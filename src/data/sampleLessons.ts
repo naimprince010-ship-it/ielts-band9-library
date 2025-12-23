@@ -1,5 +1,6 @@
 import { Lesson } from '@/types';
 import { NEW_VOCABULARY_LESSONS } from './newVocabularyLessons';
+import { NEW_GRAMMAR_LESSONS } from './newGrammarLessons';
 
 export const SAMPLE_LESSONS: Lesson[] = [
   {
@@ -471,7 +472,8 @@ This lesson focuses on words that help you express nuanced views - not just "tec
       ]
     }
   },
-  ...NEW_VOCABULARY_LESSONS
+  ...NEW_VOCABULARY_LESSONS,
+  ...NEW_GRAMMAR_LESSONS
 ];
 
 export const GRAMMAR_TOPICS = [
@@ -484,7 +486,26 @@ export const GRAMMAR_TOPICS = [
   'Reported Speech',
   'Comparatives & Superlatives',
   'Subject-Verb Agreement',
-  'Gerunds & Infinitives'
+  'Gerunds & Infinitives',
+  'Noun Clauses',
+  'Adverbial Clauses',
+  'Participle Clauses',
+  'Inversion',
+  'Cleft Sentences',
+  'Parallel Structure',
+  'Hedging',
+  'Cohesion',
+  'Subjunctive',
+  'Ellipsis',
+  'Future Forms',
+  'Causatives',
+  'Emphatic Do',
+  'Prepositions',
+  'Quantifiers',
+  'Word Order',
+  'Concession',
+  'Band Upgrade',
+  'Error Correction'
 ];
 
 export const VOCABULARY_TOPICS = [
