@@ -1,0 +1,548 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { 
+  Settings, Plus, Edit, Trash2, Eye, EyeOff, BookOpen, GraduationCap,
+  Sparkles, Save, X, AlertCircle, CheckCircle
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Switch } from '@/components/ui/switch';
+import { useAuth } from '@/contexts/AuthContext';
+import { useLessons } from '@/contexts/LessonContext';
+import { Lesson, LessonType, LessonLevel, LessonContent } from '@/types';
+import { GRAMMAR_TOPICS, VOCABULARY_TOPICS } from '@/data/sampleLessons';
+import { generateLessonWithAI } from '@/services/aiLessonGenerator';
+
+export function AdminPage() {
+  const { user, isAdmin } = useAuth();
+  const { lessons, createLesson, updateLesson, deleteLesson } = useLessons();
+  const navigate = useNavigate();
+  
+  const [isEditorOpen, setIsEditorOpen] = useState(false);
+  const [editingLesson, setEditingLesson] = useState<Lesson | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  const [formData, setFormData] = useState({
+    title: '',
+    type: 'vocabulary' as LessonType,
+    level: 'intermediate' as LessonLevel,
+    topic: '',
+    description: '',
+    is_premium: false,
+    is_published: false,
+    content: null as LessonContent | null,
+  });
+
+  useEffect(() => {
+    if (!user || !isAdmin) {
+      navigate('/');
+    }
+  }, [user, isAdmin, navigate]);
+
+  if (!user || !isAdmin) {
+    return null;
+  }
+
+  const topics = formData.type === 'vocabulary' ? VOCABULARY_TOPICS : GRAMMAR_TOPICS;
+
+  const handleNewLesson = () => {
+    setEditingLesson(null);
+    setFormData({
+      title: '',
+      type: 'vocabulary',
+      level: 'intermediate',
+      topic: '',
+      description: '',
+      is_premium: false,
+      is_published: false,
+      content: null,
+    });
+    setError('');
+    setSuccess('');
+    setIsEditorOpen(true);
+  };
+
+  const handleEditLesson = (lesson: Lesson) => {
+    setEditingLesson(lesson);
+    setFormData({
+      title: lesson.title,
+      type: lesson.type,
+      level: lesson.level,
+      topic: lesson.topic,
+      description: lesson.description,
+      is_premium: lesson.is_premium,
+      is_published: lesson.is_published,
+      content: lesson.content,
+    });
+    setError('');
+    setSuccess('');
+    setIsEditorOpen(true);
+  };
+
+  const handleDeleteLesson = async (id: string) => {
+    if (confirm('Are you sure you want to delete this lesson?')) {
+      await deleteLesson(id);
+      setSuccess('Lesson deleted successfully');
+      setTimeout(() => setSuccess(''), 3000);
+    }
+  };
+
+  const handleTogglePublish = async (lesson: Lesson) => {
+    await updateLesson(lesson.id, { is_published: !lesson.is_published });
+  };
+
+  const handleGenerateWithAI = async () => {
+    if (!formData.topic) {
+      setError('Please select a topic first');
+      return;
+    }
+
+    setIsGenerating(true);
+    setError('');
+
+    try {
+      const generatedContent = await generateLessonWithAI(
+        formData.type,
+        formData.level,
+        formData.topic
+      );
+
+      setFormData(prev => ({
+        ...prev,
+        title: generatedContent.title,
+        description: `Master ${formData.topic.toLowerCase()} ${formData.type} for IELTS Band ${formData.level === 'beginner' ? '5-6' : formData.level === 'intermediate' ? '6.5-7.5' : '7.5-9'}.`,
+        content: generatedContent,
+      }));
+
+      setSuccess('Lesson generated successfully! Review and edit before publishing.');
+    } catch (err) {
+      setError('Failed to generate lesson. Please try again.');
+      console.error(err);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleSaveLesson = async () => {
+    if (!formData.title || !formData.topic || !formData.content) {
+      setError('Please fill in all required fields and generate content');
+      return;
+    }
+
+    setIsSaving(true);
+    setError('');
+
+    try {
+      const slug = formData.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+
+      const lessonData = {
+        title: formData.title,
+        slug: editingLesson ? editingLesson.slug : `${slug}-${Date.now()}`,
+        type: formData.type,
+        level: formData.level,
+        topic: formData.topic,
+        description: formData.description,
+        content: formData.content,
+        is_premium: formData.is_premium,
+        is_published: formData.is_published,
+      };
+
+      if (editingLesson) {
+        await updateLesson(editingLesson.id, lessonData);
+        setSuccess('Lesson updated successfully!');
+      } else {
+        await createLesson(lessonData);
+        setSuccess('Lesson created successfully!');
+      }
+
+      setTimeout(() => {
+        setIsEditorOpen(false);
+        setSuccess('');
+      }, 1500);
+    } catch (err) {
+      setError('Failed to save lesson. Please try again.');
+      console.error(err);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const allLessons = lessons;
+  const vocabularyLessons = lessons.filter(l => l.type === 'vocabulary');
+  const grammarLessons = lessons.filter(l => l.type === 'grammar');
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="bg-gray-900 text-white py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Settings className="h-8 w-8" />
+              <div>
+                <h1 className="text-2xl font-bold">Admin Panel</h1>
+                <p className="text-gray-400">Manage lessons and content</p>
+              </div>
+            </div>
+            <Button onClick={handleNewLesson} className="gap-2">
+              <Plus className="h-4 w-4" />
+              New Lesson
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {success && (
+          <Alert className="mb-6 bg-green-50 border-green-200">
+            <CheckCircle className="h-4 w-4 text-green-600" />
+            <AlertDescription className="text-green-800">{success}</AlertDescription>
+          </Alert>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg">Total Lessons</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold">{allLessons.length}</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <BookOpen className="h-5 w-5 text-indigo-600" />
+                Vocabulary
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold">{vocabularyLessons.length}</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <GraduationCap className="h-5 w-5 text-purple-600" />
+                Grammar
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold">{grammarLessons.length}</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        <Tabs defaultValue="all" className="space-y-4">
+          <TabsList>
+            <TabsTrigger value="all">All Lessons ({allLessons.length})</TabsTrigger>
+            <TabsTrigger value="vocabulary">Vocabulary ({vocabularyLessons.length})</TabsTrigger>
+            <TabsTrigger value="grammar">Grammar ({grammarLessons.length})</TabsTrigger>
+          </TabsList>
+
+          {['all', 'vocabulary', 'grammar'].map((tab) => (
+            <TabsContent key={tab} value={tab}>
+              <Card>
+                <CardContent className="p-0">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-gray-50 border-b">
+                        <tr>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Title</th>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Type</th>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Level</th>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Status</th>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Views</th>
+                          <th className="px-4 py-3 text-right text-sm font-medium text-gray-500">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y">
+                        {(tab === 'all' ? allLessons : tab === 'vocabulary' ? vocabularyLessons : grammarLessons).map((lesson) => (
+                          <tr key={lesson.id} className="hover:bg-gray-50">
+                            <td className="px-4 py-3">
+                              <div>
+                                <p className="font-medium text-gray-900">{lesson.title}</p>
+                                <p className="text-sm text-gray-500">{lesson.topic}</p>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3">
+                              <Badge variant={lesson.type === 'vocabulary' ? 'default' : 'secondary'}>
+                                {lesson.type}
+                              </Badge>
+                            </td>
+                            <td className="px-4 py-3">
+                              <Badge variant="outline" className="capitalize">{lesson.level}</Badge>
+                            </td>
+                            <td className="px-4 py-3">
+                              <div className="flex items-center gap-2">
+                                {lesson.is_published ? (
+                                  <Badge className="bg-green-100 text-green-800">Published</Badge>
+                                ) : (
+                                  <Badge variant="outline">Draft</Badge>
+                                )}
+                                {lesson.is_premium && (
+                                  <Badge className="bg-amber-100 text-amber-800">Premium</Badge>
+                                )}
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-gray-500">
+                              {lesson.view_count.toLocaleString()}
+                            </td>
+                            <td className="px-4 py-3">
+                              <div className="flex items-center justify-end gap-2">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => handleTogglePublish(lesson)}
+                                  title={lesson.is_published ? 'Unpublish' : 'Publish'}
+                                >
+                                  {lesson.is_published ? (
+                                    <EyeOff className="h-4 w-4" />
+                                  ) : (
+                                    <Eye className="h-4 w-4" />
+                                  )}
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => handleEditLesson(lesson)}
+                                >
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => handleDeleteLesson(lesson.id)}
+                                  className="text-red-500 hover:text-red-700"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          ))}
+        </Tabs>
+      </div>
+
+      <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>
+              {editingLesson ? 'Edit Lesson' : 'Create New Lesson'}
+            </DialogTitle>
+            <DialogDescription>
+              Use AI to generate lesson content or create manually
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-6">
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            {success && (
+              <Alert className="bg-green-50 border-green-200">
+                <CheckCircle className="h-4 w-4 text-green-600" />
+                <AlertDescription className="text-green-800">{success}</AlertDescription>
+              </Alert>
+            )}
+
+            <Card className="border-indigo-200 bg-indigo-50">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-indigo-600" />
+                  AI Lesson Generator
+                </CardTitle>
+                <CardDescription>
+                  Select type, level, and topic, then click generate
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                  <div className="space-y-2">
+                    <Label>Lesson Type</Label>
+                    <Select
+                      value={formData.type}
+                      onValueChange={(v) => setFormData(prev => ({ ...prev, type: v as LessonType, topic: '' }))}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="vocabulary">Vocabulary</SelectItem>
+                        <SelectItem value="grammar">Grammar</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Level</Label>
+                    <Select
+                      value={formData.level}
+                      onValueChange={(v) => setFormData(prev => ({ ...prev, level: v as LessonLevel }))}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="beginner">Beginner (Band 5-6)</SelectItem>
+                        <SelectItem value="intermediate">Intermediate (Band 6.5-7.5)</SelectItem>
+                        <SelectItem value="advanced">Advanced (Band 7.5-9)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Topic</Label>
+                    <Select
+                      value={formData.topic}
+                      onValueChange={(v) => setFormData(prev => ({ ...prev, topic: v }))}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select topic" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {topics.map((topic) => (
+                          <SelectItem key={topic} value={topic}>{topic}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <Button
+                  onClick={handleGenerateWithAI}
+                  disabled={isGenerating || !formData.topic}
+                  className="w-full gap-2"
+                >
+                  <Sparkles className="h-4 w-4" />
+                  {isGenerating ? 'Generating...' : 'Generate Draft with AI'}
+                </Button>
+              </CardContent>
+            </Card>
+
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="title">Title</Label>
+                <Input
+                  id="title"
+                  value={formData.title}
+                  onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                  placeholder="Lesson title"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                  placeholder="Brief description of the lesson"
+                  rows={2}
+                />
+              </div>
+
+              {formData.content && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Generated Content Preview</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4 text-sm">
+                    <div>
+                      <strong>Target Level:</strong> {formData.content.targetLevel}
+                    </div>
+                    <div>
+                      <strong>What You Will Learn:</strong>
+                      <ul className="list-disc list-inside ml-2">
+                        {formData.content.whatYouWillLearn.map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <strong>Examples:</strong> {formData.content.examples.length} examples
+                    </div>
+                    <div>
+                      <strong>Common Mistakes:</strong> {formData.content.commonMistakes.length} mistakes
+                    </div>
+                    <div>
+                      <strong>Practice Questions:</strong> {formData.content.miniPractice.length} questions
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-6">
+                  <div className="flex items-center gap-2">
+                    <Switch
+                      id="is_premium"
+                      checked={formData.is_premium}
+                      onCheckedChange={(checked) => setFormData(prev => ({ ...prev, is_premium: checked }))}
+                    />
+                    <Label htmlFor="is_premium">Premium Content</Label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Switch
+                      id="is_published"
+                      checked={formData.is_published}
+                      onCheckedChange={(checked) => setFormData(prev => ({ ...prev, is_published: checked }))}
+                    />
+                    <Label htmlFor="is_published">Published</Label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setIsEditorOpen(false)}>
+                <X className="h-4 w-4 mr-2" />
+                Cancel
+              </Button>
+              <Button onClick={handleSaveLesson} disabled={isSaving || !formData.content}>
+                <Save className="h-4 w-4 mr-2" />
+                {isSaving ? 'Saving...' : 'Save Lesson'}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
