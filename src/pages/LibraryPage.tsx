@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Search, Filter, BookOpen, GraduationCap, Star, Bookmark, BookmarkCheck } from 'lucide-react';
+import { Search, Filter, BookOpen, GraduationCap, Star, Bookmark, BookmarkCheck, Clock, CheckCircle2, Circle, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 import {
   Select,
   SelectContent,
@@ -15,11 +16,20 @@ import {
 import { useLessons } from '@/contexts/LessonContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { LessonType, LessonLevel } from '@/types';
-import { GRAMMAR_TOPICS, VOCABULARY_TOPICS } from '@/data/sampleLessons';
+import { GRAMMAR_TOPICS, VOCABULARY_TOPICS, SAMPLE_LESSONS } from '@/data/sampleLessons';
 
 interface LibraryPageProps {
   type: LessonType;
 }
+
+const getEstimatedTime = (lesson: { content: { examples: unknown[] } }): number => {
+  const exampleCount = lesson.content?.examples?.length || 0;
+  return Math.max(10, Math.round(exampleCount * 1.5 + 5));
+};
+
+const isBandUpgradeLesson = (topic: string): boolean => {
+  return topic.toLowerCase().includes('band upgrade') || topic.toLowerCase().includes('upgrade');
+};
 
 export function LibraryPage({ type }: LibraryPageProps) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -27,11 +37,26 @@ export function LibraryPage({ type }: LibraryPageProps) {
   const [levelFilter, setLevelFilter] = useState<LessonLevel | 'all'>('all');
   const [topicFilter, setTopicFilter] = useState<string>('all');
   
-  const { lessons, loading, fetchLessons, addBookmark, removeBookmark, isBookmarked } = useLessons();
+  const { lessons, loading, fetchLessons, addBookmark, removeBookmark, isBookmarked, getLessonProgress, getCompletionPercentage, getCompletedCount } = useLessons();
   const { user } = useAuth();
 
   const topics = type === 'vocabulary' ? VOCABULARY_TOPICS : GRAMMAR_TOPICS;
   const filteredLessons = lessons.filter(l => l.type === type);
+
+  const topicCounts = useMemo(() => {
+    const allLessonsOfType = SAMPLE_LESSONS.filter(l => l.type === type);
+    const counts: Record<string, number> = {};
+    topics.forEach(topic => {
+      counts[topic.toLowerCase()] = allLessonsOfType.filter(
+        l => l.topic.toLowerCase() === topic.toLowerCase()
+      ).length;
+    });
+    return counts;
+  }, [type, topics]);
+
+  const completionPercent = getCompletionPercentage(type);
+  const completedCount = getCompletedCount(type);
+  const totalLessons = SAMPLE_LESSONS.filter(l => l.type === type).length;
 
   useEffect(() => {
     const level = levelFilter === 'all' ? undefined : levelFilter;
@@ -76,6 +101,19 @@ export function LibraryPage({ type }: LibraryPageProps) {
               ? 'Master academic vocabulary, collocations, and speaking phrases for IELTS Band 7+.'
               : 'Learn essential grammar structures with clear explanations, examples, and practice exercises.'}
           </p>
+          
+          {user && (
+            <div className="mt-6 bg-white/10 rounded-lg p-4 max-w-md">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium">Your Progress</span>
+                <span className="text-sm">{completedCount} / {totalLessons} lessons completed</span>
+              </div>
+              <Progress value={completionPercent} className="h-2 bg-white/20" />
+              <p className="text-xs mt-2 opacity-80">
+                {completionPercent}% complete - {totalLessons - completedCount} lessons remaining
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -106,14 +144,14 @@ export function LibraryPage({ type }: LibraryPageProps) {
             </Select>
 
             <Select value={topicFilter} onValueChange={setTopicFilter}>
-              <SelectTrigger className="w-full md:w-40">
+              <SelectTrigger className="w-full md:w-48">
                 <SelectValue placeholder="Topic" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Topics</SelectItem>
+                <SelectItem value="all">All Topics ({totalLessons})</SelectItem>
                 {topics.map((topic) => (
                   <SelectItem key={topic} value={topic.toLowerCase()}>
-                    {topic}
+                    {topic} ({topicCounts[topic.toLowerCase()] || 0})
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -157,63 +195,92 @@ export function LibraryPage({ type }: LibraryPageProps) {
           <>
             <p className="text-gray-600 mb-4">{displayLessons.length} lessons found</p>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {displayLessons.map((lesson) => (
-                <Link key={lesson.id} to={`/lesson/${lesson.slug}`}>
-                  <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer group">
-                    <CardHeader>
-                      <div className="flex items-center justify-between mb-2">
-                        <Badge 
-                          variant="outline" 
-                          className={`capitalize ${
-                            lesson.level === 'beginner' ? 'text-green-600 border-green-600' :
-                            lesson.level === 'intermediate' ? 'text-blue-600 border-blue-600' :
-                            'text-purple-600 border-purple-600'
-                          }`}
-                        >
-                          {lesson.level}
-                        </Badge>
-                        <div className="flex items-center gap-2">
-                          {lesson.is_premium ? (
-                            <Badge variant="outline" className="text-amber-600 border-amber-600">
-                              <Star className="h-3 w-3 mr-1" /> Premium
-                            </Badge>
-                          ) : (
-                            <Badge variant="outline" className="text-green-600 border-green-600">
-                              Free
-                            </Badge>
-                          )}
-                          {user && (
-                            <button
-                              onClick={(e) => handleBookmarkToggle(lesson.id, e)}
-                              className="p-1 hover:bg-gray-100 rounded"
+              {displayLessons.map((lesson) => {
+                const estimatedTime = lesson.estimated_time || getEstimatedTime(lesson);
+                const lessonProgress = getLessonProgress(lesson.id);
+                const isCompleted = lessonProgress === 'completed';
+                const isBandUpgrade = isBandUpgradeLesson(lesson.topic);
+                
+                return (
+                  <Link key={lesson.id} to={`/lesson/${lesson.slug}`}>
+                    <Card className={`h-full hover:shadow-lg transition-shadow cursor-pointer group ${isCompleted ? 'ring-2 ring-green-500 ring-opacity-50' : ''}`}>
+                      <CardHeader>
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <Badge 
+                              variant="outline" 
+                              className={`capitalize ${
+                                lesson.level === 'beginner' ? 'text-green-600 border-green-600' :
+                                lesson.level === 'intermediate' ? 'text-blue-600 border-blue-600' :
+                                'text-purple-600 border-purple-600'
+                              }`}
                             >
-                              {isBookmarked(lesson.id) ? (
-                                <BookmarkCheck className="h-5 w-5 text-indigo-600" />
-                              ) : (
-                                <Bookmark className="h-5 w-5 text-gray-400 group-hover:text-gray-600" />
-                              )}
-                            </button>
-                          )}
+                              {lesson.level}
+                            </Badge>
+                            {isBandUpgrade && lesson.recommended_order && (
+                              <Badge variant="outline" className="text-orange-600 border-orange-600">
+                                <TrendingUp className="h-3 w-3 mr-1" /> Step {lesson.recommended_order}
+                              </Badge>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {lesson.is_premium ? (
+                              <Badge variant="outline" className="text-amber-600 border-amber-600">
+                                <Star className="h-3 w-3 mr-1" /> Premium
+                              </Badge>
+                            ) : (
+                              <Badge variant="outline" className="text-green-600 border-green-600">
+                                Free
+                              </Badge>
+                            )}
+                            {user && (
+                              <button
+                                onClick={(e) => handleBookmarkToggle(lesson.id, e)}
+                                className="p-1 hover:bg-gray-100 rounded"
+                              >
+                                {isBookmarked(lesson.id) ? (
+                                  <BookmarkCheck className="h-5 w-5 text-indigo-600" />
+                                ) : (
+                                  <Bookmark className="h-5 w-5 text-gray-400 group-hover:text-gray-600" />
+                                )}
+                              </button>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                      <CardTitle className="text-lg group-hover:text-indigo-600 transition-colors">
-                        {lesson.title}
-                      </CardTitle>
-                      <CardDescription className="line-clamp-2">
-                        {lesson.description}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex items-center justify-between text-sm text-gray-500">
-                        <Badge variant="secondary" className="capitalize">
-                          {lesson.topic}
-                        </Badge>
-                        <span>{lesson.view_count.toLocaleString()} views</span>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
+                        <div className="flex items-center gap-2">
+                          {user && (
+                            isCompleted ? (
+                              <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0" />
+                            ) : (
+                              <Circle className="h-5 w-5 text-gray-300 flex-shrink-0" />
+                            )
+                          )}
+                          <CardTitle className="text-lg group-hover:text-indigo-600 transition-colors">
+                            {lesson.title}
+                          </CardTitle>
+                        </div>
+                        <CardDescription className="line-clamp-2">
+                          {lesson.description}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex items-center justify-between text-sm text-gray-500">
+                          <div className="flex items-center gap-2">
+                            <Badge variant="secondary" className="capitalize">
+                              {lesson.topic}
+                            </Badge>
+                            <span className="flex items-center gap-1">
+                              <Clock className="h-3 w-3" />
+                              {estimatedTime} min
+                            </span>
+                          </div>
+                          <span>{lesson.view_count.toLocaleString()} views</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                );
+              })}
             </div>
           </>
         )}

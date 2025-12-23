@@ -795,6 +795,8 @@ This lesson provides a toolkit of phrases for different functions. Instead of al
     view_count: 2450,
     created_at: '2024-02-25T10:00:00Z',
     updated_at: '2024-02-25T10:00:00Z',
+    estimated_time: 20,
+    recommended_order: 1,
     content: {
       title: 'Band 6 to 7 Vocabulary Upgrade',
       targetLevel: 'Band 6.0 - 7.0',
@@ -881,6 +883,8 @@ This lesson provides direct upgrades from common Band 6 words to Band 7 alternat
     view_count: 1890,
     created_at: '2024-02-28T10:00:00Z',
     updated_at: '2024-02-28T10:00:00Z',
+    estimated_time: 25,
+    recommended_order: 2,
     content: {
       title: 'Band 7 to 8 Precision Vocabulary',
       targetLevel: 'Band 7.0 - 8.5',

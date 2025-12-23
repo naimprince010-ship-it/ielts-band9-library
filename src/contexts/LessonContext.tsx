@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { Lesson, LessonType, LessonLevel, Bookmark } from '@/types';
+import { Lesson, LessonType, LessonLevel, Bookmark, UserLessonProgress, LessonProgress } from '@/types';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { useAuth } from './AuthContext';
 import { SAMPLE_LESSONS } from '@/data/sampleLessons';
@@ -7,6 +7,7 @@ import { SAMPLE_LESSONS } from '@/data/sampleLessons';
 interface LessonContextType {
   lessons: Lesson[];
   bookmarks: Bookmark[];
+  progress: UserLessonProgress[];
   loading: boolean;
   fetchLessons: (type?: LessonType, level?: LessonLevel, search?: string) => Promise<void>;
   getLessonBySlug: (slug: string) => Lesson | undefined;
@@ -18,6 +19,10 @@ interface LessonContextType {
   updateLesson: (id: string, lesson: Partial<Lesson>) => Promise<boolean>;
   deleteLesson: (id: string) => Promise<boolean>;
   incrementViewCount: (id: string) => Promise<void>;
+  getLessonProgress: (lessonId: string) => LessonProgress;
+  setLessonProgress: (lessonId: string, status: LessonProgress) => void;
+  getCompletionPercentage: (type?: LessonType) => number;
+  getCompletedCount: (type?: LessonType) => number;
 }
 
 const LessonContext = createContext<LessonContextType | undefined>(undefined);
@@ -25,6 +30,7 @@ const LessonContext = createContext<LessonContextType | undefined>(undefined);
 export function LessonProvider({ children }: { children: ReactNode }) {
   const [lessons, setLessons] = useState<Lesson[]>(SAMPLE_LESSONS);
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
+  const [progress, setProgress] = useState<UserLessonProgress[]>([]);
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
 
@@ -32,6 +38,10 @@ export function LessonProvider({ children }: { children: ReactNode }) {
     const storedBookmarks = localStorage.getItem('bookmarks');
     if (storedBookmarks) {
       setBookmarks(JSON.parse(storedBookmarks));
+    }
+    const storedProgress = localStorage.getItem('lessonProgress');
+    if (storedProgress) {
+      setProgress(JSON.parse(storedProgress));
     }
   }, []);
 
@@ -256,9 +266,64 @@ export function LessonProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const getLessonProgress = (lessonId: string): LessonProgress => {
+    const lessonProgress = progress.find(p => p.lesson_id === lessonId);
+    return lessonProgress?.status || 'not_started';
+  };
+
+  const setLessonProgress = (lessonId: string, status: LessonProgress) => {
+    const existingIndex = progress.findIndex(p => p.lesson_id === lessonId);
+    let updatedProgress: UserLessonProgress[];
+    
+    if (existingIndex >= 0) {
+      updatedProgress = progress.map((p, i) => 
+        i === existingIndex 
+          ? { ...p, status, completed_at: status === 'completed' ? new Date().toISOString() : undefined }
+          : p
+      );
+    } else {
+      updatedProgress = [
+        ...progress,
+        { 
+          lesson_id: lessonId, 
+          status, 
+          completed_at: status === 'completed' ? new Date().toISOString() : undefined 
+        }
+      ];
+    }
+    
+    setProgress(updatedProgress);
+    localStorage.setItem('lessonProgress', JSON.stringify(updatedProgress));
+  };
+
+  const getCompletionPercentage = (type?: LessonType): number => {
+    const relevantLessons = type 
+      ? SAMPLE_LESSONS.filter(l => l.type === type)
+      : SAMPLE_LESSONS;
+    
+    if (relevantLessons.length === 0) return 0;
+    
+    const completedCount = relevantLessons.filter(l => 
+      progress.some(p => p.lesson_id === l.id && p.status === 'completed')
+    ).length;
+    
+    return Math.round((completedCount / relevantLessons.length) * 100);
+  };
+
+  const getCompletedCount = (type?: LessonType): number => {
+    const relevantLessons = type 
+      ? SAMPLE_LESSONS.filter(l => l.type === type)
+      : SAMPLE_LESSONS;
+    
+    return relevantLessons.filter(l => 
+      progress.some(p => p.lesson_id === l.id && p.status === 'completed')
+    ).length;
+  };
+
   const value = {
     lessons,
     bookmarks,
+    progress,
     loading,
     fetchLessons,
     getLessonBySlug,
@@ -270,6 +335,10 @@ export function LessonProvider({ children }: { children: ReactNode }) {
     updateLesson,
     deleteLesson,
     incrementViewCount,
+    getLessonProgress,
+    setLessonProgress,
+    getCompletionPercentage,
+    getCompletedCount,
   };
 
   return <LessonContext.Provider value={value}>{children}</LessonContext.Provider>;

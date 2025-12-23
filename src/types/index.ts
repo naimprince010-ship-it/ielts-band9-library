@@ -45,6 +45,16 @@ export interface Lesson {
   view_count: number;
   created_at: string;
   updated_at: string;
+  estimated_time?: number; // in minutes
+  recommended_order?: number; // for band upgrade packs
+}
+
+export type LessonProgress = 'not_started' | 'completed';
+
+export interface UserLessonProgress {
+  lesson_id: string;
+  status: LessonProgress;
+  completed_at?: string;
 }
 
 export interface Bookmark {

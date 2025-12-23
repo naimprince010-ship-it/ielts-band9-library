@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Settings, Plus, Edit, Trash2, Eye, EyeOff, BookOpen, GraduationCap,
-  Sparkles, Save, X, AlertCircle, CheckCircle
+  Sparkles, Save, X, AlertCircle, CheckCircle, ShieldCheck, Square, CheckSquare
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -33,6 +33,14 @@ import { Lesson, LessonType, LessonLevel, LessonContent } from '@/types';
 import { GRAMMAR_TOPICS, VOCABULARY_TOPICS } from '@/data/sampleLessons';
 import { generateLessonWithAI } from '@/services/aiLessonGenerator';
 
+interface QualityChecklist {
+  naturalCollocations: boolean;
+  ieltsSafeUsage: boolean;
+  noRareWords: boolean;
+  examplesReviewed: boolean;
+  mistakesAccurate: boolean;
+}
+
 export function AdminPage() {
   const { user, isAdmin } = useAuth();
   const { lessons, createLesson, updateLesson, deleteLesson } = useLessons();
@@ -44,6 +52,13 @@ export function AdminPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [qualityChecklist, setQualityChecklist] = useState<QualityChecklist>({
+    naturalCollocations: false,
+    ieltsSafeUsage: false,
+    noRareWords: false,
+    examplesReviewed: false,
+    mistakesAccurate: false,
+  });
 
   const [formData, setFormData] = useState({
     title: '',
@@ -79,6 +94,13 @@ export function AdminPage() {
       is_premium: false,
       is_published: false,
       content: null,
+    });
+    setQualityChecklist({
+      naturalCollocations: false,
+      ieltsSafeUsage: false,
+      noRareWords: false,
+      examplesReviewed: false,
+      mistakesAccurate: false,
     });
     setError('');
     setSuccess('');
@@ -504,6 +526,89 @@ export function AdminPage() {
                     <div>
                       <strong>Practice Questions:</strong> {formData.content.miniPractice.length} questions
                     </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {formData.content && (
+                <Card className="border-amber-200 bg-amber-50">
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2 text-amber-800">
+                      <ShieldCheck className="h-5 w-5" />
+                      Content Quality Guard
+                    </CardTitle>
+                    <CardDescription className="text-amber-700">
+                      Review and confirm before publishing. This prevents AI over-generation issues.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div 
+                      className="flex items-center gap-3 cursor-pointer hover:bg-amber-100 p-2 rounded"
+                      onClick={() => setQualityChecklist(prev => ({ ...prev, naturalCollocations: !prev.naturalCollocations }))}
+                    >
+                      {qualityChecklist.naturalCollocations ? (
+                        <CheckSquare className="h-5 w-5 text-green-600" />
+                      ) : (
+                        <Square className="h-5 w-5 text-gray-400" />
+                      )}
+                      <span className="text-sm">Collocations are natural and commonly used</span>
+                    </div>
+                    <div 
+                      className="flex items-center gap-3 cursor-pointer hover:bg-amber-100 p-2 rounded"
+                      onClick={() => setQualityChecklist(prev => ({ ...prev, ieltsSafeUsage: !prev.ieltsSafeUsage }))}
+                    >
+                      {qualityChecklist.ieltsSafeUsage ? (
+                        <CheckSquare className="h-5 w-5 text-green-600" />
+                      ) : (
+                        <Square className="h-5 w-5 text-gray-400" />
+                      )}
+                      <span className="text-sm">Vocabulary is IELTS-safe and appropriate for the target band</span>
+                    </div>
+                    <div 
+                      className="flex items-center gap-3 cursor-pointer hover:bg-amber-100 p-2 rounded"
+                      onClick={() => setQualityChecklist(prev => ({ ...prev, noRareWords: !prev.noRareWords }))}
+                    >
+                      {qualityChecklist.noRareWords ? (
+                        <CheckSquare className="h-5 w-5 text-green-600" />
+                      ) : (
+                        <Square className="h-5 w-5 text-gray-400" />
+                      )}
+                      <span className="text-sm">No over-advanced or rare words that sound unnatural</span>
+                    </div>
+                    <div 
+                      className="flex items-center gap-3 cursor-pointer hover:bg-amber-100 p-2 rounded"
+                      onClick={() => setQualityChecklist(prev => ({ ...prev, examplesReviewed: !prev.examplesReviewed }))}
+                    >
+                      {qualityChecklist.examplesReviewed ? (
+                        <CheckSquare className="h-5 w-5 text-green-600" />
+                      ) : (
+                        <Square className="h-5 w-5 text-gray-400" />
+                      )}
+                      <span className="text-sm">Example sentences are natural and IELTS-style</span>
+                    </div>
+                    <div 
+                      className="flex items-center gap-3 cursor-pointer hover:bg-amber-100 p-2 rounded"
+                      onClick={() => setQualityChecklist(prev => ({ ...prev, mistakesAccurate: !prev.mistakesAccurate }))}
+                    >
+                      {qualityChecklist.mistakesAccurate ? (
+                        <CheckSquare className="h-5 w-5 text-green-600" />
+                      ) : (
+                        <Square className="h-5 w-5 text-gray-400" />
+                      )}
+                      <span className="text-sm">Common mistakes and corrections are accurate</span>
+                    </div>
+                    
+                    {Object.values(qualityChecklist).every(v => v) ? (
+                      <div className="mt-4 p-3 bg-green-100 rounded-lg flex items-center gap-2 text-green-800">
+                        <CheckCircle className="h-5 w-5" />
+                        <span className="text-sm font-medium">All quality checks passed - ready to publish!</span>
+                      </div>
+                    ) : (
+                      <div className="mt-4 p-3 bg-amber-100 rounded-lg flex items-center gap-2 text-amber-800">
+                        <AlertCircle className="h-5 w-5" />
+                        <span className="text-sm">Complete all checks before publishing</span>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               )}

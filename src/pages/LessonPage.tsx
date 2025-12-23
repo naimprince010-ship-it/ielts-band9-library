@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, BookOpen, GraduationCap, Star, Bookmark, BookmarkCheck, 
   CheckCircle, XCircle, AlertTriangle, Lightbulb, ChevronDown, ChevronUp,
-  Lock
+  Lock, CheckCircle2, Circle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,10 +15,13 @@ import { useAuth } from '@/contexts/AuthContext';
 export function LessonPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { getLessonBySlug, addBookmark, removeBookmark, isBookmarked, incrementViewCount, lessons } = useLessons();
+  const { getLessonBySlug, addBookmark, removeBookmark, isBookmarked, incrementViewCount, lessons, getLessonProgress, setLessonProgress } = useLessons();
   const { user, isPremium } = useAuth();
   const [showAnswers, setShowAnswers] = useState(false);
   const [lesson, setLesson] = useState(getLessonBySlug(slug || ''));
+  
+  const lessonProgress = lesson ? getLessonProgress(lesson.id) : 'not_started';
+  const isCompleted = lessonProgress === 'completed';
 
   useEffect(() => {
     const foundLesson = getLessonBySlug(slug || '');
@@ -55,6 +58,17 @@ export function LessonPage() {
     } else {
       await addBookmark(lesson.id);
     }
+  };
+
+  const handleProgressToggle = () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    
+    if (!lesson) return;
+    
+    setLessonProgress(lesson.id, isCompleted ? 'not_started' : 'completed');
   };
 
   return (
@@ -384,6 +398,47 @@ export function LessonPage() {
             </CardContent>
           </Card>
         </div>
+
+        {user && canAccessContent && (
+          <Card className={`mb-6 ${isCompleted ? 'border-green-500 bg-green-50' : 'border-gray-200'}`}>
+            <CardContent className="py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  {isCompleted ? (
+                    <CheckCircle2 className="h-8 w-8 text-green-500" />
+                  ) : (
+                    <Circle className="h-8 w-8 text-gray-300" />
+                  )}
+                  <div>
+                    <p className={`font-medium ${isCompleted ? 'text-green-700' : 'text-gray-700'}`}>
+                      {isCompleted ? 'Lesson Completed!' : 'Mark this lesson as complete'}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {isCompleted ? 'Great job! You can mark it as incomplete if needed.' : 'Track your progress by marking lessons as complete.'}
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  variant={isCompleted ? 'outline' : 'default'}
+                  onClick={handleProgressToggle}
+                  className={isCompleted ? 'border-green-500 text-green-700 hover:bg-green-100' : ''}
+                >
+                  {isCompleted ? (
+                    <>
+                      <XCircle className="h-4 w-4 mr-2" />
+                      Mark Incomplete
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle2 className="h-4 w-4 mr-2" />
+                      Mark Complete
+                    </>
+                  )}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         <div className="flex justify-between items-center mt-8">
           <Link to={`/${lesson.type}`}>
