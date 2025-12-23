@@ -1,4 +1,5 @@
 import { Lesson } from '@/types';
+import { NEW_VOCABULARY_LESSONS } from './newVocabularyLessons';
 
 export const SAMPLE_LESSONS: Lesson[] = [
   {
@@ -469,7 +470,8 @@ This lesson focuses on words that help you express nuanced views - not just "tec
         'I believe the digital divide remains a significant challenge in many developing countries.'
       ]
     }
-  }
+  },
+  ...NEW_VOCABULARY_LESSONS
 ];
 
 export const GRAMMAR_TOPICS = [
@@ -495,5 +497,10 @@ export const VOCABULARY_TOPICS = [
   'Culture',
   'Travel',
   'Work',
-  'Media'
+  'Media',
+  'Government',
+  'Science',
+  'Collocations',
+  'Speaking',
+  'Band Upgrade'
 ];
