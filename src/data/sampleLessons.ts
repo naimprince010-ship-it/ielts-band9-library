@@ -521,7 +521,10 @@ export const VOCABULARY_TOPICS = [
   'Media',
   'Government',
   'Science',
+  'Crime',
+  'Transport',
   'Collocations',
   'Speaking',
+  'Word Families',
   'Band Upgrade'
 ];
