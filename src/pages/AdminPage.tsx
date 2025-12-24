@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Settings, Plus, Edit, Trash2, Eye, EyeOff, BookOpen, GraduationCap,
-  Sparkles, Save, X, AlertCircle, CheckCircle, ShieldCheck, Square, CheckSquare
+  Sparkles, Save, X, AlertCircle, CheckCircle, ShieldCheck, Square, CheckSquare,
+  CreditCard, Clock, CheckCircle2, XCircle, Loader2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -29,6 +30,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Switch } from '@/components/ui/switch';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLessons } from '@/contexts/LessonContext';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { Lesson, LessonType, LessonLevel, LessonContent } from '@/types';
 import { GRAMMAR_TOPICS, VOCABULARY_TOPICS } from '@/data/sampleLessons';
 import { generateLessonWithAI } from '@/services/aiLessonGenerator';
@@ -39,6 +41,21 @@ interface QualityChecklist {
   noRareWords: boolean;
   examplesReviewed: boolean;
   mistakesAccurate: boolean;
+}
+
+interface PaymentRequest {
+  id: string;
+  user_id: string;
+  user_email: string;
+  package_type: string;
+  package_name: string;
+  amount: number;
+  transaction_id: string;
+  sender_number: string;
+  status: string;
+  created_at: string;
+  verified_at: string | null;
+  verified_by: string | null;
 }
 
 export function AdminPage() {
@@ -60,22 +77,124 @@ export function AdminPage() {
     mistakesAccurate: false,
   });
 
-  const [formData, setFormData] = useState({
-    title: '',
-    type: 'vocabulary' as LessonType,
-    level: 'intermediate' as LessonLevel,
-    topic: '',
-    description: '',
-    is_premium: false,
-    is_published: false,
-    content: null as LessonContent | null,
-  });
+    const [formData, setFormData] = useState({
+      title: '',
+      type: 'vocabulary' as LessonType,
+      level: 'intermediate' as LessonLevel,
+      topic: '',
+      description: '',
+      is_premium: false,
+      is_published: false,
+      content: null as LessonContent | null,
+    });
 
-  useEffect(() => {
-    if (!user || !isAdmin) {
-      navigate('/');
-    }
-  }, [user, isAdmin, navigate]);
+    const [payments, setPayments] = useState<PaymentRequest[]>([]);
+    const [loadingPayments, setLoadingPayments] = useState(false);
+    const [processingPayment, setProcessingPayment] = useState<string | null>(null);
+
+    useEffect(() => {
+      if (!user || !isAdmin) {
+        navigate('/');
+      }
+    }, [user, isAdmin, navigate]);
+
+    const fetchPayments = async () => {
+      if (!isSupabaseConfigured() || !supabase) return;
+    
+      setLoadingPayments(true);
+      try {
+        const { data, error } = await supabase
+          .from('payment_requests')
+          .select('*')
+          .order('created_at', { ascending: false });
+      
+        if (error) throw error;
+        setPayments(data || []);
+      } catch (err) {
+        console.error('Failed to fetch payments:', err);
+      } finally {
+        setLoadingPayments(false);
+      }
+    };
+
+    useEffect(() => {
+      if (user && isAdmin) {
+        fetchPayments();
+      }
+    }, [user, isAdmin]);
+
+    const handleApprovePayment = async (payment: PaymentRequest) => {
+      if (!isSupabaseConfigured() || !supabase) return;
+    
+      setProcessingPayment(payment.id);
+      try {
+        const { error: updateError } = await supabase
+          .from('payment_requests')
+          .update({
+            status: 'approved',
+            verified_at: new Date().toISOString(),
+            verified_by: user?.email || 'admin',
+          })
+          .eq('id', payment.id);
+
+        if (updateError) throw updateError;
+
+        const { error: userError } = await supabase
+          .from('users')
+          .update({
+            is_premium: true,
+            premium_until: payment.package_type === 'yearly' 
+              ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
+              : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+          })
+          .eq('id', payment.user_id);
+
+        if (userError) {
+          console.error('Failed to update user premium status:', userError);
+        }
+
+        setSuccess('Payment approved successfully!');
+        fetchPayments();
+        setTimeout(() => setSuccess(''), 3000);
+      } catch (err) {
+        console.error('Failed to approve payment:', err);
+        setError('Failed to approve payment. Please try again.');
+      } finally {
+        setProcessingPayment(null);
+      }
+    };
+
+    const handleRejectPayment = async (payment: PaymentRequest) => {
+      if (!isSupabaseConfigured() || !supabase) return;
+    
+      if (!confirm('Are you sure you want to reject this payment?')) return;
+    
+      setProcessingPayment(payment.id);
+      try {
+        const { error } = await supabase
+          .from('payment_requests')
+          .update({
+            status: 'rejected',
+            verified_at: new Date().toISOString(),
+            verified_by: user?.email || 'admin',
+          })
+          .eq('id', payment.id);
+
+        if (error) throw error;
+
+        setSuccess('Payment rejected.');
+        fetchPayments();
+        setTimeout(() => setSuccess(''), 3000);
+      } catch (err) {
+        console.error('Failed to reject payment:', err);
+        setError('Failed to reject payment. Please try again.');
+      } finally {
+        setProcessingPayment(null);
+      }
+    };
+
+    const pendingPayments = payments.filter(p => p.status === 'pending');
+    const processedPayments = payments.filter(p => p.status !== 'pending');
 
   if (!user || !isAdmin) {
     return null;
@@ -280,12 +399,126 @@ export function AdminPage() {
           </Card>
         </div>
 
-        <Tabs defaultValue="all" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="all">All Lessons ({allLessons.length})</TabsTrigger>
-            <TabsTrigger value="vocabulary">Vocabulary ({vocabularyLessons.length})</TabsTrigger>
-            <TabsTrigger value="grammar">Grammar ({grammarLessons.length})</TabsTrigger>
-          </TabsList>
+                <Tabs defaultValue="payments" className="space-y-4">
+                  <TabsList>
+                    <TabsTrigger value="payments" className="gap-2">
+                      <CreditCard className="h-4 w-4" />
+                      Payments {pendingPayments.length > 0 && <Badge className="bg-red-500 text-white ml-1">{pendingPayments.length}</Badge>}
+                    </TabsTrigger>
+                    <TabsTrigger value="all">All Lessons ({allLessons.length})</TabsTrigger>
+                    <TabsTrigger value="vocabulary">Vocabulary ({vocabularyLessons.length})</TabsTrigger>
+                    <TabsTrigger value="grammar">Grammar ({grammarLessons.length})</TabsTrigger>
+                  </TabsList>
+
+                  <TabsContent value="payments">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <CreditCard className="h-5 w-5" />
+                          Payment Verification
+                        </CardTitle>
+                        <CardDescription>
+                          Review and approve bKash payment submissions
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        {loadingPayments ? (
+                          <div className="flex items-center justify-center py-8">
+                            <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+                          </div>
+                        ) : payments.length === 0 ? (
+                          <div className="text-center py-8 text-gray-500">
+                            No payment requests yet
+                          </div>
+                        ) : (
+                          <div className="space-y-6">
+                            {pendingPayments.length > 0 && (
+                              <div>
+                                <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                                  <Clock className="h-5 w-5 text-amber-500" />
+                                  Pending Payments ({pendingPayments.length})
+                                </h3>
+                                <div className="space-y-4">
+                                  {pendingPayments.map((payment) => (
+                                    <div key={payment.id} className="border rounded-lg p-4 bg-amber-50 border-amber-200">
+                                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                        <div className="space-y-1">
+                                          <p className="font-medium">{payment.user_email}</p>
+                                          <p className="text-sm text-gray-600">
+                                            <strong>Package:</strong> {payment.package_name} - ৳{payment.amount}
+                                          </p>
+                                          <p className="text-sm text-gray-600">
+                                            <strong>TrxID:</strong> <code className="bg-white px-2 py-0.5 rounded">{payment.transaction_id}</code>
+                                          </p>
+                                          <p className="text-sm text-gray-600">
+                                            <strong>bKash:</strong> {payment.sender_number}
+                                          </p>
+                                          <p className="text-xs text-gray-500">
+                                            Submitted: {new Date(payment.created_at).toLocaleString()}
+                                          </p>
+                                        </div>
+                                        <div className="flex gap-2">
+                                          <Button
+                                            onClick={() => handleApprovePayment(payment)}
+                                            disabled={processingPayment === payment.id}
+                                            className="bg-green-600 hover:bg-green-700"
+                                          >
+                                            {processingPayment === payment.id ? (
+                                              <Loader2 className="h-4 w-4 animate-spin" />
+                                            ) : (
+                                              <>
+                                                <CheckCircle2 className="h-4 w-4 mr-2" />
+                                                Approve
+                                              </>
+                                            )}
+                                          </Button>
+                                          <Button
+                                            variant="outline"
+                                            onClick={() => handleRejectPayment(payment)}
+                                            disabled={processingPayment === payment.id}
+                                            className="text-red-600 border-red-300 hover:bg-red-50"
+                                          >
+                                            <XCircle className="h-4 w-4 mr-2" />
+                                            Reject
+                                          </Button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {processedPayments.length > 0 && (
+                              <div>
+                                <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                                  <CheckCircle className="h-5 w-5 text-gray-400" />
+                                  Processed Payments ({processedPayments.length})
+                                </h3>
+                                <div className="space-y-2">
+                                  {processedPayments.slice(0, 10).map((payment) => (
+                                    <div key={payment.id} className={`border rounded-lg p-3 ${payment.status === 'approved' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+                                      <div className="flex items-center justify-between">
+                                        <div>
+                                          <p className="font-medium text-sm">{payment.user_email}</p>
+                                          <p className="text-xs text-gray-600">
+                                            {payment.package_name} - ৳{payment.amount} | TrxID: {payment.transaction_id}
+                                          </p>
+                                        </div>
+                                        <Badge className={payment.status === 'approved' ? 'bg-green-600' : 'bg-red-600'}>
+                                          {payment.status}
+                                        </Badge>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
 
           {['all', 'vocabulary', 'grammar'].map((tab) => (
             <TabsContent key={tab} value={tab}>
