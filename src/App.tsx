@@ -16,18 +16,65 @@ function AppRoutes() {
   const location = useLocation();
   
   return (
-    <Routes>
+    <Routes key={location.pathname}>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
-      <Route element={<Layout key={location.pathname} />}>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/vocabulary" element={<LibraryPage type="vocabulary" />} />
-        <Route path="/grammar" element={<LibraryPage type="grammar" />} />
-        <Route path="/lesson/:slug" element={<LessonPage />} />
-        <Route path="/pricing" element={<PricingPage />} />
-        <Route path="/bookmarks" element={<BookmarksPage />} />
-        <Route path="/admin" element={<AdminPage />} />
-      </Route>
+      <Route
+        path="/"
+        element={
+          <Layout>
+            <HomePage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/vocabulary"
+        element={
+          <Layout>
+            <LibraryPage type="vocabulary" key="vocabulary" />
+          </Layout>
+        }
+      />
+      <Route
+        path="/grammar"
+        element={
+          <Layout>
+            <LibraryPage type="grammar" key="grammar" />
+          </Layout>
+        }
+      />
+      <Route
+        path="/lesson/:slug"
+        element={
+          <Layout>
+            <LessonPage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/pricing"
+        element={
+          <Layout>
+            <PricingPage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/bookmarks"
+        element={
+          <Layout>
+            <BookmarksPage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <Layout>
+            <AdminPage />
+          </Layout>
+        }
+      />
     </Routes>
   );
 }
