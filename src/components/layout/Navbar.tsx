@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { BookOpen, Menu, X, User, LogOut, Settings, Bookmark } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,19 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, signOut, isAdmin } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isActive = (path: string) => {
+    return location.pathname === path || location.pathname.startsWith(path + '/');
+  };
+
+  const navLinkClass = (path: string) => {
+    return `font-medium transition-colors ${
+      isActive(path)
+        ? 'text-indigo-600 border-b-2 border-indigo-600 pb-1'
+        : 'text-gray-600 hover:text-indigo-600'
+    }`;
+  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -32,16 +45,16 @@ export function Navbar() {
             </Link>
           </div>
 
-          <div className="hidden md:flex items-center space-x-8">
-            <Link to="/vocabulary" className="text-gray-600 hover:text-indigo-600 font-medium">
-              Vocabulary
-            </Link>
-            <Link to="/grammar" className="text-gray-600 hover:text-indigo-600 font-medium">
-              Grammar
-            </Link>
-            <Link to="/pricing" className="text-gray-600 hover:text-indigo-600 font-medium">
-              Pricing
-            </Link>
+                    <div className="hidden md:flex items-center space-x-8">
+                      <Link to="/vocabulary" className={navLinkClass('/vocabulary')}>
+                        Vocabulary
+                      </Link>
+                      <Link to="/grammar" className={navLinkClass('/grammar')}>
+                        Grammar
+                      </Link>
+                      <Link to="/pricing" className={navLinkClass('/pricing')}>
+                        Pricing
+                      </Link>
             
             {user ? (
               <DropdownMenu>
@@ -98,27 +111,27 @@ export function Navbar() {
       {mobileMenuOpen && (
         <div className="md:hidden bg-white border-b border-gray-200">
           <div className="px-4 py-4 space-y-4">
-            <Link
-              to="/vocabulary"
-              className="block text-gray-600 hover:text-indigo-600 font-medium"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Vocabulary
-            </Link>
-            <Link
-              to="/grammar"
-              className="block text-gray-600 hover:text-indigo-600 font-medium"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Grammar
-            </Link>
-            <Link
-              to="/pricing"
-              className="block text-gray-600 hover:text-indigo-600 font-medium"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Pricing
-            </Link>
+                        <Link
+                          to="/vocabulary"
+                          className={`block ${navLinkClass('/vocabulary')}`}
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          Vocabulary
+                        </Link>
+                        <Link
+                          to="/grammar"
+                          className={`block ${navLinkClass('/grammar')}`}
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          Grammar
+                        </Link>
+                        <Link
+                          to="/pricing"
+                          className={`block ${navLinkClass('/pricing')}`}
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          Pricing
+                        </Link>
             {user ? (
               <>
                 <Link
