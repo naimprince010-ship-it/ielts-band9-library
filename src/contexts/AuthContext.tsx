@@ -65,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSession(session);
         setSupabaseUser(session?.user ?? null);
         if (session?.user) {
-          fetchUserProfile(session.user.id);
+          fetchUserProfile(session.user.id, session.user);
         }
         setLoading(false);
       });
@@ -74,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSession(session);
         setSupabaseUser(session?.user ?? null);
         if (session?.user) {
-          fetchUserProfile(session.user.id);
+          fetchUserProfile(session.user.id, session.user);
         } else {
           setUser(null);
         }
@@ -86,17 +86,49 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const fetchUserProfile = async (userId: string) => {
+  const fetchUserProfile = async (userId: string, supabaseUserData?: SupabaseUser) => {
     if (!supabase) return;
     
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('users')
       .select('*')
       .eq('id', userId)
-      .single();
+      .maybeSingle();
 
-    if (!error && data) {
+    if (data) {
       setUser(data as User);
+    } else if (supabaseUserData) {
+      const userName = supabaseUserData.user_metadata?.full_name || 
+                       supabaseUserData.user_metadata?.name || 
+                       supabaseUserData.email?.split('@')[0] || 
+                       'User';
+      
+      const { data: newUser, error: insertError } = await supabase
+        .from('users')
+        .insert({
+          id: userId,
+          email: supabaseUserData.email,
+          name: userName,
+          role: 'user',
+          subscription_status: 'free',
+        })
+        .select()
+        .single();
+
+      if (!insertError && newUser) {
+        setUser(newUser as User);
+      } else {
+        const fallbackUser: User = {
+          id: userId,
+          email: supabaseUserData.email || '',
+          name: userName,
+          role: 'user' as UserRole,
+          subscription_status: 'free' as SubscriptionStatus,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+        setUser(fallbackUser);
+      }
     }
   };
 
