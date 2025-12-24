@@ -23,10 +23,11 @@ export function ForgotPasswordPage() {
 
     const { error } = await resetPassword(email);
     
-    if (error) {
-      setError(error.message);
-      setLoading(false);
-    } else {
+        if (error) {
+          setError(error.message || 'Error sending recovery email');
+          console.error('Password reset error:', error);
+          setLoading(false);
+        } else {
       setSuccess(true);
       setLoading(false);
     }
