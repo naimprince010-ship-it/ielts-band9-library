@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Settings, Plus, Edit, Trash2, Eye, EyeOff, BookOpen, GraduationCap,
   Sparkles, Save, X, AlertCircle, CheckCircle, ShieldCheck, Square, CheckSquare,
-  CreditCard, Clock, CheckCircle2, XCircle, Loader2
+  CreditCard, Clock, CheckCircle2, XCircle, Loader2, BarChart3
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,6 +31,7 @@ import { Switch } from '@/components/ui/switch';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLessons } from '@/contexts/LessonContext';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { VocabularyCoverageDashboard } from '@/components/admin/VocabularyCoverageDashboard';
 import { Lesson, LessonType, LessonLevel, LessonContent } from '@/types';
 import { GRAMMAR_TOPICS, VOCABULARY_TOPICS } from '@/data/sampleLessons';
 import { generateLessonWithAI } from '@/services/aiLessonGenerator';
@@ -401,11 +402,15 @@ export function AdminPage() {
 
                 <Tabs defaultValue="payments" className="space-y-4">
                   <TabsList>
-                    <TabsTrigger value="payments" className="gap-2">
-                      <CreditCard className="h-4 w-4" />
-                      Payments {pendingPayments.length > 0 && <Badge className="bg-red-500 text-white ml-1">{pendingPayments.length}</Badge>}
-                    </TabsTrigger>
-                    <TabsTrigger value="all">All Lessons ({allLessons.length})</TabsTrigger>
+                                        <TabsTrigger value="payments" className="gap-2">
+                                          <CreditCard className="h-4 w-4" />
+                                          Payments {pendingPayments.length > 0 && <Badge className="bg-red-500 text-white ml-1">{pendingPayments.length}</Badge>}
+                                        </TabsTrigger>
+                                        <TabsTrigger value="vocab-coverage" className="gap-2">
+                                          <BarChart3 className="h-4 w-4" />
+                                          Vocab Coverage
+                                        </TabsTrigger>
+                                        <TabsTrigger value="all">All Lessons ({allLessons.length})</TabsTrigger>
                     <TabsTrigger value="vocabulary">Vocabulary ({vocabularyLessons.length})</TabsTrigger>
                     <TabsTrigger value="grammar">Grammar ({grammarLessons.length})</TabsTrigger>
                   </TabsList>
@@ -516,11 +521,15 @@ export function AdminPage() {
                             )}
                           </div>
                         )}
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
+                                </CardContent>
+                              </Card>
+                            </TabsContent>
 
-          {['all', 'vocabulary', 'grammar'].map((tab) => (
+                            <TabsContent value="vocab-coverage">
+                              <VocabularyCoverageDashboard />
+                            </TabsContent>
+
+                    {['all', 'vocabulary', 'grammar'].map((tab) => (
             <TabsContent key={tab} value={tab}>
               <Card>
                 <CardContent className="p-0">
