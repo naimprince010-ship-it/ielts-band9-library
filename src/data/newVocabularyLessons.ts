@@ -1129,5 +1129,278 @@ This lesson focuses on common academic collocations that instantly upgrade your 
         'Understanding the underlying causes is crucial for developing effective solutions.'
       ]
     }
+  },
+  // Education Topic Expansion - Band 6.5-7.0
+  {
+    id: 'vocab-education-2',
+    title: 'Education Systems & School Life',
+    slug: 'education-systems-school-life',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Education',
+    description: 'Essential vocabulary for discussing education systems, school environments, and student experiences in IELTS.',
+    is_premium: false,
+    is_published: true,
+    view_count: 0,
+    created_at: '2024-03-01T10:00:00Z',
+    updated_at: '2024-03-01T10:00:00Z',
+    content: {
+      title: 'Education Systems & School Life',
+      targetLevel: 'Band 6.5 - 7.0',
+      whatYouWillLearn: [
+        'Use 25 essential education vocabulary for IELTS',
+        'Discuss school systems and student experiences confidently',
+        'Apply education vocabulary in Writing Task 2 and Speaking'
+      ],
+      coreExplanation: `Education is one of the most common IELTS topics. To score Band 6.5-7.0, you need vocabulary that goes beyond basic words like "school" and "teacher."
+
+This lesson introduces foundational education vocabulary that helps you discuss school systems, learning environments, and student experiences. Focus on using these words naturally - don't force complex vocabulary where simple words work better.`,
+      examples: [
+        { sentence: 'Compulsory education ensures all children receive basic schooling.', explanation: '"Compulsory" means required by law - key term for education discussions.' },
+        { sentence: 'The enrollment rate has increased significantly in developing countries.', explanation: '"Enrollment" is the process of registering for school or courses.' },
+        { sentence: 'Students face considerable pressure to achieve high grades.', explanation: '"Considerable pressure" is a natural collocation for academic stress.' },
+        { sentence: 'The school provides extracurricular activities to develop students holistically.', explanation: '"Extracurricular" means activities outside the regular curriculum.' },
+        { sentence: 'Tuition fees have risen dramatically in recent years.', explanation: '"Tuition fees" are charges for instruction, especially at universities.' },
+        { sentence: 'The literacy rate reflects the quality of basic education.', explanation: '"Literacy rate" is the percentage of people who can read and write.' },
+        { sentence: 'Vocational training prepares students for specific careers.', explanation: '"Vocational" relates to practical job skills rather than academic study.' },
+        { sentence: 'The dropout rate remains a concern in many regions.', explanation: '"Dropout rate" is the percentage of students who leave school early.' },
+        { sentence: 'Inclusive education accommodates students with diverse needs.', explanation: '"Inclusive education" means education that includes all students regardless of ability.' },
+        { sentence: 'The syllabus outlines the topics covered in each subject.', explanation: '"Syllabus" is the detailed plan of what will be taught in a course.' },
+        { sentence: 'Academic pressure can negatively affect student wellbeing.', explanation: '"Academic pressure" refers to stress from educational demands.' },
+        { sentence: 'The grading system varies between different countries.', explanation: '"Grading system" is the method used to evaluate student performance.' },
+        { sentence: 'Scholarships enable talented students from low-income families to pursue higher education.', explanation: '"Scholarships" are financial awards for students based on merit or need.' },
+        { sentence: 'The teacher-student ratio affects the quality of instruction.', explanation: '"Teacher-student ratio" is the number of students per teacher.' },
+        { sentence: 'Distance learning has become more prevalent since the pandemic.', explanation: '"Distance learning" is education conducted remotely, not in a classroom.' },
+        { sentence: 'The examination system determines university admissions.', explanation: '"Examination system" refers to the structure of tests and assessments.' },
+        { sentence: 'Primary education lays the foundation for future learning.', explanation: '"Primary education" is elementary/basic schooling for young children.' },
+        { sentence: 'Secondary education prepares students for higher education or employment.', explanation: '"Secondary education" is middle and high school level education.' },
+        { sentence: 'Tertiary education includes universities and colleges.', explanation: '"Tertiary education" is post-secondary education at universities/colleges.' },
+        { sentence: 'The school facilities include a library, laboratory, and sports complex.', explanation: '"Facilities" are buildings and equipment provided for a particular purpose.' },
+        { sentence: 'Peer learning encourages students to learn from each other.', explanation: '"Peer learning" is learning with and from fellow students.' },
+        { sentence: 'The attendance rate indicates student engagement with school.', explanation: '"Attendance rate" is the percentage of students present at school.' },
+        { sentence: 'Homework assignments reinforce classroom learning.', explanation: '"Assignments" are tasks given to students to complete.' },
+        { sentence: 'The academic year is divided into two semesters.', explanation: '"Academic year" is the annual period of instruction at schools.' },
+        { sentence: 'Student performance is assessed through various methods.', explanation: '"Performance" refers to how well students do in their studies.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Children must go to school.', correction: 'Compulsory education requires children to attend school.', explanation: 'Use "compulsory education" for formal discussions about mandatory schooling.' },
+        { mistake: 'Many students stop studying.', correction: 'The dropout rate remains high in certain regions.', explanation: 'Use "dropout rate" when discussing students leaving school early.' },
+        { mistake: 'School costs a lot of money.', correction: 'Tuition fees have increased substantially.', explanation: 'Use "tuition fees" specifically for education costs.' },
+        { mistake: 'Students do activities after school.', correction: 'Students participate in extracurricular activities.', explanation: '"Extracurricular activities" is the proper term for after-school programs.' },
+        { mistake: 'The school has good things.', correction: 'The school has excellent facilities / is well-equipped.', explanation: 'Use "facilities" or "well-equipped" instead of vague "good things".' }
+      ],
+      miniPractice: [
+        { question: '_____ education is mandatory for all children in most countries.', type: 'fill-blank' },
+        { question: 'Which term describes education at universities and colleges?', options: ['primary', 'secondary', 'tertiary', 'vocational'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Many students leave school before finishing."', type: 'rewrite' },
+        { question: 'The _____ rate measures the percentage of people who can read and write.', type: 'fill-blank' },
+        { question: 'Which collocation is most natural?', options: ['tuition fees', 'tuition costs', 'tuition money', 'tuition price'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        'Compulsory',
+        'tertiary',
+        'The dropout rate remains a significant concern. / Many students fail to complete their education.',
+        'literacy',
+        'tuition fees'
+      ],
+      quickRecap: 'Key terms: "compulsory education", "enrollment", "tuition fees", "extracurricular activities", "vocational training", "dropout rate", "literacy rate". Remember: "tertiary" for university level, "primary" for elementary, "secondary" for high school. Use these for clear education discussions!',
+      collocations: [
+        'compulsory education', 'enrollment rate', 'tuition fees', 'extracurricular activities',
+        'vocational training', 'dropout rate', 'literacy rate', 'academic pressure',
+        'grading system', 'teacher-student ratio', 'distance learning', 'peer learning'
+      ],
+      synonyms: [
+        { word: 'school', synonyms: ['educational institution', 'academy', 'establishment'] },
+        { word: 'student', synonyms: ['learner', 'pupil', 'scholar'] },
+        { word: 'teacher', synonyms: ['educator', 'instructor', 'tutor'] }
+      ],
+      speakingLines: [
+        'In my country, compulsory education covers ages 6 to 16.',
+        'I think extracurricular activities are essential for developing well-rounded students.',
+        'The rising tuition fees make higher education inaccessible for many families.'
+      ]
+    }
+  },
+  // Education Topic Expansion - Band 7.0-8.0
+  {
+    id: 'vocab-education-3',
+    title: 'Educational Philosophy & Teaching Methods',
+    slug: 'educational-philosophy-teaching-methods',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Education',
+    description: 'Advanced vocabulary for discussing educational theories, teaching methodologies, and learning approaches in IELTS.',
+    is_premium: true,
+    is_published: true,
+    view_count: 0,
+    created_at: '2024-03-02T10:00:00Z',
+    updated_at: '2024-03-02T10:00:00Z',
+    content: {
+      title: 'Educational Philosophy & Teaching Methods',
+      targetLevel: 'Band 7.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 advanced education terms for Band 7-8 writing',
+        'Discuss teaching methodologies and learning theories confidently',
+        'Analyze educational approaches with sophisticated vocabulary'
+      ],
+      coreExplanation: `To achieve Band 7-8 in IELTS, you need vocabulary that allows you to discuss education at a deeper level - not just describing systems, but analyzing teaching methods, learning theories, and educational philosophies.
+
+This lesson introduces vocabulary for discussing how education works, why certain approaches are effective, and how learning can be optimized. These terms demonstrate analytical thinking and academic sophistication.`,
+      examples: [
+        { sentence: 'Student-centered learning shifts focus from teacher instruction to learner engagement.', explanation: '"Student-centered" means focusing on student needs rather than teacher-led instruction.' },
+        { sentence: 'Constructivist approaches encourage students to build knowledge through experience.', explanation: '"Constructivist" is a learning theory where learners construct understanding actively.' },
+        { sentence: 'Differentiated instruction addresses diverse learning needs within a classroom.', explanation: '"Differentiated instruction" means adapting teaching to different student abilities.' },
+        { sentence: 'Formative assessment provides ongoing feedback during the learning process.', explanation: '"Formative assessment" is continuous evaluation to guide learning, not just final grades.' },
+        { sentence: 'Summative assessment evaluates learning at the end of an instructional period.', explanation: '"Summative assessment" is final evaluation like exams or projects.' },
+        { sentence: 'Scaffolding provides temporary support to help students master new concepts.', explanation: '"Scaffolding" is structured support that is gradually removed as students progress.' },
+        { sentence: 'Inquiry-based learning encourages students to ask questions and investigate.', explanation: '"Inquiry-based" means learning through questioning and exploration.' },
+        { sentence: 'Experiential learning emphasizes learning through direct experience.', explanation: '"Experiential learning" is hands-on learning by doing.' },
+        { sentence: 'Blended learning combines traditional classroom instruction with online components.', explanation: '"Blended learning" mixes face-to-face and digital learning.' },
+        { sentence: 'The flipped classroom model reverses traditional teaching by delivering content online.', explanation: '"Flipped classroom" means students learn content at home and practice in class.' },
+        { sentence: 'Metacognition involves thinking about one\'s own learning processes.', explanation: '"Metacognition" is awareness and understanding of one\'s own thought processes.' },
+        { sentence: 'Intrinsic motivation drives learning through internal satisfaction.', explanation: '"Intrinsic motivation" comes from within, not external rewards.' },
+        { sentence: 'Extrinsic motivation relies on external rewards such as grades or praise.', explanation: '"Extrinsic motivation" comes from outside factors like rewards or recognition.' },
+        { sentence: 'Collaborative learning fosters teamwork and shared knowledge construction.', explanation: '"Collaborative learning" involves students working together to learn.' },
+        { sentence: 'Project-based learning engages students in real-world problem solving.', explanation: '"Project-based learning" uses projects as the main vehicle for learning.' },
+        { sentence: 'Learning outcomes define what students should know after instruction.', explanation: '"Learning outcomes" are specific goals for what students will achieve.' },
+        { sentence: 'Pedagogical approaches vary significantly across different cultures.', explanation: '"Pedagogical" relates to teaching methods and practices.' },
+        { sentence: 'Autonomous learning develops students\' ability to direct their own education.', explanation: '"Autonomous learning" is self-directed, independent learning.' },
+        { sentence: 'Cognitive development theories inform how curricula are designed.', explanation: '"Cognitive development" relates to how thinking abilities grow over time.' },
+        { sentence: 'Holistic education addresses intellectual, emotional, and social development.', explanation: '"Holistic education" considers the whole person, not just academics.' },
+        { sentence: 'Competency-based education focuses on mastering specific skills.', explanation: '"Competency-based" means progressing by demonstrating skills, not time spent.' },
+        { sentence: 'Reflective practice encourages educators to analyze their teaching methods.', explanation: '"Reflective practice" is thoughtful consideration of one\'s professional actions.' },
+        { sentence: 'Personalized learning tailors education to individual student needs.', explanation: '"Personalized learning" customizes pace, approach, and content for each student.' },
+        { sentence: 'Active learning requires students to engage meaningfully with material.', explanation: '"Active learning" involves participation rather than passive listening.' },
+        { sentence: 'The zone of proximal development describes what learners can achieve with guidance.', explanation: '"Zone of proximal development" is the gap between independent and assisted ability.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Teachers should use different teaching ways.', correction: 'Educators should employ differentiated instruction / varied pedagogical approaches.', explanation: 'Use "differentiated instruction" or "pedagogical approaches" for teaching methods.' },
+        { mistake: 'Students learn better when they do things.', correction: 'Experiential learning enhances knowledge retention and engagement.', explanation: 'Use "experiential learning" for hands-on learning approaches.' },
+        { mistake: 'Tests at the end show what students learned.', correction: 'Summative assessments evaluate student achievement at the conclusion of instruction.', explanation: 'Use "summative assessment" for final evaluations.' },
+        { mistake: 'Students should think about how they learn.', correction: 'Developing metacognitive skills enables students to monitor their own learning.', explanation: 'Use "metacognition" or "metacognitive skills" for thinking about thinking.' },
+        { mistake: 'Students work together to learn.', correction: 'Collaborative learning fosters peer interaction and shared knowledge construction.', explanation: 'Use "collaborative learning" and explain its benefits specifically.' }
+      ],
+      miniPractice: [
+        { question: '_____ assessment provides ongoing feedback during the learning process.', type: 'fill-blank' },
+        { question: 'Which term describes learning that focuses on student needs rather than teacher instruction?', options: ['teacher-centered', 'student-centered', 'content-centered', 'exam-centered'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Students learn by doing things themselves."', type: 'rewrite' },
+        { question: '_____ motivation comes from internal satisfaction rather than external rewards.', type: 'fill-blank' },
+        { question: 'Which approach combines online and face-to-face instruction?', options: ['distance learning', 'blended learning', 'traditional learning', 'autonomous learning'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        'Formative',
+        'student-centered',
+        'Experiential learning enables students to construct knowledge through direct experience.',
+        'Intrinsic',
+        'blended learning'
+      ],
+      quickRecap: 'Key terms: "student-centered learning", "differentiated instruction", "formative/summative assessment", "scaffolding", "metacognition", "intrinsic/extrinsic motivation", "blended learning". These terms show you can analyze HOW education works, not just describe it!',
+      collocations: [
+        'student-centered learning', 'differentiated instruction', 'formative assessment', 'summative assessment',
+        'inquiry-based learning', 'experiential learning', 'blended learning', 'flipped classroom',
+        'intrinsic motivation', 'collaborative learning', 'learning outcomes', 'autonomous learning'
+      ],
+      synonyms: [
+        { word: 'teaching', synonyms: ['instruction', 'pedagogy', 'education', 'tutoring'] },
+        { word: 'method', synonyms: ['approach', 'methodology', 'technique', 'strategy'] },
+        { word: 'test', synonyms: ['assessment', 'evaluation', 'examination', 'appraisal'] }
+      ],
+      speakingLines: [
+        'I believe student-centered learning is more effective than traditional lecture-based instruction.',
+        'Formative assessment helps teachers identify gaps in understanding before final exams.',
+        'Developing metacognitive skills enables students to become more effective, independent learners.'
+      ]
+    }
+  },
+  // Education Topic Expansion - Band 8.0-9.0
+  {
+    id: 'vocab-education-4',
+    title: 'Education Policy & Systemic Reform',
+    slug: 'education-policy-systemic-reform',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Education',
+    description: 'Sophisticated vocabulary for analyzing education policy, systemic reform, and global educational challenges at Band 8-9 level.',
+    is_premium: true,
+    is_published: true,
+    view_count: 0,
+    created_at: '2024-03-03T10:00:00Z',
+    updated_at: '2024-03-03T10:00:00Z',
+    content: {
+      title: 'Education Policy & Systemic Reform',
+      targetLevel: 'Band 8.0 - 9.0',
+      whatYouWillLearn: [
+        'Master 25 sophisticated education policy terms for Band 8-9',
+        'Analyze systemic educational challenges with precision',
+        'Discuss global education trends and reforms authoritatively'
+      ],
+      coreExplanation: `Band 8-9 candidates demonstrate the ability to discuss education at a systemic and policy level. This requires vocabulary for analyzing how education systems function, why reforms succeed or fail, and how global trends shape educational outcomes.
+
+This lesson introduces terms used by education researchers, policymakers, and analysts. Using these accurately shows you can engage with complex educational debates at the highest level.`,
+      examples: [
+        { sentence: 'Educational equity ensures all students have access to quality learning opportunities.', explanation: '"Educational equity" means fairness in education, addressing systemic barriers.' },
+        { sentence: 'The achievement gap between socioeconomic groups persists despite interventions.', explanation: '"Achievement gap" is the disparity in academic performance between different groups.' },
+        { sentence: 'Standardized testing has been criticized for narrowing the curriculum.', explanation: '"Narrowing the curriculum" means focusing only on tested subjects at the expense of others.' },
+        { sentence: 'Accountability measures hold schools responsible for student outcomes.', explanation: '"Accountability measures" are systems to ensure schools meet performance standards.' },
+        { sentence: 'Decentralization of education gives local authorities more decision-making power.', explanation: '"Decentralization" means transferring control from central to local government.' },
+        { sentence: 'The privatization of education raises concerns about accessibility.', explanation: '"Privatization" is the transfer of education from public to private sector.' },
+        { sentence: 'Meritocracy assumes that success is based purely on individual ability and effort.', explanation: '"Meritocracy" is a system where advancement is based on talent and achievement.' },
+        { sentence: 'Social mobility is often linked to educational attainment.', explanation: '"Social mobility" is the ability to move between social classes, often through education.' },
+        { sentence: 'Human capital theory views education as an investment in economic productivity.', explanation: '"Human capital" treats education as developing skills that increase economic value.' },
+        { sentence: 'The commodification of education treats learning as a marketable product.', explanation: '"Commodification" means turning education into something bought and sold.' },
+        { sentence: 'Credentialism emphasizes formal qualifications over actual competence.', explanation: '"Credentialism" is excessive reliance on academic credentials for employment.' },
+        { sentence: 'Educational stratification reproduces social inequalities across generations.', explanation: '"Stratification" is the division of society into hierarchical layers through education.' },
+        { sentence: 'Lifelong learning has become essential in the knowledge economy.', explanation: '"Lifelong learning" is continuous education throughout one\'s life.' },
+        { sentence: 'The hidden curriculum transmits implicit values and norms.', explanation: '"Hidden curriculum" is the unwritten lessons students learn about behavior and values.' },
+        { sentence: 'Grade inflation undermines the validity of academic credentials.', explanation: '"Grade inflation" is the trend of awarding higher grades for the same quality of work.' },
+        { sentence: 'Brain drain depletes developing countries of educated professionals.', explanation: '"Brain drain" is the emigration of educated people to other countries.' },
+        { sentence: 'Universal access to education remains an elusive goal in many regions.', explanation: '"Universal access" means education available to all, regardless of background.' },
+        { sentence: 'Evidence-based policy relies on research to inform educational decisions.', explanation: '"Evidence-based" means decisions grounded in empirical research.' },
+        { sentence: 'Stakeholder engagement involves parents, teachers, and communities in reform.', explanation: '"Stakeholders" are all parties with an interest in education outcomes.' },
+        { sentence: 'The digital divide creates disparities in access to technology-enhanced learning.', explanation: '"Digital divide" is the gap between those with and without technology access.' },
+        { sentence: 'Curriculum standardization ensures consistency but may limit local relevance.', explanation: '"Standardization" means making curricula uniform across different schools.' },
+        { sentence: 'Educational attainment correlates strongly with lifetime earnings.', explanation: '"Educational attainment" is the highest level of education completed.' },
+        { sentence: 'Systemic reform requires addressing structural barriers to educational success.', explanation: '"Systemic reform" means changing the fundamental structure of education systems.' },
+        { sentence: 'The reproduction of inequality occurs when education reinforces existing social hierarchies.', explanation: '"Reproduction of inequality" is when education perpetuates rather than reduces disparities.' },
+        { sentence: 'Quality assurance mechanisms maintain educational standards across institutions.', explanation: '"Quality assurance" is the systematic process of ensuring educational standards.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Poor students don\'t do as well as rich students.', correction: 'The achievement gap between students from different socioeconomic backgrounds remains significant.', explanation: 'Use "achievement gap" and "socioeconomic backgrounds" for precise academic discussion.' },
+        { mistake: 'Education should be fair for everyone.', correction: 'Educational equity requires addressing systemic barriers that disadvantage certain groups.', explanation: 'Use "educational equity" and explain what fairness actually requires.' },
+        { mistake: 'Smart people get better jobs.', correction: 'Meritocratic systems assume that advancement is based on individual ability and effort.', explanation: 'Use "meritocracy" and note it\'s an assumption, not necessarily reality.' },
+        { mistake: 'Education helps people earn more money.', correction: 'Human capital theory posits that educational attainment correlates with economic productivity.', explanation: 'Use "human capital theory" and "educational attainment" for sophisticated analysis.' },
+        { mistake: 'Schools should be responsible for results.', correction: 'Accountability measures hold educational institutions responsible for student outcomes.', explanation: 'Use "accountability measures" and "student outcomes" for policy discussions.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ gap refers to disparities in academic performance between different student groups.', type: 'fill-blank' },
+        { question: 'Which term describes the emigration of educated professionals from developing countries?', options: ['brain drain', 'social mobility', 'credentialism', 'stratification'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Education makes society more unequal."', type: 'rewrite' },
+        { question: 'Educational _____ ensures all students have fair access to quality learning opportunities.', type: 'fill-blank' },
+        { question: 'Which concept treats education as an investment in economic productivity?', options: ['human capital', 'social capital', 'cultural capital', 'financial capital'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        'achievement',
+        'brain drain',
+        'Educational stratification can reproduce and perpetuate social inequalities across generations.',
+        'equity',
+        'human capital'
+      ],
+      quickRecap: 'Key terms: "educational equity", "achievement gap", "accountability measures", "meritocracy", "social mobility", "human capital", "credentialism", "stratification", "brain drain", "digital divide". These terms enable sophisticated analysis of education as a social and political system!',
+      collocations: [
+        'educational equity', 'achievement gap', 'accountability measures', 'social mobility',
+        'human capital', 'lifelong learning', 'hidden curriculum', 'grade inflation',
+        'brain drain', 'digital divide', 'systemic reform', 'quality assurance'
+      ],
+      synonyms: [
+        { word: 'fair', synonyms: ['equitable', 'just', 'impartial', 'unbiased'] },
+        { word: 'gap', synonyms: ['disparity', 'divide', 'discrepancy', 'inequality'] },
+        { word: 'change', synonyms: ['reform', 'transformation', 'restructuring', 'overhaul'] }
+      ],
+      speakingLines: [
+        'Educational equity requires more than equal resources - it demands addressing systemic barriers.',
+        'The achievement gap reflects broader socioeconomic inequalities that schools alone cannot solve.',
+        'While meritocracy is an appealing ideal, educational stratification often reproduces existing hierarchies.'
+      ]
+    }
   }
 ];
