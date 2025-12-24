@@ -32,6 +32,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLessons } from '@/contexts/LessonContext';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { VocabularyCoverageDashboard } from '@/components/admin/VocabularyCoverageDashboard';
+import { SiteSettings } from '@/components/admin/SiteSettings';
 import { Lesson, LessonType, LessonLevel, LessonContent } from '@/types';
 import { GRAMMAR_TOPICS, VOCABULARY_TOPICS } from '@/data/sampleLessons';
 import { generateLessonWithAI } from '@/services/aiLessonGenerator';
@@ -406,11 +407,15 @@ export function AdminPage() {
                                           <CreditCard className="h-4 w-4" />
                                           Payments {pendingPayments.length > 0 && <Badge className="bg-red-500 text-white ml-1">{pendingPayments.length}</Badge>}
                                         </TabsTrigger>
-                                        <TabsTrigger value="vocab-coverage" className="gap-2">
-                                          <BarChart3 className="h-4 w-4" />
-                                          Vocab Coverage
-                                        </TabsTrigger>
-                                        <TabsTrigger value="all">All Lessons ({allLessons.length})</TabsTrigger>
+                                                                                <TabsTrigger value="vocab-coverage" className="gap-2">
+                                                                                  <BarChart3 className="h-4 w-4" />
+                                                                                  Vocab Coverage
+                                                                                </TabsTrigger>
+                                                                                <TabsTrigger value="site-settings" className="gap-2">
+                                                                                  <Settings className="h-4 w-4" />
+                                                                                  Site Settings
+                                                                                </TabsTrigger>
+                                                                                <TabsTrigger value="all">All Lessons ({allLessons.length})</TabsTrigger>
                     <TabsTrigger value="vocabulary">Vocabulary ({vocabularyLessons.length})</TabsTrigger>
                     <TabsTrigger value="grammar">Grammar ({grammarLessons.length})</TabsTrigger>
                   </TabsList>
@@ -525,11 +530,15 @@ export function AdminPage() {
                               </Card>
                             </TabsContent>
 
-                            <TabsContent value="vocab-coverage">
-                              <VocabularyCoverageDashboard />
-                            </TabsContent>
+                                                <TabsContent value="vocab-coverage">
+                                                  <VocabularyCoverageDashboard />
+                                                </TabsContent>
 
-                    {['all', 'vocabulary', 'grammar'].map((tab) => (
+                                                <TabsContent value="site-settings">
+                                                  <SiteSettings />
+                                                </TabsContent>
+
+                                        {['all', 'vocabulary', 'grammar'].map((tab) => (
             <TabsContent key={tab} value={tab}>
               <Card>
                 <CardContent className="p-0">
