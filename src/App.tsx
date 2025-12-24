@@ -10,6 +10,8 @@ import { SignupPage } from '@/pages/SignupPage';
 import { PricingPage } from '@/pages/PricingPage';
 import { BookmarksPage } from '@/pages/BookmarksPage';
 import { AdminPage } from '@/pages/AdminPage';
+import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage';
+import { ResetPasswordPage } from '@/pages/ResetPasswordPage';
 import './App.css';
 
 function App() {
@@ -18,8 +20,10 @@ function App() {
       <AuthProvider>
         <LessonProvider>
           <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="/signup" element={<SignupPage />} />
+                        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                        <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route
               path="/"
               element={

@@ -11,6 +11,8 @@ interface AuthContextType {
   signUp: (email: string, password: string, name: string) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signInWithGoogle: () => Promise<{ error: Error | null }>;
+  resetPassword: (email: string) => Promise<{ error: Error | null }>;
+  updatePassword: (newPassword: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
   isAdmin: boolean;
   isPremium: boolean;
@@ -205,6 +207,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error: error as Error | null };
   };
 
+  const resetPassword = async (email: string) => {
+    if (!isSupabaseConfigured() || !supabase) {
+      return { error: new Error('Password reset requires Supabase configuration') };
+    }
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+
+    return { error: error as Error | null };
+  };
+
+  const updatePassword = async (newPassword: string) => {
+    if (!isSupabaseConfigured() || !supabase) {
+      return { error: new Error('Password update requires Supabase configuration') };
+    }
+
+    const { error } = await supabase.auth.updateUser({
+      password: newPassword,
+    });
+
+    return { error: error as Error | null };
+  };
+
   const signOut = async () => {
     if (!isSupabaseConfigured() || !supabase) {
       setUser(null);
@@ -224,6 +250,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signUp,
     signIn,
     signInWithGoogle,
+    resetPassword,
+    updatePassword,
     signOut,
     isAdmin: user?.role === 'admin',
     isPremium: user?.subscription_status === 'premium',

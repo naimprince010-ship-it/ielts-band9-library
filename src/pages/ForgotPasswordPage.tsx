@@ -1,0 +1,139 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { BookOpen, Mail, AlertCircle, CheckCircle, ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useAuth } from '@/contexts/AuthContext';
+import { isSupabaseConfigured } from '@/lib/supabase';
+
+export function ForgotPasswordPage() {
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { resetPassword } = useAuth();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    const { error } = await resetPassword(email);
+    
+    if (error) {
+      setError(error.message);
+      setLoading(false);
+    } else {
+      setSuccess(true);
+      setLoading(false);
+    }
+  };
+
+  if (!isSupabaseConfigured()) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <div className="flex justify-center mb-4">
+              <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
+                <BookOpen className="h-6 w-6 text-indigo-600" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl">Password Reset</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Alert className="mb-4 bg-yellow-50 border-yellow-200">
+              <AlertCircle className="h-4 w-4 text-yellow-600" />
+              <AlertDescription className="text-yellow-800">
+                Password reset is not available in demo mode. Please use the demo credentials to sign in.
+              </AlertDescription>
+            </Alert>
+            <Link to="/login">
+              <Button variant="outline" className="w-full">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Login
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <div className="flex justify-center mb-4">
+            <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
+              <BookOpen className="h-6 w-6 text-indigo-600" />
+            </div>
+          </div>
+          <CardTitle className="text-2xl">Forgot Password?</CardTitle>
+          <CardDescription>
+            Enter your email address and we'll send you a link to reset your password.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {success ? (
+            <div className="space-y-4">
+              <Alert className="bg-green-50 border-green-200">
+                <CheckCircle className="h-4 w-4 text-green-600" />
+                <AlertDescription className="text-green-800">
+                  Password reset link sent! Check your email inbox (and spam folder) for the reset link.
+                </AlertDescription>
+              </Alert>
+              <Link to="/login">
+                <Button variant="outline" className="w-full">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back to Login
+                </Button>
+              </Link>
+            </div>
+          ) : (
+            <>
+              {error && (
+                <Alert variant="destructive" className="mb-4">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="you@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="pl-10"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? 'Sending...' : 'Send Reset Link'}
+                </Button>
+              </form>
+
+              <div className="mt-6 text-center text-sm">
+                <Link to="/login" className="text-indigo-600 hover:text-indigo-500 font-medium flex items-center justify-center">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back to Login
+                </Link>
+              </div>
+            </>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

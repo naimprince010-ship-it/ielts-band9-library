@@ -97,23 +97,28 @@ export function LoginPage() {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10"
-                  required
-                />
-              </div>
-            </div>
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <Label htmlFor="password">Password</Label>
+                            <Link to="/forgot-password" className="text-sm text-indigo-600 hover:text-indigo-500">
+                              Forgot password?
+                            </Link>
+                          </div>
+                          <div className="relative">
+                            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                            <Input
+                              id="password"
+                              type="password"
+                              placeholder="Enter your password"
+                              value={password}
+                              onChange={(e) => setPassword(e.target.value)}
+                              className="pl-10"
+                              required
+                            />
+                          </div>
+                        </div>
 
-            <Button type="submit" className="w-full" disabled={loading}>
+                        <Button type="submit" className="w-full" disabled={loading}>
               {loading ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>
