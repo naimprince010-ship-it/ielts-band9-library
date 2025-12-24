@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { BookOpen, Mail, Lock, User, AlertCircle, CheckCircle } from 'lucide-react';
+import { BookOpen, Mail, Lock, User, AlertCircle, CheckCircle, Chrome } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuth } from '@/contexts/AuthContext';
+import { isSupabaseConfigured } from '@/lib/supabase';
 
 export function SignupPage() {
   const [name, setName] = useState('');
@@ -16,7 +17,8 @@ export function SignupPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { signUp } = useAuth();
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const { signUp, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -43,6 +45,18 @@ export function SignupPage() {
     } else {
       setSuccess(true);
       setTimeout(() => navigate('/'), 1500);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setError('');
+    setGoogleLoading(true);
+    
+    const { error } = await signInWithGoogle();
+    
+    if (error) {
+      setError(error.message);
+      setGoogleLoading(false);
     }
   };
 
@@ -144,6 +158,30 @@ export function SignupPage() {
               {loading ? 'Creating account...' : 'Create Account'}
             </Button>
           </form>
+
+          {isSupabaseConfigured() && (
+            <>
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-white px-2 text-gray-500">Or continue with</span>
+                </div>
+              </div>
+
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={handleGoogleSignIn}
+                disabled={googleLoading || success}
+              >
+                <Chrome className="mr-2 h-4 w-4" />
+                {googleLoading ? 'Connecting...' : 'Sign up with Google'}
+              </Button>
+            </>
+          )}
 
           <div className="mt-6 text-center text-sm">
             <span className="text-gray-600">Already have an account? </span>
