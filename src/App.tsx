@@ -12,6 +12,7 @@ import { BookmarksPage } from '@/pages/BookmarksPage';
 import { AdminPage } from '@/pages/AdminPage';
 import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage';
 import { ResetPasswordPage } from '@/pages/ResetPasswordPage';
+import { PaymentPage } from '@/pages/PaymentPage';
 import './App.css';
 
 function App() {
@@ -23,8 +24,9 @@ function App() {
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/signup" element={<SignupPage />} />
                         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                        <Route path="/reset-password" element={<ResetPasswordPage />} />
-            <Route
+                                    <Route path="/reset-password" element={<ResetPasswordPage />} />
+                        <Route path="/payment" element={<PaymentPage />} />
+                        <Route
               path="/"
               element={
                 <Layout>

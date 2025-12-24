@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Check, Star, Zap, Crown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,6 +7,15 @@ import { useAuth } from '@/contexts/AuthContext';
 
 export function PricingPage() {
   const { user, isPremium } = useAuth();
+  const navigate = useNavigate();
+
+  const handleUpgrade = (packageType: 'monthly' | 'yearly') => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    navigate(`/payment?package=${packageType}`);
+  };
 
   const plans = [
     {
@@ -132,32 +141,39 @@ export function PricingPage() {
                   ))}
                 </ul>
                 
-                {plan.ctaLink === '#' ? (
-                  <Button 
-                    className="w-full" 
-                    variant={plan.popular ? 'default' : 'outline'}
-                    disabled={plan.disabled}
-                  >
-                    {plan.disabled && isPremium ? (
-                      <>
-                        <Crown className="h-4 w-4 mr-2" />
-                        Current Plan
-                      </>
-                    ) : (
-                      plan.cta
-                    )}
-                  </Button>
-                ) : (
-                  <Link to={plan.ctaLink}>
-                    <Button 
-                      className="w-full" 
-                      variant={plan.popular ? 'default' : 'outline'}
-                      disabled={plan.disabled}
-                    >
-                      {plan.cta}
-                    </Button>
-                  </Link>
-                )}
+                                {plan.name === 'Free' ? (
+                                  plan.ctaLink === '#' ? (
+                                    <Button 
+                                      className="w-full" 
+                                      variant="outline"
+                                      disabled={plan.disabled}
+                                    >
+                                      {plan.disabled ? 'Current Plan' : plan.cta}
+                                    </Button>
+                                  ) : (
+                                    <Link to={plan.ctaLink}>
+                                      <Button className="w-full" variant="outline">
+                                        {plan.cta}
+                                      </Button>
+                                    </Link>
+                                  )
+                                ) : (
+                                  <Button 
+                                    className="w-full" 
+                                    variant={plan.popular ? 'default' : 'outline'}
+                                    disabled={plan.disabled}
+                                    onClick={() => handleUpgrade(plan.name === 'Premium Monthly' ? 'monthly' : 'yearly')}
+                                  >
+                                    {plan.disabled && isPremium ? (
+                                      <>
+                                        <Crown className="h-4 w-4 mr-2" />
+                                        Current Plan
+                                      </>
+                                    ) : (
+                                      plan.cta
+                                    )}
+                                  </Button>
+                                )}
               </CardContent>
             </Card>
           ))}
@@ -167,11 +183,11 @@ export function PricingPage() {
           <h2 className="text-2xl font-bold text-center mb-8">Frequently Asked Questions</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h3 className="font-semibold text-lg mb-2">What payment methods do you accept?</h3>
-              <p className="text-gray-600">
-                We accept bKash, Nagad, Rocket, and all major credit/debit cards. 
-                International payments are processed through Stripe.
-              </p>
+                            <h3 className="font-semibold text-lg mb-2">What payment methods do you accept?</h3>
+                            <p className="text-gray-600">
+                              We currently accept bKash payments. Simply send money to our bKash merchant number 
+                              and submit your transaction ID for verification.
+                            </p>
             </div>
             <div>
               <h3 className="font-semibold text-lg mb-2">Can I cancel anytime?</h3>
@@ -197,14 +213,11 @@ export function PricingPage() {
           </div>
         </div>
 
-        <div className="mt-12 text-center">
-          <p className="text-gray-500 mb-4">
-            Payment integration coming soon. Currently in demo mode.
-          </p>
-          <p className="text-sm text-gray-400">
-            Questions? Contact us at support@ieltsband9.com
-          </p>
-        </div>
+                <div className="mt-12 text-center">
+                  <p className="text-sm text-gray-400">
+                    Questions? Contact us at support@ieltstree.com
+                  </p>
+                </div>
       </div>
     </div>
   );
