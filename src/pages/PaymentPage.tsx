@@ -9,7 +9,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
-const BKASH_NUMBER = '01XXXXXXXXX';
+const BKASH_NUMBER = '01681354066';
 
 const PACKAGES = {
   monthly: {
