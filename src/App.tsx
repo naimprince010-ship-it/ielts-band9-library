@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { LessonProvider } from '@/contexts/LessonContext';
 import { Layout } from '@/components/layout/Layout';
@@ -12,79 +12,71 @@ import { BookmarksPage } from '@/pages/BookmarksPage';
 import { AdminPage } from '@/pages/AdminPage';
 import './App.css';
 
-function AppRoutes() {
-  const location = useLocation();
-  
-  return (
-    <Routes key={location.pathname}>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<SignupPage />} />
-      <Route
-        path="/"
-        element={
-          <Layout>
-            <HomePage />
-          </Layout>
-        }
-      />
-      <Route
-        path="/vocabulary"
-        element={
-          <Layout>
-            <LibraryPage type="vocabulary" key="vocabulary" />
-          </Layout>
-        }
-      />
-      <Route
-        path="/grammar"
-        element={
-          <Layout>
-            <LibraryPage type="grammar" key="grammar" />
-          </Layout>
-        }
-      />
-      <Route
-        path="/lesson/:slug"
-        element={
-          <Layout>
-            <LessonPage />
-          </Layout>
-        }
-      />
-      <Route
-        path="/pricing"
-        element={
-          <Layout>
-            <PricingPage />
-          </Layout>
-        }
-      />
-      <Route
-        path="/bookmarks"
-        element={
-          <Layout>
-            <BookmarksPage />
-          </Layout>
-        }
-      />
-      <Route
-        path="/admin"
-        element={
-          <Layout>
-            <AdminPage />
-          </Layout>
-        }
-      />
-    </Routes>
-  );
-}
-
 function App() {
   return (
     <Router>
       <AuthProvider>
         <LessonProvider>
-          <AppRoutes />
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route
+              path="/"
+              element={
+                <Layout>
+                  <HomePage />
+                </Layout>
+              }
+            />
+            <Route
+              path="/vocabulary"
+              element={
+                <Layout>
+                  <LibraryPage type="vocabulary" />
+                </Layout>
+              }
+            />
+            <Route
+              path="/grammar"
+              element={
+                <Layout>
+                  <LibraryPage type="grammar" />
+                </Layout>
+              }
+            />
+            <Route
+              path="/lesson/:slug"
+              element={
+                <Layout>
+                  <LessonPage />
+                </Layout>
+              }
+            />
+            <Route
+              path="/pricing"
+              element={
+                <Layout>
+                  <PricingPage />
+                </Layout>
+              }
+            />
+            <Route
+              path="/bookmarks"
+              element={
+                <Layout>
+                  <BookmarksPage />
+                </Layout>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <Layout>
+                  <AdminPage />
+                </Layout>
+              }
+            />
+          </Routes>
         </LessonProvider>
       </AuthProvider>
     </Router>
