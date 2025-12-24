@@ -33,6 +33,7 @@ import { useLessons } from '@/contexts/LessonContext';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { VocabularyCoverageDashboard } from '@/components/admin/VocabularyCoverageDashboard';
 import { SiteSettings } from '@/components/admin/SiteSettings';
+import { UserManagement } from '@/components/admin/UserManagement';
 import { Lesson, LessonType, LessonLevel, LessonContent } from '@/types';
 import { GRAMMAR_TOPICS, VOCABULARY_TOPICS } from '@/data/sampleLessons';
 import { generateLessonWithAI } from '@/services/aiLessonGenerator';
@@ -411,11 +412,15 @@ export function AdminPage() {
                                                                                   <BarChart3 className="h-4 w-4" />
                                                                                   Vocab Coverage
                                                                                 </TabsTrigger>
-                                                                                <TabsTrigger value="site-settings" className="gap-2">
-                                                                                  <Settings className="h-4 w-4" />
-                                                                                  Site Settings
-                                                                                </TabsTrigger>
-                                                                                <TabsTrigger value="all">All Lessons ({allLessons.length})</TabsTrigger>
+                                                                                                                                                                <TabsTrigger value="site-settings" className="gap-2">
+                                                                                                                                                                  <Settings className="h-4 w-4" />
+                                                                                                                                                                  Site Settings
+                                                                                                                                                                </TabsTrigger>
+                                                                                                                                                                <TabsTrigger value="user-management" className="gap-2">
+                                                                                                                                                                  <ShieldCheck className="h-4 w-4" />
+                                                                                                                                                                  Users
+                                                                                                                                                                </TabsTrigger>
+                                                                                                                                                                <TabsTrigger value="all">All Lessons ({allLessons.length})</TabsTrigger>
                     <TabsTrigger value="vocabulary">Vocabulary ({vocabularyLessons.length})</TabsTrigger>
                     <TabsTrigger value="grammar">Grammar ({grammarLessons.length})</TabsTrigger>
                   </TabsList>
@@ -534,11 +539,15 @@ export function AdminPage() {
                                                   <VocabularyCoverageDashboard />
                                                 </TabsContent>
 
-                                                <TabsContent value="site-settings">
-                                                  <SiteSettings />
-                                                </TabsContent>
+                                                                                        <TabsContent value="site-settings">
+                                                                                          <SiteSettings />
+                                                                                        </TabsContent>
 
-                                        {['all', 'vocabulary', 'grammar'].map((tab) => (
+                                                                                        <TabsContent value="user-management">
+                                                                                          <UserManagement />
+                                                                                        </TabsContent>
+
+                                                                                {['all', 'vocabulary', 'grammar'].map((tab) => (
             <TabsContent key={tab} value={tab}>
               <Card>
                 <CardContent className="p-0">
