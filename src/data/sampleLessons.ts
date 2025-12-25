@@ -567,7 +567,8 @@ export const VOCABULARY_TOPICS = [
   'Global',
   'Decision',
   'Creativity',
-  'Communication'
+  'Communication',
+  'Emotions'
 ];
 
 export { WRITING_TOPICS, SPEAKING_TOPICS };

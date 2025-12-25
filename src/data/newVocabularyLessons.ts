@@ -21398,5 +21398,346 @@ Understanding these terms helps you discuss influence effectively.`,
         'The consequences are far-reaching.'
       ]
     }
+  },
+  // Emotions & Expressions Vocabulary (4 lessons)
+  {
+    id: 'vocab-emotions-1',
+    title: 'Basic Emotions & Feelings Vocabulary',
+    slug: 'basic-emotions-feelings-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Emotions',
+    description: 'Essential vocabulary for describing emotions and feelings in IELTS Speaking and Writing.',
+    is_premium: false,
+    is_published: true,
+    view_count: 0,
+    created_at: '2024-12-25T10:00:00Z',
+    updated_at: '2024-12-25T10:00:00Z',
+    content: {
+      title: 'Basic Emotions & Feelings Vocabulary',
+      targetLevel: 'Band 6.5 - 7.5',
+      whatYouWillLearn: [
+        'Master 25 essential emotion and feeling terms for IELTS',
+        'Describe emotional states naturally in Speaking Part 2',
+        'Use emotion vocabulary accurately in Writing Task 2'
+      ],
+      coreExplanation: `Emotions and feelings are fundamental to human experience and frequently appear in IELTS Speaking Part 2 (Describe a person/experience) and Writing Task 2 (discussing human behavior). To achieve Band 7+, you need vocabulary that goes beyond basic words like "happy" and "sad."
+
+This lesson introduces precise emotional vocabulary that demonstrates your ability to describe complex feelings. The key is using these terms accurately and naturally - avoid overusing dramatic words that sound unnatural.`,
+      examples: [
+        { sentence: 'She felt overwhelmed by the amount of work she had to complete.', explanation: '"Overwhelmed" means feeling unable to cope with too much of something.' },
+        { sentence: 'The news left him utterly devastated and unable to function.', explanation: '"Devastated" means extremely shocked and upset - stronger than "sad".' },
+        { sentence: 'I was absolutely elated when I received my exam results.', explanation: '"Elated" means extremely happy and excited - more sophisticated than "very happy".' },
+        { sentence: 'She appeared anxious about the upcoming interview.', explanation: '"Anxious" means worried or nervous about something uncertain.' },
+        { sentence: 'He felt frustrated by the lack of progress on the project.', explanation: '"Frustrated" means feeling upset because you cannot achieve what you want.' },
+        { sentence: 'The children were ecstatic when they heard about the trip.', explanation: '"Ecstatic" means feeling overwhelming happiness or joyful excitement.' },
+        { sentence: 'She seemed melancholic after reading the letter.', explanation: '"Melancholic" means feeling or expressing sadness, especially in a thoughtful way.' },
+        { sentence: 'I was apprehensive about starting a new job in a foreign country.', explanation: '"Apprehensive" means anxious or fearful about the future.' },
+        { sentence: 'He felt content with his simple life in the countryside.', explanation: '"Content" means satisfied and at peace with what you have.' },
+        { sentence: 'She was exasperated by his constant excuses.', explanation: '"Exasperated" means intensely irritated and frustrated.' },
+        { sentence: 'The unexpected gift left her feeling touched and grateful.', explanation: '"Touched" means emotionally affected in a positive way.' },
+        { sentence: 'He appeared indifferent to the criticism he received.', explanation: '"Indifferent" means having no particular interest or concern.' },
+        { sentence: 'She felt nostalgic when looking at old photographs.', explanation: '"Nostalgic" means feeling sentimental longing for the past.' },
+        { sentence: 'The injustice left him feeling resentful and bitter.', explanation: '"Resentful" means feeling angry because of unfair treatment.' },
+        { sentence: 'I was bewildered by the complex instructions.', explanation: '"Bewildered" means completely puzzled or confused.' },
+        { sentence: 'She felt euphoric after completing the marathon.', explanation: '"Euphoric" means feeling intense excitement and happiness.' },
+        { sentence: 'He seemed despondent after failing the exam.', explanation: '"Despondent" means in low spirits from loss of hope or courage.' },
+        { sentence: 'The audience was captivated by her performance.', explanation: '"Captivated" means having attention held completely.' },
+        { sentence: 'She felt ambivalent about accepting the job offer.', explanation: '"Ambivalent" means having mixed or contradictory feelings.' },
+        { sentence: 'He was mortified when he realized his mistake.', explanation: '"Mortified" means feeling extremely embarrassed or ashamed.' }
+      ],
+      commonMistakes: [
+        { mistake: 'I feel very happy about this.', correction: 'I feel elated/thrilled/delighted about this.', explanation: 'Use more sophisticated synonyms for "very happy" to demonstrate vocabulary range.' },
+        { mistake: 'She was very sad.', correction: 'She was devastated/heartbroken/despondent.', explanation: 'Replace "very sad" with more precise emotional vocabulary.' },
+        { mistake: 'He is angry.', correction: 'He is furious/outraged/incensed.', explanation: 'Use stronger, more specific words to show intensity.' },
+        { mistake: 'I feel bad about it.', correction: 'I feel guilty/remorseful/regretful about it.', explanation: '"Bad" is vague; specify the type of negative feeling.' },
+        { mistake: 'She was scared.', correction: 'She was terrified/petrified/apprehensive.', explanation: 'Use more precise words to indicate the degree of fear.' }
+      ],
+      miniPractice: [
+        { question: 'She felt _____ when she received the unexpected promotion. (extremely happy)', type: 'fill-blank' },
+        { question: 'Which word means "feeling unable to cope with too much"?', options: ['overwhelmed', 'underwhelmed', 'content', 'indifferent'], type: 'multiple-choice' },
+        { question: 'Rewrite: "He was very angry about the decision."', type: 'rewrite' },
+        { question: 'The criticism left him feeling _____ and bitter.', type: 'fill-blank' },
+        { question: 'Which emotion describes sentimental longing for the past?', options: ['nostalgic', 'anxious', 'euphoric', 'bewildered'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        'elated/ecstatic/thrilled',
+        'overwhelmed',
+        'He was furious/outraged/incensed about the decision.',
+        'resentful',
+        'nostalgic'
+      ],
+      quickRecap: 'Key emotion terms: "elated", "devastated", "overwhelmed", "anxious", "frustrated", "ecstatic", "melancholic", "apprehensive", "content", "exasperated". Remember: avoid "very happy/sad/angry" - use precise emotional vocabulary!',
+      collocations: [
+        'utterly devastated', 'absolutely elated', 'deeply touched', 'extremely anxious',
+        'thoroughly frustrated', 'completely overwhelmed', 'genuinely content', 'visibly exasperated',
+        'profoundly moved', 'increasingly apprehensive', 'somewhat ambivalent', 'utterly bewildered'
+      ],
+      synonyms: [
+        { word: 'happy', synonyms: ['elated', 'ecstatic', 'thrilled', 'delighted', 'overjoyed'] },
+        { word: 'sad', synonyms: ['devastated', 'heartbroken', 'despondent', 'melancholic', 'dejected'] },
+        { word: 'angry', synonyms: ['furious', 'outraged', 'incensed', 'livid', 'irate'] }
+      ],
+      speakingLines: [
+        'I was absolutely elated when I heard the news - it was the best moment of my life.',
+        'To be honest, I felt quite overwhelmed by the whole experience.',
+        'Looking back, I think I was somewhat apprehensive about the change at first.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-emotions-2',
+    title: 'Facial Expressions & Body Language',
+    slug: 'facial-expressions-body-language',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Emotions',
+    description: 'Vocabulary for describing facial expressions and body language in IELTS Speaking.',
+    is_premium: true,
+    is_published: true,
+    view_count: 0,
+    created_at: '2024-12-25T10:00:00Z',
+    updated_at: '2024-12-25T10:00:00Z',
+    content: {
+      title: 'Facial Expressions & Body Language',
+      targetLevel: 'Band 6.5 - 7.5',
+      whatYouWillLearn: [
+        'Master 25 terms for describing facial expressions and body language',
+        'Describe people vividly in Speaking Part 2',
+        'Use non-verbal communication vocabulary accurately'
+      ],
+      coreExplanation: `Describing facial expressions and body language is essential for IELTS Speaking Part 2 (Describe a person) and adds depth to your descriptions. To achieve Band 7+, you need vocabulary that allows you to paint vivid pictures of how people express themselves non-verbally.
+
+This lesson focuses on words that help you describe physical manifestations of emotions - not just "she smiled" but sophisticated descriptions of how people communicate through their expressions and gestures.`,
+      examples: [
+        { sentence: 'Her face lit up when she saw her old friend.', explanation: '"Face lit up" means showed sudden happiness or excitement.' },
+        { sentence: 'He furrowed his brow in concentration.', explanation: '"Furrowed his brow" means wrinkled his forehead, showing deep thought or concern.' },
+        { sentence: 'She gave a wry smile at the ironic situation.', explanation: '"Wry smile" is a slightly twisted smile showing dry humor or irony.' },
+        { sentence: 'His eyes widened in disbelief at the news.', explanation: '"Eyes widened" indicates surprise or shock.' },
+        { sentence: 'She shrugged her shoulders indifferently.', explanation: '"Shrugged" means raised and lowered shoulders to show uncertainty or indifference.' },
+        { sentence: 'He clenched his fists in anger.', explanation: '"Clenched his fists" means closed hands tightly, showing anger or determination.' },
+        { sentence: 'Her lips quivered as she tried not to cry.', explanation: '"Lips quivered" means trembled slightly, showing emotional distress.' },
+        { sentence: 'He raised an eyebrow skeptically.', explanation: '"Raised an eyebrow" indicates doubt, surprise, or questioning.' },
+        { sentence: 'She nodded enthusiastically in agreement.', explanation: '"Nodded" means moved head up and down to show agreement.' },
+        { sentence: 'His jaw dropped in astonishment.', explanation: '"Jaw dropped" means mouth opened in extreme surprise.' },
+        { sentence: 'She grimaced at the bitter taste.', explanation: '"Grimaced" means made a twisted facial expression showing disgust or pain.' },
+        { sentence: 'He smirked knowingly at the comment.', explanation: '"Smirked" means smiled in a self-satisfied or smug way.' },
+        { sentence: 'Her eyes sparkled with excitement.', explanation: '"Eyes sparkled" means showed bright, lively enthusiasm.' },
+        { sentence: 'He slouched in his chair, looking defeated.', explanation: '"Slouched" means sat or stood with drooping posture.' },
+        { sentence: 'She gestured animatedly while telling the story.', explanation: '"Gestured animatedly" means used lively hand movements.' },
+        { sentence: 'His face fell when he heard the bad news.', explanation: '"Face fell" means expression changed to show disappointment.' },
+        { sentence: 'She beamed with pride at her achievement.', explanation: '"Beamed" means smiled radiantly with happiness.' },
+        { sentence: 'He winced in pain when he moved his arm.', explanation: '"Winced" means made a slight grimacing movement showing pain.' },
+        { sentence: 'Her posture stiffened when she heard his name.', explanation: '"Posture stiffened" means body became rigid, showing tension.' },
+        { sentence: 'He paced nervously while waiting for the results.', explanation: '"Paced" means walked back and forth anxiously.' }
+      ],
+      commonMistakes: [
+        { mistake: 'She smiled happily.', correction: 'She beamed with joy / Her face lit up with happiness.', explanation: 'Use more descriptive expressions instead of simple "smiled happily".' },
+        { mistake: 'He looked angry.', correction: 'He clenched his jaw / His face darkened with anger.', explanation: 'Describe the physical manifestation of the emotion.' },
+        { mistake: 'She was surprised.', correction: 'Her eyes widened in surprise / Her jaw dropped in astonishment.', explanation: 'Show surprise through facial expressions.' },
+        { mistake: 'He moved his hands.', correction: 'He gestured emphatically / He waved his hands dismissively.', explanation: 'Be specific about the type and meaning of the gesture.' },
+        { mistake: 'She looked sad.', correction: 'Her face fell / Her eyes glistened with unshed tears.', explanation: 'Describe how sadness manifests physically.' }
+      ],
+      miniPractice: [
+        { question: 'Her face _____ when she saw her surprise birthday party.', type: 'fill-blank' },
+        { question: 'Which expression shows skepticism or doubt?', options: ['raised an eyebrow', 'beamed', 'nodded', 'shrugged'], type: 'multiple-choice' },
+        { question: 'Rewrite: "He looked very surprised."', type: 'rewrite' },
+        { question: 'She _____ her brow in deep concentration.', type: 'fill-blank' },
+        { question: 'Which word describes a self-satisfied smile?', options: ['smirk', 'beam', 'grin', 'grimace'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        'lit up',
+        'raised an eyebrow',
+        'His jaw dropped in astonishment / His eyes widened in disbelief.',
+        'furrowed',
+        'smirk'
+      ],
+      quickRecap: 'Key expressions: "face lit up", "furrowed brow", "raised an eyebrow", "clenched fists", "jaw dropped", "beamed", "grimaced", "smirked". Remember: describe HOW emotions appear physically!',
+      collocations: [
+        'face lit up', 'furrowed brow', 'wry smile', 'eyes widened',
+        'clenched fists', 'raised eyebrow', 'jaw dropped', 'eyes sparkled',
+        'face fell', 'beamed with pride', 'gestured animatedly', 'posture stiffened'
+      ],
+      synonyms: [
+        { word: 'smile', synonyms: ['beam', 'grin', 'smirk', 'simper'] },
+        { word: 'frown', synonyms: ['scowl', 'glower', 'grimace', 'glare'] },
+        { word: 'nod', synonyms: ['incline head', 'bob head', 'gesture agreement'] }
+      ],
+      speakingLines: [
+        'When I told her the news, her face lit up with pure joy.',
+        'I could tell he was skeptical because he raised an eyebrow at my explanation.',
+        'She beamed with pride when her name was announced as the winner.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-emotions-3',
+    title: 'Complex Emotions & Psychological States',
+    slug: 'complex-emotions-psychological-states',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Emotions',
+    description: 'Advanced vocabulary for describing complex emotions and psychological states in IELTS.',
+    is_premium: true,
+    is_published: true,
+    view_count: 0,
+    created_at: '2024-12-25T10:00:00Z',
+    updated_at: '2024-12-25T10:00:00Z',
+    content: {
+      title: 'Complex Emotions & Psychological States',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 advanced terms for complex emotions',
+        'Discuss psychological states in Writing Task 2',
+        'Use nuanced emotional vocabulary for Band 8+'
+      ],
+      coreExplanation: `Complex emotions go beyond simple feelings like happiness or sadness. For Band 8+, you need vocabulary that captures nuanced psychological states - the mixed feelings, subtle emotions, and complex mental states that characterize human experience.
+
+This lesson introduces sophisticated emotional vocabulary that demonstrates your ability to analyze and describe the complexity of human psychology. These terms are particularly useful for Writing Task 2 essays on mental health, human behavior, and social issues.`,
+      examples: [
+        { sentence: 'She experienced a profound sense of disillusionment after discovering the truth.', explanation: '"Disillusionment" means disappointment from discovering something is not as good as believed.' },
+        { sentence: 'He felt a deep sense of alienation from his peers.', explanation: '"Alienation" means feeling isolated or estranged from others.' },
+        { sentence: 'The experience left her with lingering feelings of inadequacy.', explanation: '"Inadequacy" means feeling not good enough or insufficient.' },
+        { sentence: 'He struggled with feelings of existential angst.', explanation: '"Existential angst" means deep anxiety about life\'s meaning and purpose.' },
+        { sentence: 'She felt a mixture of trepidation and excitement.', explanation: '"Trepidation" means fear or anxiety about something that may happen.' },
+        { sentence: 'The news evoked a sense of profound melancholy.', explanation: '"Profound melancholy" means deep, thoughtful sadness.' },
+        { sentence: 'He experienced cognitive dissonance when his beliefs were challenged.', explanation: '"Cognitive dissonance" means mental discomfort from conflicting beliefs.' },
+        { sentence: 'She felt an overwhelming sense of catharsis after the confession.', explanation: '"Catharsis" means emotional release or purification.' },
+        { sentence: 'The situation filled him with righteous indignation.', explanation: '"Righteous indignation" means anger at perceived injustice or wrongdoing.' },
+        { sentence: 'She harbored deep-seated resentment towards her former employer.', explanation: '"Deep-seated resentment" means long-held bitter feelings.' },
+        { sentence: 'He felt a growing sense of disenchantment with politics.', explanation: '"Disenchantment" means loss of belief in the value of something.' },
+        { sentence: 'The loss triggered an acute sense of grief and bereavement.', explanation: '"Bereavement" means the state of mourning after a loss.' },
+        { sentence: 'She experienced vicarious joy through her children\'s achievements.', explanation: '"Vicarious" means experienced through another person.' },
+        { sentence: 'He felt a nagging sense of guilt and remorse.', explanation: '"Remorse" means deep regret for wrongdoing.' },
+        { sentence: 'The uncertainty created a pervasive sense of unease.', explanation: '"Pervasive unease" means widespread, persistent discomfort.' },
+        { sentence: 'She felt vindicated when her predictions came true.', explanation: '"Vindicated" means proven right after being doubted.' },
+        { sentence: 'He experienced a fleeting moment of serenity.', explanation: '"Serenity" means a state of calm and peacefulness.' },
+        { sentence: 'The betrayal left her feeling emotionally numb.', explanation: '"Emotionally numb" means unable to feel emotions, often from shock.' },
+        { sentence: 'He felt a surge of empathy for the struggling family.', explanation: '"Empathy" means understanding and sharing another\'s feelings.' },
+        { sentence: 'She experienced a profound sense of fulfillment.', explanation: '"Fulfillment" means satisfaction from achieving one\'s potential.' }
+      ],
+      commonMistakes: [
+        { mistake: 'He felt confused about his feelings.', correction: 'He experienced cognitive dissonance / felt emotionally conflicted.', explanation: 'Use more sophisticated terms for complex mental states.' },
+        { mistake: 'She was very disappointed.', correction: 'She felt a profound sense of disillusionment.', explanation: '"Disillusionment" captures deeper disappointment than simple "disappointed".' },
+        { mistake: 'He felt alone.', correction: 'He experienced a deep sense of alienation / felt profoundly isolated.', explanation: '"Alienation" implies psychological estrangement, not just physical aloneness.' },
+        { mistake: 'She felt better after crying.', correction: 'She experienced a sense of catharsis / emotional release.', explanation: '"Catharsis" is the sophisticated term for emotional purification.' },
+        { mistake: 'He was angry about the unfairness.', correction: 'He felt righteous indignation at the injustice.', explanation: '"Righteous indignation" specifically describes anger at moral wrongdoing.' }
+      ],
+      miniPractice: [
+        { question: 'She experienced a profound sense of _____ after discovering the company\'s lies.', type: 'fill-blank' },
+        { question: 'Which term describes mental discomfort from conflicting beliefs?', options: ['cognitive dissonance', 'catharsis', 'empathy', 'serenity'], type: 'multiple-choice' },
+        { question: 'Rewrite: "He felt very alone and separate from everyone."', type: 'rewrite' },
+        { question: 'The emotional release she felt after confessing was a form of _____.', type: 'fill-blank' },
+        { question: 'Which emotion describes anger at perceived injustice?', options: ['righteous indignation', 'trepidation', 'melancholy', 'serenity'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        'disillusionment',
+        'cognitive dissonance',
+        'He experienced a deep sense of alienation from those around him.',
+        'catharsis',
+        'righteous indignation'
+      ],
+      quickRecap: 'Key complex emotions: "disillusionment", "alienation", "existential angst", "cognitive dissonance", "catharsis", "righteous indignation", "bereavement", "empathy", "fulfillment". Use these for sophisticated psychological discussions!',
+      collocations: [
+        'profound disillusionment', 'deep alienation', 'existential angst', 'cognitive dissonance',
+        'emotional catharsis', 'righteous indignation', 'deep-seated resentment', 'growing disenchantment',
+        'acute grief', 'vicarious joy', 'nagging guilt', 'pervasive unease'
+      ],
+      synonyms: [
+        { word: 'disappointment', synonyms: ['disillusionment', 'disenchantment', 'letdown', 'dismay'] },
+        { word: 'loneliness', synonyms: ['alienation', 'isolation', 'estrangement', 'solitude'] },
+        { word: 'relief', synonyms: ['catharsis', 'release', 'liberation', 'unburdening'] }
+      ],
+      speakingLines: [
+        'I think many young people experience a sense of disillusionment when they enter the workforce.',
+        'Social media can paradoxically increase feelings of alienation despite connecting people.',
+        'There\'s often a sense of catharsis when people finally express emotions they\'ve been suppressing.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-emotions-4',
+    title: 'Emotional Reactions & Responses',
+    slug: 'emotional-reactions-responses',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Emotions',
+    description: 'Vocabulary for describing emotional reactions and responses in various situations.',
+    is_premium: false,
+    is_published: true,
+    view_count: 0,
+    created_at: '2024-12-25T10:00:00Z',
+    updated_at: '2024-12-25T10:00:00Z',
+    content: {
+      title: 'Emotional Reactions & Responses',
+      targetLevel: 'Band 6.5 - 7.5',
+      whatYouWillLearn: [
+        'Master 25 terms for describing emotional reactions',
+        'Describe how people respond to situations in Speaking',
+        'Use reaction vocabulary naturally in essays'
+      ],
+      coreExplanation: `Describing how people react emotionally to situations is essential for IELTS Speaking and Writing. Whether you're describing a personal experience or analyzing human behavior in an essay, you need vocabulary that captures the range of emotional responses.
+
+This lesson focuses on words that describe how emotions manifest as reactions - not just what people feel, but how they respond to events, news, and situations.`,
+      examples: [
+        { sentence: 'She recoiled in horror at the gruesome scene.', explanation: '"Recoiled" means drew back instinctively in fear or disgust.' },
+        { sentence: 'He bristled at the accusation.', explanation: '"Bristled" means showed irritation or anger, like hair standing up.' },
+        { sentence: 'The audience gasped in astonishment.', explanation: '"Gasped" means took a sharp breath in surprise or shock.' },
+        { sentence: 'She flinched when he raised his voice.', explanation: '"Flinched" means made a quick, nervous movement away from something.' },
+        { sentence: 'He reeled from the unexpected news.', explanation: '"Reeled" means felt shocked and unsteady, as if physically affected.' },
+        { sentence: 'She blanched at the thought of public speaking.', explanation: '"Blanched" means turned pale from fear or shock.' },
+        { sentence: 'He shuddered at the memory.', explanation: '"Shuddered" means trembled from fear, cold, or disgust.' },
+        { sentence: 'The children squealed with delight.', explanation: '"Squealed" means made a high-pitched sound of excitement.' },
+        { sentence: 'She seethed with barely contained rage.', explanation: '"Seethed" means was filled with intense but suppressed anger.' },
+        { sentence: 'He balked at the enormous price.', explanation: '"Balked" means hesitated or refused to accept something.' },
+        { sentence: 'She swooned over the romantic gesture.', explanation: '"Swooned" means was overwhelmed with admiration or emotion.' },
+        { sentence: 'He cringed at his past mistakes.', explanation: '"Cringed" means felt embarrassed or uncomfortable.' },
+        { sentence: 'The news left her reeling with disbelief.', explanation: '"Reeling with disbelief" means struggling to accept shocking information.' },
+        { sentence: 'He fumed silently at the injustice.', explanation: '"Fumed" means showed silent anger, like smoke from a fire.' },
+        { sentence: 'She marveled at the architectural beauty.', explanation: '"Marveled" means was filled with wonder and amazement.' },
+        { sentence: 'He winced at the criticism.', explanation: '"Winced" means showed a brief expression of pain or discomfort.' },
+        { sentence: 'She reveled in her success.', explanation: '"Reveled" means took great pleasure or delight in something.' },
+        { sentence: 'He brooded over the rejection.', explanation: '"Brooded" means thought deeply and unhappily about something.' },
+        { sentence: 'She basked in the praise.', explanation: '"Basked" means enjoyed and took pleasure in attention or warmth.' },
+        { sentence: 'He wallowed in self-pity.', explanation: '"Wallowed" means indulged excessively in a negative emotion.' }
+      ],
+      commonMistakes: [
+        { mistake: 'She was very shocked.', correction: 'She reeled from the news / gasped in astonishment.', explanation: 'Use action verbs that show the physical reaction to shock.' },
+        { mistake: 'He got angry.', correction: 'He bristled at the comment / seethed with rage.', explanation: 'Show how anger manifests through specific reactions.' },
+        { mistake: 'She was scared.', correction: 'She recoiled in fear / flinched at the sound.', explanation: 'Describe the physical response to fear.' },
+        { mistake: 'He was embarrassed.', correction: 'He cringed at the memory / blanched with embarrassment.', explanation: 'Use verbs that show how embarrassment affects someone.' },
+        { mistake: 'She was happy about it.', correction: 'She reveled in the achievement / basked in the glory.', explanation: 'Show how happiness is expressed through behavior.' }
+      ],
+      miniPractice: [
+        { question: 'She _____ in horror at the accident scene.', type: 'fill-blank' },
+        { question: 'Which word describes showing irritation like hair standing up?', options: ['bristled', 'basked', 'marveled', 'swooned'], type: 'multiple-choice' },
+        { question: 'Rewrite: "He was very angry but didn\'t show it."', type: 'rewrite' },
+        { question: 'The audience _____ in astonishment at the magic trick.', type: 'fill-blank' },
+        { question: 'Which reaction shows embarrassment about past actions?', options: ['cringed', 'reveled', 'basked', 'marveled'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        'recoiled',
+        'bristled',
+        'He seethed with barely contained rage / He fumed silently.',
+        'gasped',
+        'cringed'
+      ],
+      quickRecap: 'Key reaction verbs: "recoiled", "bristled", "gasped", "flinched", "reeled", "seethed", "cringed", "marveled", "reveled", "basked". Remember: show emotions through physical reactions and behaviors!',
+      collocations: [
+        'recoiled in horror', 'bristled at criticism', 'gasped in astonishment', 'flinched at the sound',
+        'reeled from shock', 'seethed with rage', 'cringed with embarrassment', 'marveled at beauty',
+        'reveled in success', 'basked in praise', 'brooded over failure', 'wallowed in self-pity'
+      ],
+      synonyms: [
+        { word: 'shocked', synonyms: ['reeled', 'gasped', 'blanched', 'staggered'] },
+        { word: 'angry', synonyms: ['bristled', 'seethed', 'fumed', 'raged'] },
+        { word: 'enjoyed', synonyms: ['reveled', 'basked', 'savored', 'relished'] }
+      ],
+      speakingLines: [
+        'I have to admit, I cringed when I remembered what I said at the interview.',
+        'The whole audience gasped when the winner was announced - nobody expected it.',
+        'I absolutely reveled in the experience - it was one of the best moments of my life.'
+      ]
+    }
   }
 ];
