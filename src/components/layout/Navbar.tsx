@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { BookOpen, Menu, X, User, LogOut, Settings, Bookmark, Crown } from 'lucide-react';
+import { BookOpen, Menu, X, User, LogOut, Settings, Bookmark, Crown, Brain, Trophy } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -74,6 +74,19 @@ export function Navbar() {
                   </Button>
                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="w-48">
+                                  <DropdownMenuItem onClick={() => navigate('/diagnostic')}>
+                                    <Brain className="h-4 w-4 mr-2" />
+                                    Diagnostic Test
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem onClick={() => navigate('/flashcards')}>
+                                    <BookOpen className="h-4 w-4 mr-2" />
+                                    Flashcards
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem onClick={() => navigate('/achievements')}>
+                                    <Trophy className="h-4 w-4 mr-2" />
+                                    Achievements
+                                  </DropdownMenuItem>
+                                  <DropdownMenuSeparator />
                                   <DropdownMenuItem onClick={() => navigate('/profile')}>
                                     <Crown className="h-4 w-4 mr-2" />
                                     My Subscription

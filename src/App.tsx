@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { LessonProvider } from '@/contexts/LessonContext';
 import { ProgressProvider } from '@/contexts/ProgressContext';
@@ -17,6 +18,20 @@ import { PaymentPage } from '@/pages/PaymentPage';
 import { ProfilePage } from '@/pages/ProfilePage';
 import { QuizPage } from '@/pages/QuizPage';
 import './App.css';
+
+const DiagnosticTestPage = lazy(() => import('@/pages/DiagnosticTestPage'));
+const FlashcardsPage = lazy(() => import('@/pages/FlashcardsPage'));
+const SpeakingPracticePage = lazy(() => import('@/pages/SpeakingPracticePage'));
+const WritingCheckerPage = lazy(() => import('@/pages/WritingCheckerPage'));
+const AchievementsPage = lazy(() => import('@/pages/AchievementsPage'));
+
+function LoadingSpinner() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+    </div>
+  );
+}
 
 function App() {
   return (
@@ -116,6 +131,56 @@ function App() {
                                             element={
                                               <Layout>
                                                 <QuizPage />
+                                              </Layout>
+                                            }
+                                          />
+                                          <Route
+                                            path="/diagnostic"
+                                            element={
+                                              <Layout>
+                                                <Suspense fallback={<LoadingSpinner />}>
+                                                  <DiagnosticTestPage />
+                                                </Suspense>
+                                              </Layout>
+                                            }
+                                          />
+                                          <Route
+                                            path="/flashcards"
+                                            element={
+                                              <Layout>
+                                                <Suspense fallback={<LoadingSpinner />}>
+                                                  <FlashcardsPage />
+                                                </Suspense>
+                                              </Layout>
+                                            }
+                                          />
+                                          <Route
+                                            path="/speaking-practice"
+                                            element={
+                                              <Layout>
+                                                <Suspense fallback={<LoadingSpinner />}>
+                                                  <SpeakingPracticePage />
+                                                </Suspense>
+                                              </Layout>
+                                            }
+                                          />
+                                          <Route
+                                            path="/writing-checker"
+                                            element={
+                                              <Layout>
+                                                <Suspense fallback={<LoadingSpinner />}>
+                                                  <WritingCheckerPage />
+                                                </Suspense>
+                                              </Layout>
+                                            }
+                                          />
+                                          <Route
+                                            path="/achievements"
+                                            element={
+                                              <Layout>
+                                                <Suspense fallback={<LoadingSpinner />}>
+                                                  <AchievementsPage />
+                                                </Suspense>
                                               </Layout>
                                             }
                                           />
