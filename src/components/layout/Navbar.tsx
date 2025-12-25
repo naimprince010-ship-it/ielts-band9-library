@@ -55,12 +55,15 @@ export function Navbar() {
                       <Link to="/writing" className={navLinkClass('/writing')}>
                         Writing
                       </Link>
-                      <Link to="/speaking" className={navLinkClass('/speaking')}>
-                        Speaking
-                      </Link>
-                      <Link to="/pricing" className={navLinkClass('/pricing')}>
-                        Pricing
-                      </Link>
+                                            <Link to="/speaking" className={navLinkClass('/speaking')}>
+                                              Speaking
+                                            </Link>
+                                            <Link to="/quiz" className={navLinkClass('/quiz')}>
+                                              Quiz
+                                            </Link>
+                                            <Link to="/pricing" className={navLinkClass('/pricing')}>
+                                              Pricing
+                                            </Link>
             
             {user ? (
               <DropdownMenu>
@@ -142,20 +145,27 @@ export function Navbar() {
                         >
                           Writing
                         </Link>
-                        <Link
-                          to="/speaking"
-                          className={`block ${navLinkClass('/speaking')}`}
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          Speaking
-                        </Link>
-                        <Link
-                          to="/pricing"
-                          className={`block ${navLinkClass('/pricing')}`}
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          Pricing
-                        </Link>
+                                                <Link
+                                                  to="/speaking"
+                                                  className={`block ${navLinkClass('/speaking')}`}
+                                                  onClick={() => setMobileMenuOpen(false)}
+                                                >
+                                                  Speaking
+                                                </Link>
+                                                <Link
+                                                  to="/quiz"
+                                                  className={`block ${navLinkClass('/quiz')}`}
+                                                  onClick={() => setMobileMenuOpen(false)}
+                                                >
+                                                  Quiz
+                                                </Link>
+                                                <Link
+                                                  to="/pricing"
+                                                  className={`block ${navLinkClass('/pricing')}`}
+                                                  onClick={() => setMobileMenuOpen(false)}
+                                                >
+                                                  Pricing
+                                                </Link>
                         {user ? (
                           <>
                             <Link

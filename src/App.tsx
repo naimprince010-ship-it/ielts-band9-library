@@ -14,6 +14,7 @@ import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage';
 import { ResetPasswordPage } from '@/pages/ResetPasswordPage';
 import { PaymentPage } from '@/pages/PaymentPage';
 import { ProfilePage } from '@/pages/ProfilePage';
+import { QuizPage } from '@/pages/QuizPage';
 import './App.css';
 
 function App() {
@@ -99,8 +100,24 @@ function App() {
                           </Layout>
                         }
                       />
-                      <Route path="/profile" element={<ProfilePage />} />
-                    </Routes>
+                                          <Route path="/profile" element={<ProfilePage />} />
+                                          <Route
+                                            path="/quiz"
+                                            element={
+                                              <Layout>
+                                                <QuizPage />
+                                              </Layout>
+                                            }
+                                          />
+                                          <Route
+                                            path="/quiz/:quizId"
+                                            element={
+                                              <Layout>
+                                                <QuizPage />
+                                              </Layout>
+                                            }
+                                          />
+                                        </Routes>
         </LessonProvider>
       </AuthProvider>
     </Router>
