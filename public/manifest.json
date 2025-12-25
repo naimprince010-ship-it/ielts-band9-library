@@ -1,0 +1,44 @@
+{
+  "name": "IELTS Tree - Band 9 Materials Library",
+  "short_name": "IELTS Tree",
+  "description": "Master IELTS vocabulary and grammar with our curated, AI-enhanced lessons. Self-study resources designed for Band 7+ success.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6366f1",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "lang": "en",
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Vocabulary",
+      "url": "/vocabulary",
+      "description": "Browse vocabulary lessons"
+    },
+    {
+      "name": "Grammar",
+      "url": "/grammar",
+      "description": "Browse grammar lessons"
+    },
+    {
+      "name": "Quiz",
+      "url": "/quiz",
+      "description": "Take a quiz"
+    }
+  ]
+}

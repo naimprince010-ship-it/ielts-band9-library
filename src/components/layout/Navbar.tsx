@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { BookOpen, Menu, X, User, LogOut, Settings, Bookmark, Crown, Brain, Trophy } from 'lucide-react';
+import { BookOpen, Menu, X, User, LogOut, Settings, Bookmark, Crown, Brain, Trophy, BarChart3, Target, Award } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -82,11 +82,27 @@ export function Navbar() {
                                     <BookOpen className="h-4 w-4 mr-2" />
                                     Flashcards
                                   </DropdownMenuItem>
-                                  <DropdownMenuItem onClick={() => navigate('/achievements')}>
-                                    <Trophy className="h-4 w-4 mr-2" />
-                                    Achievements
-                                  </DropdownMenuItem>
-                                  <DropdownMenuSeparator />
+                                                                    <DropdownMenuItem onClick={() => navigate('/achievements')}>
+                                                                      <Trophy className="h-4 w-4 mr-2" />
+                                                                      Achievements
+                                                                    </DropdownMenuItem>
+                                                                    <DropdownMenuItem onClick={() => navigate('/progress')}>
+                                                                      <BarChart3 className="h-4 w-4 mr-2" />
+                                                                      Progress Dashboard
+                                                                    </DropdownMenuItem>
+                                                                    <DropdownMenuItem onClick={() => navigate('/reading-practice')}>
+                                                                      <BookOpen className="h-4 w-4 mr-2" />
+                                                                      Reading Practice
+                                                                    </DropdownMenuItem>
+                                                                    <DropdownMenuItem onClick={() => navigate('/mock-test')}>
+                                                                      <Target className="h-4 w-4 mr-2" />
+                                                                      Mock Test
+                                                                    </DropdownMenuItem>
+                                                                    <DropdownMenuItem onClick={() => navigate('/certificate')}>
+                                                                      <Award className="h-4 w-4 mr-2" />
+                                                                      Certificate
+                                                                    </DropdownMenuItem>
+                                                                    <DropdownMenuSeparator />
                                   <DropdownMenuItem onClick={() => navigate('/profile')}>
                                     <Crown className="h-4 w-4 mr-2" />
                                     My Subscription

@@ -24,6 +24,10 @@ const FlashcardsPage = lazy(() => import('@/pages/FlashcardsPage'));
 const SpeakingPracticePage = lazy(() => import('@/pages/SpeakingPracticePage'));
 const WritingCheckerPage = lazy(() => import('@/pages/WritingCheckerPage'));
 const AchievementsPage = lazy(() => import('@/pages/AchievementsPage'));
+const ReadingPracticePage = lazy(() => import('@/pages/ReadingPracticePage'));
+const ProgressDashboardPage = lazy(() => import('@/pages/ProgressDashboardPage'));
+const MockTestPage = lazy(() => import('@/pages/MockTestPage'));
+const CertificatePage = lazy(() => import('@/pages/CertificatePage'));
 
 function LoadingSpinner() {
   return (
@@ -174,17 +178,57 @@ function App() {
                                               </Layout>
                                             }
                                           />
-                                          <Route
-                                            path="/achievements"
-                                            element={
-                                              <Layout>
-                                                <Suspense fallback={<LoadingSpinner />}>
-                                                  <AchievementsPage />
-                                                </Suspense>
-                                              </Layout>
-                                            }
-                                          />
-                                        </Routes>
+                                                                                  <Route
+                                                                                    path="/achievements"
+                                                                                    element={
+                                                                                      <Layout>
+                                                                                        <Suspense fallback={<LoadingSpinner />}>
+                                                                                          <AchievementsPage />
+                                                                                        </Suspense>
+                                                                                      </Layout>
+                                                                                    }
+                                                                                  />
+                                                                                  <Route
+                                                                                    path="/reading-practice"
+                                                                                    element={
+                                                                                      <Layout>
+                                                                                        <Suspense fallback={<LoadingSpinner />}>
+                                                                                          <ReadingPracticePage />
+                                                                                        </Suspense>
+                                                                                      </Layout>
+                                                                                    }
+                                                                                  />
+                                                                                  <Route
+                                                                                    path="/progress"
+                                                                                    element={
+                                                                                      <Layout>
+                                                                                        <Suspense fallback={<LoadingSpinner />}>
+                                                                                          <ProgressDashboardPage />
+                                                                                        </Suspense>
+                                                                                      </Layout>
+                                                                                    }
+                                                                                  />
+                                                                                  <Route
+                                                                                    path="/mock-test"
+                                                                                    element={
+                                                                                      <Layout>
+                                                                                        <Suspense fallback={<LoadingSpinner />}>
+                                                                                          <MockTestPage />
+                                                                                        </Suspense>
+                                                                                      </Layout>
+                                                                                    }
+                                                                                  />
+                                                                                  <Route
+                                                                                    path="/certificate"
+                                                                                    element={
+                                                                                      <Layout>
+                                                                                        <Suspense fallback={<LoadingSpinner />}>
+                                                                                          <CertificatePage />
+                                                                                        </Suspense>
+                                                                                      </Layout>
+                                                                                    }
+                                                                                  />
+                                                                                </Routes>
           </LessonProvider>
         </ProgressProvider>
       </AuthProvider>
