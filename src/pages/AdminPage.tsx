@@ -142,15 +142,15 @@ export function AdminPage() {
 
         if (updateError) throw updateError;
 
-        const { error: userError } = await supabase
-          .from('users')
-          .update({
-            is_premium: true,
-            premium_until: payment.package_type === 'yearly' 
-              ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
-              : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-          })
-          .eq('id', payment.user_id);
+                const { error: userError } = await supabase
+                  .from('users')
+                  .update({
+                    subscription_status: 'premium',
+                    premium_until: payment.package_type === 'yearly' 
+                      ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
+                      : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+                  })
+                  .eq('id', payment.user_id);
 
         if (userError) {
           console.error('Failed to update user premium status:', userError);
