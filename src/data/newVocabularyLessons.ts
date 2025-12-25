@@ -13957,5 +13957,1233 @@ Understanding these terms helps you discuss plant-related topics effectively.`,
         'Organic farming is becoming increasingly popular.'
       ]
     }
+  },
+  // ============================================
+  // BATCH 32: Sports & Fitness (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-sports-1',
+    title: 'Sports & Athletics Vocabulary',
+    slug: 'sports-athletics-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Sports',
+    description: 'Essential vocabulary for discussing sports and athletic activities.',
+    is_premium: false,
+    is_published: true,
+    view_count: 920,
+    created_at: '2025-03-11T10:00:00Z',
+    updated_at: '2025-03-11T10:00:00Z',
+    content: {
+      title: 'Sports & Athletics Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 sports vocabulary words',
+        'Discuss athletic activities',
+        'Analyze sports topics'
+      ],
+      coreExplanation: `Sports vocabulary is essential for IELTS Speaking topics about hobbies and lifestyle. This lesson covers terms for discussing various sports and athletic activities.
+
+Understanding these terms helps you discuss sports topics effectively.`,
+      examples: [
+        { sentence: 'Athletics includes track and field events.', explanation: '"Athletics" is track and field sports.' },
+        { sentence: 'The athlete trained intensively.', explanation: '"Athlete" is person who does sports.' },
+        { sentence: 'The competition was fierce.', explanation: '"Competition" is contest between rivals.' },
+        { sentence: 'The championship attracted thousands.', explanation: '"Championship" is competition for title.' },
+        { sentence: 'The team won the tournament.', explanation: '"Tournament" is series of competitions.' },
+        { sentence: 'Physical fitness is important.', explanation: '"Fitness" is being in good physical condition.' },
+        { sentence: 'The coach developed strategies.', explanation: '"Coach" is trainer/instructor.' },
+        { sentence: 'Training requires dedication.', explanation: '"Training" is preparing through practice.' },
+        { sentence: 'The stadium was packed.', explanation: '"Stadium" is sports venue.' },
+        { sentence: 'Spectators cheered loudly.', explanation: '"Spectators" are people watching.' },
+        { sentence: 'The referee made a decision.', explanation: '"Referee" is official who enforces rules.' },
+        { sentence: 'Performance improved with practice.', explanation: '"Performance" is how well someone does.' },
+        { sentence: 'The record was broken.', explanation: '"Record" is best achievement.' },
+        { sentence: 'Sportsmanship is valued.', explanation: '"Sportsmanship" is fair and generous behavior.' },
+        { sentence: 'The league has many teams.', explanation: '"League" is group of teams competing.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "sport" and "sports"', correction: '"Sport" = singular activity; "sports" = general category', explanation: 'Use appropriately.' },
+        { mistake: 'Using "play" for all sports', correction: 'Use "play" for ball games, "do" for individual sports, "go" for -ing sports', explanation: '"Play football", "do athletics", "go swimming".' },
+        { mistake: 'Confusing "match" and "game"', correction: '"Match" is British; "game" is American', explanation: 'Both are acceptable.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ trained for months before the competition.', type: 'fill-blank' },
+        { question: 'Which term means fair and generous behavior in sports?', options: ['Sportsmanship', 'Competition', 'Performance', 'Training'], type: 'multiple-choice' },
+        { question: 'Discuss the benefits of playing sports.', type: 'rewrite' },
+        { question: 'The _____ enforces the rules during the match.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'athlete',
+        'Sportsmanship',
+        'Playing sports improves physical fitness, teaches teamwork, builds discipline, and provides social interaction.',
+        'referee'
+      ],
+      quickRecap: 'Key sports terms: athletics, athlete, competition, championship, tournament, fitness, coach, training, stadium, spectators, referee, performance, record, sportsmanship, league. Use these for sports topics!',
+      collocations: [
+        'track athletics', 'professional athlete', 'fierce competition', 'world championship',
+        'knockout tournament', 'physical fitness', 'head coach', 'intensive training',
+        'sports stadium', 'enthusiastic spectators', 'match referee', 'peak performance'
+      ],
+      synonyms: [
+        { word: 'athlete', synonyms: ['sportsperson', 'player', 'competitor', 'contestant'] },
+        { word: 'competition', synonyms: ['contest', 'match', 'tournament', 'championship'] },
+        { word: 'training', synonyms: ['practice', 'preparation', 'coaching', 'conditioning'] }
+      ],
+      speakingLines: [
+        'I enjoy watching athletics competitions.',
+        'Physical fitness is important for overall health.',
+        'Sportsmanship is more important than winning.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-sports-2',
+    title: 'Fitness & Exercise Vocabulary',
+    slug: 'fitness-exercise-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Sports',
+    description: 'Vocabulary for discussing fitness, exercise, and health.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2025-03-12T10:00:00Z',
+    updated_at: '2025-03-12T10:00:00Z',
+    content: {
+      title: 'Fitness & Exercise Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 fitness vocabulary words',
+        'Discuss exercise routines',
+        'Analyze health benefits'
+      ],
+      coreExplanation: `Fitness vocabulary is essential for IELTS topics about health and lifestyle. This lesson covers terms for discussing exercise and physical fitness.
+
+Understanding these terms helps you discuss fitness topics effectively.`,
+      examples: [
+        { sentence: 'Exercise improves health.', explanation: '"Exercise" is physical activity for fitness.' },
+        { sentence: 'The workout was intense.', explanation: '"Workout" is exercise session.' },
+        { sentence: 'Cardio strengthens the heart.', explanation: '"Cardio" is cardiovascular exercise.' },
+        { sentence: 'Strength training builds muscle.', explanation: '"Strength training" is weight exercises.' },
+        { sentence: 'Flexibility prevents injuries.', explanation: '"Flexibility" is ability to bend.' },
+        { sentence: 'Endurance improves with practice.', explanation: '"Endurance" is ability to sustain effort.' },
+        { sentence: 'The gym has modern equipment.', explanation: '"Gym" is fitness center.' },
+        { sentence: 'Warm-up prevents injuries.', explanation: '"Warm-up" is preparation exercises.' },
+        { sentence: 'Cool-down helps recovery.', explanation: '"Cool-down" is post-exercise routine.' },
+        { sentence: 'Calories are burned during exercise.', explanation: '"Calories" are energy units.' },
+        { sentence: 'Metabolism affects weight.', explanation: '"Metabolism" is body energy processing.' },
+        { sentence: 'Hydration is essential.', explanation: '"Hydration" is maintaining water levels.' },
+        { sentence: 'Rest days aid recovery.', explanation: '"Recovery" is returning to normal state.' },
+        { sentence: 'Personal trainers provide guidance.', explanation: '"Personal trainers" are fitness instructors.' },
+        { sentence: 'Wellness includes mental health.', explanation: '"Wellness" is overall health state.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "exercise" and "workout"', correction: '"Exercise" is general; "workout" is specific session', explanation: 'Workout is more specific.' },
+        { mistake: 'Using "gym" and "fitness center" differently', correction: 'These are largely interchangeable', explanation: '"Fitness center" is more formal.' },
+        { mistake: 'Confusing "strength" and "endurance"', correction: '"Strength" = power; "endurance" = stamina', explanation: 'These are different fitness aspects.' }
+      ],
+      miniPractice: [
+        { question: 'Regular _____ improves physical and mental health.', type: 'fill-blank' },
+        { question: 'Which term means cardiovascular exercise?', options: ['Cardio', 'Strength training', 'Flexibility', 'Warm-up'], type: 'multiple-choice' },
+        { question: 'Discuss the importance of regular exercise.', type: 'rewrite' },
+        { question: '_____ training builds muscle strength.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'exercise',
+        'Cardio',
+        'Regular exercise is important because it improves cardiovascular health, builds strength, reduces stress, and enhances overall wellbeing.',
+        'Strength'
+      ],
+      quickRecap: 'Key fitness terms: exercise, workout, cardio, strength training, flexibility, endurance, gym, warm-up, cool-down, calories, metabolism, hydration, recovery, personal trainers, wellness. Use these for fitness topics!',
+      collocations: [
+        'regular exercise', 'intense workout', 'cardio exercise', 'strength training',
+        'improve flexibility', 'build endurance', 'go to gym', 'warm-up routine',
+        'cool-down exercises', 'burn calories', 'boost metabolism', 'stay hydrated'
+      ],
+      synonyms: [
+        { word: 'exercise', synonyms: ['workout', 'training', 'physical activity', 'fitness'] },
+        { word: 'gym', synonyms: ['fitness center', 'health club', 'workout facility', 'sports center'] },
+        { word: 'wellness', synonyms: ['wellbeing', 'health', 'fitness', 'vitality'] }
+      ],
+      speakingLines: [
+        'Regular exercise is essential for good health.',
+        'I try to do cardio three times a week.',
+        'Strength training has many benefits for overall fitness.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-sports-3',
+    title: 'Team Sports Vocabulary',
+    slug: 'team-sports-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Sports',
+    description: 'Vocabulary for discussing team sports and collaboration.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-03-13T10:00:00Z',
+    updated_at: '2025-03-13T10:00:00Z',
+    content: {
+      title: 'Team Sports Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 team sports vocabulary words',
+        'Discuss teamwork',
+        'Analyze team dynamics'
+      ],
+      coreExplanation: `Team sports vocabulary is useful for IELTS topics about cooperation and social skills. This lesson covers terms for discussing team sports and collaboration.
+
+Understanding these terms helps you discuss team sports topics effectively.`,
+      examples: [
+        { sentence: 'Teamwork is essential for success.', explanation: '"Teamwork" is working together.' },
+        { sentence: 'The captain leads the team.', explanation: '"Captain" is team leader.' },
+        { sentence: 'Players have different positions.', explanation: '"Positions" are roles on the team.' },
+        { sentence: 'Strategy determines outcomes.', explanation: '"Strategy" is planned approach.' },
+        { sentence: 'Tactics change during games.', explanation: '"Tactics" are specific actions.' },
+        { sentence: 'The defense blocked the attack.', explanation: '"Defense" is protecting goal.' },
+        { sentence: 'The offense scored a goal.', explanation: '"Offense" is attacking play.' },
+        { sentence: 'Passing requires accuracy.', explanation: '"Passing" is transferring ball.' },
+        { sentence: 'The goalkeeper saved the shot.', explanation: '"Goalkeeper" guards the goal.' },
+        { sentence: 'Substitutes wait on the bench.', explanation: '"Substitutes" are replacement players.' },
+        { sentence: 'The squad has 25 players.', explanation: '"Squad" is group of players.' },
+        { sentence: 'Coordination improves with practice.', explanation: '"Coordination" is working together smoothly.' },
+        { sentence: 'Communication is vital.', explanation: '"Communication" is exchanging information.' },
+        { sentence: 'The rivalry is intense.', explanation: '"Rivalry" is competition between teams.' },
+        { sentence: 'Morale affects performance.', explanation: '"Morale" is team spirit.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "team" and "squad"', correction: '"Team" = playing group; "squad" = all available players', explanation: 'Squad is larger.' },
+        { mistake: 'Using "tactics" and "strategy" interchangeably', correction: '"Strategy" = overall plan; "tactics" = specific actions', explanation: 'Strategy is broader.' },
+        { mistake: 'Confusing "offense" and "attack"', correction: 'These are largely synonymous in sports', explanation: '"Offense" is American; "attack" is British.' }
+      ],
+      miniPractice: [
+        { question: '_____ is essential for team success.', type: 'fill-blank' },
+        { question: 'Which term means the team leader?', options: ['Captain', 'Goalkeeper', 'Substitute', 'Squad'], type: 'multiple-choice' },
+        { question: 'Discuss what makes a successful team.', type: 'rewrite' },
+        { question: 'The _____ saved several shots during the match.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Teamwork',
+        'Captain',
+        'A successful team requires good communication, strong leadership, clear strategy, and players who support each other.',
+        'goalkeeper'
+      ],
+      quickRecap: 'Key team sports terms: teamwork, captain, positions, strategy, tactics, defense, offense, passing, goalkeeper, substitutes, squad, coordination, communication, rivalry, morale. Use these for team sports topics!',
+      collocations: [
+        'effective teamwork', 'team captain', 'playing positions', 'winning strategy',
+        'defensive tactics', 'solid defense', 'attacking offense', 'accurate passing',
+        'experienced goalkeeper', 'bench substitutes', 'full squad', 'team coordination'
+      ],
+      synonyms: [
+        { word: 'teamwork', synonyms: ['collaboration', 'cooperation', 'partnership', 'unity'] },
+        { word: 'captain', synonyms: ['leader', 'skipper', 'chief', 'head'] },
+        { word: 'strategy', synonyms: ['plan', 'approach', 'game plan', 'method'] }
+      ],
+      speakingLines: [
+        'Teamwork is the most important factor in team sports.',
+        'The captain plays a crucial role in motivating the team.',
+        'Good communication is essential for coordination.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-sports-4',
+    title: 'Olympic & International Sports Vocabulary',
+    slug: 'olympic-international-sports-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Sports',
+    description: 'Vocabulary for discussing Olympic Games and international sports.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-03-14T10:00:00Z',
+    updated_at: '2025-03-14T10:00:00Z',
+    content: {
+      title: 'Olympic & International Sports Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 Olympic vocabulary words',
+        'Discuss international sports',
+        'Analyze global competitions'
+      ],
+      coreExplanation: `Olympic vocabulary is useful for IELTS topics about international events and sports. This lesson covers terms for discussing the Olympics and global competitions.
+
+Understanding these terms helps you discuss international sports topics effectively.`,
+      examples: [
+        { sentence: 'The Olympics unite nations.', explanation: '"Olympics" is international sports event.' },
+        { sentence: 'Athletes compete for medals.', explanation: '"Medals" are awards (gold, silver, bronze).' },
+        { sentence: 'The ceremony was spectacular.', explanation: '"Ceremony" is formal event.' },
+        { sentence: 'The host city prepares for years.', explanation: '"Host city" is location of event.' },
+        { sentence: 'The torch relay symbolizes unity.', explanation: '"Torch relay" is carrying Olympic flame.' },
+        { sentence: 'National pride is evident.', explanation: '"National pride" is pride in country.' },
+        { sentence: 'The anthem plays for winners.', explanation: '"Anthem" is national song.' },
+        { sentence: 'Doping is strictly prohibited.', explanation: '"Doping" is using banned substances.' },
+        { sentence: 'The podium holds three athletes.', explanation: '"Podium" is winners platform.' },
+        { sentence: 'Qualification standards are high.', explanation: '"Qualification" is meeting requirements.' },
+        { sentence: 'The delegation represents the country.', explanation: '"Delegation" is group representing country.' },
+        { sentence: 'Paralympic athletes inspire millions.', explanation: '"Paralympic" is for athletes with disabilities.' },
+        { sentence: 'The Olympic village houses athletes.', explanation: '"Olympic village" is athletes accommodation.' },
+        { sentence: 'Legacy benefits the host city.', explanation: '"Legacy" is lasting impact.' },
+        { sentence: 'Fair play is fundamental.', explanation: '"Fair play" is honest competition.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "Olympics" and "Olympic Games"', correction: 'Both are correct; "Olympics" is informal', explanation: 'Use either consistently.' },
+        { mistake: 'Using "medal" as verb incorrectly', correction: '"Medal" can be verb: "She medaled in swimming"', explanation: 'This usage is acceptable.' },
+        { mistake: 'Confusing "Paralympic" and "Special Olympics"', correction: '"Paralympic" = elite disabled athletes; "Special Olympics" = intellectual disabilities', explanation: 'These are different events.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ Games bring together athletes from around the world.', type: 'fill-blank' },
+        { question: 'Which term means using banned substances?', options: ['Doping', 'Qualification', 'Delegation', 'Legacy'], type: 'multiple-choice' },
+        { question: 'Discuss the importance of the Olympic Games.', type: 'rewrite' },
+        { question: 'Athletes stand on the _____ to receive their medals.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Olympic',
+        'Doping',
+        'The Olympic Games are important because they promote international unity, celebrate athletic excellence, and inspire people worldwide.',
+        'podium'
+      ],
+      quickRecap: 'Key Olympic terms: Olympics, medals, ceremony, host city, torch relay, national pride, anthem, doping, podium, qualification, delegation, Paralympic, Olympic village, legacy, fair play. Use these for international sports topics!',
+      collocations: [
+        'Olympic Games', 'gold medal', 'opening ceremony', 'host city',
+        'Olympic torch relay', 'national pride', 'national anthem', 'anti-doping',
+        'medal podium', 'qualification standards', 'national delegation', 'Paralympic Games'
+      ],
+      synonyms: [
+        { word: 'Olympics', synonyms: ['Olympic Games', 'Games', 'Olympiad', 'Summer/Winter Games'] },
+        { word: 'medal', synonyms: ['award', 'prize', 'honor', 'decoration'] },
+        { word: 'ceremony', synonyms: ['event', 'celebration', 'ritual', 'occasion'] }
+      ],
+      speakingLines: [
+        'The Olympic Games promote international understanding.',
+        'Winning a medal is the dream of every athlete.',
+        'The opening ceremony is always spectacular.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 33: Food & Nutrition (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-food-1',
+    title: 'Food & Cooking Vocabulary',
+    slug: 'food-cooking-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Food',
+    description: 'Essential vocabulary for discussing food and cooking.',
+    is_premium: false,
+    is_published: true,
+    view_count: 950,
+    created_at: '2025-03-15T10:00:00Z',
+    updated_at: '2025-03-15T10:00:00Z',
+    content: {
+      title: 'Food & Cooking Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 food vocabulary words',
+        'Discuss cooking methods',
+        'Describe food and meals'
+      ],
+      coreExplanation: `Food vocabulary is essential for IELTS Speaking topics about daily life and culture. This lesson covers terms for discussing food, cooking, and meals.
+
+Understanding these terms helps you discuss food topics effectively.`,
+      examples: [
+        { sentence: 'Cuisine varies by region.', explanation: '"Cuisine" is style of cooking.' },
+        { sentence: 'The recipe requires fresh ingredients.', explanation: '"Recipe" is cooking instructions.' },
+        { sentence: 'Ingredients should be fresh.', explanation: '"Ingredients" are food components.' },
+        { sentence: 'The dish was delicious.', explanation: '"Dish" is prepared food.' },
+        { sentence: 'Cooking methods affect nutrition.', explanation: '"Cooking methods" are ways of preparing food.' },
+        { sentence: 'Baking requires precise measurements.', explanation: '"Baking" is cooking in oven.' },
+        { sentence: 'Grilling adds smoky flavor.', explanation: '"Grilling" is cooking over heat.' },
+        { sentence: 'Steaming preserves nutrients.', explanation: '"Steaming" is cooking with steam.' },
+        { sentence: 'The flavor was intense.', explanation: '"Flavor" is taste.' },
+        { sentence: 'Seasoning enhances taste.', explanation: '"Seasoning" is adding spices.' },
+        { sentence: 'The texture was perfect.', explanation: '"Texture" is how food feels.' },
+        { sentence: 'Portion sizes have increased.', explanation: '"Portion" is amount served.' },
+        { sentence: 'The meal was satisfying.', explanation: '"Meal" is food eaten at one time.' },
+        { sentence: 'Appetizers start the meal.', explanation: '"Appetizers" are starter dishes.' },
+        { sentence: 'Dessert concludes the meal.', explanation: '"Dessert" is sweet final course.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "cook" and "chef"', correction: '"Cook" = anyone who cooks; "chef" = professional', explanation: 'Chef is more specific.' },
+        { mistake: 'Using "food" and "meal" interchangeably', correction: '"Food" = general; "meal" = specific eating occasion', explanation: 'Meal is more specific.' },
+        { mistake: 'Confusing "flavor" and "taste"', correction: 'These are largely synonymous', explanation: '"Flavor" is slightly more complex.' }
+      ],
+      miniPractice: [
+        { question: 'Italian _____ is famous worldwide.', type: 'fill-blank' },
+        { question: 'Which cooking method uses steam?', options: ['Steaming', 'Grilling', 'Baking', 'Frying'], type: 'multiple-choice' },
+        { question: 'Describe your favorite dish.', type: 'rewrite' },
+        { question: 'Fresh _____ are essential for good cooking.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'cuisine',
+        'Steaming',
+        'My favorite dish is a traditional curry with rice. The flavor is rich and spicy, with tender meat and aromatic spices.',
+        'ingredients'
+      ],
+      quickRecap: 'Key food terms: cuisine, recipe, ingredients, dish, cooking methods, baking, grilling, steaming, flavor, seasoning, texture, portion, meal, appetizers, dessert. Use these for food topics!',
+      collocations: [
+        'local cuisine', 'traditional recipe', 'fresh ingredients', 'signature dish',
+        'cooking methods', 'home baking', 'outdoor grilling', 'healthy steaming',
+        'rich flavor', 'light seasoning', 'smooth texture', 'generous portion'
+      ],
+      synonyms: [
+        { word: 'cuisine', synonyms: ['cooking', 'food', 'gastronomy', 'cookery'] },
+        { word: 'dish', synonyms: ['meal', 'course', 'plate', 'serving'] },
+        { word: 'flavor', synonyms: ['taste', 'savor', 'tang', 'zest'] }
+      ],
+      speakingLines: [
+        'I really enjoy trying different cuisines.',
+        'Fresh ingredients make a huge difference in cooking.',
+        'The flavor of homemade food is incomparable.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-food-2',
+    title: 'Nutrition & Diet Vocabulary',
+    slug: 'nutrition-diet-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Food',
+    description: 'Vocabulary for discussing nutrition, diet, and healthy eating.',
+    is_premium: true,
+    is_published: true,
+    view_count: 880,
+    created_at: '2025-03-16T10:00:00Z',
+    updated_at: '2025-03-16T10:00:00Z',
+    content: {
+      title: 'Nutrition & Diet Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 nutrition vocabulary words',
+        'Discuss healthy eating',
+        'Analyze dietary choices'
+      ],
+      coreExplanation: `Nutrition vocabulary is essential for IELTS topics about health and lifestyle. This lesson covers terms for discussing diet and nutrition.
+
+Understanding these terms helps you discuss nutrition topics effectively.`,
+      examples: [
+        { sentence: 'Nutrition affects health.', explanation: '"Nutrition" is food and its effects.' },
+        { sentence: 'A balanced diet is important.', explanation: '"Balanced diet" has all nutrients.' },
+        { sentence: 'Nutrients fuel the body.', explanation: '"Nutrients" are food substances.' },
+        { sentence: 'Protein builds muscle.', explanation: '"Protein" is nutrient for growth.' },
+        { sentence: 'Carbohydrates provide energy.', explanation: '"Carbohydrates" are energy nutrients.' },
+        { sentence: 'Vitamins are essential.', explanation: '"Vitamins" are organic nutrients.' },
+        { sentence: 'Minerals support body functions.', explanation: '"Minerals" are inorganic nutrients.' },
+        { sentence: 'Fiber aids digestion.', explanation: '"Fiber" is plant material.' },
+        { sentence: 'Calorie intake affects weight.', explanation: '"Calorie intake" is energy consumed.' },
+        { sentence: 'Obesity is a health concern.', explanation: '"Obesity" is excessive body fat.' },
+        { sentence: 'Malnutrition affects development.', explanation: '"Malnutrition" is poor nutrition.' },
+        { sentence: 'Supplements may be needed.', explanation: '"Supplements" are additional nutrients.' },
+        { sentence: 'Organic food avoids chemicals.', explanation: '"Organic" means without artificial chemicals.' },
+        { sentence: 'Processed food is convenient.', explanation: '"Processed food" is manufactured food.' },
+        { sentence: 'Dietary requirements vary.', explanation: '"Dietary" relates to diet.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "diet" and "dieting"', correction: '"Diet" = what you eat; "dieting" = restricting food', explanation: 'Diet is neutral.' },
+        { mistake: 'Using "healthy" and "nutritious" interchangeably', correction: 'These are similar but "nutritious" is more specific', explanation: 'Nutritious means containing nutrients.' },
+        { mistake: 'Confusing "organic" and "natural"', correction: '"Organic" = certified production; "natural" = minimal processing', explanation: 'Organic has specific standards.' }
+      ],
+      miniPractice: [
+        { question: 'Good _____ is essential for health.', type: 'fill-blank' },
+        { question: 'Which nutrient provides energy?', options: ['Carbohydrates', 'Vitamins', 'Minerals', 'Fiber'], type: 'multiple-choice' },
+        { question: 'Discuss the importance of a balanced diet.', type: 'rewrite' },
+        { question: '_____ builds and repairs muscle tissue.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'nutrition',
+        'Carbohydrates',
+        'A balanced diet is important because it provides all necessary nutrients, maintains healthy weight, and prevents diseases.',
+        'Protein'
+      ],
+      quickRecap: 'Key nutrition terms: nutrition, balanced diet, nutrients, protein, carbohydrates, vitamins, minerals, fiber, calorie intake, obesity, malnutrition, supplements, organic, processed food, dietary. Use these for nutrition topics!',
+      collocations: [
+        'good nutrition', 'balanced diet', 'essential nutrients', 'lean protein',
+        'complex carbohydrates', 'essential vitamins', 'important minerals', 'dietary fiber',
+        'daily calorie intake', 'childhood obesity', 'severe malnutrition', 'dietary supplements'
+      ],
+      synonyms: [
+        { word: 'nutrition', synonyms: ['nourishment', 'diet', 'sustenance', 'food'] },
+        { word: 'diet', synonyms: ['eating habits', 'food intake', 'nutrition', 'regime'] },
+        { word: 'healthy', synonyms: ['nutritious', 'wholesome', 'nourishing', 'beneficial'] }
+      ],
+      speakingLines: [
+        'Good nutrition is the foundation of health.',
+        'A balanced diet includes all food groups.',
+        'Processed food often lacks essential nutrients.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-food-3',
+    title: 'Restaurant & Dining Vocabulary',
+    slug: 'restaurant-dining-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Food',
+    description: 'Vocabulary for discussing restaurants and dining experiences.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-03-17T10:00:00Z',
+    updated_at: '2025-03-17T10:00:00Z',
+    content: {
+      title: 'Restaurant & Dining Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 restaurant vocabulary words',
+        'Discuss dining experiences',
+        'Describe restaurant visits'
+      ],
+      coreExplanation: `Restaurant vocabulary is useful for IELTS Speaking topics about social activities and experiences. This lesson covers terms for discussing dining out.
+
+Understanding these terms helps you discuss restaurant topics effectively.`,
+      examples: [
+        { sentence: 'The restaurant has excellent reviews.', explanation: '"Restaurant" is eating establishment.' },
+        { sentence: 'The menu offers variety.', explanation: '"Menu" is list of dishes.' },
+        { sentence: 'The waiter took our order.', explanation: '"Waiter" is server.' },
+        { sentence: 'The reservation was confirmed.', explanation: '"Reservation" is booking.' },
+        { sentence: 'The service was impeccable.', explanation: '"Service" is how staff attend customers.' },
+        { sentence: 'The ambiance was romantic.', explanation: '"Ambiance" is atmosphere.' },
+        { sentence: 'The bill was reasonable.', explanation: '"Bill" is payment request.' },
+        { sentence: 'Tipping is customary.', explanation: '"Tipping" is giving extra money.' },
+        { sentence: 'The chef prepared a special dish.', explanation: '"Chef" is professional cook.' },
+        { sentence: 'Fine dining is expensive.', explanation: '"Fine dining" is upscale restaurants.' },
+        { sentence: 'Fast food is convenient.', explanation: '"Fast food" is quick-service food.' },
+        { sentence: 'Takeaway is popular.', explanation: '"Takeaway" is food to go.' },
+        { sentence: 'The buffet had many options.', explanation: '"Buffet" is self-service meal.' },
+        { sentence: 'The course was delicious.', explanation: '"Course" is part of meal.' },
+        { sentence: 'The table was reserved.', explanation: '"Table" is dining furniture.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "waiter" and "server"', correction: '"Server" is gender-neutral; "waiter" is male', explanation: '"Server" is preferred.' },
+        { mistake: 'Using "bill" and "check" differently', correction: '"Bill" is British; "check" is American', explanation: 'Both are correct.' },
+        { mistake: 'Confusing "takeaway" and "takeout"', correction: '"Takeaway" is British; "takeout" is American', explanation: 'Both mean food to go.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ offers a wide variety of dishes.', type: 'fill-blank' },
+        { question: 'Which term means the atmosphere of a place?', options: ['Ambiance', 'Service', 'Menu', 'Reservation'], type: 'multiple-choice' },
+        { question: 'Describe a memorable restaurant experience.', type: 'rewrite' },
+        { question: 'We made a _____ for 7 pm.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'menu',
+        'Ambiance',
+        'I had a memorable experience at an Italian restaurant. The ambiance was cozy, the service was excellent, and the food was delicious.',
+        'reservation'
+      ],
+      quickRecap: 'Key restaurant terms: restaurant, menu, waiter, reservation, service, ambiance, bill, tipping, chef, fine dining, fast food, takeaway, buffet, course, table. Use these for dining topics!',
+      collocations: [
+        'popular restaurant', 'extensive menu', 'friendly waiter', 'make reservation',
+        'excellent service', 'cozy ambiance', 'pay bill', 'leave tip',
+        'head chef', 'fine dining', 'fast food', 'order takeaway'
+      ],
+      synonyms: [
+        { word: 'restaurant', synonyms: ['eatery', 'diner', 'bistro', 'cafe'] },
+        { word: 'waiter', synonyms: ['server', 'attendant', 'staff', 'waitperson'] },
+        { word: 'ambiance', synonyms: ['atmosphere', 'mood', 'environment', 'setting'] }
+      ],
+      speakingLines: [
+        'I prefer restaurants with a relaxed ambiance.',
+        'Good service is as important as good food.',
+        'Fine dining is a special experience.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-food-4',
+    title: 'Food Industry & Agriculture Vocabulary',
+    slug: 'food-industry-agriculture-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Food',
+    description: 'Vocabulary for discussing food production and agriculture.',
+    is_premium: true,
+    is_published: true,
+    view_count: 750,
+    created_at: '2025-03-18T10:00:00Z',
+    updated_at: '2025-03-18T10:00:00Z',
+    content: {
+      title: 'Food Industry & Agriculture Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 food industry vocabulary words',
+        'Discuss food production',
+        'Analyze agricultural issues'
+      ],
+      coreExplanation: `Food industry vocabulary is useful for IELTS Writing topics about food security and sustainability. This lesson covers terms for discussing food production.
+
+Understanding these terms helps you discuss food industry topics effectively.`,
+      examples: [
+        { sentence: 'Agriculture feeds the world.', explanation: '"Agriculture" is farming.' },
+        { sentence: 'Farming practices vary.', explanation: '"Farming" is cultivating land.' },
+        { sentence: 'Crops are harvested annually.', explanation: '"Crops" are cultivated plants.' },
+        { sentence: 'Livestock provides meat and dairy.', explanation: '"Livestock" is farm animals.' },
+        { sentence: 'Food production has increased.', explanation: '"Food production" is making food.' },
+        { sentence: 'The supply chain is complex.', explanation: '"Supply chain" is production to consumer.' },
+        { sentence: 'Food security is a concern.', explanation: '"Food security" is reliable food access.' },
+        { sentence: 'Sustainable farming protects resources.', explanation: '"Sustainable farming" is environmentally responsible.' },
+        { sentence: 'Pesticides control pests.', explanation: '"Pesticides" are pest-killing chemicals.' },
+        { sentence: 'Fertilizers improve yields.', explanation: '"Fertilizers" are growth-promoting substances.' },
+        { sentence: 'GMOs are controversial.', explanation: '"GMOs" are genetically modified organisms.' },
+        { sentence: 'Food waste is a problem.', explanation: '"Food waste" is discarded food.' },
+        { sentence: 'Distribution affects availability.', explanation: '"Distribution" is spreading goods.' },
+        { sentence: 'Imports supplement local production.', explanation: '"Imports" are goods from abroad.' },
+        { sentence: 'Exports generate income.', explanation: '"Exports" are goods sent abroad.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "agriculture" and "farming"', correction: '"Agriculture" is broader; "farming" is more specific', explanation: 'Agriculture includes all food production.' },
+        { mistake: 'Using "crops" for animals', correction: '"Crops" = plants; "livestock" = animals', explanation: 'These are different.' },
+        { mistake: 'Confusing "organic" and "sustainable"', correction: '"Organic" = no chemicals; "sustainable" = environmentally responsible', explanation: 'These overlap but differ.' }
+      ],
+      miniPractice: [
+        { question: '_____ is the practice of cultivating land and raising animals.', type: 'fill-blank' },
+        { question: 'Which term means genetically modified organisms?', options: ['GMOs', 'Pesticides', 'Fertilizers', 'Livestock'], type: 'multiple-choice' },
+        { question: 'Discuss the challenges of food production.', type: 'rewrite' },
+        { question: 'Food _____ ensures everyone has access to sufficient food.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Agriculture',
+        'GMOs',
+        'Food production faces challenges including climate change, water scarcity, population growth, and the need for sustainable practices.',
+        'security'
+      ],
+      quickRecap: 'Key food industry terms: agriculture, farming, crops, livestock, food production, supply chain, food security, sustainable farming, pesticides, fertilizers, GMOs, food waste, distribution, imports, exports. Use these for food industry topics!',
+      collocations: [
+        'modern agriculture', 'organic farming', 'staple crops', 'raise livestock',
+        'food production', 'global supply chain', 'food security', 'sustainable farming',
+        'chemical pesticides', 'organic fertilizers', 'GMO crops', 'reduce food waste'
+      ],
+      synonyms: [
+        { word: 'agriculture', synonyms: ['farming', 'cultivation', 'husbandry', 'agribusiness'] },
+        { word: 'crops', synonyms: ['produce', 'harvest', 'yield', 'plants'] },
+        { word: 'sustainable', synonyms: ['eco-friendly', 'green', 'responsible', 'renewable'] }
+      ],
+      speakingLines: [
+        'Agriculture is essential for food security.',
+        'Sustainable farming practices are increasingly important.',
+        'Food waste is a significant global problem.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 34: Fashion & Lifestyle (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-fashion-1',
+    title: 'Fashion & Clothing Vocabulary',
+    slug: 'fashion-clothing-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Fashion',
+    description: 'Essential vocabulary for discussing fashion and clothing.',
+    is_premium: false,
+    is_published: true,
+    view_count: 880,
+    created_at: '2025-03-19T10:00:00Z',
+    updated_at: '2025-03-19T10:00:00Z',
+    content: {
+      title: 'Fashion & Clothing Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 fashion vocabulary words',
+        'Discuss clothing and style',
+        'Describe fashion trends'
+      ],
+      coreExplanation: `Fashion vocabulary is useful for IELTS Speaking topics about personal style and culture. This lesson covers terms for discussing fashion and clothing.
+
+Understanding these terms helps you discuss fashion topics effectively.`,
+      examples: [
+        { sentence: 'Fashion trends change quickly.', explanation: '"Fashion" is popular style.' },
+        { sentence: 'The outfit was stylish.', explanation: '"Outfit" is set of clothes.' },
+        { sentence: 'Clothing reflects personality.', explanation: '"Clothing" is garments worn.' },
+        { sentence: 'The designer created a collection.', explanation: '"Designer" is fashion creator.' },
+        { sentence: 'Trends come and go.', explanation: '"Trends" are popular styles.' },
+        { sentence: 'The fabric was luxurious.', explanation: '"Fabric" is cloth material.' },
+        { sentence: 'Accessories complete the look.', explanation: '"Accessories" are additional items.' },
+        { sentence: 'The style is elegant.', explanation: '"Style" is distinctive appearance.' },
+        { sentence: 'Casual wear is comfortable.', explanation: '"Casual wear" is informal clothing.' },
+        { sentence: 'Formal attire is required.', explanation: '"Formal attire" is dressy clothing.' },
+        { sentence: 'The wardrobe needs updating.', explanation: '"Wardrobe" is clothing collection.' },
+        { sentence: 'Vintage clothing is popular.', explanation: '"Vintage" is old but stylish.' },
+        { sentence: 'The brand is well-known.', explanation: '"Brand" is company name.' },
+        { sentence: 'Tailoring ensures good fit.', explanation: '"Tailoring" is custom fitting.' },
+        { sentence: 'The pattern is unique.', explanation: '"Pattern" is design on fabric.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "fashion" and "style"', correction: '"Fashion" = current trends; "style" = personal expression', explanation: 'Style is more individual.' },
+        { mistake: 'Using "clothes" and "clothing" interchangeably', correction: '"Clothes" is countable; "clothing" is uncountable', explanation: '"Clothes" is more casual.' },
+        { mistake: 'Confusing "outfit" and "suit"', correction: '"Outfit" = any set of clothes; "suit" = matching jacket and trousers', explanation: 'Suit is more specific.' }
+      ],
+      miniPractice: [
+        { question: '_____ trends change every season.', type: 'fill-blank' },
+        { question: 'Which term means additional items like jewelry?', options: ['Accessories', 'Fabric', 'Wardrobe', 'Pattern'], type: 'multiple-choice' },
+        { question: 'Describe your personal style.', type: 'rewrite' },
+        { question: 'The _____ created a stunning collection.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Fashion',
+        'Accessories',
+        'My personal style is casual and comfortable. I prefer simple, classic pieces that are versatile and practical.',
+        'designer'
+      ],
+      quickRecap: 'Key fashion terms: fashion, outfit, clothing, designer, trends, fabric, accessories, style, casual wear, formal attire, wardrobe, vintage, brand, tailoring, pattern. Use these for fashion topics!',
+      collocations: [
+        'fashion trends', 'complete outfit', 'designer clothing', 'fashion designer',
+        'latest trends', 'quality fabric', 'fashion accessories', 'personal style',
+        'casual wear', 'formal attire', 'extensive wardrobe', 'vintage clothing'
+      ],
+      synonyms: [
+        { word: 'fashion', synonyms: ['style', 'trend', 'vogue', 'mode'] },
+        { word: 'clothing', synonyms: ['clothes', 'garments', 'attire', 'apparel'] },
+        { word: 'stylish', synonyms: ['fashionable', 'trendy', 'chic', 'elegant'] }
+      ],
+      speakingLines: [
+        'Fashion is a form of self-expression.',
+        'I prefer comfortable clothing over trendy items.',
+        'Accessories can transform a simple outfit.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-fashion-2',
+    title: 'Shopping & Consumer Vocabulary',
+    slug: 'shopping-consumer-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Fashion',
+    description: 'Vocabulary for discussing shopping and consumer behavior.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-03-20T10:00:00Z',
+    updated_at: '2025-03-20T10:00:00Z',
+    content: {
+      title: 'Shopping & Consumer Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 shopping vocabulary words',
+        'Discuss consumer behavior',
+        'Analyze shopping trends'
+      ],
+      coreExplanation: `Shopping vocabulary is useful for IELTS topics about consumerism and lifestyle. This lesson covers terms for discussing shopping and consumer behavior.
+
+Understanding these terms helps you discuss shopping topics effectively.`,
+      examples: [
+        { sentence: 'Consumers drive the economy.', explanation: '"Consumers" are buyers.' },
+        { sentence: 'Retail sales have increased.', explanation: '"Retail" is selling to consumers.' },
+        { sentence: 'Online shopping is convenient.', explanation: '"Online shopping" is buying via internet.' },
+        { sentence: 'The discount was significant.', explanation: '"Discount" is price reduction.' },
+        { sentence: 'The purchase was impulsive.', explanation: '"Purchase" is buying something.' },
+        { sentence: 'Bargains attract shoppers.', explanation: '"Bargains" are good deals.' },
+        { sentence: 'The receipt shows the price.', explanation: '"Receipt" is proof of purchase.' },
+        { sentence: 'Returns are accepted.', explanation: '"Returns" are giving back items.' },
+        { sentence: 'The warranty covers repairs.', explanation: '"Warranty" is guarantee.' },
+        { sentence: 'Customer service is important.', explanation: '"Customer service" is helping buyers.' },
+        { sentence: 'E-commerce is growing.', explanation: '"E-commerce" is online business.' },
+        { sentence: 'The mall has many stores.', explanation: '"Mall" is shopping center.' },
+        { sentence: 'Advertising influences choices.', explanation: '"Advertising" is promoting products.' },
+        { sentence: 'Consumerism affects society.', explanation: '"Consumerism" is buying culture.' },
+        { sentence: 'The budget limits spending.', explanation: '"Budget" is spending plan.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "customer" and "consumer"', correction: '"Customer" = buyer at specific store; "consumer" = general user', explanation: 'Consumer is broader.' },
+        { mistake: 'Using "shop" and "store" differently', correction: '"Shop" is British; "store" is American', explanation: 'Both are acceptable.' },
+        { mistake: 'Confusing "price" and "cost"', correction: '"Price" = what you pay; "cost" = what it takes to make', explanation: 'Price is for buyers.' }
+      ],
+      miniPractice: [
+        { question: 'Online _____ has become increasingly popular.', type: 'fill-blank' },
+        { question: 'Which term means a price reduction?', options: ['Discount', 'Warranty', 'Receipt', 'Budget'], type: 'multiple-choice' },
+        { question: 'Discuss the advantages of online shopping.', type: 'rewrite' },
+        { question: '_____ service is essential for customer satisfaction.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'shopping',
+        'Discount',
+        'Online shopping offers convenience, wider selection, price comparison, and home delivery, making it popular among consumers.',
+        'Customer'
+      ],
+      quickRecap: 'Key shopping terms: consumers, retail, online shopping, discount, purchase, bargains, receipt, returns, warranty, customer service, e-commerce, mall, advertising, consumerism, budget. Use these for shopping topics!',
+      collocations: [
+        'target consumers', 'retail sales', 'online shopping', 'special discount',
+        'make purchase', 'find bargains', 'keep receipt', 'process returns',
+        'product warranty', 'customer service', 'e-commerce platform', 'shopping mall'
+      ],
+      synonyms: [
+        { word: 'consumer', synonyms: ['buyer', 'customer', 'shopper', 'purchaser'] },
+        { word: 'discount', synonyms: ['reduction', 'markdown', 'sale', 'deal'] },
+        { word: 'purchase', synonyms: ['buy', 'acquire', 'obtain', 'procure'] }
+      ],
+      speakingLines: [
+        'Online shopping has transformed retail.',
+        'Consumers are becoming more conscious of their purchases.',
+        'Good customer service builds brand loyalty.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-fashion-3',
+    title: 'Lifestyle & Habits Vocabulary',
+    slug: 'lifestyle-habits-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Fashion',
+    description: 'Vocabulary for discussing lifestyle choices and daily habits.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-03-21T10:00:00Z',
+    updated_at: '2025-03-21T10:00:00Z',
+    content: {
+      title: 'Lifestyle & Habits Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 lifestyle vocabulary words',
+        'Discuss daily habits',
+        'Analyze lifestyle choices'
+      ],
+      coreExplanation: `Lifestyle vocabulary is essential for IELTS Speaking topics about daily life and personal choices. This lesson covers terms for discussing lifestyle and habits.
+
+Understanding these terms helps you discuss lifestyle topics effectively.`,
+      examples: [
+        { sentence: 'Lifestyle affects health.', explanation: '"Lifestyle" is way of living.' },
+        { sentence: 'Habits are hard to change.', explanation: '"Habits" are regular behaviors.' },
+        { sentence: 'The routine is consistent.', explanation: '"Routine" is regular schedule.' },
+        { sentence: 'Work-life balance is important.', explanation: '"Work-life balance" is managing both.' },
+        { sentence: 'Leisure time is valuable.', explanation: '"Leisure" is free time.' },
+        { sentence: 'Hobbies provide relaxation.', explanation: '"Hobbies" are enjoyable activities.' },
+        { sentence: 'Recreation reduces stress.', explanation: '"Recreation" is enjoyable activities.' },
+        { sentence: 'Productivity improves with rest.', explanation: '"Productivity" is output efficiency.' },
+        { sentence: 'Minimalism is trending.', explanation: '"Minimalism" is living with less.' },
+        { sentence: 'Self-care is essential.', explanation: '"Self-care" is looking after yourself.' },
+        { sentence: 'Mindfulness reduces anxiety.', explanation: '"Mindfulness" is present awareness.' },
+        { sentence: 'Quality of life matters.', explanation: '"Quality of life" is wellbeing level.' },
+        { sentence: 'Priorities guide decisions.', explanation: '"Priorities" are important things.' },
+        { sentence: 'Time management is crucial.', explanation: '"Time management" is using time well.' },
+        { sentence: 'Wellness includes mental health.', explanation: '"Wellness" is overall health.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "lifestyle" and "life"', correction: '"Lifestyle" = how you live; "life" = existence', explanation: 'Lifestyle is about choices.' },
+        { mistake: 'Using "hobby" and "interest" interchangeably', correction: '"Hobby" = active pursuit; "interest" = general curiosity', explanation: 'Hobbies are more active.' },
+        { mistake: 'Confusing "leisure" and "free time"', correction: 'These are largely synonymous', explanation: '"Leisure" is more formal.' }
+      ],
+      miniPractice: [
+        { question: 'A healthy _____ includes exercise and good nutrition.', type: 'fill-blank' },
+        { question: 'Which term means present-moment awareness?', options: ['Mindfulness', 'Productivity', 'Minimalism', 'Recreation'], type: 'multiple-choice' },
+        { question: 'Describe your daily routine.', type: 'rewrite' },
+        { question: 'Work-life _____ is essential for wellbeing.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'lifestyle',
+        'Mindfulness',
+        'My daily routine includes waking early, exercising, working, and spending time with family in the evening.',
+        'balance'
+      ],
+      quickRecap: 'Key lifestyle terms: lifestyle, habits, routine, work-life balance, leisure, hobbies, recreation, productivity, minimalism, self-care, mindfulness, quality of life, priorities, time management, wellness. Use these for lifestyle topics!',
+      collocations: [
+        'healthy lifestyle', 'daily habits', 'morning routine', 'work-life balance',
+        'leisure time', 'pursue hobbies', 'outdoor recreation', 'increase productivity',
+        'embrace minimalism', 'practice self-care', 'practice mindfulness', 'quality of life'
+      ],
+      synonyms: [
+        { word: 'lifestyle', synonyms: ['way of life', 'living', 'existence', 'life'] },
+        { word: 'habits', synonyms: ['routines', 'practices', 'customs', 'patterns'] },
+        { word: 'leisure', synonyms: ['free time', 'recreation', 'relaxation', 'downtime'] }
+      ],
+      speakingLines: [
+        'A healthy lifestyle is important for wellbeing.',
+        'Good habits take time to develop.',
+        'Work-life balance is something I prioritize.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-fashion-4',
+    title: 'Sustainable Fashion Vocabulary',
+    slug: 'sustainable-fashion-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Fashion',
+    description: 'Vocabulary for discussing sustainable and ethical fashion.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-03-22T10:00:00Z',
+    updated_at: '2025-03-22T10:00:00Z',
+    content: {
+      title: 'Sustainable Fashion Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 sustainable fashion words',
+        'Discuss ethical fashion',
+        'Analyze fashion industry impact'
+      ],
+      coreExplanation: `Sustainable fashion vocabulary is useful for IELTS topics about environment and consumerism. This lesson covers terms for discussing ethical and sustainable fashion.
+
+Understanding these terms helps you discuss sustainable fashion topics effectively.`,
+      examples: [
+        { sentence: 'Sustainable fashion reduces waste.', explanation: '"Sustainable fashion" is environmentally responsible.' },
+        { sentence: 'Fast fashion is problematic.', explanation: '"Fast fashion" is cheap, quick-turnover clothing.' },
+        { sentence: 'Ethical production is important.', explanation: '"Ethical" means morally responsible.' },
+        { sentence: 'Eco-friendly materials are used.', explanation: '"Eco-friendly" is environmentally safe.' },
+        { sentence: 'Recycled fabrics reduce waste.', explanation: '"Recycled" is made from used materials.' },
+        { sentence: 'Upcycling creates new items.', explanation: '"Upcycling" is creative reuse.' },
+        { sentence: 'Carbon footprint is measured.', explanation: '"Carbon footprint" is environmental impact.' },
+        { sentence: 'Fair trade ensures fair wages.', explanation: '"Fair trade" is ethical trading.' },
+        { sentence: 'Sweatshops exploit workers.', explanation: '"Sweatshops" are exploitative factories.' },
+        { sentence: 'Transparency is demanded.', explanation: '"Transparency" is openness about practices.' },
+        { sentence: 'Slow fashion is mindful.', explanation: '"Slow fashion" is quality over quantity.' },
+        { sentence: 'Second-hand clothing is popular.', explanation: '"Second-hand" is previously owned.' },
+        { sentence: 'Capsule wardrobes are efficient.', explanation: '"Capsule wardrobe" is minimal clothing collection.' },
+        { sentence: 'Conscious consumers make choices.', explanation: '"Conscious consumers" consider impact.' },
+        { sentence: 'Greenwashing misleads consumers.', explanation: '"Greenwashing" is false environmental claims.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "sustainable" and "eco-friendly"', correction: '"Sustainable" = long-term viable; "eco-friendly" = not harmful', explanation: 'Sustainable is broader.' },
+        { mistake: 'Using "recycled" and "upcycled" interchangeably', correction: '"Recycled" = processed; "upcycled" = creatively reused', explanation: 'Upcycling adds value.' },
+        { mistake: 'Confusing "ethical" and "sustainable"', correction: '"Ethical" = fair treatment; "sustainable" = environmental', explanation: 'These overlap but differ.' }
+      ],
+      miniPractice: [
+        { question: '_____ fashion focuses on environmental responsibility.', type: 'fill-blank' },
+        { question: 'Which term means cheap, quick-turnover clothing?', options: ['Fast fashion', 'Slow fashion', 'Sustainable fashion', 'Ethical fashion'], type: 'multiple-choice' },
+        { question: 'Discuss the problems with fast fashion.', type: 'rewrite' },
+        { question: '_____ consumers consider the environmental impact of their purchases.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Sustainable',
+        'Fast fashion',
+        'Fast fashion causes environmental damage through waste and pollution, and often involves poor working conditions in factories.',
+        'Conscious'
+      ],
+      quickRecap: 'Key sustainable fashion terms: sustainable fashion, fast fashion, ethical, eco-friendly, recycled, upcycling, carbon footprint, fair trade, sweatshops, transparency, slow fashion, second-hand, capsule wardrobe, conscious consumers, greenwashing. Use these for sustainable fashion topics!',
+      collocations: [
+        'sustainable fashion', 'fast fashion', 'ethical production', 'eco-friendly materials',
+        'recycled fabrics', 'creative upcycling', 'carbon footprint', 'fair trade',
+        'factory sweatshops', 'supply chain transparency', 'slow fashion', 'second-hand clothing'
+      ],
+      synonyms: [
+        { word: 'sustainable', synonyms: ['eco-friendly', 'green', 'environmentally responsible', 'ethical'] },
+        { word: 'ethical', synonyms: ['responsible', 'fair', 'moral', 'principled'] },
+        { word: 'eco-friendly', synonyms: ['green', 'sustainable', 'environmentally friendly', 'clean'] }
+      ],
+      speakingLines: [
+        'Sustainable fashion is becoming more important.',
+        'Fast fashion has significant environmental costs.',
+        'Conscious consumers are driving change in the industry.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 35: Tourism & Travel (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-tourism-1',
+    title: 'Tourism & Travel Vocabulary',
+    slug: 'tourism-travel-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Tourism',
+    description: 'Essential vocabulary for discussing tourism and travel.',
+    is_premium: false,
+    is_published: true,
+    view_count: 920,
+    created_at: '2025-03-23T10:00:00Z',
+    updated_at: '2025-03-23T10:00:00Z',
+    content: {
+      title: 'Tourism & Travel Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 tourism vocabulary words',
+        'Discuss travel experiences',
+        'Analyze tourism industry'
+      ],
+      coreExplanation: `Tourism vocabulary is essential for IELTS Speaking topics about travel and holidays. This lesson covers terms for discussing tourism and travel.
+
+Understanding these terms helps you discuss tourism topics effectively.`,
+      examples: [
+        { sentence: 'Tourism boosts the economy.', explanation: '"Tourism" is traveling for pleasure.' },
+        { sentence: 'Tourists visit attractions.', explanation: '"Tourists" are travelers.' },
+        { sentence: 'The destination is popular.', explanation: '"Destination" is place visited.' },
+        { sentence: 'Accommodation was comfortable.', explanation: '"Accommodation" is lodging.' },
+        { sentence: 'The itinerary was packed.', explanation: '"Itinerary" is travel plan.' },
+        { sentence: 'Sightseeing was enjoyable.', explanation: '"Sightseeing" is visiting attractions.' },
+        { sentence: 'The excursion was memorable.', explanation: '"Excursion" is short trip.' },
+        { sentence: 'Landmarks attract visitors.', explanation: '"Landmarks" are notable places.' },
+        { sentence: 'The resort was luxurious.', explanation: '"Resort" is vacation destination.' },
+        { sentence: 'Package tours are convenient.', explanation: '"Package tours" are all-inclusive trips.' },
+        { sentence: 'Backpacking is adventurous.', explanation: '"Backpacking" is budget travel.' },
+        { sentence: 'The guidebook was helpful.', explanation: '"Guidebook" is travel information book.' },
+        { sentence: 'Souvenirs remind us of trips.', explanation: '"Souvenirs" are mementos.' },
+        { sentence: 'The visa was approved.', explanation: '"Visa" is travel permit.' },
+        { sentence: 'Hospitality was excellent.', explanation: '"Hospitality" is welcoming guests.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "travel" and "trip"', correction: '"Travel" = general activity; "trip" = specific journey', explanation: 'Trip is more specific.' },
+        { mistake: 'Using "tourist" negatively', correction: '"Tourist" is neutral; context determines tone', explanation: 'Tourist is not inherently negative.' },
+        { mistake: 'Confusing "journey" and "trip"', correction: '"Journey" emphasizes travel; "trip" emphasizes destination', explanation: 'Journey is about the process.' }
+      ],
+      miniPractice: [
+        { question: '_____ is an important industry in many countries.', type: 'fill-blank' },
+        { question: 'Which term means a travel plan?', options: ['Itinerary', 'Destination', 'Excursion', 'Resort'], type: 'multiple-choice' },
+        { question: 'Describe a memorable trip you have taken.', type: 'rewrite' },
+        { question: '_____ visit famous landmarks and attractions.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Tourism',
+        'Itinerary',
+        'I took a memorable trip to Japan. The culture, food, and scenery were amazing, and the hospitality was exceptional.',
+        'Tourists'
+      ],
+      quickRecap: 'Key tourism terms: tourism, tourists, destination, accommodation, itinerary, sightseeing, excursion, landmarks, resort, package tours, backpacking, guidebook, souvenirs, visa, hospitality. Use these for tourism topics!',
+      collocations: [
+        'tourism industry', 'foreign tourists', 'popular destination', 'book accommodation',
+        'travel itinerary', 'go sightseeing', 'day excursion', 'famous landmarks',
+        'beach resort', 'package tours', 'budget backpacking', 'travel guidebook'
+      ],
+      synonyms: [
+        { word: 'tourism', synonyms: ['travel', 'sightseeing', 'vacationing', 'touring'] },
+        { word: 'tourist', synonyms: ['traveler', 'visitor', 'vacationer', 'sightseer'] },
+        { word: 'destination', synonyms: ['location', 'place', 'spot', 'site'] }
+      ],
+      speakingLines: [
+        'Tourism is a major industry in my country.',
+        'I prefer independent travel to package tours.',
+        'The hospitality made the trip memorable.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-tourism-2',
+    title: 'Accommodation & Hotels Vocabulary',
+    slug: 'accommodation-hotels-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Tourism',
+    description: 'Vocabulary for discussing accommodation and hotels.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2025-03-24T10:00:00Z',
+    updated_at: '2025-03-24T10:00:00Z',
+    content: {
+      title: 'Accommodation & Hotels Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 accommodation vocabulary words',
+        'Discuss hotel experiences',
+        'Describe lodging options'
+      ],
+      coreExplanation: `Accommodation vocabulary is useful for IELTS Speaking topics about travel and experiences. This lesson covers terms for discussing hotels and lodging.
+
+Understanding these terms helps you discuss accommodation topics effectively.`,
+      examples: [
+        { sentence: 'The hotel was five-star.', explanation: '"Hotel" is commercial lodging.' },
+        { sentence: 'The booking was confirmed.', explanation: '"Booking" is reservation.' },
+        { sentence: 'Check-in was smooth.', explanation: '"Check-in" is arrival registration.' },
+        { sentence: 'Check-out is at noon.', explanation: '"Check-out" is departure process.' },
+        { sentence: 'The room had amenities.', explanation: '"Amenities" are facilities provided.' },
+        { sentence: 'The suite was spacious.', explanation: '"Suite" is luxury room.' },
+        { sentence: 'Room service was available.', explanation: '"Room service" is in-room delivery.' },
+        { sentence: 'The lobby was impressive.', explanation: '"Lobby" is entrance area.' },
+        { sentence: 'Housekeeping cleaned daily.', explanation: '"Housekeeping" is cleaning service.' },
+        { sentence: 'The concierge helped with tours.', explanation: '"Concierge" is guest services staff.' },
+        { sentence: 'The hostel was budget-friendly.', explanation: '"Hostel" is cheap shared accommodation.' },
+        { sentence: 'The B&B was charming.', explanation: '"B&B" is bed and breakfast.' },
+        { sentence: 'The Airbnb was convenient.', explanation: '"Airbnb" is rental accommodation.' },
+        { sentence: 'Occupancy rates are high.', explanation: '"Occupancy" is rooms filled.' },
+        { sentence: 'The review was positive.', explanation: '"Review" is guest feedback.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "booking" and "reservation"', correction: 'These are synonymous', explanation: '"Booking" is more British.' },
+        { mistake: 'Using "room" and "suite" interchangeably', correction: '"Suite" is larger and more luxurious', explanation: 'Suite has multiple rooms.' },
+        { mistake: 'Confusing "hostel" and "hotel"', correction: '"Hostel" = shared budget; "hotel" = private rooms', explanation: 'These are different types.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ was fully booked during peak season.', type: 'fill-blank' },
+        { question: 'Which term means arrival registration?', options: ['Check-in', 'Check-out', 'Booking', 'Concierge'], type: 'multiple-choice' },
+        { question: 'Describe your ideal hotel.', type: 'rewrite' },
+        { question: 'The _____ helped arrange tours and restaurant reservations.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'hotel',
+        'Check-in',
+        'My ideal hotel has comfortable rooms, excellent amenities, friendly staff, and a convenient location near attractions.',
+        'concierge'
+      ],
+      quickRecap: 'Key accommodation terms: hotel, booking, check-in, check-out, amenities, suite, room service, lobby, housekeeping, concierge, hostel, B&B, Airbnb, occupancy, review. Use these for accommodation topics!',
+      collocations: [
+        'luxury hotel', 'online booking', 'express check-in', 'late check-out',
+        'hotel amenities', 'presidential suite', 'room service', 'hotel lobby',
+        'daily housekeeping', 'hotel concierge', 'budget hostel', 'cozy B&B'
+      ],
+      synonyms: [
+        { word: 'hotel', synonyms: ['accommodation', 'lodging', 'inn', 'guesthouse'] },
+        { word: 'booking', synonyms: ['reservation', 'appointment', 'arrangement', 'scheduling'] },
+        { word: 'amenities', synonyms: ['facilities', 'features', 'services', 'conveniences'] }
+      ],
+      speakingLines: [
+        'I prefer hotels with good amenities.',
+        'The check-in process was very efficient.',
+        'The concierge was extremely helpful.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-tourism-3',
+    title: 'Sustainable Tourism Vocabulary',
+    slug: 'sustainable-tourism-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Tourism',
+    description: 'Vocabulary for discussing sustainable and responsible tourism.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-03-25T10:00:00Z',
+    updated_at: '2025-03-25T10:00:00Z',
+    content: {
+      title: 'Sustainable Tourism Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 sustainable tourism words',
+        'Discuss responsible travel',
+        'Analyze tourism impact'
+      ],
+      coreExplanation: `Sustainable tourism vocabulary is useful for IELTS Writing topics about environment and development. This lesson covers terms for discussing responsible tourism.
+
+Understanding these terms helps you discuss sustainable tourism topics effectively.`,
+      examples: [
+        { sentence: 'Sustainable tourism protects destinations.', explanation: '"Sustainable tourism" is responsible travel.' },
+        { sentence: 'Ecotourism focuses on nature.', explanation: '"Ecotourism" is nature-based tourism.' },
+        { sentence: 'Overtourism damages destinations.', explanation: '"Overtourism" is excessive visitors.' },
+        { sentence: 'Carbon offsetting reduces impact.', explanation: '"Carbon offsetting" is compensating emissions.' },
+        { sentence: 'Local communities benefit.', explanation: '"Local communities" are resident populations.' },
+        { sentence: 'Cultural preservation is important.', explanation: '"Cultural preservation" is protecting heritage.' },
+        { sentence: 'Environmental impact is measured.', explanation: '"Environmental impact" is effect on nature.' },
+        { sentence: 'Responsible travel is encouraged.', explanation: '"Responsible travel" is mindful tourism.' },
+        { sentence: 'Conservation efforts are supported.', explanation: '"Conservation" is protecting nature.' },
+        { sentence: 'Heritage sites need protection.', explanation: '"Heritage sites" are historical places.' },
+        { sentence: 'Carrying capacity limits visitors.', explanation: '"Carrying capacity" is maximum sustainable visitors.' },
+        { sentence: 'Voluntourism combines travel and helping.', explanation: '"Voluntourism" is volunteer tourism.' },
+        { sentence: 'Authentic experiences are valued.', explanation: '"Authentic" means genuine.' },
+        { sentence: 'Indigenous cultures are respected.', explanation: '"Indigenous" means native.' },
+        { sentence: 'Ethical tourism considers impact.', explanation: '"Ethical tourism" is morally responsible.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "sustainable" and "eco"', correction: '"Sustainable" = long-term viable; "eco" = nature-focused', explanation: 'Sustainable is broader.' },
+        { mistake: 'Using "ecotourism" for any nature trip', correction: 'Ecotourism must be sustainable and educational', explanation: 'True ecotourism has criteria.' },
+        { mistake: 'Confusing "overtourism" and "mass tourism"', correction: '"Overtourism" = negative impact; "mass tourism" = large numbers', explanation: 'Overtourism implies problems.' }
+      ],
+      miniPractice: [
+        { question: '_____ tourism aims to minimize environmental impact.', type: 'fill-blank' },
+        { question: 'Which term means excessive visitors damaging a destination?', options: ['Overtourism', 'Ecotourism', 'Voluntourism', 'Mass tourism'], type: 'multiple-choice' },
+        { question: 'Discuss how tourism can be more sustainable.', type: 'rewrite' },
+        { question: '_____ offsetting helps reduce the environmental impact of travel.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Sustainable',
+        'Overtourism',
+        'Tourism can be more sustainable by supporting local businesses, respecting cultures, reducing waste, and choosing eco-friendly options.',
+        'Carbon'
+      ],
+      quickRecap: 'Key sustainable tourism terms: sustainable tourism, ecotourism, overtourism, carbon offsetting, local communities, cultural preservation, environmental impact, responsible travel, conservation, heritage sites, carrying capacity, voluntourism, authentic, indigenous, ethical tourism. Use these for sustainable tourism topics!',
+      collocations: [
+        'sustainable tourism', 'nature ecotourism', 'combat overtourism', 'carbon offsetting',
+        'local communities', 'cultural preservation', 'environmental impact', 'responsible travel',
+        'wildlife conservation', 'heritage sites', 'carrying capacity', 'ethical voluntourism'
+      ],
+      synonyms: [
+        { word: 'sustainable', synonyms: ['responsible', 'eco-friendly', 'green', 'ethical'] },
+        { word: 'ecotourism', synonyms: ['nature tourism', 'green tourism', 'sustainable tourism', 'conservation tourism'] },
+        { word: 'authentic', synonyms: ['genuine', 'real', 'original', 'true'] }
+      ],
+      speakingLines: [
+        'Sustainable tourism is essential for protecting destinations.',
+        'Overtourism is a growing problem in popular cities.',
+        'Responsible travelers consider their environmental impact.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-tourism-4',
+    title: 'Adventure & Cultural Tourism Vocabulary',
+    slug: 'adventure-cultural-tourism-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Tourism',
+    description: 'Vocabulary for discussing adventure travel and cultural tourism.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-03-26T10:00:00Z',
+    updated_at: '2025-03-26T10:00:00Z',
+    content: {
+      title: 'Adventure & Cultural Tourism Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 adventure tourism words',
+        'Discuss cultural experiences',
+        'Describe travel activities'
+      ],
+      coreExplanation: `Adventure and cultural tourism vocabulary is useful for IELTS Speaking topics about experiences and interests. This lesson covers terms for discussing different types of tourism.
+
+Understanding these terms helps you discuss adventure and cultural tourism topics effectively.`,
+      examples: [
+        { sentence: 'Adventure tourism is thrilling.', explanation: '"Adventure tourism" is exciting travel.' },
+        { sentence: 'Cultural tourism explores heritage.', explanation: '"Cultural tourism" is heritage-focused travel.' },
+        { sentence: 'Trekking requires fitness.', explanation: '"Trekking" is long-distance hiking.' },
+        { sentence: 'Safari offers wildlife viewing.', explanation: '"Safari" is wildlife expedition.' },
+        { sentence: 'Scuba diving explores underwater.', explanation: '"Scuba diving" is underwater swimming.' },
+        { sentence: 'Bungee jumping is extreme.', explanation: '"Bungee jumping" is jumping with elastic cord.' },
+        { sentence: 'The expedition was challenging.', explanation: '"Expedition" is organized journey.' },
+        { sentence: 'Heritage tours are educational.', explanation: '"Heritage tours" visit historical sites.' },
+        { sentence: 'Immersion enhances understanding.', explanation: '"Immersion" is deep involvement.' },
+        { sentence: 'Festivals showcase culture.', explanation: '"Festivals" are cultural celebrations.' },
+        { sentence: 'Cuisine reflects culture.', explanation: '"Cuisine" is regional food.' },
+        { sentence: 'Traditions are preserved.', explanation: '"Traditions" are cultural practices.' },
+        { sentence: 'Artifacts tell stories.', explanation: '"Artifacts" are historical objects.' },
+        { sentence: 'Museums preserve history.', explanation: '"Museums" display collections.' },
+        { sentence: 'Pilgrimages have spiritual meaning.', explanation: '"Pilgrimages" are religious journeys.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "adventure" and "extreme"', correction: '"Adventure" = exciting; "extreme" = very risky', explanation: 'Extreme is more dangerous.' },
+        { mistake: 'Using "culture" and "heritage" interchangeably', correction: '"Culture" = living practices; "heritage" = inherited traditions', explanation: 'Heritage is from the past.' },
+        { mistake: 'Confusing "trek" and "hike"', correction: '"Trek" = long, challenging; "hike" = shorter walk', explanation: 'Trekking is more demanding.' }
+      ],
+      miniPractice: [
+        { question: '_____ tourism involves exciting outdoor activities.', type: 'fill-blank' },
+        { question: 'Which term means a wildlife expedition?', options: ['Safari', 'Trekking', 'Pilgrimage', 'Heritage tour'], type: 'multiple-choice' },
+        { question: 'Describe an adventure activity you would like to try.', type: 'rewrite' },
+        { question: '_____ tourism focuses on experiencing local traditions and history.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Adventure',
+        'Safari',
+        'I would like to try scuba diving to explore coral reefs and marine life in tropical waters.',
+        'Cultural'
+      ],
+      quickRecap: 'Key adventure/cultural terms: adventure tourism, cultural tourism, trekking, safari, scuba diving, bungee jumping, expedition, heritage tours, immersion, festivals, cuisine, traditions, artifacts, museums, pilgrimages. Use these for adventure and cultural tourism topics!',
+      collocations: [
+        'adventure tourism', 'cultural tourism', 'mountain trekking', 'African safari',
+        'scuba diving', 'bungee jumping', 'polar expedition', 'heritage tours',
+        'cultural immersion', 'local festivals', 'traditional cuisine', 'ancient artifacts'
+      ],
+      synonyms: [
+        { word: 'adventure', synonyms: ['excitement', 'thrill', 'expedition', 'exploration'] },
+        { word: 'cultural', synonyms: ['heritage', 'traditional', 'ethnic', 'historical'] },
+        { word: 'expedition', synonyms: ['journey', 'voyage', 'trek', 'exploration'] }
+      ],
+      speakingLines: [
+        'Adventure tourism is growing in popularity.',
+        'Cultural tourism helps preserve traditions.',
+        'Immersive experiences are more meaningful than sightseeing.'
+      ]
+    }
   }
 ];
