@@ -28,6 +28,8 @@ const ReadingPracticePage = lazy(() => import('@/pages/ReadingPracticePage'));
 const ProgressDashboardPage = lazy(() => import('@/pages/ProgressDashboardPage'));
 const MockTestPage = lazy(() => import('@/pages/MockTestPage'));
 const CertificatePage = lazy(() => import('@/pages/CertificatePage'));
+const GrammarExercisesPage = lazy(() => import('@/pages/GrammarExercisesPage'));
+const EssayBankPage = lazy(() => import('@/pages/EssayBankPage'));
 
 function LoadingSpinner() {
   return (
@@ -218,17 +220,37 @@ function App() {
                                                                                       </Layout>
                                                                                     }
                                                                                   />
-                                                                                  <Route
-                                                                                    path="/certificate"
-                                                                                    element={
-                                                                                      <Layout>
-                                                                                        <Suspense fallback={<LoadingSpinner />}>
-                                                                                          <CertificatePage />
-                                                                                        </Suspense>
-                                                                                      </Layout>
-                                                                                    }
-                                                                                  />
-                                                                                </Routes>
+                                                                                                                                                                  <Route
+                                                                                                                                                                    path="/certificate"
+                                                                                                                                                                    element={
+                                                                                                                                                                      <Layout>
+                                                                                                                                                                        <Suspense fallback={<LoadingSpinner />}>
+                                                                                                                                                                          <CertificatePage />
+                                                                                                                                                                        </Suspense>
+                                                                                                                                                                      </Layout>
+                                                                                                                                                                    }
+                                                                                                                                                                  />
+                                                                                                                                                                  <Route
+                                                                                                                                                                    path="/grammar-exercises"
+                                                                                                                                                                    element={
+                                                                                                                                                                      <Layout>
+                                                                                                                                                                        <Suspense fallback={<LoadingSpinner />}>
+                                                                                                                                                                          <GrammarExercisesPage />
+                                                                                                                                                                        </Suspense>
+                                                                                                                                                                      </Layout>
+                                                                                                                                                                    }
+                                                                                                                                                                  />
+                                                                                                                                                                  <Route
+                                                                                                                                                                    path="/essay-bank"
+                                                                                                                                                                    element={
+                                                                                                                                                                      <Layout>
+                                                                                                                                                                        <Suspense fallback={<LoadingSpinner />}>
+                                                                                                                                                                          <EssayBankPage />
+                                                                                                                                                                        </Suspense>
+                                                                                                                                                                      </Layout>
+                                                                                                                                                                    }
+                                                                                                                                                                  />
+                                                                                                                                                                </Routes>
           </LessonProvider>
         </ProgressProvider>
       </AuthProvider>
