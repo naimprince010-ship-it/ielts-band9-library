@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { LessonProvider } from '@/contexts/LessonContext';
+import { ProgressProvider } from '@/contexts/ProgressContext';
 import { Layout } from '@/components/layout/Layout';
 import { HomePage } from '@/pages/HomePage';
 import { LibraryPage } from '@/pages/LibraryPage';
@@ -21,8 +22,9 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <LessonProvider>
-          <Routes>
+        <ProgressProvider>
+          <LessonProvider>
+            <Routes>
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/signup" element={<SignupPage />} />
                         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
@@ -118,7 +120,8 @@ function App() {
                                             }
                                           />
                                         </Routes>
-        </LessonProvider>
+          </LessonProvider>
+        </ProgressProvider>
       </AuthProvider>
     </Router>
   );

@@ -7,10 +7,13 @@ import { Badge } from '@/components/ui/badge';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SAMPLE_LESSONS } from '@/data/sampleLessons';
+import { ContinueLearning } from '@/components/dashboard/ContinueLearning';
+import { useAuth } from '@/contexts/AuthContext';
 
 export function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,6 +26,8 @@ export function HomePage() {
 
   return (
     <div>
+      {user && <ContinueLearning />}
+      
       <section className="bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">

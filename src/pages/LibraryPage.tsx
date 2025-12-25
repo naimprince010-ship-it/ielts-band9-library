@@ -1,6 +1,6 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Search, Filter, BookOpen, GraduationCap, Star, Bookmark, BookmarkCheck, Clock, CheckCircle2, Circle, TrendingUp, PenTool, Mic } from 'lucide-react';
+import { Search, Filter, BookOpen, GraduationCap, Star, Bookmark, BookmarkCheck, Clock, CheckCircle2, Circle, TrendingUp, PenTool, Mic, ArrowUp, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/select';
 import { useLessons } from '@/contexts/LessonContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { useProgress } from '@/contexts/ProgressContext';
 import { LessonType, LessonLevel } from '@/types';
 import { GRAMMAR_TOPICS, VOCABULARY_TOPICS, WRITING_TOPICS, SPEAKING_TOPICS, SAMPLE_LESSONS } from '@/data/sampleLessons';
 
@@ -31,17 +32,53 @@ const isBandUpgradeLesson = (topic: string): boolean => {
   return topic.toLowerCase().includes('band upgrade') || topic.toLowerCase().includes('upgrade');
 };
 
+type SortOption = 'newest' | 'oldest' | 'popular' | 'az' | 'za';
+const ITEMS_PER_PAGE = 12;
+
 export function LibraryPage({ type }: LibraryPageProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const [levelFilter, setLevelFilter] = useState<LessonLevel | 'all'>('all');
   const [topicFilter, setTopicFilter] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<SortOption>('newest');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [isFilterSticky, setIsFilterSticky] = useState(false);
+  const filterRef = useRef<HTMLDivElement>(null);
   
   const { lessons, loading, fetchLessons, addBookmark, removeBookmark, isBookmarked, getLessonProgress, getCompletionPercentage, getCompletedCount } = useLessons();
   const { user } = useAuth();
+  useProgress();
 
   const topics = type === 'vocabulary' ? VOCABULARY_TOPICS : type === 'writing' ? WRITING_TOPICS : type === 'speaking' ? SPEAKING_TOPICS : GRAMMAR_TOPICS;
   const filteredLessons = lessons.filter(l => l.type === type);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 400);
+      if (filterRef.current) {
+        const rect = filterRef.current.getBoundingClientRect();
+        setIsFilterSticky(rect.top <= 0);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  const resetFilters = useCallback(() => {
+    setSearchQuery('');
+    setLevelFilter('all');
+    setTopicFilter('all');
+    setSortBy('newest');
+    setCurrentPage(1);
+    setSearchParams({});
+  }, [setSearchParams]);
+
+  const hasActiveFilters = searchQuery || levelFilter !== 'all' || topicFilter !== 'all' || sortBy !== 'newest';
 
   const topicCounts = useMemo(() => {
     const allLessonsOfType = SAMPLE_LESSONS.filter(l => l.type === type);
@@ -80,9 +117,41 @@ export function LibraryPage({ type }: LibraryPageProps) {
     }
   };
 
-  const displayLessons = topicFilter === 'all' 
-    ? filteredLessons 
-    : filteredLessons.filter(l => l.topic.toLowerCase() === topicFilter.toLowerCase());
+  const sortedAndFilteredLessons = useMemo(() => {
+    let result = topicFilter === 'all' 
+      ? filteredLessons 
+      : filteredLessons.filter(l => l.topic.toLowerCase() === topicFilter.toLowerCase());
+    
+    switch (sortBy) {
+      case 'newest':
+        result = [...result].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+        break;
+      case 'oldest':
+        result = [...result].sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+        break;
+      case 'popular':
+        result = [...result].sort((a, b) => b.view_count - a.view_count);
+        break;
+      case 'az':
+        result = [...result].sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case 'za':
+        result = [...result].sort((a, b) => b.title.localeCompare(a.title));
+        break;
+    }
+    
+    return result;
+  }, [filteredLessons, topicFilter, sortBy]);
+
+  const totalPages = Math.ceil(sortedAndFilteredLessons.length / ITEMS_PER_PAGE);
+  const displayLessons = sortedAndFilteredLessons.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, levelFilter, topicFilter, sortBy]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -126,7 +195,10 @@ export function LibraryPage({ type }: LibraryPageProps) {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-lg shadow-sm p-4 mb-8">
+        <div 
+          ref={filterRef}
+          className={`bg-white rounded-lg shadow-sm p-4 mb-8 transition-all ${isFilterSticky ? 'sticky top-0 z-40 shadow-md' : ''}`}
+        >
           <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
@@ -165,10 +237,30 @@ export function LibraryPage({ type }: LibraryPageProps) {
               </SelectContent>
             </Select>
 
+            <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
+              <SelectTrigger className="w-full md:w-40">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="newest">Newest First</SelectItem>
+                <SelectItem value="oldest">Oldest First</SelectItem>
+                <SelectItem value="popular">Most Popular</SelectItem>
+                <SelectItem value="az">A to Z</SelectItem>
+                <SelectItem value="za">Z to A</SelectItem>
+              </SelectContent>
+            </Select>
+
             <Button type="submit" className="gap-2">
               <Filter className="h-4 w-4" />
               Filter
             </Button>
+
+            {hasActiveFilters && (
+              <Button type="button" variant="outline" onClick={resetFilters} className="gap-2">
+                <X className="h-4 w-4" />
+                Reset
+              </Button>
+            )}
           </form>
         </div>
 
@@ -290,9 +382,63 @@ export function LibraryPage({ type }: LibraryPageProps) {
                 );
               })}
             </div>
+
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-8">
+                <Button
+                  variant="outline"
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </Button>
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    let pageNum;
+                    if (totalPages <= 5) {
+                      pageNum = i + 1;
+                    } else if (currentPage <= 3) {
+                      pageNum = i + 1;
+                    } else if (currentPage >= totalPages - 2) {
+                      pageNum = totalPages - 4 + i;
+                    } else {
+                      pageNum = currentPage - 2 + i;
+                    }
+                    return (
+                      <Button
+                        key={pageNum}
+                        variant={currentPage === pageNum ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setCurrentPage(pageNum)}
+                        className="w-10"
+                      >
+                        {pageNum}
+                      </Button>
+                    );
+                  })}
+                </div>
+                <Button
+                  variant="outline"
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </Button>
+              </div>
+            )}
           </>
         )}
       </div>
+
+      {showBackToTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-6 right-6 p-3 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 transition-colors z-50"
+          aria-label="Back to top"
+        >
+          <ArrowUp className="h-5 w-5" />
+        </button>
+      )}
     </div>
   );
 }

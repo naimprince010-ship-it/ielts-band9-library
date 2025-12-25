@@ -17,10 +17,14 @@ import {
   BookOpen,
   Target,
   Zap,
-  Lock
+  Lock,
+  AlertCircle,
+  Flame,
+  Star
 } from 'lucide-react';
 import { ALL_QUIZZES, getQuizById, Quiz } from '@/data/quizData';
 import { useAuth } from '@/contexts/AuthContext';
+import { useProgress, WrongQuestion } from '@/contexts/ProgressContext';
 
 interface QuizResult {
   questionId: string;
@@ -32,6 +36,7 @@ interface QuizResult {
 export function QuizPage() {
   const { quizId } = useParams<{ quizId: string }>();
   const { isPremium } = useAuth();
+  const { addQuizAttempt, getAllWrongQuestions, streakData, getTodayProgress } = useProgress();
   
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -74,7 +79,29 @@ export function QuizPage() {
   const handleQuizComplete = useCallback(() => {
     setQuizCompleted(true);
     setQuizStarted(false);
-  }, []);
+    
+    if (quiz && results.length > 0) {
+      const wrongQuestions: WrongQuestion[] = results
+        .filter(r => !r.isCorrect)
+        .map(r => {
+          const question = quiz.questions.find(q => q.id === r.questionId);
+          return {
+            questionId: r.questionId,
+            question: question?.sentence || '',
+            userAnswer: r.userAnswer,
+            correctAnswer: r.correctAnswer,
+            hint: question?.hint,
+          };
+        });
+      
+      addQuizAttempt({
+        quizId: quiz.id,
+        score: results.filter(r => r.isCorrect).length,
+        total: results.length,
+        wrongQuestions,
+      });
+    }
+  }, [quiz, results, addQuizAttempt]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -173,23 +200,79 @@ export function QuizPage() {
       ? ALL_QUIZZES 
       : ALL_QUIZZES.filter(q => q.category === selectedCategory);
 
+  const wrongQuestionsList = getAllWrongQuestions();
+  const todayProgress = getTodayProgress();
+
+  const startReviewMode = () => {
+    setCurrentQuestionIndex(0);
+    setResults([]);
+    setUserAnswer('');
+    setShowFeedback(false);
+    setQuizCompleted(false);
+    setQuizStarted(true);
+    setTimeLeft(300);
+  };
+
   if (!quizId) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-violet-50 to-white">
         <div className="bg-gradient-to-r from-violet-600 to-purple-600 text-white py-12">
           <div className="container mx-auto px-4">
-            <div className="flex items-center gap-3 mb-4">
-              <Target className="h-8 w-8" />
-              <h1 className="text-3xl font-bold">Interactive Quiz</h1>
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <Target className="h-8 w-8" />
+                  <h1 className="text-3xl font-bold">Interactive Quiz</h1>
+                </div>
+                <p className="text-violet-100 max-w-2xl">
+                  Test your IELTS knowledge with interactive fill-in-the-blank quizzes. 
+                  Get instant feedback, track your score, and improve your Band score!
+                </p>
+              </div>
+              <div className="hidden md:flex items-center gap-6">
+                {streakData.currentStreak > 0 && (
+                  <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full">
+                    <Flame className="h-5 w-5 text-orange-300" />
+                    <span className="font-semibold">{streakData.currentStreak} day streak</span>
+                  </div>
+                )}
+                <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full">
+                  <Star className="h-5 w-5 text-yellow-300" />
+                  <span className="font-semibold">{todayProgress.questions}/{todayProgress.goal} today</span>
+                </div>
+              </div>
             </div>
-            <p className="text-violet-100 max-w-2xl">
-              Test your IELTS knowledge with interactive fill-in-the-blank quizzes. 
-              Get instant feedback, track your score, and improve your Band score!
-            </p>
           </div>
         </div>
 
         <div className="container mx-auto px-4 py-8">
+          {wrongQuestionsList.length > 0 && (
+            <Card className="mb-8 border-2 border-orange-200 bg-orange-50">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-3 bg-orange-100 rounded-full">
+                      <AlertCircle className="h-6 w-6 text-orange-600" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-lg text-orange-800">Review Your Mistakes</CardTitle>
+                      <CardDescription className="text-orange-600">
+                        You have {wrongQuestionsList.length} questions to review from previous quizzes
+                      </CardDescription>
+                    </div>
+                  </div>
+                  <Button 
+                    onClick={startReviewMode}
+                    className="bg-orange-600 hover:bg-orange-700"
+                  >
+                    <RotateCcw className="h-4 w-4 mr-2" />
+                    Start Review ({Math.min(10, wrongQuestionsList.length)} questions)
+                  </Button>
+                </div>
+              </CardHeader>
+            </Card>
+          )}
+
           <div className="flex flex-wrap gap-2 mb-8">
             <Button
               variant={selectedCategory === 'all' ? 'default' : 'outline'}
