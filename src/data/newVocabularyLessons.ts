@@ -17641,5 +17641,1233 @@ Understanding these terms helps you express emotions effectively.`,
         'Expressing emotions is healthy.'
       ]
     }
+  },
+  // ============================================
+  // BATCH 44: Weather & Climate (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-weather-1',
+    title: 'Weather Conditions Vocabulary',
+    slug: 'weather-conditions-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Weather',
+    description: 'Essential vocabulary for discussing weather conditions.',
+    is_premium: false,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-04-28T10:00:00Z',
+    updated_at: '2025-04-28T10:00:00Z',
+    content: {
+      title: 'Weather Conditions Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 weather vocabulary words',
+        'Discuss weather conditions',
+        'Describe climate patterns'
+      ],
+      coreExplanation: `Weather vocabulary is useful for IELTS Speaking topics about daily life and environment. This lesson covers terms for discussing weather conditions.
+
+Understanding these terms helps you discuss weather topics effectively.`,
+      examples: [
+        { sentence: 'The weather is unpredictable.', explanation: '"Weather" is atmospheric conditions.' },
+        { sentence: 'The temperature dropped.', explanation: '"Temperature" is heat level.' },
+        { sentence: 'Heavy rainfall caused flooding.', explanation: '"Rainfall" is rain amount.' },
+        { sentence: 'The humidity is high.', explanation: '"Humidity" is moisture in air.' },
+        { sentence: 'Strong winds damaged buildings.', explanation: '"Winds" are air movements.' },
+        { sentence: 'The forecast predicts storms.', explanation: '"Forecast" is weather prediction.' },
+        { sentence: 'Sunshine improved moods.', explanation: '"Sunshine" is sunlight.' },
+        { sentence: 'The drought affected crops.', explanation: '"Drought" is prolonged dry period.' },
+        { sentence: 'Fog reduced visibility.', explanation: '"Fog" is thick mist.' },
+        { sentence: 'The heatwave was intense.', explanation: '"Heatwave" is period of hot weather.' },
+        { sentence: 'Frost covered the ground.', explanation: '"Frost" is ice crystals.' },
+        { sentence: 'Thunder rumbled in the distance.', explanation: '"Thunder" is storm sound.' },
+        { sentence: 'Lightning struck the tree.', explanation: '"Lightning" is electrical discharge.' },
+        { sentence: 'The breeze was refreshing.', explanation: '"Breeze" is light wind.' },
+        { sentence: 'Precipitation was heavy.', explanation: '"Precipitation" is rain/snow.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "weather" and "climate"', correction: '"Weather" = short-term; "climate" = long-term patterns', explanation: 'Climate is average weather.' },
+        { mistake: 'Using "hot" for all warm weather', correction: 'Use "warm", "mild", "hot", "scorching" appropriately', explanation: 'Vary your vocabulary.' },
+        { mistake: 'Confusing "rain" and "rainfall"', correction: '"Rain" = the event; "rainfall" = amount measured', explanation: 'Rainfall is quantifiable.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ forecast predicts rain tomorrow.', type: 'fill-blank' },
+        { question: 'Which term means a prolonged period without rain?', options: ['Drought', 'Heatwave', 'Frost', 'Fog'], type: 'multiple-choice' },
+        { question: 'Describe the weather in your hometown.', type: 'rewrite' },
+        { question: 'High _____ makes the air feel sticky.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'weather',
+        'Drought',
+        'My hometown has a tropical climate with high humidity and frequent rainfall. Temperatures remain warm throughout the year.',
+        'humidity'
+      ],
+      quickRecap: 'Key weather terms: weather, temperature, rainfall, humidity, winds, forecast, sunshine, drought, fog, heatwave, frost, thunder, lightning, breeze, precipitation. Use these for weather topics!',
+      collocations: [
+        'weather conditions', 'high temperature', 'heavy rainfall', 'high humidity',
+        'strong winds', 'weather forecast', 'bright sunshine', 'severe drought',
+        'thick fog', 'extreme heatwave', 'morning frost', 'loud thunder'
+      ],
+      synonyms: [
+        { word: 'weather', synonyms: ['conditions', 'climate', 'elements', 'atmosphere'] },
+        { word: 'rainfall', synonyms: ['rain', 'precipitation', 'showers', 'downpour'] },
+        { word: 'wind', synonyms: ['breeze', 'gust', 'gale', 'draft'] }
+      ],
+      speakingLines: [
+        'The weather here is quite unpredictable.',
+        'I prefer mild temperatures.',
+        'Heavy rainfall is common in monsoon season.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-weather-2',
+    title: 'Climate Change Vocabulary',
+    slug: 'climate-change-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Weather',
+    description: 'Vocabulary for discussing climate change and global warming.',
+    is_premium: true,
+    is_published: true,
+    view_count: 880,
+    created_at: '2025-04-29T10:00:00Z',
+    updated_at: '2025-04-29T10:00:00Z',
+    content: {
+      title: 'Climate Change Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 climate change words',
+        'Discuss global warming',
+        'Analyze environmental issues'
+      ],
+      coreExplanation: `Climate change vocabulary is essential for IELTS Writing topics about environment. This lesson covers terms for discussing climate change and its effects.
+
+Understanding these terms helps you discuss environmental topics effectively.`,
+      examples: [
+        { sentence: 'Climate change threatens ecosystems.', explanation: '"Climate change" is long-term weather shifts.' },
+        { sentence: 'Global warming is accelerating.', explanation: '"Global warming" is rising temperatures.' },
+        { sentence: 'Greenhouse gases trap heat.', explanation: '"Greenhouse gases" cause warming.' },
+        { sentence: 'Carbon emissions must be reduced.', explanation: '"Carbon emissions" are CO2 releases.' },
+        { sentence: 'The carbon footprint is measured.', explanation: '"Carbon footprint" is emissions impact.' },
+        { sentence: 'Sea levels are rising.', explanation: '"Sea levels" are ocean heights.' },
+        { sentence: 'Ice caps are melting.', explanation: '"Ice caps" are polar ice.' },
+        { sentence: 'Extreme weather is increasing.', explanation: '"Extreme weather" is severe conditions.' },
+        { sentence: 'Sustainability is essential.', explanation: '"Sustainability" is long-term viability.' },
+        { sentence: 'Renewable energy reduces emissions.', explanation: '"Renewable energy" is sustainable power.' },
+        { sentence: 'Deforestation accelerates warming.', explanation: '"Deforestation" is forest destruction.' },
+        { sentence: 'Biodiversity is declining.', explanation: '"Biodiversity" is species variety.' },
+        { sentence: 'Mitigation strategies are needed.', explanation: '"Mitigation" is reducing severity.' },
+        { sentence: 'Adaptation is necessary.', explanation: '"Adaptation" is adjusting to change.' },
+        { sentence: 'The ecosystem is fragile.', explanation: '"Ecosystem" is ecological community.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "climate change" and "global warming"', correction: '"Global warming" is one aspect of "climate change"', explanation: 'Climate change is broader.' },
+        { mistake: 'Using "pollution" and "emissions" interchangeably', correction: '"Emissions" = released gases; "pollution" = contamination', explanation: 'Emissions cause pollution.' },
+        { mistake: 'Confusing "mitigation" and "adaptation"', correction: '"Mitigation" = reducing cause; "adaptation" = adjusting to effects', explanation: 'Both are needed.' }
+      ],
+      miniPractice: [
+        { question: '_____ change is one of the biggest challenges facing humanity.', type: 'fill-blank' },
+        { question: 'Which term means gases that trap heat in the atmosphere?', options: ['Greenhouse gases', 'Carbon footprint', 'Emissions', 'Pollution'], type: 'multiple-choice' },
+        { question: 'Discuss the effects of climate change.', type: 'rewrite' },
+        { question: 'Reducing our carbon _____ is essential for the environment.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Climate',
+        'Greenhouse gases',
+        'Climate change causes rising sea levels, extreme weather events, biodiversity loss, and threatens ecosystems worldwide.',
+        'footprint/emissions'
+      ],
+      quickRecap: 'Key climate terms: climate change, global warming, greenhouse gases, carbon emissions, carbon footprint, sea levels, ice caps, extreme weather, sustainability, renewable energy, deforestation, biodiversity, mitigation, adaptation, ecosystem. Use these for climate topics!',
+      collocations: [
+        'climate change', 'global warming', 'greenhouse gases', 'reduce carbon emissions',
+        'carbon footprint', 'rising sea levels', 'melting ice caps', 'extreme weather',
+        'environmental sustainability', 'renewable energy', 'illegal deforestation', 'protect biodiversity'
+      ],
+      synonyms: [
+        { word: 'climate change', synonyms: ['global warming', 'climate crisis', 'environmental change', 'warming'] },
+        { word: 'emissions', synonyms: ['pollution', 'discharge', 'release', 'output'] },
+        { word: 'sustainability', synonyms: ['viability', 'durability', 'maintainability', 'longevity'] }
+      ],
+      speakingLines: [
+        'Climate change is a pressing global issue.',
+        'Reducing emissions is everyone\'s responsibility.',
+        'Renewable energy is key to sustainability.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-weather-3',
+    title: 'Seasons & Natural Phenomena Vocabulary',
+    slug: 'seasons-natural-phenomena-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Weather',
+    description: 'Vocabulary for discussing seasons and natural phenomena.',
+    is_premium: true,
+    is_published: true,
+    view_count: 750,
+    created_at: '2025-04-30T10:00:00Z',
+    updated_at: '2025-04-30T10:00:00Z',
+    content: {
+      title: 'Seasons & Natural Phenomena Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 seasons vocabulary words',
+        'Discuss natural phenomena',
+        'Describe seasonal changes'
+      ],
+      coreExplanation: `Seasons vocabulary is useful for IELTS Speaking topics about preferences and experiences. This lesson covers terms for discussing seasons and natural events.
+
+Understanding these terms helps you discuss seasonal topics effectively.`,
+      examples: [
+        { sentence: 'Seasons change throughout the year.', explanation: '"Seasons" are yearly periods.' },
+        { sentence: 'Spring brings new growth.', explanation: '"Spring" is season of renewal.' },
+        { sentence: 'Summer is warm and sunny.', explanation: '"Summer" is hottest season.' },
+        { sentence: 'Autumn leaves change color.', explanation: '"Autumn" is fall season.' },
+        { sentence: 'Winter brings cold weather.', explanation: '"Winter" is coldest season.' },
+        { sentence: 'The monsoon brings heavy rain.', explanation: '"Monsoon" is seasonal rain.' },
+        { sentence: 'The equinox marks equal day and night.', explanation: '"Equinox" is equal day/night.' },
+        { sentence: 'The solstice is the longest day.', explanation: '"Solstice" is longest/shortest day.' },
+        { sentence: 'Hurricanes cause destruction.', explanation: '"Hurricanes" are tropical storms.' },
+        { sentence: 'Earthquakes shake the ground.', explanation: '"Earthquakes" are ground tremors.' },
+        { sentence: 'Volcanic eruptions are dangerous.', explanation: '"Volcanic eruptions" are lava releases.' },
+        { sentence: 'Tsunamis devastate coastlines.', explanation: '"Tsunamis" are giant waves.' },
+        { sentence: 'Floods damage property.', explanation: '"Floods" are water overflow.' },
+        { sentence: 'Blizzards bring heavy snow.', explanation: '"Blizzards" are severe snowstorms.' },
+        { sentence: 'Tornadoes are destructive.', explanation: '"Tornadoes" are spinning wind columns.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "autumn" and "fall"', correction: '"Autumn" is British; "fall" is American', explanation: 'Both are correct.' },
+        { mistake: 'Using "monsoon" only for rain', correction: '"Monsoon" is a seasonal wind pattern', explanation: 'Monsoon brings rain but is wind-based.' },
+        { mistake: 'Confusing "hurricane" and "typhoon"', correction: 'Same phenomenon, different regions', explanation: 'Atlantic = hurricane; Pacific = typhoon.' }
+      ],
+      miniPractice: [
+        { question: 'The four _____ are spring, summer, autumn, and winter.', type: 'fill-blank' },
+        { question: 'Which term means a severe tropical storm?', options: ['Hurricane', 'Blizzard', 'Tornado', 'Monsoon'], type: 'multiple-choice' },
+        { question: 'Describe your favorite season.', type: 'rewrite' },
+        { question: 'The _____ season brings heavy rainfall to many Asian countries.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'seasons',
+        'Hurricane',
+        'My favorite season is autumn because of the beautiful colors, mild temperatures, and comfortable weather.',
+        'monsoon'
+      ],
+      quickRecap: 'Key seasons terms: seasons, spring, summer, autumn, winter, monsoon, equinox, solstice, hurricanes, earthquakes, volcanic eruptions, tsunamis, floods, blizzards, tornadoes. Use these for seasons and natural phenomena topics!',
+      collocations: [
+        'four seasons', 'early spring', 'hot summer', 'late autumn',
+        'cold winter', 'monsoon season', 'spring equinox', 'summer solstice',
+        'devastating hurricanes', 'major earthquakes', 'volcanic eruptions', 'deadly tsunamis'
+      ],
+      synonyms: [
+        { word: 'autumn', synonyms: ['fall', 'harvest season', 'fall season'] },
+        { word: 'hurricane', synonyms: ['typhoon', 'cyclone', 'tropical storm', 'tempest'] },
+        { word: 'flood', synonyms: ['deluge', 'inundation', 'overflow', 'torrent'] }
+      ],
+      speakingLines: [
+        'I enjoy the changing seasons.',
+        'Summer is my favorite time of year.',
+        'Natural disasters can be devastating.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-weather-4',
+    title: 'Environmental Protection Vocabulary',
+    slug: 'environmental-protection-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Weather',
+    description: 'Vocabulary for discussing environmental protection.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-05-01T10:00:00Z',
+    updated_at: '2025-05-01T10:00:00Z',
+    content: {
+      title: 'Environmental Protection Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 environmental protection words',
+        'Discuss conservation',
+        'Analyze environmental solutions'
+      ],
+      coreExplanation: `Environmental protection vocabulary is essential for IELTS Writing topics about sustainability. This lesson covers terms for discussing environmental conservation.
+
+Understanding these terms helps you discuss environmental topics effectively.`,
+      examples: [
+        { sentence: 'Environmental protection is crucial.', explanation: '"Environmental protection" is safeguarding nature.' },
+        { sentence: 'Conservation preserves resources.', explanation: '"Conservation" is protecting resources.' },
+        { sentence: 'Recycling reduces waste.', explanation: '"Recycling" is reusing materials.' },
+        { sentence: 'Pollution harms health.', explanation: '"Pollution" is contamination.' },
+        { sentence: 'Waste management is important.', explanation: '"Waste management" is handling garbage.' },
+        { sentence: 'Renewable resources are sustainable.', explanation: '"Renewable resources" are replenishable.' },
+        { sentence: 'Preservation protects habitats.', explanation: '"Preservation" is keeping unchanged.' },
+        { sentence: 'Eco-friendly products help.', explanation: '"Eco-friendly" means environmentally safe.' },
+        { sentence: 'Carbon neutral is the goal.', explanation: '"Carbon neutral" means zero net emissions.' },
+        { sentence: 'Green initiatives are growing.', explanation: '"Green initiatives" are environmental programs.' },
+        { sentence: 'Wildlife protection is essential.', explanation: '"Wildlife protection" is safeguarding animals.' },
+        { sentence: 'Reforestation restores forests.', explanation: '"Reforestation" is planting trees.' },
+        { sentence: 'Sustainable development balances needs.', explanation: '"Sustainable development" is balanced growth.' },
+        { sentence: 'Organic farming is healthier.', explanation: '"Organic farming" is chemical-free agriculture.' },
+        { sentence: 'Clean energy is the future.', explanation: '"Clean energy" is non-polluting power.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "conservation" and "preservation"', correction: '"Conservation" = sustainable use; "preservation" = no use', explanation: 'Conservation allows some use.' },
+        { mistake: 'Using "green" and "eco-friendly" differently', correction: 'These are largely synonymous', explanation: 'Both mean environmentally friendly.' },
+        { mistake: 'Confusing "renewable" and "sustainable"', correction: '"Renewable" = replenishable; "sustainable" = maintainable', explanation: 'Sustainable is broader.' }
+      ],
+      miniPractice: [
+        { question: 'Environmental _____ is everyone\'s responsibility.', type: 'fill-blank' },
+        { question: 'Which term means reusing materials to reduce waste?', options: ['Recycling', 'Conservation', 'Preservation', 'Reforestation'], type: 'multiple-choice' },
+        { question: 'Discuss how individuals can protect the environment.', type: 'rewrite' },
+        { question: '_____ development balances economic growth with environmental protection.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'protection',
+        'Recycling',
+        'Individuals can protect the environment by recycling, reducing energy consumption, using public transport, and supporting eco-friendly products.',
+        'Sustainable'
+      ],
+      quickRecap: 'Key environmental terms: environmental protection, conservation, recycling, pollution, waste management, renewable resources, preservation, eco-friendly, carbon neutral, green initiatives, wildlife protection, reforestation, sustainable development, organic farming, clean energy. Use these for environmental topics!',
+      collocations: [
+        'environmental protection', 'wildlife conservation', 'promote recycling', 'reduce pollution',
+        'waste management', 'renewable resources', 'nature preservation', 'eco-friendly products',
+        'carbon neutral', 'green initiatives', 'wildlife protection', 'massive reforestation'
+      ],
+      synonyms: [
+        { word: 'protection', synonyms: ['conservation', 'preservation', 'safeguarding', 'defense'] },
+        { word: 'pollution', synonyms: ['contamination', 'degradation', 'damage', 'harm'] },
+        { word: 'sustainable', synonyms: ['viable', 'maintainable', 'renewable', 'green'] }
+      ],
+      speakingLines: [
+        'Environmental protection is crucial for future generations.',
+        'Recycling is an easy way to help.',
+        'Sustainable development is essential.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 45: Time & Change (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-time-1',
+    title: 'Time Expressions Vocabulary',
+    slug: 'time-expressions-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Time',
+    description: 'Essential vocabulary for discussing time and duration.',
+    is_premium: false,
+    is_published: true,
+    view_count: 850,
+    created_at: '2025-05-02T10:00:00Z',
+    updated_at: '2025-05-02T10:00:00Z',
+    content: {
+      title: 'Time Expressions Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 time vocabulary words',
+        'Discuss duration',
+        'Express time concepts'
+      ],
+      coreExplanation: `Time vocabulary is essential for IELTS Speaking and Writing. This lesson covers terms for discussing time and duration.
+
+Understanding these terms helps you express time concepts effectively.`,
+      examples: [
+        { sentence: 'Time passes quickly.', explanation: '"Time" is duration.' },
+        { sentence: 'The duration was short.', explanation: '"Duration" is length of time.' },
+        { sentence: 'The period was challenging.', explanation: '"Period" is span of time.' },
+        { sentence: 'The era brought changes.', explanation: '"Era" is historical period.' },
+        { sentence: 'The deadline is approaching.', explanation: '"Deadline" is time limit.' },
+        { sentence: 'The schedule is tight.', explanation: '"Schedule" is time plan.' },
+        { sentence: 'The timeline shows progress.', explanation: '"Timeline" is sequence of events.' },
+        { sentence: 'The interval was brief.', explanation: '"Interval" is time between events.' },
+        { sentence: 'The phase lasted months.', explanation: '"Phase" is stage.' },
+        { sentence: 'The moment was memorable.', explanation: '"Moment" is brief time.' },
+        { sentence: 'The decade saw growth.', explanation: '"Decade" is ten years.' },
+        { sentence: 'The century brought progress.', explanation: '"Century" is hundred years.' },
+        { sentence: 'The milestone was reached.', explanation: '"Milestone" is significant point.' },
+        { sentence: 'The transition was smooth.', explanation: '"Transition" is change period.' },
+        { sentence: 'The pace is accelerating.', explanation: '"Pace" is speed.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "period" and "era"', correction: '"Period" = any span; "era" = significant historical time', explanation: 'Era is more significant.' },
+        { mistake: 'Using "moment" for long durations', correction: '"Moment" means a very brief time', explanation: 'Use "period" for longer times.' },
+        { mistake: 'Confusing "schedule" and "timetable"', correction: 'These are largely synonymous', explanation: '"Timetable" is more British.' }
+      ],
+      miniPractice: [
+        { question: '_____ management is essential for productivity.', type: 'fill-blank' },
+        { question: 'Which term means a period of ten years?', options: ['Decade', 'Century', 'Era', 'Phase'], type: 'multiple-choice' },
+        { question: 'Discuss how you manage your time.', type: 'rewrite' },
+        { question: 'The _____ for the project is next Friday.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Time',
+        'Decade',
+        'I manage my time by creating schedules, setting priorities, and avoiding distractions to meet deadlines.',
+        'deadline'
+      ],
+      quickRecap: 'Key time terms: time, duration, period, era, deadline, schedule, timeline, interval, phase, moment, decade, century, milestone, transition, pace. Use these for time topics!',
+      collocations: [
+        'manage time', 'short duration', 'time period', 'historical era',
+        'meet deadline', 'busy schedule', 'project timeline', 'brief interval',
+        'initial phase', 'memorable moment', 'past decade', 'twenty-first century'
+      ],
+      synonyms: [
+        { word: 'time', synonyms: ['period', 'duration', 'span', 'era'] },
+        { word: 'deadline', synonyms: ['due date', 'time limit', 'cutoff', 'target'] },
+        { word: 'schedule', synonyms: ['timetable', 'agenda', 'plan', 'program'] }
+      ],
+      speakingLines: [
+        'Time management is important to me.',
+        'I always try to meet deadlines.',
+        'The pace of life is accelerating.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-time-2',
+    title: 'Change & Development Vocabulary',
+    slug: 'change-development-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Time',
+    description: 'Vocabulary for discussing change and development.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-05-03T10:00:00Z',
+    updated_at: '2025-05-03T10:00:00Z',
+    content: {
+      title: 'Change & Development Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 change vocabulary words',
+        'Discuss development',
+        'Analyze transformation'
+      ],
+      coreExplanation: `Change vocabulary is essential for IELTS Writing topics about trends and development. This lesson covers terms for discussing change and progress.
+
+Understanding these terms helps you discuss change topics effectively.`,
+      examples: [
+        { sentence: 'Change is inevitable.', explanation: '"Change" is becoming different.' },
+        { sentence: 'Development takes time.', explanation: '"Development" is growth.' },
+        { sentence: 'Progress was made.', explanation: '"Progress" is forward movement.' },
+        { sentence: 'Transformation was complete.', explanation: '"Transformation" is major change.' },
+        { sentence: 'Evolution is gradual.', explanation: '"Evolution" is gradual development.' },
+        { sentence: 'Revolution brings rapid change.', explanation: '"Revolution" is dramatic change.' },
+        { sentence: 'Innovation drives progress.', explanation: '"Innovation" is new ideas.' },
+        { sentence: 'Modernization improved efficiency.', explanation: '"Modernization" is updating.' },
+        { sentence: 'Adaptation is necessary.', explanation: '"Adaptation" is adjusting.' },
+        { sentence: 'Transition was smooth.', explanation: '"Transition" is change process.' },
+        { sentence: 'Growth was steady.', explanation: '"Growth" is increase.' },
+        { sentence: 'Decline was gradual.', explanation: '"Decline" is decrease.' },
+        { sentence: 'Improvement is ongoing.', explanation: '"Improvement" is getting better.' },
+        { sentence: 'Shift occurred gradually.', explanation: '"Shift" is change in position.' },
+        { sentence: 'Trends are changing.', explanation: '"Trends" are general directions.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "evolution" and "revolution"', correction: '"Evolution" = gradual; "revolution" = rapid', explanation: 'These have opposite speeds.' },
+        { mistake: 'Using "development" only for countries', correction: '"Development" applies to any growth', explanation: 'Development is broader.' },
+        { mistake: 'Confusing "change" and "transformation"', correction: '"Transformation" implies complete change', explanation: 'Transformation is more dramatic.' }
+      ],
+      miniPractice: [
+        { question: '_____ is the only constant in life.', type: 'fill-blank' },
+        { question: 'Which term means gradual development over time?', options: ['Evolution', 'Revolution', 'Transformation', 'Shift'], type: 'multiple-choice' },
+        { question: 'Discuss how technology has changed society.', type: 'rewrite' },
+        { question: 'The _____ from traditional to modern methods was gradual.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Change',
+        'Evolution',
+        'Technology has transformed society by changing how we communicate, work, and access information.',
+        'transition'
+      ],
+      quickRecap: 'Key change terms: change, development, progress, transformation, evolution, revolution, innovation, modernization, adaptation, transition, growth, decline, improvement, shift, trends. Use these for change topics!',
+      collocations: [
+        'rapid change', 'economic development', 'make progress', 'complete transformation',
+        'gradual evolution', 'industrial revolution', 'technological innovation', 'rapid modernization',
+        'successful adaptation', 'smooth transition', 'steady growth', 'gradual decline'
+      ],
+      synonyms: [
+        { word: 'change', synonyms: ['alteration', 'modification', 'shift', 'transformation'] },
+        { word: 'development', synonyms: ['growth', 'progress', 'advancement', 'evolution'] },
+        { word: 'progress', synonyms: ['advancement', 'improvement', 'development', 'growth'] }
+      ],
+      speakingLines: [
+        'Change is inevitable in modern society.',
+        'Development requires time and effort.',
+        'Progress has been remarkable in recent decades.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-time-3',
+    title: 'Past & History Vocabulary',
+    slug: 'past-history-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Time',
+    description: 'Vocabulary for discussing the past and history.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-05-04T10:00:00Z',
+    updated_at: '2025-05-04T10:00:00Z',
+    content: {
+      title: 'Past & History Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 history vocabulary words',
+        'Discuss the past',
+        'Analyze historical events'
+      ],
+      coreExplanation: `History vocabulary is useful for IELTS topics about culture and society. This lesson covers terms for discussing the past and historical events.
+
+Understanding these terms helps you discuss history topics effectively.`,
+      examples: [
+        { sentence: 'History teaches lessons.', explanation: '"History" is past events.' },
+        { sentence: 'The past shapes the present.', explanation: '"Past" is previous time.' },
+        { sentence: 'Tradition is valued.', explanation: '"Tradition" is inherited customs.' },
+        { sentence: 'Heritage is preserved.', explanation: '"Heritage" is inherited culture.' },
+        { sentence: 'Ancient civilizations fascinate.', explanation: '"Ancient" means very old.' },
+        { sentence: 'Historical events shaped nations.', explanation: '"Historical" relates to history.' },
+        { sentence: 'The legacy continues.', explanation: '"Legacy" is what is left behind.' },
+        { sentence: 'Ancestors built foundations.', explanation: '"Ancestors" are forebears.' },
+        { sentence: 'The origin is unclear.', explanation: '"Origin" is beginning.' },
+        { sentence: 'The era was significant.', explanation: '"Era" is historical period.' },
+        { sentence: 'Archaeology reveals the past.', explanation: '"Archaeology" is studying remains.' },
+        { sentence: 'Artifacts tell stories.', explanation: '"Artifacts" are historical objects.' },
+        { sentence: 'The monument commemorates.', explanation: '"Monument" is memorial structure.' },
+        { sentence: 'Memory preserves history.', explanation: '"Memory" is recollection.' },
+        { sentence: 'Documentation records events.', explanation: '"Documentation" is recorded evidence.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "history" and "story"', correction: '"History" = factual past; "story" = narrative', explanation: 'History is factual.' },
+        { mistake: 'Using "ancient" for recent past', correction: '"Ancient" means thousands of years ago', explanation: 'Use "old" or "historical" for recent.' },
+        { mistake: 'Confusing "heritage" and "inheritance"', correction: '"Heritage" = cultural; "inheritance" = legal/financial', explanation: 'Heritage is cultural.' }
+      ],
+      miniPractice: [
+        { question: '_____ teaches us valuable lessons about the past.', type: 'fill-blank' },
+        { question: 'Which term means inherited cultural traditions?', options: ['Heritage', 'Legacy', 'Tradition', 'Origin'], type: 'multiple-choice' },
+        { question: 'Discuss the importance of preserving history.', type: 'rewrite' },
+        { question: '_____ civilizations built remarkable structures.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'History',
+        'Heritage',
+        'Preserving history is important because it helps us understand our origins, learn from past mistakes, and maintain cultural identity.',
+        'Ancient'
+      ],
+      quickRecap: 'Key history terms: history, past, tradition, heritage, ancient, historical, legacy, ancestors, origin, era, archaeology, artifacts, monument, memory, documentation. Use these for history topics!',
+      collocations: [
+        'study history', 'learn from past', 'cultural tradition', 'rich heritage',
+        'ancient civilization', 'historical event', 'lasting legacy', 'honor ancestors',
+        'trace origin', 'historical era', 'archaeological site', 'historical artifacts'
+      ],
+      synonyms: [
+        { word: 'history', synonyms: ['past', 'heritage', 'chronicle', 'record'] },
+        { word: 'tradition', synonyms: ['custom', 'practice', 'convention', 'ritual'] },
+        { word: 'ancient', synonyms: ['old', 'antique', 'historic', 'age-old'] }
+      ],
+      speakingLines: [
+        'History is fascinating to me.',
+        'Traditions connect us to our past.',
+        'Heritage should be preserved.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-time-4',
+    title: 'Future & Predictions Vocabulary',
+    slug: 'future-predictions-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Time',
+    description: 'Vocabulary for discussing the future and predictions.',
+    is_premium: true,
+    is_published: true,
+    view_count: 750,
+    created_at: '2025-05-05T10:00:00Z',
+    updated_at: '2025-05-05T10:00:00Z',
+    content: {
+      title: 'Future & Predictions Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 future vocabulary words',
+        'Discuss predictions',
+        'Analyze future trends'
+      ],
+      coreExplanation: `Future vocabulary is essential for IELTS Writing topics about trends and predictions. This lesson covers terms for discussing the future.
+
+Understanding these terms helps you discuss future topics effectively.`,
+      examples: [
+        { sentence: 'The future is uncertain.', explanation: '"Future" is time to come.' },
+        { sentence: 'Predictions are difficult.', explanation: '"Predictions" are forecasts.' },
+        { sentence: 'The forecast is positive.', explanation: '"Forecast" is prediction.' },
+        { sentence: 'Expectations are high.', explanation: '"Expectations" are anticipated outcomes.' },
+        { sentence: 'The outlook is promising.', explanation: '"Outlook" is future view.' },
+        { sentence: 'Prospects are good.', explanation: '"Prospects" are future possibilities.' },
+        { sentence: 'Anticipation builds excitement.', explanation: '"Anticipation" is expectation.' },
+        { sentence: 'The projection shows growth.', explanation: '"Projection" is estimated future.' },
+        { sentence: 'Trends indicate change.', explanation: '"Trends" are general directions.' },
+        { sentence: 'The vision is ambitious.', explanation: '"Vision" is future goal.' },
+        { sentence: 'Goals guide action.', explanation: '"Goals" are objectives.' },
+        { sentence: 'Planning is essential.', explanation: '"Planning" is preparing.' },
+        { sentence: 'Potential is unlimited.', explanation: '"Potential" is possible ability.' },
+        { sentence: 'Innovation shapes tomorrow.', explanation: '"Innovation" is new ideas.' },
+        { sentence: 'Speculation is risky.', explanation: '"Speculation" is guessing.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "prediction" and "forecast"', correction: 'These are largely synonymous', explanation: '"Forecast" is often more formal.' },
+        { mistake: 'Using "expectation" and "anticipation" differently', correction: '"Anticipation" implies looking forward to', explanation: 'Anticipation is more emotional.' },
+        { mistake: 'Confusing "prospect" and "perspective"', correction: '"Prospect" = future possibility; "perspective" = viewpoint', explanation: 'These are different concepts.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ is full of possibilities.', type: 'fill-blank' },
+        { question: 'Which term means an estimated future outcome?', options: ['Projection', 'Speculation', 'Vision', 'Trend'], type: 'multiple-choice' },
+        { question: 'Discuss your predictions for the future.', type: 'rewrite' },
+        { question: 'The economic _____ for next year is positive.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'future',
+        'Projection',
+        'I predict that technology will continue to transform how we live and work, with AI playing an increasingly important role.',
+        'outlook/forecast'
+      ],
+      quickRecap: 'Key future terms: future, predictions, forecast, expectations, outlook, prospects, anticipation, projection, trends, vision, goals, planning, potential, innovation, speculation. Use these for future topics!',
+      collocations: [
+        'near future', 'make predictions', 'weather forecast', 'high expectations',
+        'positive outlook', 'career prospects', 'eager anticipation', 'sales projection',
+        'current trends', 'future vision', 'achieve goals', 'strategic planning'
+      ],
+      synonyms: [
+        { word: 'future', synonyms: ['tomorrow', 'prospect', 'outlook', 'destiny'] },
+        { word: 'prediction', synonyms: ['forecast', 'projection', 'prophecy', 'prognosis'] },
+        { word: 'expectation', synonyms: ['anticipation', 'hope', 'prospect', 'outlook'] }
+      ],
+      speakingLines: [
+        'The future holds many possibilities.',
+        'Making predictions is challenging.',
+        'I have high expectations for the future.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 46: Success & Achievement (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-success-1',
+    title: 'Success & Achievement Vocabulary',
+    slug: 'success-achievement-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Success',
+    description: 'Essential vocabulary for discussing success and achievement.',
+    is_premium: false,
+    is_published: true,
+    view_count: 880,
+    created_at: '2025-05-06T10:00:00Z',
+    updated_at: '2025-05-06T10:00:00Z',
+    content: {
+      title: 'Success & Achievement Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 success vocabulary words',
+        'Discuss achievement',
+        'Analyze success factors'
+      ],
+      coreExplanation: `Success vocabulary is useful for IELTS Speaking topics about goals and experiences. This lesson covers terms for discussing success and achievement.
+
+Understanding these terms helps you discuss success topics effectively.`,
+      examples: [
+        { sentence: 'Success requires effort.', explanation: '"Success" is achieving goals.' },
+        { sentence: 'Achievement brings satisfaction.', explanation: '"Achievement" is accomplishment.' },
+        { sentence: 'Accomplishment was celebrated.', explanation: '"Accomplishment" is completed task.' },
+        { sentence: 'Goals were reached.', explanation: '"Goals" are objectives.' },
+        { sentence: 'Ambition drives success.', explanation: '"Ambition" is desire to achieve.' },
+        { sentence: 'Determination overcomes obstacles.', explanation: '"Determination" is firm resolve.' },
+        { sentence: 'Perseverance pays off.', explanation: '"Perseverance" is persistence.' },
+        { sentence: 'Excellence is the standard.', explanation: '"Excellence" is outstanding quality.' },
+        { sentence: 'Recognition was deserved.', explanation: '"Recognition" is acknowledgment.' },
+        { sentence: 'The milestone was reached.', explanation: '"Milestone" is significant point.' },
+        { sentence: 'Victory was sweet.', explanation: '"Victory" is winning.' },
+        { sentence: 'Triumph followed struggle.', explanation: '"Triumph" is great success.' },
+        { sentence: 'Fulfillment comes from purpose.', explanation: '"Fulfillment" is satisfaction.' },
+        { sentence: 'Reward motivates effort.', explanation: '"Reward" is benefit received.' },
+        { sentence: 'Merit is recognized.', explanation: '"Merit" is deserving quality.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "success" and "achievement"', correction: '"Success" = general; "achievement" = specific accomplishment', explanation: 'Achievement is more specific.' },
+        { mistake: 'Using "ambition" negatively', correction: '"Ambition" is generally positive', explanation: 'Ambition drives success.' },
+        { mistake: 'Confusing "perseverance" and "persistence"', correction: 'These are largely synonymous', explanation: 'Both mean continuing despite difficulty.' }
+      ],
+      miniPractice: [
+        { question: '_____ is the result of hard work and determination.', type: 'fill-blank' },
+        { question: 'Which term means continuing despite difficulties?', options: ['Perseverance', 'Ambition', 'Recognition', 'Merit'], type: 'multiple-choice' },
+        { question: 'Describe a personal achievement you are proud of.', type: 'rewrite' },
+        { question: '_____ drives people to achieve their goals.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Success',
+        'Perseverance',
+        'I am proud of completing my degree while working full-time. It required determination and perseverance.',
+        'Ambition'
+      ],
+      quickRecap: 'Key success terms: success, achievement, accomplishment, goals, ambition, determination, perseverance, excellence, recognition, milestone, victory, triumph, fulfillment, reward, merit. Use these for success topics!',
+      collocations: [
+        'achieve success', 'great achievement', 'major accomplishment', 'reach goals',
+        'personal ambition', 'strong determination', 'show perseverance', 'strive for excellence',
+        'gain recognition', 'reach milestone', 'celebrate victory', 'personal triumph'
+      ],
+      synonyms: [
+        { word: 'success', synonyms: ['achievement', 'accomplishment', 'triumph', 'victory'] },
+        { word: 'achievement', synonyms: ['accomplishment', 'attainment', 'feat', 'success'] },
+        { word: 'determination', synonyms: ['resolve', 'persistence', 'tenacity', 'willpower'] }
+      ],
+      speakingLines: [
+        'Success means different things to different people.',
+        'Achievement requires hard work.',
+        'Perseverance is key to reaching goals.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-success-2',
+    title: 'Failure & Setbacks Vocabulary',
+    slug: 'failure-setbacks-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Success',
+    description: 'Vocabulary for discussing failure and overcoming setbacks.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-05-07T10:00:00Z',
+    updated_at: '2025-05-07T10:00:00Z',
+    content: {
+      title: 'Failure & Setbacks Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 failure vocabulary words',
+        'Discuss setbacks',
+        'Analyze overcoming challenges'
+      ],
+      coreExplanation: `Failure vocabulary is useful for IELTS Speaking topics about challenges and learning. This lesson covers terms for discussing setbacks and recovery.
+
+Understanding these terms helps you discuss failure topics effectively.`,
+      examples: [
+        { sentence: 'Failure teaches lessons.', explanation: '"Failure" is not succeeding.' },
+        { sentence: 'Setbacks are temporary.', explanation: '"Setbacks" are obstacles.' },
+        { sentence: 'Obstacles can be overcome.', explanation: '"Obstacles" are barriers.' },
+        { sentence: 'Challenges build character.', explanation: '"Challenges" are difficulties.' },
+        { sentence: 'Mistakes are learning opportunities.', explanation: '"Mistakes" are errors.' },
+        { sentence: 'Disappointment is natural.', explanation: '"Disappointment" is unmet expectations.' },
+        { sentence: 'Defeat is not final.', explanation: '"Defeat" is being beaten.' },
+        { sentence: 'Struggle leads to growth.', explanation: '"Struggle" is difficult effort.' },
+        { sentence: 'Recovery takes time.', explanation: '"Recovery" is returning to normal.' },
+        { sentence: 'Resilience is essential.', explanation: '"Resilience" is bouncing back.' },
+        { sentence: 'Persistence overcomes failure.', explanation: '"Persistence" is continuing.' },
+        { sentence: 'Learning from failure is key.', explanation: '"Learning" is gaining knowledge.' },
+        { sentence: 'Adversity builds strength.', explanation: '"Adversity" is hardship.' },
+        { sentence: 'Rejection is part of life.', explanation: '"Rejection" is being refused.' },
+        { sentence: 'Comeback stories inspire.', explanation: '"Comeback" is return to success.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "failure" only negatively', correction: '"Failure" can be a learning opportunity', explanation: 'Failure teaches lessons.' },
+        { mistake: 'Confusing "setback" and "failure"', correction: '"Setback" = temporary obstacle; "failure" = not achieving goal', explanation: 'Setback is less severe.' },
+        { mistake: 'Confusing "resilience" and "resistance"', correction: '"Resilience" = bouncing back; "resistance" = opposing', explanation: 'These are different concepts.' }
+      ],
+      miniPractice: [
+        { question: '_____ is not the opposite of success; it is part of the journey.', type: 'fill-blank' },
+        { question: 'Which term means the ability to recover from difficulties?', options: ['Resilience', 'Persistence', 'Adversity', 'Struggle'], type: 'multiple-choice' },
+        { question: 'Discuss how you handle setbacks.', type: 'rewrite' },
+        { question: '_____ can be overcome with determination.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Failure',
+        'Resilience',
+        'I handle setbacks by staying positive, learning from mistakes, and persisting until I achieve my goals.',
+        'Obstacles/Challenges'
+      ],
+      quickRecap: 'Key failure terms: failure, setbacks, obstacles, challenges, mistakes, disappointment, defeat, struggle, recovery, resilience, persistence, learning, adversity, rejection, comeback. Use these for failure topics!',
+      collocations: [
+        'learn from failure', 'overcome setbacks', 'face obstacles', 'meet challenges',
+        'make mistakes', 'handle disappointment', 'accept defeat', 'daily struggle',
+        'full recovery', 'build resilience', 'show persistence', 'face adversity'
+      ],
+      synonyms: [
+        { word: 'failure', synonyms: ['defeat', 'setback', 'disappointment', 'loss'] },
+        { word: 'setback', synonyms: ['obstacle', 'hindrance', 'difficulty', 'problem'] },
+        { word: 'resilience', synonyms: ['toughness', 'strength', 'adaptability', 'recovery'] }
+      ],
+      speakingLines: [
+        'Failure is a stepping stone to success.',
+        'Setbacks are temporary obstacles.',
+        'Resilience helps us overcome challenges.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-success-3',
+    title: 'Competition & Comparison Vocabulary',
+    slug: 'competition-comparison-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Success',
+    description: 'Vocabulary for discussing competition and comparison.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-05-08T10:00:00Z',
+    updated_at: '2025-05-08T10:00:00Z',
+    content: {
+      title: 'Competition & Comparison Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 competition vocabulary words',
+        'Discuss comparison',
+        'Analyze competitive situations'
+      ],
+      coreExplanation: `Competition vocabulary is useful for IELTS topics about sports, business, and society. This lesson covers terms for discussing competition and comparison.
+
+Understanding these terms helps you discuss competitive topics effectively.`,
+      examples: [
+        { sentence: 'Competition drives improvement.', explanation: '"Competition" is rivalry.' },
+        { sentence: 'Comparison reveals differences.', explanation: '"Comparison" is examining similarities.' },
+        { sentence: 'Rivalry motivates performance.', explanation: '"Rivalry" is competition.' },
+        { sentence: 'The contest was fierce.', explanation: '"Contest" is competition.' },
+        { sentence: 'The competitor was skilled.', explanation: '"Competitor" is rival.' },
+        { sentence: 'The advantage was clear.', explanation: '"Advantage" is favorable position.' },
+        { sentence: 'The disadvantage was overcome.', explanation: '"Disadvantage" is unfavorable position.' },
+        { sentence: 'The ranking improved.', explanation: '"Ranking" is position in order.' },
+        { sentence: 'The benchmark was set.', explanation: '"Benchmark" is standard.' },
+        { sentence: 'Performance was measured.', explanation: '"Performance" is how well done.' },
+        { sentence: 'The standard was high.', explanation: '"Standard" is level of quality.' },
+        { sentence: 'Excellence was achieved.', explanation: '"Excellence" is outstanding quality.' },
+        { sentence: 'The winner was announced.', explanation: '"Winner" is victor.' },
+        { sentence: 'The loser accepted defeat.', explanation: '"Loser" is one who loses.' },
+        { sentence: 'Fair play is important.', explanation: '"Fair play" is honest competition.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "competition" only for sports', correction: '"Competition" applies to business, academics, etc.', explanation: 'Competition is broader.' },
+        { mistake: 'Confusing "compare" and "contrast"', correction: '"Compare" = similarities; "contrast" = differences', explanation: 'These are different.' },
+        { mistake: 'Using "rival" and "competitor" differently', correction: 'These are largely synonymous', explanation: '"Rival" is slightly more personal.' }
+      ],
+      miniPractice: [
+        { question: 'Healthy _____ can drive improvement.', type: 'fill-blank' },
+        { question: 'Which term means a standard for comparison?', options: ['Benchmark', 'Ranking', 'Advantage', 'Performance'], type: 'multiple-choice' },
+        { question: 'Discuss the benefits of competition.', type: 'rewrite' },
+        { question: 'The _____ between the two teams was intense.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'competition',
+        'Benchmark',
+        'Competition benefits society by driving innovation, improving quality, and motivating individuals to perform better.',
+        'rivalry/competition'
+      ],
+      quickRecap: 'Key competition terms: competition, comparison, rivalry, contest, competitor, advantage, disadvantage, ranking, benchmark, performance, standard, excellence, winner, loser, fair play. Use these for competition topics!',
+      collocations: [
+        'fierce competition', 'make comparison', 'intense rivalry', 'enter contest',
+        'main competitor', 'competitive advantage', 'overcome disadvantage', 'world ranking',
+        'industry benchmark', 'strong performance', 'high standard', 'achieve excellence'
+      ],
+      synonyms: [
+        { word: 'competition', synonyms: ['rivalry', 'contest', 'race', 'match'] },
+        { word: 'competitor', synonyms: ['rival', 'opponent', 'contender', 'challenger'] },
+        { word: 'advantage', synonyms: ['benefit', 'edge', 'upper hand', 'lead'] }
+      ],
+      speakingLines: [
+        'Competition can be healthy and motivating.',
+        'Comparison helps us understand differences.',
+        'Fair play is essential in any competition.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-success-4',
+    title: 'Goals & Planning Vocabulary',
+    slug: 'goals-planning-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Success',
+    description: 'Vocabulary for discussing goals and planning.',
+    is_premium: true,
+    is_published: true,
+    view_count: 750,
+    created_at: '2025-05-09T10:00:00Z',
+    updated_at: '2025-05-09T10:00:00Z',
+    content: {
+      title: 'Goals & Planning Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 goals vocabulary words',
+        'Discuss planning',
+        'Analyze goal-setting'
+      ],
+      coreExplanation: `Goals vocabulary is essential for IELTS Speaking topics about ambitions and future plans. This lesson covers terms for discussing goals and planning.
+
+Understanding these terms helps you discuss goal-setting topics effectively.`,
+      examples: [
+        { sentence: 'Goals guide action.', explanation: '"Goals" are objectives.' },
+        { sentence: 'Planning ensures success.', explanation: '"Planning" is preparing.' },
+        { sentence: 'Objectives were defined.', explanation: '"Objectives" are specific goals.' },
+        { sentence: 'The target was met.', explanation: '"Target" is aim.' },
+        { sentence: 'The aim is clear.', explanation: '"Aim" is intention.' },
+        { sentence: 'The purpose is defined.', explanation: '"Purpose" is reason.' },
+        { sentence: 'Strategy guides decisions.', explanation: '"Strategy" is plan of action.' },
+        { sentence: 'Priorities were set.', explanation: '"Priorities" are most important things.' },
+        { sentence: 'The deadline was met.', explanation: '"Deadline" is time limit.' },
+        { sentence: 'Progress was tracked.', explanation: '"Progress" is forward movement.' },
+        { sentence: 'Milestones were reached.', explanation: '"Milestones" are significant points.' },
+        { sentence: 'The vision is inspiring.', explanation: '"Vision" is future goal.' },
+        { sentence: 'The mission is clear.', explanation: '"Mission" is purpose.' },
+        { sentence: 'Action was taken.', explanation: '"Action" is doing something.' },
+        { sentence: 'Results were achieved.', explanation: '"Results" are outcomes.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "goal" and "objective"', correction: '"Goal" = general; "objective" = specific, measurable', explanation: 'Objectives are more specific.' },
+        { mistake: 'Using "aim" and "target" differently', correction: 'These are largely synonymous', explanation: '"Target" is slightly more specific.' },
+        { mistake: 'Confusing "vision" and "mission"', correction: '"Vision" = future state; "mission" = purpose', explanation: 'Vision is aspirational.' }
+      ],
+      miniPractice: [
+        { question: 'Setting clear _____ is essential for success.', type: 'fill-blank' },
+        { question: 'Which term means a plan of action to achieve goals?', options: ['Strategy', 'Priority', 'Milestone', 'Progress'], type: 'multiple-choice' },
+        { question: 'Describe your goals for the next five years.', type: 'rewrite' },
+        { question: '_____ helps ensure that goals are achieved on time.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'goals',
+        'Strategy',
+        'In the next five years, I aim to advance my career, improve my skills, and achieve a better work-life balance.',
+        'Planning'
+      ],
+      quickRecap: 'Key goals terms: goals, planning, objectives, target, aim, purpose, strategy, priorities, deadline, progress, milestones, vision, mission, action, results. Use these for goals topics!',
+      collocations: [
+        'set goals', 'strategic planning', 'clear objectives', 'meet target',
+        'main aim', 'sense of purpose', 'business strategy', 'top priorities',
+        'meet deadline', 'make progress', 'reach milestones', 'future vision'
+      ],
+      synonyms: [
+        { word: 'goal', synonyms: ['objective', 'aim', 'target', 'purpose'] },
+        { word: 'planning', synonyms: ['preparation', 'organization', 'arrangement', 'scheduling'] },
+        { word: 'strategy', synonyms: ['plan', 'approach', 'method', 'tactic'] }
+      ],
+      speakingLines: [
+        'Setting goals is important for success.',
+        'Planning helps me stay organized.',
+        'I have clear objectives for my future.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 47: Problems & Solutions (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-problems-1',
+    title: 'Problems & Issues Vocabulary',
+    slug: 'problems-issues-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Problems',
+    description: 'Essential vocabulary for discussing problems and issues.',
+    is_premium: false,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-05-10T10:00:00Z',
+    updated_at: '2025-05-10T10:00:00Z',
+    content: {
+      title: 'Problems & Issues Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 problem vocabulary words',
+        'Discuss issues',
+        'Analyze challenges'
+      ],
+      coreExplanation: `Problem vocabulary is essential for IELTS Writing topics about challenges. This lesson covers terms for discussing problems and issues.
+
+Understanding these terms helps you discuss problem topics effectively.`,
+      examples: [
+        { sentence: 'The problem is complex.', explanation: '"Problem" is difficulty.' },
+        { sentence: 'The issue requires attention.', explanation: '"Issue" is matter of concern.' },
+        { sentence: 'The challenge is significant.', explanation: '"Challenge" is difficult task.' },
+        { sentence: 'The difficulty was overcome.', explanation: '"Difficulty" is obstacle.' },
+        { sentence: 'The obstacle was removed.', explanation: '"Obstacle" is barrier.' },
+        { sentence: 'The barrier was broken.', explanation: '"Barrier" is obstruction.' },
+        { sentence: 'The complication arose.', explanation: '"Complication" is added difficulty.' },
+        { sentence: 'The dilemma was resolved.', explanation: '"Dilemma" is difficult choice.' },
+        { sentence: 'The crisis was managed.', explanation: '"Crisis" is emergency.' },
+        { sentence: 'The concern was addressed.', explanation: '"Concern" is worry.' },
+        { sentence: 'The drawback was noted.', explanation: '"Drawback" is disadvantage.' },
+        { sentence: 'The limitation was acknowledged.', explanation: '"Limitation" is restriction.' },
+        { sentence: 'The shortcoming was identified.', explanation: '"Shortcoming" is weakness.' },
+        { sentence: 'The flaw was corrected.', explanation: '"Flaw" is defect.' },
+        { sentence: 'The setback was temporary.', explanation: '"Setback" is reversal.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "problem" and "issue"', correction: '"Problem" = needs solving; "issue" = needs discussion', explanation: 'Issue is broader.' },
+        { mistake: 'Using "crisis" for minor problems', correction: '"Crisis" means serious emergency', explanation: 'Crisis is severe.' },
+        { mistake: 'Confusing "drawback" and "disadvantage"', correction: 'These are largely synonymous', explanation: 'Both mean negative aspects.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ needs to be addressed urgently.', type: 'fill-blank' },
+        { question: 'Which term means a serious emergency situation?', options: ['Crisis', 'Issue', 'Concern', 'Drawback'], type: 'multiple-choice' },
+        { question: 'Discuss a problem facing your community.', type: 'rewrite' },
+        { question: 'Every solution has potential _____ that must be considered.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'problem/issue',
+        'Crisis',
+        'Traffic congestion is a major problem in my community, causing delays and pollution. Better public transport could help.',
+        'drawbacks'
+      ],
+      quickRecap: 'Key problem terms: problem, issue, challenge, difficulty, obstacle, barrier, complication, dilemma, crisis, concern, drawback, limitation, shortcoming, flaw, setback. Use these for problem topics!',
+      collocations: [
+        'solve problem', 'address issue', 'face challenge', 'overcome difficulty',
+        'remove obstacle', 'break barrier', 'avoid complication', 'resolve dilemma',
+        'manage crisis', 'raise concern', 'major drawback', 'key limitation'
+      ],
+      synonyms: [
+        { word: 'problem', synonyms: ['issue', 'difficulty', 'challenge', 'obstacle'] },
+        { word: 'issue', synonyms: ['matter', 'concern', 'question', 'topic'] },
+        { word: 'challenge', synonyms: ['difficulty', 'obstacle', 'hurdle', 'test'] }
+      ],
+      speakingLines: [
+        'Every problem has a solution.',
+        'Issues need to be addressed promptly.',
+        'Challenges help us grow.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-problems-2',
+    title: 'Solutions & Remedies Vocabulary',
+    slug: 'solutions-remedies-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Problems',
+    description: 'Vocabulary for discussing solutions and remedies.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-05-11T10:00:00Z',
+    updated_at: '2025-05-11T10:00:00Z',
+    content: {
+      title: 'Solutions & Remedies Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 solution vocabulary words',
+        'Discuss remedies',
+        'Analyze problem-solving'
+      ],
+      coreExplanation: `Solution vocabulary is essential for IELTS Writing topics about addressing problems. This lesson covers terms for discussing solutions and remedies.
+
+Understanding these terms helps you discuss solution topics effectively.`,
+      examples: [
+        { sentence: 'The solution was effective.', explanation: '"Solution" is answer to problem.' },
+        { sentence: 'The remedy worked.', explanation: '"Remedy" is cure.' },
+        { sentence: 'The answer was found.', explanation: '"Answer" is response.' },
+        { sentence: 'The resolution was reached.', explanation: '"Resolution" is solving.' },
+        { sentence: 'The approach was innovative.', explanation: '"Approach" is method.' },
+        { sentence: 'The strategy succeeded.', explanation: '"Strategy" is plan.' },
+        { sentence: 'The measure was implemented.', explanation: '"Measure" is action taken.' },
+        { sentence: 'The intervention helped.', explanation: '"Intervention" is action to help.' },
+        { sentence: 'The initiative was launched.', explanation: '"Initiative" is new program.' },
+        { sentence: 'The response was quick.', explanation: '"Response" is reaction.' },
+        { sentence: 'The action was decisive.', explanation: '"Action" is doing something.' },
+        { sentence: 'The fix was temporary.', explanation: '"Fix" is repair.' },
+        { sentence: 'The improvement was noticeable.', explanation: '"Improvement" is getting better.' },
+        { sentence: 'The recommendation was accepted.', explanation: '"Recommendation" is suggestion.' },
+        { sentence: 'The proposal was approved.', explanation: '"Proposal" is formal suggestion.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "solution" and "resolution"', correction: '"Solution" = answer; "resolution" = process of solving', explanation: 'Resolution is the process.' },
+        { mistake: 'Using "remedy" only for medicine', correction: '"Remedy" applies to any cure or fix', explanation: 'Remedy is broader.' },
+        { mistake: 'Confusing "measure" and "action"', correction: '"Measure" = specific step; "action" = general doing', explanation: 'Measure is more specific.' }
+      ],
+      miniPractice: [
+        { question: 'Finding the right _____ requires careful analysis.', type: 'fill-blank' },
+        { question: 'Which term means a formal suggestion?', options: ['Proposal', 'Response', 'Fix', 'Measure'], type: 'multiple-choice' },
+        { question: 'Propose a solution to traffic congestion.', type: 'rewrite' },
+        { question: 'The government implemented new _____ to address the problem.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'solution',
+        'Proposal',
+        'Traffic congestion could be reduced by improving public transport, implementing congestion charges, and promoting remote work.',
+        'measures'
+      ],
+      quickRecap: 'Key solution terms: solution, remedy, answer, resolution, approach, strategy, measure, intervention, initiative, response, action, fix, improvement, recommendation, proposal. Use these for solution topics!',
+      collocations: [
+        'find solution', 'effective remedy', 'correct answer', 'reach resolution',
+        'new approach', 'effective strategy', 'take measure', 'government intervention',
+        'new initiative', 'quick response', 'take action', 'quick fix'
+      ],
+      synonyms: [
+        { word: 'solution', synonyms: ['answer', 'remedy', 'resolution', 'fix'] },
+        { word: 'approach', synonyms: ['method', 'strategy', 'way', 'technique'] },
+        { word: 'measure', synonyms: ['step', 'action', 'move', 'initiative'] }
+      ],
+      speakingLines: [
+        'Every problem has a solution.',
+        'Finding the right approach is key.',
+        'Effective measures can make a difference.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-problems-3',
+    title: 'Cause & Effect Vocabulary',
+    slug: 'cause-effect-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Problems',
+    description: 'Vocabulary for discussing cause and effect relationships.',
+    is_premium: true,
+    is_published: true,
+    view_count: 750,
+    created_at: '2025-05-12T10:00:00Z',
+    updated_at: '2025-05-12T10:00:00Z',
+    content: {
+      title: 'Cause & Effect Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 cause and effect words',
+        'Discuss relationships',
+        'Analyze consequences'
+      ],
+      coreExplanation: `Cause and effect vocabulary is essential for IELTS Writing Task 2. This lesson covers terms for discussing causal relationships.
+
+Understanding these terms helps you discuss cause and effect topics effectively.`,
+      examples: [
+        { sentence: 'The cause was identified.', explanation: '"Cause" is reason.' },
+        { sentence: 'The effect was significant.', explanation: '"Effect" is result.' },
+        { sentence: 'The result was unexpected.', explanation: '"Result" is outcome.' },
+        { sentence: 'The consequence was severe.', explanation: '"Consequence" is outcome.' },
+        { sentence: 'The outcome was positive.', explanation: '"Outcome" is result.' },
+        { sentence: 'The impact was lasting.', explanation: '"Impact" is effect.' },
+        { sentence: 'The influence was strong.', explanation: '"Influence" is effect on.' },
+        { sentence: 'The reason was clear.', explanation: '"Reason" is cause.' },
+        { sentence: 'The factor contributed.', explanation: '"Factor" is contributing element.' },
+        { sentence: 'The trigger was identified.', explanation: '"Trigger" is immediate cause.' },
+        { sentence: 'The source was found.', explanation: '"Source" is origin.' },
+        { sentence: 'The implication was serious.', explanation: '"Implication" is possible consequence.' },
+        { sentence: 'The repercussion was felt.', explanation: '"Repercussion" is indirect effect.' },
+        { sentence: 'The correlation was noted.', explanation: '"Correlation" is relationship.' },
+        { sentence: 'The connection was established.', explanation: '"Connection" is link.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "effect" and "affect"', correction: '"Effect" = noun (result); "affect" = verb (influence)', explanation: 'Effect is usually a noun.' },
+        { mistake: 'Using "reason" and "cause" differently', correction: 'These are largely synonymous', explanation: '"Cause" is slightly more formal.' },
+        { mistake: 'Confusing "correlation" and "causation"', correction: '"Correlation" = relationship; "causation" = direct cause', explanation: 'Correlation does not imply causation.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ of pollution is poor health.', type: 'fill-blank' },
+        { question: 'Which term means an indirect effect?', options: ['Repercussion', 'Trigger', 'Factor', 'Source'], type: 'multiple-choice' },
+        { question: 'Discuss the causes and effects of urbanization.', type: 'rewrite' },
+        { question: 'Several _____ contributed to the problem.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'effect/consequence',
+        'Repercussion',
+        'Urbanization is caused by economic opportunities and better services in cities. Its effects include overcrowding, pollution, and strain on infrastructure.',
+        'factors'
+      ],
+      quickRecap: 'Key cause and effect terms: cause, effect, result, consequence, outcome, impact, influence, reason, factor, trigger, source, implication, repercussion, correlation, connection. Use these for cause and effect topics!',
+      collocations: [
+        'root cause', 'side effect', 'direct result', 'serious consequence',
+        'positive outcome', 'lasting impact', 'strong influence', 'main reason',
+        'key factor', 'immediate trigger', 'primary source', 'serious implication'
+      ],
+      synonyms: [
+        { word: 'cause', synonyms: ['reason', 'source', 'origin', 'root'] },
+        { word: 'effect', synonyms: ['result', 'consequence', 'outcome', 'impact'] },
+        { word: 'consequence', synonyms: ['result', 'outcome', 'effect', 'repercussion'] }
+      ],
+      speakingLines: [
+        'Understanding cause and effect is important.',
+        'Every action has consequences.',
+        'Multiple factors contribute to complex problems.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-problems-4',
+    title: 'Analysis & Evaluation Vocabulary',
+    slug: 'analysis-evaluation-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Problems',
+    description: 'Vocabulary for discussing analysis and evaluation.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-05-13T10:00:00Z',
+    updated_at: '2025-05-13T10:00:00Z',
+    content: {
+      title: 'Analysis & Evaluation Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 analysis vocabulary words',
+        'Discuss evaluation',
+        'Analyze critically'
+      ],
+      coreExplanation: `Analysis vocabulary is essential for IELTS Writing and academic discussion. This lesson covers terms for discussing analysis and evaluation.
+
+Understanding these terms helps you discuss analytical topics effectively.`,
+      examples: [
+        { sentence: 'Analysis reveals patterns.', explanation: '"Analysis" is detailed examination.' },
+        { sentence: 'Evaluation measures success.', explanation: '"Evaluation" is assessment.' },
+        { sentence: 'Assessment was thorough.', explanation: '"Assessment" is evaluation.' },
+        { sentence: 'Examination was detailed.', explanation: '"Examination" is close study.' },
+        { sentence: 'Investigation uncovered facts.', explanation: '"Investigation" is inquiry.' },
+        { sentence: 'Research supports conclusions.', explanation: '"Research" is systematic study.' },
+        { sentence: 'Review was comprehensive.', explanation: '"Review" is examination.' },
+        { sentence: 'Critique was constructive.', explanation: '"Critique" is critical analysis.' },
+        { sentence: 'Interpretation varies.', explanation: '"Interpretation" is understanding.' },
+        { sentence: 'Perspective matters.', explanation: '"Perspective" is viewpoint.' },
+        { sentence: 'Evidence supports claims.', explanation: '"Evidence" is proof.' },
+        { sentence: 'Data was analyzed.', explanation: '"Data" is information.' },
+        { sentence: 'Findings were significant.', explanation: '"Findings" are discoveries.' },
+        { sentence: 'Conclusions were drawn.', explanation: '"Conclusions" are final judgments.' },
+        { sentence: 'Judgment was fair.', explanation: '"Judgment" is decision.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "analysis" and "evaluation"', correction: '"Analysis" = breaking down; "evaluation" = judging value', explanation: 'Evaluation involves judgment.' },
+        { mistake: 'Using "critique" negatively', correction: '"Critique" is neutral analysis', explanation: 'Critique can be positive.' },
+        { mistake: 'Confusing "data" as singular', correction: '"Data" is technically plural', explanation: '"Data are" is formal; "data is" is common.' }
+      ],
+      miniPractice: [
+        { question: 'Careful _____ is needed before making decisions.', type: 'fill-blank' },
+        { question: 'Which term means a critical analysis?', options: ['Critique', 'Review', 'Assessment', 'Investigation'], type: 'multiple-choice' },
+        { question: 'Discuss the importance of critical thinking.', type: 'rewrite' },
+        { question: 'The _____ supported the hypothesis.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'analysis',
+        'Critique',
+        'Critical thinking is important because it helps us evaluate information objectively, make better decisions, and avoid being misled.',
+        'evidence/data'
+      ],
+      quickRecap: 'Key analysis terms: analysis, evaluation, assessment, examination, investigation, research, review, critique, interpretation, perspective, evidence, data, findings, conclusions, judgment. Use these for analysis topics!',
+      collocations: [
+        'detailed analysis', 'performance evaluation', 'risk assessment', 'close examination',
+        'thorough investigation', 'academic research', 'literature review', 'constructive critique',
+        'different interpretation', 'unique perspective', 'strong evidence', 'collect data'
+      ],
+      synonyms: [
+        { word: 'analysis', synonyms: ['examination', 'study', 'investigation', 'review'] },
+        { word: 'evaluation', synonyms: ['assessment', 'appraisal', 'judgment', 'review'] },
+        { word: 'evidence', synonyms: ['proof', 'data', 'support', 'documentation'] }
+      ],
+      speakingLines: [
+        'Analysis helps us understand complex issues.',
+        'Evaluation is essential for improvement.',
+        'Evidence-based decisions are more reliable.'
+      ]
+    }
   }
 ];
