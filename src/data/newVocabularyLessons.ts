@@ -19790,5 +19790,1002 @@ Understanding these terms helps you write more coherently.`,
         'Therefore, we can conclude that...'
       ]
     }
+  },
+  // ============================================
+  // BATCH 51: Description & Comparison (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-describe-1',
+    title: 'Describing People Vocabulary',
+    slug: 'describing-people-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Description',
+    description: 'Essential vocabulary for describing people.',
+    is_premium: false,
+    is_published: true,
+    view_count: 850,
+    created_at: '2025-05-26T10:00:00Z',
+    updated_at: '2025-05-26T10:00:00Z',
+    content: {
+      title: 'Describing People Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 description vocabulary words',
+        'Describe people effectively',
+        'Use varied adjectives'
+      ],
+      coreExplanation: `Description vocabulary is essential for IELTS Speaking Part 2. This lesson covers terms for describing people.
+
+Understanding these terms helps you describe people effectively.`,
+      examples: [
+        { sentence: 'She is intelligent.', explanation: '"Intelligent" means smart.' },
+        { sentence: 'He is ambitious.', explanation: '"Ambitious" means driven.' },
+        { sentence: 'She is compassionate.', explanation: '"Compassionate" means caring.' },
+        { sentence: 'He is reliable.', explanation: '"Reliable" means dependable.' },
+        { sentence: 'She is charismatic.', explanation: '"Charismatic" means charming.' },
+        { sentence: 'He is diligent.', explanation: '"Diligent" means hardworking.' },
+        { sentence: 'She is resourceful.', explanation: '"Resourceful" means clever.' },
+        { sentence: 'He is articulate.', explanation: '"Articulate" means well-spoken.' },
+        { sentence: 'She is conscientious.', explanation: '"Conscientious" means careful.' },
+        { sentence: 'He is versatile.', explanation: '"Versatile" means adaptable.' },
+        { sentence: 'She is perceptive.', explanation: '"Perceptive" means observant.' },
+        { sentence: 'He is resilient.', explanation: '"Resilient" means tough.' },
+        { sentence: 'She is empathetic.', explanation: '"Empathetic" means understanding.' },
+        { sentence: 'He is innovative.', explanation: '"Innovative" means creative.' },
+        { sentence: 'She is meticulous.', explanation: '"Meticulous" means detailed.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Overusing "nice" and "good"', correction: 'Use specific adjectives: "kind", "talented", "reliable"', explanation: 'Specific words are better.' },
+        { mistake: 'Using "very" with extreme adjectives', correction: 'Don\'t say "very excellent"; just "excellent"', explanation: 'Extreme adjectives don\'t need "very".' },
+        { mistake: 'Confusing personality and appearance', correction: 'Distinguish between character traits and physical features', explanation: 'These are different categories.' }
+      ],
+      miniPractice: [
+        { question: 'She is very _____ and always helps others.', type: 'fill-blank' },
+        { question: 'Which word means hardworking?', options: ['Diligent', 'Charismatic', 'Versatile', 'Perceptive'], type: 'multiple-choice' },
+        { question: 'Describe a person you admire.', type: 'rewrite' },
+        { question: 'He is _____ and can adapt to any situation.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'compassionate/kind',
+        'Diligent',
+        'I admire my teacher because she is intelligent, compassionate, and always willing to help students succeed.',
+        'versatile/adaptable'
+      ],
+      quickRecap: 'Key description terms: intelligent, ambitious, compassionate, reliable, charismatic, diligent, resourceful, articulate, conscientious, versatile, perceptive, resilient, empathetic, innovative, meticulous. Use these for describing people!',
+      collocations: [
+        'highly intelligent', 'extremely ambitious', 'deeply compassionate', 'very reliable',
+        'naturally charismatic', 'incredibly diligent', 'highly resourceful', 'very articulate',
+        'extremely conscientious', 'highly versatile', 'remarkably perceptive', 'incredibly resilient'
+      ],
+      synonyms: [
+        { word: 'intelligent', synonyms: ['smart', 'clever', 'bright', 'brilliant'] },
+        { word: 'ambitious', synonyms: ['driven', 'determined', 'motivated', 'aspiring'] },
+        { word: 'compassionate', synonyms: ['caring', 'kind', 'sympathetic', 'empathetic'] }
+      ],
+      speakingLines: [
+        'She is an incredibly intelligent person.',
+        'He is known for being reliable.',
+        'I would describe her as compassionate.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-describe-2',
+    title: 'Describing Places Vocabulary',
+    slug: 'describing-places-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Description',
+    description: 'Vocabulary for describing places and locations.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-05-27T10:00:00Z',
+    updated_at: '2025-05-27T10:00:00Z',
+    content: {
+      title: 'Describing Places Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 place description words',
+        'Describe locations effectively',
+        'Use varied vocabulary'
+      ],
+      coreExplanation: `Place description vocabulary is essential for IELTS Speaking Part 2. This lesson covers terms for describing places.
+
+Understanding these terms helps you describe places effectively.`,
+      examples: [
+        { sentence: 'The city is vibrant.', explanation: '"Vibrant" means lively.' },
+        { sentence: 'The area is picturesque.', explanation: '"Picturesque" means scenic.' },
+        { sentence: 'The neighborhood is tranquil.', explanation: '"Tranquil" means peaceful.' },
+        { sentence: 'The location is bustling.', explanation: '"Bustling" means busy.' },
+        { sentence: 'The region is diverse.', explanation: '"Diverse" means varied.' },
+        { sentence: 'The town is quaint.', explanation: '"Quaint" means charming.' },
+        { sentence: 'The street is congested.', explanation: '"Congested" means crowded.' },
+        { sentence: 'The park is serene.', explanation: '"Serene" means calm.' },
+        { sentence: 'The building is imposing.', explanation: '"Imposing" means impressive.' },
+        { sentence: 'The landscape is breathtaking.', explanation: '"Breathtaking" means stunning.' },
+        { sentence: 'The atmosphere is lively.', explanation: '"Lively" means energetic.' },
+        { sentence: 'The venue is spacious.', explanation: '"Spacious" means roomy.' },
+        { sentence: 'The district is affluent.', explanation: '"Affluent" means wealthy.' },
+        { sentence: 'The surroundings are pristine.', explanation: '"Pristine" means clean.' },
+        { sentence: 'The setting is idyllic.', explanation: '"Idyllic" means perfect.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Overusing "beautiful" and "nice"', correction: 'Use specific adjectives: "picturesque", "stunning", "serene"', explanation: 'Specific words are better.' },
+        { mistake: 'Confusing "quiet" and "tranquil"', correction: '"Quiet" = no noise; "tranquil" = peaceful atmosphere', explanation: 'Tranquil is more evocative.' },
+        { mistake: 'Using "big" for all large places', correction: 'Use "spacious", "vast", "expansive" appropriately', explanation: 'Vary your vocabulary.' }
+      ],
+      miniPractice: [
+        { question: 'The countryside is _____ and peaceful.', type: 'fill-blank' },
+        { question: 'Which word means charming and old-fashioned?', options: ['Quaint', 'Bustling', 'Congested', 'Affluent'], type: 'multiple-choice' },
+        { question: 'Describe your favorite place.', type: 'rewrite' },
+        { question: 'The city center is always _____ with activity.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'tranquil/serene',
+        'Quaint',
+        'My favorite place is a small beach town that is picturesque and tranquil, with breathtaking views of the ocean.',
+        'bustling'
+      ],
+      quickRecap: 'Key place terms: vibrant, picturesque, tranquil, bustling, diverse, quaint, congested, serene, imposing, breathtaking, lively, spacious, affluent, pristine, idyllic. Use these for describing places!',
+      collocations: [
+        'vibrant city', 'picturesque village', 'tranquil setting', 'bustling market',
+        'diverse community', 'quaint town', 'congested streets', 'serene lake',
+        'imposing building', 'breathtaking view', 'lively atmosphere', 'spacious room'
+      ],
+      synonyms: [
+        { word: 'vibrant', synonyms: ['lively', 'energetic', 'dynamic', 'bustling'] },
+        { word: 'picturesque', synonyms: ['scenic', 'beautiful', 'charming', 'lovely'] },
+        { word: 'tranquil', synonyms: ['peaceful', 'calm', 'serene', 'quiet'] }
+      ],
+      speakingLines: [
+        'The city is vibrant and exciting.',
+        'It is a picturesque location.',
+        'The atmosphere is tranquil and relaxing.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-describe-3',
+    title: 'Comparison Vocabulary',
+    slug: 'comparison-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Description',
+    description: 'Vocabulary for making comparisons.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-05-28T10:00:00Z',
+    updated_at: '2025-05-28T10:00:00Z',
+    content: {
+      title: 'Comparison Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 comparison vocabulary words',
+        'Make effective comparisons',
+        'Contrast ideas'
+      ],
+      coreExplanation: `Comparison vocabulary is essential for IELTS Writing Task 1. This lesson covers terms for making comparisons.
+
+Understanding these terms helps you compare effectively.`,
+      examples: [
+        { sentence: 'This is similar to that.', explanation: '"Similar" means alike.' },
+        { sentence: 'This differs from that.', explanation: '"Differs" means is different.' },
+        { sentence: 'This is comparable to that.', explanation: '"Comparable" means similar.' },
+        { sentence: 'This contrasts with that.', explanation: '"Contrasts" means differs.' },
+        { sentence: 'This is equivalent to that.', explanation: '"Equivalent" means equal.' },
+        { sentence: 'This resembles that.', explanation: '"Resembles" means looks like.' },
+        { sentence: 'This is identical to that.', explanation: '"Identical" means exactly same.' },
+        { sentence: 'This is distinct from that.', explanation: '"Distinct" means different.' },
+        { sentence: 'This is superior to that.', explanation: '"Superior" means better.' },
+        { sentence: 'This is inferior to that.', explanation: '"Inferior" means worse.' },
+        { sentence: 'This exceeds that.', explanation: '"Exceeds" means is more than.' },
+        { sentence: 'This matches that.', explanation: '"Matches" means equals.' },
+        { sentence: 'This outperforms that.', explanation: '"Outperforms" means does better.' },
+        { sentence: 'This is proportional to that.', explanation: '"Proportional" means in ratio.' },
+        { sentence: 'This corresponds to that.', explanation: '"Corresponds" means relates.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "compare" and "contrast"', correction: '"Compare" = similarities; "contrast" = differences', explanation: 'These are different.' },
+        { mistake: 'Using "more better"', correction: 'Use "better" or "more effective"', explanation: 'Double comparatives are wrong.' },
+        { mistake: 'Confusing "similar" and "same"', correction: '"Similar" = alike; "same" = identical', explanation: 'Similar allows differences.' }
+      ],
+      miniPractice: [
+        { question: 'This result is _____ to the previous one.', type: 'fill-blank' },
+        { question: 'Which word means exactly the same?', options: ['Identical', 'Similar', 'Comparable', 'Equivalent'], type: 'multiple-choice' },
+        { question: 'Compare two cities you know.', type: 'rewrite' },
+        { question: 'The new model _____ the old one in performance.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'similar/comparable',
+        'Identical',
+        'Tokyo is more densely populated than London, but both cities are vibrant and offer excellent public transport.',
+        'outperforms/exceeds'
+      ],
+      quickRecap: 'Key comparison terms: similar, differs, comparable, contrasts, equivalent, resembles, identical, distinct, superior, inferior, exceeds, matches, outperforms, proportional, corresponds. Use these for comparisons!',
+      collocations: [
+        'very similar', 'significantly differs', 'directly comparable', 'sharply contrasts',
+        'roughly equivalent', 'closely resembles', 'almost identical', 'clearly distinct',
+        'far superior', 'slightly inferior', 'greatly exceeds', 'closely matches'
+      ],
+      synonyms: [
+        { word: 'similar', synonyms: ['alike', 'comparable', 'analogous', 'like'] },
+        { word: 'different', synonyms: ['distinct', 'dissimilar', 'unlike', 'contrasting'] },
+        { word: 'superior', synonyms: ['better', 'higher', 'greater', 'exceeding'] }
+      ],
+      speakingLines: [
+        'This is similar to what I experienced.',
+        'The two options differ significantly.',
+        'This is comparable to the previous version.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-describe-4',
+    title: 'Describing Objects & Things Vocabulary',
+    slug: 'describing-objects-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Description',
+    description: 'Vocabulary for describing objects and things.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-05-29T10:00:00Z',
+    updated_at: '2025-05-29T10:00:00Z',
+    content: {
+      title: 'Describing Objects & Things Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 object description words',
+        'Describe things effectively',
+        'Use varied adjectives'
+      ],
+      coreExplanation: `Object description vocabulary is useful for IELTS Speaking Part 2. This lesson covers terms for describing objects and things.
+
+Understanding these terms helps you describe objects effectively.`,
+      examples: [
+        { sentence: 'The device is compact.', explanation: '"Compact" means small and efficient.' },
+        { sentence: 'The material is durable.', explanation: '"Durable" means long-lasting.' },
+        { sentence: 'The design is sleek.', explanation: '"Sleek" means smooth and elegant.' },
+        { sentence: 'The product is versatile.', explanation: '"Versatile" means multi-purpose.' },
+        { sentence: 'The item is portable.', explanation: '"Portable" means easy to carry.' },
+        { sentence: 'The tool is efficient.', explanation: '"Efficient" means effective.' },
+        { sentence: 'The gadget is innovative.', explanation: '"Innovative" means new and creative.' },
+        { sentence: 'The equipment is sophisticated.', explanation: '"Sophisticated" means advanced.' },
+        { sentence: 'The appliance is user-friendly.', explanation: '"User-friendly" means easy to use.' },
+        { sentence: 'The object is fragile.', explanation: '"Fragile" means easily broken.' },
+        { sentence: 'The texture is smooth.', explanation: '"Smooth" means even surface.' },
+        { sentence: 'The color is vibrant.', explanation: '"Vibrant" means bright.' },
+        { sentence: 'The shape is rectangular.', explanation: '"Rectangular" describes shape.' },
+        { sentence: 'The size is substantial.', explanation: '"Substantial" means considerable.' },
+        { sentence: 'The quality is exceptional.', explanation: '"Exceptional" means outstanding.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "good" for all positive descriptions', correction: 'Use specific adjectives: "durable", "efficient", "innovative"', explanation: 'Specific words are better.' },
+        { mistake: 'Confusing "effective" and "efficient"', correction: '"Effective" = achieves goal; "efficient" = uses resources well', explanation: 'These have different meanings.' },
+        { mistake: 'Overusing "very"', correction: 'Use stronger adjectives: "exceptional" instead of "very good"', explanation: 'Strong adjectives are better.' }
+      ],
+      miniPractice: [
+        { question: 'The laptop is _____ and easy to carry.', type: 'fill-blank' },
+        { question: 'Which word means long-lasting?', options: ['Durable', 'Fragile', 'Compact', 'Sleek'], type: 'multiple-choice' },
+        { question: 'Describe a useful object you own.', type: 'rewrite' },
+        { question: 'The smartphone has a _____ design.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'portable/compact',
+        'Durable',
+        'My laptop is a versatile device that is compact, user-friendly, and has exceptional battery life.',
+        'sleek/innovative'
+      ],
+      quickRecap: 'Key object terms: compact, durable, sleek, versatile, portable, efficient, innovative, sophisticated, user-friendly, fragile, smooth, vibrant, rectangular, substantial, exceptional. Use these for describing objects!',
+      collocations: [
+        'compact design', 'highly durable', 'sleek appearance', 'extremely versatile',
+        'easily portable', 'highly efficient', 'truly innovative', 'highly sophisticated',
+        'very user-friendly', 'extremely fragile', 'smooth texture', 'vibrant color'
+      ],
+      synonyms: [
+        { word: 'compact', synonyms: ['small', 'portable', 'condensed', 'miniature'] },
+        { word: 'durable', synonyms: ['sturdy', 'robust', 'long-lasting', 'resilient'] },
+        { word: 'innovative', synonyms: ['creative', 'novel', 'original', 'groundbreaking'] }
+      ],
+      speakingLines: [
+        'The device is compact and portable.',
+        'It has a sleek and modern design.',
+        'The quality is exceptional.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 52: Everyday Life (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-daily-1',
+    title: 'Daily Routines Vocabulary',
+    slug: 'daily-routines-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Daily Life',
+    description: 'Essential vocabulary for discussing daily routines.',
+    is_premium: false,
+    is_published: true,
+    view_count: 880,
+    created_at: '2025-05-30T10:00:00Z',
+    updated_at: '2025-05-30T10:00:00Z',
+    content: {
+      title: 'Daily Routines Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 daily routine vocabulary words',
+        'Discuss daily activities',
+        'Describe habits'
+      ],
+      coreExplanation: `Daily routine vocabulary is useful for IELTS Speaking Part 1. This lesson covers terms for discussing daily activities.
+
+Understanding these terms helps you discuss routines effectively.`,
+      examples: [
+        { sentence: 'I wake up early.', explanation: '"Wake up" means stop sleeping.' },
+        { sentence: 'I commute to work.', explanation: '"Commute" means travel to work.' },
+        { sentence: 'I exercise regularly.', explanation: '"Exercise" means physical activity.' },
+        { sentence: 'I prepare meals.', explanation: '"Prepare" means make ready.' },
+        { sentence: 'I attend meetings.', explanation: '"Attend" means be present at.' },
+        { sentence: 'I complete tasks.', explanation: '"Complete" means finish.' },
+        { sentence: 'I relax in the evening.', explanation: '"Relax" means rest.' },
+        { sentence: 'I socialize with friends.', explanation: '"Socialize" means interact.' },
+        { sentence: 'I unwind after work.', explanation: '"Unwind" means relax.' },
+        { sentence: 'I maintain a schedule.', explanation: '"Maintain" means keep.' },
+        { sentence: 'I prioritize tasks.', explanation: '"Prioritize" means rank by importance.' },
+        { sentence: 'I manage my time.', explanation: '"Manage" means control.' },
+        { sentence: 'I balance work and life.', explanation: '"Balance" means keep equal.' },
+        { sentence: 'I establish routines.', explanation: '"Establish" means set up.' },
+        { sentence: 'I stick to habits.', explanation: '"Stick to" means continue.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "go to work" always', correction: 'Vary with "commute", "head to the office"', explanation: 'Variety improves expression.' },
+        { mistake: 'Confusing "routine" and "habit"', correction: '"Routine" = regular sequence; "habit" = automatic behavior', explanation: 'These are related but different.' },
+        { mistake: 'Using present simple incorrectly', correction: 'Use present simple for routines: "I wake up at 7"', explanation: 'Present simple for habits.' }
+      ],
+      miniPractice: [
+        { question: 'I _____ to work by train every day.', type: 'fill-blank' },
+        { question: 'Which word means to relax after stress?', options: ['Unwind', 'Commute', 'Prioritize', 'Establish'], type: 'multiple-choice' },
+        { question: 'Describe your daily routine.', type: 'rewrite' },
+        { question: 'I try to _____ work and personal life.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'commute',
+        'Unwind',
+        'I wake up at 7 AM, exercise for 30 minutes, then commute to work. In the evening, I unwind by reading.',
+        'balance'
+      ],
+      quickRecap: 'Key routine terms: wake up, commute, exercise, prepare, attend, complete, relax, socialize, unwind, maintain, prioritize, manage, balance, establish, stick to. Use these for daily routines!',
+      collocations: [
+        'wake up early', 'daily commute', 'exercise regularly', 'prepare meals',
+        'attend meetings', 'complete tasks', 'relax at home', 'socialize with friends',
+        'unwind after work', 'maintain schedule', 'prioritize tasks', 'manage time'
+      ],
+      synonyms: [
+        { word: 'wake up', synonyms: ['get up', 'rise', 'awaken', 'arise'] },
+        { word: 'relax', synonyms: ['unwind', 'rest', 'chill', 'decompress'] },
+        { word: 'commute', synonyms: ['travel', 'journey', 'go', 'head'] }
+      ],
+      speakingLines: [
+        'I usually wake up around 7 AM.',
+        'I commute to work by public transport.',
+        'I try to exercise regularly.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-daily-2',
+    title: 'Hobbies & Leisure Vocabulary',
+    slug: 'hobbies-leisure-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Daily Life',
+    description: 'Vocabulary for discussing hobbies and leisure activities.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2025-05-31T10:00:00Z',
+    updated_at: '2025-05-31T10:00:00Z',
+    content: {
+      title: 'Hobbies & Leisure Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 hobby vocabulary words',
+        'Discuss leisure activities',
+        'Describe interests'
+      ],
+      coreExplanation: `Hobby vocabulary is useful for IELTS Speaking Part 1. This lesson covers terms for discussing hobbies and leisure.
+
+Understanding these terms helps you discuss interests effectively.`,
+      examples: [
+        { sentence: 'I enjoy reading.', explanation: '"Enjoy" means take pleasure in.' },
+        { sentence: 'I pursue photography.', explanation: '"Pursue" means follow as interest.' },
+        { sentence: 'I practice yoga.', explanation: '"Practice" means do regularly.' },
+        { sentence: 'I engage in sports.', explanation: '"Engage in" means participate.' },
+        { sentence: 'I collect stamps.', explanation: '"Collect" means gather.' },
+        { sentence: 'I explore nature.', explanation: '"Explore" means discover.' },
+        { sentence: 'I create art.', explanation: '"Create" means make.' },
+        { sentence: 'I participate in clubs.', explanation: '"Participate" means take part.' },
+        { sentence: 'I appreciate music.', explanation: '"Appreciate" means value.' },
+        { sentence: 'I dedicate time to hobbies.', explanation: '"Dedicate" means devote.' },
+        { sentence: 'I develop skills.', explanation: '"Develop" means improve.' },
+        { sentence: 'I indulge in gaming.', explanation: '"Indulge" means allow oneself.' },
+        { sentence: 'I immerse myself in books.', explanation: '"Immerse" means deeply involve.' },
+        { sentence: 'I cultivate interests.', explanation: '"Cultivate" means develop.' },
+        { sentence: 'I unwind through gardening.', explanation: '"Unwind" means relax.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "like" for all interests', correction: 'Vary with "enjoy", "appreciate", "am passionate about"', explanation: 'Variety improves expression.' },
+        { mistake: 'Confusing "hobby" and "interest"', correction: '"Hobby" = active pursuit; "interest" = general curiosity', explanation: 'Hobby is more active.' },
+        { mistake: 'Using "play" for all activities', correction: 'Use "practice" for skills, "engage in" for activities', explanation: 'Match verb to activity.' }
+      ],
+      miniPractice: [
+        { question: 'I _____ photography as a hobby.', type: 'fill-blank' },
+        { question: 'Which word means to deeply involve oneself?', options: ['Immerse', 'Collect', 'Pursue', 'Dedicate'], type: 'multiple-choice' },
+        { question: 'Describe your favorite hobby.', type: 'rewrite' },
+        { question: 'I _____ time to reading every day.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'pursue/enjoy',
+        'Immerse',
+        'My favorite hobby is photography. I enjoy exploring new places and capturing beautiful moments through my camera.',
+        'dedicate'
+      ],
+      quickRecap: 'Key hobby terms: enjoy, pursue, practice, engage in, collect, explore, create, participate, appreciate, dedicate, develop, indulge, immerse, cultivate, unwind. Use these for hobbies!',
+      collocations: [
+        'really enjoy', 'actively pursue', 'regularly practice', 'engage in activities',
+        'collect items', 'explore nature', 'create art', 'participate in events',
+        'deeply appreciate', 'dedicate time', 'develop skills', 'indulge in hobbies'
+      ],
+      synonyms: [
+        { word: 'enjoy', synonyms: ['like', 'love', 'appreciate', 'relish'] },
+        { word: 'pursue', synonyms: ['follow', 'engage in', 'practice', 'take up'] },
+        { word: 'hobby', synonyms: ['pastime', 'interest', 'pursuit', 'activity'] }
+      ],
+      speakingLines: [
+        'I really enjoy reading in my free time.',
+        'I pursue photography as a hobby.',
+        'I dedicate time to my hobbies every weekend.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-daily-3',
+    title: 'Shopping & Consumer Vocabulary',
+    slug: 'shopping-consumer-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Daily Life',
+    description: 'Vocabulary for discussing shopping and consumer behavior.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-06-01T10:00:00Z',
+    updated_at: '2025-06-01T10:00:00Z',
+    content: {
+      title: 'Shopping & Consumer Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 shopping vocabulary words',
+        'Discuss consumer behavior',
+        'Describe shopping habits'
+      ],
+      coreExplanation: `Shopping vocabulary is useful for IELTS Speaking topics about consumerism. This lesson covers terms for discussing shopping.
+
+Understanding these terms helps you discuss shopping effectively.`,
+      examples: [
+        { sentence: 'I purchase items online.', explanation: '"Purchase" means buy.' },
+        { sentence: 'I browse products.', explanation: '"Browse" means look casually.' },
+        { sentence: 'I compare prices.', explanation: '"Compare" means examine differences.' },
+        { sentence: 'I bargain for discounts.', explanation: '"Bargain" means negotiate price.' },
+        { sentence: 'I spend wisely.', explanation: '"Spend" means use money.' },
+        { sentence: 'I save money.', explanation: '"Save" means keep for later.' },
+        { sentence: 'I budget carefully.', explanation: '"Budget" means plan spending.' },
+        { sentence: 'I afford luxuries.', explanation: '"Afford" means have money for.' },
+        { sentence: 'I invest in quality.', explanation: '"Invest" means put money into.' },
+        { sentence: 'I consume responsibly.', explanation: '"Consume" means use up.' },
+        { sentence: 'I prefer brands.', explanation: '"Prefer" means like better.' },
+        { sentence: 'I return items.', explanation: '"Return" means give back.' },
+        { sentence: 'I exchange products.', explanation: '"Exchange" means swap.' },
+        { sentence: 'I refund purchases.', explanation: '"Refund" means get money back.' },
+        { sentence: 'I recommend products.', explanation: '"Recommend" means suggest.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "buy" and "purchase"', correction: '"Purchase" is more formal than "buy"', explanation: 'Use appropriately.' },
+        { mistake: 'Using "cost" as a verb incorrectly', correction: '"It costs $10" not "It is costing $10"', explanation: 'Cost is stative.' },
+        { mistake: 'Confusing "price" and "cost"', correction: '"Price" = what seller asks; "cost" = what buyer pays', explanation: 'These can differ.' }
+      ],
+      miniPractice: [
+        { question: 'I prefer to _____ products online.', type: 'fill-blank' },
+        { question: 'Which word means to negotiate price?', options: ['Bargain', 'Browse', 'Compare', 'Recommend'], type: 'multiple-choice' },
+        { question: 'Describe your shopping habits.', type: 'rewrite' },
+        { question: 'I always _____ prices before buying.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'purchase/browse',
+        'Bargain',
+        'I prefer shopping online because I can compare prices easily and often find better deals than in physical stores.',
+        'compare'
+      ],
+      quickRecap: 'Key shopping terms: purchase, browse, compare, bargain, spend, save, budget, afford, invest, consume, prefer, return, exchange, refund, recommend. Use these for shopping topics!',
+      collocations: [
+        'purchase online', 'browse products', 'compare prices', 'bargain for discount',
+        'spend money', 'save money', 'budget carefully', 'afford to buy',
+        'invest in quality', 'consume responsibly', 'prefer brands', 'return items'
+      ],
+      synonyms: [
+        { word: 'purchase', synonyms: ['buy', 'acquire', 'obtain', 'get'] },
+        { word: 'browse', synonyms: ['look', 'scan', 'peruse', 'explore'] },
+        { word: 'spend', synonyms: ['pay', 'expend', 'use', 'shell out'] }
+      ],
+      speakingLines: [
+        'I usually purchase items online.',
+        'I always compare prices before buying.',
+        'I try to budget carefully.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-daily-4',
+    title: 'Home & Living Vocabulary',
+    slug: 'home-living-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Daily Life',
+    description: 'Vocabulary for discussing home and living arrangements.',
+    is_premium: true,
+    is_published: true,
+    view_count: 750,
+    created_at: '2025-06-02T10:00:00Z',
+    updated_at: '2025-06-02T10:00:00Z',
+    content: {
+      title: 'Home & Living Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 home vocabulary words',
+        'Discuss living arrangements',
+        'Describe accommodation'
+      ],
+      coreExplanation: `Home vocabulary is useful for IELTS Speaking topics about accommodation. This lesson covers terms for discussing home and living.
+
+Understanding these terms helps you discuss home topics effectively.`,
+      examples: [
+        { sentence: 'I reside in an apartment.', explanation: '"Reside" means live.' },
+        { sentence: 'I rent accommodation.', explanation: '"Rent" means pay to use.' },
+        { sentence: 'I own property.', explanation: '"Own" means possess.' },
+        { sentence: 'I furnish rooms.', explanation: '"Furnish" means add furniture.' },
+        { sentence: 'I decorate spaces.', explanation: '"Decorate" means make attractive.' },
+        { sentence: 'I maintain the house.', explanation: '"Maintain" means keep in condition.' },
+        { sentence: 'I renovate buildings.', explanation: '"Renovate" means restore.' },
+        { sentence: 'I relocate frequently.', explanation: '"Relocate" means move.' },
+        { sentence: 'I settle in new areas.', explanation: '"Settle" means establish home.' },
+        { sentence: 'I share accommodation.', explanation: '"Share" means use together.' },
+        { sentence: 'I occupy the space.', explanation: '"Occupy" means live in.' },
+        { sentence: 'I accommodate guests.', explanation: '"Accommodate" means provide space.' },
+        { sentence: 'I organize rooms.', explanation: '"Organize" means arrange.' },
+        { sentence: 'I upgrade facilities.', explanation: '"Upgrade" means improve.' },
+        { sentence: 'I downsize homes.', explanation: '"Downsize" means move to smaller.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "house" and "home"', correction: '"House" = building; "home" = where you live', explanation: 'Home is more personal.' },
+        { mistake: 'Using "live" and "stay" interchangeably', correction: '"Live" = permanent; "stay" = temporary', explanation: 'These differ in duration.' },
+        { mistake: 'Confusing "rent" and "hire"', correction: '"Rent" = property; "hire" = services/equipment', explanation: 'Use appropriately.' }
+      ],
+      miniPractice: [
+        { question: 'I _____ in a small apartment in the city.', type: 'fill-blank' },
+        { question: 'Which word means to move to a new place?', options: ['Relocate', 'Renovate', 'Furnish', 'Maintain'], type: 'multiple-choice' },
+        { question: 'Describe your ideal home.', type: 'rewrite' },
+        { question: 'I plan to _____ my apartment next year.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'reside/live',
+        'Relocate',
+        'My ideal home would be a spacious house with a garden, located in a quiet neighborhood with good transport links.',
+        'renovate/upgrade'
+      ],
+      quickRecap: 'Key home terms: reside, rent, own, furnish, decorate, maintain, renovate, relocate, settle, share, occupy, accommodate, organize, upgrade, downsize. Use these for home topics!',
+      collocations: [
+        'reside in', 'rent apartment', 'own property', 'fully furnished',
+        'beautifully decorated', 'well maintained', 'recently renovated', 'relocate to',
+        'settle down', 'share accommodation', 'occupy space', 'accommodate guests'
+      ],
+      synonyms: [
+        { word: 'reside', synonyms: ['live', 'dwell', 'inhabit', 'stay'] },
+        { word: 'rent', synonyms: ['lease', 'hire', 'let', 'charter'] },
+        { word: 'renovate', synonyms: ['restore', 'refurbish', 'modernize', 'update'] }
+      ],
+      speakingLines: [
+        'I currently reside in an apartment.',
+        'I rent my accommodation.',
+        'I would like to own property someday.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 53: Final Topics (5 lessons to reach 280)
+  // ============================================
+  {
+    id: 'vocab-final-1',
+    title: 'Technology & Digital Life Vocabulary',
+    slug: 'technology-digital-life-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Technology',
+    description: 'Essential vocabulary for discussing technology and digital life.',
+    is_premium: false,
+    is_published: true,
+    view_count: 920,
+    created_at: '2025-06-03T10:00:00Z',
+    updated_at: '2025-06-03T10:00:00Z',
+    content: {
+      title: 'Technology & Digital Life Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 technology vocabulary words',
+        'Discuss digital life',
+        'Analyze tech impact'
+      ],
+      coreExplanation: `Technology vocabulary is essential for IELTS topics about modern life. This lesson covers terms for discussing technology and digital life.
+
+Understanding these terms helps you discuss technology effectively.`,
+      examples: [
+        { sentence: 'Technology transforms lives.', explanation: '"Technology" is applied science.' },
+        { sentence: 'Digital devices are everywhere.', explanation: '"Digital" means electronic.' },
+        { sentence: 'The internet connects people.', explanation: '"Internet" is global network.' },
+        { sentence: 'Social media influences opinions.', explanation: '"Social media" is online platforms.' },
+        { sentence: 'Smartphones are essential.', explanation: '"Smartphones" are mobile devices.' },
+        { sentence: 'Apps simplify tasks.', explanation: '"Apps" are applications.' },
+        { sentence: 'Data is valuable.', explanation: '"Data" is information.' },
+        { sentence: 'Privacy is important.', explanation: '"Privacy" is personal space.' },
+        { sentence: 'Cybersecurity protects systems.', explanation: '"Cybersecurity" is digital protection.' },
+        { sentence: 'Automation increases efficiency.', explanation: '"Automation" is automatic processes.' },
+        { sentence: 'AI is advancing rapidly.', explanation: '"AI" is artificial intelligence.' },
+        { sentence: 'Virtual reality is immersive.', explanation: '"Virtual reality" is simulated environment.' },
+        { sentence: 'Cloud computing is convenient.', explanation: '"Cloud computing" is remote storage.' },
+        { sentence: 'Connectivity is essential.', explanation: '"Connectivity" is being connected.' },
+        { sentence: 'Innovation drives progress.', explanation: '"Innovation" is new ideas.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "digital" and "electronic"', correction: '"Digital" = binary data; "electronic" = using electricity', explanation: 'Digital is more specific.' },
+        { mistake: 'Using "technology" as countable', correction: '"Technology" is usually uncountable', explanation: 'Say "technologies" for types.' },
+        { mistake: 'Confusing "internet" and "web"', correction: '"Internet" = network; "web" = content on internet', explanation: 'Web is part of internet.' }
+      ],
+      miniPractice: [
+        { question: '_____ has transformed how we communicate.', type: 'fill-blank' },
+        { question: 'Which term means automatic processes?', options: ['Automation', 'Innovation', 'Connectivity', 'Privacy'], type: 'multiple-choice' },
+        { question: 'Discuss the impact of technology on daily life.', type: 'rewrite' },
+        { question: '_____ media has changed how we get news.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Technology',
+        'Automation',
+        'Technology has transformed daily life by making communication instant, information accessible, and tasks more efficient.',
+        'Social'
+      ],
+      quickRecap: 'Key technology terms: technology, digital, internet, social media, smartphones, apps, data, privacy, cybersecurity, automation, AI, virtual reality, cloud computing, connectivity, innovation. Use these for technology topics!',
+      collocations: [
+        'modern technology', 'digital age', 'internet access', 'social media platforms',
+        'smartphone users', 'mobile apps', 'personal data', 'online privacy',
+        'cybersecurity threats', 'industrial automation', 'artificial intelligence', 'virtual reality'
+      ],
+      synonyms: [
+        { word: 'technology', synonyms: ['tech', 'innovation', 'advancement', 'development'] },
+        { word: 'digital', synonyms: ['electronic', 'online', 'virtual', 'computerized'] },
+        { word: 'innovation', synonyms: ['invention', 'advancement', 'breakthrough', 'development'] }
+      ],
+      speakingLines: [
+        'Technology has changed our lives significantly.',
+        'I rely on digital devices daily.',
+        'Social media has both benefits and drawbacks.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-final-2',
+    title: 'Work & Employment Vocabulary',
+    slug: 'work-employment-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Work',
+    description: 'Vocabulary for discussing work and employment.',
+    is_premium: true,
+    is_published: true,
+    view_count: 880,
+    created_at: '2025-06-04T10:00:00Z',
+    updated_at: '2025-06-04T10:00:00Z',
+    content: {
+      title: 'Work & Employment Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 work vocabulary words',
+        'Discuss employment',
+        'Describe careers'
+      ],
+      coreExplanation: `Work vocabulary is essential for IELTS Speaking topics about careers. This lesson covers terms for discussing work and employment.
+
+Understanding these terms helps you discuss work effectively.`,
+      examples: [
+        { sentence: 'Employment rates are rising.', explanation: '"Employment" is having a job.' },
+        { sentence: 'The workforce is diverse.', explanation: '"Workforce" is all workers.' },
+        { sentence: 'Career development is important.', explanation: '"Career" is professional path.' },
+        { sentence: 'Job satisfaction matters.', explanation: '"Job satisfaction" is work happiness.' },
+        { sentence: 'Salaries vary by industry.', explanation: '"Salaries" are regular pay.' },
+        { sentence: 'Benefits attract employees.', explanation: '"Benefits" are extra compensation.' },
+        { sentence: 'Promotion rewards performance.', explanation: '"Promotion" is advancement.' },
+        { sentence: 'Recruitment is competitive.', explanation: '"Recruitment" is hiring.' },
+        { sentence: 'Training improves skills.', explanation: '"Training" is teaching.' },
+        { sentence: 'Productivity is measured.', explanation: '"Productivity" is output rate.' },
+        { sentence: 'Teamwork is essential.', explanation: '"Teamwork" is collaboration.' },
+        { sentence: 'Leadership guides teams.', explanation: '"Leadership" is directing.' },
+        { sentence: 'Deadlines create pressure.', explanation: '"Deadlines" are time limits.' },
+        { sentence: 'Flexibility is valued.', explanation: '"Flexibility" is adaptability.' },
+        { sentence: 'Remote work is growing.', explanation: '"Remote work" is working from home.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "job" and "career"', correction: '"Job" = specific position; "career" = long-term path', explanation: 'Career is broader.' },
+        { mistake: 'Using "salary" and "wage" interchangeably', correction: '"Salary" = fixed annual; "wage" = hourly', explanation: 'These differ in calculation.' },
+        { mistake: 'Confusing "employer" and "employee"', correction: '"Employer" = company; "employee" = worker', explanation: 'These are opposite roles.' }
+      ],
+      miniPractice: [
+        { question: '_____ satisfaction is important for well-being.', type: 'fill-blank' },
+        { question: 'Which term means working from home?', options: ['Remote work', 'Teamwork', 'Recruitment', 'Promotion'], type: 'multiple-choice' },
+        { question: 'Discuss what makes a good job.', type: 'rewrite' },
+        { question: 'Good _____ is essential for team success.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Job',
+        'Remote work',
+        'A good job offers fair salary, opportunities for growth, work-life balance, and a positive work environment.',
+        'leadership/teamwork'
+      ],
+      quickRecap: 'Key work terms: employment, workforce, career, job satisfaction, salaries, benefits, promotion, recruitment, training, productivity, teamwork, leadership, deadlines, flexibility, remote work. Use these for work topics!',
+      collocations: [
+        'full employment', 'skilled workforce', 'career development', 'job satisfaction',
+        'competitive salaries', 'employee benefits', 'earn promotion', 'recruitment process',
+        'professional training', 'increase productivity', 'effective teamwork', 'strong leadership'
+      ],
+      synonyms: [
+        { word: 'employment', synonyms: ['work', 'job', 'occupation', 'position'] },
+        { word: 'career', synonyms: ['profession', 'vocation', 'occupation', 'field'] },
+        { word: 'salary', synonyms: ['pay', 'wage', 'income', 'earnings'] }
+      ],
+      speakingLines: [
+        'Job satisfaction is important to me.',
+        'Career development requires continuous learning.',
+        'Remote work has become more common.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-final-3',
+    title: 'Health & Wellbeing Vocabulary',
+    slug: 'health-wellbeing-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Health',
+    description: 'Vocabulary for discussing health and wellbeing.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2025-06-05T10:00:00Z',
+    updated_at: '2025-06-05T10:00:00Z',
+    content: {
+      title: 'Health & Wellbeing Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 health vocabulary words',
+        'Discuss wellbeing',
+        'Analyze health topics'
+      ],
+      coreExplanation: `Health vocabulary is essential for IELTS topics about lifestyle. This lesson covers terms for discussing health and wellbeing.
+
+Understanding these terms helps you discuss health effectively.`,
+      examples: [
+        { sentence: 'Health is wealth.', explanation: '"Health" is physical condition.' },
+        { sentence: 'Wellbeing includes mental health.', explanation: '"Wellbeing" is overall state.' },
+        { sentence: 'Fitness improves quality of life.', explanation: '"Fitness" is physical condition.' },
+        { sentence: 'Nutrition affects health.', explanation: '"Nutrition" is food intake.' },
+        { sentence: 'Exercise is beneficial.', explanation: '"Exercise" is physical activity.' },
+        { sentence: 'Prevention is better than cure.', explanation: '"Prevention" is stopping before.' },
+        { sentence: 'Treatment cures illness.', explanation: '"Treatment" is medical care.' },
+        { sentence: 'Symptoms indicate problems.', explanation: '"Symptoms" are signs of illness.' },
+        { sentence: 'Diagnosis identifies conditions.', explanation: '"Diagnosis" is identification.' },
+        { sentence: 'Recovery takes time.', explanation: '"Recovery" is getting better.' },
+        { sentence: 'Immunity protects us.', explanation: '"Immunity" is disease resistance.' },
+        { sentence: 'Stress affects health.', explanation: '"Stress" is mental pressure.' },
+        { sentence: 'Sleep is essential.', explanation: '"Sleep" is rest.' },
+        { sentence: 'Lifestyle choices matter.', explanation: '"Lifestyle" is way of living.' },
+        { sentence: 'Healthcare is a right.', explanation: '"Healthcare" is medical services.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "healthy" and "healthful"', correction: '"Healthy" = in good health; "healthful" = promoting health', explanation: 'These differ in meaning.' },
+        { mistake: 'Using "disease" and "illness" interchangeably', correction: '"Disease" = medical condition; "illness" = feeling unwell', explanation: 'Disease is more specific.' },
+        { mistake: 'Confusing "cure" and "treatment"', correction: '"Cure" = complete recovery; "treatment" = medical care', explanation: 'Treatment may not cure.' }
+      ],
+      miniPractice: [
+        { question: 'Good _____ is essential for a happy life.', type: 'fill-blank' },
+        { question: 'Which term means disease resistance?', options: ['Immunity', 'Fitness', 'Nutrition', 'Recovery'], type: 'multiple-choice' },
+        { question: 'Discuss how to maintain good health.', type: 'rewrite' },
+        { question: '_____ is better than cure.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'health',
+        'Immunity',
+        'Good health can be maintained through regular exercise, balanced nutrition, adequate sleep, and managing stress effectively.',
+        'Prevention'
+      ],
+      quickRecap: 'Key health terms: health, wellbeing, fitness, nutrition, exercise, prevention, treatment, symptoms, diagnosis, recovery, immunity, stress, sleep, lifestyle, healthcare. Use these for health topics!',
+      collocations: [
+        'good health', 'mental wellbeing', 'physical fitness', 'balanced nutrition',
+        'regular exercise', 'disease prevention', 'medical treatment', 'common symptoms',
+        'accurate diagnosis', 'full recovery', 'strong immunity', 'manage stress'
+      ],
+      synonyms: [
+        { word: 'health', synonyms: ['wellness', 'wellbeing', 'fitness', 'condition'] },
+        { word: 'exercise', synonyms: ['workout', 'training', 'activity', 'fitness'] },
+        { word: 'treatment', synonyms: ['therapy', 'care', 'medication', 'remedy'] }
+      ],
+      speakingLines: [
+        'Health is the most important thing.',
+        'Regular exercise improves wellbeing.',
+        'Prevention is better than cure.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-final-4',
+    title: 'Society & Culture Vocabulary',
+    slug: 'society-culture-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Society',
+    description: 'Vocabulary for discussing society and culture.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-06-06T10:00:00Z',
+    updated_at: '2025-06-06T10:00:00Z',
+    content: {
+      title: 'Society & Culture Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 society vocabulary words',
+        'Discuss culture',
+        'Analyze social issues'
+      ],
+      coreExplanation: `Society vocabulary is essential for IELTS Writing topics. This lesson covers terms for discussing society and culture.
+
+Understanding these terms helps you discuss social topics effectively.`,
+      examples: [
+        { sentence: 'Society is changing.', explanation: '"Society" is community of people.' },
+        { sentence: 'Culture shapes behavior.', explanation: '"Culture" is shared beliefs.' },
+        { sentence: 'Traditions are valued.', explanation: '"Traditions" are customs.' },
+        { sentence: 'Values guide decisions.', explanation: '"Values" are principles.' },
+        { sentence: 'Norms define behavior.', explanation: '"Norms" are standards.' },
+        { sentence: 'Identity is complex.', explanation: '"Identity" is who we are.' },
+        { sentence: 'Diversity enriches society.', explanation: '"Diversity" is variety.' },
+        { sentence: 'Integration promotes unity.', explanation: '"Integration" is combining.' },
+        { sentence: 'Community supports members.', explanation: '"Community" is group.' },
+        { sentence: 'Citizenship involves rights.', explanation: '"Citizenship" is membership.' },
+        { sentence: 'Equality is essential.', explanation: '"Equality" is being equal.' },
+        { sentence: 'Justice ensures fairness.', explanation: '"Justice" is fairness.' },
+        { sentence: 'Freedom is valued.', explanation: '"Freedom" is liberty.' },
+        { sentence: 'Responsibility accompanies rights.', explanation: '"Responsibility" is duty.' },
+        { sentence: 'Solidarity unites people.', explanation: '"Solidarity" is unity.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "society" and "community"', correction: '"Society" = larger group; "community" = local group', explanation: 'Society is broader.' },
+        { mistake: 'Using "culture" only for arts', correction: '"Culture" includes beliefs, customs, values', explanation: 'Culture is broader.' },
+        { mistake: 'Confusing "equality" and "equity"', correction: '"Equality" = same treatment; "equity" = fair treatment', explanation: 'Equity considers differences.' }
+      ],
+      miniPractice: [
+        { question: '_____ is constantly evolving.', type: 'fill-blank' },
+        { question: 'Which term means variety in a group?', options: ['Diversity', 'Integration', 'Solidarity', 'Citizenship'], type: 'multiple-choice' },
+        { question: 'Discuss the importance of cultural diversity.', type: 'rewrite' },
+        { question: '_____ and responsibility go hand in hand.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Society/Culture',
+        'Diversity',
+        'Cultural diversity enriches society by bringing different perspectives, traditions, and ideas that promote creativity and understanding.',
+        'Freedom/Rights'
+      ],
+      quickRecap: 'Key society terms: society, culture, traditions, values, norms, identity, diversity, integration, community, citizenship, equality, justice, freedom, responsibility, solidarity. Use these for society topics!',
+      collocations: [
+        'modern society', 'cultural heritage', 'ancient traditions', 'core values',
+        'social norms', 'cultural identity', 'cultural diversity', 'social integration',
+        'local community', 'active citizenship', 'gender equality', 'social justice'
+      ],
+      synonyms: [
+        { word: 'society', synonyms: ['community', 'civilization', 'population', 'public'] },
+        { word: 'culture', synonyms: ['heritage', 'traditions', 'customs', 'way of life'] },
+        { word: 'diversity', synonyms: ['variety', 'difference', 'heterogeneity', 'multiplicity'] }
+      ],
+      speakingLines: [
+        'Society is constantly changing.',
+        'Culture shapes our identity.',
+        'Diversity enriches our communities.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-final-5',
+    title: 'Global Issues Vocabulary',
+    slug: 'global-issues-vocabulary',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Global',
+    description: 'Vocabulary for discussing global issues and challenges.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-06-07T10:00:00Z',
+    updated_at: '2025-06-07T10:00:00Z',
+    content: {
+      title: 'Global Issues Vocabulary',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'Master 25 global issues vocabulary words',
+        'Discuss world challenges',
+        'Analyze international topics'
+      ],
+      coreExplanation: `Global issues vocabulary is essential for IELTS Writing Task 2. This lesson covers terms for discussing world challenges.
+
+Understanding these terms helps you discuss global topics effectively.`,
+      examples: [
+        { sentence: 'Globalization connects economies.', explanation: '"Globalization" is worldwide integration.' },
+        { sentence: 'Climate change threatens ecosystems.', explanation: '"Climate change" is environmental shift.' },
+        { sentence: 'Poverty affects millions.', explanation: '"Poverty" is lack of resources.' },
+        { sentence: 'Inequality persists globally.', explanation: '"Inequality" is unequal distribution.' },
+        { sentence: 'Migration is increasing.', explanation: '"Migration" is movement of people.' },
+        { sentence: 'Conflict destabilizes regions.', explanation: '"Conflict" is fighting.' },
+        { sentence: 'Terrorism threatens security.', explanation: '"Terrorism" is political violence.' },
+        { sentence: 'Pandemics spread rapidly.', explanation: '"Pandemics" are global diseases.' },
+        { sentence: 'Sustainability is crucial.', explanation: '"Sustainability" is long-term viability.' },
+        { sentence: 'Development varies by region.', explanation: '"Development" is progress.' },
+        { sentence: 'Cooperation solves problems.', explanation: '"Cooperation" is working together.' },
+        { sentence: 'Diplomacy prevents conflict.', explanation: '"Diplomacy" is negotiation.' },
+        { sentence: 'Humanitarian aid helps.', explanation: '"Humanitarian" is helping people.' },
+        { sentence: 'Human rights are universal.', explanation: '"Human rights" are basic freedoms.' },
+        { sentence: 'Global governance is needed.', explanation: '"Global governance" is international management.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "global" and "international"', correction: '"Global" = worldwide; "international" = between nations', explanation: 'Global is broader.' },
+        { mistake: 'Using "third world" inappropriately', correction: 'Use "developing countries" instead', explanation: '"Third world" is outdated.' },
+        { mistake: 'Confusing "refugee" and "migrant"', correction: '"Refugee" = fleeing danger; "migrant" = moving voluntarily', explanation: 'These have different causes.' }
+      ],
+      miniPractice: [
+        { question: '_____ is one of the biggest challenges facing humanity.', type: 'fill-blank' },
+        { question: 'Which term means worldwide integration?', options: ['Globalization', 'Migration', 'Diplomacy', 'Cooperation'], type: 'multiple-choice' },
+        { question: 'Discuss a major global issue.', type: 'rewrite' },
+        { question: 'International _____ is needed to address global challenges.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Climate change/Poverty',
+        'Globalization',
+        'Climate change is a major global issue that requires international cooperation to reduce emissions and protect ecosystems.',
+        'cooperation'
+      ],
+      quickRecap: 'Key global terms: globalization, climate change, poverty, inequality, migration, conflict, terrorism, pandemics, sustainability, development, cooperation, diplomacy, humanitarian, human rights, global governance. Use these for global topics!',
+      collocations: [
+        'economic globalization', 'combat climate change', 'extreme poverty', 'social inequality',
+        'mass migration', 'armed conflict', 'international terrorism', 'global pandemics',
+        'environmental sustainability', 'sustainable development', 'international cooperation', 'diplomatic relations'
+      ],
+      synonyms: [
+        { word: 'globalization', synonyms: ['internationalization', 'integration', 'interconnection', 'worldwide'] },
+        { word: 'poverty', synonyms: ['deprivation', 'hardship', 'need', 'destitution'] },
+        { word: 'cooperation', synonyms: ['collaboration', 'partnership', 'teamwork', 'alliance'] }
+      ],
+      speakingLines: [
+        'Globalization has both benefits and drawbacks.',
+        'Climate change requires urgent action.',
+        'International cooperation is essential.'
+      ]
+    }
   }
 ];
