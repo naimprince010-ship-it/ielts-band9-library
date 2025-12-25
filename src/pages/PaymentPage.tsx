@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Smartphone, Copy, CheckCircle, AlertCircle, ArrowLeft, Clock, Shield } from 'lucide-react';
+import { Smartphone, Copy, CheckCircle, AlertCircle, ArrowLeft, Clock, Shield, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,26 +9,26 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
-const BKASH_NUMBER = '01681354066';
+interface PaymentSettings {
+  bkash_number: string;
+  bkash_account_name: string;
+  monthly_price: number;
+  yearly_price: number;
+}
 
-const PACKAGES = {
-  monthly: {
-    name: 'Premium Monthly',
-    price: 299,
-    duration: '1 Month',
-  },
-  yearly: {
-    name: 'Premium Yearly',
-    price: 2499,
-    duration: '1 Year',
-  },
+const DEFAULT_SETTINGS: PaymentSettings = {
+  bkash_number: '01681354066',
+  bkash_account_name: 'IELTS Band 9',
+  monthly_price: 299,
+  yearly_price: 2499,
 };
 
 export function PaymentPage() {
   const [searchParams] = useSearchParams();
   const packageType = searchParams.get('package') as 'monthly' | 'yearly' || 'monthly';
-  const selectedPackage = PACKAGES[packageType] || PACKAGES.monthly;
 
+  const [settings, setSettings] = useState<PaymentSettings>(DEFAULT_SETTINGS);
+  const [loadingSettings, setLoadingSettings] = useState(true);
   const [transactionId, setTransactionId] = useState('');
   const [senderNumber, setSenderNumber] = useState('');
   const [loading, setLoading] = useState(false);
@@ -39,9 +39,46 @@ export function PaymentPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    loadPaymentSettings();
+  }, []);
+
+  const loadPaymentSettings = async () => {
+    if (!isSupabaseConfigured() || !supabase) {
+      setLoadingSettings(false);
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('site_settings')
+        .select('bkash_number, bkash_account_name, monthly_price, yearly_price')
+        .single();
+
+      if (data && !error) {
+        setSettings({
+          bkash_number: data.bkash_number || DEFAULT_SETTINGS.bkash_number,
+          bkash_account_name: data.bkash_account_name || DEFAULT_SETTINGS.bkash_account_name,
+          monthly_price: data.monthly_price || DEFAULT_SETTINGS.monthly_price,
+          yearly_price: data.yearly_price || DEFAULT_SETTINGS.yearly_price,
+        });
+      }
+    } catch (err) {
+      console.log('Using default payment settings');
+    } finally {
+      setLoadingSettings(false);
+    }
+  };
+
+  const selectedPackage = {
+    name: packageType === 'yearly' ? 'Premium Yearly' : 'Premium Monthly',
+    price: packageType === 'yearly' ? settings.yearly_price : settings.monthly_price,
+    duration: packageType === 'yearly' ? '1 Year' : '1 Month',
+  };
+
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(BKASH_NUMBER);
+      await navigator.clipboard.writeText(settings.bkash_number);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -110,23 +147,31 @@ export function PaymentPage() {
     }
   };
 
-  if (!user) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <CardTitle>Login Required</CardTitle>
-            <CardDescription>Please login to make a payment</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button onClick={() => navigate('/login')} className="w-full">
-              Go to Login
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+    if (loadingSettings) {
+      return (
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+          <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+        </div>
+      );
+    }
+
+    if (!user) {
+      return (
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+          <Card className="w-full max-w-md">
+            <CardHeader className="text-center">
+              <CardTitle>Login Required</CardTitle>
+              <CardDescription>Please login to make a payment</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button onClick={() => navigate('/login')} className="w-full">
+                Go to Login
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      );
+    }
 
   if (success) {
     return (
@@ -226,7 +271,7 @@ export function PaymentPage() {
                       <span>Enter this bKash number:</span>
                       <div className="flex items-center gap-2 mt-2">
                         <code className="bg-gray-100 px-4 py-2 rounded-lg text-lg font-mono font-bold">
-                          {BKASH_NUMBER}
+                          {settings.bkash_number}
                         </code>
                         <Button 
                           variant="outline" 

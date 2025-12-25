@@ -36,6 +36,7 @@ import { SiteSettings } from '@/components/admin/SiteSettings';
 import { UserManagement } from '@/components/admin/UserManagement';
 import { CouponManagement } from '@/components/admin/CouponManagement';
 import { ReadingPassageManagement } from '@/components/admin/ReadingPassageManagement';
+import { PaymentSettings } from '@/components/admin/PaymentSettings';
 import { Lesson, LessonType, LessonLevel, LessonContent } from '@/types';
 import { GRAMMAR_TOPICS, VOCABULARY_TOPICS } from '@/data/sampleLessons';
 import { generateLessonWithAI } from '@/services/aiLessonGenerator';
@@ -414,10 +415,14 @@ export function AdminPage() {
                                                                                   <BarChart3 className="h-4 w-4" />
                                                                                   Vocab Coverage
                                                                                 </TabsTrigger>
-                                                                                                                                                                <TabsTrigger value="site-settings" className="gap-2">
-                                                                                                                                                                  <Settings className="h-4 w-4" />
-                                                                                                                                                                  Site Settings
-                                                                                                                                                                </TabsTrigger>
+                                                                                                                                                                                                                                                                                                                                <TabsTrigger value="site-settings" className="gap-2">
+                                                                                                                                                                                                                                                                                                                                  <Settings className="h-4 w-4" />
+                                                                                                                                                                                                                                                                                                                                  Site Settings
+                                                                                                                                                                                                                                                                                                                                </TabsTrigger>
+                                                                                                                                                                                                                                                                                                                                <TabsTrigger value="payment-settings" className="gap-2">
+                                                                                                                                                                                                                                                                                                                                  <CreditCard className="h-4 w-4" />
+                                                                                                                                                                                                                                                                                                                                  Payment
+                                                                                                                                                                                                                                                                                                                                </TabsTrigger>
                                                                                                                                                                                                                                                                                                                                 <TabsTrigger value="user-management" className="gap-2">
                                                                                                                                                                                                                                                                                                                                   <ShieldCheck className="h-4 w-4" />
                                                                                                                                                                                                                                                                                                                                   Users
@@ -549,11 +554,15 @@ export function AdminPage() {
                                                   <VocabularyCoverageDashboard />
                                                 </TabsContent>
 
-                                                                                        <TabsContent value="site-settings">
-                                                                                          <SiteSettings />
-                                                                                        </TabsContent>
+                                                                                                                                                                                <TabsContent value="site-settings">
+                                                                                                                                                                                  <SiteSettings />
+                                                                                                                                                                                </TabsContent>
 
-                                                                                                                                                                        <TabsContent value="user-management">
+                                                                                                                                                                                <TabsContent value="payment-settings">
+                                                                                                                                                                                  <PaymentSettings />
+                                                                                                                                                                                </TabsContent>
+
+                                                                                                                                                                                                                                                                <TabsContent value="user-management">
                                                                                                                                                                           <UserManagement />
                                                                                                                                                                         </TabsContent>
 
