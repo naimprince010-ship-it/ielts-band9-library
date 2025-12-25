@@ -61,11 +61,27 @@ export function Navbar() {
                                             <Link to="/quiz" className={navLinkClass('/quiz')}>
                                               Quiz
                                             </Link>
-                                            <Link to="/pricing" className={navLinkClass('/pricing')}>
-                                              Pricing
-                                            </Link>
+                                                        <Link to="/pricing" className={navLinkClass('/pricing')}>
+                                                          Pricing
+                                                        </Link>
+                                                        <DropdownMenu>
+                                                          <DropdownMenuTrigger className={`font-medium transition-colors ${isActive('/grammar-exercises') || isActive('/essay-bank') ? 'text-indigo-600' : 'text-gray-600 hover:text-indigo-600'} flex items-center gap-1`}>
+                                                            Practice
+                                                            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                                                          </DropdownMenuTrigger>
+                                                          <DropdownMenuContent align="end">
+                                                            <DropdownMenuItem onClick={() => navigate('/grammar-exercises')}>
+                                                              <PenTool className="h-4 w-4 mr-2" />
+                                                              Grammar Exercises
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem onClick={() => navigate('/essay-bank')}>
+                                                              <FileText className="h-4 w-4 mr-2" />
+                                                              Essay Bank
+                                                            </DropdownMenuItem>
+                                                          </DropdownMenuContent>
+                                                        </DropdownMenu>
             
-            {user ? (
+                        {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="flex items-center space-x-2">
@@ -196,14 +212,28 @@ export function Navbar() {
                                                 >
                                                   Quiz
                                                 </Link>
-                                                <Link
-                                                  to="/pricing"
-                                                  className={`block ${navLinkClass('/pricing')}`}
-                                                  onClick={() => setMobileMenuOpen(false)}
-                                                >
-                                                  Pricing
-                                                </Link>
-                        {user ? (
+                                                                        <Link
+                                                                          to="/pricing"
+                                                                          className={`block ${navLinkClass('/pricing')}`}
+                                                                          onClick={() => setMobileMenuOpen(false)}
+                                                                        >
+                                                                          Pricing
+                                                                        </Link>
+                                                                        <Link
+                                                                          to="/grammar-exercises"
+                                                                          className={`block ${navLinkClass('/grammar-exercises')}`}
+                                                                          onClick={() => setMobileMenuOpen(false)}
+                                                                        >
+                                                                          Grammar Exercises
+                                                                        </Link>
+                                                                        <Link
+                                                                          to="/essay-bank"
+                                                                          className={`block ${navLinkClass('/essay-bank')}`}
+                                                                          onClick={() => setMobileMenuOpen(false)}
+                                                                        >
+                                                                          Essay Bank
+                                                                        </Link>
+                                                {user ? (
                           <>
                             <Link
                               to="/profile"
