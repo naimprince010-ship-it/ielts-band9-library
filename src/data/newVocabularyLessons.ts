@@ -6762,5 +6762,1379 @@ This lesson covers food culture, dining experiences, and eating customs. Underst
         'Communal dining strengthens social bonds and cultural connections.'
       ]
     }
+  },
+  // ============================================
+  // BATCH 15: Collocations (10 lessons)
+  // ============================================
+  {
+    id: 'vocab-collocations-1',
+    title: 'Academic Collocations Part 1',
+    slug: 'academic-collocations-1',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Collocations',
+    description: 'Essential academic collocations for IELTS Writing Task 2 and Speaking.',
+    is_premium: true,
+    is_published: true,
+    view_count: 920,
+    created_at: '2024-10-25T10:00:00Z',
+    updated_at: '2024-10-25T10:00:00Z',
+    content: {
+      title: 'Academic Collocations Part 1',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 academic collocations',
+        'Use natural word combinations',
+        'Improve writing fluency'
+      ],
+      coreExplanation: `Collocations are words that naturally go together. Using correct collocations is essential for Band 7+ as it demonstrates natural language use.
+
+This lesson covers academic collocations commonly used in IELTS Writing and Speaking. Mastering these combinations will make your language sound more natural and sophisticated.`,
+      examples: [
+        { sentence: 'The government should take measures to address this issue.', explanation: '"Take measures" is a strong collocation meaning to act.' },
+        { sentence: 'This raises concerns about environmental protection.', explanation: '"Raise concerns" means to bring up worries.' },
+        { sentence: 'We need to draw conclusions from the evidence.', explanation: '"Draw conclusions" means to form judgments.' },
+        { sentence: 'The study provides evidence for this theory.', explanation: '"Provide evidence" means to give proof.' },
+        { sentence: 'This poses a significant challenge to policymakers.', explanation: '"Pose a challenge" means to present a difficulty.' },
+        { sentence: 'The data strongly suggests a correlation.', explanation: '"Strongly suggest" indicates compelling evidence.' },
+        { sentence: 'We must address the underlying causes.', explanation: '"Underlying causes" are root reasons.' },
+        { sentence: 'This has far-reaching implications for society.', explanation: '"Far-reaching implications" are widespread effects.' },
+        { sentence: 'The research sheds light on this phenomenon.', explanation: '"Shed light on" means to clarify.' },
+        { sentence: 'This plays a crucial role in development.', explanation: '"Play a role" means to have a function.' },
+        { sentence: 'We should place emphasis on education.', explanation: '"Place emphasis" means to stress importance.' },
+        { sentence: 'The policy has had a profound impact.', explanation: '"Profound impact" is a deep effect.' },
+        { sentence: 'This bears a striking resemblance to previous cases.', explanation: '"Bear resemblance" means to be similar.' },
+        { sentence: 'The government should allocate resources effectively.', explanation: '"Allocate resources" means to distribute assets.' },
+        { sentence: 'This warrants further investigation.', explanation: '"Warrant investigation" means to deserve study.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Make measures', correction: 'Take measures', explanation: 'We "take" measures, not "make" them.' },
+        { mistake: 'Do conclusions', correction: 'Draw conclusions', explanation: 'We "draw" conclusions, not "do" them.' },
+        { mistake: 'Give light on', correction: 'Shed light on', explanation: 'We "shed" light on something, not "give" light.' }
+      ],
+      miniPractice: [
+        { question: 'The government should _____ measures to reduce pollution.', type: 'fill-blank' },
+        { question: 'Which collocation is correct?', options: ['make a decision', 'do a decision', 'have a decision', 'give a decision'], type: 'multiple-choice' },
+        { question: 'Rewrite using a collocation: "This shows the reasons clearly."', type: 'rewrite' },
+        { question: 'This _____ a significant challenge to educators.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'take',
+        'make a decision',
+        'This sheds light on the underlying causes.',
+        'poses'
+      ],
+      quickRecap: 'Key collocations: "take measures", "raise concerns", "draw conclusions", "provide evidence", "pose a challenge", "shed light on", "play a role", "place emphasis", "profound impact", "warrant investigation". Use these naturally!',
+      collocations: [
+        'take measures', 'raise concerns', 'draw conclusions', 'provide evidence',
+        'pose a challenge', 'strongly suggest', 'underlying causes', 'far-reaching implications',
+        'shed light on', 'play a role', 'place emphasis', 'profound impact'
+      ],
+      synonyms: [
+        { word: 'take measures', synonyms: ['take action', 'take steps', 'implement measures', 'adopt measures'] },
+        { word: 'raise concerns', synonyms: ['express concerns', 'voice concerns', 'highlight concerns', 'bring up concerns'] },
+        { word: 'draw conclusions', synonyms: ['reach conclusions', 'come to conclusions', 'arrive at conclusions', 'form conclusions'] }
+      ],
+      speakingLines: [
+        'The government should take measures to address this pressing issue.',
+        'This research sheds light on the underlying causes of the problem.',
+        'Education plays a crucial role in economic development.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-collocations-2',
+    title: 'Academic Collocations Part 2',
+    slug: 'academic-collocations-2',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Collocations',
+    description: 'More essential academic collocations for achieving Band 7+ in IELTS.',
+    is_premium: true,
+    is_published: true,
+    view_count: 880,
+    created_at: '2024-10-28T10:00:00Z',
+    updated_at: '2024-10-28T10:00:00Z',
+    content: {
+      title: 'Academic Collocations Part 2',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 more academic collocations',
+        'Enhance academic writing',
+        'Sound more natural'
+      ],
+      coreExplanation: `Continuing from Part 1, this lesson covers more academic collocations essential for IELTS success. These combinations appear frequently in academic texts and high-scoring IELTS responses.
+
+Using these collocations correctly demonstrates lexical sophistication and natural language use.`,
+      examples: [
+        { sentence: 'The findings lend support to this hypothesis.', explanation: '"Lend support" means to provide backing.' },
+        { sentence: 'This calls into question previous assumptions.', explanation: '"Call into question" means to challenge.' },
+        { sentence: 'We must strike a balance between work and life.', explanation: '"Strike a balance" means to find equilibrium.' },
+        { sentence: 'The policy has come under scrutiny.', explanation: '"Come under scrutiny" means to be examined.' },
+        { sentence: 'This runs counter to conventional wisdom.', explanation: '"Run counter to" means to contradict.' },
+        { sentence: 'The evidence points to a clear trend.', explanation: '"Point to" means to indicate.' },
+        { sentence: 'We should bear in mind the limitations.', explanation: '"Bear in mind" means to remember.' },
+        { sentence: 'This brings about significant changes.', explanation: '"Bring about" means to cause.' },
+        { sentence: 'The study takes into account various factors.', explanation: '"Take into account" means to consider.' },
+        { sentence: 'This gives rise to new challenges.', explanation: '"Give rise to" means to cause.' },
+        { sentence: 'We must come to terms with reality.', explanation: '"Come to terms with" means to accept.' },
+        { sentence: 'The policy falls short of expectations.', explanation: '"Fall short of" means to fail to meet.' },
+        { sentence: 'This stands in stark contrast to previous findings.', explanation: '"Stand in contrast" means to differ.' },
+        { sentence: 'The research fills a gap in our knowledge.', explanation: '"Fill a gap" means to address a deficiency.' },
+        { sentence: 'This paves the way for future developments.', explanation: '"Pave the way" means to enable.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Make a balance', correction: 'Strike a balance', explanation: 'We "strike" a balance, not "make" one.' },
+        { mistake: 'Take in mind', correction: 'Bear in mind', explanation: 'We "bear" something in mind, not "take" it.' },
+        { mistake: 'Come under question', correction: 'Call into question', explanation: 'We "call" something into question.' }
+      ],
+      miniPractice: [
+        { question: 'We must _____ a balance between economic growth and environmental protection.', type: 'fill-blank' },
+        { question: 'Which collocation means "to contradict"?', options: ['run counter to', 'run against', 'go counter to', 'stand counter to'], type: 'multiple-choice' },
+        { question: 'Rewrite using a collocation: "This causes new problems."', type: 'rewrite' },
+        { question: 'The policy has _____ under scrutiny recently.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'strike',
+        'run counter to',
+        'This gives rise to new challenges.',
+        'come'
+      ],
+      quickRecap: 'Key collocations: "lend support", "call into question", "strike a balance", "come under scrutiny", "run counter to", "bear in mind", "bring about", "take into account", "give rise to", "pave the way". Master these for Band 7+!',
+      collocations: [
+        'lend support', 'call into question', 'strike a balance', 'come under scrutiny',
+        'run counter to', 'point to', 'bear in mind', 'bring about',
+        'take into account', 'give rise to', 'fall short of', 'pave the way'
+      ],
+      synonyms: [
+        { word: 'strike a balance', synonyms: ['find a balance', 'achieve a balance', 'maintain a balance', 'reach a balance'] },
+        { word: 'bring about', synonyms: ['cause', 'lead to', 'result in', 'give rise to'] },
+        { word: 'take into account', synonyms: ['consider', 'factor in', 'allow for', 'bear in mind'] }
+      ],
+      speakingLines: [
+        'We must strike a balance between economic development and environmental protection.',
+        'This research calls into question some long-held assumptions.',
+        'The new policy paves the way for significant reforms.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-collocations-3',
+    title: 'Business & Economy Collocations',
+    slug: 'business-economy-collocations',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Collocations',
+    description: 'Essential collocations for discussing business and economic topics in IELTS.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2024-11-01T10:00:00Z',
+    updated_at: '2024-11-01T10:00:00Z',
+    content: {
+      title: 'Business & Economy Collocations',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 business collocations',
+        'Discuss economic topics naturally',
+        'Improve IELTS Writing Task 2'
+      ],
+      coreExplanation: `Business and economic topics are common in IELTS. Using the right collocations when discussing these topics will significantly improve your score.
+
+This lesson covers collocations frequently used in business and economic contexts.`,
+      examples: [
+        { sentence: 'The company has experienced rapid growth.', explanation: '"Rapid growth" is fast expansion.' },
+        { sentence: 'We need to boost the economy.', explanation: '"Boost the economy" means to stimulate it.' },
+        { sentence: 'The government should create jobs.', explanation: '"Create jobs" means to generate employment.' },
+        { sentence: 'Inflation has risen sharply.', explanation: '"Rise sharply" means to increase dramatically.' },
+        { sentence: 'The market has become highly competitive.', explanation: '"Highly competitive" means very competitive.' },
+        { sentence: 'Companies must cut costs to survive.', explanation: '"Cut costs" means to reduce expenses.' },
+        { sentence: 'The business has generated significant revenue.', explanation: '"Generate revenue" means to produce income.' },
+        { sentence: 'We should attract foreign investment.', explanation: '"Attract investment" means to draw capital.' },
+        { sentence: 'The economy has entered a recession.', explanation: '"Enter a recession" means to begin economic decline.' },
+        { sentence: 'Companies must meet consumer demand.', explanation: '"Meet demand" means to satisfy needs.' },
+        { sentence: 'The policy aims to reduce unemployment.', explanation: '"Reduce unemployment" means to lower joblessness.' },
+        { sentence: 'Businesses should maximize profits.', explanation: '"Maximize profits" means to increase earnings.' },
+        { sentence: 'The company has expanded its operations.', explanation: '"Expand operations" means to grow business activities.' },
+        { sentence: 'We need to stimulate economic growth.', explanation: '"Stimulate growth" means to encourage expansion.' },
+        { sentence: 'The market has reached saturation point.', explanation: '"Reach saturation" means to become fully supplied.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Make jobs', correction: 'Create jobs', explanation: 'We "create" jobs, not "make" them.' },
+        { mistake: 'Do profits', correction: 'Make/maximize profits', explanation: 'We "make" or "maximize" profits.' },
+        { mistake: 'Grow the economy', correction: 'Boost/stimulate the economy', explanation: 'We "boost" or "stimulate" the economy.' }
+      ],
+      miniPractice: [
+        { question: 'The government should _____ jobs to reduce unemployment.', type: 'fill-blank' },
+        { question: 'Which collocation is correct?', options: ['cut costs', 'reduce costs', 'lower costs', 'all are correct'], type: 'multiple-choice' },
+        { question: 'Rewrite using a collocation: "The company made more money."', type: 'rewrite' },
+        { question: 'Inflation has _____ sharply this year.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'create',
+        'all are correct',
+        'The company generated significant revenue.',
+        'risen'
+      ],
+      quickRecap: 'Key collocations: "rapid growth", "boost the economy", "create jobs", "rise sharply", "cut costs", "generate revenue", "attract investment", "meet demand", "maximize profits", "stimulate growth". Use these for economic topics!',
+      collocations: [
+        'rapid growth', 'boost the economy', 'create jobs', 'rise sharply',
+        'highly competitive', 'cut costs', 'generate revenue', 'attract investment',
+        'enter a recession', 'meet demand', 'reduce unemployment', 'maximize profits'
+      ],
+      synonyms: [
+        { word: 'rapid growth', synonyms: ['fast growth', 'quick expansion', 'swift development', 'accelerated growth'] },
+        { word: 'cut costs', synonyms: ['reduce costs', 'lower expenses', 'trim spending', 'minimize costs'] },
+        { word: 'boost the economy', synonyms: ['stimulate the economy', 'strengthen the economy', 'revitalize the economy', 'invigorate the economy'] }
+      ],
+      speakingLines: [
+        'The government should create jobs to boost the economy.',
+        'Companies must cut costs while maintaining quality to remain competitive.',
+        'Foreign investment can stimulate economic growth in developing countries.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-collocations-4',
+    title: 'Environment & Nature Collocations',
+    slug: 'environment-nature-collocations',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Collocations',
+    description: 'Essential collocations for discussing environmental topics in IELTS.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2024-11-05T10:00:00Z',
+    updated_at: '2024-11-05T10:00:00Z',
+    content: {
+      title: 'Environment & Nature Collocations',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 environmental collocations',
+        'Discuss climate and nature naturally',
+        'Improve environmental vocabulary'
+      ],
+      coreExplanation: `Environmental topics are extremely common in IELTS. Using the right collocations when discussing these topics demonstrates natural language use.
+
+This lesson covers collocations frequently used in environmental contexts.`,
+      examples: [
+        { sentence: 'We must protect the environment.', explanation: '"Protect the environment" is a common collocation.' },
+        { sentence: 'Climate change poses a serious threat.', explanation: '"Pose a threat" means to present danger.' },
+        { sentence: 'We should reduce carbon emissions.', explanation: '"Reduce emissions" means to lower pollution output.' },
+        { sentence: 'Deforestation causes habitat destruction.', explanation: '"Habitat destruction" is loss of natural homes.' },
+        { sentence: 'We need to conserve natural resources.', explanation: '"Conserve resources" means to protect and save.' },
+        { sentence: 'Pollution has reached alarming levels.', explanation: '"Alarming levels" means worrying amounts.' },
+        { sentence: 'We should promote sustainable development.', explanation: '"Sustainable development" is environmentally responsible growth.' },
+        { sentence: 'The government should implement green policies.', explanation: '"Green policies" are environmental regulations.' },
+        { sentence: 'We must tackle climate change urgently.', explanation: '"Tackle climate change" means to address it.' },
+        { sentence: 'Renewable energy offers a clean alternative.', explanation: '"Renewable energy" is sustainable power.' },
+        { sentence: 'We should minimize environmental damage.', explanation: '"Environmental damage" is harm to nature.' },
+        { sentence: 'The ecosystem is under severe pressure.', explanation: '"Under pressure" means stressed or threatened.' },
+        { sentence: 'We need to raise environmental awareness.', explanation: '"Raise awareness" means to increase understanding.' },
+        { sentence: 'Global warming is accelerating rapidly.', explanation: '"Global warming" is Earth\'s temperature rise.' },
+        { sentence: 'We should adopt eco-friendly practices.', explanation: '"Eco-friendly practices" are environmentally safe methods.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Save the environment', correction: 'Protect the environment', explanation: '"Protect" is more commonly used with "environment".' },
+        { mistake: 'Do pollution', correction: 'Cause pollution', explanation: 'We "cause" pollution, not "do" it.' },
+        { mistake: 'Make awareness', correction: 'Raise awareness', explanation: 'We "raise" awareness, not "make" it.' }
+      ],
+      miniPractice: [
+        { question: 'We must _____ the environment for future generations.', type: 'fill-blank' },
+        { question: 'Which collocation is correct?', options: ['reduce emissions', 'lower emissions', 'cut emissions', 'all are correct'], type: 'multiple-choice' },
+        { question: 'Rewrite using a collocation: "Climate change is a big danger."', type: 'rewrite' },
+        { question: 'We should _____ environmental awareness.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'protect',
+        'all are correct',
+        'Climate change poses a serious threat.',
+        'raise'
+      ],
+      quickRecap: 'Key collocations: "protect the environment", "pose a threat", "reduce emissions", "habitat destruction", "conserve resources", "sustainable development", "tackle climate change", "renewable energy", "raise awareness", "eco-friendly practices". Master these for environmental topics!',
+      collocations: [
+        'protect the environment', 'pose a threat', 'reduce emissions', 'habitat destruction',
+        'conserve resources', 'alarming levels', 'sustainable development', 'green policies',
+        'tackle climate change', 'renewable energy', 'environmental damage', 'raise awareness'
+      ],
+      synonyms: [
+        { word: 'protect the environment', synonyms: ['preserve the environment', 'safeguard the environment', 'conserve the environment', 'defend the environment'] },
+        { word: 'reduce emissions', synonyms: ['cut emissions', 'lower emissions', 'decrease emissions', 'minimize emissions'] },
+        { word: 'tackle climate change', synonyms: ['address climate change', 'combat climate change', 'fight climate change', 'deal with climate change'] }
+      ],
+      speakingLines: [
+        'We must tackle climate change before it poses an even greater threat.',
+        'Governments should implement green policies to reduce carbon emissions.',
+        'Raising environmental awareness is crucial for promoting sustainable development.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-collocations-5',
+    title: 'Education & Learning Collocations',
+    slug: 'education-learning-collocations',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Collocations',
+    description: 'Essential collocations for discussing education topics in IELTS.',
+    is_premium: true,
+    is_published: true,
+    view_count: 880,
+    created_at: '2024-11-08T10:00:00Z',
+    updated_at: '2024-11-08T10:00:00Z',
+    content: {
+      title: 'Education & Learning Collocations',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 education collocations',
+        'Discuss learning naturally',
+        'Improve academic vocabulary'
+      ],
+      coreExplanation: `Education is one of the most common IELTS topics. Using the right collocations when discussing education demonstrates natural language use.
+
+This lesson covers collocations frequently used in educational contexts.`,
+      examples: [
+        { sentence: 'Students should acquire knowledge through various methods.', explanation: '"Acquire knowledge" means to gain understanding.' },
+        { sentence: 'Education plays a vital role in development.', explanation: '"Play a role" means to have a function.' },
+        { sentence: 'Students need to develop critical thinking skills.', explanation: '"Develop skills" means to build abilities.' },
+        { sentence: 'Teachers should provide guidance to students.', explanation: '"Provide guidance" means to offer direction.' },
+        { sentence: 'Students must meet academic requirements.', explanation: '"Meet requirements" means to fulfill criteria.' },
+        { sentence: 'Education broadens horizons.', explanation: '"Broaden horizons" means to expand perspectives.' },
+        { sentence: 'Students should pursue higher education.', explanation: '"Pursue education" means to seek learning.' },
+        { sentence: 'Schools should foster creativity.', explanation: '"Foster creativity" means to encourage innovation.' },
+        { sentence: 'Students gain valuable experience through internships.', explanation: '"Gain experience" means to acquire practical knowledge.' },
+        { sentence: 'Education enhances career prospects.', explanation: '"Enhance prospects" means to improve opportunities.' },
+        { sentence: 'Students should attend classes regularly.', explanation: '"Attend classes" means to go to lessons.' },
+        { sentence: 'Teachers should set high standards.', explanation: '"Set standards" means to establish expectations.' },
+        { sentence: 'Students must complete assignments on time.', explanation: '"Complete assignments" means to finish tasks.' },
+        { sentence: 'Education equips students with skills.', explanation: '"Equip with skills" means to provide abilities.' },
+        { sentence: 'Students should take responsibility for their learning.', explanation: '"Take responsibility" means to be accountable.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Get knowledge', correction: 'Acquire/gain knowledge', explanation: 'We "acquire" or "gain" knowledge, not "get" it in formal contexts.' },
+        { mistake: 'Make skills', correction: 'Develop skills', explanation: 'We "develop" skills, not "make" them.' },
+        { mistake: 'Do education', correction: 'Pursue education', explanation: 'We "pursue" education, not "do" it.' }
+      ],
+      miniPractice: [
+        { question: 'Students should _____ knowledge through reading and research.', type: 'fill-blank' },
+        { question: 'Which collocation is correct?', options: ['develop skills', 'make skills', 'do skills', 'create skills'], type: 'multiple-choice' },
+        { question: 'Rewrite using a collocation: "Education makes your view of the world bigger."', type: 'rewrite' },
+        { question: 'Teachers should _____ guidance to struggling students.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'acquire',
+        'develop skills',
+        'Education broadens horizons.',
+        'provide'
+      ],
+      quickRecap: 'Key collocations: "acquire knowledge", "play a role", "develop skills", "provide guidance", "meet requirements", "broaden horizons", "pursue education", "foster creativity", "gain experience", "enhance prospects". Use these for education topics!',
+      collocations: [
+        'acquire knowledge', 'play a role', 'develop skills', 'provide guidance',
+        'meet requirements', 'broaden horizons', 'pursue education', 'foster creativity',
+        'gain experience', 'enhance prospects', 'attend classes', 'set standards'
+      ],
+      synonyms: [
+        { word: 'acquire knowledge', synonyms: ['gain knowledge', 'obtain knowledge', 'attain knowledge', 'accumulate knowledge'] },
+        { word: 'develop skills', synonyms: ['build skills', 'hone skills', 'cultivate skills', 'enhance skills'] },
+        { word: 'broaden horizons', synonyms: ['expand horizons', 'widen horizons', 'extend horizons', 'open up horizons'] }
+      ],
+      speakingLines: [
+        'Education plays a vital role in personal and professional development.',
+        'Students should develop critical thinking skills to succeed in the modern world.',
+        'Higher education broadens horizons and enhances career prospects.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-collocations-6',
+    title: 'Health & Wellbeing Collocations',
+    slug: 'health-wellbeing-collocations',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Collocations',
+    description: 'Essential collocations for discussing health topics in IELTS.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2024-11-12T10:00:00Z',
+    updated_at: '2024-11-12T10:00:00Z',
+    content: {
+      title: 'Health & Wellbeing Collocations',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 health collocations',
+        'Discuss wellbeing naturally',
+        'Improve health vocabulary'
+      ],
+      coreExplanation: `Health topics are common in IELTS. Using the right collocations when discussing health demonstrates natural language use.
+
+This lesson covers collocations frequently used in health and wellbeing contexts.`,
+      examples: [
+        { sentence: 'We should maintain good health.', explanation: '"Maintain health" means to keep healthy.' },
+        { sentence: 'Exercise improves physical fitness.', explanation: '"Physical fitness" is bodily health.' },
+        { sentence: 'A balanced diet promotes wellbeing.', explanation: '"Balanced diet" is nutritionally complete eating.' },
+        { sentence: 'Stress can have adverse effects on health.', explanation: '"Adverse effects" are negative impacts.' },
+        { sentence: 'We should adopt a healthy lifestyle.', explanation: '"Healthy lifestyle" is health-promoting living.' },
+        { sentence: 'Prevention is better than cure.', explanation: '"Prevention is better than cure" is a common saying.' },
+        { sentence: 'Regular exercise reduces the risk of disease.', explanation: '"Reduce the risk" means to lower probability.' },
+        { sentence: 'Mental health is equally important.', explanation: '"Mental health" is psychological wellbeing.' },
+        { sentence: 'We should seek medical advice when ill.', explanation: '"Seek advice" means to ask for guidance.' },
+        { sentence: 'Smoking poses serious health risks.', explanation: '"Health risks" are dangers to wellbeing.' },
+        { sentence: 'We should get adequate sleep.', explanation: '"Adequate sleep" is sufficient rest.' },
+        { sentence: 'Healthcare should be accessible to all.', explanation: '"Accessible healthcare" is available medical care.' },
+        { sentence: 'We should take preventive measures.', explanation: '"Preventive measures" are actions to avoid problems.' },
+        { sentence: 'Obesity has become a major health concern.', explanation: '"Health concern" is a medical worry.' },
+        { sentence: 'We should promote public health.', explanation: '"Public health" is community wellbeing.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Keep health', correction: 'Maintain health', explanation: 'We "maintain" health, not "keep" it in formal contexts.' },
+        { mistake: 'Do exercise', correction: 'Take/get exercise', explanation: 'We "take" or "get" exercise, not "do" it.' },
+        { mistake: 'Make a diet', correction: 'Follow/go on a diet', explanation: 'We "follow" or "go on" a diet.' }
+      ],
+      miniPractice: [
+        { question: 'We should _____ good health through regular exercise.', type: 'fill-blank' },
+        { question: 'Which collocation is correct?', options: ['balanced diet', 'equal diet', 'fair diet', 'even diet'], type: 'multiple-choice' },
+        { question: 'Rewrite using a collocation: "Smoking is dangerous for your body."', type: 'rewrite' },
+        { question: 'Regular exercise _____ the risk of heart disease.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'maintain',
+        'balanced diet',
+        'Smoking poses serious health risks.',
+        'reduces'
+      ],
+      quickRecap: 'Key collocations: "maintain health", "physical fitness", "balanced diet", "adverse effects", "healthy lifestyle", "reduce the risk", "mental health", "seek advice", "health risks", "preventive measures". Use these for health topics!',
+      collocations: [
+        'maintain health', 'physical fitness', 'balanced diet', 'adverse effects',
+        'healthy lifestyle', 'reduce the risk', 'mental health', 'seek advice',
+        'health risks', 'adequate sleep', 'accessible healthcare', 'preventive measures'
+      ],
+      synonyms: [
+        { word: 'maintain health', synonyms: ['preserve health', 'keep healthy', 'stay healthy', 'sustain health'] },
+        { word: 'balanced diet', synonyms: ['healthy diet', 'nutritious diet', 'well-balanced diet', 'wholesome diet'] },
+        { word: 'reduce the risk', synonyms: ['lower the risk', 'minimize the risk', 'decrease the risk', 'cut the risk'] }
+      ],
+      speakingLines: [
+        'Maintaining good health requires a balanced diet and regular exercise.',
+        'Mental health is equally important as physical fitness.',
+        'Governments should promote public health through preventive measures.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-collocations-7',
+    title: 'Technology & Innovation Collocations',
+    slug: 'technology-innovation-collocations',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Collocations',
+    description: 'Essential collocations for discussing technology topics in IELTS.',
+    is_premium: true,
+    is_published: true,
+    view_count: 880,
+    created_at: '2024-11-15T10:00:00Z',
+    updated_at: '2024-11-15T10:00:00Z',
+    content: {
+      title: 'Technology & Innovation Collocations',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 technology collocations',
+        'Discuss innovation naturally',
+        'Improve tech vocabulary'
+      ],
+      coreExplanation: `Technology topics are increasingly common in IELTS. Using the right collocations when discussing technology demonstrates natural language use.
+
+This lesson covers collocations frequently used in technology and innovation contexts.`,
+      examples: [
+        { sentence: 'Technology has made rapid advances.', explanation: '"Make advances" means to progress.' },
+        { sentence: 'We should embrace new technology.', explanation: '"Embrace technology" means to accept it.' },
+        { sentence: 'The internet has revolutionized communication.', explanation: '"Revolutionize communication" means to transform it.' },
+        { sentence: 'Technology plays an increasingly important role.', explanation: '"Play a role" means to have a function.' },
+        { sentence: 'We must keep pace with technological change.', explanation: '"Keep pace with" means to stay current.' },
+        { sentence: 'Innovation drives economic growth.', explanation: '"Drive growth" means to cause expansion.' },
+        { sentence: 'Technology has transformed our daily lives.', explanation: '"Transform lives" means to change significantly.' },
+        { sentence: 'We should harness the power of technology.', explanation: '"Harness power" means to utilize effectively.' },
+        { sentence: 'Digital technology has become ubiquitous.', explanation: '"Digital technology" is computer-based tech.' },
+        { sentence: 'Technology raises ethical concerns.', explanation: '"Raise concerns" means to bring up worries.' },
+        { sentence: 'We must bridge the digital divide.', explanation: '"Digital divide" is the technology access gap.' },
+        { sentence: 'Artificial intelligence is advancing rapidly.', explanation: '"Advance rapidly" means to progress quickly.' },
+        { sentence: 'Technology offers unprecedented opportunities.', explanation: '"Unprecedented opportunities" are new possibilities.' },
+        { sentence: 'We should adopt cutting-edge technology.', explanation: '"Cutting-edge technology" is the most advanced.' },
+        { sentence: 'Technology has far-reaching implications.', explanation: '"Far-reaching implications" are widespread effects.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Do advances', correction: 'Make advances', explanation: 'We "make" advances, not "do" them.' },
+        { mistake: 'Accept technology', correction: 'Embrace/adopt technology', explanation: '"Embrace" or "adopt" are more natural with technology.' },
+        { mistake: 'Technology makes changes', correction: 'Technology brings about changes', explanation: '"Bring about" is more natural for causing changes.' }
+      ],
+      miniPractice: [
+        { question: 'Technology has _____ rapid advances in recent years.', type: 'fill-blank' },
+        { question: 'Which collocation is correct?', options: ['cutting-edge technology', 'sharp-edge technology', 'leading-edge technology', 'both A and C'], type: 'multiple-choice' },
+        { question: 'Rewrite using a collocation: "Technology has changed how we communicate."', type: 'rewrite' },
+        { question: 'We must _____ pace with technological change.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'made',
+        'both A and C',
+        'Technology has revolutionized communication.',
+        'keep'
+      ],
+      quickRecap: 'Key collocations: "make advances", "embrace technology", "revolutionize communication", "keep pace with", "drive growth", "transform lives", "harness power", "digital divide", "cutting-edge technology", "far-reaching implications". Use these for tech topics!',
+      collocations: [
+        'make advances', 'embrace technology', 'revolutionize communication', 'play a role',
+        'keep pace with', 'drive growth', 'transform lives', 'harness power',
+        'digital technology', 'raise concerns', 'digital divide', 'cutting-edge technology'
+      ],
+      synonyms: [
+        { word: 'make advances', synonyms: ['make progress', 'advance', 'develop', 'evolve'] },
+        { word: 'embrace technology', synonyms: ['adopt technology', 'accept technology', 'welcome technology', 'take up technology'] },
+        { word: 'cutting-edge technology', synonyms: ['state-of-the-art technology', 'advanced technology', 'latest technology', 'leading-edge technology'] }
+      ],
+      speakingLines: [
+        'Technology has made rapid advances that have transformed our daily lives.',
+        'We must keep pace with technological change to remain competitive.',
+        'Cutting-edge technology offers unprecedented opportunities for innovation.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-collocations-8',
+    title: 'Society & Culture Collocations',
+    slug: 'society-culture-collocations',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Collocations',
+    description: 'Essential collocations for discussing social and cultural topics in IELTS.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2024-11-18T10:00:00Z',
+    updated_at: '2024-11-18T10:00:00Z',
+    content: {
+      title: 'Society & Culture Collocations',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 social collocations',
+        'Discuss culture naturally',
+        'Improve social vocabulary'
+      ],
+      coreExplanation: `Social and cultural topics are common in IELTS. Using the right collocations when discussing these topics demonstrates natural language use.
+
+This lesson covers collocations frequently used in social and cultural contexts.`,
+      examples: [
+        { sentence: 'Society has undergone significant changes.', explanation: '"Undergo changes" means to experience transformation.' },
+        { sentence: 'We should preserve cultural heritage.', explanation: '"Preserve heritage" means to protect traditions.' },
+        { sentence: 'Social media has shaped public opinion.', explanation: '"Shape opinion" means to influence views.' },
+        { sentence: 'We must address social inequality.', explanation: '"Address inequality" means to deal with unfairness.' },
+        { sentence: 'Cultural diversity enriches society.', explanation: '"Cultural diversity" is variety of cultures.' },
+        { sentence: 'We should promote social cohesion.', explanation: '"Social cohesion" is community unity.' },
+        { sentence: 'Traditional values are being challenged.', explanation: '"Traditional values" are established beliefs.' },
+        { sentence: 'We must bridge the generation gap.', explanation: '"Generation gap" is difference between age groups.' },
+        { sentence: 'Social norms vary across cultures.', explanation: '"Social norms" are accepted behaviors.' },
+        { sentence: 'We should foster community spirit.', explanation: '"Community spirit" is local togetherness.' },
+        { sentence: 'Cultural exchange promotes understanding.', explanation: '"Cultural exchange" is sharing between cultures.' },
+        { sentence: 'Society faces numerous challenges.', explanation: '"Face challenges" means to encounter difficulties.' },
+        { sentence: 'We must tackle social problems.', explanation: '"Tackle problems" means to address issues.' },
+        { sentence: 'Social mobility enables advancement.', explanation: '"Social mobility" is ability to change status.' },
+        { sentence: 'We should embrace cultural differences.', explanation: '"Embrace differences" means to accept variety.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Have changes', correction: 'Undergo changes', explanation: 'We "undergo" changes, not "have" them in this context.' },
+        { mistake: 'Keep heritage', correction: 'Preserve heritage', explanation: 'We "preserve" heritage, not "keep" it.' },
+        { mistake: 'Do problems', correction: 'Tackle/address problems', explanation: 'We "tackle" or "address" problems.' }
+      ],
+      miniPractice: [
+        { question: 'Society has _____ significant changes in recent decades.', type: 'fill-blank' },
+        { question: 'Which collocation is correct?', options: ['cultural diversity', 'culture diversity', 'cultural variety', 'both A and C'], type: 'multiple-choice' },
+        { question: 'Rewrite using a collocation: "We should protect old traditions."', type: 'rewrite' },
+        { question: 'We must _____ the generation gap.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'undergone',
+        'both A and C',
+        'We should preserve cultural heritage.',
+        'bridge'
+      ],
+      quickRecap: 'Key collocations: "undergo changes", "preserve heritage", "shape opinion", "address inequality", "cultural diversity", "social cohesion", "traditional values", "generation gap", "social norms", "cultural exchange". Use these for social topics!',
+      collocations: [
+        'undergo changes', 'preserve heritage', 'shape opinion', 'address inequality',
+        'cultural diversity', 'social cohesion', 'traditional values', 'generation gap',
+        'social norms', 'community spirit', 'cultural exchange', 'social mobility'
+      ],
+      synonyms: [
+        { word: 'undergo changes', synonyms: ['experience changes', 'go through changes', 'see changes', 'witness changes'] },
+        { word: 'preserve heritage', synonyms: ['protect heritage', 'maintain heritage', 'safeguard heritage', 'conserve heritage'] },
+        { word: 'cultural diversity', synonyms: ['cultural variety', 'multicultural society', 'cultural pluralism', 'ethnic diversity'] }
+      ],
+      speakingLines: [
+        'Society has undergone significant changes due to globalization.',
+        'We should preserve cultural heritage while embracing cultural diversity.',
+        'Bridging the generation gap requires mutual understanding and respect.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-collocations-9',
+    title: 'Government & Politics Collocations',
+    slug: 'government-politics-collocations',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Collocations',
+    description: 'Essential collocations for discussing government and political topics in IELTS.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2024-11-22T10:00:00Z',
+    updated_at: '2024-11-22T10:00:00Z',
+    content: {
+      title: 'Government & Politics Collocations',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 political collocations',
+        'Discuss government naturally',
+        'Improve political vocabulary'
+      ],
+      coreExplanation: `Government and political topics appear frequently in IELTS. Using the right collocations when discussing these topics demonstrates sophisticated language use.
+
+This lesson covers collocations frequently used in government and political contexts.`,
+      examples: [
+        { sentence: 'The government should implement policies.', explanation: '"Implement policies" means to put into action.' },
+        { sentence: 'Citizens should exercise their rights.', explanation: '"Exercise rights" means to use entitlements.' },
+        { sentence: 'The policy has come under criticism.', explanation: '"Come under criticism" means to be criticized.' },
+        { sentence: 'We should hold elections regularly.', explanation: '"Hold elections" means to conduct voting.' },
+        { sentence: 'The government must address public concerns.', explanation: '"Address concerns" means to deal with worries.' },
+        { sentence: 'Politicians should fulfill their promises.', explanation: '"Fulfill promises" means to keep commitments.' },
+        { sentence: 'The law should be strictly enforced.', explanation: '"Enforce the law" means to apply rules.' },
+        { sentence: 'Citizens should participate in democracy.', explanation: '"Participate in democracy" means to engage politically.' },
+        { sentence: 'The government should allocate funding.', explanation: '"Allocate funding" means to distribute money.' },
+        { sentence: 'We must uphold democratic values.', explanation: '"Uphold values" means to maintain principles.' },
+        { sentence: 'The policy has sparked debate.', explanation: '"Spark debate" means to cause discussion.' },
+        { sentence: 'The government should tackle corruption.', explanation: '"Tackle corruption" means to fight dishonesty.' },
+        { sentence: 'Citizens should voice their opinions.', explanation: '"Voice opinions" means to express views.' },
+        { sentence: 'The reform has met with resistance.', explanation: '"Meet with resistance" means to face opposition.' },
+        { sentence: 'We should promote good governance.', explanation: '"Good governance" is effective administration.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Do policies', correction: 'Implement policies', explanation: 'We "implement" policies, not "do" them.' },
+        { mistake: 'Use rights', correction: 'Exercise rights', explanation: 'We "exercise" rights, not "use" them in formal contexts.' },
+        { mistake: 'Make elections', correction: 'Hold elections', explanation: 'We "hold" elections, not "make" them.' }
+      ],
+      miniPractice: [
+        { question: 'The government should _____ policies to reduce poverty.', type: 'fill-blank' },
+        { question: 'Which collocation is correct?', options: ['exercise rights', 'use rights', 'do rights', 'make rights'], type: 'multiple-choice' },
+        { question: 'Rewrite using a collocation: "The policy caused a lot of discussion."', type: 'rewrite' },
+        { question: 'Citizens should _____ in democracy.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'implement',
+        'exercise rights',
+        'The policy sparked debate.',
+        'participate'
+      ],
+      quickRecap: 'Key collocations: "implement policies", "exercise rights", "come under criticism", "hold elections", "address concerns", "fulfill promises", "enforce the law", "allocate funding", "uphold values", "good governance". Use these for political topics!',
+      collocations: [
+        'implement policies', 'exercise rights', 'come under criticism', 'hold elections',
+        'address concerns', 'fulfill promises', 'enforce the law', 'participate in democracy',
+        'allocate funding', 'uphold values', 'spark debate', 'tackle corruption'
+      ],
+      synonyms: [
+        { word: 'implement policies', synonyms: ['enact policies', 'introduce policies', 'put policies into effect', 'execute policies'] },
+        { word: 'exercise rights', synonyms: ['use rights', 'assert rights', 'claim rights', 'invoke rights'] },
+        { word: 'hold elections', synonyms: ['conduct elections', 'organize elections', 'run elections', 'stage elections'] }
+      ],
+      speakingLines: [
+        'Governments should implement policies that address public concerns.',
+        'Citizens should exercise their rights and participate in democracy.',
+        'Good governance requires transparency and accountability.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-collocations-10',
+    title: 'Crime & Justice Collocations',
+    slug: 'crime-justice-collocations',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Collocations',
+    description: 'Essential collocations for discussing crime and justice topics in IELTS.',
+    is_premium: true,
+    is_published: true,
+    view_count: 680,
+    created_at: '2024-11-25T10:00:00Z',
+    updated_at: '2024-11-25T10:00:00Z',
+    content: {
+      title: 'Crime & Justice Collocations',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 crime collocations',
+        'Discuss justice naturally',
+        'Improve legal vocabulary'
+      ],
+      coreExplanation: `Crime and justice topics appear in IELTS Writing and Speaking. Using the right collocations when discussing these topics demonstrates sophisticated language use.
+
+This lesson covers collocations frequently used in crime and justice contexts.`,
+      examples: [
+        { sentence: 'We must combat crime effectively.', explanation: '"Combat crime" means to fight against it.' },
+        { sentence: 'Criminals should face justice.', explanation: '"Face justice" means to be held accountable.' },
+        { sentence: 'The police should enforce the law.', explanation: '"Enforce the law" means to apply rules.' },
+        { sentence: 'We should prevent crime through education.', explanation: '"Prevent crime" means to stop it happening.' },
+        { sentence: 'Offenders should serve their sentences.', explanation: '"Serve a sentence" means to complete punishment.' },
+        { sentence: 'The court should deliver justice.', explanation: '"Deliver justice" means to provide fair outcomes.' },
+        { sentence: 'We must address the root causes of crime.', explanation: '"Root causes" are fundamental reasons.' },
+        { sentence: 'Rehabilitation helps reduce reoffending.', explanation: '"Reduce reoffending" means to lower repeat crimes.' },
+        { sentence: 'The suspect was brought to trial.', explanation: '"Bring to trial" means to prosecute.' },
+        { sentence: 'We should uphold the rule of law.', explanation: '"Rule of law" is legal governance.' },
+        { sentence: 'The crime rate has fallen significantly.', explanation: '"Crime rate" is frequency of crime.' },
+        { sentence: 'Victims deserve compensation.', explanation: '"Deserve compensation" means to merit payment.' },
+        { sentence: 'We must deter potential criminals.', explanation: '"Deter criminals" means to discourage crime.' },
+        { sentence: 'The accused was found guilty.', explanation: '"Found guilty" means determined to be responsible.' },
+        { sentence: 'Justice must be served.', explanation: '"Justice must be served" means fairness must prevail.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Fight crime', correction: 'Combat crime', explanation: '"Combat" is more formal than "fight" for crime.' },
+        { mistake: 'Do a sentence', correction: 'Serve a sentence', explanation: 'We "serve" a sentence, not "do" it.' },
+        { mistake: 'Make justice', correction: 'Deliver justice', explanation: 'We "deliver" justice, not "make" it.' }
+      ],
+      miniPractice: [
+        { question: 'We must _____ crime through effective policing.', type: 'fill-blank' },
+        { question: 'Which collocation is correct?', options: ['serve a sentence', 'do a sentence', 'make a sentence', 'have a sentence'], type: 'multiple-choice' },
+        { question: 'Rewrite using a collocation: "The number of crimes has gone down."', type: 'rewrite' },
+        { question: 'Criminals should _____ justice for their actions.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'combat',
+        'serve a sentence',
+        'The crime rate has fallen.',
+        'face'
+      ],
+      quickRecap: 'Key collocations: "combat crime", "face justice", "enforce the law", "prevent crime", "serve a sentence", "deliver justice", "root causes", "reduce reoffending", "rule of law", "crime rate". Use these for crime topics!',
+      collocations: [
+        'combat crime', 'face justice', 'enforce the law', 'prevent crime',
+        'serve a sentence', 'deliver justice', 'root causes', 'reduce reoffending',
+        'bring to trial', 'rule of law', 'crime rate', 'deter criminals'
+      ],
+      synonyms: [
+        { word: 'combat crime', synonyms: ['fight crime', 'tackle crime', 'address crime', 'reduce crime'] },
+        { word: 'face justice', synonyms: ['be brought to justice', 'answer for crimes', 'be held accountable', 'stand trial'] },
+        { word: 'serve a sentence', synonyms: ['do time', 'be imprisoned', 'be incarcerated', 'complete a sentence'] }
+      ],
+      speakingLines: [
+        'We must combat crime by addressing its root causes.',
+        'Criminals should face justice while also having opportunities for rehabilitation.',
+        'Upholding the rule of law is essential for a fair society.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 16: Speaking Functions (8 lessons)
+  // ============================================
+  {
+    id: 'vocab-speaking-1',
+    title: 'Expressing Opinions',
+    slug: 'expressing-opinions',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Speaking',
+    description: 'Phrases and vocabulary for expressing opinions effectively in IELTS Speaking.',
+    is_premium: false,
+    is_published: true,
+    view_count: 980,
+    created_at: '2024-11-28T10:00:00Z',
+    updated_at: '2024-11-28T10:00:00Z',
+    content: {
+      title: 'Expressing Opinions',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 opinion phrases',
+        'Express views confidently',
+        'Vary opinion language'
+      ],
+      coreExplanation: `Expressing opinions is essential in IELTS Speaking Parts 2 and 3. Using varied phrases to express your views demonstrates lexical range.
+
+This lesson covers different ways to express opinions, from strong to tentative.`,
+      examples: [
+        { sentence: 'In my opinion, education is the key to success.', explanation: '"In my opinion" introduces a personal view.' },
+        { sentence: 'I firmly believe that technology has improved our lives.', explanation: '"Firmly believe" shows strong conviction.' },
+        { sentence: 'From my perspective, this is a complex issue.', explanation: '"From my perspective" offers a personal viewpoint.' },
+        { sentence: 'I would argue that the benefits outweigh the drawbacks.', explanation: '"I would argue" presents a reasoned position.' },
+        { sentence: 'It seems to me that more research is needed.', explanation: '"It seems to me" is a tentative opinion.' },
+        { sentence: 'I tend to think that traditional methods are still valuable.', explanation: '"I tend to think" shows a leaning.' },
+        { sentence: 'As far as I am concerned, this is unacceptable.', explanation: '"As far as I am concerned" is personal stance.' },
+        { sentence: 'I am convinced that change is necessary.', explanation: '"I am convinced" shows strong belief.' },
+        { sentence: 'My view is that both sides have valid points.', explanation: '"My view is" introduces personal opinion.' },
+        { sentence: 'I am inclined to believe that this will succeed.', explanation: '"Inclined to believe" shows tendency.' },
+        { sentence: 'Personally, I think this approach is effective.', explanation: '"Personally" emphasizes individual view.' },
+        { sentence: 'I hold the view that governments should act.', explanation: '"Hold the view" is a formal opinion phrase.' },
+        { sentence: 'It is my contention that this policy is flawed.', explanation: '"My contention" is a formal argument.' },
+        { sentence: 'I am of the opinion that more should be done.', explanation: '"I am of the opinion" is formal.' },
+        { sentence: 'To my mind, this is the best solution.', explanation: '"To my mind" introduces personal thought.' }
+      ],
+      commonMistakes: [
+        { mistake: 'I think that...', correction: 'Use varied phrases like "In my opinion", "I believe", "From my perspective"', explanation: 'Vary your opinion phrases for better scores.' },
+        { mistake: 'According to me', correction: 'In my opinion / From my perspective', explanation: '"According to me" is not natural English.' },
+        { mistake: 'I am thinking', correction: 'I think / I believe', explanation: 'Use simple present for opinions.' }
+      ],
+      miniPractice: [
+        { question: '_____ my opinion, education should be free for all.', type: 'fill-blank' },
+        { question: 'Which phrase shows strong conviction?', options: ['I firmly believe', 'I tend to think', 'It seems to me', 'I suppose'], type: 'multiple-choice' },
+        { question: 'Rewrite using a different opinion phrase: "I think technology is important."', type: 'rewrite' },
+        { question: 'From my _____, this is a complex issue.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'In',
+        'I firmly believe',
+        'In my opinion, technology plays a crucial role. / I firmly believe that technology is essential.',
+        'perspective'
+      ],
+      quickRecap: 'Key phrases: "In my opinion", "I firmly believe", "From my perspective", "I would argue", "It seems to me", "I tend to think", "As far as I am concerned", "I am convinced", "My view is", "To my mind". Vary these in Speaking!',
+      collocations: [
+        'in my opinion', 'firmly believe', 'from my perspective', 'would argue',
+        'seems to me', 'tend to think', 'as far as I am concerned', 'am convinced',
+        'my view is', 'inclined to believe', 'hold the view', 'to my mind'
+      ],
+      synonyms: [
+        { word: 'I think', synonyms: ['I believe', 'I feel', 'I consider', 'I reckon'] },
+        { word: 'in my opinion', synonyms: ['from my perspective', 'to my mind', 'as I see it', 'in my view'] },
+        { word: 'I believe', synonyms: ['I am convinced', 'I am certain', 'I am confident', 'I hold the view'] }
+      ],
+      speakingLines: [
+        'In my opinion, education is the foundation of a successful society.',
+        'I firmly believe that technology has transformed our daily lives.',
+        'From my perspective, both traditional and modern approaches have merit.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-speaking-2',
+    title: 'Agreeing & Disagreeing',
+    slug: 'agreeing-disagreeing',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Speaking',
+    description: 'Phrases for agreeing and disagreeing politely in IELTS Speaking.',
+    is_premium: true,
+    is_published: true,
+    view_count: 920,
+    created_at: '2024-12-01T10:00:00Z',
+    updated_at: '2024-12-01T10:00:00Z',
+    content: {
+      title: 'Agreeing & Disagreeing',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 agreement phrases',
+        'Disagree politely',
+        'Show partial agreement'
+      ],
+      coreExplanation: `Being able to agree and disagree effectively is important in IELTS Speaking Part 3. Using varied phrases demonstrates lexical range and pragmatic competence.
+
+This lesson covers different ways to agree, disagree, and show partial agreement.`,
+      examples: [
+        { sentence: 'I completely agree with that view.', explanation: '"Completely agree" shows full agreement.' },
+        { sentence: 'I see your point, but I would argue differently.', explanation: '"I see your point, but" shows partial disagreement.' },
+        { sentence: 'That is absolutely true.', explanation: '"Absolutely true" confirms agreement.' },
+        { sentence: 'I beg to differ on this matter.', explanation: '"Beg to differ" is polite disagreement.' },
+        { sentence: 'I could not agree more.', explanation: '"Could not agree more" is strong agreement.' },
+        { sentence: 'I am afraid I disagree.', explanation: '"I am afraid I disagree" is polite.' },
+        { sentence: 'You make a valid point.', explanation: '"Valid point" acknowledges merit.' },
+        { sentence: 'I take your point, however...', explanation: '"Take your point" shows understanding.' },
+        { sentence: 'I am in complete agreement.', explanation: '"Complete agreement" is full accord.' },
+        { sentence: 'I respectfully disagree.', explanation: '"Respectfully disagree" is polite opposition.' },
+        { sentence: 'That is exactly how I see it.', explanation: '"Exactly how I see it" confirms shared view.' },
+        { sentence: 'I am not entirely convinced.', explanation: '"Not entirely convinced" shows doubt.' },
+        { sentence: 'I share your view on this.', explanation: '"Share your view" shows agreement.' },
+        { sentence: 'I have to disagree on that point.', explanation: '"Have to disagree" is firm but polite.' },
+        { sentence: 'To some extent, I agree.', explanation: '"To some extent" shows partial agreement.' }
+      ],
+      commonMistakes: [
+        { mistake: 'I am agree', correction: 'I agree', explanation: '"Agree" is a verb, not an adjective.' },
+        { mistake: 'I am not agree', correction: 'I do not agree / I disagree', explanation: 'Use "do not agree" or "disagree".' },
+        { mistake: 'You are wrong', correction: 'I respectfully disagree / I see it differently', explanation: 'Be polite when disagreeing.' }
+      ],
+      miniPractice: [
+        { question: 'I _____ agree with that view.', type: 'fill-blank' },
+        { question: 'Which phrase shows polite disagreement?', options: ['I beg to differ', 'You are wrong', 'That is stupid', 'I hate that idea'], type: 'multiple-choice' },
+        { question: 'Rewrite politely: "I disagree with you."', type: 'rewrite' },
+        { question: 'I see your point, _____ I would argue differently.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'completely',
+        'I beg to differ',
+        'I respectfully disagree. / I see your point, but I have a different perspective.',
+        'but'
+      ],
+      quickRecap: 'Key phrases: "completely agree", "I see your point, but", "beg to differ", "could not agree more", "respectfully disagree", "take your point", "not entirely convinced", "share your view", "to some extent". Use these for balanced discussions!',
+      collocations: [
+        'completely agree', 'see your point', 'beg to differ', 'could not agree more',
+        'afraid I disagree', 'valid point', 'take your point', 'complete agreement',
+        'respectfully disagree', 'share your view', 'not entirely convinced', 'to some extent'
+      ],
+      synonyms: [
+        { word: 'I agree', synonyms: ['I concur', 'I share your view', 'I am in agreement', 'I see eye to eye'] },
+        { word: 'I disagree', synonyms: ['I beg to differ', 'I see it differently', 'I have a different view', 'I take a different position'] },
+        { word: 'partially agree', synonyms: ['agree to some extent', 'partly agree', 'agree in part', 'have mixed feelings'] }
+      ],
+      speakingLines: [
+        'I completely agree that education is fundamental to development.',
+        'I see your point, but I would argue that technology also has drawbacks.',
+        'To some extent, I agree, although I think the situation is more complex.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-speaking-3',
+    title: 'Giving Examples',
+    slug: 'giving-examples',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Speaking',
+    description: 'Phrases for giving examples effectively in IELTS Speaking and Writing.',
+    is_premium: true,
+    is_published: true,
+    view_count: 880,
+    created_at: '2024-12-05T10:00:00Z',
+    updated_at: '2024-12-05T10:00:00Z',
+    content: {
+      title: 'Giving Examples',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 example phrases',
+        'Support arguments effectively',
+        'Vary example language'
+      ],
+      coreExplanation: `Giving examples is essential for supporting your arguments in IELTS. Using varied phrases to introduce examples demonstrates lexical range.
+
+This lesson covers different ways to introduce and develop examples.`,
+      examples: [
+        { sentence: 'For example, many countries have implemented this policy.', explanation: '"For example" is the most common phrase.' },
+        { sentence: 'For instance, technology has improved healthcare.', explanation: '"For instance" is similar to "for example".' },
+        { sentence: 'Take education, for example.', explanation: '"Take X, for example" highlights a specific case.' },
+        { sentence: 'A case in point is the success of renewable energy.', explanation: '"A case in point" introduces a relevant example.' },
+        { sentence: 'To illustrate this point, consider the following.', explanation: '"To illustrate" introduces an explanatory example.' },
+        { sentence: 'This is exemplified by the rise of social media.', explanation: '"Exemplified by" shows something demonstrates a point.' },
+        { sentence: 'A good example of this is Japan.', explanation: '"A good example of this" introduces a clear case.' },
+        { sentence: 'Such as smartphones and tablets.', explanation: '"Such as" lists specific examples.' },
+        { sentence: 'Namely, education, healthcare, and infrastructure.', explanation: '"Namely" specifies exact examples.' },
+        { sentence: 'This can be seen in many developing countries.', explanation: '"Can be seen in" shows where something is evident.' },
+        { sentence: 'To give a concrete example...', explanation: '"Concrete example" is a specific, real case.' },
+        { sentence: 'One notable example is...', explanation: '"Notable example" highlights an important case.' },
+        { sentence: 'This is particularly evident in...', explanation: '"Particularly evident" shows clear demonstration.' },
+        { sentence: 'Consider the case of China.', explanation: '"Consider the case of" invites examination.' },
+        { sentence: 'As demonstrated by recent research...', explanation: '"As demonstrated by" shows evidence.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Like for example', correction: 'For example / Such as', explanation: 'Do not use "like" and "for example" together.' },
+        { mistake: 'Example, technology...', correction: 'For example, technology...', explanation: 'Use the full phrase "for example".' },
+        { mistake: 'As example', correction: 'As an example / For example', explanation: 'Use "as an example" or "for example".' }
+      ],
+      miniPractice: [
+        { question: '_____ example, many countries have adopted this approach.', type: 'fill-blank' },
+        { question: 'Which phrase is most formal?', options: ['A case in point', 'Like', 'For example', 'Such as'], type: 'multiple-choice' },
+        { question: 'Rewrite using a different phrase: "For example, Japan has succeeded."', type: 'rewrite' },
+        { question: 'A good _____ of this is the success of electric vehicles.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'For',
+        'A case in point',
+        'A case in point is Japan\'s success. / Take Japan, for instance.',
+        'example'
+      ],
+      quickRecap: 'Key phrases: "for example", "for instance", "take X, for example", "a case in point", "to illustrate", "exemplified by", "such as", "namely", "can be seen in", "consider the case of". Vary these when giving examples!',
+      collocations: [
+        'for example', 'for instance', 'take for example', 'case in point',
+        'to illustrate', 'exemplified by', 'good example', 'such as',
+        'namely', 'can be seen in', 'concrete example', 'notable example'
+      ],
+      synonyms: [
+        { word: 'for example', synonyms: ['for instance', 'such as', 'like', 'e.g.'] },
+        { word: 'a case in point', synonyms: ['a good example', 'a prime example', 'a typical example', 'a clear example'] },
+        { word: 'to illustrate', synonyms: ['to demonstrate', 'to show', 'to exemplify', 'to highlight'] }
+      ],
+      speakingLines: [
+        'For example, many developed countries have invested heavily in renewable energy.',
+        'A case in point is the success of Singapore\'s education system.',
+        'This is particularly evident in countries that have embraced technology.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-speaking-4',
+    title: 'Comparing & Contrasting',
+    slug: 'comparing-contrasting',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Speaking',
+    description: 'Phrases for comparing and contrasting effectively in IELTS.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2024-12-08T10:00:00Z',
+    updated_at: '2024-12-08T10:00:00Z',
+    content: {
+      title: 'Comparing & Contrasting',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 comparison phrases',
+        'Show similarities and differences',
+        'Vary comparison language'
+      ],
+      coreExplanation: `Comparing and contrasting is essential in IELTS, especially in Writing Task 1 and Speaking Part 3. Using varied phrases demonstrates lexical range.
+
+This lesson covers different ways to show similarities and differences.`,
+      examples: [
+        { sentence: 'Similarly, both countries face economic challenges.', explanation: '"Similarly" shows a parallel.' },
+        { sentence: 'In contrast, urban areas have better facilities.', explanation: '"In contrast" shows difference.' },
+        { sentence: 'On the other hand, there are also disadvantages.', explanation: '"On the other hand" introduces an opposing point.' },
+        { sentence: 'Compared to the past, life is more convenient now.', explanation: '"Compared to" makes a direct comparison.' },
+        { sentence: 'Unlike traditional methods, modern approaches are faster.', explanation: '"Unlike" shows difference.' },
+        { sentence: 'While some people prefer cities, others choose rural areas.', explanation: '"While" shows contrast.' },
+        { sentence: 'Both approaches have their merits.', explanation: '"Both" shows similarity.' },
+        { sentence: 'However, there are significant differences.', explanation: '"However" introduces contrast.' },
+        { sentence: 'In the same way, education plays a crucial role.', explanation: '"In the same way" shows similarity.' },
+        { sentence: 'Conversely, some argue the opposite.', explanation: '"Conversely" shows opposite view.' },
+        { sentence: 'Likewise, technology has transformed healthcare.', explanation: '"Likewise" shows similarity.' },
+        { sentence: 'By contrast, developing countries face different challenges.', explanation: '"By contrast" shows difference.' },
+        { sentence: 'Whereas cities offer opportunities, rural areas offer peace.', explanation: '"Whereas" shows contrast.' },
+        { sentence: 'There are striking similarities between the two.', explanation: '"Striking similarities" are notable parallels.' },
+        { sentence: 'The main difference lies in the approach.', explanation: '"The main difference" identifies key contrast.' }
+      ],
+      commonMistakes: [
+        { mistake: 'On the contrary (when meaning on the other hand)', correction: 'On the other hand', explanation: '"On the contrary" means "the opposite is true", not just "alternatively".' },
+        { mistake: 'Compare with', correction: 'Compared to / In comparison with', explanation: 'Use "compared to" or "in comparison with".' },
+        { mistake: 'But however', correction: 'However / But', explanation: 'Do not use "but" and "however" together.' }
+      ],
+      miniPractice: [
+        { question: '_____ contrast, rural areas have fewer facilities.', type: 'fill-blank' },
+        { question: 'Which phrase shows similarity?', options: ['Similarly', 'In contrast', 'However', 'Unlike'], type: 'multiple-choice' },
+        { question: 'Rewrite using a different phrase: "But there are also disadvantages."', type: 'rewrite' },
+        { question: '_____ to the past, life is more convenient now.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'In',
+        'Similarly',
+        'On the other hand, there are also disadvantages. / However, there are also disadvantages.',
+        'Compared'
+      ],
+      quickRecap: 'Key phrases: "similarly", "in contrast", "on the other hand", "compared to", "unlike", "while", "however", "likewise", "by contrast", "whereas". Use these for effective comparisons!',
+      collocations: [
+        'similarly', 'in contrast', 'on the other hand', 'compared to',
+        'unlike', 'while', 'both', 'however',
+        'in the same way', 'conversely', 'likewise', 'by contrast'
+      ],
+      synonyms: [
+        { word: 'similarly', synonyms: ['likewise', 'in the same way', 'equally', 'correspondingly'] },
+        { word: 'in contrast', synonyms: ['by contrast', 'on the other hand', 'conversely', 'however'] },
+        { word: 'compared to', synonyms: ['in comparison with', 'relative to', 'as opposed to', 'versus'] }
+      ],
+      speakingLines: [
+        'Similarly, both developed and developing countries face environmental challenges.',
+        'In contrast, urban areas offer more employment opportunities than rural regions.',
+        'While technology has many benefits, it also raises concerns about privacy.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-speaking-5',
+    title: 'Cause & Effect Language',
+    slug: 'cause-effect-language',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Speaking',
+    description: 'Phrases for expressing cause and effect in IELTS Speaking and Writing.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2024-12-12T10:00:00Z',
+    updated_at: '2024-12-12T10:00:00Z',
+    content: {
+      title: 'Cause & Effect Language',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 cause-effect phrases',
+        'Explain reasons and results',
+        'Vary causal language'
+      ],
+      coreExplanation: `Expressing cause and effect is essential in IELTS for explaining reasons and consequences. Using varied phrases demonstrates lexical range.
+
+This lesson covers different ways to express causes and effects.`,
+      examples: [
+        { sentence: 'As a result, unemployment has increased.', explanation: '"As a result" introduces an effect.' },
+        { sentence: 'This is due to economic factors.', explanation: '"Due to" introduces a cause.' },
+        { sentence: 'Consequently, many people have migrated.', explanation: '"Consequently" shows a result.' },
+        { sentence: 'Because of pollution, health problems have risen.', explanation: '"Because of" introduces a cause.' },
+        { sentence: 'This leads to social problems.', explanation: '"Leads to" shows a result.' },
+        { sentence: 'The main reason for this is lack of funding.', explanation: '"The main reason" identifies a cause.' },
+        { sentence: 'Therefore, action is needed.', explanation: '"Therefore" introduces a logical result.' },
+        { sentence: 'Owing to climate change, weather patterns have shifted.', explanation: '"Owing to" introduces a cause.' },
+        { sentence: 'This results in environmental damage.', explanation: '"Results in" shows an effect.' },
+        { sentence: 'The cause of this problem is poverty.', explanation: '"The cause of" identifies a reason.' },
+        { sentence: 'Hence, governments must act.', explanation: '"Hence" introduces a result.' },
+        { sentence: 'This is attributed to technological advances.', explanation: '"Attributed to" assigns a cause.' },
+        { sentence: 'As a consequence, standards have improved.', explanation: '"As a consequence" shows a result.' },
+        { sentence: 'This stems from historical factors.', explanation: '"Stems from" identifies an origin.' },
+        { sentence: 'Thus, change is inevitable.', explanation: '"Thus" introduces a logical conclusion.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Because of + clause', correction: 'Because + clause / Because of + noun', explanation: '"Because of" is followed by a noun, not a clause.' },
+        { mistake: 'Due to + clause', correction: 'Due to + noun / Because + clause', explanation: '"Due to" is followed by a noun, not a clause.' },
+        { mistake: 'So that (for result)', correction: 'So / Therefore / As a result', explanation: '"So that" expresses purpose, not result.' }
+      ],
+      miniPractice: [
+        { question: 'As a _____, unemployment has increased significantly.', type: 'fill-blank' },
+        { question: 'Which phrase introduces a cause?', options: ['Due to', 'As a result', 'Therefore', 'Consequently'], type: 'multiple-choice' },
+        { question: 'Rewrite using a different phrase: "Because of pollution, health problems have risen."', type: 'rewrite' },
+        { question: 'This _____ to social problems in urban areas.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'result',
+        'Due to',
+        'Owing to pollution, health problems have risen. / Pollution has led to rising health problems.',
+        'leads'
+      ],
+      quickRecap: 'Key phrases: "as a result", "due to", "consequently", "because of", "leads to", "therefore", "owing to", "results in", "hence", "stems from". Use these for cause-effect explanations!',
+      collocations: [
+        'as a result', 'due to', 'consequently', 'because of',
+        'leads to', 'the main reason', 'therefore', 'owing to',
+        'results in', 'the cause of', 'hence', 'attributed to'
+      ],
+      synonyms: [
+        { word: 'as a result', synonyms: ['consequently', 'therefore', 'thus', 'hence'] },
+        { word: 'due to', synonyms: ['because of', 'owing to', 'as a result of', 'on account of'] },
+        { word: 'leads to', synonyms: ['results in', 'causes', 'brings about', 'gives rise to'] }
+      ],
+      speakingLines: [
+        'As a result of urbanization, many rural areas have experienced population decline.',
+        'Due to technological advances, communication has become much easier.',
+        'This leads to various social and economic challenges.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-speaking-6',
+    title: 'Hedging & Tentative Language',
+    slug: 'hedging-tentative-language',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Speaking',
+    description: 'Phrases for expressing uncertainty and making cautious statements in IELTS.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2024-12-15T10:00:00Z',
+    updated_at: '2024-12-15T10:00:00Z',
+    content: {
+      title: 'Hedging & Tentative Language',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 hedging phrases',
+        'Express uncertainty appropriately',
+        'Sound more academic'
+      ],
+      coreExplanation: `Hedging is using cautious language to avoid making absolute claims. This is important in academic English and demonstrates sophisticated language use.
+
+This lesson covers different ways to express uncertainty and make tentative statements.`,
+      examples: [
+        { sentence: 'This may be due to economic factors.', explanation: '"May be" shows possibility.' },
+        { sentence: 'It appears that the situation is improving.', explanation: '"It appears that" is tentative.' },
+        { sentence: 'This could potentially lead to problems.', explanation: '"Could potentially" shows possibility.' },
+        { sentence: 'It seems likely that changes will occur.', explanation: '"Seems likely" shows probability.' },
+        { sentence: 'This might suggest a correlation.', explanation: '"Might suggest" is cautious.' },
+        { sentence: 'To some extent, this is true.', explanation: '"To some extent" limits the claim.' },
+        { sentence: 'It is possible that this will succeed.', explanation: '"It is possible" shows uncertainty.' },
+        { sentence: 'This tends to be the case in most situations.', explanation: '"Tends to be" shows general pattern.' },
+        { sentence: 'There is some evidence to suggest...', explanation: '"Some evidence" is cautious.' },
+        { sentence: 'This would appear to indicate...', explanation: '"Would appear to" is very tentative.' },
+        { sentence: 'In many cases, this is effective.', explanation: '"In many cases" limits generalization.' },
+        { sentence: 'It is generally believed that...', explanation: '"Generally believed" shows common view.' },
+        { sentence: 'This is arguably the most important factor.', explanation: '"Arguably" shows debatable claim.' },
+        { sentence: 'To a certain degree, this is accurate.', explanation: '"To a certain degree" limits claim.' },
+        { sentence: 'It is widely accepted that...', explanation: '"Widely accepted" shows consensus.' }
+      ],
+      commonMistakes: [
+        { mistake: 'This is definitely true', correction: 'This appears to be true / This is likely true', explanation: 'Avoid absolute claims in academic contexts.' },
+        { mistake: 'Everyone knows that', correction: 'It is widely believed that / Many people think that', explanation: 'Avoid overgeneralizations.' },
+        { mistake: 'This will happen', correction: 'This may/could happen', explanation: 'Use hedging for predictions.' }
+      ],
+      miniPractice: [
+        { question: 'This _____ be due to economic factors.', type: 'fill-blank' },
+        { question: 'Which phrase is most tentative?', options: ['It would appear that', 'It is clear that', 'Obviously', 'Definitely'], type: 'multiple-choice' },
+        { question: 'Rewrite with hedging: "Technology will solve all problems."', type: 'rewrite' },
+        { question: 'To some _____, this is true.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'may',
+        'It would appear that',
+        'Technology may help address some problems. / Technology could potentially solve many problems.',
+        'extent'
+      ],
+      quickRecap: 'Key phrases: "may be", "it appears that", "could potentially", "seems likely", "might suggest", "to some extent", "tends to be", "some evidence", "in many cases", "arguably". Use hedging for academic sophistication!',
+      collocations: [
+        'may be', 'it appears that', 'could potentially', 'seems likely',
+        'might suggest', 'to some extent', 'it is possible', 'tends to be',
+        'some evidence', 'would appear to', 'in many cases', 'generally believed'
+      ],
+      synonyms: [
+        { word: 'may', synonyms: ['might', 'could', 'possibly', 'perhaps'] },
+        { word: 'it appears that', synonyms: ['it seems that', 'it would appear that', 'apparently', 'seemingly'] },
+        { word: 'to some extent', synonyms: ['to a certain degree', 'in part', 'partially', 'somewhat'] }
+      ],
+      speakingLines: [
+        'This may be due to a combination of economic and social factors.',
+        'It appears that the situation is gradually improving.',
+        'To some extent, technology has helped address these challenges.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-speaking-7',
+    title: 'Emphasizing & Highlighting',
+    slug: 'emphasizing-highlighting',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Speaking',
+    description: 'Phrases for emphasizing important points in IELTS Speaking and Writing.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2024-12-18T10:00:00Z',
+    updated_at: '2024-12-18T10:00:00Z',
+    content: {
+      title: 'Emphasizing & Highlighting',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 emphasis phrases',
+        'Highlight key points',
+        'Add impact to arguments'
+      ],
+      coreExplanation: `Emphasizing important points helps make your arguments more impactful in IELTS. Using varied phrases demonstrates lexical range.
+
+This lesson covers different ways to emphasize and highlight key points.`,
+      examples: [
+        { sentence: 'It is important to note that this is a complex issue.', explanation: '"Important to note" highlights significance.' },
+        { sentence: 'What is particularly significant is the rapid change.', explanation: '"Particularly significant" emphasizes importance.' },
+        { sentence: 'Above all, education is essential.', explanation: '"Above all" shows highest priority.' },
+        { sentence: 'The key point here is that action is needed.', explanation: '"Key point" identifies main idea.' },
+        { sentence: 'It should be emphasized that this is urgent.', explanation: '"Should be emphasized" highlights importance.' },
+        { sentence: 'Most importantly, we must act now.', explanation: '"Most importantly" shows priority.' },
+        { sentence: 'It is worth noting that progress has been made.', explanation: '"Worth noting" highlights something notable.' },
+        { sentence: 'The crucial factor is government support.', explanation: '"Crucial factor" identifies key element.' },
+        { sentence: 'Indeed, this is a serious concern.', explanation: '"Indeed" adds emphasis.' },
+        { sentence: 'In particular, young people are affected.', explanation: '"In particular" specifies focus.' },
+        { sentence: 'Significantly, the trend has reversed.', explanation: '"Significantly" highlights importance.' },
+        { sentence: 'It is essential to understand that...', explanation: '"Essential to understand" emphasizes necessity.' },
+        { sentence: 'The main point is that change is needed.', explanation: '"Main point" identifies central idea.' },
+        { sentence: 'Notably, some countries have succeeded.', explanation: '"Notably" highlights something noteworthy.' },
+        { sentence: 'What stands out is the rapid progress.', explanation: '"Stands out" highlights distinction.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Very very important', correction: 'Extremely important / Crucially important', explanation: 'Avoid repetition; use stronger adverbs.' },
+        { mistake: 'The most important thing', correction: 'The key point / Most importantly', explanation: 'Use more sophisticated phrases.' },
+        { mistake: 'I want to say that', correction: 'It is important to note that / I would emphasize that', explanation: 'Use more formal emphasis phrases.' }
+      ],
+      miniPractice: [
+        { question: 'It is _____ to note that this is a complex issue.', type: 'fill-blank' },
+        { question: 'Which phrase shows highest priority?', options: ['Above all', 'In addition', 'Furthermore', 'Moreover'], type: 'multiple-choice' },
+        { question: 'Rewrite with emphasis: "Education is important."', type: 'rewrite' },
+        { question: 'The _____ point here is that action is needed.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'important',
+        'Above all',
+        'It is essential to recognize that education plays a crucial role. / Above all, education is fundamental.',
+        'key'
+      ],
+      quickRecap: 'Key phrases: "important to note", "particularly significant", "above all", "key point", "most importantly", "worth noting", "crucial factor", "indeed", "in particular", "what stands out". Use these to emphasize key points!',
+      collocations: [
+        'important to note', 'particularly significant', 'above all', 'key point',
+        'should be emphasized', 'most importantly', 'worth noting', 'crucial factor',
+        'indeed', 'in particular', 'significantly', 'essential to understand'
+      ],
+      synonyms: [
+        { word: 'important', synonyms: ['crucial', 'essential', 'vital', 'significant'] },
+        { word: 'above all', synonyms: ['most importantly', 'primarily', 'chiefly', 'first and foremost'] },
+        { word: 'in particular', synonyms: ['especially', 'specifically', 'notably', 'particularly'] }
+      ],
+      speakingLines: [
+        'It is important to note that this issue affects all segments of society.',
+        'Above all, governments must prioritize sustainable development.',
+        'What is particularly significant is the speed of technological change.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-speaking-8',
+    title: 'Concluding & Summarizing',
+    slug: 'concluding-summarizing',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Speaking',
+    description: 'Phrases for concluding arguments and summarizing points in IELTS.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2024-12-22T10:00:00Z',
+    updated_at: '2024-12-22T10:00:00Z',
+    content: {
+      title: 'Concluding & Summarizing',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 conclusion phrases',
+        'Summarize effectively',
+        'End arguments strongly'
+      ],
+      coreExplanation: `Concluding and summarizing effectively is essential in IELTS Writing and Speaking. Using varied phrases demonstrates lexical range.
+
+This lesson covers different ways to conclude arguments and summarize points.`,
+      examples: [
+        { sentence: 'In conclusion, education is fundamental to development.', explanation: '"In conclusion" signals the end.' },
+        { sentence: 'To sum up, both approaches have merit.', explanation: '"To sum up" introduces a summary.' },
+        { sentence: 'All in all, the benefits outweigh the drawbacks.', explanation: '"All in all" gives overall assessment.' },
+        { sentence: 'In summary, action is urgently needed.', explanation: '"In summary" introduces a recap.' },
+        { sentence: 'To conclude, governments must take responsibility.', explanation: '"To conclude" signals ending.' },
+        { sentence: 'On balance, I believe this is positive.', explanation: '"On balance" gives overall judgment.' },
+        { sentence: 'Taking everything into account, change is necessary.', explanation: '"Taking everything into account" considers all factors.' },
+        { sentence: 'Overall, the situation has improved.', explanation: '"Overall" gives general assessment.' },
+        { sentence: 'In brief, technology has transformed society.', explanation: '"In brief" introduces short summary.' },
+        { sentence: 'To summarize, there are both advantages and disadvantages.', explanation: '"To summarize" introduces recap.' },
+        { sentence: 'Ultimately, the decision lies with individuals.', explanation: '"Ultimately" shows final point.' },
+        { sentence: 'In the final analysis, education is key.', explanation: '"In the final analysis" gives concluding view.' },
+        { sentence: 'All things considered, this is a complex issue.', explanation: '"All things considered" weighs factors.' },
+        { sentence: 'To put it briefly, change is inevitable.', explanation: '"To put it briefly" introduces concise summary.' },
+        { sentence: 'In essence, cooperation is essential.', explanation: '"In essence" captures core idea.' }
+      ],
+      commonMistakes: [
+        { mistake: 'In the conclusion', correction: 'In conclusion', explanation: 'Use "in conclusion" without "the".' },
+        { mistake: 'To sum up everything', correction: 'To sum up / In summary', explanation: 'Keep conclusion phrases concise.' },
+        { mistake: 'Finally to conclude', correction: 'Finally / To conclude', explanation: 'Do not combine these phrases.' }
+      ],
+      miniPractice: [
+        { question: 'In _____, education is fundamental to development.', type: 'fill-blank' },
+        { question: 'Which phrase gives an overall assessment?', options: ['All in all', 'For example', 'However', 'Furthermore'], type: 'multiple-choice' },
+        { question: 'Rewrite using a different phrase: "In conclusion, action is needed."', type: 'rewrite' },
+        { question: 'To _____ up, both approaches have their merits.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'conclusion',
+        'All in all',
+        'To sum up, action is needed. / All things considered, action is needed.',
+        'sum'
+      ],
+      quickRecap: 'Key phrases: "in conclusion", "to sum up", "all in all", "in summary", "on balance", "taking everything into account", "overall", "ultimately", "all things considered", "in essence". Use these to conclude effectively!',
+      collocations: [
+        'in conclusion', 'to sum up', 'all in all', 'in summary',
+        'to conclude', 'on balance', 'taking everything into account', 'overall',
+        'in brief', 'to summarize', 'ultimately', 'all things considered'
+      ],
+      synonyms: [
+        { word: 'in conclusion', synonyms: ['to conclude', 'finally', 'in closing', 'to finish'] },
+        { word: 'to sum up', synonyms: ['in summary', 'to summarize', 'in brief', 'to recap'] },
+        { word: 'all in all', synonyms: ['overall', 'on the whole', 'by and large', 'all things considered'] }
+      ],
+      speakingLines: [
+        'In conclusion, education plays a crucial role in personal and national development.',
+        'All in all, the benefits of technology outweigh its drawbacks.',
+        'Taking everything into account, a balanced approach is most effective.'
+      ]
+    }
   }
 ];
