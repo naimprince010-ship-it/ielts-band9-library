@@ -55,6 +55,9 @@ export function Navbar() {
                       <Link to="/writing" className={navLinkClass('/writing')}>
                         Writing
                       </Link>
+                      <Link to="/speaking" className={navLinkClass('/speaking')}>
+                        Speaking
+                      </Link>
                       <Link to="/pricing" className={navLinkClass('/pricing')}>
                         Pricing
                       </Link>
@@ -138,6 +141,13 @@ export function Navbar() {
                           onClick={() => setMobileMenuOpen(false)}
                         >
                           Writing
+                        </Link>
+                        <Link
+                          to="/speaking"
+                          className={`block ${navLinkClass('/speaking')}`}
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          Speaking
                         </Link>
                         <Link
                           to="/pricing"
