@@ -15185,5 +15185,1233 @@ Understanding these terms helps you discuss adventure and cultural tourism topic
         'Immersive experiences are more meaningful than sightseeing.'
       ]
     }
+  },
+  // ============================================
+  // BATCH 36: Arts & Entertainment (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-arts-1',
+    title: 'Visual Arts Vocabulary',
+    slug: 'visual-arts-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Arts',
+    description: 'Essential vocabulary for discussing visual arts and creativity.',
+    is_premium: false,
+    is_published: true,
+    view_count: 850,
+    created_at: '2025-03-27T10:00:00Z',
+    updated_at: '2025-03-27T10:00:00Z',
+    content: {
+      title: 'Visual Arts Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 visual arts vocabulary words',
+        'Discuss art and creativity',
+        'Describe artworks'
+      ],
+      coreExplanation: `Visual arts vocabulary is useful for IELTS Speaking topics about culture and interests. This lesson covers terms for discussing painting, sculpture, and other visual arts.
+
+Understanding these terms helps you discuss art topics effectively.`,
+      examples: [
+        { sentence: 'Art expresses human creativity.', explanation: '"Art" is creative expression.' },
+        { sentence: 'The painting was masterful.', explanation: '"Painting" is art on canvas.' },
+        { sentence: 'The sculpture was impressive.', explanation: '"Sculpture" is 3D art.' },
+        { sentence: 'The artist has a unique style.', explanation: '"Artist" is creator of art.' },
+        { sentence: 'The gallery displays contemporary art.', explanation: '"Gallery" is art exhibition space.' },
+        { sentence: 'The exhibition attracted thousands.', explanation: '"Exhibition" is public display.' },
+        { sentence: 'The masterpiece is priceless.', explanation: '"Masterpiece" is outstanding work.' },
+        { sentence: 'Abstract art challenges perception.', explanation: '"Abstract" is non-representational.' },
+        { sentence: 'The portrait captured her essence.', explanation: '"Portrait" is person depiction.' },
+        { sentence: 'The landscape was breathtaking.', explanation: '"Landscape" is scenery painting.' },
+        { sentence: 'The canvas was large.', explanation: '"Canvas" is painting surface.' },
+        { sentence: 'The technique was innovative.', explanation: '"Technique" is method used.' },
+        { sentence: 'The composition was balanced.', explanation: '"Composition" is arrangement of elements.' },
+        { sentence: 'The palette was vibrant.', explanation: '"Palette" is range of colors.' },
+        { sentence: 'The aesthetic is modern.', explanation: '"Aesthetic" is artistic style.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "art" and "arts"', correction: '"Art" = visual art; "arts" = broader creative fields', explanation: 'Arts includes music, theater, etc.' },
+        { mistake: 'Using "picture" for all art', correction: 'Use "painting", "drawing", "photograph" specifically', explanation: 'Be more precise.' },
+        { mistake: 'Confusing "gallery" and "museum"', correction: '"Gallery" = art display; "museum" = broader collections', explanation: 'Museums are more comprehensive.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ displayed works by famous painters.', type: 'fill-blank' },
+        { question: 'Which term means a 3D artwork?', options: ['Sculpture', 'Painting', 'Portrait', 'Canvas'], type: 'multiple-choice' },
+        { question: 'Describe a piece of art you admire.', type: 'rewrite' },
+        { question: 'The _____ created a stunning masterpiece.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'gallery',
+        'Sculpture',
+        'I admire Van Gogh\'s Starry Night. The vibrant palette and swirling composition create a dreamlike aesthetic.',
+        'artist'
+      ],
+      quickRecap: 'Key visual arts terms: art, painting, sculpture, artist, gallery, exhibition, masterpiece, abstract, portrait, landscape, canvas, technique, composition, palette, aesthetic. Use these for art topics!',
+      collocations: [
+        'visual art', 'oil painting', 'bronze sculpture', 'talented artist',
+        'art gallery', 'art exhibition', 'artistic masterpiece', 'abstract art',
+        'portrait painting', 'landscape painting', 'blank canvas', 'artistic technique'
+      ],
+      synonyms: [
+        { word: 'art', synonyms: ['artwork', 'creation', 'piece', 'work'] },
+        { word: 'artist', synonyms: ['painter', 'creator', 'sculptor', 'craftsman'] },
+        { word: 'masterpiece', synonyms: ['masterwork', 'classic', 'gem', 'treasure'] }
+      ],
+      speakingLines: [
+        'Art is a powerful form of expression.',
+        'I enjoy visiting galleries and exhibitions.',
+        'The artist\'s technique is truly remarkable.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-arts-2',
+    title: 'Music & Performance Vocabulary',
+    slug: 'music-performance-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Arts',
+    description: 'Vocabulary for discussing music and performing arts.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-03-28T10:00:00Z',
+    updated_at: '2025-03-28T10:00:00Z',
+    content: {
+      title: 'Music & Performance Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 music vocabulary words',
+        'Discuss musical genres',
+        'Describe performances'
+      ],
+      coreExplanation: `Music vocabulary is essential for IELTS Speaking topics about entertainment and culture. This lesson covers terms for discussing music and performances.
+
+Understanding these terms helps you discuss music topics effectively.`,
+      examples: [
+        { sentence: 'Music transcends language.', explanation: '"Music" is organized sound.' },
+        { sentence: 'The melody was memorable.', explanation: '"Melody" is tune.' },
+        { sentence: 'The rhythm was infectious.', explanation: '"Rhythm" is beat pattern.' },
+        { sentence: 'The harmony was beautiful.', explanation: '"Harmony" is combined notes.' },
+        { sentence: 'The composer created symphonies.', explanation: '"Composer" is music creator.' },
+        { sentence: 'The musician performed brilliantly.', explanation: '"Musician" is music performer.' },
+        { sentence: 'The concert was sold out.', explanation: '"Concert" is live performance.' },
+        { sentence: 'The orchestra played flawlessly.', explanation: '"Orchestra" is large music group.' },
+        { sentence: 'The genre is popular.', explanation: '"Genre" is music category.' },
+        { sentence: 'Classical music is timeless.', explanation: '"Classical" is traditional formal music.' },
+        { sentence: 'The lyrics were meaningful.', explanation: '"Lyrics" are song words.' },
+        { sentence: 'The album was a success.', explanation: '"Album" is music collection.' },
+        { sentence: 'The instrument requires skill.', explanation: '"Instrument" is music-making device.' },
+        { sentence: 'The vocalist has range.', explanation: '"Vocalist" is singer.' },
+        { sentence: 'The performance was captivating.', explanation: '"Performance" is live presentation.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "music" and "song"', correction: '"Music" = general; "song" = specific piece with lyrics', explanation: 'Song is more specific.' },
+        { mistake: 'Using "band" and "orchestra" interchangeably', correction: '"Band" = popular music; "orchestra" = classical', explanation: 'These are different groups.' },
+        { mistake: 'Confusing "melody" and "rhythm"', correction: '"Melody" = tune; "rhythm" = beat', explanation: 'These are different elements.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ was catchy and memorable.', type: 'fill-blank' },
+        { question: 'Which term means a live music event?', options: ['Concert', 'Album', 'Genre', 'Lyrics'], type: 'multiple-choice' },
+        { question: 'Describe your favorite type of music.', type: 'rewrite' },
+        { question: 'The _____ composed beautiful symphonies.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'melody',
+        'Concert',
+        'I enjoy jazz music because of its complex harmonies and improvisation. The rhythm and melody create a unique listening experience.',
+        'composer'
+      ],
+      quickRecap: 'Key music terms: music, melody, rhythm, harmony, composer, musician, concert, orchestra, genre, classical, lyrics, album, instrument, vocalist, performance. Use these for music topics!',
+      collocations: [
+        'listen to music', 'catchy melody', 'steady rhythm', 'perfect harmony',
+        'famous composer', 'talented musician', 'live concert', 'symphony orchestra',
+        'music genre', 'classical music', 'song lyrics', 'debut album'
+      ],
+      synonyms: [
+        { word: 'music', synonyms: ['melody', 'tune', 'sound', 'composition'] },
+        { word: 'musician', synonyms: ['performer', 'artist', 'player', 'instrumentalist'] },
+        { word: 'concert', synonyms: ['performance', 'show', 'gig', 'recital'] }
+      ],
+      speakingLines: [
+        'Music is an important part of my life.',
+        'I enjoy attending live concerts.',
+        'Classical music helps me concentrate.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-arts-3',
+    title: 'Film & Cinema Vocabulary',
+    slug: 'film-cinema-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Arts',
+    description: 'Vocabulary for discussing films and cinema.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-03-29T10:00:00Z',
+    updated_at: '2025-03-29T10:00:00Z',
+    content: {
+      title: 'Film & Cinema Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 film vocabulary words',
+        'Discuss movies and cinema',
+        'Analyze film elements'
+      ],
+      coreExplanation: `Film vocabulary is useful for IELTS Speaking topics about entertainment and media. This lesson covers terms for discussing movies and cinema.
+
+Understanding these terms helps you discuss film topics effectively.`,
+      examples: [
+        { sentence: 'The film won awards.', explanation: '"Film" is movie.' },
+        { sentence: 'The director has vision.', explanation: '"Director" is film leader.' },
+        { sentence: 'The actor gave a powerful performance.', explanation: '"Actor" is performer.' },
+        { sentence: 'The screenplay was well-written.', explanation: '"Screenplay" is film script.' },
+        { sentence: 'The plot was engaging.', explanation: '"Plot" is story.' },
+        { sentence: 'The cinematography was stunning.', explanation: '"Cinematography" is camera work.' },
+        { sentence: 'The soundtrack enhanced the mood.', explanation: '"Soundtrack" is film music.' },
+        { sentence: 'The scene was emotional.', explanation: '"Scene" is film segment.' },
+        { sentence: 'The genre is thriller.', explanation: '"Genre" is film category.' },
+        { sentence: 'The blockbuster broke records.', explanation: '"Blockbuster" is hugely successful film.' },
+        { sentence: 'The sequel continues the story.', explanation: '"Sequel" is follow-up film.' },
+        { sentence: 'The premiere attracted celebrities.', explanation: '"Premiere" is first showing.' },
+        { sentence: 'The review was positive.', explanation: '"Review" is critical assessment.' },
+        { sentence: 'The cast was talented.', explanation: '"Cast" is group of actors.' },
+        { sentence: 'The special effects were impressive.', explanation: '"Special effects" are visual tricks.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "film" and "movie"', correction: '"Film" is British/formal; "movie" is American/informal', explanation: 'Both are acceptable.' },
+        { mistake: 'Using "actor" only for males', correction: '"Actor" is now gender-neutral', explanation: '"Actress" is becoming less common.' },
+        { mistake: 'Confusing "plot" and "story"', correction: '"Plot" = sequence of events; "story" = overall narrative', explanation: 'Plot is more specific.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ directed several award-winning films.', type: 'fill-blank' },
+        { question: 'Which term means the camera work in a film?', options: ['Cinematography', 'Screenplay', 'Soundtrack', 'Plot'], type: 'multiple-choice' },
+        { question: 'Describe a film you enjoyed recently.', type: 'rewrite' },
+        { question: 'The _____ was gripping from start to finish.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'director',
+        'Cinematography',
+        'I recently enjoyed a thriller with excellent cinematography and a gripping plot. The cast delivered powerful performances.',
+        'plot'
+      ],
+      quickRecap: 'Key film terms: film, director, actor, screenplay, plot, cinematography, soundtrack, scene, genre, blockbuster, sequel, premiere, review, cast, special effects. Use these for film topics!',
+      collocations: [
+        'feature film', 'film director', 'lead actor', 'original screenplay',
+        'complex plot', 'stunning cinematography', 'film soundtrack', 'opening scene',
+        'film genre', 'summer blockbuster', 'film sequel', 'world premiere'
+      ],
+      synonyms: [
+        { word: 'film', synonyms: ['movie', 'picture', 'motion picture', 'feature'] },
+        { word: 'director', synonyms: ['filmmaker', 'auteur', 'moviemaker', 'producer'] },
+        { word: 'actor', synonyms: ['performer', 'star', 'player', 'thespian'] }
+      ],
+      speakingLines: [
+        'I enjoy films with complex plots.',
+        'The director\'s vision was remarkable.',
+        'Good cinematography can transform a film.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-arts-4',
+    title: 'Theater & Literature Vocabulary',
+    slug: 'theater-literature-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Arts',
+    description: 'Vocabulary for discussing theater and literature.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-03-30T10:00:00Z',
+    updated_at: '2025-03-30T10:00:00Z',
+    content: {
+      title: 'Theater & Literature Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 theater and literature words',
+        'Discuss plays and books',
+        'Analyze literary works'
+      ],
+      coreExplanation: `Theater and literature vocabulary is useful for IELTS topics about culture and education. This lesson covers terms for discussing plays, books, and written works.
+
+Understanding these terms helps you discuss theater and literature topics effectively.`,
+      examples: [
+        { sentence: 'Theater brings stories to life.', explanation: '"Theater" is live performance venue.' },
+        { sentence: 'The play received acclaim.', explanation: '"Play" is theatrical work.' },
+        { sentence: 'The novel was bestselling.', explanation: '"Novel" is long fiction book.' },
+        { sentence: 'The author is celebrated.', explanation: '"Author" is writer.' },
+        { sentence: 'The playwright wrote tragedies.', explanation: '"Playwright" is play writer.' },
+        { sentence: 'The narrative was compelling.', explanation: '"Narrative" is story.' },
+        { sentence: 'The character was complex.', explanation: '"Character" is person in story.' },
+        { sentence: 'The dialogue was witty.', explanation: '"Dialogue" is conversation.' },
+        { sentence: 'The theme was universal.', explanation: '"Theme" is central idea.' },
+        { sentence: 'The genre is fiction.', explanation: '"Fiction" is imaginary stories.' },
+        { sentence: 'Poetry expresses emotion.', explanation: '"Poetry" is verse writing.' },
+        { sentence: 'The drama was intense.', explanation: '"Drama" is serious play.' },
+        { sentence: 'The comedy was hilarious.', explanation: '"Comedy" is humorous work.' },
+        { sentence: 'The tragedy was moving.', explanation: '"Tragedy" is sad ending play.' },
+        { sentence: 'The audience applauded.', explanation: '"Audience" is viewers/readers.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "theater" and "theatre"', correction: '"Theater" is American; "theatre" is British', explanation: 'Both are correct.' },
+        { mistake: 'Using "book" and "novel" interchangeably', correction: '"Novel" is specifically long fiction', explanation: 'Book is broader.' },
+        { mistake: 'Confusing "drama" and "play"', correction: '"Drama" = serious genre; "play" = any theatrical work', explanation: 'Drama is a type of play.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ wrote several famous novels.', type: 'fill-blank' },
+        { question: 'Which term means a long work of fiction?', options: ['Novel', 'Poetry', 'Drama', 'Dialogue'], type: 'multiple-choice' },
+        { question: 'Describe a book that influenced you.', type: 'rewrite' },
+        { question: 'The _____ explored themes of love and loss.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'author',
+        'Novel',
+        'A book that influenced me explored themes of identity and belonging. The complex characters and compelling narrative stayed with me.',
+        'play/novel'
+      ],
+      quickRecap: 'Key theater/literature terms: theater, play, novel, author, playwright, narrative, character, dialogue, theme, fiction, poetry, drama, comedy, tragedy, audience. Use these for theater and literature topics!',
+      collocations: [
+        'live theater', 'stage play', 'bestselling novel', 'famous author',
+        'talented playwright', 'compelling narrative', 'main character', 'natural dialogue',
+        'central theme', 'literary fiction', 'modern poetry', 'Greek tragedy'
+      ],
+      synonyms: [
+        { word: 'theater', synonyms: ['stage', 'drama', 'playhouse', 'venue'] },
+        { word: 'novel', synonyms: ['book', 'fiction', 'story', 'narrative'] },
+        { word: 'author', synonyms: ['writer', 'novelist', 'creator', 'penman'] }
+      ],
+      speakingLines: [
+        'I enjoy reading novels in my free time.',
+        'Theater is a unique art form.',
+        'The author\'s writing style is distinctive.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 37: Science & Research (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-science-1',
+    title: 'Scientific Method Vocabulary',
+    slug: 'scientific-method-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Science',
+    description: 'Essential vocabulary for discussing scientific research and methods.',
+    is_premium: false,
+    is_published: true,
+    view_count: 880,
+    created_at: '2025-03-31T10:00:00Z',
+    updated_at: '2025-03-31T10:00:00Z',
+    content: {
+      title: 'Scientific Method Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 scientific method words',
+        'Discuss research processes',
+        'Analyze scientific studies'
+      ],
+      coreExplanation: `Scientific method vocabulary is essential for IELTS Academic Writing and Reading. This lesson covers terms for discussing research and scientific processes.
+
+Understanding these terms helps you discuss science topics effectively.`,
+      examples: [
+        { sentence: 'Science advances knowledge.', explanation: '"Science" is systematic study.' },
+        { sentence: 'The hypothesis was tested.', explanation: '"Hypothesis" is proposed explanation.' },
+        { sentence: 'The experiment yielded results.', explanation: '"Experiment" is controlled test.' },
+        { sentence: 'The data supports the theory.', explanation: '"Data" is collected information.' },
+        { sentence: 'The research was groundbreaking.', explanation: '"Research" is systematic investigation.' },
+        { sentence: 'The methodology was rigorous.', explanation: '"Methodology" is research approach.' },
+        { sentence: 'The findings were significant.', explanation: '"Findings" are research results.' },
+        { sentence: 'The conclusion was supported.', explanation: '"Conclusion" is final judgment.' },
+        { sentence: 'The evidence was compelling.', explanation: '"Evidence" is supporting information.' },
+        { sentence: 'The analysis revealed patterns.', explanation: '"Analysis" is detailed examination.' },
+        { sentence: 'The variables were controlled.', explanation: '"Variables" are changeable factors.' },
+        { sentence: 'The sample was representative.', explanation: '"Sample" is subset studied.' },
+        { sentence: 'The results were replicated.', explanation: '"Replicated" means repeated.' },
+        { sentence: 'The theory was validated.', explanation: '"Theory" is explanatory framework.' },
+        { sentence: 'Peer review ensures quality.', explanation: '"Peer review" is expert evaluation.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "hypothesis" and "theory"', correction: '"Hypothesis" = untested idea; "theory" = well-supported explanation', explanation: 'Theory is more established.' },
+        { mistake: 'Using "data" as singular', correction: '"Data" is technically plural (datum is singular)', explanation: '"Data are" is formal; "data is" is common.' },
+        { mistake: 'Confusing "results" and "findings"', correction: 'These are largely synonymous', explanation: '"Findings" is slightly more formal.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ was designed to test the hypothesis.', type: 'fill-blank' },
+        { question: 'Which term means a proposed explanation?', options: ['Hypothesis', 'Theory', 'Conclusion', 'Evidence'], type: 'multiple-choice' },
+        { question: 'Discuss why the scientific method is important.', type: 'rewrite' },
+        { question: 'The _____ supported the original theory.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'experiment',
+        'Hypothesis',
+        'The scientific method is important because it provides a systematic approach to testing ideas, ensuring objectivity and reliability.',
+        'findings/evidence/data'
+      ],
+      quickRecap: 'Key scientific method terms: science, hypothesis, experiment, data, research, methodology, findings, conclusion, evidence, analysis, variables, sample, replicated, theory, peer review. Use these for science topics!',
+      collocations: [
+        'scientific research', 'test hypothesis', 'conduct experiment', 'collect data',
+        'academic research', 'research methodology', 'key findings', 'draw conclusion',
+        'scientific evidence', 'data analysis', 'control variables', 'random sample'
+      ],
+      synonyms: [
+        { word: 'research', synonyms: ['study', 'investigation', 'inquiry', 'examination'] },
+        { word: 'findings', synonyms: ['results', 'discoveries', 'conclusions', 'outcomes'] },
+        { word: 'evidence', synonyms: ['proof', 'data', 'support', 'documentation'] }
+      ],
+      speakingLines: [
+        'Scientific research requires rigorous methodology.',
+        'The findings support the original hypothesis.',
+        'Peer review is essential for scientific credibility.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-science-2',
+    title: 'Biology & Life Sciences Vocabulary',
+    slug: 'biology-life-sciences-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Science',
+    description: 'Vocabulary for discussing biology and life sciences.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-04-01T10:00:00Z',
+    updated_at: '2025-04-01T10:00:00Z',
+    content: {
+      title: 'Biology & Life Sciences Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 biology vocabulary words',
+        'Discuss life sciences',
+        'Analyze biological concepts'
+      ],
+      coreExplanation: `Biology vocabulary is useful for IELTS topics about health, environment, and science. This lesson covers terms for discussing living organisms and life processes.
+
+Understanding these terms helps you discuss biology topics effectively.`,
+      examples: [
+        { sentence: 'Biology studies living organisms.', explanation: '"Biology" is study of life.' },
+        { sentence: 'Cells are building blocks.', explanation: '"Cells" are basic life units.' },
+        { sentence: 'DNA carries genetic information.', explanation: '"DNA" is genetic material.' },
+        { sentence: 'Genes determine traits.', explanation: '"Genes" are hereditary units.' },
+        { sentence: 'Evolution explains diversity.', explanation: '"Evolution" is gradual change.' },
+        { sentence: 'Species adapt to environments.', explanation: '"Species" are organism types.' },
+        { sentence: 'Ecosystems are interconnected.', explanation: '"Ecosystems" are ecological communities.' },
+        { sentence: 'Organisms interact with environments.', explanation: '"Organisms" are living things.' },
+        { sentence: 'Metabolism sustains life.', explanation: '"Metabolism" is chemical processes.' },
+        { sentence: 'Reproduction ensures survival.', explanation: '"Reproduction" is creating offspring.' },
+        { sentence: 'Genetics explains inheritance.', explanation: '"Genetics" is study of heredity.' },
+        { sentence: 'Biodiversity is declining.', explanation: '"Biodiversity" is variety of life.' },
+        { sentence: 'Microorganisms are everywhere.', explanation: '"Microorganisms" are tiny life forms.' },
+        { sentence: 'The immune system protects.', explanation: '"Immune system" fights disease.' },
+        { sentence: 'Photosynthesis produces oxygen.', explanation: '"Photosynthesis" is plant energy process.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "gene" and "DNA"', correction: '"Gene" = unit of heredity; "DNA" = molecule carrying genes', explanation: 'Genes are parts of DNA.' },
+        { mistake: 'Using "bacteria" as singular', correction: '"Bacteria" is plural; "bacterium" is singular', explanation: 'Use "bacteria are".' },
+        { mistake: 'Confusing "evolution" and "adaptation"', correction: '"Evolution" = long-term change; "adaptation" = specific adjustment', explanation: 'Adaptation is part of evolution.' }
+      ],
+      miniPractice: [
+        { question: '_____ is the study of living organisms.', type: 'fill-blank' },
+        { question: 'Which term means the basic unit of life?', options: ['Cell', 'Gene', 'DNA', 'Organism'], type: 'multiple-choice' },
+        { question: 'Discuss why biodiversity is important.', type: 'rewrite' },
+        { question: '_____ carries genetic information from parents to offspring.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Biology',
+        'Cell',
+        'Biodiversity is important because it maintains ecosystem balance, provides resources, and supports human survival.',
+        'DNA'
+      ],
+      quickRecap: 'Key biology terms: biology, cells, DNA, genes, evolution, species, ecosystems, organisms, metabolism, reproduction, genetics, biodiversity, microorganisms, immune system, photosynthesis. Use these for biology topics!',
+      collocations: [
+        'study biology', 'living cells', 'DNA sequence', 'dominant genes',
+        'theory of evolution', 'endangered species', 'natural ecosystems', 'living organisms',
+        'cell metabolism', 'sexual reproduction', 'genetic inheritance', 'protect biodiversity'
+      ],
+      synonyms: [
+        { word: 'organism', synonyms: ['creature', 'being', 'life form', 'entity'] },
+        { word: 'evolution', synonyms: ['development', 'progression', 'change', 'adaptation'] },
+        { word: 'species', synonyms: ['type', 'kind', 'variety', 'breed'] }
+      ],
+      speakingLines: [
+        'Biology helps us understand living systems.',
+        'Evolution explains the diversity of life.',
+        'Biodiversity is essential for ecosystem health.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-science-3',
+    title: 'Physics & Chemistry Vocabulary',
+    slug: 'physics-chemistry-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Science',
+    description: 'Vocabulary for discussing physics and chemistry.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-04-02T10:00:00Z',
+    updated_at: '2025-04-02T10:00:00Z',
+    content: {
+      title: 'Physics & Chemistry Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 physics and chemistry words',
+        'Discuss physical sciences',
+        'Analyze scientific concepts'
+      ],
+      coreExplanation: `Physics and chemistry vocabulary is useful for IELTS topics about technology and science. This lesson covers terms for discussing matter, energy, and physical processes.
+
+Understanding these terms helps you discuss physical science topics effectively.`,
+      examples: [
+        { sentence: 'Physics explains natural phenomena.', explanation: '"Physics" is study of matter and energy.' },
+        { sentence: 'Chemistry studies substances.', explanation: '"Chemistry" is study of matter composition.' },
+        { sentence: 'Energy cannot be destroyed.', explanation: '"Energy" is capacity to do work.' },
+        { sentence: 'Matter has mass.', explanation: '"Matter" is physical substance.' },
+        { sentence: 'Atoms are fundamental.', explanation: '"Atoms" are basic matter units.' },
+        { sentence: 'Molecules combine atoms.', explanation: '"Molecules" are atom groups.' },
+        { sentence: 'Elements are pure substances.', explanation: '"Elements" are basic substances.' },
+        { sentence: 'Compounds combine elements.', explanation: '"Compounds" are element combinations.' },
+        { sentence: 'Reactions transform substances.', explanation: '"Reactions" are chemical changes.' },
+        { sentence: 'Forces cause motion.', explanation: '"Forces" are pushes or pulls.' },
+        { sentence: 'Gravity attracts objects.', explanation: '"Gravity" is attractive force.' },
+        { sentence: 'Velocity measures speed.', explanation: '"Velocity" is speed with direction.' },
+        { sentence: 'Temperature affects reactions.', explanation: '"Temperature" is heat measure.' },
+        { sentence: 'Pressure influences states.', explanation: '"Pressure" is force per area.' },
+        { sentence: 'Particles are in motion.', explanation: '"Particles" are tiny matter pieces.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "speed" and "velocity"', correction: '"Speed" = how fast; "velocity" = speed with direction', explanation: 'Velocity is more specific.' },
+        { mistake: 'Using "weight" and "mass" interchangeably', correction: '"Mass" = amount of matter; "weight" = gravitational force', explanation: 'Mass is constant; weight varies.' },
+        { mistake: 'Confusing "atom" and "molecule"', correction: '"Atom" = single element unit; "molecule" = bonded atoms', explanation: 'Molecules contain atoms.' }
+      ],
+      miniPractice: [
+        { question: '_____ is the study of matter and energy.', type: 'fill-blank' },
+        { question: 'Which term means the basic unit of matter?', options: ['Atom', 'Molecule', 'Element', 'Compound'], type: 'multiple-choice' },
+        { question: 'Discuss how physics impacts daily life.', type: 'rewrite' },
+        { question: 'Chemical _____ transform substances into new materials.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Physics',
+        'Atom',
+        'Physics impacts daily life through technology, transportation, and understanding natural phenomena like gravity and electricity.',
+        'reactions'
+      ],
+      quickRecap: 'Key physics/chemistry terms: physics, chemistry, energy, matter, atoms, molecules, elements, compounds, reactions, forces, gravity, velocity, temperature, pressure, particles. Use these for physical science topics!',
+      collocations: [
+        'study physics', 'organic chemistry', 'kinetic energy', 'dark matter',
+        'split atoms', 'water molecules', 'chemical elements', 'organic compounds',
+        'chemical reactions', 'gravitational forces', 'force of gravity', 'high velocity'
+      ],
+      synonyms: [
+        { word: 'energy', synonyms: ['power', 'force', 'strength', 'vigor'] },
+        { word: 'matter', synonyms: ['substance', 'material', 'stuff', 'mass'] },
+        { word: 'reaction', synonyms: ['response', 'change', 'transformation', 'process'] }
+      ],
+      speakingLines: [
+        'Physics helps explain how the universe works.',
+        'Chemistry is essential for understanding materials.',
+        'Energy transformation is a fundamental concept.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-science-4',
+    title: 'Technology & Innovation Vocabulary',
+    slug: 'technology-innovation-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Science',
+    description: 'Vocabulary for discussing technology and innovation.',
+    is_premium: true,
+    is_published: true,
+    view_count: 920,
+    created_at: '2025-04-03T10:00:00Z',
+    updated_at: '2025-04-03T10:00:00Z',
+    content: {
+      title: 'Technology & Innovation Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 technology vocabulary words',
+        'Discuss innovation',
+        'Analyze technological trends'
+      ],
+      coreExplanation: `Technology vocabulary is essential for IELTS topics about modern life and development. This lesson covers terms for discussing technology and innovation.
+
+Understanding these terms helps you discuss technology topics effectively.`,
+      examples: [
+        { sentence: 'Technology transforms society.', explanation: '"Technology" is applied science.' },
+        { sentence: 'Innovation drives progress.', explanation: '"Innovation" is new ideas/methods.' },
+        { sentence: 'Artificial intelligence is advancing.', explanation: '"Artificial intelligence" is machine thinking.' },
+        { sentence: 'Automation increases efficiency.', explanation: '"Automation" is automatic processes.' },
+        { sentence: 'Digital transformation is ongoing.', explanation: '"Digital" relates to computers.' },
+        { sentence: 'The software was updated.', explanation: '"Software" is computer programs.' },
+        { sentence: 'Hardware needs upgrading.', explanation: '"Hardware" is physical equipment.' },
+        { sentence: 'The algorithm optimizes results.', explanation: '"Algorithm" is step-by-step procedure.' },
+        { sentence: 'Data drives decisions.', explanation: '"Data" is digital information.' },
+        { sentence: 'Cybersecurity protects systems.', explanation: '"Cybersecurity" is digital protection.' },
+        { sentence: 'Cloud computing enables access.', explanation: '"Cloud computing" is remote servers.' },
+        { sentence: 'Robotics is advancing.', explanation: '"Robotics" is robot technology.' },
+        { sentence: 'Biotechnology improves health.', explanation: '"Biotechnology" is biological technology.' },
+        { sentence: 'Renewable energy is growing.', explanation: '"Renewable energy" is sustainable power.' },
+        { sentence: 'The startup disrupted the industry.', explanation: '"Startup" is new business.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "technology" and "technique"', correction: '"Technology" = tools/systems; "technique" = method', explanation: 'Technology is broader.' },
+        { mistake: 'Using "digital" for all technology', correction: '"Digital" specifically means computer-based', explanation: 'Not all technology is digital.' },
+        { mistake: 'Confusing "software" and "application"', correction: '"Software" = all programs; "application" = specific program', explanation: 'Application is a type of software.' }
+      ],
+      miniPractice: [
+        { question: '_____ is transforming how we live and work.', type: 'fill-blank' },
+        { question: 'Which term means machine thinking?', options: ['Artificial intelligence', 'Automation', 'Algorithm', 'Robotics'], type: 'multiple-choice' },
+        { question: 'Discuss how technology has changed communication.', type: 'rewrite' },
+        { question: '_____ drives progress through new ideas and methods.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Technology',
+        'Artificial intelligence',
+        'Technology has revolutionized communication through instant messaging, video calls, and social media, connecting people globally.',
+        'Innovation'
+      ],
+      quickRecap: 'Key technology terms: technology, innovation, artificial intelligence, automation, digital, software, hardware, algorithm, data, cybersecurity, cloud computing, robotics, biotechnology, renewable energy, startup. Use these for technology topics!',
+      collocations: [
+        'modern technology', 'technological innovation', 'artificial intelligence', 'industrial automation',
+        'digital transformation', 'computer software', 'computer hardware', 'complex algorithm',
+        'big data', 'cybersecurity threats', 'cloud computing', 'advanced robotics'
+      ],
+      synonyms: [
+        { word: 'technology', synonyms: ['tech', 'innovation', 'advancement', 'development'] },
+        { word: 'innovation', synonyms: ['invention', 'breakthrough', 'advancement', 'novelty'] },
+        { word: 'digital', synonyms: ['electronic', 'computerized', 'virtual', 'online'] }
+      ],
+      speakingLines: [
+        'Technology has transformed every aspect of life.',
+        'Innovation is essential for economic growth.',
+        'Artificial intelligence will shape the future.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 38: Business & Finance (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-business-1',
+    title: 'Business & Commerce Vocabulary',
+    slug: 'business-commerce-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Business',
+    description: 'Essential vocabulary for discussing business and commerce.',
+    is_premium: false,
+    is_published: true,
+    view_count: 920,
+    created_at: '2025-04-04T10:00:00Z',
+    updated_at: '2025-04-04T10:00:00Z',
+    content: {
+      title: 'Business & Commerce Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 business vocabulary words',
+        'Discuss commerce',
+        'Analyze business concepts'
+      ],
+      coreExplanation: `Business vocabulary is essential for IELTS topics about work and economy. This lesson covers terms for discussing business and commercial activities.
+
+Understanding these terms helps you discuss business topics effectively.`,
+      examples: [
+        { sentence: 'Business drives the economy.', explanation: '"Business" is commercial activity.' },
+        { sentence: 'The company expanded globally.', explanation: '"Company" is business organization.' },
+        { sentence: 'The corporation has shareholders.', explanation: '"Corporation" is large company.' },
+        { sentence: 'Entrepreneurs take risks.', explanation: '"Entrepreneurs" are business starters.' },
+        { sentence: 'The market is competitive.', explanation: '"Market" is trading environment.' },
+        { sentence: 'Revenue increased this quarter.', explanation: '"Revenue" is income.' },
+        { sentence: 'Profit margins improved.', explanation: '"Profit" is financial gain.' },
+        { sentence: 'The strategy was effective.', explanation: '"Strategy" is plan of action.' },
+        { sentence: 'Management made decisions.', explanation: '"Management" is business leadership.' },
+        { sentence: 'Operations run smoothly.', explanation: '"Operations" are business activities.' },
+        { sentence: 'The brand is recognized.', explanation: '"Brand" is company identity.' },
+        { sentence: 'Customers are satisfied.', explanation: '"Customers" are buyers.' },
+        { sentence: 'Competition is intense.', explanation: '"Competition" is rivalry.' },
+        { sentence: 'The partnership was successful.', explanation: '"Partnership" is business alliance.' },
+        { sentence: 'Growth is projected.', explanation: '"Growth" is expansion.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "company" and "corporation"', correction: '"Corporation" is a specific legal structure', explanation: 'All corporations are companies, not vice versa.' },
+        { mistake: 'Using "income" and "revenue" interchangeably', correction: '"Revenue" = total sales; "income" = after expenses', explanation: 'Revenue is gross; income is net.' },
+        { mistake: 'Confusing "customer" and "client"', correction: '"Customer" = buyer; "client" = service recipient', explanation: 'Client implies ongoing relationship.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ expanded into new markets.', type: 'fill-blank' },
+        { question: 'Which term means financial gain?', options: ['Profit', 'Revenue', 'Growth', 'Strategy'], type: 'multiple-choice' },
+        { question: 'Discuss what makes a business successful.', type: 'rewrite' },
+        { question: '_____ take risks to start new businesses.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'company',
+        'Profit',
+        'A successful business requires good strategy, strong management, quality products, and satisfied customers.',
+        'Entrepreneurs'
+      ],
+      quickRecap: 'Key business terms: business, company, corporation, entrepreneurs, market, revenue, profit, strategy, management, operations, brand, customers, competition, partnership, growth. Use these for business topics!',
+      collocations: [
+        'run business', 'large company', 'multinational corporation', 'successful entrepreneurs',
+        'target market', 'annual revenue', 'net profit', 'business strategy',
+        'senior management', 'daily operations', 'brand recognition', 'loyal customers'
+      ],
+      synonyms: [
+        { word: 'business', synonyms: ['company', 'enterprise', 'firm', 'organization'] },
+        { word: 'profit', synonyms: ['gain', 'earnings', 'return', 'income'] },
+        { word: 'strategy', synonyms: ['plan', 'approach', 'method', 'tactic'] }
+      ],
+      speakingLines: [
+        'Business plays a crucial role in the economy.',
+        'Entrepreneurs drive innovation and job creation.',
+        'A good strategy is essential for business success.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-business-2',
+    title: 'Finance & Investment Vocabulary',
+    slug: 'finance-investment-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Business',
+    description: 'Vocabulary for discussing finance and investment.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2025-04-05T10:00:00Z',
+    updated_at: '2025-04-05T10:00:00Z',
+    content: {
+      title: 'Finance & Investment Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 finance vocabulary words',
+        'Discuss investment',
+        'Analyze financial concepts'
+      ],
+      coreExplanation: `Finance vocabulary is useful for IELTS topics about economy and personal finance. This lesson covers terms for discussing money management and investment.
+
+Understanding these terms helps you discuss finance topics effectively.`,
+      examples: [
+        { sentence: 'Finance manages money.', explanation: '"Finance" is money management.' },
+        { sentence: 'Investment generates returns.', explanation: '"Investment" is putting money to work.' },
+        { sentence: 'The stock market fluctuates.', explanation: '"Stock market" is share trading.' },
+        { sentence: 'Bonds provide fixed income.', explanation: '"Bonds" are debt securities.' },
+        { sentence: 'Assets have value.', explanation: '"Assets" are valuable possessions.' },
+        { sentence: 'Liabilities are obligations.', explanation: '"Liabilities" are debts.' },
+        { sentence: 'Capital funds growth.', explanation: '"Capital" is financial resources.' },
+        { sentence: 'Interest rates affect borrowing.', explanation: '"Interest rates" are borrowing costs.' },
+        { sentence: 'Inflation erodes purchasing power.', explanation: '"Inflation" is price increase.' },
+        { sentence: 'The budget was balanced.', explanation: '"Budget" is financial plan.' },
+        { sentence: 'Savings provide security.', explanation: '"Savings" are stored money.' },
+        { sentence: 'Debt must be managed.', explanation: '"Debt" is money owed.' },
+        { sentence: 'Returns exceeded expectations.', explanation: '"Returns" are investment gains.' },
+        { sentence: 'Risk must be assessed.', explanation: '"Risk" is potential loss.' },
+        { sentence: 'Diversification reduces risk.', explanation: '"Diversification" is spreading investments.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "stocks" and "shares"', correction: 'These are largely synonymous', explanation: '"Stocks" is American; "shares" is British.' },
+        { mistake: 'Using "interest" and "interest rate" interchangeably', correction: '"Interest" = money paid; "interest rate" = percentage', explanation: 'Rate is the percentage.' },
+        { mistake: 'Confusing "savings" and "investment"', correction: '"Savings" = safe storage; "investment" = growth-seeking', explanation: 'Investment involves more risk.' }
+      ],
+      miniPractice: [
+        { question: '_____ is essential for managing money effectively.', type: 'fill-blank' },
+        { question: 'Which term means money owed?', options: ['Debt', 'Assets', 'Capital', 'Returns'], type: 'multiple-choice' },
+        { question: 'Discuss the importance of saving money.', type: 'rewrite' },
+        { question: '_____ generates returns over time.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Finance/Budgeting',
+        'Debt',
+        'Saving money is important because it provides financial security, enables future investments, and prepares for emergencies.',
+        'Investment'
+      ],
+      quickRecap: 'Key finance terms: finance, investment, stock market, bonds, assets, liabilities, capital, interest rates, inflation, budget, savings, debt, returns, risk, diversification. Use these for finance topics!',
+      collocations: [
+        'personal finance', 'long-term investment', 'stock market', 'government bonds',
+        'financial assets', 'current liabilities', 'venture capital', 'interest rates',
+        'high inflation', 'annual budget', 'personal savings', 'national debt'
+      ],
+      synonyms: [
+        { word: 'finance', synonyms: ['money', 'funds', 'capital', 'resources'] },
+        { word: 'investment', synonyms: ['stake', 'venture', 'contribution', 'funding'] },
+        { word: 'debt', synonyms: ['liability', 'obligation', 'loan', 'borrowing'] }
+      ],
+      speakingLines: [
+        'Finance literacy is important for everyone.',
+        'Investment requires careful planning.',
+        'Managing debt is crucial for financial health.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-business-3',
+    title: 'Marketing & Sales Vocabulary',
+    slug: 'marketing-sales-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Business',
+    description: 'Vocabulary for discussing marketing and sales.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-04-06T10:00:00Z',
+    updated_at: '2025-04-06T10:00:00Z',
+    content: {
+      title: 'Marketing & Sales Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 marketing vocabulary words',
+        'Discuss sales strategies',
+        'Analyze marketing concepts'
+      ],
+      coreExplanation: `Marketing vocabulary is useful for IELTS topics about business and consumerism. This lesson covers terms for discussing marketing and sales.
+
+Understanding these terms helps you discuss marketing topics effectively.`,
+      examples: [
+        { sentence: 'Marketing promotes products.', explanation: '"Marketing" is promoting and selling.' },
+        { sentence: 'Sales increased significantly.', explanation: '"Sales" are transactions.' },
+        { sentence: 'Advertising reaches audiences.', explanation: '"Advertising" is paid promotion.' },
+        { sentence: 'The campaign was successful.', explanation: '"Campaign" is marketing effort.' },
+        { sentence: 'The target audience is young.', explanation: '"Target audience" is intended customers.' },
+        { sentence: 'Branding creates identity.', explanation: '"Branding" is creating brand image.' },
+        { sentence: 'The promotion attracted customers.', explanation: '"Promotion" is special offer.' },
+        { sentence: 'Market research guides decisions.', explanation: '"Market research" is studying markets.' },
+        { sentence: 'Consumer behavior varies.', explanation: '"Consumer behavior" is buying patterns.' },
+        { sentence: 'The product launch was successful.', explanation: '"Product launch" is introducing product.' },
+        { sentence: 'Digital marketing is growing.', explanation: '"Digital marketing" is online promotion.' },
+        { sentence: 'Social media marketing is effective.', explanation: '"Social media marketing" is platform promotion.' },
+        { sentence: 'The slogan is memorable.', explanation: '"Slogan" is catchy phrase.' },
+        { sentence: 'Market share increased.', explanation: '"Market share" is portion of market.' },
+        { sentence: 'Customer loyalty is valuable.', explanation: '"Customer loyalty" is repeat business.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "marketing" and "advertising"', correction: '"Marketing" is broader; "advertising" is one component', explanation: 'Advertising is part of marketing.' },
+        { mistake: 'Using "promotion" only for discounts', correction: '"Promotion" includes all marketing activities', explanation: 'Promotion is broader.' },
+        { mistake: 'Confusing "brand" and "branding"', correction: '"Brand" = identity; "branding" = creating identity', explanation: 'Branding is the process.' }
+      ],
+      miniPractice: [
+        { question: '_____ is essential for reaching potential customers.', type: 'fill-blank' },
+        { question: 'Which term means the intended customers?', options: ['Target audience', 'Market share', 'Consumer behavior', 'Customer loyalty'], type: 'multiple-choice' },
+        { question: 'Discuss how advertising influences consumers.', type: 'rewrite' },
+        { question: 'The _____ was designed to increase brand awareness.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Marketing/Advertising',
+        'Target audience',
+        'Advertising influences consumers by creating awareness, shaping perceptions, and encouraging purchasing decisions.',
+        'campaign'
+      ],
+      quickRecap: 'Key marketing terms: marketing, sales, advertising, campaign, target audience, branding, promotion, market research, consumer behavior, product launch, digital marketing, social media marketing, slogan, market share, customer loyalty. Use these for marketing topics!',
+      collocations: [
+        'marketing strategy', 'boost sales', 'online advertising', 'marketing campaign',
+        'target audience', 'brand branding', 'sales promotion', 'market research',
+        'consumer behavior', 'product launch', 'digital marketing', 'social media marketing'
+      ],
+      synonyms: [
+        { word: 'marketing', synonyms: ['promotion', 'advertising', 'selling', 'merchandising'] },
+        { word: 'advertising', synonyms: ['promotion', 'publicity', 'marketing', 'commercials'] },
+        { word: 'campaign', synonyms: ['drive', 'initiative', 'effort', 'push'] }
+      ],
+      speakingLines: [
+        'Marketing is essential for business success.',
+        'Digital marketing has transformed advertising.',
+        'Understanding consumer behavior is crucial.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-business-4',
+    title: 'Economics & Trade Vocabulary',
+    slug: 'economics-trade-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Business',
+    description: 'Vocabulary for discussing economics and international trade.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-04-07T10:00:00Z',
+    updated_at: '2025-04-07T10:00:00Z',
+    content: {
+      title: 'Economics & Trade Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 economics vocabulary words',
+        'Discuss international trade',
+        'Analyze economic concepts'
+      ],
+      coreExplanation: `Economics vocabulary is essential for IELTS Writing topics about globalization and development. This lesson covers terms for discussing economics and trade.
+
+Understanding these terms helps you discuss economic topics effectively.`,
+      examples: [
+        { sentence: 'Economics studies resource allocation.', explanation: '"Economics" is study of resources.' },
+        { sentence: 'The economy is growing.', explanation: '"Economy" is financial system.' },
+        { sentence: 'Trade benefits both parties.', explanation: '"Trade" is exchange of goods.' },
+        { sentence: 'Exports generate income.', explanation: '"Exports" are goods sold abroad.' },
+        { sentence: 'Imports meet demand.', explanation: '"Imports" are goods from abroad.' },
+        { sentence: 'GDP measures output.', explanation: '"GDP" is gross domestic product.' },
+        { sentence: 'Supply meets demand.', explanation: '"Supply" is available quantity.' },
+        { sentence: 'Demand drives prices.', explanation: '"Demand" is desire to buy.' },
+        { sentence: 'Tariffs affect trade.', explanation: '"Tariffs" are import taxes.' },
+        { sentence: 'Free trade removes barriers.', explanation: '"Free trade" is unrestricted trade.' },
+        { sentence: 'Recession affects employment.', explanation: '"Recession" is economic decline.' },
+        { sentence: 'Unemployment is rising.', explanation: '"Unemployment" is joblessness.' },
+        { sentence: 'Globalization connects economies.', explanation: '"Globalization" is world integration.' },
+        { sentence: 'Development improves living standards.', explanation: '"Development" is economic progress.' },
+        { sentence: 'Sustainability ensures future growth.', explanation: '"Sustainability" is long-term viability.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "economy" and "economics"', correction: '"Economy" = system; "economics" = study', explanation: 'Economics is the academic field.' },
+        { mistake: 'Using "growth" and "development" interchangeably', correction: '"Growth" = quantitative; "development" = qualitative', explanation: 'Development is broader.' },
+        { mistake: 'Confusing "recession" and "depression"', correction: '"Recession" = decline; "depression" = severe, prolonged decline', explanation: 'Depression is more severe.' }
+      ],
+      miniPractice: [
+        { question: '_____ studies how resources are allocated.', type: 'fill-blank' },
+        { question: 'Which term means goods sold to other countries?', options: ['Exports', 'Imports', 'Tariffs', 'Trade'], type: 'multiple-choice' },
+        { question: 'Discuss the benefits of international trade.', type: 'rewrite' },
+        { question: '_____ connects economies around the world.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Economics',
+        'Exports',
+        'International trade benefits countries by providing access to goods, creating jobs, and promoting economic growth.',
+        'Globalization'
+      ],
+      quickRecap: 'Key economics terms: economics, economy, trade, exports, imports, GDP, supply, demand, tariffs, free trade, recession, unemployment, globalization, development, sustainability. Use these for economics topics!',
+      collocations: [
+        'study economics', 'global economy', 'international trade', 'increase exports',
+        'reduce imports', 'GDP growth', 'supply and demand', 'consumer demand',
+        'import tariffs', 'free trade', 'economic recession', 'high unemployment'
+      ],
+      synonyms: [
+        { word: 'economy', synonyms: ['market', 'system', 'finances', 'commerce'] },
+        { word: 'trade', synonyms: ['commerce', 'business', 'exchange', 'dealing'] },
+        { word: 'growth', synonyms: ['expansion', 'development', 'increase', 'progress'] }
+      ],
+      speakingLines: [
+        'Economics helps us understand resource allocation.',
+        'International trade benefits all participating countries.',
+        'Globalization has transformed the world economy.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 39: Media & Journalism (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-media-1',
+    title: 'Media & News Vocabulary',
+    slug: 'media-news-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Media',
+    description: 'Essential vocabulary for discussing media and news.',
+    is_premium: false,
+    is_published: true,
+    view_count: 880,
+    created_at: '2025-04-08T10:00:00Z',
+    updated_at: '2025-04-08T10:00:00Z',
+    content: {
+      title: 'Media & News Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 media vocabulary words',
+        'Discuss news and journalism',
+        'Analyze media influence'
+      ],
+      coreExplanation: `Media vocabulary is essential for IELTS topics about information and society. This lesson covers terms for discussing news and media.
+
+Understanding these terms helps you discuss media topics effectively.`,
+      examples: [
+        { sentence: 'Media shapes public opinion.', explanation: '"Media" is communication channels.' },
+        { sentence: 'The news reported events.', explanation: '"News" is current information.' },
+        { sentence: 'Journalism informs the public.', explanation: '"Journalism" is news gathering.' },
+        { sentence: 'The press has freedom.', explanation: '"Press" is news media.' },
+        { sentence: 'The headline grabbed attention.', explanation: '"Headline" is news title.' },
+        { sentence: 'The article was informative.', explanation: '"Article" is written piece.' },
+        { sentence: 'The broadcast reached millions.', explanation: '"Broadcast" is transmitted program.' },
+        { sentence: 'The reporter investigated.', explanation: '"Reporter" is news gatherer.' },
+        { sentence: 'The editor reviewed content.', explanation: '"Editor" is content manager.' },
+        { sentence: 'The source was reliable.', explanation: '"Source" is information origin.' },
+        { sentence: 'Coverage was extensive.', explanation: '"Coverage" is reporting extent.' },
+        { sentence: 'The story went viral.', explanation: '"Viral" means spreading rapidly.' },
+        { sentence: 'Bias affects reporting.', explanation: '"Bias" is prejudice.' },
+        { sentence: 'Objectivity is important.', explanation: '"Objectivity" is impartiality.' },
+        { sentence: 'Credibility must be maintained.', explanation: '"Credibility" is trustworthiness.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "media" as singular', correction: '"Media" is plural (medium is singular)', explanation: '"Media are" is technically correct.' },
+        { mistake: 'Using "news" as countable', correction: '"News" is uncountable', explanation: 'Say "news items" or "pieces of news".' },
+        { mistake: 'Confusing "press" and "media"', correction: '"Press" = print media; "media" = all channels', explanation: 'Media is broader.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ plays a crucial role in informing the public.', type: 'fill-blank' },
+        { question: 'Which term means the title of a news story?', options: ['Headline', 'Article', 'Broadcast', 'Coverage'], type: 'multiple-choice' },
+        { question: 'Discuss the role of media in society.', type: 'rewrite' },
+        { question: '_____ is essential for trustworthy reporting.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'media',
+        'Headline',
+        'Media plays a vital role in society by informing citizens, holding power accountable, and facilitating public debate.',
+        'Objectivity/Credibility'
+      ],
+      quickRecap: 'Key media terms: media, news, journalism, press, headline, article, broadcast, reporter, editor, source, coverage, viral, bias, objectivity, credibility. Use these for media topics!',
+      collocations: [
+        'mass media', 'breaking news', 'investigative journalism', 'free press',
+        'news headline', 'newspaper article', 'live broadcast', 'news reporter',
+        'chief editor', 'reliable source', 'media coverage', 'go viral'
+      ],
+      synonyms: [
+        { word: 'media', synonyms: ['press', 'news', 'broadcasting', 'journalism'] },
+        { word: 'news', synonyms: ['information', 'reports', 'updates', 'stories'] },
+        { word: 'reporter', synonyms: ['journalist', 'correspondent', 'newsman', 'writer'] }
+      ],
+      speakingLines: [
+        'Media plays a crucial role in democracy.',
+        'News should be objective and unbiased.',
+        'Journalism requires credibility and integrity.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-media-2',
+    title: 'Social Media Vocabulary',
+    slug: 'social-media-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Media',
+    description: 'Vocabulary for discussing social media and online platforms.',
+    is_premium: true,
+    is_published: true,
+    view_count: 920,
+    created_at: '2025-04-09T10:00:00Z',
+    updated_at: '2025-04-09T10:00:00Z',
+    content: {
+      title: 'Social Media Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 social media vocabulary words',
+        'Discuss online platforms',
+        'Analyze social media impact'
+      ],
+      coreExplanation: `Social media vocabulary is essential for IELTS topics about technology and communication. This lesson covers terms for discussing social media platforms and online interaction.
+
+Understanding these terms helps you discuss social media topics effectively.`,
+      examples: [
+        { sentence: 'Social media connects people.', explanation: '"Social media" is online platforms.' },
+        { sentence: 'The platform has millions of users.', explanation: '"Platform" is online service.' },
+        { sentence: 'The post went viral.', explanation: '"Post" is shared content.' },
+        { sentence: 'Followers increased rapidly.', explanation: '"Followers" are subscribers.' },
+        { sentence: 'The content was engaging.', explanation: '"Content" is shared material.' },
+        { sentence: 'Influencers shape opinions.', explanation: '"Influencers" are popular users.' },
+        { sentence: 'The feed shows updates.', explanation: '"Feed" is content stream.' },
+        { sentence: 'Engagement metrics improved.', explanation: '"Engagement" is user interaction.' },
+        { sentence: 'The hashtag trended.', explanation: '"Hashtag" is topic marker.' },
+        { sentence: 'Sharing spreads information.', explanation: '"Sharing" is distributing content.' },
+        { sentence: 'The profile was updated.', explanation: '"Profile" is user page.' },
+        { sentence: 'Privacy settings matter.', explanation: '"Privacy" is personal information control.' },
+        { sentence: 'Algorithms determine visibility.', explanation: '"Algorithms" are content rules.' },
+        { sentence: 'Misinformation spreads quickly.', explanation: '"Misinformation" is false information.' },
+        { sentence: 'Online presence is important.', explanation: '"Online presence" is digital footprint.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "followers" and "friends"', correction: '"Followers" = one-way; "friends" = mutual connection', explanation: 'These differ by platform.' },
+        { mistake: 'Using "viral" for any popular content', correction: '"Viral" means spreading rapidly and widely', explanation: 'Viral implies exponential growth.' },
+        { mistake: 'Confusing "post" and "share"', correction: '"Post" = create content; "share" = distribute others\' content', explanation: 'These are different actions.' }
+      ],
+      miniPractice: [
+        { question: '_____ media has transformed how people communicate.', type: 'fill-blank' },
+        { question: 'Which term means popular users who shape opinions?', options: ['Influencers', 'Followers', 'Algorithms', 'Hashtags'], type: 'multiple-choice' },
+        { question: 'Discuss the impact of social media on society.', type: 'rewrite' },
+        { question: 'The _____ went viral and was shared millions of times.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Social',
+        'Influencers',
+        'Social media has transformed society by enabling instant communication, but has also raised concerns about privacy and misinformation.',
+        'post/content'
+      ],
+      quickRecap: 'Key social media terms: social media, platform, post, followers, content, influencers, feed, engagement, hashtag, sharing, profile, privacy, algorithms, misinformation, online presence. Use these for social media topics!',
+      collocations: [
+        'social media', 'online platform', 'viral post', 'gain followers',
+        'create content', 'social media influencers', 'news feed', 'user engagement',
+        'trending hashtag', 'content sharing', 'user profile', 'privacy settings'
+      ],
+      synonyms: [
+        { word: 'platform', synonyms: ['network', 'site', 'service', 'app'] },
+        { word: 'followers', synonyms: ['subscribers', 'fans', 'audience', 'supporters'] },
+        { word: 'content', synonyms: ['material', 'posts', 'media', 'information'] }
+      ],
+      speakingLines: [
+        'Social media has changed how we communicate.',
+        'Influencers have significant impact on consumer behavior.',
+        'Privacy is a major concern on social media.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-media-3',
+    title: 'Advertising & Propaganda Vocabulary',
+    slug: 'advertising-propaganda-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Media',
+    description: 'Vocabulary for discussing advertising and media influence.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-04-10T10:00:00Z',
+    updated_at: '2025-04-10T10:00:00Z',
+    content: {
+      title: 'Advertising & Propaganda Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 advertising vocabulary words',
+        'Discuss media influence',
+        'Analyze persuasion techniques'
+      ],
+      coreExplanation: `Advertising vocabulary is useful for IELTS topics about media influence and consumerism. This lesson covers terms for discussing advertising and persuasion.
+
+Understanding these terms helps you discuss advertising topics effectively.`,
+      examples: [
+        { sentence: 'Advertising promotes products.', explanation: '"Advertising" is paid promotion.' },
+        { sentence: 'Propaganda influences beliefs.', explanation: '"Propaganda" is biased information.' },
+        { sentence: 'The commercial was memorable.', explanation: '"Commercial" is TV advertisement.' },
+        { sentence: 'The advertisement targeted youth.', explanation: '"Advertisement" is promotional message.' },
+        { sentence: 'Persuasion techniques are used.', explanation: '"Persuasion" is convincing.' },
+        { sentence: 'The message was subtle.', explanation: '"Message" is communicated idea.' },
+        { sentence: 'The slogan was catchy.', explanation: '"Slogan" is memorable phrase.' },
+        { sentence: 'The brand image was strong.', explanation: '"Brand image" is perception.' },
+        { sentence: 'Endorsements boost credibility.', explanation: '"Endorsements" are celebrity support.' },
+        { sentence: 'The target market is defined.', explanation: '"Target market" is intended audience.' },
+        { sentence: 'Consumerism is promoted.', explanation: '"Consumerism" is buying culture.' },
+        { sentence: 'Manipulation is unethical.', explanation: '"Manipulation" is unfair influence.' },
+        { sentence: 'Subliminal messages are hidden.', explanation: '"Subliminal" is below conscious awareness.' },
+        { sentence: 'Media literacy is important.', explanation: '"Media literacy" is understanding media.' },
+        { sentence: 'Critical thinking is essential.', explanation: '"Critical thinking" is careful analysis.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "advertising" and "propaganda"', correction: '"Advertising" = commercial; "propaganda" = political/ideological', explanation: 'Propaganda has negative connotations.' },
+        { mistake: 'Using "commercial" for all ads', correction: '"Commercial" specifically means TV/radio ad', explanation: 'Advertisement is broader.' },
+        { mistake: 'Confusing "persuasion" and "manipulation"', correction: '"Persuasion" = ethical; "manipulation" = deceptive', explanation: 'Manipulation is negative.' }
+      ],
+      miniPractice: [
+        { question: '_____ uses various techniques to promote products.', type: 'fill-blank' },
+        { question: 'Which term means biased information to influence beliefs?', options: ['Propaganda', 'Advertising', 'Endorsement', 'Slogan'], type: 'multiple-choice' },
+        { question: 'Discuss how advertising influences consumers.', type: 'rewrite' },
+        { question: '_____ literacy helps people analyze media messages critically.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Advertising',
+        'Propaganda',
+        'Advertising influences consumers through emotional appeals, celebrity endorsements, and persuasive messaging that shapes purchasing decisions.',
+        'Media'
+      ],
+      quickRecap: 'Key advertising terms: advertising, propaganda, commercial, advertisement, persuasion, message, slogan, brand image, endorsements, target market, consumerism, manipulation, subliminal, media literacy, critical thinking. Use these for advertising topics!',
+      collocations: [
+        'online advertising', 'political propaganda', 'TV commercial', 'print advertisement',
+        'persuasion techniques', 'advertising message', 'catchy slogan', 'brand image',
+        'celebrity endorsements', 'target market', 'consumer consumerism', 'media manipulation'
+      ],
+      synonyms: [
+        { word: 'advertising', synonyms: ['marketing', 'promotion', 'publicity', 'commercials'] },
+        { word: 'propaganda', synonyms: ['misinformation', 'spin', 'brainwashing', 'indoctrination'] },
+        { word: 'persuasion', synonyms: ['influence', 'convincing', 'coaxing', 'inducement'] }
+      ],
+      speakingLines: [
+        'Advertising is everywhere in modern society.',
+        'Media literacy helps us analyze messages critically.',
+        'Propaganda can be used to manipulate public opinion.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-media-4',
+    title: 'Digital Media & Publishing Vocabulary',
+    slug: 'digital-media-publishing-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Media',
+    description: 'Vocabulary for discussing digital media and publishing.',
+    is_premium: true,
+    is_published: true,
+    view_count: 750,
+    created_at: '2025-04-11T10:00:00Z',
+    updated_at: '2025-04-11T10:00:00Z',
+    content: {
+      title: 'Digital Media & Publishing Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 digital publishing words',
+        'Discuss online media',
+        'Analyze publishing trends'
+      ],
+      coreExplanation: `Digital media vocabulary is useful for IELTS topics about technology and information. This lesson covers terms for discussing digital publishing and online media.
+
+Understanding these terms helps you discuss digital media topics effectively.`,
+      examples: [
+        { sentence: 'Digital media is growing.', explanation: '"Digital media" is electronic content.' },
+        { sentence: 'Publishing has transformed.', explanation: '"Publishing" is producing content.' },
+        { sentence: 'The blog attracts readers.', explanation: '"Blog" is online journal.' },
+        { sentence: 'The podcast is popular.', explanation: '"Podcast" is audio program.' },
+        { sentence: 'Streaming replaced downloads.', explanation: '"Streaming" is real-time delivery.' },
+        { sentence: 'The website has traffic.', explanation: '"Website" is online location.' },
+        { sentence: 'Content creation is a career.', explanation: '"Content creation" is making media.' },
+        { sentence: 'The e-book was downloaded.', explanation: '"E-book" is electronic book.' },
+        { sentence: 'Online journalism is growing.', explanation: '"Online journalism" is digital news.' },
+        { sentence: 'The subscription model works.', explanation: '"Subscription" is paid access.' },
+        { sentence: 'Paywalls restrict access.', explanation: '"Paywalls" are payment barriers.' },
+        { sentence: 'User-generated content is popular.', explanation: '"User-generated" is audience-created.' },
+        { sentence: 'Multimedia enhances engagement.', explanation: '"Multimedia" is multiple media types.' },
+        { sentence: 'The archive is searchable.', explanation: '"Archive" is stored content.' },
+        { sentence: 'Analytics track performance.', explanation: '"Analytics" is data analysis.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "digital" and "online"', correction: '"Digital" = electronic format; "online" = internet-connected', explanation: 'Digital can be offline.' },
+        { mistake: 'Using "blog" and "website" interchangeably', correction: '"Blog" is a type of website with regular posts', explanation: 'Blog is more specific.' },
+        { mistake: 'Confusing "streaming" and "downloading"', correction: '"Streaming" = real-time; "downloading" = saving locally', explanation: 'These are different delivery methods.' }
+      ],
+      miniPractice: [
+        { question: '_____ media has transformed how we consume information.', type: 'fill-blank' },
+        { question: 'Which term means an audio program available online?', options: ['Podcast', 'Blog', 'E-book', 'Website'], type: 'multiple-choice' },
+        { question: 'Discuss how digital publishing has changed media.', type: 'rewrite' },
+        { question: '_____ allows users to watch content in real-time.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Digital',
+        'Podcast',
+        'Digital publishing has democratized media by allowing anyone to create and distribute content, while challenging traditional business models.',
+        'Streaming'
+      ],
+      quickRecap: 'Key digital media terms: digital media, publishing, blog, podcast, streaming, website, content creation, e-book, online journalism, subscription, paywalls, user-generated, multimedia, archive, analytics. Use these for digital media topics!',
+      collocations: [
+        'digital media', 'online publishing', 'personal blog', 'popular podcast',
+        'video streaming', 'company website', 'content creation', 'download e-book',
+        'online journalism', 'monthly subscription', 'news paywalls', 'user-generated content'
+      ],
+      synonyms: [
+        { word: 'digital', synonyms: ['electronic', 'online', 'virtual', 'computerized'] },
+        { word: 'publishing', synonyms: ['production', 'distribution', 'release', 'issuing'] },
+        { word: 'streaming', synonyms: ['broadcasting', 'transmitting', 'playing', 'delivering'] }
+      ],
+      speakingLines: [
+        'Digital media has transformed information consumption.',
+        'Podcasts have become a popular medium.',
+        'Streaming services have changed entertainment.'
+      ]
+    }
   }
 ];
