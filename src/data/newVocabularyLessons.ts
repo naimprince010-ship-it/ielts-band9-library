@@ -11501,5 +11501,1233 @@ Understanding these terms helps you propose solutions to crime problems.`,
         'CCTV surveillance serves as a deterrent to potential offenders.'
       ]
     }
+  },
+  // ============================================
+  // BATCH 24: Family & Relationships (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-family-1',
+    title: 'Family Structure Vocabulary',
+    slug: 'family-structure-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Family',
+    description: 'Essential vocabulary for discussing family types and structures.',
+    is_premium: false,
+    is_published: true,
+    view_count: 920,
+    created_at: '2025-02-07T10:00:00Z',
+    updated_at: '2025-02-07T10:00:00Z',
+    content: {
+      title: 'Family Structure Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 family structure words',
+        'Discuss family types',
+        'Describe family relationships'
+      ],
+      coreExplanation: `Family vocabulary is essential for IELTS Speaking Part 1 (talking about your family) and Writing Task 2 (discussing family issues). This lesson covers different family structures and relationships.
+
+Understanding these terms helps you discuss family topics fluently.`,
+      examples: [
+        { sentence: 'The nuclear family consists of parents and children.', explanation: '"Nuclear family" is parents and their children only.' },
+        { sentence: 'Extended families include grandparents and relatives.', explanation: '"Extended family" includes wider relatives.' },
+        { sentence: 'Single-parent families are increasingly common.', explanation: '"Single-parent" means one parent raising children.' },
+        { sentence: 'Blended families combine children from previous marriages.', explanation: '"Blended family" has step-parents/step-siblings.' },
+        { sentence: 'The breadwinner supports the family financially.', explanation: '"Breadwinner" is the main income earner.' },
+        { sentence: 'Childcare responsibilities are shared.', explanation: '"Childcare" is looking after children.' },
+        { sentence: 'The household includes all family members.', explanation: '"Household" is people living together.' },
+        { sentence: 'Sibling rivalry is common in families.', explanation: '"Sibling rivalry" is competition between brothers/sisters.' },
+        { sentence: 'The generation gap causes misunderstandings.', explanation: '"Generation gap" is difference between age groups.' },
+        { sentence: 'Family bonds are important for wellbeing.', explanation: '"Family bonds" are emotional connections.' },
+        { sentence: 'Parental guidance shapes childrens development.', explanation: '"Parental guidance" is parents directing children.' },
+        { sentence: 'The upbringing affects personality.', explanation: '"Upbringing" is how children are raised.' },
+        { sentence: 'Family values are passed down generations.', explanation: '"Family values" are beliefs and principles.' },
+        { sentence: 'Kinship ties connect relatives.', explanation: '"Kinship" is family relationship.' },
+        { sentence: 'The patriarch leads the family.', explanation: '"Patriarch" is male head of family.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "family" singular/plural', correction: '"Family" can be singular or plural depending on context', explanation: '"My family is large" (unit) vs "My family are all doctors" (members).' },
+        { mistake: 'Using "parents" for all guardians', correction: 'Use "guardians" or "caregivers" for non-parents', explanation: 'Not all children live with biological parents.' },
+        { mistake: 'Confusing "relative" and "relation"', correction: 'Both mean family member; "relative" is more common', explanation: 'Use "relative" in most contexts.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ family consists of parents and children only.', type: 'fill-blank' },
+        { question: 'Which term means the main income earner?', options: ['Breadwinner', 'Patriarch', 'Guardian', 'Sibling'], type: 'multiple-choice' },
+        { question: 'Describe your family structure using vocabulary from this lesson.', type: 'rewrite' },
+        { question: 'The _____ gap causes misunderstandings between young and old.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'nuclear',
+        'Breadwinner',
+        'I come from a nuclear family with two siblings. My father is the breadwinner while my mother handles childcare.',
+        'generation'
+      ],
+      quickRecap: 'Key family types: nuclear, extended, single-parent, blended. Key terms: breadwinner, childcare, household, sibling, generation gap, family bonds, upbringing, family values, kinship, patriarch/matriarch. Use these for family topics!',
+      collocations: [
+        'nuclear family', 'extended family', 'single-parent family', 'blended family',
+        'main breadwinner', 'childcare responsibilities', 'family household', 'sibling rivalry',
+        'generation gap', 'family bonds', 'parental guidance', 'family values'
+      ],
+      synonyms: [
+        { word: 'family', synonyms: ['household', 'relatives', 'kin', 'clan'] },
+        { word: 'upbringing', synonyms: ['childhood', 'raising', 'nurturing', 'rearing'] },
+        { word: 'breadwinner', synonyms: ['provider', 'earner', 'wage earner', 'supporter'] }
+      ],
+      speakingLines: [
+        'I come from a nuclear family with two siblings.',
+        'The generation gap can sometimes cause misunderstandings.',
+        'Family bonds are essential for emotional wellbeing.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-family-2',
+    title: 'Parenting & Child Development Vocabulary',
+    slug: 'parenting-child-development-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Family',
+    description: 'Vocabulary for discussing parenting styles and child development.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2025-02-08T10:00:00Z',
+    updated_at: '2025-02-08T10:00:00Z',
+    content: {
+      title: 'Parenting & Child Development Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 parenting vocabulary words',
+        'Discuss child development',
+        'Analyze parenting approaches'
+      ],
+      coreExplanation: `Parenting vocabulary is essential for IELTS Writing Task 2 topics about education, family, and child development. This lesson covers parenting styles and developmental concepts.
+
+Understanding these terms helps you discuss parenting topics effectively.`,
+      examples: [
+        { sentence: 'Authoritative parenting balances warmth and discipline.', explanation: '"Authoritative" is firm but supportive parenting.' },
+        { sentence: 'Permissive parents set few boundaries.', explanation: '"Permissive" means allowing much freedom.' },
+        { sentence: 'Strict parenting emphasizes obedience.', explanation: '"Strict" means enforcing rules firmly.' },
+        { sentence: 'Child development occurs in stages.', explanation: '"Child development" is growth and learning.' },
+        { sentence: 'Early childhood is a formative period.', explanation: '"Formative" means shaping development.' },
+        { sentence: 'Nurturing environments support growth.', explanation: '"Nurturing" means caring and supportive.' },
+        { sentence: 'Discipline teaches self-control.', explanation: '"Discipline" is training for behavior.' },
+        { sentence: 'Attachment to caregivers is crucial.', explanation: '"Attachment" is emotional bond with caregivers.' },
+        { sentence: 'Cognitive development affects learning.', explanation: '"Cognitive development" is mental growth.' },
+        { sentence: 'Social skills develop through interaction.', explanation: '"Social skills" are abilities to interact.' },
+        { sentence: 'Emotional intelligence is important.', explanation: '"Emotional intelligence" is understanding emotions.' },
+        { sentence: 'Helicopter parenting is overprotective.', explanation: '"Helicopter parenting" is excessive involvement.' },
+        { sentence: 'Independence should be encouraged.', explanation: '"Independence" is self-reliance.' },
+        { sentence: 'Role models influence behavior.', explanation: '"Role models" are people to emulate.' },
+        { sentence: 'Positive reinforcement encourages good behavior.', explanation: '"Positive reinforcement" rewards desired behavior.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "authoritative" and "authoritarian"', correction: '"Authoritative" = balanced; "authoritarian" = strict/controlling', explanation: 'These are different parenting styles.' },
+        { mistake: 'Using "discipline" only negatively', correction: '"Discipline" can mean training, not just punishment', explanation: 'Discipline includes positive guidance.' },
+        { mistake: 'Confusing "nurture" and "nature"', correction: '"Nurture" = environment; "nature" = genetics', explanation: 'The nature vs nurture debate.' }
+      ],
+      miniPractice: [
+        { question: '_____ parenting balances warmth with clear boundaries.', type: 'fill-blank' },
+        { question: 'Which term means overprotective parenting?', options: ['Helicopter parenting', 'Permissive parenting', 'Authoritative parenting', 'Strict parenting'], type: 'multiple-choice' },
+        { question: 'Discuss the importance of early childhood development.', type: 'rewrite' },
+        { question: '_____ reinforcement encourages good behavior through rewards.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Authoritative',
+        'Helicopter parenting',
+        'Early childhood is a formative period when cognitive and social development occurs rapidly, making nurturing environments crucial.',
+        'Positive'
+      ],
+      quickRecap: 'Key parenting styles: authoritative, permissive, strict, helicopter. Key development terms: child development, formative, nurturing, attachment, cognitive development, social skills, emotional intelligence, independence, role models, positive reinforcement. Use these for parenting topics!',
+      collocations: [
+        'authoritative parenting', 'permissive parents', 'strict discipline', 'child development',
+        'formative years', 'nurturing environment', 'emotional attachment', 'cognitive development',
+        'social skills', 'emotional intelligence', 'helicopter parenting', 'positive reinforcement'
+      ],
+      synonyms: [
+        { word: 'nurturing', synonyms: ['caring', 'supportive', 'loving', 'fostering'] },
+        { word: 'discipline', synonyms: ['training', 'guidance', 'control', 'regulation'] },
+        { word: 'development', synonyms: ['growth', 'progress', 'maturation', 'advancement'] }
+      ],
+      speakingLines: [
+        'Authoritative parenting is considered the most effective approach.',
+        'Early childhood is a formative period for cognitive development.',
+        'Positive reinforcement is more effective than punishment.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-family-3',
+    title: 'Marriage & Relationships Vocabulary',
+    slug: 'marriage-relationships-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Family',
+    description: 'Vocabulary for discussing marriage, relationships, and social bonds.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-02-09T10:00:00Z',
+    updated_at: '2025-02-09T10:00:00Z',
+    content: {
+      title: 'Marriage & Relationships Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 relationship vocabulary words',
+        'Discuss marriage and partnerships',
+        'Analyze relationship dynamics'
+      ],
+      coreExplanation: `Marriage and relationship vocabulary is essential for IELTS Writing Task 2 topics about social change and family. This lesson covers terms for discussing partnerships and social bonds.
+
+Understanding these terms helps you discuss relationship topics effectively.`,
+      examples: [
+        { sentence: 'Marriage rates have declined in recent decades.', explanation: '"Marriage rates" is frequency of marriages.' },
+        { sentence: 'Cohabitation is increasingly common.', explanation: '"Cohabitation" is living together unmarried.' },
+        { sentence: 'Divorce rates have risen significantly.', explanation: '"Divorce" is legal end of marriage.' },
+        { sentence: 'Arranged marriages are traditional in some cultures.', explanation: '"Arranged marriage" is family-organized marriage.' },
+        { sentence: 'Romantic relationships require commitment.', explanation: '"Commitment" is dedication to relationship.' },
+        { sentence: 'Communication is key to healthy relationships.', explanation: '"Communication" is exchanging thoughts/feelings.' },
+        { sentence: 'Trust forms the foundation of relationships.', explanation: '"Trust" is confidence in partner.' },
+        { sentence: 'Compatibility affects relationship success.', explanation: '"Compatibility" is ability to exist together.' },
+        { sentence: 'Intimacy strengthens bonds.', explanation: '"Intimacy" is closeness and connection.' },
+        { sentence: 'Conflict resolution skills are important.', explanation: '"Conflict resolution" is solving disagreements.' },
+        { sentence: 'Long-distance relationships are challenging.', explanation: '"Long-distance" means partners live far apart.' },
+        { sentence: 'Mutual respect is essential.', explanation: '"Mutual respect" is two-way respect.' },
+        { sentence: 'The couple got engaged last year.', explanation: '"Engaged" means promised to marry.' },
+        { sentence: 'Separation often precedes divorce.', explanation: '"Separation" is living apart while married.' },
+        { sentence: 'Companionship provides emotional support.', explanation: '"Companionship" is being together as partners.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "marriage" and "wedding"', correction: '"Marriage" = the relationship; "wedding" = the ceremony', explanation: 'These are different concepts.' },
+        { mistake: 'Using "relation" for romantic partner', correction: 'Use "relationship" or "partner"', explanation: '"Relation" usually means family member.' },
+        { mistake: 'Confusing "engaged" and "married"', correction: '"Engaged" = promised to marry; "married" = legally wed', explanation: 'Engagement comes before marriage.' }
+      ],
+      miniPractice: [
+        { question: '_____ is increasingly common as an alternative to marriage.', type: 'fill-blank' },
+        { question: 'Which term means ability to exist together harmoniously?', options: ['Compatibility', 'Commitment', 'Companionship', 'Communication'], type: 'multiple-choice' },
+        { question: 'Discuss factors that contribute to successful relationships.', type: 'rewrite' },
+        { question: '_____ respect is essential for healthy relationships.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Cohabitation',
+        'Compatibility',
+        'Successful relationships require trust, communication, mutual respect, and commitment from both partners.',
+        'Mutual'
+      ],
+      quickRecap: 'Key relationship terms: marriage, cohabitation, divorce, arranged marriage, commitment, communication, trust, compatibility, intimacy, conflict resolution, mutual respect, engagement, separation, companionship. Use these for relationship topics!',
+      collocations: [
+        'marriage rates', 'cohabitation trends', 'divorce rates', 'arranged marriage',
+        'romantic relationship', 'strong commitment', 'open communication', 'mutual trust',
+        'relationship compatibility', 'emotional intimacy', 'conflict resolution', 'mutual respect'
+      ],
+      synonyms: [
+        { word: 'marriage', synonyms: ['matrimony', 'wedlock', 'union', 'partnership'] },
+        { word: 'commitment', synonyms: ['dedication', 'devotion', 'loyalty', 'faithfulness'] },
+        { word: 'companionship', synonyms: ['partnership', 'fellowship', 'friendship', 'togetherness'] }
+      ],
+      speakingLines: [
+        'Marriage rates have declined significantly in recent decades.',
+        'Communication and trust are essential for healthy relationships.',
+        'Cohabitation has become increasingly common among young couples.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-family-4',
+    title: 'Aging & Elderly Care Vocabulary',
+    slug: 'aging-elderly-care-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Family',
+    description: 'Vocabulary for discussing aging populations and elderly care.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-02-10T10:00:00Z',
+    updated_at: '2025-02-10T10:00:00Z',
+    content: {
+      title: 'Aging & Elderly Care Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 aging vocabulary words',
+        'Discuss elderly care issues',
+        'Analyze aging population challenges'
+      ],
+      coreExplanation: `Aging vocabulary is essential for IELTS Writing Task 2 topics about demographics and social care. This lesson covers terms for discussing aging populations and elderly care.
+
+Understanding these terms helps you discuss aging-related topics effectively.`,
+      examples: [
+        { sentence: 'The aging population is growing rapidly.', explanation: '"Aging population" is increasing elderly proportion.' },
+        { sentence: 'Life expectancy has increased significantly.', explanation: '"Life expectancy" is average lifespan.' },
+        { sentence: 'Elderly care requires significant resources.', explanation: '"Elderly care" is looking after older people.' },
+        { sentence: 'Retirement age varies by country.', explanation: '"Retirement age" is when people stop working.' },
+        { sentence: 'Pension systems face challenges.', explanation: '"Pension" is retirement income.' },
+        { sentence: 'Nursing homes provide residential care.', explanation: '"Nursing home" is care facility for elderly.' },
+        { sentence: 'Home care allows aging in place.', explanation: '"Home care" is care provided at home.' },
+        { sentence: 'Dementia affects many elderly people.', explanation: '"Dementia" is cognitive decline condition.' },
+        { sentence: 'Caregivers provide essential support.', explanation: '"Caregivers" are people who provide care.' },
+        { sentence: 'Social isolation affects the elderly.', explanation: '"Social isolation" is lack of social contact.' },
+        { sentence: 'Intergenerational support benefits all.', explanation: '"Intergenerational" means between generations.' },
+        { sentence: 'The dependency ratio is increasing.', explanation: '"Dependency ratio" is non-workers to workers.' },
+        { sentence: 'Active aging promotes wellbeing.', explanation: '"Active aging" is staying engaged in later life.' },
+        { sentence: 'Geriatric medicine specializes in elderly health.', explanation: '"Geriatric" relates to elderly healthcare.' },
+        { sentence: 'End-of-life care requires sensitivity.', explanation: '"End-of-life care" is care for dying patients.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "old" instead of "elderly"', correction: '"Elderly" or "older people" is more respectful', explanation: '"Old" can sound disrespectful.' },
+        { mistake: 'Confusing "aging" and "ageing"', correction: 'Both spellings are correct (US vs UK)', explanation: 'Use one consistently.' },
+        { mistake: 'Using "retired" for all elderly', correction: 'Not all elderly people are retired', explanation: 'Some continue working past retirement age.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ population is growing due to increased life expectancy.', type: 'fill-blank' },
+        { question: 'Which term means care facility for elderly?', options: ['Nursing home', 'Home care', 'Caregiver', 'Pension'], type: 'multiple-choice' },
+        { question: 'Discuss challenges of an aging population.', type: 'rewrite' },
+        { question: 'Life _____ has increased significantly in recent decades.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'aging',
+        'Nursing home',
+        'An aging population creates challenges including increased healthcare costs, pension system strain, and the need for more elderly care services.',
+        'expectancy'
+      ],
+      quickRecap: 'Key aging terms: aging population, life expectancy, elderly care, retirement, pension, nursing home, home care, dementia, caregivers, social isolation, intergenerational, dependency ratio, active aging, geriatric, end-of-life care. Use these for aging topics!',
+      collocations: [
+        'aging population', 'life expectancy', 'elderly care', 'retirement age',
+        'pension system', 'nursing home', 'home care', 'dementia patients',
+        'family caregivers', 'social isolation', 'intergenerational support', 'dependency ratio'
+      ],
+      synonyms: [
+        { word: 'elderly', synonyms: ['older people', 'seniors', 'aged', 'pensioners'] },
+        { word: 'aging', synonyms: ['getting older', 'maturing', 'advancing in years', 'growing old'] },
+        { word: 'caregiver', synonyms: ['carer', 'attendant', 'nurse', 'helper'] }
+      ],
+      speakingLines: [
+        'The aging population presents significant challenges for healthcare systems.',
+        'Life expectancy has increased dramatically over the past century.',
+        'Elderly care requires both financial resources and emotional support.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 25: Globalization (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-global-1',
+    title: 'Globalization Basics Vocabulary',
+    slug: 'globalization-basics-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Globalization',
+    description: 'Essential vocabulary for discussing globalization concepts.',
+    is_premium: false,
+    is_published: true,
+    view_count: 880,
+    created_at: '2025-02-11T10:00:00Z',
+    updated_at: '2025-02-11T10:00:00Z',
+    content: {
+      title: 'Globalization Basics Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 globalization vocabulary words',
+        'Discuss global integration',
+        'Analyze globalization effects'
+      ],
+      coreExplanation: `Globalization vocabulary is essential for IELTS Writing Task 2 topics about international trade, culture, and economics. This lesson covers fundamental globalization concepts.
+
+Understanding these terms helps you discuss global issues effectively.`,
+      examples: [
+        { sentence: 'Globalization has transformed the world economy.', explanation: '"Globalization" is worldwide integration.' },
+        { sentence: 'International trade has expanded rapidly.', explanation: '"International trade" is commerce between countries.' },
+        { sentence: 'Multinational corporations operate globally.', explanation: '"Multinational" operates in multiple countries.' },
+        { sentence: 'Economic integration benefits many countries.', explanation: '"Economic integration" is linking economies.' },
+        { sentence: 'Free trade agreements reduce barriers.', explanation: '"Free trade" is trade without restrictions.' },
+        { sentence: 'Outsourcing has become common practice.', explanation: '"Outsourcing" is contracting work abroad.' },
+        { sentence: 'Global supply chains connect countries.', explanation: '"Supply chains" are production networks.' },
+        { sentence: 'Foreign investment drives development.', explanation: '"Foreign investment" is investing in other countries.' },
+        { sentence: 'Cultural exchange enriches societies.', explanation: '"Cultural exchange" is sharing cultures.' },
+        { sentence: 'Interconnectedness defines modern life.', explanation: '"Interconnectedness" is being linked together.' },
+        { sentence: 'The global village concept emerged.', explanation: '"Global village" is the world as one community.' },
+        { sentence: 'Cross-border cooperation is essential.', explanation: '"Cross-border" means between countries.' },
+        { sentence: 'Tariffs protect domestic industries.', explanation: '"Tariffs" are taxes on imports.' },
+        { sentence: 'Trade liberalization opens markets.', explanation: '"Liberalization" is removing restrictions.' },
+        { sentence: 'Global markets influence local economies.', explanation: '"Global markets" are worldwide trading systems.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "global" and "international"', correction: '"Global" = worldwide; "international" = between nations', explanation: 'Global is broader than international.' },
+        { mistake: 'Using "globalization" only positively', correction: 'Globalization has both benefits and drawbacks', explanation: 'Present balanced views.' },
+        { mistake: 'Confusing "export" and "import"', correction: '"Export" = sell abroad; "import" = buy from abroad', explanation: 'These are opposites.' }
+      ],
+      miniPractice: [
+        { question: '_____ has transformed the world economy through increased integration.', type: 'fill-blank' },
+        { question: 'Which term means contracting work to other countries?', options: ['Outsourcing', 'Tariffs', 'Liberalization', 'Integration'], type: 'multiple-choice' },
+        { question: 'Discuss one benefit of globalization.', type: 'rewrite' },
+        { question: '_____ corporations operate in multiple countries.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Globalization',
+        'Outsourcing',
+        'Globalization has increased cultural exchange, allowing people to experience diverse traditions and perspectives.',
+        'Multinational'
+      ],
+      quickRecap: 'Key globalization terms: globalization, international trade, multinational, economic integration, free trade, outsourcing, supply chains, foreign investment, cultural exchange, interconnectedness, global village, cross-border, tariffs, liberalization. Use these for global topics!',
+      collocations: [
+        'economic globalization', 'international trade', 'multinational corporation', 'economic integration',
+        'free trade agreement', 'outsourcing jobs', 'global supply chain', 'foreign direct investment',
+        'cultural exchange', 'global interconnectedness', 'global village', 'trade liberalization'
+      ],
+      synonyms: [
+        { word: 'globalization', synonyms: ['internationalization', 'global integration', 'worldwide expansion', 'globalism'] },
+        { word: 'multinational', synonyms: ['transnational', 'international', 'global', 'worldwide'] },
+        { word: 'integration', synonyms: ['unification', 'consolidation', 'merger', 'combination'] }
+      ],
+      speakingLines: [
+        'Globalization has transformed the way businesses operate.',
+        'International trade has brought both benefits and challenges.',
+        'Multinational corporations play a significant role in the global economy.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-global-2',
+    title: 'Cultural Globalization Vocabulary',
+    slug: 'cultural-globalization-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Globalization',
+    description: 'Vocabulary for discussing cultural aspects of globalization.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-02-12T10:00:00Z',
+    updated_at: '2025-02-12T10:00:00Z',
+    content: {
+      title: 'Cultural Globalization Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 cultural globalization words',
+        'Discuss cultural exchange',
+        'Analyze cultural impacts'
+      ],
+      coreExplanation: `Cultural globalization vocabulary is essential for discussing how cultures interact and change in a globalized world. This lesson covers terms for cultural exchange and its effects.
+
+Understanding these terms helps you discuss cultural globalization topics effectively.`,
+      examples: [
+        { sentence: 'Cultural homogenization threatens diversity.', explanation: '"Homogenization" is cultures becoming similar.' },
+        { sentence: 'Western influence is widespread.', explanation: '"Western influence" is impact of Western culture.' },
+        { sentence: 'Cultural imperialism concerns some critics.', explanation: '"Cultural imperialism" is dominant culture imposing values.' },
+        { sentence: 'Local traditions are being preserved.', explanation: '"Local traditions" are regional customs.' },
+        { sentence: 'Cultural identity is important to communities.', explanation: '"Cultural identity" is sense of belonging to culture.' },
+        { sentence: 'Hybridization creates new cultural forms.', explanation: '"Hybridization" is mixing of cultures.' },
+        { sentence: 'Indigenous cultures face challenges.', explanation: '"Indigenous" means native or original.' },
+        { sentence: 'Cultural diversity enriches society.', explanation: '"Cultural diversity" is variety of cultures.' },
+        { sentence: 'Americanization affects global culture.', explanation: '"Americanization" is spread of American culture.' },
+        { sentence: 'Traditional values are changing.', explanation: '"Traditional values" are long-held beliefs.' },
+        { sentence: 'Cultural erosion is a concern.', explanation: '"Cultural erosion" is gradual loss of culture.' },
+        { sentence: 'Multiculturalism promotes coexistence.', explanation: '"Multiculturalism" is many cultures together.' },
+        { sentence: 'Cultural assimilation occurs over time.', explanation: '"Assimilation" is adopting dominant culture.' },
+        { sentence: 'Heritage preservation is important.', explanation: '"Heritage" is cultural inheritance.' },
+        { sentence: 'Cross-cultural communication is essential.', explanation: '"Cross-cultural" means between cultures.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "culture" and "tradition" interchangeably', correction: '"Culture" is broader; "tradition" is specific practices', explanation: 'Traditions are part of culture.' },
+        { mistake: 'Confusing "multicultural" and "intercultural"', correction: '"Multicultural" = many cultures; "intercultural" = between cultures', explanation: 'These have different focuses.' },
+        { mistake: 'Using "homogenization" only negatively', correction: 'Some see benefits in shared global culture', explanation: 'Present balanced perspectives.' }
+      ],
+      miniPractice: [
+        { question: 'Cultural _____ threatens the diversity of world cultures.', type: 'fill-blank' },
+        { question: 'Which term means mixing of different cultures?', options: ['Hybridization', 'Homogenization', 'Assimilation', 'Erosion'], type: 'multiple-choice' },
+        { question: 'Discuss how globalization affects cultural identity.', type: 'rewrite' },
+        { question: '_____ cultures face challenges from globalization.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'homogenization',
+        'Hybridization',
+        'Globalization can threaten cultural identity by promoting homogenization, but it also enables cultural exchange and hybridization.',
+        'Indigenous'
+      ],
+      quickRecap: 'Key cultural terms: homogenization, Western influence, cultural imperialism, local traditions, cultural identity, hybridization, indigenous, cultural diversity, Americanization, cultural erosion, multiculturalism, assimilation, heritage, cross-cultural. Use these for cultural globalization topics!',
+      collocations: [
+        'cultural homogenization', 'Western influence', 'cultural imperialism', 'local traditions',
+        'cultural identity', 'cultural hybridization', 'indigenous cultures', 'cultural diversity',
+        'cultural erosion', 'multicultural society', 'cultural assimilation', 'heritage preservation'
+      ],
+      synonyms: [
+        { word: 'homogenization', synonyms: ['standardization', 'uniformity', 'sameness', 'convergence'] },
+        { word: 'diversity', synonyms: ['variety', 'multiplicity', 'heterogeneity', 'pluralism'] },
+        { word: 'heritage', synonyms: ['tradition', 'legacy', 'inheritance', 'culture'] }
+      ],
+      speakingLines: [
+        'Cultural homogenization is a concern for many communities.',
+        'Indigenous cultures face significant challenges from globalization.',
+        'Cultural diversity should be preserved and celebrated.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-global-3',
+    title: 'Economic Globalization Vocabulary',
+    slug: 'economic-globalization-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Globalization',
+    description: 'Vocabulary for discussing economic aspects of globalization.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-02-13T10:00:00Z',
+    updated_at: '2025-02-13T10:00:00Z',
+    content: {
+      title: 'Economic Globalization Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 economic globalization words',
+        'Discuss global economics',
+        'Analyze economic impacts'
+      ],
+      coreExplanation: `Economic globalization vocabulary is essential for discussing international trade, finance, and economic development. This lesson covers terms for economic aspects of globalization.
+
+Understanding these terms helps you discuss economic globalization topics effectively.`,
+      examples: [
+        { sentence: 'Capital flows across borders freely.', explanation: '"Capital flows" is movement of money.' },
+        { sentence: 'Emerging markets offer opportunities.', explanation: '"Emerging markets" are developing economies.' },
+        { sentence: 'Trade deficits concern some countries.', explanation: '"Trade deficit" is importing more than exporting.' },
+        { sentence: 'Economic interdependence has increased.', explanation: '"Interdependence" is mutual reliance.' },
+        { sentence: 'Protectionism restricts free trade.', explanation: '"Protectionism" is protecting domestic industry.' },
+        { sentence: 'Developing countries seek investment.', explanation: '"Developing countries" are less industrialized nations.' },
+        { sentence: 'The global financial system is complex.', explanation: '"Financial system" is banking and investment networks.' },
+        { sentence: 'Currency fluctuations affect trade.', explanation: '"Currency fluctuations" are exchange rate changes.' },
+        { sentence: 'Economic inequality has widened.', explanation: '"Economic inequality" is wealth gap.' },
+        { sentence: 'Market access is crucial for exporters.', explanation: '"Market access" is ability to sell in markets.' },
+        { sentence: 'Trade barriers hinder commerce.', explanation: '"Trade barriers" are obstacles to trade.' },
+        { sentence: 'Competitive advantage drives trade.', explanation: '"Competitive advantage" is superior ability.' },
+        { sentence: 'Economic sanctions affect countries.', explanation: '"Sanctions" are penalties restricting trade.' },
+        { sentence: 'The balance of trade is important.', explanation: '"Balance of trade" is exports minus imports.' },
+        { sentence: 'Foreign exchange markets operate globally.', explanation: '"Foreign exchange" is currency trading.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "deficit" and "debt"', correction: '"Deficit" = annual shortfall; "debt" = total owed', explanation: 'Deficits add to debt.' },
+        { mistake: 'Using "developed" and "developing" incorrectly', correction: '"Developed" = industrialized; "developing" = industrializing', explanation: 'These describe economic status.' },
+        { mistake: 'Confusing "protectionism" and "protection"', correction: '"Protectionism" is economic policy; "protection" is general', explanation: 'Protectionism is specific to trade.' }
+      ],
+      miniPractice: [
+        { question: '_____ markets offer growth opportunities for investors.', type: 'fill-blank' },
+        { question: 'Which term means protecting domestic industries from foreign competition?', options: ['Protectionism', 'Liberalization', 'Integration', 'Interdependence'], type: 'multiple-choice' },
+        { question: 'Discuss one economic effect of globalization.', type: 'rewrite' },
+        { question: 'Economic _____ means countries rely on each other.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Emerging',
+        'Protectionism',
+        'Globalization has increased economic interdependence, meaning economic problems in one country can quickly affect others.',
+        'interdependence'
+      ],
+      quickRecap: 'Key economic terms: capital flows, emerging markets, trade deficit, interdependence, protectionism, developing countries, financial system, currency fluctuations, economic inequality, market access, trade barriers, competitive advantage, sanctions, balance of trade. Use these for economic globalization topics!',
+      collocations: [
+        'capital flows', 'emerging markets', 'trade deficit', 'economic interdependence',
+        'trade protectionism', 'developing countries', 'global financial system', 'currency fluctuations',
+        'economic inequality', 'market access', 'trade barriers', 'competitive advantage'
+      ],
+      synonyms: [
+        { word: 'interdependence', synonyms: ['mutual dependence', 'interconnection', 'interrelation', 'reciprocity'] },
+        { word: 'protectionism', synonyms: ['trade barriers', 'economic nationalism', 'import restrictions', 'tariff policy'] },
+        { word: 'inequality', synonyms: ['disparity', 'imbalance', 'gap', 'unevenness'] }
+      ],
+      speakingLines: [
+        'Emerging markets have become increasingly important in the global economy.',
+        'Economic interdependence means that crises can spread quickly.',
+        'Trade barriers can protect domestic industries but may harm consumers.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-global-4',
+    title: 'Migration & Movement Vocabulary',
+    slug: 'migration-movement-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Globalization',
+    description: 'Vocabulary for discussing migration and global movement of people.',
+    is_premium: true,
+    is_published: true,
+    view_count: 750,
+    created_at: '2025-02-14T10:00:00Z',
+    updated_at: '2025-02-14T10:00:00Z',
+    content: {
+      title: 'Migration & Movement Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 migration vocabulary words',
+        'Discuss global movement',
+        'Analyze migration issues'
+      ],
+      coreExplanation: `Migration vocabulary is essential for IELTS Writing Task 2 topics about population movement and immigration. This lesson covers terms for discussing migration and its effects.
+
+Understanding these terms helps you discuss migration topics effectively.`,
+      examples: [
+        { sentence: 'Immigration has increased in many countries.', explanation: '"Immigration" is moving into a country.' },
+        { sentence: 'Emigration affects source countries.', explanation: '"Emigration" is leaving ones country.' },
+        { sentence: 'Refugees flee conflict and persecution.', explanation: '"Refugees" are people fleeing danger.' },
+        { sentence: 'Economic migrants seek better opportunities.', explanation: '"Economic migrants" move for work.' },
+        { sentence: 'Brain drain affects developing countries.', explanation: '"Brain drain" is skilled people leaving.' },
+        { sentence: 'Remittances support families back home.', explanation: '"Remittances" are money sent home.' },
+        { sentence: 'Asylum seekers request protection.', explanation: '"Asylum seekers" request refugee status.' },
+        { sentence: 'Integration into society takes time.', explanation: '"Integration" is becoming part of society.' },
+        { sentence: 'Diaspora communities maintain connections.', explanation: '"Diaspora" is people living outside homeland.' },
+        { sentence: 'Border control is a political issue.', explanation: '"Border control" is managing entry.' },
+        { sentence: 'Illegal immigration concerns governments.', explanation: '"Illegal immigration" is unauthorized entry.' },
+        { sentence: 'Skilled workers are in demand.', explanation: '"Skilled workers" have specialized abilities.' },
+        { sentence: 'Population displacement is increasing.', explanation: '"Displacement" is forced movement.' },
+        { sentence: 'Citizenship can be obtained through naturalization.', explanation: '"Naturalization" is becoming a citizen.' },
+        { sentence: 'Migration patterns are changing.', explanation: '"Migration patterns" are movement trends.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "immigrant" and "emigrant"', correction: '"Immigrant" = arriving; "emigrant" = leaving', explanation: 'Perspective matters.' },
+        { mistake: 'Using "refugee" and "migrant" interchangeably', correction: '"Refugees" flee danger; "migrants" choose to move', explanation: 'These have different legal statuses.' },
+        { mistake: 'Using "illegal immigrant" insensitively', correction: 'Use "undocumented migrant" or "irregular migrant"', explanation: 'More neutral terminology.' }
+      ],
+      miniPractice: [
+        { question: '_____ has increased as people seek better opportunities abroad.', type: 'fill-blank' },
+        { question: 'Which term means skilled people leaving their country?', options: ['Brain drain', 'Remittances', 'Diaspora', 'Naturalization'], type: 'multiple-choice' },
+        { question: 'Discuss one cause of migration.', type: 'rewrite' },
+        { question: '_____ are money sent by migrants to their families back home.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Immigration/Migration',
+        'Brain drain',
+        'Economic factors are a major cause of migration, as people move to countries with better job opportunities and higher wages.',
+        'Remittances'
+      ],
+      quickRecap: 'Key migration terms: immigration, emigration, refugees, economic migrants, brain drain, remittances, asylum seekers, integration, diaspora, border control, illegal/undocumented immigration, skilled workers, displacement, naturalization, migration patterns. Use these for migration topics!',
+      collocations: [
+        'mass immigration', 'forced emigration', 'political refugees', 'economic migrants',
+        'brain drain', 'send remittances', 'asylum seekers', 'social integration',
+        'diaspora community', 'border control', 'skilled workers', 'population displacement'
+      ],
+      synonyms: [
+        { word: 'immigration', synonyms: ['migration', 'relocation', 'settlement', 'movement'] },
+        { word: 'refugee', synonyms: ['asylum seeker', 'displaced person', 'exile', 'evacuee'] },
+        { word: 'integration', synonyms: ['assimilation', 'incorporation', 'inclusion', 'adaptation'] }
+      ],
+      speakingLines: [
+        'Immigration has become a major political issue in many countries.',
+        'Brain drain can negatively affect developing countries.',
+        'Remittances play an important role in many economies.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 26: Psychology & Behavior (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-psych-1',
+    title: 'Psychology Basics Vocabulary',
+    slug: 'psychology-basics-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Psychology',
+    description: 'Essential vocabulary for discussing psychology and human behavior.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-02-15T10:00:00Z',
+    updated_at: '2025-02-15T10:00:00Z',
+    content: {
+      title: 'Psychology Basics Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 psychology vocabulary words',
+        'Discuss human behavior',
+        'Analyze psychological concepts'
+      ],
+      coreExplanation: `Psychology vocabulary is useful for IELTS Writing Task 2 topics about behavior, motivation, and mental health. This lesson covers fundamental psychological concepts.
+
+Understanding these terms helps you discuss psychology-related topics effectively.`,
+      examples: [
+        { sentence: 'Behavior is influenced by many factors.', explanation: '"Behavior" is how people act.' },
+        { sentence: 'Motivation drives human actions.', explanation: '"Motivation" is reason for acting.' },
+        { sentence: 'Perception shapes our understanding.', explanation: '"Perception" is how we interpret things.' },
+        { sentence: 'Cognition involves mental processes.', explanation: '"Cognition" is thinking and understanding.' },
+        { sentence: 'Emotions affect decision-making.', explanation: '"Emotions" are feelings.' },
+        { sentence: 'Personality develops over time.', explanation: '"Personality" is individual character.' },
+        { sentence: 'Attitudes influence behavior.', explanation: '"Attitudes" are views and opinions.' },
+        { sentence: 'Conditioning shapes responses.', explanation: '"Conditioning" is learned responses.' },
+        { sentence: 'Instinct is innate behavior.', explanation: '"Instinct" is natural, unlearned behavior.' },
+        { sentence: 'Stimulus triggers responses.', explanation: '"Stimulus" is something that causes reaction.' },
+        { sentence: 'The subconscious affects behavior.', explanation: '"Subconscious" is below conscious awareness.' },
+        { sentence: 'Habits form through repetition.', explanation: '"Habits" are regular behaviors.' },
+        { sentence: 'Reinforcement strengthens behavior.', explanation: '"Reinforcement" encourages behavior.' },
+        { sentence: 'Cognitive bias affects judgment.', explanation: '"Cognitive bias" is systematic thinking error.' },
+        { sentence: 'Self-esteem affects wellbeing.', explanation: '"Self-esteem" is self-worth.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "behavior" and "behaviour"', correction: 'Both spellings are correct (US vs UK)', explanation: 'Use one consistently.' },
+        { mistake: 'Using "psychology" and "psychiatry" interchangeably', correction: '"Psychology" = study of mind; "psychiatry" = medical treatment', explanation: 'Psychiatrists are medical doctors.' },
+        { mistake: 'Confusing "conscious" and "conscience"', correction: '"Conscious" = aware; "conscience" = moral sense', explanation: 'These are different concepts.' }
+      ],
+      miniPractice: [
+        { question: '_____ drives human actions and decisions.', type: 'fill-blank' },
+        { question: 'Which term means systematic thinking errors?', options: ['Cognitive bias', 'Perception', 'Conditioning', 'Instinct'], type: 'multiple-choice' },
+        { question: 'Discuss how emotions affect decision-making.', type: 'rewrite' },
+        { question: '_____ is how we interpret and understand the world around us.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Motivation',
+        'Cognitive bias',
+        'Emotions can significantly affect decision-making, sometimes leading people to make irrational choices based on feelings rather than logic.',
+        'Perception'
+      ],
+      quickRecap: 'Key psychology terms: behavior, motivation, perception, cognition, emotions, personality, attitudes, conditioning, instinct, stimulus, subconscious, habits, reinforcement, cognitive bias, self-esteem. Use these for psychology topics!',
+      collocations: [
+        'human behavior', 'intrinsic motivation', 'visual perception', 'cognitive processes',
+        'emotional response', 'personality traits', 'positive attitudes', 'classical conditioning',
+        'natural instinct', 'external stimulus', 'subconscious mind', 'cognitive bias'
+      ],
+      synonyms: [
+        { word: 'behavior', synonyms: ['conduct', 'actions', 'manner', 'demeanor'] },
+        { word: 'motivation', synonyms: ['drive', 'incentive', 'stimulus', 'inspiration'] },
+        { word: 'perception', synonyms: ['awareness', 'understanding', 'interpretation', 'view'] }
+      ],
+      speakingLines: [
+        'Human behavior is influenced by both nature and nurture.',
+        'Motivation plays a crucial role in achieving goals.',
+        'Cognitive biases can lead to poor decision-making.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-psych-2',
+    title: 'Mental Health Vocabulary',
+    slug: 'mental-health-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Psychology',
+    description: 'Vocabulary for discussing mental health and wellbeing.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-02-16T10:00:00Z',
+    updated_at: '2025-02-16T10:00:00Z',
+    content: {
+      title: 'Mental Health Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 mental health vocabulary words',
+        'Discuss mental wellbeing',
+        'Analyze mental health issues'
+      ],
+      coreExplanation: `Mental health vocabulary is essential for IELTS Writing Task 2 topics about health and society. This lesson covers terms for discussing mental health and wellbeing.
+
+Understanding these terms helps you discuss mental health topics sensitively and accurately.`,
+      examples: [
+        { sentence: 'Mental health awareness has increased.', explanation: '"Mental health" is psychological wellbeing.' },
+        { sentence: 'Stress affects many workers.', explanation: '"Stress" is mental or emotional strain.' },
+        { sentence: 'Anxiety disorders are common.', explanation: '"Anxiety" is excessive worry or fear.' },
+        { sentence: 'Depression requires treatment.', explanation: '"Depression" is persistent sadness.' },
+        { sentence: 'Therapy can help recovery.', explanation: '"Therapy" is treatment through talking.' },
+        { sentence: 'Counseling provides support.', explanation: '"Counseling" is professional guidance.' },
+        { sentence: 'Wellbeing encompasses mental health.', explanation: '"Wellbeing" is overall health and happiness.' },
+        { sentence: 'Burnout affects professionals.', explanation: '"Burnout" is exhaustion from overwork.' },
+        { sentence: 'Resilience helps cope with challenges.', explanation: '"Resilience" is ability to recover.' },
+        { sentence: 'Stigma prevents people seeking help.', explanation: '"Stigma" is negative attitudes.' },
+        { sentence: 'Self-care is important for mental health.', explanation: '"Self-care" is looking after oneself.' },
+        { sentence: 'Mindfulness reduces stress.', explanation: '"Mindfulness" is present-moment awareness.' },
+        { sentence: 'Trauma can have lasting effects.', explanation: '"Trauma" is deeply distressing experience.' },
+        { sentence: 'Coping mechanisms help manage stress.', explanation: '"Coping mechanisms" are ways of dealing with problems.' },
+        { sentence: 'Mental illness affects millions.', explanation: '"Mental illness" is psychological disorder.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "crazy" or "insane" for mental illness', correction: 'Use "mental health condition" or specific terms', explanation: 'Avoid stigmatizing language.' },
+        { mistake: 'Confusing "stress" and "anxiety"', correction: '"Stress" is response to pressure; "anxiety" is persistent worry', explanation: 'Anxiety is more chronic.' },
+        { mistake: 'Using "depressed" casually', correction: 'Reserve "depression" for clinical condition', explanation: 'Use "sad" or "unhappy" for temporary feelings.' }
+      ],
+      miniPractice: [
+        { question: 'Mental health _____ has increased in recent years.', type: 'fill-blank' },
+        { question: 'Which term means exhaustion from overwork?', options: ['Burnout', 'Anxiety', 'Trauma', 'Stigma'], type: 'multiple-choice' },
+        { question: 'Discuss why mental health awareness is important.', type: 'rewrite' },
+        { question: '_____ prevents many people from seeking help for mental health issues.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'awareness',
+        'Burnout',
+        'Mental health awareness is important because it reduces stigma and encourages people to seek help when needed.',
+        'Stigma'
+      ],
+      quickRecap: 'Key mental health terms: mental health, stress, anxiety, depression, therapy, counseling, wellbeing, burnout, resilience, stigma, self-care, mindfulness, trauma, coping mechanisms, mental illness. Use these for mental health topics!',
+      collocations: [
+        'mental health awareness', 'work-related stress', 'anxiety disorder', 'clinical depression',
+        'cognitive therapy', 'professional counseling', 'emotional wellbeing', 'workplace burnout',
+        'mental resilience', 'social stigma', 'self-care practices', 'mindfulness meditation'
+      ],
+      synonyms: [
+        { word: 'stress', synonyms: ['pressure', 'strain', 'tension', 'anxiety'] },
+        { word: 'wellbeing', synonyms: ['welfare', 'health', 'happiness', 'wellness'] },
+        { word: 'resilience', synonyms: ['toughness', 'strength', 'adaptability', 'recovery'] }
+      ],
+      speakingLines: [
+        'Mental health awareness has increased significantly in recent years.',
+        'Workplace burnout is becoming a major concern.',
+        'Reducing stigma is essential for improving mental health outcomes.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-psych-3',
+    title: 'Social Psychology Vocabulary',
+    slug: 'social-psychology-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Psychology',
+    description: 'Vocabulary for discussing social behavior and group dynamics.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-02-17T10:00:00Z',
+    updated_at: '2025-02-17T10:00:00Z',
+    content: {
+      title: 'Social Psychology Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 social psychology words',
+        'Discuss group behavior',
+        'Analyze social influences'
+      ],
+      coreExplanation: `Social psychology vocabulary is useful for discussing how people interact and influence each other. This lesson covers terms for social behavior and group dynamics.
+
+Understanding these terms helps you discuss social psychology topics effectively.`,
+      examples: [
+        { sentence: 'Conformity is common in groups.', explanation: '"Conformity" is following group norms.' },
+        { sentence: 'Peer pressure affects teenagers.', explanation: '"Peer pressure" is influence from equals.' },
+        { sentence: 'Social norms guide behavior.', explanation: '"Social norms" are expected behaviors.' },
+        { sentence: 'Groupthink can lead to poor decisions.', explanation: '"Groupthink" is conformity in groups.' },
+        { sentence: 'Prejudice affects social interactions.', explanation: '"Prejudice" is preconceived opinions.' },
+        { sentence: 'Stereotypes oversimplify groups.', explanation: '"Stereotypes" are fixed generalizations.' },
+        { sentence: 'Discrimination is harmful.', explanation: '"Discrimination" is unfair treatment.' },
+        { sentence: 'Social identity shapes behavior.', explanation: '"Social identity" is group membership.' },
+        { sentence: 'Obedience to authority is studied.', explanation: '"Obedience" is following orders.' },
+        { sentence: 'Bystander effect reduces helping.', explanation: '"Bystander effect" is not helping when others present.' },
+        { sentence: 'Altruism benefits others.', explanation: '"Altruism" is selfless concern for others.' },
+        { sentence: 'Empathy enables understanding.', explanation: '"Empathy" is understanding others feelings.' },
+        { sentence: 'Social influence shapes opinions.', explanation: '"Social influence" is others affecting us.' },
+        { sentence: 'In-group bias favors own group.', explanation: '"In-group bias" is preferring own group.' },
+        { sentence: 'Attribution explains behavior.', explanation: '"Attribution" is explaining causes of behavior.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "prejudice" and "discrimination"', correction: '"Prejudice" = attitude; "discrimination" = action', explanation: 'Prejudice is thinking; discrimination is doing.' },
+        { mistake: 'Using "empathy" and "sympathy" interchangeably', correction: '"Empathy" = feeling with; "sympathy" = feeling for', explanation: 'Empathy is deeper understanding.' },
+        { mistake: 'Confusing "conformity" and "compliance"', correction: '"Conformity" = matching group; "compliance" = agreeing to request', explanation: 'These have different triggers.' }
+      ],
+      miniPractice: [
+        { question: '_____ is the tendency to follow group norms.', type: 'fill-blank' },
+        { question: 'Which term means selfless concern for others?', options: ['Altruism', 'Empathy', 'Conformity', 'Obedience'], type: 'multiple-choice' },
+        { question: 'Discuss how peer pressure affects behavior.', type: 'rewrite' },
+        { question: '_____ are fixed generalizations about groups of people.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Conformity',
+        'Altruism',
+        'Peer pressure can significantly affect behavior, especially among teenagers who want to fit in with their social group.',
+        'Stereotypes'
+      ],
+      quickRecap: 'Key social psychology terms: conformity, peer pressure, social norms, groupthink, prejudice, stereotypes, discrimination, social identity, obedience, bystander effect, altruism, empathy, social influence, in-group bias, attribution. Use these for social psychology topics!',
+      collocations: [
+        'social conformity', 'peer pressure', 'social norms', 'groupthink phenomenon',
+        'racial prejudice', 'cultural stereotypes', 'workplace discrimination', 'social identity',
+        'blind obedience', 'bystander effect', 'pure altruism', 'emotional empathy'
+      ],
+      synonyms: [
+        { word: 'conformity', synonyms: ['compliance', 'obedience', 'agreement', 'uniformity'] },
+        { word: 'prejudice', synonyms: ['bias', 'discrimination', 'intolerance', 'bigotry'] },
+        { word: 'empathy', synonyms: ['understanding', 'compassion', 'sensitivity', 'identification'] }
+      ],
+      speakingLines: [
+        'Conformity is a powerful force in social situations.',
+        'Peer pressure can have both positive and negative effects.',
+        'Stereotypes can lead to prejudice and discrimination.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-psych-4',
+    title: 'Learning & Memory Vocabulary',
+    slug: 'learning-memory-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Psychology',
+    description: 'Vocabulary for discussing learning processes and memory.',
+    is_premium: true,
+    is_published: true,
+    view_count: 680,
+    created_at: '2025-02-18T10:00:00Z',
+    updated_at: '2025-02-18T10:00:00Z',
+    content: {
+      title: 'Learning & Memory Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 learning and memory words',
+        'Discuss learning processes',
+        'Analyze memory functions'
+      ],
+      coreExplanation: `Learning and memory vocabulary is useful for IELTS topics about education and cognitive development. This lesson covers terms for discussing how we learn and remember.
+
+Understanding these terms helps you discuss learning and memory topics effectively.`,
+      examples: [
+        { sentence: 'Memory stores information.', explanation: '"Memory" is ability to store and recall.' },
+        { sentence: 'Short-term memory is limited.', explanation: '"Short-term memory" holds information briefly.' },
+        { sentence: 'Long-term memory is more permanent.', explanation: '"Long-term memory" stores information long.' },
+        { sentence: 'Retention affects learning outcomes.', explanation: '"Retention" is keeping information.' },
+        { sentence: 'Recall is retrieving information.', explanation: '"Recall" is remembering information.' },
+        { sentence: 'Recognition is easier than recall.', explanation: '"Recognition" is identifying familiar things.' },
+        { sentence: 'Encoding converts information for storage.', explanation: '"Encoding" is processing for memory.' },
+        { sentence: 'Retrieval accesses stored information.', explanation: '"Retrieval" is getting information back.' },
+        { sentence: 'Forgetting is natural.', explanation: '"Forgetting" is losing stored information.' },
+        { sentence: 'Repetition aids memorization.', explanation: '"Repetition" is doing something again.' },
+        { sentence: 'Association helps memory.', explanation: '"Association" is linking ideas together.' },
+        { sentence: 'Concentration improves learning.', explanation: '"Concentration" is focused attention.' },
+        { sentence: 'Comprehension is understanding.', explanation: '"Comprehension" is grasping meaning.' },
+        { sentence: 'Acquisition is gaining knowledge.', explanation: '"Acquisition" is obtaining skills/knowledge.' },
+        { sentence: 'Cognitive load affects learning.', explanation: '"Cognitive load" is mental effort required.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "recall" and "recognition"', correction: '"Recall" = retrieve from memory; "recognition" = identify as familiar', explanation: 'Recognition is easier.' },
+        { mistake: 'Using "memorize" and "remember" interchangeably', correction: '"Memorize" = deliberately learn; "remember" = recall', explanation: 'Memorization is intentional.' },
+        { mistake: 'Confusing "learning" and "studying"', correction: '"Learning" = acquiring knowledge; "studying" = the process', explanation: 'Learning is the outcome.' }
+      ],
+      miniPractice: [
+        { question: '_____ memory holds information for a short period.', type: 'fill-blank' },
+        { question: 'Which term means retrieving stored information?', options: ['Retrieval', 'Encoding', 'Retention', 'Acquisition'], type: 'multiple-choice' },
+        { question: 'Discuss techniques for improving memory.', type: 'rewrite' },
+        { question: '_____ is the process of converting information for storage in memory.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Short-term',
+        'Retrieval',
+        'Techniques for improving memory include repetition, association, and breaking information into smaller chunks.',
+        'Encoding'
+      ],
+      quickRecap: 'Key memory terms: memory, short-term, long-term, retention, recall, recognition, encoding, retrieval, forgetting, repetition, association, concentration, comprehension, acquisition, cognitive load. Use these for learning and memory topics!',
+      collocations: [
+        'working memory', 'short-term memory', 'long-term memory', 'memory retention',
+        'free recall', 'pattern recognition', 'memory encoding', 'information retrieval',
+        'memory loss', 'spaced repetition', 'word association', 'deep concentration'
+      ],
+      synonyms: [
+        { word: 'memory', synonyms: ['recollection', 'recall', 'remembrance', 'retention'] },
+        { word: 'learning', synonyms: ['education', 'study', 'acquisition', 'training'] },
+        { word: 'comprehension', synonyms: ['understanding', 'grasp', 'perception', 'insight'] }
+      ],
+      speakingLines: [
+        'Short-term memory has limited capacity.',
+        'Repetition is one of the most effective ways to improve retention.',
+        'Cognitive load can affect how well we learn new information.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 27: History & Tradition (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-history-1',
+    title: 'Historical Periods Vocabulary',
+    slug: 'historical-periods-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'History',
+    description: 'Essential vocabulary for discussing historical periods and eras.',
+    is_premium: true,
+    is_published: true,
+    view_count: 750,
+    created_at: '2025-02-19T10:00:00Z',
+    updated_at: '2025-02-19T10:00:00Z',
+    content: {
+      title: 'Historical Periods Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 historical vocabulary words',
+        'Discuss historical periods',
+        'Analyze historical developments'
+      ],
+      coreExplanation: `Historical vocabulary is useful for IELTS topics about change, development, and tradition. This lesson covers terms for discussing historical periods and events.
+
+Understanding these terms helps you discuss history-related topics effectively.`,
+      examples: [
+        { sentence: 'The ancient civilizations were advanced.', explanation: '"Ancient" means very old, from long ago.' },
+        { sentence: 'The medieval period lasted centuries.', explanation: '"Medieval" is the Middle Ages.' },
+        { sentence: 'The Renaissance brought cultural change.', explanation: '"Renaissance" is cultural rebirth period.' },
+        { sentence: 'The Industrial Revolution transformed society.', explanation: '"Industrial Revolution" is shift to manufacturing.' },
+        { sentence: 'The modern era began recently.', explanation: '"Modern era" is recent historical period.' },
+        { sentence: 'Contemporary history is current events.', explanation: '"Contemporary" means present time.' },
+        { sentence: 'Colonialism shaped many nations.', explanation: '"Colonialism" is control of other territories.' },
+        { sentence: 'The empire expanded rapidly.', explanation: '"Empire" is group of territories under one ruler.' },
+        { sentence: 'The dynasty ruled for generations.', explanation: '"Dynasty" is ruling family line.' },
+        { sentence: 'The revolution changed everything.', explanation: '"Revolution" is major political change.' },
+        { sentence: 'The era was marked by progress.', explanation: '"Era" is a distinct period.' },
+        { sentence: 'The epoch saw great changes.', explanation: '"Epoch" is a significant period.' },
+        { sentence: 'The century brought innovations.', explanation: '"Century" is 100 years.' },
+        { sentence: 'The decade was transformative.', explanation: '"Decade" is 10 years.' },
+        { sentence: 'Historical events shape the present.', explanation: '"Historical" relates to past events.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "historic" and "historical"', correction: '"Historic" = important; "historical" = relating to history', explanation: '"A historic event" vs "historical research".' },
+        { mistake: 'Using "ancient" for recent past', correction: '"Ancient" means thousands of years ago', explanation: 'Use "old" or "past" for recent history.' },
+        { mistake: 'Confusing "era" and "error"', correction: '"Era" = period; "error" = mistake', explanation: 'These are different words.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ civilizations developed thousands of years ago.', type: 'fill-blank' },
+        { question: 'Which term means a period of cultural rebirth?', options: ['Renaissance', 'Revolution', 'Colonialism', 'Dynasty'], type: 'multiple-choice' },
+        { question: 'Discuss how the Industrial Revolution changed society.', type: 'rewrite' },
+        { question: 'The _____ Revolution transformed manufacturing and society.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'ancient',
+        'Renaissance',
+        'The Industrial Revolution transformed society by shifting from agricultural to manufacturing economies, leading to urbanization and technological advancement.',
+        'Industrial'
+      ],
+      quickRecap: 'Key historical terms: ancient, medieval, Renaissance, Industrial Revolution, modern era, contemporary, colonialism, empire, dynasty, revolution, era, epoch, century, decade, historical. Use these for history topics!',
+      collocations: [
+        'ancient civilization', 'medieval period', 'cultural Renaissance', 'Industrial Revolution',
+        'modern era', 'contemporary history', 'colonial period', 'vast empire',
+        'ruling dynasty', 'political revolution', 'historical era', 'significant epoch'
+      ],
+      synonyms: [
+        { word: 'ancient', synonyms: ['old', 'antique', 'prehistoric', 'primeval'] },
+        { word: 'era', synonyms: ['period', 'age', 'epoch', 'time'] },
+        { word: 'revolution', synonyms: ['uprising', 'rebellion', 'transformation', 'upheaval'] }
+      ],
+      speakingLines: [
+        'Ancient civilizations made remarkable achievements.',
+        'The Industrial Revolution fundamentally changed society.',
+        'Contemporary history is shaped by past events.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-history-2',
+    title: 'Tradition & Heritage Vocabulary',
+    slug: 'tradition-heritage-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'History',
+    description: 'Vocabulary for discussing traditions, customs, and cultural heritage.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-02-20T10:00:00Z',
+    updated_at: '2025-02-20T10:00:00Z',
+    content: {
+      title: 'Tradition & Heritage Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 tradition vocabulary words',
+        'Discuss cultural heritage',
+        'Analyze traditional practices'
+      ],
+      coreExplanation: `Tradition and heritage vocabulary is essential for IELTS topics about culture and social change. This lesson covers terms for discussing customs and cultural inheritance.
+
+Understanding these terms helps you discuss tradition-related topics effectively.`,
+      examples: [
+        { sentence: 'Traditions are passed down generations.', explanation: '"Traditions" are customs handed down.' },
+        { sentence: 'Cultural heritage must be preserved.', explanation: '"Heritage" is inherited culture.' },
+        { sentence: 'Customs vary between cultures.', explanation: '"Customs" are traditional practices.' },
+        { sentence: 'Rituals mark important occasions.', explanation: '"Rituals" are ceremonial acts.' },
+        { sentence: 'Folklore tells cultural stories.', explanation: '"Folklore" is traditional stories and beliefs.' },
+        { sentence: 'Ancestral practices continue today.', explanation: '"Ancestral" relates to ancestors.' },
+        { sentence: 'The ceremony was traditional.', explanation: '"Ceremony" is formal event.' },
+        { sentence: 'Cultural preservation is important.', explanation: '"Preservation" is keeping something intact.' },
+        { sentence: 'Indigenous traditions are valued.', explanation: '"Indigenous" means native or original.' },
+        { sentence: 'The festival celebrates heritage.', explanation: '"Festival" is celebration event.' },
+        { sentence: 'Legacy connects past and present.', explanation: '"Legacy" is what is passed down.' },
+        { sentence: 'Artifacts reveal history.', explanation: '"Artifacts" are historical objects.' },
+        { sentence: 'Monuments commemorate events.', explanation: '"Monuments" are memorial structures.' },
+        { sentence: 'The practice is centuries old.', explanation: '"Practice" is regular activity.' },
+        { sentence: 'Cultural identity shapes communities.', explanation: '"Cultural identity" is sense of belonging.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "tradition" and "custom"', correction: '"Tradition" is broader; "custom" is specific practice', explanation: 'Customs are part of traditions.' },
+        { mistake: 'Using "heritage" only for buildings', correction: '"Heritage" includes intangible culture too', explanation: 'Heritage includes traditions, language, etc.' },
+        { mistake: 'Confusing "ancestor" and "descendant"', correction: '"Ancestor" = past relative; "descendant" = future relative', explanation: 'These are opposites.' }
+      ],
+      miniPractice: [
+        { question: '_____ are passed down from generation to generation.', type: 'fill-blank' },
+        { question: 'Which term means traditional stories and beliefs?', options: ['Folklore', 'Heritage', 'Ritual', 'Legacy'], type: 'multiple-choice' },
+        { question: 'Discuss why preserving cultural heritage is important.', type: 'rewrite' },
+        { question: 'Cultural _____ must be protected for future generations.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Traditions',
+        'Folklore',
+        'Preserving cultural heritage is important because it maintains cultural identity, connects generations, and provides valuable historical knowledge.',
+        'heritage'
+      ],
+      quickRecap: 'Key tradition terms: traditions, heritage, customs, rituals, folklore, ancestral, ceremony, preservation, indigenous, festival, legacy, artifacts, monuments, practice, cultural identity. Use these for tradition topics!',
+      collocations: [
+        'cultural traditions', 'national heritage', 'local customs', 'religious rituals',
+        'traditional folklore', 'ancestral practices', 'wedding ceremony', 'heritage preservation',
+        'indigenous culture', 'annual festival', 'cultural legacy', 'historical artifacts'
+      ],
+      synonyms: [
+        { word: 'tradition', synonyms: ['custom', 'practice', 'convention', 'ritual'] },
+        { word: 'heritage', synonyms: ['legacy', 'inheritance', 'birthright', 'tradition'] },
+        { word: 'preservation', synonyms: ['conservation', 'protection', 'maintenance', 'safeguarding'] }
+      ],
+      speakingLines: [
+        'Traditions help maintain cultural identity.',
+        'Cultural heritage should be preserved for future generations.',
+        'Festivals are an important way to celebrate heritage.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-history-3',
+    title: 'Change & Progress Vocabulary',
+    slug: 'change-progress-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'History',
+    description: 'Vocabulary for discussing historical change and social progress.',
+    is_premium: true,
+    is_published: true,
+    view_count: 680,
+    created_at: '2025-02-21T10:00:00Z',
+    updated_at: '2025-02-21T10:00:00Z',
+    content: {
+      title: 'Change & Progress Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 change and progress words',
+        'Discuss social development',
+        'Analyze historical change'
+      ],
+      coreExplanation: `Change and progress vocabulary is essential for IELTS topics about development and social transformation. This lesson covers terms for discussing how societies change over time.
+
+Understanding these terms helps you discuss change-related topics effectively.`,
+      examples: [
+        { sentence: 'Progress has been significant.', explanation: '"Progress" is forward movement.' },
+        { sentence: 'Development continues rapidly.', explanation: '"Development" is growth and advancement.' },
+        { sentence: 'Evolution occurs gradually.', explanation: '"Evolution" is gradual change.' },
+        { sentence: 'Transformation was dramatic.', explanation: '"Transformation" is complete change.' },
+        { sentence: 'Reform improved the system.', explanation: '"Reform" is change for improvement.' },
+        { sentence: 'Innovation drives progress.', explanation: '"Innovation" is new ideas/methods.' },
+        { sentence: 'Modernization changed society.', explanation: '"Modernization" is becoming modern.' },
+        { sentence: 'Advancement benefits everyone.', explanation: '"Advancement" is moving forward.' },
+        { sentence: 'The transition was smooth.', explanation: '"Transition" is change from one state to another.' },
+        { sentence: 'Adaptation is necessary.', explanation: '"Adaptation" is adjusting to change.' },
+        { sentence: 'The shift was gradual.', explanation: '"Shift" is change in position/direction.' },
+        { sentence: 'Improvement is ongoing.', explanation: '"Improvement" is making better.' },
+        { sentence: 'The breakthrough changed everything.', explanation: '"Breakthrough" is major discovery.' },
+        { sentence: 'Regression is sometimes possible.', explanation: '"Regression" is moving backward.' },
+        { sentence: 'Stagnation prevents growth.', explanation: '"Stagnation" is lack of progress.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "progress" and "process"', correction: '"Progress" = advancement; "process" = series of steps', explanation: 'These are different concepts.' },
+        { mistake: 'Using "evolution" only for biology', correction: '"Evolution" can describe any gradual change', explanation: 'Social evolution is common usage.' },
+        { mistake: 'Confusing "reform" and "transform"', correction: '"Reform" = improve; "transform" = change completely', explanation: 'Reform is less dramatic.' }
+      ],
+      miniPractice: [
+        { question: '_____ has been made in reducing poverty.', type: 'fill-blank' },
+        { question: 'Which term means lack of progress?', options: ['Stagnation', 'Transformation', 'Innovation', 'Advancement'], type: 'multiple-choice' },
+        { question: 'Discuss how technology has driven progress.', type: 'rewrite' },
+        { question: '_____ is necessary to adapt to changing circumstances.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Progress',
+        'Stagnation',
+        'Technology has driven progress by enabling innovation, improving efficiency, and connecting people globally.',
+        'Adaptation/Change'
+      ],
+      quickRecap: 'Key change terms: progress, development, evolution, transformation, reform, innovation, modernization, advancement, transition, adaptation, shift, improvement, breakthrough, regression, stagnation. Use these for change topics!',
+      collocations: [
+        'significant progress', 'economic development', 'social evolution', 'complete transformation',
+        'political reform', 'technological innovation', 'rapid modernization', 'scientific advancement',
+        'smooth transition', 'cultural adaptation', 'paradigm shift', 'continuous improvement'
+      ],
+      synonyms: [
+        { word: 'progress', synonyms: ['advancement', 'development', 'improvement', 'growth'] },
+        { word: 'transformation', synonyms: ['change', 'conversion', 'metamorphosis', 'revolution'] },
+        { word: 'innovation', synonyms: ['invention', 'novelty', 'breakthrough', 'creativity'] }
+      ],
+      speakingLines: [
+        'Significant progress has been made in many areas.',
+        'Innovation is essential for continued development.',
+        'Adaptation is necessary in a rapidly changing world.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-history-4',
+    title: 'Conflict & Resolution Vocabulary',
+    slug: 'conflict-resolution-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'History',
+    description: 'Vocabulary for discussing historical conflicts and their resolution.',
+    is_premium: true,
+    is_published: true,
+    view_count: 650,
+    created_at: '2025-02-22T10:00:00Z',
+    updated_at: '2025-02-22T10:00:00Z',
+    content: {
+      title: 'Conflict & Resolution Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 conflict vocabulary words',
+        'Discuss historical conflicts',
+        'Analyze peace processes'
+      ],
+      coreExplanation: `Conflict and resolution vocabulary is useful for IELTS topics about war, peace, and international relations. This lesson covers terms for discussing conflicts and their resolution.
+
+Understanding these terms helps you discuss conflict-related topics effectively.`,
+      examples: [
+        { sentence: 'The conflict lasted years.', explanation: '"Conflict" is serious disagreement or war.' },
+        { sentence: 'War devastated the region.', explanation: '"War" is armed conflict between nations.' },
+        { sentence: 'Peace was finally achieved.', explanation: '"Peace" is absence of war.' },
+        { sentence: 'The treaty ended hostilities.', explanation: '"Treaty" is formal agreement.' },
+        { sentence: 'Diplomacy prevented war.', explanation: '"Diplomacy" is negotiation between nations.' },
+        { sentence: 'Negotiations were successful.', explanation: '"Negotiations" are discussions to reach agreement.' },
+        { sentence: 'The ceasefire held.', explanation: '"Ceasefire" is temporary stop to fighting.' },
+        { sentence: 'Reconciliation takes time.', explanation: '"Reconciliation" is restoring friendly relations.' },
+        { sentence: 'The alliance was formed.', explanation: '"Alliance" is union between groups.' },
+        { sentence: 'Tensions remain high.', explanation: '"Tensions" are strained relations.' },
+        { sentence: 'The dispute was resolved.', explanation: '"Dispute" is disagreement.' },
+        { sentence: 'Mediation helped both sides.', explanation: '"Mediation" is third-party intervention.' },
+        { sentence: 'The armistice was signed.', explanation: '"Armistice" is agreement to stop fighting.' },
+        { sentence: 'Hostilities resumed briefly.', explanation: '"Hostilities" are acts of warfare.' },
+        { sentence: 'Peacekeeping forces were deployed.', explanation: '"Peacekeeping" is maintaining peace.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "peace" and "piece"', correction: '"Peace" = no war; "piece" = part of something', explanation: 'These are homophones.' },
+        { mistake: 'Using "war" for all conflicts', correction: 'Use "conflict", "dispute", "tension" for lesser situations', explanation: 'War is the most severe.' },
+        { mistake: 'Confusing "treaty" and "agreement"', correction: '"Treaty" is formal between nations; "agreement" is broader', explanation: 'Treaties are specific to international law.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ lasted for several years before peace was achieved.', type: 'fill-blank' },
+        { question: 'Which term means third-party intervention to resolve disputes?', options: ['Mediation', 'Alliance', 'Treaty', 'Ceasefire'], type: 'multiple-choice' },
+        { question: 'Discuss how diplomacy can prevent conflicts.', type: 'rewrite' },
+        { question: 'The _____ was signed to formally end the war.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'conflict/war',
+        'Mediation',
+        'Diplomacy can prevent conflicts by enabling nations to resolve disputes through negotiation rather than military action.',
+        'treaty'
+      ],
+      quickRecap: 'Key conflict terms: conflict, war, peace, treaty, diplomacy, negotiations, ceasefire, reconciliation, alliance, tensions, dispute, mediation, armistice, hostilities, peacekeeping. Use these for conflict topics!',
+      collocations: [
+        'armed conflict', 'civil war', 'lasting peace', 'peace treaty',
+        'diplomatic relations', 'peace negotiations', 'temporary ceasefire', 'national reconciliation',
+        'military alliance', 'political tensions', 'territorial dispute', 'international mediation'
+      ],
+      synonyms: [
+        { word: 'conflict', synonyms: ['war', 'battle', 'struggle', 'confrontation'] },
+        { word: 'peace', synonyms: ['harmony', 'tranquility', 'ceasefire', 'truce'] },
+        { word: 'diplomacy', synonyms: ['negotiation', 'statecraft', 'mediation', 'dialogue'] }
+      ],
+      speakingLines: [
+        'The conflict had devastating consequences for the region.',
+        'Diplomacy is often more effective than military action.',
+        'Reconciliation is essential for lasting peace.'
+      ]
+    }
   }
 ];
