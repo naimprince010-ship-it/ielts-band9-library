@@ -506,6 +506,744 @@ In discussion essays, you MUST give equal weight to both views before stating yo
         'X and Y combined comprised nearly three quarters of spending.'
       ]
     }
+  },
+  // ============================================
+  // TASK 2: Problem-Solution Essays
+  // ============================================
+  {
+    id: 'writing-task2-problem-solution-1',
+    title: 'Problem-Solution Essay: Urban Traffic',
+    slug: 'problem-solution-urban-traffic',
+    type: 'writing',
+    level: 'intermediate',
+    topic: 'Task 2 Problem-Solution',
+    description: 'Master the problem-solution essay format with Band 9 techniques for discussing urban traffic congestion.',
+    is_premium: true,
+    is_published: true,
+    view_count: 1800,
+    created_at: '2025-06-20T10:00:00Z',
+    updated_at: '2025-06-20T10:00:00Z',
+    estimated_time: 45,
+    content: {
+      title: 'Problem-Solution Essay: Urban Traffic',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'Structure a problem-solution essay effectively',
+        'Identify and explain causes clearly',
+        'Propose realistic, well-developed solutions',
+        'Use cause-effect language at Band 9 level'
+      ],
+      coreExplanation: `**IELTS Task 2 Question:**
+"Traffic congestion is becoming a major problem in most cities. What are the causes of this problem and what measures could be taken to reduce traffic in big cities?"
+
+**Planning (5 minutes):**
+1. Question type: Problem-Solution (Causes + Solutions)
+2. Causes: Car ownership increase, inadequate public transport, urban sprawl
+3. Solutions: Improve public transport, congestion charges, remote work policies
+
+**Band 9 Structure:**
+- Introduction: Paraphrase problem + outline (causes and solutions)
+- Body 1: 2-3 main causes with explanations
+- Body 2: 2-3 practical solutions with reasoning
+- Conclusion: Summarize key points + future outlook`,
+      examples: [
+        { sentence: '**BAND 9 MODEL ANSWER (Introduction):**\n\n"Urban traffic congestion has emerged as one of the most pressing challenges facing metropolitan areas worldwide. This essay will examine the primary factors contributing to this phenomenon before proposing viable measures to alleviate the problem."', explanation: '**Why Band 9:** Sophisticated paraphrase (pressing challenges, metropolitan areas), clear essay direction, academic register, no wasted words.' },
+        { sentence: '**BAND 9 MODEL ANSWER (Body 1 - Causes):**\n\n"The escalating traffic crisis can be attributed to several interconnected factors. Foremost among these is the dramatic increase in private vehicle ownership, driven by rising incomes and the perception of cars as status symbols. Additionally, many cities suffer from inadequate public transportation infrastructure, leaving commuters with few viable alternatives to driving. Urban sprawl further exacerbates the problem, as residential areas expand outward, increasing commute distances and dependency on personal vehicles."', explanation: '**Why Band 9:** Clear topic sentence, three well-developed causes, sophisticated vocabulary (escalating, attributed to, exacerbates), logical flow with linking words (Foremost, Additionally, further).' },
+        { sentence: '**BAND 9 MODEL ANSWER (Body 2 - Solutions):**\n\n"Addressing this multifaceted issue requires a combination of policy interventions and infrastructure investment. Governments should prioritize expanding and modernizing public transit networks, making them more affordable, reliable, and extensive. Implementing congestion pricing in city centers, as successfully demonstrated in Singapore and London, can discourage unnecessary car journeys while generating revenue for transport improvements. Furthermore, promoting remote work policies and flexible hours can distribute traffic more evenly throughout the day, reducing peak-hour bottlenecks."', explanation: '**Why Band 9:** Practical solutions with real examples (Singapore, London), clear reasoning for each solution, sophisticated vocabulary (multifaceted, interventions, bottlenecks), varied sentence structures.' },
+        { sentence: '**CAUSE-EFFECT LANGUAGE:**\n\n**Describing causes:**\n- X can be attributed to...\n- The primary factor contributing to X is...\n- X stems from / arises from...\n- X is driven by / fueled by...\n\n**Describing effects:**\n- This has led to / resulted in...\n- As a consequence / As a result...\n- X has given rise to...\n- The ramifications of X include...\n\n**Proposing solutions:**\n- To address this issue, governments should...\n- One effective measure would be to...\n- X could be mitigated by...\n- A viable solution involves...', explanation: 'These phrases demonstrate sophisticated cause-effect reasoning essential for Band 8-9 scores.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Listing causes without explanation', correction: 'Develop each cause with reasoning: "Car ownership has increased BECAUSE rising incomes make vehicles affordable AND cars are seen as status symbols"', explanation: 'Band 9 requires fully developed ideas, not just a list.' },
+        { mistake: 'Proposing unrealistic solutions', correction: 'Suggest practical, implementable solutions with real-world examples', explanation: 'Solutions like "ban all cars" are unrealistic. Use examples from cities that have succeeded.' },
+        { mistake: 'Not connecting causes to solutions', correction: 'Your solutions should directly address the causes you identified', explanation: 'If you say "inadequate public transport" is a cause, your solution should include improving public transport.' },
+        { mistake: 'Using "problem" and "solution" repeatedly', correction: 'Use synonyms: issue, challenge, crisis / measure, approach, intervention, strategy', explanation: 'Vocabulary range is 25% of your score. Vary your word choice.' },
+        { mistake: 'Weak conclusion that just repeats the introduction', correction: 'Summarize key points and add a forward-looking statement', explanation: 'Band 9 conclusions add value, not just repetition.' }
+      ],
+      miniPractice: [
+        { question: 'Which phrase best introduces a cause?', options: ['"The problem is..."', '"X can be attributed to..."', '"I think the reason is..."', '"Because of..."'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Traffic is bad because many people have cars."', type: 'rewrite' },
+        { question: 'Which is a realistic solution for traffic?', options: ['Ban all private vehicles', 'Implement congestion pricing in city centers', 'Make everyone work from home', 'Build roads everywhere'], type: 'multiple-choice' },
+        { question: 'Complete: "To _____ this issue, governments should prioritize public transport investment."', type: 'fill-blank' }
+      ],
+      answerKey: [
+        '"X can be attributed to..."',
+        'The escalating traffic crisis can be attributed to the dramatic increase in private vehicle ownership, driven by rising incomes and improved affordability.',
+        'Implement congestion pricing in city centers',
+        'address/tackle/mitigate'
+      ],
+      quickRecap: 'Problem-Solution Formula: 1) Paraphrase problem + outline, 2) 2-3 causes with full development, 3) 2-3 practical solutions with examples, 4) Summary + outlook. Use cause-effect language (attributed to, stems from, has led to). Connect solutions to causes. Include real-world examples.',
+      collocations: [
+        'traffic congestion', 'urban sprawl', 'public transit', 'congestion pricing',
+        'peak hours', 'commute distances', 'infrastructure investment', 'policy interventions',
+        'viable alternatives', 'pressing challenge', 'multifaceted issue', 'bottlenecks'
+      ],
+      synonyms: [
+        { word: 'problem', synonyms: ['issue', 'challenge', 'crisis', 'concern'] },
+        { word: 'solution', synonyms: ['measure', 'approach', 'intervention', 'strategy'] },
+        { word: 'cause', synonyms: ['factor', 'reason', 'contributor', 'driver'] }
+      ],
+      speakingLines: [
+        'Traffic congestion can be attributed to several interconnected factors.',
+        'To address this multifaceted issue, governments should prioritize public transport.',
+        'Congestion pricing has been successfully implemented in cities like Singapore and London.'
+      ]
+    }
+  },
+  // ============================================
+  // TASK 2: Advantages-Disadvantages Essays
+  // ============================================
+  {
+    id: 'writing-task2-advdis-1',
+    title: 'Advantages-Disadvantages: Remote Work',
+    slug: 'advantages-disadvantages-remote-work',
+    type: 'writing',
+    level: 'intermediate',
+    topic: 'Task 2 Advantages-Disadvantages',
+    description: 'Master the advantages-disadvantages essay format with Band 9 techniques for discussing remote work.',
+    is_premium: true,
+    is_published: true,
+    view_count: 2000,
+    created_at: '2025-06-21T10:00:00Z',
+    updated_at: '2025-06-21T10:00:00Z',
+    estimated_time: 45,
+    content: {
+      title: 'Advantages-Disadvantages: Remote Work',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'Structure an advantages-disadvantages essay effectively',
+        'Present balanced arguments with equal development',
+        'Use comparison and contrast language',
+        'Decide when to give your opinion (if asked)'
+      ],
+      coreExplanation: `**IELTS Task 2 Question:**
+"More and more people are working from home rather than in offices. What are the advantages and disadvantages of this trend?"
+
+**Planning (5 minutes):**
+1. Question type: Advantages-Disadvantages (NO opinion required unless asked)
+2. Advantages: Flexibility, no commute, work-life balance, cost savings
+3. Disadvantages: Isolation, blurred boundaries, communication challenges, career progression
+
+**Band 9 Structure:**
+- Introduction: Paraphrase trend + outline (will discuss both)
+- Body 1: 2-3 advantages with development
+- Body 2: 2-3 disadvantages with development
+- Conclusion: Balanced summary (opinion only if question asks)`,
+      examples: [
+        { sentence: '**BAND 9 MODEL ANSWER (Introduction):**\n\n"The shift toward remote work has accelerated dramatically in recent years, fundamentally transforming traditional employment patterns. This essay will examine both the benefits and drawbacks of this increasingly prevalent working arrangement."', explanation: '**Why Band 9:** Sophisticated paraphrase (shift toward, accelerated dramatically), context (recent years), clear direction, academic vocabulary (prevalent, arrangement).' },
+        { sentence: '**BAND 9 MODEL ANSWER (Body 1 - Advantages):**\n\n"Remote work offers several compelling advantages for both employees and employers. Perhaps most significantly, it eliminates commuting time, allowing workers to reclaim hours previously lost to travel while simultaneously reducing their carbon footprint. Additionally, the flexibility to structure one\'s workday around personal commitments can enhance work-life balance, particularly for parents managing childcare responsibilities. From an organizational perspective, companies can reduce overhead costs associated with maintaining physical office spaces and access a broader talent pool unrestricted by geographical limitations."', explanation: '**Why Band 9:** Multiple perspectives (employees AND employers), fully developed points with reasoning, sophisticated vocabulary (compelling, reclaim, overhead costs), varied sentence structures.' },
+        { sentence: '**BAND 9 MODEL ANSWER (Body 2 - Disadvantages):**\n\n"However, remote work is not without its drawbacks. The absence of face-to-face interaction can lead to feelings of isolation and disconnection from colleagues, potentially impacting mental health and team cohesion. Furthermore, the blurring of boundaries between professional and personal life may result in employees working longer hours, paradoxically undermining the work-life balance that remote work ostensibly promotes. Career advancement may also suffer, as remote workers often have reduced visibility and fewer opportunities for informal networking that can influence promotion decisions."', explanation: '**Why Band 9:** Clear contrast (However), balanced treatment, sophisticated vocabulary (paradoxically, ostensibly, cohesion), cause-effect reasoning, multiple developed points.' },
+        { sentence: '**COMPARISON LANGUAGE:**\n\n**Introducing advantages:**\n- X offers several compelling advantages...\n- One significant benefit is...\n- Perhaps most importantly...\n- From X\'s perspective...\n\n**Introducing disadvantages:**\n- However, X is not without its drawbacks...\n- On the other hand...\n- Conversely...\n- Nevertheless, there are concerns regarding...\n\n**Balanced conclusion:**\n- While X offers clear benefits, the drawbacks cannot be overlooked...\n- On balance, both advantages and disadvantages are significant...\n- Ultimately, the impact depends on...', explanation: 'These phrases help structure a balanced argument and demonstrate sophisticated language use.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Giving opinion when not asked', correction: 'Only give your opinion if the question explicitly asks "Do you think the advantages outweigh the disadvantages?"', explanation: 'Adding unsolicited opinion can hurt Task Response if the question only asks to discuss both sides.' },
+        { mistake: 'Unbalanced paragraphs (3 advantages, 1 disadvantage)', correction: 'Give roughly equal space and development to both sides', explanation: 'Unbalanced treatment suggests you cannot discuss both perspectives fairly.' },
+        { mistake: 'Listing points without development', correction: 'Each point needs: statement + explanation + example/result', explanation: 'Band 9 requires fully extended and supported ideas.' },
+        { mistake: 'Using "pros and cons" in academic writing', correction: 'Use "advantages and disadvantages" or "benefits and drawbacks"', explanation: '"Pros and cons" is too informal for academic writing.' },
+        { mistake: 'Repeating the same linking words', correction: 'Vary: Additionally/Furthermore/Moreover, However/Nevertheless/Conversely', explanation: 'Repetitive linking words suggest limited vocabulary range.' }
+      ],
+      miniPractice: [
+        { question: 'Should you give your opinion in an advantages-disadvantages essay?', options: ['Always', 'Never', 'Only if the question asks', 'Only in the conclusion'], type: 'multiple-choice' },
+        { question: 'Rewrite informally: "The pros of working from home include flexibility."', type: 'rewrite' },
+        { question: 'Which phrase introduces a disadvantage?', options: ['"Additionally..."', '"However, X is not without its drawbacks..."', '"Furthermore..."', '"One benefit is..."'], type: 'multiple-choice' },
+        { question: 'Complete: "Remote work offers several _____ advantages for both employees and employers."', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Only if the question asks',
+        'Remote work offers several compelling advantages, including the flexibility to structure one\'s workday around personal commitments.',
+        '"However, X is not without its drawbacks..."',
+        'compelling/significant/notable'
+      ],
+      quickRecap: 'Advantages-Disadvantages Formula: 1) Paraphrase + outline, 2) 2-3 advantages with full development, 3) 2-3 disadvantages with equal development, 4) Balanced summary. Only give opinion if asked. Use comparison language (However, Conversely, On the other hand). Develop each point fully.',
+      collocations: [
+        'remote work', 'work-life balance', 'carbon footprint', 'overhead costs',
+        'talent pool', 'team cohesion', 'career advancement', 'promotion decisions',
+        'geographical limitations', 'working arrangement', 'face-to-face interaction', 'informal networking'
+      ],
+      synonyms: [
+        { word: 'advantage', synonyms: ['benefit', 'merit', 'positive aspect', 'upside'] },
+        { word: 'disadvantage', synonyms: ['drawback', 'downside', 'limitation', 'negative aspect'] },
+        { word: 'increase', synonyms: ['rise', 'growth', 'surge', 'expansion'] }
+      ],
+      speakingLines: [
+        'Remote work offers several compelling advantages for both employees and employers.',
+        'However, remote work is not without its drawbacks.',
+        'On balance, both the advantages and disadvantages are significant.'
+      ]
+    }
+  },
+  // ============================================
+  // TASK 2: Two-Part Question Essays
+  // ============================================
+  {
+    id: 'writing-task2-twopart-1',
+    title: 'Two-Part Question: Youth Unemployment',
+    slug: 'two-part-question-youth-unemployment',
+    type: 'writing',
+    level: 'intermediate',
+    topic: 'Task 2 Two-Part Question',
+    description: 'Master the two-part question format with Band 9 techniques for discussing youth unemployment.',
+    is_premium: true,
+    is_published: true,
+    view_count: 1700,
+    created_at: '2025-06-22T10:00:00Z',
+    updated_at: '2025-06-22T10:00:00Z',
+    estimated_time: 45,
+    content: {
+      title: 'Two-Part Question: Youth Unemployment',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'Identify and address both parts of a two-part question',
+        'Structure your essay to give equal weight to both questions',
+        'Develop answers with specific examples and reasoning',
+        'Avoid the common mistake of focusing on only one part'
+      ],
+      coreExplanation: `**IELTS Task 2 Question:**
+"Youth unemployment is a growing problem in many countries. What are the causes of this situation? What measures can governments take to address it?"
+
+**Planning (5 minutes):**
+1. Question type: Two-Part (Causes + Measures)
+2. Part 1 - Causes: Skills mismatch, economic recession, automation
+3. Part 2 - Measures: Vocational training, incentives for employers, entrepreneurship support
+
+**Band 9 Structure:**
+- Introduction: Paraphrase + acknowledge both parts
+- Body 1: Answer Part 1 (causes) with 2-3 developed points
+- Body 2: Answer Part 2 (measures) with 2-3 developed points
+- Conclusion: Summarize both parts briefly`,
+      examples: [
+        { sentence: '**BAND 9 MODEL ANSWER (Introduction):**\n\n"Youth unemployment has emerged as a critical socioeconomic challenge affecting nations across the globe. This essay will explore the underlying causes of this phenomenon before examining potential governmental interventions to mitigate the problem."', explanation: '**Why Band 9:** Clear acknowledgment of both parts (causes + interventions), sophisticated vocabulary (socioeconomic, phenomenon, mitigate), academic register.' },
+        { sentence: '**BAND 9 MODEL ANSWER (Body 1 - Causes):**\n\n"Several factors contribute to the high rates of unemployment among young people. Primarily, there exists a significant mismatch between the skills acquired through formal education and those demanded by the contemporary job market. Many graduates possess theoretical knowledge but lack practical competencies valued by employers. Economic downturns further exacerbate the situation, as companies facing financial constraints often implement hiring freezes or reduce entry-level positions first. Additionally, technological advancement and automation have eliminated numerous traditional entry-level roles, particularly in manufacturing and administrative sectors."', explanation: '**Why Band 9:** Three well-developed causes, sophisticated vocabulary (mismatch, competencies, exacerbate), clear logical flow, specific examples (manufacturing, administrative).' },
+        { sentence: '**BAND 9 MODEL ANSWER (Body 2 - Measures):**\n\n"Governments can implement various strategies to address youth unemployment. Investing in vocational training programs that align curricula with industry needs would help bridge the skills gap, ensuring graduates possess market-relevant competencies. Providing tax incentives or subsidies to companies that hire young workers could encourage employers to take on inexperienced staff despite the associated training costs. Furthermore, supporting youth entrepreneurship through accessible funding, mentorship programs, and reduced bureaucratic barriers could enable young people to create their own employment opportunities rather than competing for limited positions."', explanation: '**Why Band 9:** Three practical measures with clear reasoning, sophisticated vocabulary (align curricula, bureaucratic barriers), cause-effect logic, varied sentence structures.' },
+        { sentence: '**TWO-PART QUESTION STRATEGY:**\n\n**Key principle:** Both parts must receive EQUAL attention\n\n**Common structures:**\n- Body 1 = Part 1, Body 2 = Part 2 (recommended)\n- Each body paragraph addresses both parts (harder to organize)\n\n**Transition between parts:**\n- "Having examined the causes, it is now necessary to consider..."\n- "Turning to potential solutions..."\n- "With regard to governmental measures..."\n\n**Conclusion must reference BOTH parts:**\n- "In conclusion, while X causes Y, governments can address this through..."', explanation: 'Two-part questions test your ability to address multiple aspects. Missing one part significantly lowers your Task Response score.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Focusing too much on one part', correction: 'Allocate roughly equal word count to both parts (about 100-120 words each in body paragraphs)', explanation: 'Unequal treatment suggests you cannot fully address the task.' },
+        { mistake: 'Not clearly separating the two parts', correction: 'Use clear transitions: "Turning to the second question..." or dedicate one body paragraph to each part', explanation: 'Clear organization helps coherence and shows you understand the task structure.' },
+        { mistake: 'Forgetting one part in the conclusion', correction: 'Your conclusion must briefly reference BOTH parts of the question', explanation: 'A conclusion that only mentions one part suggests incomplete task response.' },
+        { mistake: 'Treating it as a problem-solution essay', correction: 'Two-part questions may ask for causes + effects, reasons + results, or other combinations - read carefully', explanation: 'Not all two-part questions are problem-solution. Identify exactly what each part asks.' },
+        { mistake: 'Mixing the two parts throughout', correction: 'Keep the two parts clearly separated for better organization', explanation: 'Mixing parts can confuse the reader and hurt coherence scores.' }
+      ],
+      miniPractice: [
+        { question: 'How should you structure a two-part question essay?', options: ['One body paragraph for each part', 'Mix both parts in every paragraph', 'Focus on the more interesting part', 'Write about one part only'], type: 'multiple-choice' },
+        { question: 'Identify the two parts: "Why do people move to cities? Is this a positive development?"', type: 'rewrite' },
+        { question: 'Which transition works between parts?', options: ['"Also..."', '"Turning to potential solutions..."', '"And..."', '"Next..."'], type: 'multiple-choice' },
+        { question: 'Complete: "Having examined the causes, it is now necessary to _____ potential solutions."', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'One body paragraph for each part',
+        'Part 1: Reasons why people move to cities. Part 2: Whether this is positive or negative (opinion required).',
+        '"Turning to potential solutions..."',
+        'consider/examine/explore'
+      ],
+      quickRecap: 'Two-Part Question Formula: 1) Acknowledge both parts in intro, 2) Body 1 = Part 1 fully developed, 3) Body 2 = Part 2 fully developed, 4) Conclusion references both. Give EQUAL attention to both parts. Use clear transitions between parts. Read carefully to identify exactly what each part asks.',
+      collocations: [
+        'youth unemployment', 'skills mismatch', 'job market', 'hiring freeze',
+        'entry-level positions', 'vocational training', 'tax incentives', 'entrepreneurship',
+        'bureaucratic barriers', 'market-relevant', 'socioeconomic challenge', 'governmental interventions'
+      ],
+      synonyms: [
+        { word: 'unemployment', synonyms: ['joblessness', 'lack of employment', 'worklessness'] },
+        { word: 'young people', synonyms: ['youth', 'young adults', 'the younger generation', 'school leavers'] },
+        { word: 'government', synonyms: ['authorities', 'policymakers', 'the state', 'administration'] }
+      ],
+      speakingLines: [
+        'Youth unemployment has emerged as a critical socioeconomic challenge.',
+        'Several factors contribute to the high rates of unemployment among young people.',
+        'Governments can implement various strategies to address this issue.'
+      ]
+    }
+  },
+  // ============================================
+  // TASK 1 GENERAL: Formal Letter
+  // ============================================
+  {
+    id: 'writing-task1-formal-letter',
+    title: 'Task 1 General: Formal Letter',
+    slug: 'task1-formal-letter-complaint',
+    type: 'writing',
+    level: 'intermediate',
+    topic: 'Task 1 General',
+    description: 'Master formal letter writing for IELTS General Training with Band 9 techniques for complaints and requests.',
+    is_premium: false,
+    is_published: true,
+    view_count: 2200,
+    created_at: '2025-06-23T10:00:00Z',
+    updated_at: '2025-06-23T10:00:00Z',
+    estimated_time: 30,
+    content: {
+      title: 'Task 1 General: Formal Letter',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'Structure a formal letter correctly',
+        'Use appropriate formal register and tone',
+        'Write effective complaints and requests',
+        'Avoid common formality mistakes'
+      ],
+      coreExplanation: `**IELTS General Training Task 1:**
+"You recently purchased a product online, but it arrived damaged. Write a letter to the company. In your letter:
+- describe the product and when you ordered it
+- explain the problem
+- say what action you would like the company to take"
+
+**Formal Letter Structure:**
+- Opening: Dear Sir/Madam, (if name unknown) or Dear Mr/Ms [Name],
+- Paragraph 1: State purpose clearly
+- Paragraph 2: Provide details/explain situation
+- Paragraph 3: State what action you want
+- Closing: Yours faithfully, (if Dear Sir/Madam) or Yours sincerely, (if name used)
+
+**Word Count:** 150+ words (aim for 170-190)`,
+      examples: [
+        { sentence: '**BAND 9 MODEL ANSWER:**\n\nDear Sir or Madam,\n\nI am writing to express my dissatisfaction with a recent purchase from your online store and to request appropriate compensation.\n\nOn 15th November, I ordered a ceramic dinner set (Order #45892) from your website, which was delivered on 22nd November. Upon opening the package, I discovered that three of the six plates were cracked and one bowl had a large chip on the rim. The damage appears to have occurred during transit, as the packaging was inadequate – the items were wrapped only in thin paper with no protective padding.\n\nI would appreciate it if you could arrange for a full replacement of the damaged items at no additional cost. Alternatively, I would accept a partial refund equivalent to the value of the broken pieces. I have attached photographs of the damage for your reference.\n\nI look forward to your prompt response and a satisfactory resolution to this matter.\n\nYours faithfully,\nJohn Smith', explanation: '**Why Band 9:** Correct format, appropriate formal register, all bullet points addressed, clear and specific details, polite but firm tone, appropriate closing.' },
+        { sentence: '**FORMAL LETTER PHRASES:**\n\n**Opening purpose:**\n- I am writing to express my concern regarding...\n- I am writing to request...\n- I am writing to complain about...\n- I wish to bring to your attention...\n\n**Explaining the situation:**\n- On [date], I [action]...\n- Upon [doing something], I discovered that...\n- Despite [expectation], [what happened]...\n\n**Requesting action:**\n- I would appreciate it if you could...\n- I would be grateful if you would...\n- I request that you...\n- I expect [action] to be taken...\n\n**Closing:**\n- I look forward to your prompt response.\n- I trust this matter will be resolved swiftly.\n- Please do not hesitate to contact me if you require further information.', explanation: 'These phrases demonstrate appropriate formal register. Memorize 2-3 from each category.' },
+        { sentence: '**FORMAL vs INFORMAL COMPARISON:**\n\n**Informal:** "I bought this thing and it came broken. Can you fix it?"\n**Formal:** "I am writing to express my dissatisfaction with a recent purchase, which arrived in a damaged condition. I would appreciate it if you could arrange for a replacement."\n\n**Informal:** "Thanks for getting back to me."\n**Formal:** "Thank you for your prompt response to my enquiry."\n\n**Informal:** "Let me know what you can do."\n**Formal:** "I would be grateful if you could inform me of the available options."', explanation: 'Formal letters require: full forms (not contractions), polite phrases, passive voice where appropriate, no slang or colloquialisms.' },
+        { sentence: '**COMMON FORMAL LETTER SCENARIOS:**\n\n1. **Complaint:** Product/service issues, noise complaints, billing errors\n2. **Request:** Information, permission, recommendation letter\n3. **Application:** Job application, course application\n4. **Suggestion:** Improvements to services, facilities\n\n**Key for all:** Identify the tone required (formal/semi-formal/informal) and maintain it consistently throughout.', explanation: 'The question will indicate the recipient (manager, company, council) which tells you the formality level required.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using contractions (don\'t, can\'t, I\'m)', correction: 'Use full forms: do not, cannot, I am', explanation: 'Contractions are informal. Formal letters require full forms throughout.' },
+        { mistake: 'Wrong closing (Yours sincerely with Dear Sir/Madam)', correction: 'Dear Sir/Madam → Yours faithfully; Dear Mr/Ms X → Yours sincerely', explanation: 'This is a fixed rule in British English formal letters.' },
+        { mistake: 'Being too aggressive or emotional', correction: 'Maintain a polite but firm tone: "I would appreciate" not "You must"', explanation: 'Even complaints should be professional. Aggressive tone is inappropriate.' },
+        { mistake: 'Not addressing all bullet points', correction: 'Check each bullet point is clearly addressed in your letter', explanation: 'Missing bullet points directly affects Task Response score.' },
+        { mistake: 'Starting with "I am John Smith and I am writing..."', correction: 'Start with purpose: "I am writing to..." Your name goes at the end.', explanation: 'Your name appears in the signature, not the opening.' }
+      ],
+      miniPractice: [
+        { question: 'What closing should you use with "Dear Sir or Madam"?', options: ['Yours sincerely', 'Yours faithfully', 'Best regards', 'Kind regards'], type: 'multiple-choice' },
+        { question: 'Rewrite informally: "I\'m really angry about this broken thing you sent me!"', type: 'rewrite' },
+        { question: 'Which phrase is appropriately formal?', options: ['"Can you fix this?"', '"I would appreciate it if you could..."', '"You need to sort this out"', '"Please help me ASAP"'], type: 'multiple-choice' },
+        { question: 'Complete: "I am writing to express my _____ with a recent purchase."', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Yours faithfully',
+        'I am writing to express my dissatisfaction with a recent purchase, which arrived in a damaged condition.',
+        '"I would appreciate it if you could..."',
+        'dissatisfaction/concern/disappointment'
+      ],
+      quickRecap: 'Formal Letter Formula: Dear Sir/Madam → Yours faithfully; Dear Mr/Ms X → Yours sincerely. No contractions. Polite but firm tone. Address ALL bullet points. Structure: Purpose → Details → Action requested → Polite closing. Aim for 170-190 words.',
+      collocations: [
+        'express dissatisfaction', 'prompt response', 'satisfactory resolution', 'at your earliest convenience',
+        'bring to your attention', 'further information', 'appropriate compensation', 'partial refund',
+        'no additional cost', 'for your reference', 'trust this matter', 'do not hesitate'
+      ],
+      synonyms: [
+        { word: 'complain', synonyms: ['express dissatisfaction', 'raise concerns', 'bring to attention'] },
+        { word: 'want', synonyms: ['request', 'would appreciate', 'would be grateful for'] },
+        { word: 'problem', synonyms: ['issue', 'matter', 'concern', 'difficulty'] }
+      ],
+      speakingLines: [
+        'I am writing to express my dissatisfaction with a recent purchase.',
+        'I would appreciate it if you could arrange for a replacement.',
+        'I look forward to your prompt response.'
+      ]
+    }
+  },
+  {
+    id: 'writing-task1-informal-letter',
+    title: 'Task 1 General: Informal Letter',
+    slug: 'task1-informal-letter-friend',
+    type: 'writing',
+    level: 'beginner',
+    topic: 'Task 1 General',
+    description: 'Master informal letter writing for IELTS General Training with natural, friendly language.',
+    is_premium: true,
+    is_published: true,
+    view_count: 1900,
+    created_at: '2025-06-24T10:00:00Z',
+    updated_at: '2025-06-24T10:00:00Z',
+    estimated_time: 30,
+    content: {
+      title: 'Task 1 General: Informal Letter',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'Write naturally to friends and family',
+        'Use appropriate informal register',
+        'Include personal touches and warmth',
+        'Avoid being too formal or too casual'
+      ],
+      coreExplanation: `**IELTS General Training Task 1:**
+"A friend is coming to visit your city for the first time. Write a letter to your friend. In your letter:
+- suggest places they should visit
+- recommend where they should stay
+- offer to help during their visit"
+
+**Informal Letter Structure:**
+- Opening: Dear [Name], / Hi [Name],
+- Paragraph 1: Warm opening + acknowledge situation
+- Paragraph 2-3: Address the bullet points naturally
+- Closing: Warm sign-off + your name
+
+**Word Count:** 150+ words (aim for 170-190)`,
+      examples: [
+        { sentence: '**BAND 9 MODEL ANSWER:**\n\nDear Sarah,\n\nI was so excited to hear you\'re finally coming to visit! I\'ve been looking forward to showing you around my city for ages.\n\nThere are so many amazing places I want to take you to. The old town is absolutely stunning – we could spend a whole day wandering through the narrow streets and stopping at cute cafes. The art museum is also worth a visit if you\'re interested, and there\'s a fantastic viewpoint on the hill that offers breathtaking views of the whole city, especially at sunset.\n\nAs for accommodation, I\'d recommend the boutique hotel near the main square. It\'s reasonably priced and the location is perfect for exploring. Of course, you\'re more than welcome to stay at my place if you\'d prefer – I have a spare room and it would be lovely to catch up properly!\n\nI\'ve already taken some time off work, so I\'ll be free to show you around. Just let me know your dates and I\'ll plan some activities.\n\nCan\'t wait to see you!\n\nLove,\nEmma', explanation: '**Why Band 9:** Natural, warm tone; contractions used appropriately; personal touches (excitement, offering spare room); all bullet points addressed; appropriate informal closing.' },
+        { sentence: '**INFORMAL LETTER PHRASES:**\n\n**Warm openings:**\n- I was so excited/delighted to hear...\n- It\'s been ages since we last spoke!\n- How are things with you?\n- Thanks so much for your letter/email.\n\n**Making suggestions:**\n- You should definitely check out...\n- I\'d highly recommend...\n- You\'ll love...\n- Make sure you don\'t miss...\n\n**Offering help:**\n- I\'d be happy to...\n- Feel free to...\n- Just let me know if you need...\n- I\'m more than willing to...\n\n**Warm closings:**\n- Can\'t wait to see you!\n- Looking forward to hearing from you.\n- Take care and see you soon!\n- Write back soon!', explanation: 'These phrases create a natural, friendly tone. Use contractions and personal expressions.' },
+        { sentence: '**INFORMAL vs FORMAL COMPARISON:**\n\n**Formal:** "I am writing to inform you that I will be available to assist you during your visit."\n**Informal:** "I\'ve taken some time off work, so I\'ll be free to show you around!"\n\n**Formal:** "I would recommend the establishment located in the central district."\n**Informal:** "There\'s this amazing little hotel near the main square – you\'ll love it!"\n\n**Formal:** "Please do not hesitate to contact me."\n**Informal:** "Just give me a call if you need anything!"', explanation: 'Informal letters should sound like you\'re talking to a friend. Use contractions, exclamation marks (sparingly), and personal expressions.' },
+        { sentence: '**COMMON INFORMAL LETTER SCENARIOS:**\n\n1. **Invitation:** Inviting a friend to an event/visit\n2. **Advice:** Giving suggestions to a friend\n3. **News:** Sharing personal news or updates\n4. **Thanks:** Thanking a friend for something\n5. **Apology:** Apologizing for something\n\n**Key:** Sound natural and warm, but still address all bullet points clearly.', explanation: 'Even informal letters must address all parts of the task. Don\'t sacrifice content for friendliness.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Being too formal ("I am writing to inform you...")', correction: 'Use natural, conversational language: "I was so happy to hear..."', explanation: 'Overly formal language in an informal letter sounds unnatural and affects your score.' },
+        { mistake: 'Using "Dear Sir/Madam" for a friend', correction: 'Use "Dear [Name]" or "Hi [Name]"', explanation: 'The question will indicate the relationship. Friends don\'t write "Dear Sir/Madam" to each other.' },
+        { mistake: 'No personal touches or warmth', correction: 'Add expressions of emotion: "I\'m so excited!", "I can\'t wait!", "It would be lovely to..."', explanation: 'Informal letters should show personality and warmth.' },
+        { mistake: 'Ending with "Yours faithfully"', correction: 'Use informal closings: "Love,", "Take care,", "See you soon,", "Best wishes,"', explanation: '"Yours faithfully" is for formal letters only.' },
+        { mistake: 'Not using contractions at all', correction: 'Use contractions naturally: "I\'m", "you\'ll", "can\'t", "it\'s"', explanation: 'No contractions makes informal letters sound stiff and unnatural.' }
+      ],
+      miniPractice: [
+        { question: 'Which opening is appropriate for a letter to a friend?', options: ['Dear Sir or Madam', 'To Whom It May Concern', 'Hi Sarah!', 'Dear Customer'], type: 'multiple-choice' },
+        { question: 'Rewrite formally: "I was so excited to hear you\'re coming to visit!"', type: 'rewrite' },
+        { question: 'Which closing is appropriate for an informal letter?', options: ['Yours faithfully', 'Yours sincerely', 'Take care and see you soon!', 'I remain, respectfully yours'], type: 'multiple-choice' },
+        { question: 'Complete: "I\'ve taken some time off work, so I\'ll be _____ to show you around!"', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Hi Sarah!',
+        'I was pleased to receive news of your upcoming visit.',
+        'Take care and see you soon!',
+        'free/happy/able'
+      ],
+      quickRecap: 'Informal Letter Formula: Dear/Hi [Name] → Warm opening → Address bullet points naturally → Warm closing + name. Use contractions, personal expressions, exclamation marks (sparingly). Sound like you\'re talking to a friend. Still address ALL bullet points clearly.',
+      collocations: [
+        'can\'t wait', 'looking forward to', 'it\'s been ages', 'catch up',
+        'show you around', 'more than welcome', 'feel free', 'let me know',
+        'take care', 'see you soon', 'write back', 'keep in touch'
+      ],
+      synonyms: [
+        { word: 'happy', synonyms: ['excited', 'delighted', 'thrilled', 'pleased'] },
+        { word: 'good', synonyms: ['amazing', 'fantastic', 'wonderful', 'lovely'] },
+        { word: 'help', synonyms: ['give you a hand', 'show you around', 'be there for you'] }
+      ],
+      speakingLines: [
+        'I was so excited to hear you\'re coming to visit!',
+        'You\'re more than welcome to stay at my place.',
+        'Can\'t wait to see you!'
+      ]
+    }
+  },
+  {
+    id: 'writing-task1-semiformal-letter',
+    title: 'Task 1 General: Semi-Formal Letter',
+    slug: 'task1-semiformal-letter-landlord',
+    type: 'writing',
+    level: 'intermediate',
+    topic: 'Task 1 General',
+    description: 'Master semi-formal letter writing for situations like writing to a landlord, neighbor, or colleague.',
+    is_premium: true,
+    is_published: true,
+    view_count: 1600,
+    created_at: '2025-06-25T10:00:00Z',
+    updated_at: '2025-06-25T10:00:00Z',
+    estimated_time: 30,
+    content: {
+      title: 'Task 1 General: Semi-Formal Letter',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'Identify when semi-formal tone is appropriate',
+        'Balance politeness with friendliness',
+        'Write to landlords, neighbors, and colleagues',
+        'Avoid being too formal or too casual'
+      ],
+      coreExplanation: `**IELTS General Training Task 1:**
+"You have been living in a rented apartment for a year. There is a problem with the heating system. Write a letter to your landlord. In your letter:
+- describe the problem
+- explain how it is affecting you
+- suggest what should be done"
+
+**Semi-Formal = You know the person but it's not a close friend**
+Examples: Landlord, neighbor, colleague, teacher, club organizer
+
+**Semi-Formal Letter Structure:**
+- Opening: Dear Mr/Ms [Name],
+- Paragraph 1: State purpose politely
+- Paragraph 2-3: Address bullet points
+- Closing: Best regards, / Kind regards,`,
+      examples: [
+        { sentence: '**BAND 9 MODEL ANSWER:**\n\nDear Mr Thompson,\n\nI am writing to bring to your attention a problem with the heating system in my apartment at 24 Oak Street, which I have been renting for the past year.\n\nOver the past two weeks, the central heating has been functioning intermittently, often shutting off completely during the night. Given that temperatures have dropped significantly this month, this has made the apartment uncomfortably cold, particularly in the mornings. I have tried adjusting the thermostat and checking the radiators, but the problem persists.\n\nI would be grateful if you could arrange for a qualified technician to inspect and repair the system at your earliest convenience. I am generally available on weekday evenings and weekends if you need to schedule a visit. Please let me know if you require any further information.\n\nThank you for your attention to this matter. I look forward to hearing from you soon.\n\nBest regards,\nDavid Chen', explanation: '**Why Band 9:** Appropriate semi-formal tone (polite but not stiff), all bullet points addressed, specific details, reasonable request, professional closing.' },
+        { sentence: '**SEMI-FORMAL TONE GUIDE:**\n\n**More formal than informal:**\n- Use "Dear Mr/Ms [Name]" not "Hi"\n- Avoid excessive exclamation marks\n- Don\'t use slang or very casual expressions\n\n**Less formal than formal:**\n- Can use some contractions (I\'ve, it\'s)\n- More personal tone than business letters\n- "Best regards" rather than "Yours faithfully"\n\n**The balance:**\n- Polite and respectful\n- Clear and direct\n- Friendly but professional', explanation: 'Semi-formal is the middle ground. Think: how would you write to a teacher you respect but have a good relationship with?' },
+        { sentence: '**SEMI-FORMAL PHRASES:**\n\n**Opening purpose:**\n- I am writing to bring to your attention...\n- I am writing regarding...\n- I wanted to let you know about...\n\n**Explaining politely:**\n- I have noticed that...\n- Unfortunately, there seems to be...\n- I\'m afraid that...\n\n**Making requests:**\n- I would be grateful if you could...\n- Would it be possible to...\n- I was wondering if you could...\n\n**Closing:**\n- Thank you for your attention to this matter.\n- I look forward to hearing from you.\n- Please let me know if you need any further information.', explanation: 'These phrases strike the right balance between formal and friendly.' },
+        { sentence: '**IDENTIFYING THE TONE:**\n\n**Formal:** Company, government office, unknown person\n→ Dear Sir/Madam, Yours faithfully\n\n**Semi-formal:** Landlord, neighbor, colleague, teacher\n→ Dear Mr/Ms [Name], Best regards\n\n**Informal:** Close friend, family member\n→ Hi/Dear [First name], Love/Take care\n\n**Key indicator:** Does the question give you a name? If yes, it\'s likely semi-formal or informal. Check the relationship to decide.', explanation: 'The question will indicate the recipient. Use this to determine the appropriate tone.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Being too formal ("I wish to formally notify you...")', correction: 'Use polite but natural language: "I am writing to let you know..."', explanation: 'Overly formal language sounds cold and distant for semi-formal relationships.' },
+        { mistake: 'Being too casual ("Hey, the heating\'s broken!")', correction: 'Maintain politeness: "I am writing to bring to your attention a problem with the heating."', explanation: 'Too casual undermines the professional nature of the communication.' },
+        { mistake: 'Using "Dear Sir/Madam" when a name is given', correction: 'Use "Dear Mr/Ms [Name]" when you know the person\'s name', explanation: 'Using the name shows appropriate familiarity for semi-formal relationships.' },
+        { mistake: 'Ending with "Yours faithfully"', correction: 'Use "Best regards" or "Kind regards" for semi-formal letters', explanation: '"Yours faithfully" is too formal for someone you know.' },
+        { mistake: 'Not being specific about the problem', correction: 'Include specific details: dates, locations, what you\'ve tried', explanation: 'Vague complaints are less effective. Specific details show you\'re reasonable.' }
+      ],
+      miniPractice: [
+        { question: 'Which relationship requires semi-formal tone?', options: ['Writing to a company', 'Writing to your landlord', 'Writing to your best friend', 'Writing to a government office'], type: 'multiple-choice' },
+        { question: 'Rewrite too formally: "I wish to formally lodge a complaint regarding the malfunctioning heating apparatus."', type: 'rewrite' },
+        { question: 'Which closing is appropriate for a semi-formal letter?', options: ['Yours faithfully', 'Love', 'Best regards', 'Cheers'], type: 'multiple-choice' },
+        { question: 'Complete: "I would be _____ if you could arrange for a technician to inspect the system."', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Writing to your landlord',
+        'I am writing to let you know about a problem with the heating system.',
+        'Best regards',
+        'grateful/appreciative'
+      ],
+      quickRecap: 'Semi-Formal Formula: Dear Mr/Ms [Name] → Polite purpose statement → Specific details → Reasonable request → Best regards. Balance politeness with friendliness. Not as stiff as formal, not as casual as informal. Use for landlords, neighbors, colleagues, teachers.',
+      collocations: [
+        'bring to your attention', 'at your earliest convenience', 'further information',
+        'attention to this matter', 'look forward to hearing', 'please let me know',
+        'would be grateful', 'was wondering if', 'I\'m afraid that', 'unfortunately'
+      ],
+      synonyms: [
+        { word: 'problem', synonyms: ['issue', 'concern', 'difficulty', 'matter'] },
+        { word: 'fix', synonyms: ['repair', 'resolve', 'address', 'rectify'] },
+        { word: 'soon', synonyms: ['at your earliest convenience', 'as soon as possible', 'promptly'] }
+      ],
+      speakingLines: [
+        'I am writing to bring to your attention a problem with the heating system.',
+        'I would be grateful if you could arrange for a technician.',
+        'Thank you for your attention to this matter.'
+      ]
+    }
+  },
+  // ============================================
+  // TASK 1 ACADEMIC: Process Diagram
+  // ============================================
+  {
+    id: 'writing-task1-process',
+    title: 'Task 1 Academic: Process Diagram',
+    slug: 'task1-process-diagram',
+    type: 'writing',
+    level: 'intermediate',
+    topic: 'Task 1 Academic',
+    description: 'Master process diagram description with Band 9 sequencing language and passive voice.',
+    is_premium: true,
+    is_published: true,
+    view_count: 2100,
+    created_at: '2025-06-26T10:00:00Z',
+    updated_at: '2025-06-26T10:00:00Z',
+    estimated_time: 35,
+    content: {
+      title: 'Task 1 Academic: Process Diagram',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'Describe processes using appropriate sequencing language',
+        'Use passive voice correctly for process descriptions',
+        'Organize information logically from start to finish',
+        'Identify and describe key stages clearly'
+      ],
+      coreExplanation: `**Process Diagram Overview:**
+Process diagrams show how something is made, how something works, or how something happens. They can be:
+- Manufacturing processes (how chocolate is made)
+- Natural processes (the water cycle)
+- Abstract processes (how a law is passed)
+
+**Band 9 Structure:**
+- Introduction: Paraphrase what the process shows
+- Overview: State the number of stages and start/end points
+- Body 1: First half of the process
+- Body 2: Second half of the process
+
+**Key Language Features:**
+- Passive voice (is harvested, are transported, is processed)
+- Sequencing words (First, Then, Next, Subsequently, Finally)
+- Present simple tense (for general processes)`,
+      examples: [
+        { sentence: '**BAND 9 MODEL ANSWER (Introduction + Overview):**\n\n"The diagram illustrates the process by which chocolate is manufactured from cacao beans. Overall, the production involves multiple stages, beginning with the harvesting of cacao pods and culminating in the packaging of finished chocolate products. The process can be divided into two main phases: the initial processing of raw cacao and the subsequent manufacturing of chocolate."', explanation: '**Why Band 9:** Clear paraphrase, comprehensive overview stating start/end points and number of phases, sophisticated vocabulary (culminating, subsequent).' },
+        { sentence: '**BAND 9 MODEL ANSWER (Body 1):**\n\n"The process commences with the harvesting of ripe cacao pods from trees, which are then split open to extract the beans. These beans are subsequently fermented for several days in wooden containers before being spread out to dry in the sun. Once dried, the beans are transported to a processing facility where they are roasted at high temperatures. Following roasting, the outer shells are removed, leaving the inner nibs which are ground into a paste known as cacao liquor."', explanation: '**Why Band 9:** Clear sequencing (commences, subsequently, Once, Following), consistent passive voice, specific details, logical flow.' },
+        { sentence: '**SEQUENCING LANGUAGE:**\n\n**Starting:**\n- The process begins/commences with...\n- Initially/First/Firstly...\n- At the first stage...\n\n**Continuing:**\n- Then/Next/Subsequently...\n- Following this/After this...\n- Once X is complete...\n- At the next stage...\n\n**Ending:**\n- Finally/Lastly...\n- The process concludes with...\n- At the final stage...\n- ...culminating in...', explanation: 'Vary your sequencing language throughout. Don\'t use "then" for every step.' },
+        { sentence: '**PASSIVE VOICE FOR PROCESSES:**\n\n**Active (avoid):** "Workers harvest the beans."\n**Passive (use):** "The beans are harvested."\n\n**Why passive?** Process descriptions focus on WHAT happens, not WHO does it.\n\n**Common passive structures:**\n- is/are + past participle (is harvested, are transported)\n- is/are + past participle + by (is processed by machines)\n- can be + past participle (can be divided into)\n\n**Practice converting:**\n- "They roast the beans" → "The beans are roasted"\n- "Machines grind the nibs" → "The nibs are ground by machines"', explanation: 'Passive voice is essential for Band 7+ in process descriptions. Practice converting active to passive.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using active voice throughout', correction: 'Use passive voice: "The beans are harvested" not "Farmers harvest the beans"', explanation: 'Process descriptions focus on the process, not the people. Passive voice is expected.' },
+        { mistake: 'No overview paragraph', correction: 'Always include an overview stating the number of stages and start/end points', explanation: 'The overview is essential for Band 7+. It shows you can identify key features.' },
+        { mistake: 'Using "firstly, secondly, thirdly" for every step', correction: 'Vary sequencing: "Initially... Subsequently... Following this... Finally..."', explanation: 'Repetitive sequencing suggests limited vocabulary range.' },
+        { mistake: 'Describing every tiny detail', correction: 'Focus on main stages. Group minor steps together.', explanation: 'You have limited words. Focus on significant stages, not every small detail.' },
+        { mistake: 'Using past tense for general processes', correction: 'Use present simple: "The beans are roasted" not "The beans were roasted"', explanation: 'General processes that happen regularly use present simple tense.' }
+      ],
+      miniPractice: [
+        { question: 'Which voice should dominate in process descriptions?', options: ['Active voice', 'Passive voice', 'Both equally', 'Neither'], type: 'multiple-choice' },
+        { question: 'Convert to passive: "Workers transport the beans to the factory."', type: 'rewrite' },
+        { question: 'Which sequencing phrase is most sophisticated?', options: ['"Then..."', '"Subsequently..."', '"And then..."', '"After that..."'], type: 'multiple-choice' },
+        { question: 'Complete: "The process _____ with the harvesting of raw materials."', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Passive voice',
+        'The beans are transported to the factory.',
+        '"Subsequently..."',
+        'begins/commences/starts'
+      ],
+      quickRecap: 'Process Diagram Formula: 1) Paraphrase what process shows, 2) Overview with stages and start/end, 3) Body 1 = first half, 4) Body 2 = second half. Use passive voice throughout. Vary sequencing language. Present simple for general processes. Focus on main stages.',
+      collocations: [
+        'the process begins', 'subsequently', 'following this', 'at the next stage',
+        'the process concludes', 'culminating in', 'can be divided into', 'is transported to',
+        'is processed', 'are extracted', 'is converted into', 'the final stage'
+      ],
+      synonyms: [
+        { word: 'begin', synonyms: ['commence', 'start', 'initiate'] },
+        { word: 'then', synonyms: ['subsequently', 'following this', 'next', 'afterwards'] },
+        { word: 'end', synonyms: ['conclude', 'finish', 'culminate', 'complete'] }
+      ],
+      speakingLines: [
+        'The process commences with the harvesting of raw materials.',
+        'Subsequently, the materials are transported to the processing facility.',
+        'The process concludes with the packaging of the finished product.'
+      ]
+    }
+  },
+  // ============================================
+  // TASK 1 ACADEMIC: Map/Plan
+  // ============================================
+  {
+    id: 'writing-task1-map',
+    title: 'Task 1 Academic: Map Comparison',
+    slug: 'task1-map-comparison',
+    type: 'writing',
+    level: 'advanced',
+    topic: 'Task 1 Academic',
+    description: 'Master map comparison with Band 9 techniques for describing changes over time.',
+    is_premium: true,
+    is_published: true,
+    view_count: 1800,
+    created_at: '2025-06-27T10:00:00Z',
+    updated_at: '2025-06-27T10:00:00Z',
+    estimated_time: 35,
+    content: {
+      title: 'Task 1 Academic: Map Comparison',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'Describe changes to places over time',
+        'Use appropriate language for development and change',
+        'Organize spatial information clearly',
+        'Compare "before and after" effectively'
+      ],
+      coreExplanation: `**Map Comparison Overview:**
+Map tasks show how a place has changed over time (past vs present) or compare two different plans (proposed vs existing).
+
+**Band 9 Structure:**
+- Introduction: Paraphrase what the maps show
+- Overview: Summarize the main changes (development, expansion, etc.)
+- Body 1: Changes in one area (e.g., north/center)
+- Body 2: Changes in another area (e.g., south/east)
+
+**Key Language Features:**
+- Past tense for completed changes
+- Present perfect for changes with current relevance
+- Passive voice for developments
+- Location language (in the north, to the east of)`,
+      examples: [
+        { sentence: '**BAND 9 MODEL ANSWER (Introduction + Overview):**\n\n"The two maps illustrate the transformation of Riverside town between 1980 and the present day. Overall, the town has undergone significant development, with the most notable changes being the expansion of residential areas, the construction of new infrastructure, and the conversion of farmland into commercial zones."', explanation: '**Why Band 9:** Clear paraphrase, comprehensive overview identifying three main changes, sophisticated vocabulary (transformation, undergone, conversion).' },
+        { sentence: '**BAND 9 MODEL ANSWER (Body 1):**\n\n"In 1980, the northern part of the town was predominantly agricultural, with extensive farmland surrounding a small cluster of houses. By the present day, this area has been completely transformed. The farmland has been replaced by a large shopping center and an adjacent car park. Additionally, a new road has been constructed, connecting this commercial zone to the town center."', explanation: '**Why Band 9:** Clear location reference (northern part), specific changes described, appropriate tenses (was, has been transformed, has been replaced), good use of passive voice.' },
+        { sentence: '**LANGUAGE FOR CHANGES:**\n\n**Development/Construction:**\n- X has been built/constructed/developed\n- A new X has been added\n- X has been converted into Y\n- X has been replaced by Y\n\n**Removal/Demolition:**\n- X has been demolished/removed\n- X no longer exists\n- X has disappeared\n- X has been cleared\n\n**Expansion/Reduction:**\n- X has been extended/expanded\n- X has doubled/tripled in size\n- X has been reduced/decreased\n- X has shrunk considerably', explanation: 'Use present perfect for changes that connect past to present. Use past simple for completed historical changes.' },
+        { sentence: '**LOCATION LANGUAGE:**\n\n**Position:**\n- in the north/south/east/west\n- in the northern/southern part of\n- in the center/middle of\n- on the outskirts/edge of\n\n**Relative position:**\n- to the north/south of X\n- adjacent to / next to\n- opposite / across from\n- between X and Y\n- surrounding / around\n\n**Movement/Direction:**\n- from X to Y\n- towards the east\n- along the river/road', explanation: 'Clear location references are essential for coherence in map descriptions.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Not identifying the time periods clearly', correction: 'State the years clearly: "In 1980... By 2020..."', explanation: 'The reader needs to know which time period you\'re describing.' },
+        { mistake: 'Describing each map separately without comparison', correction: 'Compare directly: "The farmland has been replaced by a shopping center"', explanation: 'The task is to describe CHANGES, not just describe each map.' },
+        { mistake: 'Vague location references', correction: 'Be specific: "in the northeastern corner" not "somewhere in the area"', explanation: 'Precise location language demonstrates vocabulary range and clarity.' },
+        { mistake: 'Using only present simple tense', correction: 'Use past simple for 1980, present perfect for changes: "was... has been transformed"', explanation: 'Appropriate tense use is essential for grammatical accuracy.' },
+        { mistake: 'Missing the overview', correction: 'Always summarize the main changes before going into detail', explanation: 'The overview is essential for Band 7+ and shows you can identify key features.' }
+      ],
+      miniPractice: [
+        { question: 'Which tense is best for describing changes from past to present?', options: ['Past simple only', 'Present simple only', 'Present perfect', 'Future tense'], type: 'multiple-choice' },
+        { question: 'Describe this change: "1990: farmland → 2020: shopping center"', type: 'rewrite' },
+        { question: 'Which phrase describes location most precisely?', options: ['"somewhere there"', '"in the northeastern corner of the town"', '"in that area"', '"near the place"'], type: 'multiple-choice' },
+        { question: 'Complete: "The farmland has been _____ by a residential development."', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Present perfect',
+        'The farmland in the northern part of the town has been replaced by a large shopping center.',
+        '"in the northeastern corner of the town"',
+        'replaced/substituted'
+      ],
+      quickRecap: 'Map Comparison Formula: 1) Paraphrase what maps show, 2) Overview of main changes, 3) Body 1 = one area, 4) Body 2 = another area. Use present perfect for changes (has been built, has been replaced). Be specific about locations (in the northeast, adjacent to). Compare directly, don\'t just describe each map.',
+      collocations: [
+        'has undergone', 'has been transformed', 'has been replaced by', 'has been converted into',
+        'has been constructed', 'has been demolished', 'has expanded', 'no longer exists',
+        'in the northern part', 'adjacent to', 'on the outskirts', 'surrounding area'
+      ],
+      synonyms: [
+        { word: 'change', synonyms: ['transformation', 'development', 'alteration', 'modification'] },
+        { word: 'build', synonyms: ['construct', 'develop', 'erect', 'establish'] },
+        { word: 'remove', synonyms: ['demolish', 'clear', 'eliminate', 'knock down'] }
+      ],
+      speakingLines: [
+        'The town has undergone significant development over the past three decades.',
+        'The farmland has been replaced by a large shopping center.',
+        'A new road has been constructed connecting the residential area to the town center.'
+      ]
+    }
+  },
+  // ============================================
+  // TASK 1 ACADEMIC: Table
+  // ============================================
+  {
+    id: 'writing-task1-table',
+    title: 'Task 1 Academic: Table Analysis',
+    slug: 'task1-table-analysis',
+    type: 'writing',
+    level: 'intermediate',
+    topic: 'Task 1 Academic',
+    description: 'Master table description with Band 9 techniques for comparing data across categories.',
+    is_premium: true,
+    is_published: true,
+    view_count: 1900,
+    created_at: '2025-06-28T10:00:00Z',
+    updated_at: '2025-06-28T10:00:00Z',
+    estimated_time: 35,
+    content: {
+      title: 'Task 1 Academic: Table Analysis',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'Identify key features in tables',
+        'Compare data across multiple categories',
+        'Select and report significant data',
+        'Avoid listing every number'
+      ],
+      coreExplanation: `**Table Analysis Overview:**
+Tables present data in rows and columns. They can show:
+- Comparisons between categories
+- Changes over time
+- Rankings or proportions
+
+**Band 9 Structure:**
+- Introduction: Paraphrase what the table shows
+- Overview: Identify 2-3 key trends or comparisons
+- Body 1: First major comparison/trend with data
+- Body 2: Second major comparison/trend with data
+
+**Key Principle:** Select and compare - don't list every number!`,
+      examples: [
+        { sentence: '**BAND 9 MODEL ANSWER (Introduction + Overview):**\n\n"The table provides information about the percentage of household income spent on various categories in five different countries in 2020. Overall, housing represented the largest expenditure category across all nations, while entertainment accounted for the smallest proportion. Notable variations existed between countries, with Japan allocating the highest percentage to housing and Brazil spending the most on food."', explanation: '**Why Band 9:** Clear paraphrase, identifies highest/lowest categories, notes key variations between countries, doesn\'t list numbers yet.' },
+        { sentence: '**BAND 9 MODEL ANSWER (Body 1):**\n\n"Housing costs consumed the largest share of household budgets in all five countries, ranging from 25% in Brazil to 35% in Japan. European countries fell in the middle, with the UK and Germany allocating 30% and 28% respectively. Food expenditure showed greater variation, with Brazilian households dedicating 30% of their income to food, nearly double the figure for Japan (16%)."', explanation: '**Why Band 9:** Groups similar data (European countries), uses ranges, makes comparisons (nearly double), includes specific figures to support points.' },
+        { sentence: '**TABLE ANALYSIS STRATEGIES:**\n\n**1. Identify the highest and lowest:**\n- Which category/country has the highest/lowest figures?\n- Are there any extremes or outliers?\n\n**2. Look for patterns:**\n- Do certain countries/categories behave similarly?\n- Are there any surprising results?\n\n**3. Make comparisons:**\n- Compare between categories within a country\n- Compare between countries for the same category\n\n**4. Use ranges:**\n- "ranging from X to Y"\n- "between X and Y"', explanation: 'Don\'t describe row by row. Group, compare, and highlight significant data.' },
+        { sentence: '**COMPARISON LANGUAGE FOR TABLES:**\n\n**Comparing figures:**\n- X was significantly higher than Y\n- X was nearly/almost double/triple Y\n- X and Y were roughly equal/similar\n- X was marginally/slightly higher than Y\n\n**Describing ranges:**\n- ranging from X to Y\n- between X and Y\n- from a low of X to a high of Y\n\n**Grouping:**\n- European countries showed similar patterns...\n- In contrast to Asian nations...\n- X and Y both allocated approximately...', explanation: 'Comparison language demonstrates vocabulary range and analytical ability.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Listing every number in the table', correction: 'Select key data that supports your comparisons and trends', explanation: 'Listing all numbers shows no analytical ability. Select and compare.' },
+        { mistake: 'Describing row by row or column by column', correction: 'Group similar data and make comparisons across categories', explanation: 'Mechanical description doesn\'t demonstrate analytical skills.' },
+        { mistake: 'No overview identifying key features', correction: 'Always state the main trends/comparisons before giving details', explanation: 'The overview shows you can identify significant features.' },
+        { mistake: 'Using "the table shows that" repeatedly', correction: 'Vary: "According to the data...", "The figures indicate...", "It is evident that..."', explanation: 'Repetitive phrases suggest limited vocabulary.' },
+        { mistake: 'Including opinions or explanations', correction: 'Only report what the data shows. Don\'t explain WHY.', explanation: 'Task 1 is descriptive, not analytical. Don\'t speculate about causes.' }
+      ],
+      miniPractice: [
+        { question: 'What should you do first when analyzing a table?', options: ['List all the numbers', 'Identify highest and lowest values', 'Describe row by row', 'Give your opinion'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Japan is 35%. UK is 30%. Germany is 28%."', type: 'rewrite' },
+        { question: 'Which phrase best compares two figures?', options: ['"X is 35% and Y is 18%"', '"X was nearly double Y"', '"X is bigger"', '"X and Y are different"'], type: 'multiple-choice' },
+        { question: 'Complete: "Housing costs _____ from 25% in Brazil to 35% in Japan."', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Identify highest and lowest values',
+        'Japan allocated the highest percentage to housing (35%), followed by the UK (30%) and Germany (28%).',
+        '"X was nearly double Y"',
+        'ranged/varied'
+      ],
+      quickRecap: 'Table Analysis Formula: 1) Paraphrase what table shows, 2) Overview with key trends/comparisons, 3) Body paragraphs with grouped comparisons and supporting data. Don\'t list every number. Identify highest/lowest, group similar data, make comparisons. Use ranges (from X to Y) and comparison language (nearly double, significantly higher).',
+      collocations: [
+        'the highest percentage', 'the lowest figure', 'ranging from X to Y', 'nearly double',
+        'significantly higher', 'roughly equal', 'in contrast to', 'according to the data',
+        'the figures indicate', 'allocated to', 'accounted for', 'represented'
+      ],
+      synonyms: [
+        { word: 'show', synonyms: ['indicate', 'reveal', 'demonstrate', 'illustrate'] },
+        { word: 'highest', synonyms: ['greatest', 'largest', 'maximum', 'peak'] },
+        { word: 'spend', synonyms: ['allocate', 'dedicate', 'devote', 'assign'] }
+      ],
+      speakingLines: [
+        'Housing represented the largest expenditure category across all nations.',
+        'The figures ranged from 25% in Brazil to 35% in Japan.',
+        'Brazilian households dedicated nearly double the percentage to food compared to Japan.'
+      ]
+    }
   }
 ];
 
