@@ -18869,5 +18869,926 @@ Understanding these terms helps you discuss analytical topics effectively.`,
         'Evidence-based decisions are more reliable.'
       ]
     }
+  },
+  // ============================================
+  // BATCH 48: Opinion & Argument (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-opinion-1',
+    title: 'Expressing Opinions Vocabulary',
+    slug: 'expressing-opinions-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Opinion',
+    description: 'Essential vocabulary for expressing opinions.',
+    is_premium: false,
+    is_published: true,
+    view_count: 880,
+    created_at: '2025-05-14T10:00:00Z',
+    updated_at: '2025-05-14T10:00:00Z',
+    content: {
+      title: 'Expressing Opinions Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 opinion vocabulary words',
+        'Express views effectively',
+        'Discuss perspectives'
+      ],
+      coreExplanation: `Opinion vocabulary is essential for IELTS Speaking and Writing. This lesson covers terms for expressing and discussing opinions.
+
+Understanding these terms helps you express opinions effectively.`,
+      examples: [
+        { sentence: 'In my opinion, education is key.', explanation: '"Opinion" is personal view.' },
+        { sentence: 'I believe this is correct.', explanation: '"Believe" is to think true.' },
+        { sentence: 'I think we should act now.', explanation: '"Think" is to have opinion.' },
+        { sentence: 'I consider this important.', explanation: '"Consider" is to regard as.' },
+        { sentence: 'My view is that change is needed.', explanation: '"View" is perspective.' },
+        { sentence: 'I feel strongly about this.', explanation: '"Feel" is to have emotion.' },
+        { sentence: 'I maintain that this is true.', explanation: '"Maintain" is to assert.' },
+        { sentence: 'I argue that action is needed.', explanation: '"Argue" is to give reasons.' },
+        { sentence: 'I contend that this is wrong.', explanation: '"Contend" is to assert.' },
+        { sentence: 'I assert that facts support this.', explanation: '"Assert" is to state firmly.' },
+        { sentence: 'I hold the view that...', explanation: '"Hold" is to maintain.' },
+        { sentence: 'From my perspective...', explanation: '"Perspective" is viewpoint.' },
+        { sentence: 'As far as I am concerned...', explanation: 'Expression of personal view.' },
+        { sentence: 'It seems to me that...', explanation: 'Tentative opinion expression.' },
+        { sentence: 'I am convinced that...', explanation: '"Convinced" is firmly believing.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "I think" repeatedly', correction: 'Vary with "I believe", "In my view", etc.', explanation: 'Variety improves expression.' },
+        { mistake: 'Confusing "opinion" and "fact"', correction: '"Opinion" = subjective; "fact" = objective', explanation: 'Distinguish clearly.' },
+        { mistake: 'Being too direct', correction: 'Use hedging: "It seems", "I tend to think"', explanation: 'Hedging shows nuance.' }
+      ],
+      miniPractice: [
+        { question: 'In my _____, technology has improved our lives.', type: 'fill-blank' },
+        { question: 'Which phrase expresses a strong opinion?', options: ['I am convinced that', 'It seems to me', 'Perhaps', 'Maybe'], type: 'multiple-choice' },
+        { question: 'Express your opinion on social media.', type: 'rewrite' },
+        { question: 'From my _____, this is the best approach.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'opinion',
+        'I am convinced that',
+        'In my opinion, social media has both benefits and drawbacks. While it connects people, it can also spread misinformation.',
+        'perspective'
+      ],
+      quickRecap: 'Key opinion terms: opinion, believe, think, consider, view, feel, maintain, argue, contend, assert, hold, perspective, concerned, seems, convinced. Use these for expressing opinions!',
+      collocations: [
+        'personal opinion', 'firmly believe', 'strongly think', 'carefully consider',
+        'point of view', 'feel strongly', 'maintain position', 'argue convincingly',
+        'contend that', 'assert firmly', 'hold view', 'different perspective'
+      ],
+      synonyms: [
+        { word: 'opinion', synonyms: ['view', 'belief', 'perspective', 'stance'] },
+        { word: 'believe', synonyms: ['think', 'consider', 'feel', 'hold'] },
+        { word: 'argue', synonyms: ['contend', 'assert', 'maintain', 'claim'] }
+      ],
+      speakingLines: [
+        'In my opinion, this is important.',
+        'I believe we should take action.',
+        'From my perspective, change is needed.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-opinion-2',
+    title: 'Agreement & Disagreement Vocabulary',
+    slug: 'agreement-disagreement-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Opinion',
+    description: 'Vocabulary for expressing agreement and disagreement.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-05-15T10:00:00Z',
+    updated_at: '2025-05-15T10:00:00Z',
+    content: {
+      title: 'Agreement & Disagreement Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 agreement vocabulary words',
+        'Express agreement/disagreement',
+        'Discuss different views'
+      ],
+      coreExplanation: `Agreement vocabulary is essential for IELTS Speaking and Writing. This lesson covers terms for expressing agreement and disagreement.
+
+Understanding these terms helps you discuss different views effectively.`,
+      examples: [
+        { sentence: 'I agree with this view.', explanation: '"Agree" is to share opinion.' },
+        { sentence: 'I disagree with this statement.', explanation: '"Disagree" is to differ.' },
+        { sentence: 'I concur with the findings.', explanation: '"Concur" is to agree formally.' },
+        { sentence: 'I support this proposal.', explanation: '"Support" is to back.' },
+        { sentence: 'I oppose this measure.', explanation: '"Oppose" is to be against.' },
+        { sentence: 'I endorse this approach.', explanation: '"Endorse" is to approve.' },
+        { sentence: 'I reject this argument.', explanation: '"Reject" is to refuse.' },
+        { sentence: 'I accept this conclusion.', explanation: '"Accept" is to agree with.' },
+        { sentence: 'I dispute this claim.', explanation: '"Dispute" is to challenge.' },
+        { sentence: 'I acknowledge the point.', explanation: '"Acknowledge" is to recognize.' },
+        { sentence: 'I share this concern.', explanation: '"Share" is to have in common.' },
+        { sentence: 'I differ on this issue.', explanation: '"Differ" is to disagree.' },
+        { sentence: 'I partially agree.', explanation: '"Partially" means in part.' },
+        { sentence: 'I strongly disagree.', explanation: '"Strongly" intensifies.' },
+        { sentence: 'I tend to agree.', explanation: '"Tend" shows inclination.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Being too blunt with disagreement', correction: 'Use "I see your point, but..." or "While I understand..."', explanation: 'Soften disagreement.' },
+        { mistake: 'Using only "agree" and "disagree"', correction: 'Vary with "concur", "support", "oppose", etc.', explanation: 'Variety improves expression.' },
+        { mistake: 'Confusing "accept" and "agree"', correction: '"Accept" = receive; "agree" = share view', explanation: 'Accept is broader.' }
+      ],
+      miniPractice: [
+        { question: 'I _____ with the view that education is important.', type: 'fill-blank' },
+        { question: 'Which word means to formally agree?', options: ['Concur', 'Oppose', 'Reject', 'Dispute'], type: 'multiple-choice' },
+        { question: 'Express partial agreement with a statement.', type: 'rewrite' },
+        { question: 'I _____ this proposal because it lacks evidence.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'agree',
+        'Concur',
+        'While I see the merit in this argument, I partially disagree because there are other factors to consider.',
+        'oppose/reject'
+      ],
+      quickRecap: 'Key agreement terms: agree, disagree, concur, support, oppose, endorse, reject, accept, dispute, acknowledge, share, differ, partially, strongly, tend. Use these for agreement/disagreement!',
+      collocations: [
+        'fully agree', 'strongly disagree', 'completely concur', 'actively support',
+        'firmly oppose', 'publicly endorse', 'outright reject', 'readily accept',
+        'openly dispute', 'readily acknowledge', 'share concern', 'fundamentally differ'
+      ],
+      synonyms: [
+        { word: 'agree', synonyms: ['concur', 'accept', 'support', 'endorse'] },
+        { word: 'disagree', synonyms: ['differ', 'oppose', 'dispute', 'reject'] },
+        { word: 'support', synonyms: ['back', 'endorse', 'advocate', 'champion'] }
+      ],
+      speakingLines: [
+        'I completely agree with this view.',
+        'I tend to disagree on this point.',
+        'While I acknowledge the argument, I differ in my conclusion.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-opinion-3',
+    title: 'Persuasion & Argument Vocabulary',
+    slug: 'persuasion-argument-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Opinion',
+    description: 'Vocabulary for persuasion and building arguments.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-05-16T10:00:00Z',
+    updated_at: '2025-05-16T10:00:00Z',
+    content: {
+      title: 'Persuasion & Argument Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 persuasion vocabulary words',
+        'Build strong arguments',
+        'Persuade effectively'
+      ],
+      coreExplanation: `Persuasion vocabulary is essential for IELTS Writing Task 2. This lesson covers terms for building arguments and persuading.
+
+Understanding these terms helps you argue effectively.`,
+      examples: [
+        { sentence: 'The argument is compelling.', explanation: '"Argument" is reasoned case.' },
+        { sentence: 'The evidence supports this.', explanation: '"Evidence" is proof.' },
+        { sentence: 'The reasoning is sound.', explanation: '"Reasoning" is logical thinking.' },
+        { sentence: 'The claim is valid.', explanation: '"Claim" is assertion.' },
+        { sentence: 'The point is clear.', explanation: '"Point" is specific argument.' },
+        { sentence: 'The logic is flawed.', explanation: '"Logic" is reasoning.' },
+        { sentence: 'The premise is questionable.', explanation: '"Premise" is starting assumption.' },
+        { sentence: 'The conclusion follows.', explanation: '"Conclusion" is final point.' },
+        { sentence: 'The justification is weak.', explanation: '"Justification" is reason given.' },
+        { sentence: 'The rationale is clear.', explanation: '"Rationale" is underlying reason.' },
+        { sentence: 'The counterargument is strong.', explanation: '"Counterargument" is opposing view.' },
+        { sentence: 'The rebuttal was effective.', explanation: '"Rebuttal" is response to argument.' },
+        { sentence: 'The stance is clear.', explanation: '"Stance" is position taken.' },
+        { sentence: 'The thesis is stated.', explanation: '"Thesis" is main argument.' },
+        { sentence: 'The proposition is debatable.', explanation: '"Proposition" is statement proposed.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "argument" and "quarrel"', correction: '"Argument" = reasoned case; "quarrel" = dispute', explanation: 'Argument is academic.' },
+        { mistake: 'Using "claim" without evidence', correction: 'Always support claims with evidence', explanation: 'Claims need support.' },
+        { mistake: 'Ignoring counterarguments', correction: 'Address opposing views to strengthen argument', explanation: 'Counterarguments show balance.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ for this policy is based on research.', type: 'fill-blank' },
+        { question: 'Which term means an opposing argument?', options: ['Counterargument', 'Premise', 'Thesis', 'Rationale'], type: 'multiple-choice' },
+        { question: 'Build an argument for environmental protection.', type: 'rewrite' },
+        { question: 'The _____ is the main argument of an essay.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'argument/rationale',
+        'Counterargument',
+        'Environmental protection is essential because it preserves biodiversity, ensures clean air and water, and protects future generations.',
+        'thesis'
+      ],
+      quickRecap: 'Key persuasion terms: argument, evidence, reasoning, claim, point, logic, premise, conclusion, justification, rationale, counterargument, rebuttal, stance, thesis, proposition. Use these for persuasion!',
+      collocations: [
+        'compelling argument', 'strong evidence', 'sound reasoning', 'valid claim',
+        'main point', 'flawed logic', 'basic premise', 'logical conclusion',
+        'clear justification', 'underlying rationale', 'strong counterargument', 'effective rebuttal'
+      ],
+      synonyms: [
+        { word: 'argument', synonyms: ['case', 'reasoning', 'point', 'contention'] },
+        { word: 'evidence', synonyms: ['proof', 'support', 'data', 'facts'] },
+        { word: 'claim', synonyms: ['assertion', 'statement', 'contention', 'argument'] }
+      ],
+      speakingLines: [
+        'The argument is supported by evidence.',
+        'The reasoning behind this is clear.',
+        'I would like to address the counterargument.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-opinion-4',
+    title: 'Certainty & Uncertainty Vocabulary',
+    slug: 'certainty-uncertainty-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Opinion',
+    description: 'Vocabulary for expressing certainty and uncertainty.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-05-17T10:00:00Z',
+    updated_at: '2025-05-17T10:00:00Z',
+    content: {
+      title: 'Certainty & Uncertainty Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 certainty vocabulary words',
+        'Express degrees of certainty',
+        'Use hedging language'
+      ],
+      coreExplanation: `Certainty vocabulary is essential for academic writing. This lesson covers terms for expressing different degrees of certainty.
+
+Understanding these terms helps you express certainty appropriately.`,
+      examples: [
+        { sentence: 'This is certainly true.', explanation: '"Certainly" expresses high certainty.' },
+        { sentence: 'This is probably correct.', explanation: '"Probably" expresses likelihood.' },
+        { sentence: 'This is possibly true.', explanation: '"Possibly" expresses uncertainty.' },
+        { sentence: 'This is definitely the case.', explanation: '"Definitely" expresses certainty.' },
+        { sentence: 'This is undoubtedly important.', explanation: '"Undoubtedly" expresses no doubt.' },
+        { sentence: 'This is likely to happen.', explanation: '"Likely" expresses probability.' },
+        { sentence: 'This is unlikely to occur.', explanation: '"Unlikely" expresses low probability.' },
+        { sentence: 'This may be true.', explanation: '"May" expresses possibility.' },
+        { sentence: 'This might work.', explanation: '"Might" expresses lower possibility.' },
+        { sentence: 'This could be the answer.', explanation: '"Could" expresses possibility.' },
+        { sentence: 'Perhaps this is correct.', explanation: '"Perhaps" expresses uncertainty.' },
+        { sentence: 'It appears that...', explanation: '"Appears" shows tentative conclusion.' },
+        { sentence: 'It seems likely that...', explanation: '"Seems" shows tentative view.' },
+        { sentence: 'There is no doubt that...', explanation: 'Expression of certainty.' },
+        { sentence: 'It is questionable whether...', explanation: '"Questionable" shows doubt.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Being too certain without evidence', correction: 'Use hedging: "may", "might", "could"', explanation: 'Hedging shows academic caution.' },
+        { mistake: 'Confusing "probably" and "possibly"', correction: '"Probably" = likely; "possibly" = maybe', explanation: 'Probably is more certain.' },
+        { mistake: 'Overusing "definitely"', correction: 'Reserve for truly certain statements', explanation: 'Overuse weakens impact.' }
+      ],
+      miniPractice: [
+        { question: 'This is _____ the best solution.', type: 'fill-blank' },
+        { question: 'Which word expresses the highest certainty?', options: ['Definitely', 'Probably', 'Possibly', 'Perhaps'], type: 'multiple-choice' },
+        { question: 'Express uncertainty about a prediction.', type: 'rewrite' },
+        { question: 'It _____ that the economy will improve.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'probably/definitely',
+        'Definitely',
+        'It is possible that technology will continue to advance, though the exact direction is uncertain.',
+        'seems/appears'
+      ],
+      quickRecap: 'Key certainty terms: certainly, probably, possibly, definitely, undoubtedly, likely, unlikely, may, might, could, perhaps, appears, seems, no doubt, questionable. Use these for expressing certainty!',
+      collocations: [
+        'almost certainly', 'most probably', 'quite possibly', 'most definitely',
+        'undoubtedly true', 'highly likely', 'highly unlikely', 'may well',
+        'might possibly', 'could potentially', 'perhaps not', 'appears to be'
+      ],
+      synonyms: [
+        { word: 'certainly', synonyms: ['definitely', 'undoubtedly', 'surely', 'absolutely'] },
+        { word: 'probably', synonyms: ['likely', 'presumably', 'apparently', 'seemingly'] },
+        { word: 'possibly', synonyms: ['perhaps', 'maybe', 'conceivably', 'potentially'] }
+      ],
+      speakingLines: [
+        'This is certainly an important issue.',
+        'It is likely that changes will occur.',
+        'Perhaps we should consider alternatives.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 49: Quantity & Degree (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-quantity-1',
+    title: 'Quantity & Amount Vocabulary',
+    slug: 'quantity-amount-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Quantity',
+    description: 'Essential vocabulary for discussing quantity and amount.',
+    is_premium: false,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-05-18T10:00:00Z',
+    updated_at: '2025-05-18T10:00:00Z',
+    content: {
+      title: 'Quantity & Amount Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 quantity vocabulary words',
+        'Discuss amounts',
+        'Express quantities'
+      ],
+      coreExplanation: `Quantity vocabulary is essential for IELTS Writing Task 1. This lesson covers terms for discussing quantity and amount.
+
+Understanding these terms helps you describe quantities effectively.`,
+      examples: [
+        { sentence: 'The quantity increased.', explanation: '"Quantity" is amount.' },
+        { sentence: 'The amount was significant.', explanation: '"Amount" is quantity.' },
+        { sentence: 'The number rose sharply.', explanation: '"Number" is count.' },
+        { sentence: 'The majority agreed.', explanation: '"Majority" is more than half.' },
+        { sentence: 'The minority disagreed.', explanation: '"Minority" is less than half.' },
+        { sentence: 'The proportion was high.', explanation: '"Proportion" is relative amount.' },
+        { sentence: 'The percentage increased.', explanation: '"Percentage" is per hundred.' },
+        { sentence: 'The fraction was small.', explanation: '"Fraction" is part of whole.' },
+        { sentence: 'The total was calculated.', explanation: '"Total" is complete amount.' },
+        { sentence: 'The average was computed.', explanation: '"Average" is typical amount.' },
+        { sentence: 'The sum was large.', explanation: '"Sum" is total added.' },
+        { sentence: 'The rate increased.', explanation: '"Rate" is speed of change.' },
+        { sentence: 'The level remained stable.', explanation: '"Level" is amount at point.' },
+        { sentence: 'The volume grew.', explanation: '"Volume" is amount of space.' },
+        { sentence: 'The extent was unclear.', explanation: '"Extent" is degree.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "amount" and "number"', correction: '"Amount" = uncountable; "number" = countable', explanation: 'Use correctly with nouns.' },
+        { mistake: 'Using "less" with countable nouns', correction: 'Use "fewer" with countable nouns', explanation: '"Less" is for uncountable.' },
+        { mistake: 'Confusing "percentage" and "proportion"', correction: '"Percentage" = out of 100; "proportion" = relative part', explanation: 'Percentage is specific.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ of students increased by 20%.', type: 'fill-blank' },
+        { question: 'Which term means more than half?', options: ['Majority', 'Minority', 'Fraction', 'Average'], type: 'multiple-choice' },
+        { question: 'Describe a change in quantity.', type: 'rewrite' },
+        { question: 'The _____ of water consumed daily is significant.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'number',
+        'Majority',
+        'The number of internet users has increased significantly over the past decade, with the majority now accessing the web via mobile devices.',
+        'amount'
+      ],
+      quickRecap: 'Key quantity terms: quantity, amount, number, majority, minority, proportion, percentage, fraction, total, average, sum, rate, level, volume, extent. Use these for quantity topics!',
+      collocations: [
+        'large quantity', 'significant amount', 'total number', 'vast majority',
+        'small minority', 'high proportion', 'large percentage', 'small fraction',
+        'grand total', 'national average', 'total sum', 'growth rate'
+      ],
+      synonyms: [
+        { word: 'quantity', synonyms: ['amount', 'number', 'volume', 'measure'] },
+        { word: 'amount', synonyms: ['quantity', 'sum', 'total', 'measure'] },
+        { word: 'majority', synonyms: ['most', 'bulk', 'preponderance', 'greater part'] }
+      ],
+      speakingLines: [
+        'The quantity has increased significantly.',
+        'The majority of people agree.',
+        'The proportion is quite high.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-quantity-2',
+    title: 'Increase & Decrease Vocabulary',
+    slug: 'increase-decrease-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Quantity',
+    description: 'Vocabulary for describing increases and decreases.',
+    is_premium: true,
+    is_published: true,
+    view_count: 880,
+    created_at: '2025-05-19T10:00:00Z',
+    updated_at: '2025-05-19T10:00:00Z',
+    content: {
+      title: 'Increase & Decrease Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 trend vocabulary words',
+        'Describe changes',
+        'Analyze trends'
+      ],
+      coreExplanation: `Trend vocabulary is essential for IELTS Writing Task 1. This lesson covers terms for describing increases and decreases.
+
+Understanding these terms helps you describe trends effectively.`,
+      examples: [
+        { sentence: 'Sales increased dramatically.', explanation: '"Increased" means went up.' },
+        { sentence: 'Prices decreased slightly.', explanation: '"Decreased" means went down.' },
+        { sentence: 'The figure rose sharply.', explanation: '"Rose" means increased.' },
+        { sentence: 'Numbers fell gradually.', explanation: '"Fell" means decreased.' },
+        { sentence: 'Growth accelerated.', explanation: '"Accelerated" means sped up.' },
+        { sentence: 'The decline slowed.', explanation: '"Decline" means decrease.' },
+        { sentence: 'Values soared.', explanation: '"Soared" means rose rapidly.' },
+        { sentence: 'Prices plummeted.', explanation: '"Plummeted" means fell rapidly.' },
+        { sentence: 'The trend fluctuated.', explanation: '"Fluctuated" means varied.' },
+        { sentence: 'Levels stabilized.', explanation: '"Stabilized" means became steady.' },
+        { sentence: 'Numbers doubled.', explanation: '"Doubled" means multiplied by two.' },
+        { sentence: 'The rate halved.', explanation: '"Halved" means divided by two.' },
+        { sentence: 'Growth peaked.', explanation: '"Peaked" means reached highest.' },
+        { sentence: 'Numbers bottomed out.', explanation: '"Bottomed out" means reached lowest.' },
+        { sentence: 'The trend reversed.', explanation: '"Reversed" means changed direction.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "increase" and "rise" as nouns incorrectly', correction: '"An increase" / "a rise" (nouns) vs "to increase" / "to rise" (verbs)', explanation: 'Know noun and verb forms.' },
+        { mistake: 'Confusing "dramatic" and "drastically"', correction: '"Dramatic" = adjective; "drastically" = adverb', explanation: 'Use correct form.' },
+        { mistake: 'Overusing "increased" and "decreased"', correction: 'Vary with "rose", "fell", "soared", "plummeted"', explanation: 'Variety improves writing.' }
+      ],
+      miniPractice: [
+        { question: 'Sales _____ by 50% last year.', type: 'fill-blank' },
+        { question: 'Which word means fell very rapidly?', options: ['Plummeted', 'Decreased', 'Fell', 'Declined'], type: 'multiple-choice' },
+        { question: 'Describe a trend in your country.', type: 'rewrite' },
+        { question: 'After reaching a peak, the numbers _____ gradually.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'increased/rose',
+        'Plummeted',
+        'Internet usage in my country has soared over the past decade, with the number of users doubling since 2015.',
+        'fell/declined'
+      ],
+      quickRecap: 'Key trend terms: increased, decreased, rose, fell, accelerated, decline, soared, plummeted, fluctuated, stabilized, doubled, halved, peaked, bottomed out, reversed. Use these for trends!',
+      collocations: [
+        'increased significantly', 'decreased slightly', 'rose sharply', 'fell gradually',
+        'growth accelerated', 'steady decline', 'prices soared', 'values plummeted',
+        'figures fluctuated', 'levels stabilized', 'numbers doubled', 'rate halved'
+      ],
+      synonyms: [
+        { word: 'increase', synonyms: ['rise', 'grow', 'climb', 'surge'] },
+        { word: 'decrease', synonyms: ['fall', 'drop', 'decline', 'reduce'] },
+        { word: 'fluctuate', synonyms: ['vary', 'oscillate', 'waver', 'swing'] }
+      ],
+      speakingLines: [
+        'The number has increased significantly.',
+        'Prices have fallen in recent months.',
+        'The trend has fluctuated over time.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-quantity-3',
+    title: 'Degree & Intensity Vocabulary',
+    slug: 'degree-intensity-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Quantity',
+    description: 'Vocabulary for expressing degree and intensity.',
+    is_premium: true,
+    is_published: true,
+    view_count: 750,
+    created_at: '2025-05-20T10:00:00Z',
+    updated_at: '2025-05-20T10:00:00Z',
+    content: {
+      title: 'Degree & Intensity Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 degree vocabulary words',
+        'Express intensity',
+        'Modify statements'
+      ],
+      coreExplanation: `Degree vocabulary is essential for nuanced expression. This lesson covers terms for expressing degree and intensity.
+
+Understanding these terms helps you express intensity effectively.`,
+      examples: [
+        { sentence: 'This is extremely important.', explanation: '"Extremely" intensifies.' },
+        { sentence: 'This is very significant.', explanation: '"Very" adds emphasis.' },
+        { sentence: 'This is quite interesting.', explanation: '"Quite" moderates.' },
+        { sentence: 'This is fairly common.', explanation: '"Fairly" shows moderate degree.' },
+        { sentence: 'This is rather unusual.', explanation: '"Rather" shows some degree.' },
+        { sentence: 'This is slightly different.', explanation: '"Slightly" shows small degree.' },
+        { sentence: 'This is highly effective.', explanation: '"Highly" intensifies.' },
+        { sentence: 'This is largely successful.', explanation: '"Largely" shows great extent.' },
+        { sentence: 'This is partially true.', explanation: '"Partially" shows part.' },
+        { sentence: 'This is entirely correct.', explanation: '"Entirely" shows completeness.' },
+        { sentence: 'This is absolutely essential.', explanation: '"Absolutely" intensifies completely.' },
+        { sentence: 'This is somewhat surprising.', explanation: '"Somewhat" shows some degree.' },
+        { sentence: 'This is particularly relevant.', explanation: '"Particularly" emphasizes.' },
+        { sentence: 'This is remarkably good.', explanation: '"Remarkably" shows notable degree.' },
+        { sentence: 'This is exceptionally rare.', explanation: '"Exceptionally" shows unusual degree.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Overusing "very"', correction: 'Vary with "extremely", "highly", "remarkably"', explanation: 'Variety improves expression.' },
+        { mistake: 'Confusing "quite" meanings', correction: '"Quite" = fairly (British) or completely (American)', explanation: 'Context determines meaning.' },
+        { mistake: 'Using "absolutely" with gradable adjectives', correction: '"Absolutely" goes with extreme adjectives', explanation: 'Use "absolutely essential" not "absolutely important".' }
+      ],
+      miniPractice: [
+        { question: 'This issue is _____ important.', type: 'fill-blank' },
+        { question: 'Which word shows the highest intensity?', options: ['Extremely', 'Fairly', 'Slightly', 'Somewhat'], type: 'multiple-choice' },
+        { question: 'Express a moderate degree of agreement.', type: 'rewrite' },
+        { question: 'The results were _____ successful.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'extremely/highly',
+        'Extremely',
+        'I somewhat agree with this view, though I have some reservations about certain aspects.',
+        'largely/highly'
+      ],
+      quickRecap: 'Key degree terms: extremely, very, quite, fairly, rather, slightly, highly, largely, partially, entirely, absolutely, somewhat, particularly, remarkably, exceptionally. Use these for degree!',
+      collocations: [
+        'extremely important', 'very significant', 'quite interesting', 'fairly common',
+        'rather unusual', 'slightly different', 'highly effective', 'largely successful',
+        'partially true', 'entirely correct', 'absolutely essential', 'somewhat surprising'
+      ],
+      synonyms: [
+        { word: 'extremely', synonyms: ['very', 'highly', 'exceptionally', 'remarkably'] },
+        { word: 'slightly', synonyms: ['somewhat', 'a little', 'marginally', 'mildly'] },
+        { word: 'entirely', synonyms: ['completely', 'totally', 'wholly', 'fully'] }
+      ],
+      speakingLines: [
+        'This is extremely important to me.',
+        'I find this quite interesting.',
+        'The results were highly successful.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-quantity-4',
+    title: 'Frequency & Duration Vocabulary',
+    slug: 'frequency-duration-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Quantity',
+    description: 'Vocabulary for expressing frequency and duration.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-05-21T10:00:00Z',
+    updated_at: '2025-05-21T10:00:00Z',
+    content: {
+      title: 'Frequency & Duration Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 frequency vocabulary words',
+        'Express how often',
+        'Describe duration'
+      ],
+      coreExplanation: `Frequency vocabulary is essential for describing habits and patterns. This lesson covers terms for expressing frequency and duration.
+
+Understanding these terms helps you describe frequency effectively.`,
+      examples: [
+        { sentence: 'This always happens.', explanation: '"Always" means every time.' },
+        { sentence: 'This usually occurs.', explanation: '"Usually" means most times.' },
+        { sentence: 'This often happens.', explanation: '"Often" means frequently.' },
+        { sentence: 'This sometimes occurs.', explanation: '"Sometimes" means occasionally.' },
+        { sentence: 'This rarely happens.', explanation: '"Rarely" means not often.' },
+        { sentence: 'This never occurs.', explanation: '"Never" means not ever.' },
+        { sentence: 'This frequently happens.', explanation: '"Frequently" means often.' },
+        { sentence: 'This occasionally occurs.', explanation: '"Occasionally" means sometimes.' },
+        { sentence: 'This seldom happens.', explanation: '"Seldom" means rarely.' },
+        { sentence: 'This constantly occurs.', explanation: '"Constantly" means continuously.' },
+        { sentence: 'This periodically happens.', explanation: '"Periodically" means at intervals.' },
+        { sentence: 'This temporarily stopped.', explanation: '"Temporarily" means for limited time.' },
+        { sentence: 'This permanently changed.', explanation: '"Permanently" means forever.' },
+        { sentence: 'This briefly occurred.', explanation: '"Briefly" means for short time.' },
+        { sentence: 'This continuously happens.', explanation: '"Continuously" means without stopping.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "always" and "usually"', correction: '"Always" = 100%; "usually" = most times', explanation: 'Always is absolute.' },
+        { mistake: 'Using "never" with negatives', correction: 'Avoid double negatives: "never" already negative', explanation: 'One negative is enough.' },
+        { mistake: 'Confusing "temporary" and "temporarily"', correction: '"Temporary" = adjective; "temporarily" = adverb', explanation: 'Use correct form.' }
+      ],
+      miniPractice: [
+        { question: 'I _____ exercise in the morning.', type: 'fill-blank' },
+        { question: 'Which word means not very often?', options: ['Rarely', 'Usually', 'Often', 'Always'], type: 'multiple-choice' },
+        { question: 'Describe how often you use technology.', type: 'rewrite' },
+        { question: 'The service was _____ interrupted.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'usually/often',
+        'Rarely',
+        'I frequently use technology throughout the day, constantly checking my phone and occasionally using my laptop for work.',
+        'temporarily/briefly'
+      ],
+      quickRecap: 'Key frequency terms: always, usually, often, sometimes, rarely, never, frequently, occasionally, seldom, constantly, periodically, temporarily, permanently, briefly, continuously. Use these for frequency!',
+      collocations: [
+        'almost always', 'usually happens', 'quite often', 'only sometimes',
+        'very rarely', 'almost never', 'more frequently', 'only occasionally',
+        'very seldom', 'almost constantly', 'check periodically', 'only temporarily'
+      ],
+      synonyms: [
+        { word: 'always', synonyms: ['constantly', 'continuously', 'perpetually', 'invariably'] },
+        { word: 'often', synonyms: ['frequently', 'regularly', 'commonly', 'repeatedly'] },
+        { word: 'rarely', synonyms: ['seldom', 'infrequently', 'hardly ever', 'scarcely'] }
+      ],
+      speakingLines: [
+        'I usually wake up early.',
+        'This rarely happens in my country.',
+        'I frequently use public transport.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 50: Academic Writing (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-academic-1',
+    title: 'Academic Writing Vocabulary',
+    slug: 'academic-writing-vocabulary',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Academic',
+    description: 'Essential vocabulary for academic writing.',
+    is_premium: false,
+    is_published: true,
+    view_count: 920,
+    created_at: '2025-05-22T10:00:00Z',
+    updated_at: '2025-05-22T10:00:00Z',
+    content: {
+      title: 'Academic Writing Vocabulary',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'Master 25 academic vocabulary words',
+        'Write academically',
+        'Use formal language'
+      ],
+      coreExplanation: `Academic vocabulary is essential for IELTS Writing. This lesson covers terms commonly used in academic writing.
+
+Understanding these terms helps you write more academically.`,
+      examples: [
+        { sentence: 'The study examines this issue.', explanation: '"Examines" is academic for looks at.' },
+        { sentence: 'The research demonstrates this.', explanation: '"Demonstrates" is academic for shows.' },
+        { sentence: 'The data indicates a trend.', explanation: '"Indicates" is academic for shows.' },
+        { sentence: 'The evidence suggests this.', explanation: '"Suggests" is academic for implies.' },
+        { sentence: 'The findings reveal patterns.', explanation: '"Reveal" is academic for show.' },
+        { sentence: 'The analysis highlights issues.', explanation: '"Highlights" is academic for emphasizes.' },
+        { sentence: 'The theory proposes that...', explanation: '"Proposes" is academic for suggests.' },
+        { sentence: 'The author argues that...', explanation: '"Argues" is academic for claims.' },
+        { sentence: 'The text illustrates this.', explanation: '"Illustrates" is academic for shows.' },
+        { sentence: 'The results confirm this.', explanation: '"Confirm" is academic for prove.' },
+        { sentence: 'The study investigates this.', explanation: '"Investigates" is academic for looks into.' },
+        { sentence: 'The paper addresses this.', explanation: '"Addresses" is academic for deals with.' },
+        { sentence: 'The report outlines this.', explanation: '"Outlines" is academic for describes.' },
+        { sentence: 'The chapter discusses this.', explanation: '"Discusses" is academic for talks about.' },
+        { sentence: 'The section explores this.', explanation: '"Explores" is academic for looks at.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using informal language', correction: 'Replace "shows" with "demonstrates", "indicates"', explanation: 'Academic writing is formal.' },
+        { mistake: 'Using contractions', correction: 'Write "does not" instead of "doesn\'t"', explanation: 'Avoid contractions in academic writing.' },
+        { mistake: 'Using personal pronouns excessively', correction: 'Use passive voice or "this essay" instead of "I"', explanation: 'Academic writing is objective.' }
+      ],
+      miniPractice: [
+        { question: 'The research _____ that education improves outcomes.', type: 'fill-blank' },
+        { question: 'Which is most academic?', options: ['Demonstrates', 'Shows', 'Proves', 'Says'], type: 'multiple-choice' },
+        { question: 'Rewrite informally: "The study shows results."', type: 'rewrite' },
+        { question: 'The findings _____ a significant correlation.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'demonstrates/indicates',
+        'Demonstrates',
+        'The study demonstrates significant results that indicate a clear correlation between the variables.',
+        'reveal/indicate'
+      ],
+      quickRecap: 'Key academic terms: examines, demonstrates, indicates, suggests, reveal, highlights, proposes, argues, illustrates, confirm, investigates, addresses, outlines, discusses, explores. Use these for academic writing!',
+      collocations: [
+        'carefully examines', 'clearly demonstrates', 'strongly indicates', 'research suggests',
+        'findings reveal', 'study highlights', 'theory proposes', 'author argues',
+        'example illustrates', 'results confirm', 'paper investigates', 'report addresses'
+      ],
+      synonyms: [
+        { word: 'shows', synonyms: ['demonstrates', 'indicates', 'reveals', 'illustrates'] },
+        { word: 'says', synonyms: ['argues', 'claims', 'states', 'asserts'] },
+        { word: 'looks at', synonyms: ['examines', 'investigates', 'explores', 'analyzes'] }
+      ],
+      speakingLines: [
+        'The research demonstrates clear findings.',
+        'The evidence suggests a correlation.',
+        'The study examines this phenomenon.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-academic-2',
+    title: 'Reporting & Citation Vocabulary',
+    slug: 'reporting-citation-vocabulary',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Academic',
+    description: 'Vocabulary for reporting and citing sources.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-05-23T10:00:00Z',
+    updated_at: '2025-05-23T10:00:00Z',
+    content: {
+      title: 'Reporting & Citation Vocabulary',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'Master 25 reporting vocabulary words',
+        'Cite sources effectively',
+        'Report findings'
+      ],
+      coreExplanation: `Reporting vocabulary is essential for academic writing. This lesson covers terms for reporting and citing sources.
+
+Understanding these terms helps you report findings effectively.`,
+      examples: [
+        { sentence: 'According to Smith (2020)...', explanation: '"According to" introduces source.' },
+        { sentence: 'Smith (2020) states that...', explanation: '"States" reports neutrally.' },
+        { sentence: 'Smith (2020) claims that...', explanation: '"Claims" shows assertion.' },
+        { sentence: 'Smith (2020) argues that...', explanation: '"Argues" shows reasoning.' },
+        { sentence: 'Smith (2020) suggests that...', explanation: '"Suggests" shows implication.' },
+        { sentence: 'Smith (2020) maintains that...', explanation: '"Maintains" shows continued belief.' },
+        { sentence: 'Smith (2020) asserts that...', explanation: '"Asserts" shows strong claim.' },
+        { sentence: 'Smith (2020) contends that...', explanation: '"Contends" shows argument.' },
+        { sentence: 'Smith (2020) notes that...', explanation: '"Notes" reports observation.' },
+        { sentence: 'Smith (2020) observes that...', explanation: '"Observes" reports finding.' },
+        { sentence: 'Smith (2020) points out that...', explanation: '"Points out" highlights.' },
+        { sentence: 'Smith (2020) emphasizes that...', explanation: '"Emphasizes" shows importance.' },
+        { sentence: 'Smith (2020) acknowledges that...', explanation: '"Acknowledges" admits.' },
+        { sentence: 'Smith (2020) concedes that...', explanation: '"Concedes" admits reluctantly.' },
+        { sentence: 'As Smith (2020) demonstrates...', explanation: '"Demonstrates" shows proof.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "says" in academic writing', correction: 'Use "states", "argues", "claims" instead', explanation: '"Says" is too informal.' },
+        { mistake: 'Not varying reporting verbs', correction: 'Use different verbs for different purposes', explanation: 'Variety shows nuance.' },
+        { mistake: 'Confusing "claims" and "states"', correction: '"Claims" = debatable; "states" = neutral', explanation: 'Choose based on meaning.' }
+      ],
+      miniPractice: [
+        { question: '_____ to recent research, climate change is accelerating.', type: 'fill-blank' },
+        { question: 'Which verb is most neutral?', options: ['States', 'Claims', 'Argues', 'Contends'], type: 'multiple-choice' },
+        { question: 'Report a finding using academic language.', type: 'rewrite' },
+        { question: 'The researcher _____ that further study is needed.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'According',
+        'States',
+        'According to recent research, the findings demonstrate a significant correlation between the variables studied.',
+        'suggests/notes'
+      ],
+      quickRecap: 'Key reporting terms: according to, states, claims, argues, suggests, maintains, asserts, contends, notes, observes, points out, emphasizes, acknowledges, concedes, demonstrates. Use these for reporting!',
+      collocations: [
+        'according to research', 'clearly states', 'strongly claims', 'convincingly argues',
+        'research suggests', 'firmly maintains', 'boldly asserts', 'author contends',
+        'study notes', 'researcher observes', 'points out that', 'strongly emphasizes'
+      ],
+      synonyms: [
+        { word: 'states', synonyms: ['says', 'declares', 'announces', 'reports'] },
+        { word: 'argues', synonyms: ['contends', 'claims', 'maintains', 'asserts'] },
+        { word: 'suggests', synonyms: ['implies', 'indicates', 'proposes', 'hints'] }
+      ],
+      speakingLines: [
+        'According to research, this is significant.',
+        'The author argues that change is needed.',
+        'The study suggests a correlation.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-academic-3',
+    title: 'Hedging & Caution Vocabulary',
+    slug: 'hedging-caution-vocabulary',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Academic',
+    description: 'Vocabulary for hedging and expressing caution.',
+    is_premium: true,
+    is_published: true,
+    view_count: 750,
+    created_at: '2025-05-24T10:00:00Z',
+    updated_at: '2025-05-24T10:00:00Z',
+    content: {
+      title: 'Hedging & Caution Vocabulary',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'Master 25 hedging vocabulary words',
+        'Express caution',
+        'Avoid overgeneralization'
+      ],
+      coreExplanation: `Hedging vocabulary is essential for academic writing. This lesson covers terms for expressing caution and avoiding overgeneralization.
+
+Understanding these terms helps you write more cautiously.`,
+      examples: [
+        { sentence: 'This may be true.', explanation: '"May" shows possibility.' },
+        { sentence: 'This might indicate...', explanation: '"Might" shows lower possibility.' },
+        { sentence: 'This could suggest...', explanation: '"Could" shows possibility.' },
+        { sentence: 'This appears to be...', explanation: '"Appears" shows tentative conclusion.' },
+        { sentence: 'This seems to indicate...', explanation: '"Seems" shows tentative view.' },
+        { sentence: 'This tends to occur...', explanation: '"Tends" shows general pattern.' },
+        { sentence: 'This is likely to...', explanation: '"Likely" shows probability.' },
+        { sentence: 'This is possible...', explanation: '"Possible" shows uncertainty.' },
+        { sentence: 'This is probable...', explanation: '"Probable" shows likelihood.' },
+        { sentence: 'To some extent...', explanation: '"To some extent" limits claim.' },
+        { sentence: 'In general...', explanation: '"In general" allows exceptions.' },
+        { sentence: 'In most cases...', explanation: '"In most cases" allows exceptions.' },
+        { sentence: 'It is generally accepted...', explanation: '"Generally accepted" shows consensus.' },
+        { sentence: 'There is evidence to suggest...', explanation: 'Tentative claim with support.' },
+        { sentence: 'It could be argued that...', explanation: 'Introduces possible argument.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Being too certain', correction: 'Use hedging: "may", "might", "could"', explanation: 'Academic writing requires caution.' },
+        { mistake: 'Overgeneralizing', correction: 'Use "in most cases", "generally", "tends to"', explanation: 'Allow for exceptions.' },
+        { mistake: 'Overusing hedging', correction: 'Balance hedging with clear statements', explanation: 'Too much hedging weakens writing.' }
+      ],
+      miniPractice: [
+        { question: 'This _____ indicate a correlation.', type: 'fill-blank' },
+        { question: 'Which phrase shows the most caution?', options: ['It could be argued', 'It is clear', 'It is obvious', 'It is certain'], type: 'multiple-choice' },
+        { question: 'Hedge this statement: "Technology causes problems."', type: 'rewrite' },
+        { question: 'In _____ cases, this pattern is observed.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'may/might/could',
+        'It could be argued',
+        'Technology may cause problems in some cases, though the extent of this impact tends to vary depending on context.',
+        'most/many'
+      ],
+      quickRecap: 'Key hedging terms: may, might, could, appears, seems, tends, likely, possible, probable, to some extent, in general, in most cases, generally accepted, evidence suggests, could be argued. Use these for hedging!',
+      collocations: [
+        'may well', 'might possibly', 'could potentially', 'appears to be',
+        'seems likely', 'tends to', 'highly likely', 'entirely possible',
+        'highly probable', 'to some extent', 'in general terms', 'in most cases'
+      ],
+      synonyms: [
+        { word: 'may', synonyms: ['might', 'could', 'possibly', 'perhaps'] },
+        { word: 'appears', synonyms: ['seems', 'looks', 'suggests', 'indicates'] },
+        { word: 'likely', synonyms: ['probable', 'possible', 'expected', 'anticipated'] }
+      ],
+      speakingLines: [
+        'This may be the case.',
+        'It appears that there is a connection.',
+        'In most cases, this pattern is observed.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-academic-4',
+    title: 'Cohesion & Coherence Vocabulary',
+    slug: 'cohesion-coherence-vocabulary',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Academic',
+    description: 'Vocabulary for creating cohesion and coherence.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-05-25T10:00:00Z',
+    updated_at: '2025-05-25T10:00:00Z',
+    content: {
+      title: 'Cohesion & Coherence Vocabulary',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'Master 25 cohesion vocabulary words',
+        'Create coherent writing',
+        'Link ideas effectively'
+      ],
+      coreExplanation: `Cohesion vocabulary is essential for well-organized writing. This lesson covers terms for creating cohesion and coherence.
+
+Understanding these terms helps you write more coherently.`,
+      examples: [
+        { sentence: 'Furthermore, this shows...', explanation: '"Furthermore" adds information.' },
+        { sentence: 'Moreover, evidence suggests...', explanation: '"Moreover" adds emphasis.' },
+        { sentence: 'In addition, research indicates...', explanation: '"In addition" adds points.' },
+        { sentence: 'However, this is debatable.', explanation: '"However" shows contrast.' },
+        { sentence: 'Nevertheless, progress was made.', explanation: '"Nevertheless" shows contrast.' },
+        { sentence: 'On the other hand...', explanation: '"On the other hand" shows alternative.' },
+        { sentence: 'Consequently, changes occurred.', explanation: '"Consequently" shows result.' },
+        { sentence: 'Therefore, action is needed.', explanation: '"Therefore" shows conclusion.' },
+        { sentence: 'As a result, improvements followed.', explanation: '"As a result" shows effect.' },
+        { sentence: 'For example, studies show...', explanation: '"For example" introduces example.' },
+        { sentence: 'For instance, research indicates...', explanation: '"For instance" introduces example.' },
+        { sentence: 'In contrast, other views suggest...', explanation: '"In contrast" shows difference.' },
+        { sentence: 'Similarly, other studies confirm...', explanation: '"Similarly" shows likeness.' },
+        { sentence: 'In conclusion, evidence supports...', explanation: '"In conclusion" summarizes.' },
+        { sentence: 'To summarize, the findings show...', explanation: '"To summarize" concludes.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Overusing "and" and "but"', correction: 'Use "furthermore", "however", "nevertheless"', explanation: 'Variety improves cohesion.' },
+        { mistake: 'Starting sentences with "And" or "But"', correction: 'Use "In addition" or "However" instead', explanation: 'More formal in academic writing.' },
+        { mistake: 'Using connectors incorrectly', correction: 'Match connector to logical relationship', explanation: 'Connectors must fit meaning.' }
+      ],
+      miniPractice: [
+        { question: '_____, the research supports this view.', type: 'fill-blank' },
+        { question: 'Which word shows contrast?', options: ['However', 'Furthermore', 'Therefore', 'Similarly'], type: 'multiple-choice' },
+        { question: 'Connect these ideas: "Technology helps. It has drawbacks."', type: 'rewrite' },
+        { question: '_____, action must be taken.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Furthermore/Moreover',
+        'However',
+        'Technology helps in many ways; however, it also has significant drawbacks that must be considered.',
+        'Therefore/Consequently'
+      ],
+      quickRecap: 'Key cohesion terms: furthermore, moreover, in addition, however, nevertheless, on the other hand, consequently, therefore, as a result, for example, for instance, in contrast, similarly, in conclusion, to summarize. Use these for cohesion!',
+      collocations: [
+        'furthermore research', 'moreover evidence', 'in addition to', 'however it',
+        'nevertheless progress', 'on the other hand', 'consequently changes', 'therefore action',
+        'as a result of', 'for example studies', 'for instance research', 'in contrast to'
+      ],
+      synonyms: [
+        { word: 'furthermore', synonyms: ['moreover', 'in addition', 'additionally', 'also'] },
+        { word: 'however', synonyms: ['nevertheless', 'nonetheless', 'yet', 'still'] },
+        { word: 'therefore', synonyms: ['consequently', 'thus', 'hence', 'as a result'] }
+      ],
+      speakingLines: [
+        'Furthermore, this is supported by evidence.',
+        'However, there are alternative views.',
+        'Therefore, we can conclude that...'
+      ]
+    }
   }
 ];
