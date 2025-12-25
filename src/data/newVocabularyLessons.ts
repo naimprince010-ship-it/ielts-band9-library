@@ -16413,5 +16413,1233 @@ Understanding these terms helps you discuss digital media topics effectively.`,
         'Streaming services have changed entertainment.'
       ]
     }
+  },
+  // ============================================
+  // BATCH 40: Government & Politics (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-govt-1',
+    title: 'Government & Politics Vocabulary',
+    slug: 'government-politics-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Government',
+    description: 'Essential vocabulary for discussing government and politics.',
+    is_premium: false,
+    is_published: true,
+    view_count: 850,
+    created_at: '2025-04-12T10:00:00Z',
+    updated_at: '2025-04-12T10:00:00Z',
+    content: {
+      title: 'Government & Politics Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 government vocabulary words',
+        'Discuss political systems',
+        'Analyze governance'
+      ],
+      coreExplanation: `Government vocabulary is essential for IELTS topics about society and policy. This lesson covers terms for discussing government and political systems.
+
+Understanding these terms helps you discuss political topics effectively.`,
+      examples: [
+        { sentence: 'Government provides services.', explanation: '"Government" is ruling authority.' },
+        { sentence: 'Politics shapes society.', explanation: '"Politics" is governance activities.' },
+        { sentence: 'Democracy empowers citizens.', explanation: '"Democracy" is people\'s rule.' },
+        { sentence: 'The parliament passed laws.', explanation: '"Parliament" is legislative body.' },
+        { sentence: 'The constitution protects rights.', explanation: '"Constitution" is fundamental law.' },
+        { sentence: 'Elections determine leaders.', explanation: '"Elections" are voting processes.' },
+        { sentence: 'Citizens have responsibilities.', explanation: '"Citizens" are country members.' },
+        { sentence: 'Policy affects everyone.', explanation: '"Policy" is course of action.' },
+        { sentence: 'Legislation was enacted.', explanation: '"Legislation" is laws.' },
+        { sentence: 'The administration implemented changes.', explanation: '"Administration" is government management.' },
+        { sentence: 'Bureaucracy can be slow.', explanation: '"Bureaucracy" is administrative system.' },
+        { sentence: 'Taxation funds services.', explanation: '"Taxation" is collecting taxes.' },
+        { sentence: 'Public services are essential.', explanation: '"Public services" are government services.' },
+        { sentence: 'Governance requires accountability.', explanation: '"Governance" is governing process.' },
+        { sentence: 'Reform is needed.', explanation: '"Reform" is improvement.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "government" and "state"', correction: '"Government" = ruling body; "state" = political entity', explanation: 'Government changes; state is permanent.' },
+        { mistake: 'Using "politics" negatively', correction: '"Politics" is neutral; context determines tone', explanation: 'Politics is not inherently negative.' },
+        { mistake: 'Confusing "policy" and "politics"', correction: '"Policy" = specific plan; "politics" = broader activities', explanation: 'Policy is more specific.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ provides essential public services.', type: 'fill-blank' },
+        { question: 'Which term means rule by the people?', options: ['Democracy', 'Bureaucracy', 'Administration', 'Legislation'], type: 'multiple-choice' },
+        { question: 'Discuss the role of government in society.', type: 'rewrite' },
+        { question: '_____ determine who leads the country.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'government',
+        'Democracy',
+        'Government plays a crucial role in providing services, protecting rights, and creating policies that benefit society.',
+        'Elections'
+      ],
+      quickRecap: 'Key government terms: government, politics, democracy, parliament, constitution, elections, citizens, policy, legislation, administration, bureaucracy, taxation, public services, governance, reform. Use these for government topics!',
+      collocations: [
+        'federal government', 'local politics', 'liberal democracy', 'national parliament',
+        'written constitution', 'general elections', 'law-abiding citizens', 'government policy',
+        'pass legislation', 'current administration', 'government bureaucracy', 'income taxation'
+      ],
+      synonyms: [
+        { word: 'government', synonyms: ['administration', 'authority', 'regime', 'state'] },
+        { word: 'policy', synonyms: ['plan', 'strategy', 'approach', 'program'] },
+        { word: 'reform', synonyms: ['change', 'improvement', 'amendment', 'revision'] }
+      ],
+      speakingLines: [
+        'Government plays a vital role in society.',
+        'Democracy gives citizens a voice.',
+        'Policy decisions affect everyone.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-govt-2',
+    title: 'Law & Justice Vocabulary',
+    slug: 'law-justice-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Government',
+    description: 'Vocabulary for discussing law and the justice system.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-04-13T10:00:00Z',
+    updated_at: '2025-04-13T10:00:00Z',
+    content: {
+      title: 'Law & Justice Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 legal vocabulary words',
+        'Discuss justice system',
+        'Analyze legal concepts'
+      ],
+      coreExplanation: `Legal vocabulary is useful for IELTS topics about crime and society. This lesson covers terms for discussing law and justice.
+
+Understanding these terms helps you discuss legal topics effectively.`,
+      examples: [
+        { sentence: 'Law maintains order.', explanation: '"Law" is rules of society.' },
+        { sentence: 'Justice must be served.', explanation: '"Justice" is fair treatment.' },
+        { sentence: 'The court made a ruling.', explanation: '"Court" is legal tribunal.' },
+        { sentence: 'The judge delivered the verdict.', explanation: '"Judge" is legal decision-maker.' },
+        { sentence: 'The lawyer represented the client.', explanation: '"Lawyer" is legal professional.' },
+        { sentence: 'The trial lasted weeks.', explanation: '"Trial" is legal proceeding.' },
+        { sentence: 'Evidence was presented.', explanation: '"Evidence" is proof.' },
+        { sentence: 'The defendant pleaded innocent.', explanation: '"Defendant" is accused person.' },
+        { sentence: 'The verdict was guilty.', explanation: '"Verdict" is decision.' },
+        { sentence: 'The sentence was fair.', explanation: '"Sentence" is punishment.' },
+        { sentence: 'Rights must be protected.', explanation: '"Rights" are entitlements.' },
+        { sentence: 'The contract was binding.', explanation: '"Contract" is legal agreement.' },
+        { sentence: 'Regulations were enforced.', explanation: '"Regulations" are rules.' },
+        { sentence: 'The appeal was successful.', explanation: '"Appeal" is review request.' },
+        { sentence: 'Legal aid is available.', explanation: '"Legal aid" is free legal help.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "law" and "legislation"', correction: '"Law" = general rules; "legislation" = specific laws passed', explanation: 'Legislation is more specific.' },
+        { mistake: 'Using "lawyer" and "attorney" differently', correction: 'These are largely synonymous', explanation: '"Attorney" is more American.' },
+        { mistake: 'Confusing "verdict" and "sentence"', correction: '"Verdict" = guilty/not guilty; "sentence" = punishment', explanation: 'These are different stages.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ ensures fair treatment for all.', type: 'fill-blank' },
+        { question: 'Which term means the decision of guilty or not guilty?', options: ['Verdict', 'Sentence', 'Appeal', 'Trial'], type: 'multiple-choice' },
+        { question: 'Discuss the importance of a fair justice system.', type: 'rewrite' },
+        { question: 'The _____ represented the defendant in court.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'law/justice system',
+        'Verdict',
+        'A fair justice system is important because it protects rights, maintains order, and ensures equal treatment under the law.',
+        'lawyer'
+      ],
+      quickRecap: 'Key legal terms: law, justice, court, judge, lawyer, trial, evidence, defendant, verdict, sentence, rights, contract, regulations, appeal, legal aid. Use these for legal topics!',
+      collocations: [
+        'criminal law', 'social justice', 'supreme court', 'presiding judge',
+        'defense lawyer', 'fair trial', 'present evidence', 'accused defendant',
+        'deliver verdict', 'prison sentence', 'human rights', 'legal contract'
+      ],
+      synonyms: [
+        { word: 'law', synonyms: ['legislation', 'statute', 'rule', 'regulation'] },
+        { word: 'justice', synonyms: ['fairness', 'equity', 'righteousness', 'impartiality'] },
+        { word: 'lawyer', synonyms: ['attorney', 'counsel', 'advocate', 'solicitor'] }
+      ],
+      speakingLines: [
+        'Law is essential for maintaining social order.',
+        'Justice should be accessible to everyone.',
+        'A fair trial is a fundamental right.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-govt-3',
+    title: 'International Relations Vocabulary',
+    slug: 'international-relations-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Government',
+    description: 'Vocabulary for discussing international relations and diplomacy.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-04-14T10:00:00Z',
+    updated_at: '2025-04-14T10:00:00Z',
+    content: {
+      title: 'International Relations Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 international relations words',
+        'Discuss diplomacy',
+        'Analyze global politics'
+      ],
+      coreExplanation: `International relations vocabulary is useful for IELTS topics about globalization and world affairs. This lesson covers terms for discussing diplomacy and international politics.
+
+Understanding these terms helps you discuss international topics effectively.`,
+      examples: [
+        { sentence: 'Diplomacy resolves conflicts.', explanation: '"Diplomacy" is international negotiation.' },
+        { sentence: 'The treaty was signed.', explanation: '"Treaty" is international agreement.' },
+        { sentence: 'The alliance strengthened security.', explanation: '"Alliance" is partnership.' },
+        { sentence: 'Sanctions were imposed.', explanation: '"Sanctions" are penalties.' },
+        { sentence: 'The summit addressed issues.', explanation: '"Summit" is leaders\' meeting.' },
+        { sentence: 'The ambassador represented the country.', explanation: '"Ambassador" is diplomatic representative.' },
+        { sentence: 'Foreign policy guides relations.', explanation: '"Foreign policy" is international approach.' },
+        { sentence: 'Sovereignty must be respected.', explanation: '"Sovereignty" is self-governance.' },
+        { sentence: 'The UN promotes peace.', explanation: '"UN" is United Nations.' },
+        { sentence: 'Negotiations continued.', explanation: '"Negotiations" are discussions.' },
+        { sentence: 'Cooperation benefits all.', explanation: '"Cooperation" is working together.' },
+        { sentence: 'Conflict threatens stability.', explanation: '"Conflict" is disagreement.' },
+        { sentence: 'Humanitarian aid was sent.', explanation: '"Humanitarian aid" is emergency help.' },
+        { sentence: 'Trade agreements boost economy.', explanation: '"Trade agreements" are commerce deals.' },
+        { sentence: 'Multilateral talks progressed.', explanation: '"Multilateral" involves multiple parties.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "treaty" and "agreement"', correction: '"Treaty" is formal and binding; "agreement" is broader', explanation: 'Treaties are more formal.' },
+        { mistake: 'Using "sanction" positively', correction: '"Sanction" can mean approve OR penalize', explanation: 'Context determines meaning.' },
+        { mistake: 'Confusing "bilateral" and "multilateral"', correction: '"Bilateral" = two parties; "multilateral" = multiple parties', explanation: 'These have different meanings.' }
+      ],
+      miniPractice: [
+        { question: '_____ is essential for resolving international conflicts peacefully.', type: 'fill-blank' },
+        { question: 'Which term means penalties imposed on a country?', options: ['Sanctions', 'Treaties', 'Summits', 'Alliances'], type: 'multiple-choice' },
+        { question: 'Discuss the role of international organizations.', type: 'rewrite' },
+        { question: 'The _____ represented the country abroad.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Diplomacy',
+        'Sanctions',
+        'International organizations promote cooperation, resolve conflicts, and address global challenges through multilateral dialogue.',
+        'ambassador'
+      ],
+      quickRecap: 'Key international terms: diplomacy, treaty, alliance, sanctions, summit, ambassador, foreign policy, sovereignty, UN, negotiations, cooperation, conflict, humanitarian aid, trade agreements, multilateral. Use these for international topics!',
+      collocations: [
+        'international diplomacy', 'peace treaty', 'military alliance', 'economic sanctions',
+        'world summit', 'foreign ambassador', 'foreign policy', 'national sovereignty',
+        'UN resolution', 'peace negotiations', 'international cooperation', 'armed conflict'
+      ],
+      synonyms: [
+        { word: 'diplomacy', synonyms: ['negotiation', 'statecraft', 'tact', 'mediation'] },
+        { word: 'treaty', synonyms: ['agreement', 'pact', 'accord', 'convention'] },
+        { word: 'conflict', synonyms: ['dispute', 'clash', 'disagreement', 'tension'] }
+      ],
+      speakingLines: [
+        'Diplomacy is preferable to conflict.',
+        'International cooperation addresses global challenges.',
+        'Sovereignty is a fundamental principle.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-govt-4',
+    title: 'Public Policy Vocabulary',
+    slug: 'public-policy-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Government',
+    description: 'Vocabulary for discussing public policy and social programs.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-04-15T10:00:00Z',
+    updated_at: '2025-04-15T10:00:00Z',
+    content: {
+      title: 'Public Policy Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 public policy words',
+        'Discuss social programs',
+        'Analyze policy issues'
+      ],
+      coreExplanation: `Public policy vocabulary is useful for IELTS Writing topics about government and society. This lesson covers terms for discussing policy and social programs.
+
+Understanding these terms helps you discuss policy topics effectively.`,
+      examples: [
+        { sentence: 'Public policy addresses issues.', explanation: '"Public policy" is government decisions.' },
+        { sentence: 'Social welfare supports citizens.', explanation: '"Social welfare" is assistance programs.' },
+        { sentence: 'Healthcare is a priority.', explanation: '"Healthcare" is medical services.' },
+        { sentence: 'Education policy affects schools.', explanation: '"Education policy" is school rules.' },
+        { sentence: 'Housing programs help families.', explanation: '"Housing programs" are accommodation assistance.' },
+        { sentence: 'Subsidies support industries.', explanation: '"Subsidies" are financial support.' },
+        { sentence: 'Regulation protects consumers.', explanation: '"Regulation" is government rules.' },
+        { sentence: 'Implementation is challenging.', explanation: '"Implementation" is putting into action.' },
+        { sentence: 'Stakeholders were consulted.', explanation: '"Stakeholders" are affected parties.' },
+        { sentence: 'The initiative was launched.', explanation: '"Initiative" is new program.' },
+        { sentence: 'Funding was allocated.', explanation: '"Funding" is financial resources.' },
+        { sentence: 'Evaluation measures success.', explanation: '"Evaluation" is assessment.' },
+        { sentence: 'Advocacy promotes change.', explanation: '"Advocacy" is supporting causes.' },
+        { sentence: 'The program was effective.', explanation: '"Program" is organized activity.' },
+        { sentence: 'Intervention was necessary.', explanation: '"Intervention" is action to help.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "policy" and "program"', correction: '"Policy" = guidelines; "program" = specific implementation', explanation: 'Programs implement policies.' },
+        { mistake: 'Using "welfare" negatively', correction: '"Welfare" is neutral; it means wellbeing', explanation: 'Context determines tone.' },
+        { mistake: 'Confusing "subsidy" and "grant"', correction: '"Subsidy" = ongoing support; "grant" = one-time funding', explanation: 'These differ in duration.' }
+      ],
+      miniPractice: [
+        { question: '_____ policy addresses important social issues.', type: 'fill-blank' },
+        { question: 'Which term means financial support from government?', options: ['Subsidies', 'Regulations', 'Initiatives', 'Evaluations'], type: 'multiple-choice' },
+        { question: 'Discuss the importance of healthcare policy.', type: 'rewrite' },
+        { question: 'Social _____ programs support vulnerable citizens.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Public',
+        'Subsidies',
+        'Healthcare policy is important because it ensures access to medical services, protects public health, and manages healthcare costs.',
+        'welfare'
+      ],
+      quickRecap: 'Key policy terms: public policy, social welfare, healthcare, education policy, housing programs, subsidies, regulation, implementation, stakeholders, initiative, funding, evaluation, advocacy, program, intervention. Use these for policy topics!',
+      collocations: [
+        'public policy', 'social welfare', 'universal healthcare', 'education policy',
+        'affordable housing', 'government subsidies', 'industry regulation', 'policy implementation',
+        'key stakeholders', 'new initiative', 'government funding', 'program evaluation'
+      ],
+      synonyms: [
+        { word: 'policy', synonyms: ['plan', 'strategy', 'approach', 'guideline'] },
+        { word: 'welfare', synonyms: ['wellbeing', 'benefit', 'assistance', 'support'] },
+        { word: 'program', synonyms: ['scheme', 'initiative', 'project', 'plan'] }
+      ],
+      speakingLines: [
+        'Public policy shapes society.',
+        'Social welfare programs support those in need.',
+        'Healthcare policy is a major political issue.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 41: Social Issues (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-social-1',
+    title: 'Poverty & Inequality Vocabulary',
+    slug: 'poverty-inequality-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Social Issues',
+    description: 'Essential vocabulary for discussing poverty and inequality.',
+    is_premium: false,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-04-16T10:00:00Z',
+    updated_at: '2025-04-16T10:00:00Z',
+    content: {
+      title: 'Poverty & Inequality Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 poverty vocabulary words',
+        'Discuss inequality',
+        'Analyze social issues'
+      ],
+      coreExplanation: `Poverty vocabulary is essential for IELTS Writing topics about social issues. This lesson covers terms for discussing poverty and inequality.
+
+Understanding these terms helps you discuss social issues effectively.`,
+      examples: [
+        { sentence: 'Poverty affects millions.', explanation: '"Poverty" is lack of resources.' },
+        { sentence: 'Inequality is growing.', explanation: '"Inequality" is unequal distribution.' },
+        { sentence: 'The wealth gap is widening.', explanation: '"Wealth gap" is difference between rich and poor.' },
+        { sentence: 'Homelessness is increasing.', explanation: '"Homelessness" is lacking housing.' },
+        { sentence: 'Deprivation affects development.', explanation: '"Deprivation" is lacking necessities.' },
+        { sentence: 'Disadvantaged groups need support.', explanation: '"Disadvantaged" means lacking advantages.' },
+        { sentence: 'Social mobility is limited.', explanation: '"Social mobility" is moving between classes.' },
+        { sentence: 'The poverty line defines need.', explanation: '"Poverty line" is minimum income level.' },
+        { sentence: 'Unemployment causes hardship.', explanation: '"Unemployment" is joblessness.' },
+        { sentence: 'Marginalized communities struggle.', explanation: '"Marginalized" means pushed to edges.' },
+        { sentence: 'Economic disparity is evident.', explanation: '"Disparity" is difference.' },
+        { sentence: 'Aid programs help.', explanation: '"Aid" is assistance.' },
+        { sentence: 'Empowerment creates change.', explanation: '"Empowerment" is giving power.' },
+        { sentence: 'Inclusion benefits society.', explanation: '"Inclusion" is including everyone.' },
+        { sentence: 'Opportunity should be equal.', explanation: '"Opportunity" is chance for success.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "poverty" and "poor"', correction: '"Poverty" = condition; "poor" = adjective', explanation: 'Poverty is the state.' },
+        { mistake: 'Using "inequality" only for income', correction: '"Inequality" can be social, educational, etc.', explanation: 'Inequality is broader.' },
+        { mistake: 'Confusing "equality" and "equity"', correction: '"Equality" = same treatment; "equity" = fair treatment', explanation: 'Equity considers different needs.' }
+      ],
+      miniPractice: [
+        { question: '_____ affects millions of people worldwide.', type: 'fill-blank' },
+        { question: 'Which term means the difference between rich and poor?', options: ['Wealth gap', 'Social mobility', 'Poverty line', 'Deprivation'], type: 'multiple-choice' },
+        { question: 'Discuss the causes of poverty.', type: 'rewrite' },
+        { question: 'Social _____ allows people to improve their economic status.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Poverty',
+        'Wealth gap',
+        'Poverty is caused by factors including unemployment, lack of education, discrimination, and inadequate social support systems.',
+        'mobility'
+      ],
+      quickRecap: 'Key poverty terms: poverty, inequality, wealth gap, homelessness, deprivation, disadvantaged, social mobility, poverty line, unemployment, marginalized, disparity, aid, empowerment, inclusion, opportunity. Use these for social issues topics!',
+      collocations: [
+        'extreme poverty', 'social inequality', 'wealth gap', 'youth homelessness',
+        'economic deprivation', 'disadvantaged groups', 'social mobility', 'poverty line',
+        'high unemployment', 'marginalized communities', 'economic disparity', 'foreign aid'
+      ],
+      synonyms: [
+        { word: 'poverty', synonyms: ['deprivation', 'hardship', 'need', 'want'] },
+        { word: 'inequality', synonyms: ['disparity', 'imbalance', 'unfairness', 'inequity'] },
+        { word: 'disadvantaged', synonyms: ['underprivileged', 'deprived', 'marginalized', 'vulnerable'] }
+      ],
+      speakingLines: [
+        'Poverty is a complex social issue.',
+        'Inequality has many causes and effects.',
+        'Social mobility is essential for a fair society.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-social-2',
+    title: 'Gender & Diversity Vocabulary',
+    slug: 'gender-diversity-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Social Issues',
+    description: 'Vocabulary for discussing gender equality and diversity.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-04-17T10:00:00Z',
+    updated_at: '2025-04-17T10:00:00Z',
+    content: {
+      title: 'Gender & Diversity Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 gender and diversity words',
+        'Discuss equality',
+        'Analyze diversity issues'
+      ],
+      coreExplanation: `Gender and diversity vocabulary is useful for IELTS topics about society and equality. This lesson covers terms for discussing gender and diversity issues.
+
+Understanding these terms helps you discuss equality topics effectively.`,
+      examples: [
+        { sentence: 'Gender equality is essential.', explanation: '"Gender equality" is equal treatment regardless of gender.' },
+        { sentence: 'Diversity enriches society.', explanation: '"Diversity" is variety.' },
+        { sentence: 'Discrimination is illegal.', explanation: '"Discrimination" is unfair treatment.' },
+        { sentence: 'Inclusion benefits everyone.', explanation: '"Inclusion" is including all.' },
+        { sentence: 'The pay gap persists.', explanation: '"Pay gap" is wage difference.' },
+        { sentence: 'Representation matters.', explanation: '"Representation" is being represented.' },
+        { sentence: 'Stereotypes are harmful.', explanation: '"Stereotypes" are oversimplified beliefs.' },
+        { sentence: 'Bias affects decisions.', explanation: '"Bias" is prejudice.' },
+        { sentence: 'Empowerment creates change.', explanation: '"Empowerment" is giving power.' },
+        { sentence: 'Harassment is unacceptable.', explanation: '"Harassment" is unwanted behavior.' },
+        { sentence: 'Equity ensures fairness.', explanation: '"Equity" is fair treatment.' },
+        { sentence: 'Minorities face challenges.', explanation: '"Minorities" are smaller groups.' },
+        { sentence: 'Rights must be protected.', explanation: '"Rights" are entitlements.' },
+        { sentence: 'Tolerance promotes harmony.', explanation: '"Tolerance" is accepting differences.' },
+        { sentence: 'Awareness is increasing.', explanation: '"Awareness" is knowledge.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "gender" and "sex"', correction: '"Gender" = social; "sex" = biological', explanation: 'Gender is socially constructed.' },
+        { mistake: 'Using "diversity" only for race', correction: '"Diversity" includes gender, age, ability, etc.', explanation: 'Diversity is broader.' },
+        { mistake: 'Confusing "equality" and "equity"', correction: '"Equality" = same; "equity" = fair based on need', explanation: 'Equity considers circumstances.' }
+      ],
+      miniPractice: [
+        { question: 'Gender _____ means equal treatment regardless of gender.', type: 'fill-blank' },
+        { question: 'Which term means unfair treatment based on characteristics?', options: ['Discrimination', 'Diversity', 'Inclusion', 'Representation'], type: 'multiple-choice' },
+        { question: 'Discuss why diversity is important in the workplace.', type: 'rewrite' },
+        { question: '_____ are oversimplified beliefs about groups of people.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'equality',
+        'Discrimination',
+        'Diversity is important in the workplace because it brings different perspectives, improves creativity, and reflects society.',
+        'Stereotypes'
+      ],
+      quickRecap: 'Key diversity terms: gender equality, diversity, discrimination, inclusion, pay gap, representation, stereotypes, bias, empowerment, harassment, equity, minorities, rights, tolerance, awareness. Use these for diversity topics!',
+      collocations: [
+        'gender equality', 'cultural diversity', 'racial discrimination', 'social inclusion',
+        'gender pay gap', 'fair representation', 'harmful stereotypes', 'unconscious bias',
+        'women empowerment', 'workplace harassment', 'social equity', 'ethnic minorities'
+      ],
+      synonyms: [
+        { word: 'equality', synonyms: ['fairness', 'parity', 'equity', 'balance'] },
+        { word: 'diversity', synonyms: ['variety', 'difference', 'range', 'multiplicity'] },
+        { word: 'discrimination', synonyms: ['prejudice', 'bias', 'unfairness', 'inequality'] }
+      ],
+      speakingLines: [
+        'Gender equality is a fundamental right.',
+        'Diversity makes organizations stronger.',
+        'Discrimination has no place in modern society.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-social-3',
+    title: 'Aging & Demographics Vocabulary',
+    slug: 'aging-demographics-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Social Issues',
+    description: 'Vocabulary for discussing aging populations and demographics.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-04-18T10:00:00Z',
+    updated_at: '2025-04-18T10:00:00Z',
+    content: {
+      title: 'Aging & Demographics Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 demographics vocabulary words',
+        'Discuss aging populations',
+        'Analyze demographic trends'
+      ],
+      coreExplanation: `Demographics vocabulary is useful for IELTS Writing topics about population and society. This lesson covers terms for discussing aging and demographic changes.
+
+Understanding these terms helps you discuss demographic topics effectively.`,
+      examples: [
+        { sentence: 'Demographics are changing.', explanation: '"Demographics" is population statistics.' },
+        { sentence: 'The population is aging.', explanation: '"Aging" is getting older.' },
+        { sentence: 'Life expectancy has increased.', explanation: '"Life expectancy" is expected lifespan.' },
+        { sentence: 'The birth rate is declining.', explanation: '"Birth rate" is births per population.' },
+        { sentence: 'The elderly need care.', explanation: '"Elderly" means old people.' },
+        { sentence: 'Retirement age is rising.', explanation: '"Retirement" is stopping work.' },
+        { sentence: 'Pensions support retirees.', explanation: '"Pensions" are retirement income.' },
+        { sentence: 'The dependency ratio is increasing.', explanation: '"Dependency ratio" is non-workers to workers.' },
+        { sentence: 'Healthcare costs are rising.', explanation: '"Healthcare costs" are medical expenses.' },
+        { sentence: 'The workforce is shrinking.', explanation: '"Workforce" is working population.' },
+        { sentence: 'Migration affects demographics.', explanation: '"Migration" is population movement.' },
+        { sentence: 'Fertility rates vary.', explanation: '"Fertility rate" is births per woman.' },
+        { sentence: 'Longevity is increasing.', explanation: '"Longevity" is long life.' },
+        { sentence: 'Generational differences exist.', explanation: '"Generational" relates to age groups.' },
+        { sentence: 'Social security is essential.', explanation: '"Social security" is government support.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "elderly" and "old"', correction: '"Elderly" is more respectful', explanation: 'Use "elderly" or "older people".' },
+        { mistake: 'Using "aging" only negatively', correction: '"Aging" is natural and can be positive', explanation: 'Aging brings experience.' },
+        { mistake: 'Confusing "life expectancy" and "lifespan"', correction: '"Life expectancy" = average; "lifespan" = maximum', explanation: 'These are different measures.' }
+      ],
+      miniPractice: [
+        { question: '_____ are changing due to lower birth rates and longer lifespans.', type: 'fill-blank' },
+        { question: 'Which term means expected years of life?', options: ['Life expectancy', 'Fertility rate', 'Dependency ratio', 'Birth rate'], type: 'multiple-choice' },
+        { question: 'Discuss the challenges of an aging population.', type: 'rewrite' },
+        { question: 'The _____ rate has declined in many developed countries.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Demographics',
+        'Life expectancy',
+        'An aging population creates challenges including increased healthcare costs, pension pressures, and a shrinking workforce.',
+        'birth'
+      ],
+      quickRecap: 'Key demographics terms: demographics, aging, life expectancy, birth rate, elderly, retirement, pensions, dependency ratio, healthcare costs, workforce, migration, fertility rate, longevity, generational, social security. Use these for demographics topics!',
+      collocations: [
+        'changing demographics', 'aging population', 'life expectancy', 'declining birth rate',
+        'elderly care', 'retirement age', 'state pensions', 'dependency ratio',
+        'rising healthcare costs', 'shrinking workforce', 'mass migration', 'low fertility rate'
+      ],
+      synonyms: [
+        { word: 'elderly', synonyms: ['aged', 'senior', 'older', 'retired'] },
+        { word: 'aging', synonyms: ['getting older', 'maturing', 'advancing in years', 'growing old'] },
+        { word: 'longevity', synonyms: ['long life', 'lifespan', 'durability', 'endurance'] }
+      ],
+      speakingLines: [
+        'Demographics are shifting in many countries.',
+        'An aging population presents both challenges and opportunities.',
+        'Life expectancy has increased significantly.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-social-4',
+    title: 'Community & Social Cohesion Vocabulary',
+    slug: 'community-social-cohesion-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Social Issues',
+    description: 'Vocabulary for discussing community and social cohesion.',
+    is_premium: true,
+    is_published: true,
+    view_count: 680,
+    created_at: '2025-04-19T10:00:00Z',
+    updated_at: '2025-04-19T10:00:00Z',
+    content: {
+      title: 'Community & Social Cohesion Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 community vocabulary words',
+        'Discuss social cohesion',
+        'Analyze community issues'
+      ],
+      coreExplanation: `Community vocabulary is useful for IELTS topics about society and belonging. This lesson covers terms for discussing community and social bonds.
+
+Understanding these terms helps you discuss community topics effectively.`,
+      examples: [
+        { sentence: 'Community provides support.', explanation: '"Community" is group of people.' },
+        { sentence: 'Social cohesion unites people.', explanation: '"Social cohesion" is social bonds.' },
+        { sentence: 'Belonging is important.', explanation: '"Belonging" is feeling part of group.' },
+        { sentence: 'Neighbors help each other.', explanation: '"Neighbors" are people living nearby.' },
+        { sentence: 'Volunteering strengthens communities.', explanation: '"Volunteering" is unpaid helping.' },
+        { sentence: 'Integration takes time.', explanation: '"Integration" is becoming part of society.' },
+        { sentence: 'Social capital is valuable.', explanation: '"Social capital" is social networks.' },
+        { sentence: 'Trust builds relationships.', explanation: '"Trust" is confidence in others.' },
+        { sentence: 'Solidarity supports members.', explanation: '"Solidarity" is unity.' },
+        { sentence: 'Civic engagement is important.', explanation: '"Civic engagement" is community participation.' },
+        { sentence: 'Isolation affects wellbeing.', explanation: '"Isolation" is being alone.' },
+        { sentence: 'Networks provide support.', explanation: '"Networks" are connections.' },
+        { sentence: 'Participation benefits all.', explanation: '"Participation" is taking part.' },
+        { sentence: 'Local initiatives help.', explanation: '"Initiatives" are new programs.' },
+        { sentence: 'Shared values unite.', explanation: '"Shared values" are common beliefs.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "community" and "society"', correction: '"Community" = local group; "society" = broader', explanation: 'Community is more local.' },
+        { mistake: 'Using "integration" only for immigrants', correction: '"Integration" applies to any group joining society', explanation: 'Integration is broader.' },
+        { mistake: 'Confusing "isolation" and "loneliness"', correction: '"Isolation" = physical; "loneliness" = emotional', explanation: 'These are different concepts.' }
+      ],
+      miniPractice: [
+        { question: '_____ provides a sense of belonging and support.', type: 'fill-blank' },
+        { question: 'Which term means social bonds that unite people?', options: ['Social cohesion', 'Social capital', 'Civic engagement', 'Integration'], type: 'multiple-choice' },
+        { question: 'Discuss how to strengthen community bonds.', type: 'rewrite' },
+        { question: '_____ is essential for building trust in communities.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Community',
+        'Social cohesion',
+        'Community bonds can be strengthened through volunteering, local events, civic engagement, and creating spaces for interaction.',
+        'Participation/Trust'
+      ],
+      quickRecap: 'Key community terms: community, social cohesion, belonging, neighbors, volunteering, integration, social capital, trust, solidarity, civic engagement, isolation, networks, participation, initiatives, shared values. Use these for community topics!',
+      collocations: [
+        'local community', 'social cohesion', 'sense of belonging', 'friendly neighbors',
+        'community volunteering', 'social integration', 'social capital', 'build trust',
+        'community solidarity', 'civic engagement', 'social isolation', 'support networks'
+      ],
+      synonyms: [
+        { word: 'community', synonyms: ['neighborhood', 'society', 'group', 'collective'] },
+        { word: 'cohesion', synonyms: ['unity', 'solidarity', 'togetherness', 'bond'] },
+        { word: 'belonging', synonyms: ['membership', 'inclusion', 'connection', 'attachment'] }
+      ],
+      speakingLines: [
+        'Community is essential for wellbeing.',
+        'Social cohesion creates stronger societies.',
+        'Volunteering strengthens community bonds.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 42: Personal Development (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-personal-1',
+    title: 'Personal Growth Vocabulary',
+    slug: 'personal-growth-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Personal Development',
+    description: 'Essential vocabulary for discussing personal growth and development.',
+    is_premium: false,
+    is_published: true,
+    view_count: 880,
+    created_at: '2025-04-20T10:00:00Z',
+    updated_at: '2025-04-20T10:00:00Z',
+    content: {
+      title: 'Personal Growth Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 personal growth words',
+        'Discuss self-improvement',
+        'Analyze development concepts'
+      ],
+      coreExplanation: `Personal growth vocabulary is useful for IELTS Speaking topics about goals and experiences. This lesson covers terms for discussing personal development.
+
+Understanding these terms helps you discuss personal growth topics effectively.`,
+      examples: [
+        { sentence: 'Personal growth is ongoing.', explanation: '"Personal growth" is self-improvement.' },
+        { sentence: 'Self-improvement requires effort.', explanation: '"Self-improvement" is bettering oneself.' },
+        { sentence: 'Goals guide progress.', explanation: '"Goals" are objectives.' },
+        { sentence: 'Motivation drives action.', explanation: '"Motivation" is desire to act.' },
+        { sentence: 'Discipline ensures consistency.', explanation: '"Discipline" is self-control.' },
+        { sentence: 'Resilience overcomes setbacks.', explanation: '"Resilience" is bouncing back.' },
+        { sentence: 'Mindset affects outcomes.', explanation: '"Mindset" is way of thinking.' },
+        { sentence: 'Potential can be developed.', explanation: '"Potential" is possible ability.' },
+        { sentence: 'Skills can be learned.', explanation: '"Skills" are abilities.' },
+        { sentence: 'Habits shape behavior.', explanation: '"Habits" are regular behaviors.' },
+        { sentence: 'Confidence builds success.', explanation: '"Confidence" is self-belief.' },
+        { sentence: 'Reflection aids learning.', explanation: '"Reflection" is thinking back.' },
+        { sentence: 'Challenges promote growth.', explanation: '"Challenges" are difficulties.' },
+        { sentence: 'Achievement brings satisfaction.', explanation: '"Achievement" is accomplishment.' },
+        { sentence: 'Purpose gives direction.', explanation: '"Purpose" is reason for being.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "goal" and "objective"', correction: 'These are largely synonymous', explanation: '"Objective" is slightly more specific.' },
+        { mistake: 'Using "discipline" only negatively', correction: '"Discipline" can mean self-control (positive)', explanation: 'Context determines meaning.' },
+        { mistake: 'Confusing "confidence" and "arrogance"', correction: '"Confidence" = healthy self-belief; "arrogance" = excessive', explanation: 'Confidence is positive.' }
+      ],
+      miniPractice: [
+        { question: 'Personal _____ is a lifelong journey.', type: 'fill-blank' },
+        { question: 'Which term means the ability to recover from setbacks?', options: ['Resilience', 'Discipline', 'Motivation', 'Confidence'], type: 'multiple-choice' },
+        { question: 'Discuss how to achieve personal goals.', type: 'rewrite' },
+        { question: '_____ drives us to take action toward our goals.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'growth',
+        'Resilience',
+        'Personal goals can be achieved through clear planning, consistent effort, discipline, and learning from setbacks.',
+        'Motivation'
+      ],
+      quickRecap: 'Key personal growth terms: personal growth, self-improvement, goals, motivation, discipline, resilience, mindset, potential, skills, habits, confidence, reflection, challenges, achievement, purpose. Use these for personal development topics!',
+      collocations: [
+        'personal growth', 'continuous self-improvement', 'achieve goals', 'find motivation',
+        'self-discipline', 'build resilience', 'growth mindset', 'reach potential',
+        'develop skills', 'form habits', 'gain confidence', 'self-reflection'
+      ],
+      synonyms: [
+        { word: 'growth', synonyms: ['development', 'progress', 'improvement', 'advancement'] },
+        { word: 'motivation', synonyms: ['drive', 'ambition', 'determination', 'inspiration'] },
+        { word: 'resilience', synonyms: ['toughness', 'strength', 'adaptability', 'perseverance'] }
+      ],
+      speakingLines: [
+        'Personal growth is important to me.',
+        'Setting goals helps me stay focused.',
+        'Resilience is essential for overcoming challenges.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-personal-2',
+    title: 'Career & Professional Development Vocabulary',
+    slug: 'career-professional-development-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Personal Development',
+    description: 'Vocabulary for discussing career and professional development.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2025-04-21T10:00:00Z',
+    updated_at: '2025-04-21T10:00:00Z',
+    content: {
+      title: 'Career & Professional Development Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 career vocabulary words',
+        'Discuss professional growth',
+        'Analyze career concepts'
+      ],
+      coreExplanation: `Career vocabulary is essential for IELTS Speaking topics about work and ambitions. This lesson covers terms for discussing professional development.
+
+Understanding these terms helps you discuss career topics effectively.`,
+      examples: [
+        { sentence: 'Career planning is important.', explanation: '"Career" is professional path.' },
+        { sentence: 'Professional development is ongoing.', explanation: '"Professional development" is work skills growth.' },
+        { sentence: 'Promotion rewards performance.', explanation: '"Promotion" is job advancement.' },
+        { sentence: 'Networking opens opportunities.', explanation: '"Networking" is building connections.' },
+        { sentence: 'Skills are transferable.', explanation: '"Transferable" means usable elsewhere.' },
+        { sentence: 'Experience is valuable.', explanation: '"Experience" is practical knowledge.' },
+        { sentence: 'Qualifications matter.', explanation: '"Qualifications" are credentials.' },
+        { sentence: 'The resume was impressive.', explanation: '"Resume" is job application document.' },
+        { sentence: 'The interview went well.', explanation: '"Interview" is job meeting.' },
+        { sentence: 'Mentorship guides development.', explanation: '"Mentorship" is guidance from experienced person.' },
+        { sentence: 'Leadership requires skills.', explanation: '"Leadership" is guiding others.' },
+        { sentence: 'Ambition drives success.', explanation: '"Ambition" is desire to achieve.' },
+        { sentence: 'Work-life balance is essential.', explanation: '"Work-life balance" is managing both.' },
+        { sentence: 'Job satisfaction matters.', explanation: '"Job satisfaction" is happiness at work.' },
+        { sentence: 'Career change is possible.', explanation: '"Career change" is switching professions.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "career" and "job"', correction: '"Career" = long-term path; "job" = specific position', explanation: 'Career is broader.' },
+        { mistake: 'Using "resume" and "CV" differently', correction: '"Resume" is American; "CV" is British', explanation: 'Both are acceptable.' },
+        { mistake: 'Confusing "qualification" and "skill"', correction: '"Qualification" = formal credential; "skill" = ability', explanation: 'Qualifications are documented.' }
+      ],
+      miniPractice: [
+        { question: '_____ development helps advance your professional path.', type: 'fill-blank' },
+        { question: 'Which term means building professional connections?', options: ['Networking', 'Mentorship', 'Leadership', 'Promotion'], type: 'multiple-choice' },
+        { question: 'Discuss what makes a successful career.', type: 'rewrite' },
+        { question: 'A _____ provides guidance from an experienced professional.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Career/Professional',
+        'Networking',
+        'A successful career requires clear goals, continuous learning, networking, and maintaining work-life balance.',
+        'mentor'
+      ],
+      quickRecap: 'Key career terms: career, professional development, promotion, networking, transferable, experience, qualifications, resume, interview, mentorship, leadership, ambition, work-life balance, job satisfaction, career change. Use these for career topics!',
+      collocations: [
+        'career path', 'professional development', 'job promotion', 'professional networking',
+        'transferable skills', 'work experience', 'academic qualifications', 'update resume',
+        'job interview', 'career mentorship', 'leadership skills', 'career ambition'
+      ],
+      synonyms: [
+        { word: 'career', synonyms: ['profession', 'occupation', 'vocation', 'field'] },
+        { word: 'promotion', synonyms: ['advancement', 'elevation', 'upgrade', 'progression'] },
+        { word: 'ambition', synonyms: ['aspiration', 'drive', 'determination', 'goal'] }
+      ],
+      speakingLines: [
+        'Career planning is essential for success.',
+        'Networking has helped me find opportunities.',
+        'Work-life balance is important to me.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-personal-3',
+    title: 'Learning & Education Vocabulary',
+    slug: 'learning-education-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Personal Development',
+    description: 'Vocabulary for discussing learning and educational development.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-04-22T10:00:00Z',
+    updated_at: '2025-04-22T10:00:00Z',
+    content: {
+      title: 'Learning & Education Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 learning vocabulary words',
+        'Discuss education',
+        'Analyze learning concepts'
+      ],
+      coreExplanation: `Learning vocabulary is essential for IELTS topics about education and development. This lesson covers terms for discussing learning and education.
+
+Understanding these terms helps you discuss education topics effectively.`,
+      examples: [
+        { sentence: 'Learning is lifelong.', explanation: '"Learning" is acquiring knowledge.' },
+        { sentence: 'Education opens doors.', explanation: '"Education" is formal learning.' },
+        { sentence: 'Knowledge is power.', explanation: '"Knowledge" is information understood.' },
+        { sentence: 'Understanding deepens with study.', explanation: '"Understanding" is comprehension.' },
+        { sentence: 'Critical thinking is essential.', explanation: '"Critical thinking" is careful analysis.' },
+        { sentence: 'Curiosity drives learning.', explanation: '"Curiosity" is desire to know.' },
+        { sentence: 'The curriculum was comprehensive.', explanation: '"Curriculum" is course content.' },
+        { sentence: 'Assessment measures progress.', explanation: '"Assessment" is evaluation.' },
+        { sentence: 'Feedback improves performance.', explanation: '"Feedback" is response to work.' },
+        { sentence: 'Self-directed learning is valuable.', explanation: '"Self-directed" means independent.' },
+        { sentence: 'Online learning is growing.', explanation: '"Online learning" is internet education.' },
+        { sentence: 'Practical skills are important.', explanation: '"Practical" means hands-on.' },
+        { sentence: 'Theory supports practice.', explanation: '"Theory" is conceptual knowledge.' },
+        { sentence: 'Literacy is fundamental.', explanation: '"Literacy" is reading/writing ability.' },
+        { sentence: 'Continuous learning is necessary.', explanation: '"Continuous" means ongoing.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "learning" and "education"', correction: '"Learning" = process; "education" = system', explanation: 'Learning is broader.' },
+        { mistake: 'Using "knowledge" and "information" interchangeably', correction: '"Knowledge" = understood; "information" = raw data', explanation: 'Knowledge is processed.' },
+        { mistake: 'Confusing "assessment" and "evaluation"', correction: 'These are largely synonymous', explanation: '"Assessment" is slightly more formal.' }
+      ],
+      miniPractice: [
+        { question: '_____ is a lifelong process.', type: 'fill-blank' },
+        { question: 'Which term means careful analysis of information?', options: ['Critical thinking', 'Curiosity', 'Assessment', 'Feedback'], type: 'multiple-choice' },
+        { question: 'Discuss the importance of lifelong learning.', type: 'rewrite' },
+        { question: '_____ learning allows people to study independently.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Learning',
+        'Critical thinking',
+        'Lifelong learning is important because it keeps skills relevant, enables adaptation to change, and promotes personal growth.',
+        'Self-directed'
+      ],
+      quickRecap: 'Key learning terms: learning, education, knowledge, understanding, critical thinking, curiosity, curriculum, assessment, feedback, self-directed, online learning, practical, theory, literacy, continuous. Use these for education topics!',
+      collocations: [
+        'lifelong learning', 'formal education', 'acquire knowledge', 'deep understanding',
+        'critical thinking', 'natural curiosity', 'school curriculum', 'continuous assessment',
+        'constructive feedback', 'self-directed learning', 'online learning', 'practical skills'
+      ],
+      synonyms: [
+        { word: 'learning', synonyms: ['education', 'study', 'training', 'development'] },
+        { word: 'knowledge', synonyms: ['understanding', 'expertise', 'wisdom', 'information'] },
+        { word: 'education', synonyms: ['schooling', 'training', 'instruction', 'teaching'] }
+      ],
+      speakingLines: [
+        'Learning is a lifelong journey.',
+        'Education has transformed my life.',
+        'Critical thinking is essential in today\'s world.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-personal-4',
+    title: 'Mental Health & Wellbeing Vocabulary',
+    slug: 'mental-health-wellbeing-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Personal Development',
+    description: 'Vocabulary for discussing mental health and wellbeing.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-04-23T10:00:00Z',
+    updated_at: '2025-04-23T10:00:00Z',
+    content: {
+      title: 'Mental Health & Wellbeing Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 mental health vocabulary words',
+        'Discuss wellbeing',
+        'Analyze health concepts'
+      ],
+      coreExplanation: `Mental health vocabulary is useful for IELTS topics about health and lifestyle. This lesson covers terms for discussing mental health and wellbeing.
+
+Understanding these terms helps you discuss wellbeing topics effectively.`,
+      examples: [
+        { sentence: 'Mental health is important.', explanation: '"Mental health" is psychological wellbeing.' },
+        { sentence: 'Wellbeing includes many factors.', explanation: '"Wellbeing" is overall health.' },
+        { sentence: 'Stress affects health.', explanation: '"Stress" is mental pressure.' },
+        { sentence: 'Anxiety is common.', explanation: '"Anxiety" is worry and fear.' },
+        { sentence: 'Depression requires treatment.', explanation: '"Depression" is persistent sadness.' },
+        { sentence: 'Self-care is essential.', explanation: '"Self-care" is looking after yourself.' },
+        { sentence: 'Mindfulness reduces stress.', explanation: '"Mindfulness" is present awareness.' },
+        { sentence: 'Therapy helps many people.', explanation: '"Therapy" is professional treatment.' },
+        { sentence: 'Coping strategies are important.', explanation: '"Coping" is dealing with difficulties.' },
+        { sentence: 'Support networks help.', explanation: '"Support networks" are helpful relationships.' },
+        { sentence: 'Burnout affects workers.', explanation: '"Burnout" is exhaustion from work.' },
+        { sentence: 'Balance promotes health.', explanation: '"Balance" is equilibrium.' },
+        { sentence: 'Relaxation reduces tension.', explanation: '"Relaxation" is reducing stress.' },
+        { sentence: 'Stigma prevents help-seeking.', explanation: '"Stigma" is negative attitudes.' },
+        { sentence: 'Awareness is increasing.', explanation: '"Awareness" is knowledge.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "mental health" and "mental illness"', correction: '"Mental health" = overall state; "mental illness" = specific condition', explanation: 'Mental health is broader.' },
+        { mistake: 'Using "stress" and "anxiety" interchangeably', correction: '"Stress" = response to pressure; "anxiety" = persistent worry', explanation: 'Anxiety is more persistent.' },
+        { mistake: 'Confusing "therapy" and "counseling"', correction: 'These overlap; "therapy" is often more intensive', explanation: 'Both involve professional support.' }
+      ],
+      miniPractice: [
+        { question: '_____ health is as important as physical health.', type: 'fill-blank' },
+        { question: 'Which term means exhaustion from overwork?', options: ['Burnout', 'Stress', 'Anxiety', 'Depression'], type: 'multiple-choice' },
+        { question: 'Discuss how to maintain good mental health.', type: 'rewrite' },
+        { question: '_____ is the practice of being present and aware.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Mental',
+        'Burnout',
+        'Good mental health can be maintained through self-care, exercise, social connections, and seeking help when needed.',
+        'Mindfulness'
+      ],
+      quickRecap: 'Key mental health terms: mental health, wellbeing, stress, anxiety, depression, self-care, mindfulness, therapy, coping, support networks, burnout, balance, relaxation, stigma, awareness. Use these for mental health topics!',
+      collocations: [
+        'mental health', 'overall wellbeing', 'work stress', 'social anxiety',
+        'clinical depression', 'practice self-care', 'practice mindfulness', 'seek therapy',
+        'coping strategies', 'support networks', 'job burnout', 'work-life balance'
+      ],
+      synonyms: [
+        { word: 'wellbeing', synonyms: ['wellness', 'health', 'welfare', 'happiness'] },
+        { word: 'stress', synonyms: ['pressure', 'tension', 'strain', 'anxiety'] },
+        { word: 'therapy', synonyms: ['treatment', 'counseling', 'psychotherapy', 'help'] }
+      ],
+      speakingLines: [
+        'Mental health is increasingly recognized as important.',
+        'Self-care is essential for wellbeing.',
+        'Mindfulness has helped me manage stress.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 43: Relationships & Communication (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-relationships-1',
+    title: 'Interpersonal Relationships Vocabulary',
+    slug: 'interpersonal-relationships-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Relationships',
+    description: 'Essential vocabulary for discussing interpersonal relationships.',
+    is_premium: false,
+    is_published: true,
+    view_count: 850,
+    created_at: '2025-04-24T10:00:00Z',
+    updated_at: '2025-04-24T10:00:00Z',
+    content: {
+      title: 'Interpersonal Relationships Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 relationship vocabulary words',
+        'Discuss interpersonal connections',
+        'Analyze relationship dynamics'
+      ],
+      coreExplanation: `Relationship vocabulary is useful for IELTS Speaking topics about people and experiences. This lesson covers terms for discussing interpersonal relationships.
+
+Understanding these terms helps you discuss relationship topics effectively.`,
+      examples: [
+        { sentence: 'Relationships require effort.', explanation: '"Relationships" are connections between people.' },
+        { sentence: 'Friendship is valuable.', explanation: '"Friendship" is close relationship.' },
+        { sentence: 'Trust is fundamental.', explanation: '"Trust" is confidence in others.' },
+        { sentence: 'Communication is key.', explanation: '"Communication" is exchanging information.' },
+        { sentence: 'Respect builds bonds.', explanation: '"Respect" is valuing others.' },
+        { sentence: 'Empathy connects people.', explanation: '"Empathy" is understanding feelings.' },
+        { sentence: 'Support strengthens relationships.', explanation: '"Support" is helping others.' },
+        { sentence: 'Conflict is natural.', explanation: '"Conflict" is disagreement.' },
+        { sentence: 'Compromise resolves issues.', explanation: '"Compromise" is finding middle ground.' },
+        { sentence: 'Boundaries are important.', explanation: '"Boundaries" are limits.' },
+        { sentence: 'Intimacy deepens bonds.', explanation: '"Intimacy" is closeness.' },
+        { sentence: 'Loyalty is valued.', explanation: '"Loyalty" is faithfulness.' },
+        { sentence: 'Compatibility matters.', explanation: '"Compatibility" is being well-suited.' },
+        { sentence: 'Connection brings happiness.', explanation: '"Connection" is bond.' },
+        { sentence: 'Appreciation shows care.', explanation: '"Appreciation" is gratitude.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "relationship" and "relation"', correction: '"Relationship" = connection; "relation" = family member', explanation: 'Relationship is broader.' },
+        { mistake: 'Using "empathy" and "sympathy" interchangeably', correction: '"Empathy" = feeling with; "sympathy" = feeling for', explanation: 'Empathy is deeper.' },
+        { mistake: 'Confusing "compromise" and "sacrifice"', correction: '"Compromise" = both give; "sacrifice" = one gives up', explanation: 'Compromise is mutual.' }
+      ],
+      miniPractice: [
+        { question: 'Strong _____ require trust and communication.', type: 'fill-blank' },
+        { question: 'Which term means understanding others\' feelings?', options: ['Empathy', 'Sympathy', 'Respect', 'Loyalty'], type: 'multiple-choice' },
+        { question: 'Discuss what makes a good friendship.', type: 'rewrite' },
+        { question: '_____ is essential for resolving conflicts.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'relationships',
+        'Empathy',
+        'A good friendship is built on trust, mutual respect, support, and honest communication.',
+        'Compromise/Communication'
+      ],
+      quickRecap: 'Key relationship terms: relationships, friendship, trust, communication, respect, empathy, support, conflict, compromise, boundaries, intimacy, loyalty, compatibility, connection, appreciation. Use these for relationship topics!',
+      collocations: [
+        'close relationships', 'lasting friendship', 'build trust', 'open communication',
+        'mutual respect', 'show empathy', 'emotional support', 'resolve conflict',
+        'reach compromise', 'set boundaries', 'emotional intimacy', 'unwavering loyalty'
+      ],
+      synonyms: [
+        { word: 'relationship', synonyms: ['connection', 'bond', 'association', 'link'] },
+        { word: 'friendship', synonyms: ['companionship', 'camaraderie', 'fellowship', 'bond'] },
+        { word: 'trust', synonyms: ['faith', 'confidence', 'belief', 'reliance'] }
+      ],
+      speakingLines: [
+        'Relationships are important for happiness.',
+        'Trust is the foundation of any relationship.',
+        'Communication is essential in friendships.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-relationships-2',
+    title: 'Conflict Resolution Vocabulary',
+    slug: 'conflict-resolution-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Relationships',
+    description: 'Vocabulary for discussing conflict resolution and negotiation.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-04-25T10:00:00Z',
+    updated_at: '2025-04-25T10:00:00Z',
+    content: {
+      title: 'Conflict Resolution Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 conflict resolution words',
+        'Discuss negotiation',
+        'Analyze resolution strategies'
+      ],
+      coreExplanation: `Conflict resolution vocabulary is useful for IELTS topics about relationships and society. This lesson covers terms for discussing how to resolve disagreements.
+
+Understanding these terms helps you discuss conflict resolution topics effectively.`,
+      examples: [
+        { sentence: 'Conflict resolution requires skill.', explanation: '"Conflict resolution" is solving disagreements.' },
+        { sentence: 'Negotiation finds solutions.', explanation: '"Negotiation" is discussing to agree.' },
+        { sentence: 'Mediation helps parties.', explanation: '"Mediation" is third-party help.' },
+        { sentence: 'Compromise benefits both.', explanation: '"Compromise" is mutual concession.' },
+        { sentence: 'Dialogue promotes understanding.', explanation: '"Dialogue" is conversation.' },
+        { sentence: 'Reconciliation heals relationships.', explanation: '"Reconciliation" is restoring harmony.' },
+        { sentence: 'Disputes need resolution.', explanation: '"Disputes" are disagreements.' },
+        { sentence: 'Tension must be addressed.', explanation: '"Tension" is strained relations.' },
+        { sentence: 'Agreement was reached.', explanation: '"Agreement" is mutual understanding.' },
+        { sentence: 'Collaboration solves problems.', explanation: '"Collaboration" is working together.' },
+        { sentence: 'Understanding reduces conflict.', explanation: '"Understanding" is comprehension.' },
+        { sentence: 'Patience is necessary.', explanation: '"Patience" is calm waiting.' },
+        { sentence: 'Listening is essential.', explanation: '"Listening" is paying attention.' },
+        { sentence: 'Perspective matters.', explanation: '"Perspective" is viewpoint.' },
+        { sentence: 'Resolution brings peace.', explanation: '"Resolution" is solving.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "mediation" and "arbitration"', correction: '"Mediation" = facilitating; "arbitration" = deciding', explanation: 'Arbitration is binding.' },
+        { mistake: 'Using "conflict" only negatively', correction: '"Conflict" can lead to positive change', explanation: 'Conflict can be constructive.' },
+        { mistake: 'Confusing "compromise" and "consensus"', correction: '"Compromise" = give and take; "consensus" = full agreement', explanation: 'Consensus is stronger.' }
+      ],
+      miniPractice: [
+        { question: 'Conflict _____ requires good communication skills.', type: 'fill-blank' },
+        { question: 'Which term means third-party help in resolving disputes?', options: ['Mediation', 'Negotiation', 'Collaboration', 'Dialogue'], type: 'multiple-choice' },
+        { question: 'Discuss how to resolve conflicts effectively.', type: 'rewrite' },
+        { question: '_____ involves discussing to reach mutual agreement.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'resolution',
+        'Mediation',
+        'Conflicts can be resolved effectively through open dialogue, active listening, understanding different perspectives, and finding compromise.',
+        'Negotiation'
+      ],
+      quickRecap: 'Key conflict resolution terms: conflict resolution, negotiation, mediation, compromise, dialogue, reconciliation, disputes, tension, agreement, collaboration, understanding, patience, listening, perspective, resolution. Use these for conflict resolution topics!',
+      collocations: [
+        'conflict resolution', 'peace negotiation', 'professional mediation', 'reach compromise',
+        'open dialogue', 'achieve reconciliation', 'settle disputes', 'reduce tension',
+        'reach agreement', 'effective collaboration', 'mutual understanding', 'practice patience'
+      ],
+      synonyms: [
+        { word: 'conflict', synonyms: ['dispute', 'disagreement', 'clash', 'tension'] },
+        { word: 'resolution', synonyms: ['solution', 'settlement', 'answer', 'outcome'] },
+        { word: 'negotiation', synonyms: ['discussion', 'bargaining', 'mediation', 'talks'] }
+      ],
+      speakingLines: [
+        'Conflict resolution is an important skill.',
+        'Negotiation requires patience and understanding.',
+        'Mediation can help resolve difficult disputes.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-relationships-3',
+    title: 'Social Interaction Vocabulary',
+    slug: 'social-interaction-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Relationships',
+    description: 'Vocabulary for discussing social interaction and behavior.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-04-26T10:00:00Z',
+    updated_at: '2025-04-26T10:00:00Z',
+    content: {
+      title: 'Social Interaction Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 social interaction words',
+        'Discuss social behavior',
+        'Analyze interaction patterns'
+      ],
+      coreExplanation: `Social interaction vocabulary is useful for IELTS topics about society and behavior. This lesson covers terms for discussing how people interact.
+
+Understanding these terms helps you discuss social interaction topics effectively.`,
+      examples: [
+        { sentence: 'Social interaction is essential.', explanation: '"Social interaction" is engaging with others.' },
+        { sentence: 'Conversation builds connections.', explanation: '"Conversation" is talking.' },
+        { sentence: 'Body language communicates.', explanation: '"Body language" is physical expression.' },
+        { sentence: 'Etiquette guides behavior.', explanation: '"Etiquette" is social rules.' },
+        { sentence: 'Politeness is valued.', explanation: '"Politeness" is courteous behavior.' },
+        { sentence: 'Small talk breaks ice.', explanation: '"Small talk" is casual conversation.' },
+        { sentence: 'Networking builds contacts.', explanation: '"Networking" is making connections.' },
+        { sentence: 'First impressions matter.', explanation: '"First impressions" are initial perceptions.' },
+        { sentence: 'Social skills are learned.', explanation: '"Social skills" are interaction abilities.' },
+        { sentence: 'Rapport builds trust.', explanation: '"Rapport" is harmonious relationship.' },
+        { sentence: 'Introversion is common.', explanation: '"Introversion" is preference for solitude.' },
+        { sentence: 'Extroversion seeks company.', explanation: '"Extroversion" is preference for socializing.' },
+        { sentence: 'Assertiveness is healthy.', explanation: '"Assertiveness" is confident expression.' },
+        { sentence: 'Cooperation benefits all.', explanation: '"Cooperation" is working together.' },
+        { sentence: 'Socialization shapes behavior.', explanation: '"Socialization" is learning social norms.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "introvert" and "shy"', correction: '"Introvert" = prefers solitude; "shy" = fears judgment', explanation: 'These are different concepts.' },
+        { mistake: 'Using "assertive" and "aggressive" interchangeably', correction: '"Assertive" = confident; "aggressive" = hostile', explanation: 'Assertive is positive.' },
+        { mistake: 'Confusing "etiquette" and "manners"', correction: 'These are largely synonymous', explanation: '"Etiquette" is slightly more formal.' }
+      ],
+      miniPractice: [
+        { question: 'Social _____ is essential for building relationships.', type: 'fill-blank' },
+        { question: 'Which term means casual conversation?', options: ['Small talk', 'Networking', 'Rapport', 'Etiquette'], type: 'multiple-choice' },
+        { question: 'Discuss the importance of social skills.', type: 'rewrite' },
+        { question: '_____ language communicates without words.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'interaction',
+        'Small talk',
+        'Social skills are important because they enable effective communication, build relationships, and help navigate social situations.',
+        'Body'
+      ],
+      quickRecap: 'Key social interaction terms: social interaction, conversation, body language, etiquette, politeness, small talk, networking, first impressions, social skills, rapport, introversion, extroversion, assertiveness, cooperation, socialization. Use these for social interaction topics!',
+      collocations: [
+        'social interaction', 'casual conversation', 'body language', 'social etiquette',
+        'common politeness', 'make small talk', 'professional networking', 'first impressions',
+        'develop social skills', 'build rapport', 'natural introversion', 'healthy assertiveness'
+      ],
+      synonyms: [
+        { word: 'interaction', synonyms: ['communication', 'exchange', 'contact', 'engagement'] },
+        { word: 'conversation', synonyms: ['discussion', 'talk', 'chat', 'dialogue'] },
+        { word: 'politeness', synonyms: ['courtesy', 'manners', 'civility', 'respect'] }
+      ],
+      speakingLines: [
+        'Social interaction is important for wellbeing.',
+        'Good social skills help in many situations.',
+        'First impressions can be lasting.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-relationships-4',
+    title: 'Emotions & Feelings Vocabulary',
+    slug: 'emotions-feelings-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Relationships',
+    description: 'Vocabulary for discussing emotions and feelings.',
+    is_premium: true,
+    is_published: true,
+    view_count: 750,
+    created_at: '2025-04-27T10:00:00Z',
+    updated_at: '2025-04-27T10:00:00Z',
+    content: {
+      title: 'Emotions & Feelings Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 emotions vocabulary words',
+        'Discuss feelings',
+        'Express emotions effectively'
+      ],
+      coreExplanation: `Emotions vocabulary is useful for IELTS Speaking topics about experiences and reactions. This lesson covers terms for discussing emotions and feelings.
+
+Understanding these terms helps you express emotions effectively.`,
+      examples: [
+        { sentence: 'Emotions affect behavior.', explanation: '"Emotions" are feelings.' },
+        { sentence: 'Happiness is contagious.', explanation: '"Happiness" is joy.' },
+        { sentence: 'Sadness is natural.', explanation: '"Sadness" is sorrow.' },
+        { sentence: 'Anger must be managed.', explanation: '"Anger" is strong displeasure.' },
+        { sentence: 'Fear protects us.', explanation: '"Fear" is response to danger.' },
+        { sentence: 'Joy brings energy.', explanation: '"Joy" is great happiness.' },
+        { sentence: 'Frustration is common.', explanation: '"Frustration" is feeling blocked.' },
+        { sentence: 'Excitement motivates.', explanation: '"Excitement" is eager anticipation.' },
+        { sentence: 'Disappointment teaches.', explanation: '"Disappointment" is unmet expectations.' },
+        { sentence: 'Gratitude improves mood.', explanation: '"Gratitude" is thankfulness.' },
+        { sentence: 'Anxiety can be managed.', explanation: '"Anxiety" is worry.' },
+        { sentence: 'Contentment brings peace.', explanation: '"Contentment" is satisfaction.' },
+        { sentence: 'Empathy connects people.', explanation: '"Empathy" is understanding feelings.' },
+        { sentence: 'Emotional intelligence matters.', explanation: '"Emotional intelligence" is understanding emotions.' },
+        { sentence: 'Expression is healthy.', explanation: '"Expression" is showing feelings.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "emotions" and "feelings"', correction: 'These are largely synonymous', explanation: '"Emotions" is slightly more formal.' },
+        { mistake: 'Using "happy" for all positive emotions', correction: 'Use specific words: joyful, content, excited, etc.', explanation: 'Vary your vocabulary.' },
+        { mistake: 'Confusing "empathy" and "sympathy"', correction: '"Empathy" = feeling with; "sympathy" = feeling for', explanation: 'Empathy is deeper.' }
+      ],
+      miniPractice: [
+        { question: '_____ affect our thoughts and behavior.', type: 'fill-blank' },
+        { question: 'Which term means understanding and sharing others\' feelings?', options: ['Empathy', 'Sympathy', 'Gratitude', 'Contentment'], type: 'multiple-choice' },
+        { question: 'Describe a time you felt very happy.', type: 'rewrite' },
+        { question: '_____ intelligence is the ability to understand and manage emotions.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Emotions',
+        'Empathy',
+        'I felt very happy when I achieved my goal after months of hard work. The joy and satisfaction were overwhelming.',
+        'Emotional'
+      ],
+      quickRecap: 'Key emotions terms: emotions, happiness, sadness, anger, fear, joy, frustration, excitement, disappointment, gratitude, anxiety, contentment, empathy, emotional intelligence, expression. Use these for emotions topics!',
+      collocations: [
+        'strong emotions', 'find happiness', 'feel sadness', 'control anger',
+        'overcome fear', 'experience joy', 'express frustration', 'feel excitement',
+        'handle disappointment', 'show gratitude', 'manage anxiety', 'find contentment'
+      ],
+      synonyms: [
+        { word: 'happiness', synonyms: ['joy', 'delight', 'pleasure', 'contentment'] },
+        { word: 'sadness', synonyms: ['sorrow', 'unhappiness', 'grief', 'melancholy'] },
+        { word: 'anger', synonyms: ['fury', 'rage', 'irritation', 'annoyance'] }
+      ],
+      speakingLines: [
+        'Emotions are a natural part of life.',
+        'Emotional intelligence is important for relationships.',
+        'Expressing emotions is healthy.'
+      ]
+    }
   }
 ];
