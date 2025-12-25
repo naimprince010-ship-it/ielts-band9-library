@@ -12729,5 +12729,1233 @@ Understanding these terms helps you discuss conflict-related topics effectively.
         'Reconciliation is essential for lasting peace.'
       ]
     }
+  },
+  // ============================================
+  // BATCH 28: Transportation & Infrastructure (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-transport-1',
+    title: 'Transportation Systems Vocabulary',
+    slug: 'transportation-systems-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Transportation',
+    description: 'Essential vocabulary for discussing transportation systems and modes.',
+    is_premium: false,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-02-23T10:00:00Z',
+    updated_at: '2025-02-23T10:00:00Z',
+    content: {
+      title: 'Transportation Systems Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 transportation vocabulary words',
+        'Discuss transport modes',
+        'Analyze transportation systems'
+      ],
+      coreExplanation: `Transportation vocabulary is essential for IELTS topics about urban development, environment, and infrastructure. This lesson covers different modes of transport and related systems.
+
+Understanding these terms helps you discuss transportation topics effectively.`,
+      examples: [
+        { sentence: 'Public transportation reduces congestion.', explanation: '"Public transportation" is buses, trains, etc.' },
+        { sentence: 'The commute takes an hour.', explanation: '"Commute" is regular travel to work.' },
+        { sentence: 'Traffic congestion is a major problem.', explanation: '"Congestion" is overcrowding of vehicles.' },
+        { sentence: 'The infrastructure needs upgrading.', explanation: '"Infrastructure" is basic transport systems.' },
+        { sentence: 'Sustainable transport is encouraged.', explanation: '"Sustainable transport" is environmentally friendly.' },
+        { sentence: 'The metro system is efficient.', explanation: '"Metro" is underground railway.' },
+        { sentence: 'Cycling infrastructure has improved.', explanation: '"Cycling infrastructure" is bike lanes, etc.' },
+        { sentence: 'Pedestrian zones are car-free.', explanation: '"Pedestrian zones" are walking-only areas.' },
+        { sentence: 'The highway connects major cities.', explanation: '"Highway" is main road for fast travel.' },
+        { sentence: 'Rush hour traffic is heavy.', explanation: '"Rush hour" is peak travel time.' },
+        { sentence: 'Carpooling reduces emissions.', explanation: '"Carpooling" is sharing car journeys.' },
+        { sentence: 'The transit system is integrated.', explanation: '"Transit" is public transport.' },
+        { sentence: 'Freight transport moves goods.', explanation: '"Freight" is goods transported.' },
+        { sentence: 'The terminal handles passengers.', explanation: '"Terminal" is transport station.' },
+        { sentence: 'Accessibility is important for all.', explanation: '"Accessibility" is ease of use for everyone.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "transport" and "transportation"', correction: 'Both are correct; "transport" is British, "transportation" is American', explanation: 'Use one consistently.' },
+        { mistake: 'Using "traffic" only for cars', correction: '"Traffic" can include all vehicles and pedestrians', explanation: 'Traffic is broader.' },
+        { mistake: 'Confusing "commute" and "travel"', correction: '"Commute" is specifically regular work travel', explanation: 'Travel is more general.' }
+      ],
+      miniPractice: [
+        { question: 'Public _____ reduces traffic congestion in cities.', type: 'fill-blank' },
+        { question: 'Which term means peak travel time?', options: ['Rush hour', 'Commute', 'Transit', 'Freight'], type: 'multiple-choice' },
+        { question: 'Discuss how cities can improve transportation.', type: 'rewrite' },
+        { question: 'Traffic _____ is a major problem in urban areas.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'transportation/transport',
+        'Rush hour',
+        'Cities can improve transportation by investing in public transit, creating cycling infrastructure, and implementing carpooling programs.',
+        'congestion'
+      ],
+      quickRecap: 'Key transport terms: public transportation, commute, congestion, infrastructure, sustainable transport, metro, cycling infrastructure, pedestrian zones, highway, rush hour, carpooling, transit, freight, terminal, accessibility. Use these for transport topics!',
+      collocations: [
+        'public transportation', 'daily commute', 'traffic congestion', 'transport infrastructure',
+        'sustainable transport', 'metro system', 'cycling infrastructure', 'pedestrian zone',
+        'major highway', 'rush hour', 'carpooling scheme', 'transit system'
+      ],
+      synonyms: [
+        { word: 'transportation', synonyms: ['transport', 'transit', 'travel', 'conveyance'] },
+        { word: 'congestion', synonyms: ['gridlock', 'traffic jam', 'bottleneck', 'overcrowding'] },
+        { word: 'commute', synonyms: ['journey', 'travel', 'trip', 'passage'] }
+      ],
+      speakingLines: [
+        'Public transportation is essential for reducing traffic congestion.',
+        'My daily commute takes about 45 minutes.',
+        'Sustainable transport options are becoming more popular.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-transport-2',
+    title: 'Air & Sea Travel Vocabulary',
+    slug: 'air-sea-travel-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Transportation',
+    description: 'Vocabulary for discussing air and sea transportation.',
+    is_premium: true,
+    is_published: true,
+    view_count: 750,
+    created_at: '2025-02-24T10:00:00Z',
+    updated_at: '2025-02-24T10:00:00Z',
+    content: {
+      title: 'Air & Sea Travel Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 air and sea travel words',
+        'Discuss aviation and shipping',
+        'Analyze travel industry'
+      ],
+      coreExplanation: `Air and sea travel vocabulary is useful for IELTS topics about tourism, trade, and globalization. This lesson covers terms for aviation and maritime transport.
+
+Understanding these terms helps you discuss travel and shipping topics effectively.`,
+      examples: [
+        { sentence: 'Aviation has transformed travel.', explanation: '"Aviation" is flying aircraft.' },
+        { sentence: 'The airline operates globally.', explanation: '"Airline" is company providing flights.' },
+        { sentence: 'The flight was delayed.', explanation: '"Flight" is journey by aircraft.' },
+        { sentence: 'The airport handles millions of passengers.', explanation: '"Airport" is place for aircraft.' },
+        { sentence: 'Boarding begins at gate 5.', explanation: '"Boarding" is getting on aircraft.' },
+        { sentence: 'The departure was on time.', explanation: '"Departure" is leaving.' },
+        { sentence: 'The arrival was smooth.', explanation: '"Arrival" is reaching destination.' },
+        { sentence: 'Maritime trade is essential.', explanation: '"Maritime" relates to the sea.' },
+        { sentence: 'The port handles cargo ships.', explanation: '"Port" is harbor for ships.' },
+        { sentence: 'Shipping costs have increased.', explanation: '"Shipping" is transporting by sea.' },
+        { sentence: 'The vessel crossed the ocean.', explanation: '"Vessel" is a ship or boat.' },
+        { sentence: 'The cruise industry is growing.', explanation: '"Cruise" is leisure voyage.' },
+        { sentence: 'Customs clearance takes time.', explanation: '"Customs" is border control for goods.' },
+        { sentence: 'The cargo was unloaded.', explanation: '"Cargo" is goods transported.' },
+        { sentence: 'International flights connect countries.', explanation: '"International" means between countries.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "flight" and "fly"', correction: '"Flight" is noun; "fly" is verb', explanation: '"The flight" vs "to fly".' },
+        { mistake: 'Using "boat" for large ships', correction: 'Use "ship" or "vessel" for large craft', explanation: '"Boat" is usually smaller.' },
+        { mistake: 'Confusing "port" and "airport"', correction: '"Port" is for ships; "airport" is for aircraft', explanation: 'These are different facilities.' }
+      ],
+      miniPractice: [
+        { question: '_____ has transformed international travel.', type: 'fill-blank' },
+        { question: 'Which term relates to sea transport?', options: ['Maritime', 'Aviation', 'Boarding', 'Departure'], type: 'multiple-choice' },
+        { question: 'Discuss the importance of air travel for tourism.', type: 'rewrite' },
+        { question: 'The _____ handles millions of passengers annually.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Aviation',
+        'Maritime',
+        'Air travel has made tourism accessible by connecting distant destinations quickly and affordably.',
+        'airport'
+      ],
+      quickRecap: 'Key air travel terms: aviation, airline, flight, airport, boarding, departure, arrival. Key sea travel terms: maritime, port, shipping, vessel, cruise, cargo, customs. Use these for travel topics!',
+      collocations: [
+        'commercial aviation', 'major airline', 'international flight', 'busy airport',
+        'passenger boarding', 'scheduled departure', 'safe arrival', 'maritime trade',
+        'busy port', 'container shipping', 'cargo vessel', 'cruise ship'
+      ],
+      synonyms: [
+        { word: 'flight', synonyms: ['journey', 'trip', 'voyage', 'passage'] },
+        { word: 'vessel', synonyms: ['ship', 'boat', 'craft', 'carrier'] },
+        { word: 'cargo', synonyms: ['freight', 'goods', 'shipment', 'load'] }
+      ],
+      speakingLines: [
+        'Aviation has revolutionized international travel.',
+        'Maritime trade is essential for the global economy.',
+        'The airport handles millions of passengers every year.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-transport-3',
+    title: 'Future Transportation Vocabulary',
+    slug: 'future-transportation-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Transportation',
+    description: 'Vocabulary for discussing future transportation technologies.',
+    is_premium: true,
+    is_published: true,
+    view_count: 680,
+    created_at: '2025-02-25T10:00:00Z',
+    updated_at: '2025-02-25T10:00:00Z',
+    content: {
+      title: 'Future Transportation Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 future transport words',
+        'Discuss emerging technologies',
+        'Analyze transport innovations'
+      ],
+      coreExplanation: `Future transportation vocabulary is useful for IELTS topics about technology and innovation. This lesson covers terms for emerging transport technologies.
+
+Understanding these terms helps you discuss future transport topics effectively.`,
+      examples: [
+        { sentence: 'Electric vehicles are becoming popular.', explanation: '"Electric vehicles" run on electricity.' },
+        { sentence: 'Autonomous cars drive themselves.', explanation: '"Autonomous" means self-driving.' },
+        { sentence: 'Hyperloop could revolutionize travel.', explanation: '"Hyperloop" is high-speed tube transport.' },
+        { sentence: 'Drones deliver packages.', explanation: '"Drones" are unmanned aircraft.' },
+        { sentence: 'High-speed rail connects cities.', explanation: '"High-speed rail" is fast train service.' },
+        { sentence: 'Zero-emission vehicles reduce pollution.', explanation: '"Zero-emission" produces no pollution.' },
+        { sentence: 'Smart transportation uses technology.', explanation: '"Smart transportation" uses data and AI.' },
+        { sentence: 'Ride-sharing has disrupted taxis.', explanation: '"Ride-sharing" is sharing car journeys via apps.' },
+        { sentence: 'Charging stations are expanding.', explanation: '"Charging stations" power electric vehicles.' },
+        { sentence: 'Maglev trains float on magnets.', explanation: '"Maglev" is magnetic levitation.' },
+        { sentence: 'Urban mobility is evolving.', explanation: '"Urban mobility" is city transport.' },
+        { sentence: 'Connected vehicles communicate.', explanation: '"Connected vehicles" share data.' },
+        { sentence: 'E-scooters are popular in cities.', explanation: '"E-scooters" are electric scooters.' },
+        { sentence: 'Hydrogen fuel cells power vehicles.', explanation: '"Hydrogen fuel cells" generate electricity.' },
+        { sentence: 'Mobility as a service integrates options.', explanation: '"Mobility as a service" combines transport modes.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "electric" and "electronic"', correction: '"Electric" = powered by electricity; "electronic" = using circuits', explanation: 'Electric vehicles use electric motors.' },
+        { mistake: 'Using "driverless" and "autonomous" differently', correction: 'Both mean self-driving', explanation: 'These are synonyms.' },
+        { mistake: 'Confusing "hybrid" and "electric"', correction: '"Hybrid" uses both fuel and electricity; "electric" uses only electricity', explanation: 'These are different technologies.' }
+      ],
+      miniPractice: [
+        { question: '_____ vehicles run entirely on electricity.', type: 'fill-blank' },
+        { question: 'Which term means self-driving?', options: ['Autonomous', 'Electric', 'Hybrid', 'Connected'], type: 'multiple-choice' },
+        { question: 'Discuss how technology is changing transportation.', type: 'rewrite' },
+        { question: '_____ cars can drive without human input.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Electric',
+        'Autonomous',
+        'Technology is changing transportation through electric vehicles, autonomous driving, and smart systems that optimize traffic flow.',
+        'Autonomous/Self-driving'
+      ],
+      quickRecap: 'Key future transport terms: electric vehicles, autonomous, hyperloop, drones, high-speed rail, zero-emission, smart transportation, ride-sharing, charging stations, maglev, urban mobility, connected vehicles, e-scooters, hydrogen fuel cells. Use these for future transport topics!',
+      collocations: [
+        'electric vehicles', 'autonomous driving', 'hyperloop technology', 'delivery drones',
+        'high-speed rail', 'zero-emission transport', 'smart transportation', 'ride-sharing apps',
+        'charging stations', 'maglev trains', 'urban mobility', 'connected vehicles'
+      ],
+      synonyms: [
+        { word: 'autonomous', synonyms: ['self-driving', 'driverless', 'automated', 'unmanned'] },
+        { word: 'electric', synonyms: ['battery-powered', 'EV', 'plug-in', 'zero-emission'] },
+        { word: 'smart', synonyms: ['intelligent', 'connected', 'digital', 'automated'] }
+      ],
+      speakingLines: [
+        'Electric vehicles are becoming increasingly popular.',
+        'Autonomous cars could revolutionize transportation.',
+        'Smart transportation systems can reduce congestion.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-transport-4',
+    title: 'Traffic & Road Safety Vocabulary',
+    slug: 'traffic-road-safety-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Transportation',
+    description: 'Vocabulary for discussing traffic management and road safety.',
+    is_premium: true,
+    is_published: true,
+    view_count: 650,
+    created_at: '2025-02-26T10:00:00Z',
+    updated_at: '2025-02-26T10:00:00Z',
+    content: {
+      title: 'Traffic & Road Safety Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 traffic safety words',
+        'Discuss road safety issues',
+        'Analyze traffic management'
+      ],
+      coreExplanation: `Traffic and road safety vocabulary is useful for IELTS topics about urban planning and public safety. This lesson covers terms for traffic management and safety.
+
+Understanding these terms helps you discuss traffic-related topics effectively.`,
+      examples: [
+        { sentence: 'Road safety campaigns save lives.', explanation: '"Road safety" is preventing accidents.' },
+        { sentence: 'Speed limits reduce accidents.', explanation: '"Speed limits" are maximum allowed speeds.' },
+        { sentence: 'Traffic lights control flow.', explanation: '"Traffic lights" are signal systems.' },
+        { sentence: 'Pedestrian crossings are essential.', explanation: '"Pedestrian crossings" are safe crossing points.' },
+        { sentence: 'Seat belts save lives.', explanation: '"Seat belts" are safety restraints.' },
+        { sentence: 'Drunk driving is dangerous.', explanation: '"Drunk driving" is driving under alcohol influence.' },
+        { sentence: 'Road accidents cause injuries.', explanation: '"Road accidents" are vehicle crashes.' },
+        { sentence: 'Traffic enforcement is strict.', explanation: '"Enforcement" is ensuring rules are followed.' },
+        { sentence: 'Roundabouts improve traffic flow.', explanation: '"Roundabouts" are circular junctions.' },
+        { sentence: 'Speed cameras deter speeding.', explanation: '"Speed cameras" detect speeding vehicles.' },
+        { sentence: 'Road markings guide drivers.', explanation: '"Road markings" are painted lines.' },
+        { sentence: 'Traffic calming slows vehicles.', explanation: '"Traffic calming" reduces speeds.' },
+        { sentence: 'Collision rates have decreased.', explanation: '"Collision" is vehicles hitting each other.' },
+        { sentence: 'Fatalities must be reduced.', explanation: '"Fatalities" are deaths.' },
+        { sentence: 'Driver education is important.', explanation: '"Driver education" is training for drivers.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "accident" and "incident"', correction: '"Accident" implies unintentional; "incident" is broader', explanation: 'Use "collision" for neutrality.' },
+        { mistake: 'Using "crash" and "accident" interchangeably', correction: '"Crash" is more neutral than "accident"', explanation: 'Some prefer "crash" as more accurate.' },
+        { mistake: 'Confusing "speed limit" and "speed restriction"', correction: 'Both are acceptable; "limit" is more common', explanation: 'Use either consistently.' }
+      ],
+      miniPractice: [
+        { question: 'Road _____ campaigns aim to reduce accidents.', type: 'fill-blank' },
+        { question: 'Which device detects speeding vehicles?', options: ['Speed cameras', 'Traffic lights', 'Roundabouts', 'Road markings'], type: 'multiple-choice' },
+        { question: 'Discuss how to improve road safety.', type: 'rewrite' },
+        { question: '_____ limits are set to reduce accidents.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'safety',
+        'Speed cameras',
+        'Road safety can be improved through stricter enforcement, better driver education, and improved infrastructure like pedestrian crossings.',
+        'Speed'
+      ],
+      quickRecap: 'Key safety terms: road safety, speed limits, traffic lights, pedestrian crossings, seat belts, drunk driving, road accidents, enforcement, roundabouts, speed cameras, road markings, traffic calming, collision, fatalities, driver education. Use these for traffic topics!',
+      collocations: [
+        'road safety', 'speed limits', 'traffic lights', 'pedestrian crossing',
+        'seat belt', 'drunk driving', 'road accident', 'traffic enforcement',
+        'traffic roundabout', 'speed camera', 'road markings', 'traffic calming'
+      ],
+      synonyms: [
+        { word: 'accident', synonyms: ['crash', 'collision', 'incident', 'wreck'] },
+        { word: 'safety', synonyms: ['security', 'protection', 'precaution', 'prevention'] },
+        { word: 'enforcement', synonyms: ['implementation', 'application', 'execution', 'policing'] }
+      ],
+      speakingLines: [
+        'Road safety is a major concern in many countries.',
+        'Speed limits help reduce the number of accidents.',
+        'Driver education is essential for improving road safety.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 29: Language & Communication (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-language-1',
+    title: 'Language Learning Vocabulary',
+    slug: 'language-learning-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Language',
+    description: 'Essential vocabulary for discussing language learning and acquisition.',
+    is_premium: false,
+    is_published: true,
+    view_count: 880,
+    created_at: '2025-02-27T10:00:00Z',
+    updated_at: '2025-02-27T10:00:00Z',
+    content: {
+      title: 'Language Learning Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 language learning words',
+        'Discuss language acquisition',
+        'Analyze learning methods'
+      ],
+      coreExplanation: `Language learning vocabulary is essential for IELTS topics about education and communication. This lesson covers terms for discussing how languages are learned.
+
+Understanding these terms helps you discuss language learning topics effectively.`,
+      examples: [
+        { sentence: 'Language acquisition begins early.', explanation: '"Acquisition" is gaining language naturally.' },
+        { sentence: 'Fluency takes years to develop.', explanation: '"Fluency" is speaking smoothly.' },
+        { sentence: 'Proficiency levels vary.', explanation: '"Proficiency" is skill level.' },
+        { sentence: 'Immersion accelerates learning.', explanation: '"Immersion" is surrounding yourself with language.' },
+        { sentence: 'Native speakers have advantages.', explanation: '"Native speakers" learned language from birth.' },
+        { sentence: 'Second language learning is challenging.', explanation: '"Second language" is learned after first.' },
+        { sentence: 'Bilingual children have benefits.', explanation: '"Bilingual" means speaking two languages.' },
+        { sentence: 'Multilingualism is increasingly common.', explanation: '"Multilingualism" is speaking multiple languages.' },
+        { sentence: 'Pronunciation requires practice.', explanation: '"Pronunciation" is how words sound.' },
+        { sentence: 'Grammar rules must be learned.', explanation: '"Grammar" is language structure rules.' },
+        { sentence: 'Vocabulary expands with reading.', explanation: '"Vocabulary" is words known.' },
+        { sentence: 'Comprehension improves with exposure.', explanation: '"Comprehension" is understanding.' },
+        { sentence: 'The mother tongue is first language.', explanation: '"Mother tongue" is native language.' },
+        { sentence: 'Language barriers cause problems.', explanation: '"Language barriers" prevent communication.' },
+        { sentence: 'Linguistic diversity is valuable.', explanation: '"Linguistic" relates to language.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "fluent" and "proficient"', correction: '"Fluent" = smooth speaking; "proficient" = skilled overall', explanation: 'Fluency is one aspect of proficiency.' },
+        { mistake: 'Using "learn" and "acquire" interchangeably', correction: '"Acquire" = natural; "learn" = conscious effort', explanation: 'Acquisition is more natural.' },
+        { mistake: 'Confusing "bilingual" and "multilingual"', correction: '"Bilingual" = two languages; "multilingual" = more than two', explanation: 'These have different meanings.' }
+      ],
+      miniPractice: [
+        { question: 'Language _____ begins in early childhood.', type: 'fill-blank' },
+        { question: 'Which term means speaking two languages?', options: ['Bilingual', 'Multilingual', 'Fluent', 'Proficient'], type: 'multiple-choice' },
+        { question: 'Discuss the benefits of learning a second language.', type: 'rewrite' },
+        { question: '_____ speakers have an advantage in pronunciation.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'acquisition',
+        'Bilingual',
+        'Learning a second language improves cognitive abilities, opens career opportunities, and enables cross-cultural communication.',
+        'Native'
+      ],
+      quickRecap: 'Key language terms: acquisition, fluency, proficiency, immersion, native speaker, second language, bilingual, multilingual, pronunciation, grammar, vocabulary, comprehension, mother tongue, language barriers, linguistic. Use these for language topics!',
+      collocations: [
+        'language acquisition', 'achieve fluency', 'language proficiency', 'total immersion',
+        'native speaker', 'second language', 'bilingual education', 'multilingual society',
+        'correct pronunciation', 'grammar rules', 'expand vocabulary', 'reading comprehension'
+      ],
+      synonyms: [
+        { word: 'fluency', synonyms: ['proficiency', 'command', 'mastery', 'competence'] },
+        { word: 'acquisition', synonyms: ['learning', 'gaining', 'obtaining', 'development'] },
+        { word: 'native', synonyms: ['first', 'mother', 'original', 'primary'] }
+      ],
+      speakingLines: [
+        'Language acquisition is most effective in early childhood.',
+        'Achieving fluency requires consistent practice.',
+        'Bilingual education has many cognitive benefits.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-language-2',
+    title: 'Communication Skills Vocabulary',
+    slug: 'communication-skills-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Language',
+    description: 'Vocabulary for discussing communication skills and styles.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-02-28T10:00:00Z',
+    updated_at: '2025-02-28T10:00:00Z',
+    content: {
+      title: 'Communication Skills Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 communication vocabulary words',
+        'Discuss communication styles',
+        'Analyze effective communication'
+      ],
+      coreExplanation: `Communication skills vocabulary is essential for IELTS topics about work, relationships, and society. This lesson covers terms for discussing how people communicate.
+
+Understanding these terms helps you discuss communication topics effectively.`,
+      examples: [
+        { sentence: 'Effective communication is essential.', explanation: '"Effective" means achieving results.' },
+        { sentence: 'Verbal communication uses words.', explanation: '"Verbal" means using spoken words.' },
+        { sentence: 'Non-verbal cues are important.', explanation: '"Non-verbal" is without words (gestures, etc.).' },
+        { sentence: 'Body language conveys meaning.', explanation: '"Body language" is physical expressions.' },
+        { sentence: 'Active listening improves understanding.', explanation: '"Active listening" is fully concentrating.' },
+        { sentence: 'Feedback helps improvement.', explanation: '"Feedback" is response to communication.' },
+        { sentence: 'Clarity ensures understanding.', explanation: '"Clarity" is being clear.' },
+        { sentence: 'Miscommunication causes problems.', explanation: '"Miscommunication" is failed communication.' },
+        { sentence: 'Interpersonal skills are valued.', explanation: '"Interpersonal" is between people.' },
+        { sentence: 'Articulate speakers are effective.', explanation: '"Articulate" means expressing clearly.' },
+        { sentence: 'Tone affects message reception.', explanation: '"Tone" is manner of expression.' },
+        { sentence: 'Persuasion influences others.', explanation: '"Persuasion" is convincing others.' },
+        { sentence: 'Negotiation requires skill.', explanation: '"Negotiation" is discussing to reach agreement.' },
+        { sentence: 'Assertive communication is direct.', explanation: '"Assertive" is confident and direct.' },
+        { sentence: 'Empathetic listening builds rapport.', explanation: '"Empathetic" shows understanding of feelings.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "verbal" and "oral"', correction: '"Verbal" = using words; "oral" = spoken', explanation: 'Verbal can include written words.' },
+        { mistake: 'Using "hear" and "listen" interchangeably', correction: '"Hear" = perceive sound; "listen" = pay attention', explanation: 'Listening is active.' },
+        { mistake: 'Confusing "assertive" and "aggressive"', correction: '"Assertive" = confident; "aggressive" = hostile', explanation: 'Assertive is positive.' }
+      ],
+      miniPractice: [
+        { question: '_____ communication uses spoken or written words.', type: 'fill-blank' },
+        { question: 'Which term means fully concentrating when someone speaks?', options: ['Active listening', 'Feedback', 'Persuasion', 'Negotiation'], type: 'multiple-choice' },
+        { question: 'Discuss why communication skills are important.', type: 'rewrite' },
+        { question: 'Body _____ conveys meaning without words.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Verbal',
+        'Active listening',
+        'Communication skills are important because they enable effective collaboration, prevent misunderstandings, and build strong relationships.',
+        'language'
+      ],
+      quickRecap: 'Key communication terms: effective, verbal, non-verbal, body language, active listening, feedback, clarity, miscommunication, interpersonal, articulate, tone, persuasion, negotiation, assertive, empathetic. Use these for communication topics!',
+      collocations: [
+        'effective communication', 'verbal communication', 'non-verbal cues', 'body language',
+        'active listening', 'constructive feedback', 'message clarity', 'avoid miscommunication',
+        'interpersonal skills', 'articulate speaker', 'tone of voice', 'persuasive communication'
+      ],
+      synonyms: [
+        { word: 'effective', synonyms: ['successful', 'productive', 'efficient', 'impactful'] },
+        { word: 'clarity', synonyms: ['clearness', 'precision', 'lucidity', 'transparency'] },
+        { word: 'articulate', synonyms: ['eloquent', 'fluent', 'expressive', 'clear'] }
+      ],
+      speakingLines: [
+        'Effective communication is essential in the workplace.',
+        'Active listening is a key interpersonal skill.',
+        'Non-verbal cues often convey more than words.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-language-3',
+    title: 'Digital Communication Vocabulary',
+    slug: 'digital-communication-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Language',
+    description: 'Vocabulary for discussing digital and online communication.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-03-01T10:00:00Z',
+    updated_at: '2025-03-01T10:00:00Z',
+    content: {
+      title: 'Digital Communication Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 digital communication words',
+        'Discuss online communication',
+        'Analyze digital trends'
+      ],
+      coreExplanation: `Digital communication vocabulary is essential for IELTS topics about technology and social change. This lesson covers terms for discussing online and digital communication.
+
+Understanding these terms helps you discuss digital communication topics effectively.`,
+      examples: [
+        { sentence: 'Social media connects people globally.', explanation: '"Social media" is online platforms.' },
+        { sentence: 'Instant messaging is convenient.', explanation: '"Instant messaging" is real-time text chat.' },
+        { sentence: 'Video conferencing enables remote meetings.', explanation: '"Video conferencing" is online video meetings.' },
+        { sentence: 'Email remains important for business.', explanation: '"Email" is electronic mail.' },
+        { sentence: 'Online communication has increased.', explanation: '"Online" means on the internet.' },
+        { sentence: 'Virtual meetings save time.', explanation: '"Virtual" means online, not physical.' },
+        { sentence: 'Digital literacy is essential.', explanation: '"Digital literacy" is technology skills.' },
+        { sentence: 'Cyberbullying is a serious problem.', explanation: '"Cyberbullying" is online harassment.' },
+        { sentence: 'Information overload affects people.', explanation: '"Information overload" is too much data.' },
+        { sentence: 'Privacy concerns are growing.', explanation: '"Privacy" is keeping information private.' },
+        { sentence: 'Viral content spreads quickly.', explanation: '"Viral" means spreading rapidly online.' },
+        { sentence: 'Netiquette guides online behavior.', explanation: '"Netiquette" is internet etiquette.' },
+        { sentence: 'Emojis express emotions.', explanation: '"Emojis" are digital symbols.' },
+        { sentence: 'Hashtags organize content.', explanation: '"Hashtags" are topic markers.' },
+        { sentence: 'Algorithms determine what we see.', explanation: '"Algorithms" are computer processes.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "online" and "digital"', correction: '"Online" = connected to internet; "digital" = electronic', explanation: 'Digital is broader.' },
+        { mistake: 'Using "social media" as singular', correction: '"Social media" can be singular or plural', explanation: '"Social media is/are" both acceptable.' },
+        { mistake: 'Confusing "virtual" and "digital"', correction: '"Virtual" = simulated; "digital" = electronic format', explanation: 'Virtual implies simulation.' }
+      ],
+      miniPractice: [
+        { question: '_____ media has transformed how people communicate.', type: 'fill-blank' },
+        { question: 'Which term means online video meetings?', options: ['Video conferencing', 'Instant messaging', 'Email', 'Hashtags'], type: 'multiple-choice' },
+        { question: 'Discuss how digital communication has changed society.', type: 'rewrite' },
+        { question: '_____ literacy is essential in the modern workplace.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Social',
+        'Video conferencing',
+        'Digital communication has changed society by enabling instant global connection, but has also raised concerns about privacy and information overload.',
+        'Digital'
+      ],
+      quickRecap: 'Key digital terms: social media, instant messaging, video conferencing, email, online, virtual, digital literacy, cyberbullying, information overload, privacy, viral, netiquette, emojis, hashtags, algorithms. Use these for digital communication topics!',
+      collocations: [
+        'social media platform', 'instant messaging app', 'video conferencing', 'email communication',
+        'online presence', 'virtual meeting', 'digital literacy', 'cyberbullying prevention',
+        'information overload', 'privacy concerns', 'viral content', 'social media algorithm'
+      ],
+      synonyms: [
+        { word: 'online', synonyms: ['internet-based', 'web-based', 'digital', 'virtual'] },
+        { word: 'virtual', synonyms: ['online', 'remote', 'digital', 'electronic'] },
+        { word: 'viral', synonyms: ['trending', 'popular', 'widespread', 'contagious'] }
+      ],
+      speakingLines: [
+        'Social media has transformed how we communicate.',
+        'Video conferencing has become essential for remote work.',
+        'Digital literacy is increasingly important in education.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-language-4',
+    title: 'Language & Society Vocabulary',
+    slug: 'language-society-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Language',
+    description: 'Vocabulary for discussing language in society and culture.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-03-02T10:00:00Z',
+    updated_at: '2025-03-02T10:00:00Z',
+    content: {
+      title: 'Language & Society Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 sociolinguistic words',
+        'Discuss language in society',
+        'Analyze language issues'
+      ],
+      coreExplanation: `Language and society vocabulary is useful for IELTS topics about culture, identity, and globalization. This lesson covers terms for discussing how language relates to society.
+
+Understanding these terms helps you discuss sociolinguistic topics effectively.`,
+      examples: [
+        { sentence: 'Dialects vary by region.', explanation: '"Dialects" are regional language varieties.' },
+        { sentence: 'Accents reveal origins.', explanation: '"Accents" are pronunciation patterns.' },
+        { sentence: 'Slang is informal language.', explanation: '"Slang" is casual vocabulary.' },
+        { sentence: 'Jargon is specialized vocabulary.', explanation: '"Jargon" is professional terminology.' },
+        { sentence: 'Language evolves over time.', explanation: '"Evolves" means changes gradually.' },
+        { sentence: 'Endangered languages need protection.', explanation: '"Endangered" means at risk of dying.' },
+        { sentence: 'Language preservation is important.', explanation: '"Preservation" is keeping language alive.' },
+        { sentence: 'Lingua franca enables communication.', explanation: '"Lingua franca" is common language.' },
+        { sentence: 'Code-switching is common.', explanation: '"Code-switching" is switching between languages.' },
+        { sentence: 'Language policy affects education.', explanation: '"Language policy" is official language rules.' },
+        { sentence: 'Minority languages face challenges.', explanation: '"Minority languages" are less widely spoken.' },
+        { sentence: 'Official languages have legal status.', explanation: '"Official languages" are government-recognized.' },
+        { sentence: 'Language rights are human rights.', explanation: '"Language rights" are rights to use language.' },
+        { sentence: 'Linguistic diversity is valuable.', explanation: '"Linguistic diversity" is variety of languages.' },
+        { sentence: 'Language identity is important.', explanation: '"Language identity" is connection to language.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "dialect" and "accent"', correction: '"Dialect" = vocabulary and grammar; "accent" = pronunciation', explanation: 'Dialects are broader.' },
+        { mistake: 'Using "slang" negatively', correction: 'Slang is natural language evolution', explanation: 'Slang is not inherently bad.' },
+        { mistake: 'Confusing "jargon" and "terminology"', correction: '"Jargon" can be negative; "terminology" is neutral', explanation: 'Jargon implies exclusivity.' }
+      ],
+      miniPractice: [
+        { question: '_____ vary by region and include different vocabulary.', type: 'fill-blank' },
+        { question: 'Which term means a common language used between groups?', options: ['Lingua franca', 'Dialect', 'Jargon', 'Slang'], type: 'multiple-choice' },
+        { question: 'Discuss why preserving endangered languages is important.', type: 'rewrite' },
+        { question: '_____ languages are at risk of disappearing.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Dialects',
+        'Lingua franca',
+        'Preserving endangered languages is important because they represent unique cultural knowledge, history, and identity.',
+        'Endangered'
+      ],
+      quickRecap: 'Key sociolinguistic terms: dialects, accents, slang, jargon, evolves, endangered languages, preservation, lingua franca, code-switching, language policy, minority languages, official languages, language rights, linguistic diversity, language identity. Use these for language and society topics!',
+      collocations: [
+        'regional dialects', 'foreign accent', 'youth slang', 'technical jargon',
+        'language evolution', 'endangered languages', 'language preservation', 'global lingua franca',
+        'code-switching behavior', 'language policy', 'minority languages', 'linguistic diversity'
+      ],
+      synonyms: [
+        { word: 'dialect', synonyms: ['variety', 'vernacular', 'idiom', 'speech'] },
+        { word: 'endangered', synonyms: ['threatened', 'at-risk', 'dying', 'vulnerable'] },
+        { word: 'preservation', synonyms: ['conservation', 'protection', 'maintenance', 'safeguarding'] }
+      ],
+      speakingLines: [
+        'Dialects reflect regional cultural differences.',
+        'English has become a global lingua franca.',
+        'Endangered languages represent irreplaceable cultural heritage.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 30: Ethics & Values (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-ethics-1',
+    title: 'Ethics & Morality Vocabulary',
+    slug: 'ethics-morality-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Ethics',
+    description: 'Essential vocabulary for discussing ethics and moral issues.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-03-03T10:00:00Z',
+    updated_at: '2025-03-03T10:00:00Z',
+    content: {
+      title: 'Ethics & Morality Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 ethics vocabulary words',
+        'Discuss moral issues',
+        'Analyze ethical dilemmas'
+      ],
+      coreExplanation: `Ethics vocabulary is essential for IELTS Writing Task 2 topics about society, technology, and values. This lesson covers terms for discussing moral and ethical issues.
+
+Understanding these terms helps you discuss ethics-related topics effectively.`,
+      examples: [
+        { sentence: 'Ethics guides behavior.', explanation: '"Ethics" is moral principles.' },
+        { sentence: 'Morality varies by culture.', explanation: '"Morality" is right and wrong beliefs.' },
+        { sentence: 'Ethical dilemmas are complex.', explanation: '"Dilemmas" are difficult choices.' },
+        { sentence: 'Values shape decisions.', explanation: '"Values" are important beliefs.' },
+        { sentence: 'Integrity is highly valued.', explanation: '"Integrity" is honesty and moral principles.' },
+        { sentence: 'Accountability is important.', explanation: '"Accountability" is being responsible.' },
+        { sentence: 'Transparency builds trust.', explanation: '"Transparency" is openness.' },
+        { sentence: 'Fairness ensures equality.', explanation: '"Fairness" is just treatment.' },
+        { sentence: 'Justice must be served.', explanation: '"Justice" is fair treatment.' },
+        { sentence: 'Responsibility is essential.', explanation: '"Responsibility" is duty to act.' },
+        { sentence: 'Conscience guides choices.', explanation: '"Conscience" is inner moral sense.' },
+        { sentence: 'Principles guide behavior.', explanation: '"Principles" are fundamental beliefs.' },
+        { sentence: 'Virtue is moral excellence.', explanation: '"Virtue" is good moral quality.' },
+        { sentence: 'Corruption undermines society.', explanation: '"Corruption" is dishonest behavior.' },
+        { sentence: 'Ethical standards must be maintained.', explanation: '"Standards" are levels of quality.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "ethics" and "morals"', correction: '"Ethics" = principles; "morals" = personal beliefs', explanation: 'Ethics is more systematic.' },
+        { mistake: 'Using "ethical" and "moral" interchangeably', correction: 'These overlap but have nuances', explanation: 'Ethical often relates to professional standards.' },
+        { mistake: 'Confusing "values" and "beliefs"', correction: '"Values" = what is important; "beliefs" = what is true', explanation: 'Values guide priorities.' }
+      ],
+      miniPractice: [
+        { question: '_____ guides our understanding of right and wrong.', type: 'fill-blank' },
+        { question: 'Which term means honesty and moral principles?', options: ['Integrity', 'Transparency', 'Accountability', 'Fairness'], type: 'multiple-choice' },
+        { question: 'Discuss why ethics is important in business.', type: 'rewrite' },
+        { question: 'Ethical _____ are difficult choices between competing values.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Ethics/Morality',
+        'Integrity',
+        'Ethics is important in business because it builds trust, ensures fair treatment, and maintains reputation.',
+        'dilemmas'
+      ],
+      quickRecap: 'Key ethics terms: ethics, morality, dilemmas, values, integrity, accountability, transparency, fairness, justice, responsibility, conscience, principles, virtue, corruption, standards. Use these for ethics topics!',
+      collocations: [
+        'professional ethics', 'personal morality', 'ethical dilemma', 'core values',
+        'personal integrity', 'corporate accountability', 'financial transparency', 'social fairness',
+        'criminal justice', 'social responsibility', 'moral conscience', 'ethical principles'
+      ],
+      synonyms: [
+        { word: 'ethics', synonyms: ['morals', 'principles', 'values', 'standards'] },
+        { word: 'integrity', synonyms: ['honesty', 'honor', 'uprightness', 'probity'] },
+        { word: 'fairness', synonyms: ['justice', 'equity', 'impartiality', 'equality'] }
+      ],
+      speakingLines: [
+        'Ethics plays a crucial role in professional conduct.',
+        'Integrity is essential for building trust.',
+        'Ethical dilemmas often have no easy answers.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-ethics-2',
+    title: 'Social Responsibility Vocabulary',
+    slug: 'social-responsibility-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Ethics',
+    description: 'Vocabulary for discussing social responsibility and citizenship.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-03-04T10:00:00Z',
+    updated_at: '2025-03-04T10:00:00Z',
+    content: {
+      title: 'Social Responsibility Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 social responsibility words',
+        'Discuss civic duties',
+        'Analyze corporate responsibility'
+      ],
+      coreExplanation: `Social responsibility vocabulary is essential for IELTS topics about business, society, and citizenship. This lesson covers terms for discussing responsibilities to society.
+
+Understanding these terms helps you discuss social responsibility topics effectively.`,
+      examples: [
+        { sentence: 'Corporate social responsibility is expected.', explanation: '"Corporate social responsibility" is business ethics.' },
+        { sentence: 'Civic duty includes voting.', explanation: '"Civic duty" is citizen responsibilities.' },
+        { sentence: 'Philanthropy benefits society.', explanation: '"Philanthropy" is charitable giving.' },
+        { sentence: 'Volunteering helps communities.', explanation: '"Volunteering" is unpaid helping.' },
+        { sentence: 'Sustainability is a priority.', explanation: '"Sustainability" is long-term viability.' },
+        { sentence: 'Stakeholders have interests.', explanation: '"Stakeholders" are affected parties.' },
+        { sentence: 'Community engagement is valued.', explanation: '"Community engagement" is involvement.' },
+        { sentence: 'Ethical sourcing is important.', explanation: '"Ethical sourcing" is responsible purchasing.' },
+        { sentence: 'Fair trade supports producers.', explanation: '"Fair trade" ensures fair prices.' },
+        { sentence: 'Environmental stewardship protects nature.', explanation: '"Stewardship" is responsible management.' },
+        { sentence: 'Social impact is measured.', explanation: '"Social impact" is effect on society.' },
+        { sentence: 'Charitable donations help causes.', explanation: '"Charitable" relates to charity.' },
+        { sentence: 'Nonprofit organizations serve society.', explanation: '"Nonprofit" means not for profit.' },
+        { sentence: 'Activism promotes change.', explanation: '"Activism" is campaigning for change.' },
+        { sentence: 'Citizenship involves responsibilities.', explanation: '"Citizenship" is being a citizen.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "charity" and "philanthropy"', correction: '"Charity" = giving to needy; "philanthropy" = broader giving', explanation: 'Philanthropy is more systematic.' },
+        { mistake: 'Using "volunteer" as noun incorrectly', correction: '"Volunteer" can be noun or verb', explanation: '"A volunteer" vs "to volunteer".' },
+        { mistake: 'Confusing "stakeholder" and "shareholder"', correction: '"Stakeholder" = any affected party; "shareholder" = owner', explanation: 'Stakeholders are broader.' }
+      ],
+      miniPractice: [
+        { question: 'Corporate social _____ is increasingly expected of businesses.', type: 'fill-blank' },
+        { question: 'Which term means charitable giving?', options: ['Philanthropy', 'Activism', 'Stewardship', 'Citizenship'], type: 'multiple-choice' },
+        { question: 'Discuss why businesses should be socially responsible.', type: 'rewrite' },
+        { question: '_____ duty includes voting and obeying laws.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'responsibility',
+        'Philanthropy',
+        'Businesses should be socially responsible because it builds trust, benefits communities, and creates long-term value for stakeholders.',
+        'Civic'
+      ],
+      quickRecap: 'Key responsibility terms: corporate social responsibility, civic duty, philanthropy, volunteering, sustainability, stakeholders, community engagement, ethical sourcing, fair trade, stewardship, social impact, charitable, nonprofit, activism, citizenship. Use these for responsibility topics!',
+      collocations: [
+        'corporate social responsibility', 'civic duty', 'charitable philanthropy', 'community volunteering',
+        'environmental sustainability', 'key stakeholders', 'community engagement', 'ethical sourcing',
+        'fair trade products', 'environmental stewardship', 'social impact', 'nonprofit organization'
+      ],
+      synonyms: [
+        { word: 'responsibility', synonyms: ['duty', 'obligation', 'accountability', 'liability'] },
+        { word: 'philanthropy', synonyms: ['charity', 'giving', 'benevolence', 'generosity'] },
+        { word: 'sustainability', synonyms: ['viability', 'durability', 'continuity', 'longevity'] }
+      ],
+      speakingLines: [
+        'Corporate social responsibility has become a business priority.',
+        'Civic duty is essential for a functioning democracy.',
+        'Philanthropy can make a significant difference in communities.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-ethics-3',
+    title: 'Human Rights Vocabulary',
+    slug: 'human-rights-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Ethics',
+    description: 'Vocabulary for discussing human rights and freedoms.',
+    is_premium: true,
+    is_published: true,
+    view_count: 680,
+    created_at: '2025-03-05T10:00:00Z',
+    updated_at: '2025-03-05T10:00:00Z',
+    content: {
+      title: 'Human Rights Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 human rights vocabulary words',
+        'Discuss fundamental freedoms',
+        'Analyze rights issues'
+      ],
+      coreExplanation: `Human rights vocabulary is essential for IELTS topics about society, government, and justice. This lesson covers terms for discussing fundamental rights and freedoms.
+
+Understanding these terms helps you discuss human rights topics effectively.`,
+      examples: [
+        { sentence: 'Human rights are universal.', explanation: '"Human rights" are fundamental entitlements.' },
+        { sentence: 'Freedom of speech is protected.', explanation: '"Freedom of speech" is right to express opinions.' },
+        { sentence: 'Equality before the law is essential.', explanation: '"Equality" is being treated the same.' },
+        { sentence: 'Discrimination violates rights.', explanation: '"Discrimination" is unfair treatment.' },
+        { sentence: 'Civil liberties must be protected.', explanation: '"Civil liberties" are individual freedoms.' },
+        { sentence: 'The right to education is fundamental.', explanation: '"Right to education" is access to learning.' },
+        { sentence: 'Privacy is a basic right.', explanation: '"Privacy" is freedom from intrusion.' },
+        { sentence: 'Dignity must be respected.', explanation: '"Dignity" is inherent worth.' },
+        { sentence: 'Persecution forces people to flee.', explanation: '"Persecution" is cruel treatment.' },
+        { sentence: 'Asylum protects refugees.', explanation: '"Asylum" is protection for refugees.' },
+        { sentence: 'Oppression denies freedoms.', explanation: '"Oppression" is cruel control.' },
+        { sentence: 'Advocacy promotes rights.', explanation: '"Advocacy" is supporting causes.' },
+        { sentence: 'Humanitarian aid helps victims.', explanation: '"Humanitarian" relates to human welfare.' },
+        { sentence: 'Violations must be addressed.', explanation: '"Violations" are breaches of rights.' },
+        { sentence: 'Justice ensures fairness.', explanation: '"Justice" is fair treatment.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "rights" and "privileges"', correction: '"Rights" are inherent; "privileges" are granted', explanation: 'Rights cannot be taken away.' },
+        { mistake: 'Using "freedom" and "liberty" interchangeably', correction: 'These are similar but have nuances', explanation: 'Liberty often implies political freedom.' },
+        { mistake: 'Confusing "equality" and "equity"', correction: '"Equality" = same treatment; "equity" = fair treatment', explanation: 'Equity considers different needs.' }
+      ],
+      miniPractice: [
+        { question: 'Human _____ are universal and cannot be taken away.', type: 'fill-blank' },
+        { question: 'Which term means cruel treatment based on identity?', options: ['Persecution', 'Advocacy', 'Asylum', 'Dignity'], type: 'multiple-choice' },
+        { question: 'Discuss why freedom of speech is important.', type: 'rewrite' },
+        { question: 'Freedom of _____ allows people to express their opinions.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'rights',
+        'Persecution',
+        'Freedom of speech is important because it enables democratic participation, allows criticism of power, and promotes the exchange of ideas.',
+        'speech'
+      ],
+      quickRecap: 'Key rights terms: human rights, freedom of speech, equality, discrimination, civil liberties, right to education, privacy, dignity, persecution, asylum, oppression, advocacy, humanitarian, violations, justice. Use these for human rights topics!',
+      collocations: [
+        'human rights', 'freedom of speech', 'racial equality', 'workplace discrimination',
+        'civil liberties', 'right to education', 'personal privacy', 'human dignity',
+        'political persecution', 'seek asylum', 'systematic oppression', 'human rights advocacy'
+      ],
+      synonyms: [
+        { word: 'rights', synonyms: ['entitlements', 'freedoms', 'liberties', 'privileges'] },
+        { word: 'equality', synonyms: ['fairness', 'equity', 'parity', 'impartiality'] },
+        { word: 'freedom', synonyms: ['liberty', 'independence', 'autonomy', 'self-determination'] }
+      ],
+      speakingLines: [
+        'Human rights are fundamental and universal.',
+        'Freedom of speech is essential for democracy.',
+        'Discrimination violates basic human rights.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-ethics-4',
+    title: 'Environmental Ethics Vocabulary',
+    slug: 'environmental-ethics-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Ethics',
+    description: 'Vocabulary for discussing environmental ethics and sustainability.',
+    is_premium: true,
+    is_published: true,
+    view_count: 650,
+    created_at: '2025-03-06T10:00:00Z',
+    updated_at: '2025-03-06T10:00:00Z',
+    content: {
+      title: 'Environmental Ethics Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 environmental ethics words',
+        'Discuss sustainability issues',
+        'Analyze environmental responsibility'
+      ],
+      coreExplanation: `Environmental ethics vocabulary is essential for IELTS topics about climate change and sustainability. This lesson covers terms for discussing our responsibilities to the environment.
+
+Understanding these terms helps you discuss environmental ethics topics effectively.`,
+      examples: [
+        { sentence: 'Environmental ethics guides our relationship with nature.', explanation: '"Environmental ethics" is moral relationship with nature.' },
+        { sentence: 'Sustainability ensures future resources.', explanation: '"Sustainability" is meeting needs without harming future.' },
+        { sentence: 'Conservation protects natural resources.', explanation: '"Conservation" is protecting nature.' },
+        { sentence: 'Biodiversity must be preserved.', explanation: '"Biodiversity" is variety of life.' },
+        { sentence: 'Ecological balance is fragile.', explanation: '"Ecological" relates to ecosystems.' },
+        { sentence: 'Carbon footprint measures impact.', explanation: '"Carbon footprint" is emissions produced.' },
+        { sentence: 'Renewable resources are sustainable.', explanation: '"Renewable" can be replenished.' },
+        { sentence: 'Deforestation destroys habitats.', explanation: '"Deforestation" is clearing forests.' },
+        { sentence: 'Pollution harms ecosystems.', explanation: '"Pollution" is harmful contamination.' },
+        { sentence: 'Climate action is urgent.', explanation: '"Climate action" is addressing climate change.' },
+        { sentence: 'Intergenerational equity considers future.', explanation: '"Intergenerational" means between generations.' },
+        { sentence: 'Stewardship means responsible care.', explanation: '"Stewardship" is responsible management.' },
+        { sentence: 'Eco-friendly products reduce harm.', explanation: '"Eco-friendly" is environmentally safe.' },
+        { sentence: 'Sustainable development balances needs.', explanation: '"Sustainable development" meets needs responsibly.' },
+        { sentence: 'Environmental justice ensures fairness.', explanation: '"Environmental justice" is fair distribution of impacts.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "conservation" and "preservation"', correction: '"Conservation" = sustainable use; "preservation" = no use', explanation: 'Conservation allows responsible use.' },
+        { mistake: 'Using "sustainable" for everything green', correction: '"Sustainable" means can continue long-term', explanation: 'Not all eco-friendly is sustainable.' },
+        { mistake: 'Confusing "ecology" and "environment"', correction: '"Ecology" = study of ecosystems; "environment" = surroundings', explanation: 'Ecology is more specific.' }
+      ],
+      miniPractice: [
+        { question: '_____ ensures we meet present needs without harming future generations.', type: 'fill-blank' },
+        { question: 'Which term means variety of life on Earth?', options: ['Biodiversity', 'Ecology', 'Conservation', 'Stewardship'], type: 'multiple-choice' },
+        { question: 'Discuss our ethical responsibility to the environment.', type: 'rewrite' },
+        { question: 'Carbon _____ measures the environmental impact of activities.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Sustainability',
+        'Biodiversity',
+        'We have an ethical responsibility to protect the environment for future generations through sustainable practices and conservation.',
+        'footprint'
+      ],
+      quickRecap: 'Key environmental ethics terms: environmental ethics, sustainability, conservation, biodiversity, ecological, carbon footprint, renewable, deforestation, pollution, climate action, intergenerational, stewardship, eco-friendly, sustainable development, environmental justice. Use these for environmental ethics topics!',
+      collocations: [
+        'environmental ethics', 'long-term sustainability', 'wildlife conservation', 'protect biodiversity',
+        'ecological balance', 'carbon footprint', 'renewable energy', 'illegal deforestation',
+        'air pollution', 'climate action', 'intergenerational equity', 'environmental stewardship'
+      ],
+      synonyms: [
+        { word: 'sustainability', synonyms: ['viability', 'durability', 'continuity', 'maintainability'] },
+        { word: 'conservation', synonyms: ['preservation', 'protection', 'safeguarding', 'maintenance'] },
+        { word: 'eco-friendly', synonyms: ['environmentally friendly', 'green', 'sustainable', 'clean'] }
+      ],
+      speakingLines: [
+        'Environmental ethics guides our relationship with nature.',
+        'Sustainability is essential for future generations.',
+        'We have a responsibility to reduce our carbon footprint.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 31: Nature & Wildlife (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-nature-1',
+    title: 'Wildlife & Ecosystems Vocabulary',
+    slug: 'wildlife-ecosystems-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Nature',
+    description: 'Essential vocabulary for discussing wildlife and ecosystems.',
+    is_premium: false,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-03-07T10:00:00Z',
+    updated_at: '2025-03-07T10:00:00Z',
+    content: {
+      title: 'Wildlife & Ecosystems Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 wildlife vocabulary words',
+        'Discuss ecosystems',
+        'Analyze wildlife issues'
+      ],
+      coreExplanation: `Wildlife vocabulary is essential for IELTS topics about environment and conservation. This lesson covers terms for discussing animals, plants, and ecosystems.
+
+Understanding these terms helps you discuss wildlife topics effectively.`,
+      examples: [
+        { sentence: 'Wildlife populations are declining.', explanation: '"Wildlife" is wild animals and plants.' },
+        { sentence: 'Ecosystems are interconnected.', explanation: '"Ecosystems" are communities of organisms.' },
+        { sentence: 'Habitats are being destroyed.', explanation: '"Habitats" are natural homes.' },
+        { sentence: 'Species are becoming extinct.', explanation: '"Species" are types of organisms.' },
+        { sentence: 'Endangered animals need protection.', explanation: '"Endangered" means at risk of extinction.' },
+        { sentence: 'Predators control prey populations.', explanation: '"Predators" hunt other animals.' },
+        { sentence: 'The food chain connects organisms.', explanation: '"Food chain" is feeding relationships.' },
+        { sentence: 'Migration patterns are changing.', explanation: '"Migration" is seasonal movement.' },
+        { sentence: 'Biodiversity is essential.', explanation: '"Biodiversity" is variety of life.' },
+        { sentence: 'Conservation efforts are increasing.', explanation: '"Conservation" is protecting nature.' },
+        { sentence: 'Poaching threatens species.', explanation: '"Poaching" is illegal hunting.' },
+        { sentence: 'Natural reserves protect wildlife.', explanation: '"Reserves" are protected areas.' },
+        { sentence: 'Breeding programs help recovery.', explanation: '"Breeding programs" reproduce endangered species.' },
+        { sentence: 'Invasive species cause problems.', explanation: '"Invasive species" are non-native harmful organisms.' },
+        { sentence: 'The ecosystem is fragile.', explanation: '"Fragile" means easily damaged.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "wildlife" and "nature"', correction: '"Wildlife" = animals/plants; "nature" = broader natural world', explanation: 'Wildlife is more specific.' },
+        { mistake: 'Using "extinct" and "endangered" interchangeably', correction: '"Extinct" = no longer exists; "endangered" = at risk', explanation: 'These are different stages.' },
+        { mistake: 'Confusing "habitat" and "environment"', correction: '"Habitat" = specific home; "environment" = surroundings', explanation: 'Habitat is more specific.' }
+      ],
+      miniPractice: [
+        { question: '_____ populations have declined significantly.', type: 'fill-blank' },
+        { question: 'Which term means at risk of extinction?', options: ['Endangered', 'Extinct', 'Invasive', 'Migratory'], type: 'multiple-choice' },
+        { question: 'Discuss why biodiversity is important.', type: 'rewrite' },
+        { question: 'Natural _____ are being destroyed by human activity.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Wildlife',
+        'Endangered',
+        'Biodiversity is important because it maintains ecosystem balance, provides resources, and supports human wellbeing.',
+        'habitats'
+      ],
+      quickRecap: 'Key wildlife terms: wildlife, ecosystems, habitats, species, endangered, predators, food chain, migration, biodiversity, conservation, poaching, reserves, breeding programs, invasive species, fragile. Use these for wildlife topics!',
+      collocations: [
+        'wildlife populations', 'natural ecosystems', 'natural habitats', 'endangered species',
+        'apex predators', 'food chain', 'seasonal migration', 'protect biodiversity',
+        'wildlife conservation', 'illegal poaching', 'nature reserves', 'breeding programs'
+      ],
+      synonyms: [
+        { word: 'wildlife', synonyms: ['fauna', 'animals', 'creatures', 'organisms'] },
+        { word: 'habitat', synonyms: ['environment', 'home', 'territory', 'ecosystem'] },
+        { word: 'endangered', synonyms: ['threatened', 'at-risk', 'vulnerable', 'imperiled'] }
+      ],
+      speakingLines: [
+        'Wildlife populations have declined dramatically.',
+        'Ecosystems are interconnected and fragile.',
+        'Conservation efforts are essential for protecting endangered species.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-nature-2',
+    title: 'Natural Landscapes Vocabulary',
+    slug: 'natural-landscapes-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Nature',
+    description: 'Vocabulary for describing natural landscapes and geographical features.',
+    is_premium: true,
+    is_published: true,
+    view_count: 750,
+    created_at: '2025-03-08T10:00:00Z',
+    updated_at: '2025-03-08T10:00:00Z',
+    content: {
+      title: 'Natural Landscapes Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 landscape vocabulary words',
+        'Describe natural features',
+        'Discuss geographical topics'
+      ],
+      coreExplanation: `Natural landscape vocabulary is useful for IELTS Speaking (describing places) and Writing (discussing environment). This lesson covers terms for geographical features.
+
+Understanding these terms helps you describe natural landscapes effectively.`,
+      examples: [
+        { sentence: 'The mountain range is spectacular.', explanation: '"Mountain range" is a series of mountains.' },
+        { sentence: 'The valley is fertile.', explanation: '"Valley" is low land between hills.' },
+        { sentence: 'The coastline is beautiful.', explanation: '"Coastline" is where land meets sea.' },
+        { sentence: 'The forest is dense.', explanation: '"Forest" is large area of trees.' },
+        { sentence: 'The desert is arid.', explanation: '"Desert" is dry, sandy region.' },
+        { sentence: 'The river flows to the sea.', explanation: '"River" is large natural stream.' },
+        { sentence: 'The lake is pristine.', explanation: '"Lake" is body of water surrounded by land.' },
+        { sentence: 'The waterfall is impressive.', explanation: '"Waterfall" is water falling from height.' },
+        { sentence: 'The glacier is melting.', explanation: '"Glacier" is large ice mass.' },
+        { sentence: 'The wetlands support wildlife.', explanation: '"Wetlands" are water-saturated areas.' },
+        { sentence: 'The plateau is elevated.', explanation: '"Plateau" is flat elevated land.' },
+        { sentence: 'The canyon is deep.', explanation: '"Canyon" is deep valley with steep sides.' },
+        { sentence: 'The reef supports marine life.', explanation: '"Reef" is underwater rock/coral formation.' },
+        { sentence: 'The terrain is rugged.', explanation: '"Terrain" is land surface features.' },
+        { sentence: 'The landscape is breathtaking.', explanation: '"Landscape" is visible natural features.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "mountain" and "hill"', correction: '"Mountain" is higher and steeper than "hill"', explanation: 'Mountains are generally over 600m.' },
+        { mistake: 'Using "beach" and "coast" interchangeably', correction: '"Beach" = sandy shore; "coast" = general shoreline', explanation: 'Coast is broader.' },
+        { mistake: 'Confusing "forest" and "jungle"', correction: '"Jungle" is dense tropical forest', explanation: 'Jungle is a type of forest.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ range stretches for hundreds of kilometers.', type: 'fill-blank' },
+        { question: 'Which term describes a dry, sandy region?', options: ['Desert', 'Wetlands', 'Valley', 'Plateau'], type: 'multiple-choice' },
+        { question: 'Describe a natural landscape you have visited.', type: 'rewrite' },
+        { question: 'The _____ is melting due to climate change.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'mountain',
+        'Desert',
+        'I visited a beautiful coastline with sandy beaches and dramatic cliffs overlooking the ocean.',
+        'glacier'
+      ],
+      quickRecap: 'Key landscape terms: mountain range, valley, coastline, forest, desert, river, lake, waterfall, glacier, wetlands, plateau, canyon, reef, terrain, landscape. Use these for describing natural features!',
+      collocations: [
+        'mountain range', 'river valley', 'rocky coastline', 'dense forest',
+        'arid desert', 'flowing river', 'pristine lake', 'spectacular waterfall',
+        'melting glacier', 'coastal wetlands', 'high plateau', 'deep canyon'
+      ],
+      synonyms: [
+        { word: 'mountain', synonyms: ['peak', 'summit', 'mount', 'highland'] },
+        { word: 'forest', synonyms: ['woodland', 'woods', 'jungle', 'grove'] },
+        { word: 'landscape', synonyms: ['scenery', 'terrain', 'countryside', 'vista'] }
+      ],
+      speakingLines: [
+        'The mountain range offers spectacular views.',
+        'The coastline is one of the most beautiful in the country.',
+        'Glaciers are melting at an alarming rate.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-nature-3',
+    title: 'Weather & Climate Vocabulary',
+    slug: 'weather-climate-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Nature',
+    description: 'Vocabulary for discussing weather patterns and climate.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-03-09T10:00:00Z',
+    updated_at: '2025-03-09T10:00:00Z',
+    content: {
+      title: 'Weather & Climate Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 weather vocabulary words',
+        'Discuss climate patterns',
+        'Describe weather conditions'
+      ],
+      coreExplanation: `Weather and climate vocabulary is essential for IELTS topics about environment and daily life. This lesson covers terms for discussing weather patterns and climate.
+
+Understanding these terms helps you discuss weather and climate topics effectively.`,
+      examples: [
+        { sentence: 'The climate is changing rapidly.', explanation: '"Climate" is long-term weather patterns.' },
+        { sentence: 'The weather is unpredictable.', explanation: '"Weather" is daily atmospheric conditions.' },
+        { sentence: 'Temperatures are rising globally.', explanation: '"Temperatures" are heat levels.' },
+        { sentence: 'Precipitation has increased.', explanation: '"Precipitation" is rain, snow, etc.' },
+        { sentence: 'Humidity makes it feel hotter.', explanation: '"Humidity" is moisture in air.' },
+        { sentence: 'The drought lasted months.', explanation: '"Drought" is prolonged dry period.' },
+        { sentence: 'Flooding caused damage.', explanation: '"Flooding" is water overflow.' },
+        { sentence: 'The storm was severe.', explanation: '"Storm" is violent weather.' },
+        { sentence: 'Seasonal variations are normal.', explanation: '"Seasonal" relates to seasons.' },
+        { sentence: 'The forecast predicts rain.', explanation: '"Forecast" is weather prediction.' },
+        { sentence: 'Extreme weather is increasing.', explanation: '"Extreme weather" is severe conditions.' },
+        { sentence: 'The heatwave was dangerous.', explanation: '"Heatwave" is period of very hot weather.' },
+        { sentence: 'Monsoon rains are heavy.', explanation: '"Monsoon" is seasonal wind/rain.' },
+        { sentence: 'The atmosphere is warming.', explanation: '"Atmosphere" is air surrounding Earth.' },
+        { sentence: 'Weather patterns are shifting.', explanation: '"Patterns" are regular occurrences.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "weather" and "climate"', correction: '"Weather" = daily; "climate" = long-term average', explanation: 'Climate is weather over time.' },
+        { mistake: 'Using "hot" for all warm weather', correction: 'Use "warm", "mild", "hot", "scorching" for different levels', explanation: 'Vary your vocabulary.' },
+        { mistake: 'Confusing "rain" and "precipitation"', correction: '"Precipitation" includes rain, snow, sleet, hail', explanation: 'Precipitation is broader.' }
+      ],
+      miniPractice: [
+        { question: '_____ is the long-term pattern of weather in an area.', type: 'fill-blank' },
+        { question: 'Which term means a prolonged period without rain?', options: ['Drought', 'Flooding', 'Monsoon', 'Heatwave'], type: 'multiple-choice' },
+        { question: 'Describe the climate in your country.', type: 'rewrite' },
+        { question: 'Extreme _____ events are becoming more common.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Climate',
+        'Drought',
+        'My country has a tropical climate with high humidity, distinct wet and dry seasons, and occasional monsoon rains.',
+        'weather'
+      ],
+      quickRecap: 'Key weather terms: climate, weather, temperatures, precipitation, humidity, drought, flooding, storm, seasonal, forecast, extreme weather, heatwave, monsoon, atmosphere, patterns. Use these for weather and climate topics!',
+      collocations: [
+        'climate change', 'weather conditions', 'rising temperatures', 'heavy precipitation',
+        'high humidity', 'severe drought', 'flash flooding', 'tropical storm',
+        'seasonal variations', 'weather forecast', 'extreme weather', 'summer heatwave'
+      ],
+      synonyms: [
+        { word: 'weather', synonyms: ['conditions', 'climate', 'elements', 'atmosphere'] },
+        { word: 'storm', synonyms: ['tempest', 'gale', 'squall', 'cyclone'] },
+        { word: 'drought', synonyms: ['dry spell', 'aridity', 'dryness', 'water shortage'] }
+      ],
+      speakingLines: [
+        'Climate change is affecting weather patterns globally.',
+        'Extreme weather events are becoming more frequent.',
+        'The weather in my country is quite unpredictable.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-nature-4',
+    title: 'Plants & Vegetation Vocabulary',
+    slug: 'plants-vegetation-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Nature',
+    description: 'Vocabulary for discussing plants, trees, and vegetation.',
+    is_premium: true,
+    is_published: true,
+    view_count: 680,
+    created_at: '2025-03-10T10:00:00Z',
+    updated_at: '2025-03-10T10:00:00Z',
+    content: {
+      title: 'Plants & Vegetation Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 plant vocabulary words',
+        'Discuss vegetation types',
+        'Describe plant life'
+      ],
+      coreExplanation: `Plant vocabulary is useful for IELTS topics about environment, agriculture, and nature. This lesson covers terms for discussing plants and vegetation.
+
+Understanding these terms helps you discuss plant-related topics effectively.`,
+      examples: [
+        { sentence: 'Vegetation covers the hillside.', explanation: '"Vegetation" is plant life in an area.' },
+        { sentence: 'The flora is diverse.', explanation: '"Flora" is plants of a region.' },
+        { sentence: 'Trees provide oxygen.', explanation: '"Trees" are large woody plants.' },
+        { sentence: 'Crops are harvested annually.', explanation: '"Crops" are cultivated plants.' },
+        { sentence: 'The soil is fertile.', explanation: '"Fertile" means good for growing.' },
+        { sentence: 'Photosynthesis produces oxygen.', explanation: '"Photosynthesis" is plants making food from light.' },
+        { sentence: 'The roots absorb water.', explanation: '"Roots" are underground plant parts.' },
+        { sentence: 'Leaves change color in autumn.', explanation: '"Leaves" are flat green parts.' },
+        { sentence: 'Seeds germinate in spring.', explanation: '"Germinate" means begin to grow.' },
+        { sentence: 'The harvest was abundant.', explanation: '"Harvest" is gathering crops.' },
+        { sentence: 'Organic farming avoids chemicals.', explanation: '"Organic" means without artificial chemicals.' },
+        { sentence: 'Deforestation destroys forests.', explanation: '"Deforestation" is clearing forests.' },
+        { sentence: 'Reforestation restores forests.', explanation: '"Reforestation" is planting new forests.' },
+        { sentence: 'Native plants are adapted.', explanation: '"Native" means originally from the area.' },
+        { sentence: 'The ecosystem depends on plants.', explanation: '"Ecosystem" is community of organisms.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "flora" and "fauna"', correction: '"Flora" = plants; "fauna" = animals', explanation: 'These are opposites.' },
+        { mistake: 'Using "plant" and "tree" interchangeably', correction: '"Tree" is a type of plant', explanation: 'Trees are large woody plants.' },
+        { mistake: 'Confusing "organic" and "natural"', correction: '"Organic" = without chemicals; "natural" = from nature', explanation: 'Organic is more specific.' }
+      ],
+      miniPractice: [
+        { question: '_____ covers large areas of the rainforest.', type: 'fill-blank' },
+        { question: 'Which term means plants of a region?', options: ['Flora', 'Fauna', 'Vegetation', 'Crops'], type: 'multiple-choice' },
+        { question: 'Discuss why forests are important.', type: 'rewrite' },
+        { question: '_____ is the process by which plants make food from sunlight.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Vegetation',
+        'Flora',
+        'Forests are important because they produce oxygen, absorb carbon dioxide, provide habitats, and regulate climate.',
+        'Photosynthesis'
+      ],
+      quickRecap: 'Key plant terms: vegetation, flora, trees, crops, fertile, photosynthesis, roots, leaves, germinate, harvest, organic, deforestation, reforestation, native, ecosystem. Use these for plant and vegetation topics!',
+      collocations: [
+        'dense vegetation', 'native flora', 'tall trees', 'agricultural crops',
+        'fertile soil', 'plant photosynthesis', 'deep roots', 'green leaves',
+        'seeds germinate', 'annual harvest', 'organic farming', 'illegal deforestation'
+      ],
+      synonyms: [
+        { word: 'vegetation', synonyms: ['plants', 'flora', 'greenery', 'foliage'] },
+        { word: 'fertile', synonyms: ['productive', 'rich', 'fruitful', 'abundant'] },
+        { word: 'harvest', synonyms: ['crop', 'yield', 'gathering', 'reaping'] }
+      ],
+      speakingLines: [
+        'Vegetation plays a crucial role in the ecosystem.',
+        'Deforestation is destroying valuable forest habitats.',
+        'Organic farming is becoming increasingly popular.'
+      ]
+    }
   }
 ];
