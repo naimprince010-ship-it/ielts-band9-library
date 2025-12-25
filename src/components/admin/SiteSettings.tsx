@@ -68,13 +68,13 @@ export function SiteSettings() {
         const filePath = `site-assets/${fileName}`;
 
         const { error: uploadError } = await supabase.storage
-          .from('public')
+          .from('site-assets')
           .upload(filePath, file, { upsert: true });
 
         if (uploadError) throw uploadError;
 
         const { data: { publicUrl } } = supabase.storage
-          .from('public')
+          .from('site-assets')
           .getPublicUrl(filePath);
 
       if (type === 'favicon') {
@@ -327,7 +327,7 @@ export function SiteSettings() {
         <CardContent className="text-blue-700 space-y-2">
           <p>1. <strong>Favicon:</strong> Upload a square image (32x32 or 64x64 pixels) in PNG or ICO format.</p>
           <p>2. <strong>OG Image:</strong> Upload a landscape image (1200x630 pixels) for best social media display.</p>
-          <p>3. <strong>Storage:</strong> Images are stored in Supabase storage. Make sure you have created a "public" bucket.</p>
+          <p>3. <strong>Storage:</strong> Images are stored in Supabase storage. Make sure you have created a "site-assets" bucket (public).</p>
           <p>4. <strong>Apply Changes:</strong> After saving, refresh the page to see favicon changes. OG image changes will appear when sharing links.</p>
         </CardContent>
       </Card>
