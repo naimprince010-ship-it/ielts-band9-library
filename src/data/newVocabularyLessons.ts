@@ -5534,5 +5534,1233 @@ This lesson covers automation, AI impact, and future employment trends. Understa
         'Lifelong learning is essential for adapting to the changing nature of work.'
       ]
     }
+  },
+  // ============================================
+  // BATCH 11: Travel & Tourism (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-travel-2',
+    title: 'Tourism Industry & Hospitality',
+    slug: 'tourism-industry-hospitality',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Travel',
+    description: 'Vocabulary for discussing the tourism industry, hospitality services, and travel business.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2024-09-01T10:00:00Z',
+    updated_at: '2024-09-01T10:00:00Z',
+    content: {
+      title: 'Tourism Industry & Hospitality',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 tourism industry terms',
+        'Discuss hospitality services',
+        'Use travel business vocabulary'
+      ],
+      coreExplanation: `Tourism and hospitality are common IELTS topics. To achieve Band 7+, you need vocabulary that allows you to discuss the travel industry and its impacts.
+
+This lesson covers tourism industry, hospitality services, and travel business. Understanding these concepts helps you discuss travel-related topics effectively.`,
+      examples: [
+        { sentence: 'The tourism industry contributes significantly to many economies.', explanation: '"Tourism industry" is the business of travel and hospitality.' },
+        { sentence: 'Hospitality services include accommodation and dining.', explanation: '"Hospitality services" are services for travelers.' },
+        { sentence: 'Tourist destinations attract visitors from around the world.', explanation: '"Tourist destinations" are places people visit.' },
+        { sentence: 'Sustainable tourism minimizes environmental impact.', explanation: '"Sustainable tourism" is environmentally responsible travel.' },
+        { sentence: 'Ecotourism focuses on natural environments.', explanation: '"Ecotourism" is nature-based tourism.' },
+        { sentence: 'Cultural tourism explores heritage and traditions.', explanation: '"Cultural tourism" is travel for cultural experiences.' },
+        { sentence: 'Mass tourism involves large numbers of visitors.', explanation: '"Mass tourism" is high-volume tourism.' },
+        { sentence: 'Tourism revenue supports local economies.', explanation: '"Tourism revenue" is income from tourism.' },
+        { sentence: 'Travel agencies arrange trips for customers.', explanation: '"Travel agencies" are businesses organizing travel.' },
+        { sentence: 'Accommodation options range from hotels to hostels.', explanation: '"Accommodation" is places to stay.' },
+        { sentence: 'Tourist attractions draw visitors to destinations.', explanation: '"Tourist attractions" are places of interest.' },
+        { sentence: 'Overtourism damages popular destinations.', explanation: '"Overtourism" is excessive tourism.' },
+        { sentence: 'Heritage sites preserve historical significance.', explanation: '"Heritage sites" are historically important places.' },
+        { sentence: 'Tourism infrastructure includes transportation and facilities.', explanation: '"Tourism infrastructure" is facilities supporting tourism.' },
+        { sentence: 'Seasonal tourism fluctuates throughout the year.', explanation: '"Seasonal tourism" varies by time of year.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Tourism is always good for local communities.', correction: 'Tourism brings both benefits and challenges, including economic opportunities and potential environmental or cultural impacts.', explanation: 'Present balanced views on tourism.' },
+        { mistake: 'All tourists are the same.', correction: 'Tourism encompasses diverse types including cultural, adventure, eco, and mass tourism, each with different impacts.', explanation: 'Distinguish tourism types.' },
+        { mistake: 'More tourists is always better.', correction: 'Overtourism can damage destinations, requiring sustainable approaches to visitor management.', explanation: 'Discuss tourism sustainability.' }
+      ],
+      miniPractice: [
+        { question: 'The tourism _____ contributes significantly to many economies.', type: 'fill-blank' },
+        { question: 'Which term describes environmentally responsible travel?', options: ['sustainable tourism', 'ecotourism', 'green tourism', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Too many tourists ruin places."', type: 'rewrite' },
+        { question: '_____ services include accommodation and dining.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'industry',
+        'all of the above',
+        'Overtourism can negatively impact popular destinations, requiring sustainable visitor management.',
+        'Hospitality'
+      ],
+      quickRecap: 'Key terms: "tourism industry", "hospitality services", "tourist destinations", "sustainable tourism", "ecotourism", "cultural tourism", "mass tourism", "tourism revenue", "overtourism", "heritage sites". Use tourism vocabulary accurately!',
+      collocations: [
+        'tourism industry', 'hospitality services', 'tourist destinations', 'sustainable tourism',
+        'ecotourism', 'cultural tourism', 'mass tourism', 'tourism revenue',
+        'travel agencies', 'accommodation options', 'tourist attractions', 'heritage sites'
+      ],
+      synonyms: [
+        { word: 'tourist', synonyms: ['visitor', 'traveler', 'vacationer', 'holidaymaker'] },
+        { word: 'trip', synonyms: ['journey', 'vacation', 'holiday', 'excursion'] },
+        { word: 'visit', synonyms: ['tour', 'explore', 'see', 'experience'] }
+      ],
+      speakingLines: [
+        'The tourism industry is a major contributor to many national economies.',
+        'Sustainable tourism aims to minimize environmental and cultural impacts.',
+        'Overtourism has become a significant challenge for popular destinations.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-travel-3',
+    title: 'Transportation & Getting Around',
+    slug: 'transportation-getting-around',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Travel',
+    description: 'Vocabulary for discussing transportation modes, travel logistics, and getting around.',
+    is_premium: false,
+    is_published: true,
+    view_count: 920,
+    created_at: '2024-09-05T10:00:00Z',
+    updated_at: '2024-09-05T10:00:00Z',
+    content: {
+      title: 'Transportation & Getting Around',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 transportation terms',
+        'Discuss travel logistics',
+        'Use transport vocabulary'
+      ],
+      coreExplanation: `Transportation is essential for discussing travel and urban life. To achieve Band 7+, you need vocabulary that allows you to discuss various modes of transport and travel logistics.
+
+This lesson covers transportation modes, travel logistics, and getting around. Understanding these concepts helps you discuss travel and mobility effectively.`,
+      examples: [
+        { sentence: 'Public transportation includes buses, trains, and metros.', explanation: '"Public transportation" is shared transport services.' },
+        { sentence: 'Air travel has made international journeys accessible.', explanation: '"Air travel" is traveling by airplane.' },
+        { sentence: 'Commuting involves regular travel to work.', explanation: '"Commuting" is traveling between home and work.' },
+        { sentence: 'Traffic congestion affects urban mobility.', explanation: '"Traffic congestion" is crowded roads.' },
+        { sentence: 'Sustainable transport reduces environmental impact.', explanation: '"Sustainable transport" is eco-friendly transportation.' },
+        { sentence: 'High-speed rail connects major cities efficiently.', explanation: '"High-speed rail" is fast train services.' },
+        { sentence: 'Ride-sharing services offer flexible transportation.', explanation: '"Ride-sharing" is shared vehicle services.' },
+        { sentence: 'Cycling infrastructure supports bike travel.', explanation: '"Cycling infrastructure" is facilities for bicycles.' },
+        { sentence: 'Flight delays disrupt travel plans.', explanation: '"Flight delays" are late departures.' },
+        { sentence: 'Border crossings require documentation.', explanation: '"Border crossings" are passages between countries.' },
+        { sentence: 'Luggage allowances vary by airline.', explanation: '"Luggage allowances" are baggage limits.' },
+        { sentence: 'Transit hubs connect different transport modes.', explanation: '"Transit hubs" are transportation connection points.' },
+        { sentence: 'Electric vehicles reduce transport emissions.', explanation: '"Electric vehicles" are battery-powered cars.' },
+        { sentence: 'Navigation apps guide travelers.', explanation: '"Navigation apps" are direction-finding software.' },
+        { sentence: 'Travel itineraries plan trip details.', explanation: '"Travel itineraries" are trip schedules.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Cars are the best way to travel.', correction: 'Different transportation modes suit different contexts, with trade-offs between convenience, cost, and environmental impact.', explanation: 'Compare transport modes objectively.' },
+        { mistake: 'Public transport is inconvenient.', correction: 'Public transportation effectiveness varies by location, with well-designed systems offering efficient alternatives to private vehicles.', explanation: 'Acknowledge transport system variation.' },
+        { mistake: 'Flying is always faster.', correction: 'For shorter distances, high-speed rail or driving may be faster when accounting for airport procedures.', explanation: 'Consider total travel time.' }
+      ],
+      miniPractice: [
+        { question: 'Public _____ includes buses, trains, and metros.', type: 'fill-blank' },
+        { question: 'Which term describes crowded roads?', options: ['traffic congestion', 'traffic jam', 'gridlock', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "I take the bus to work every day."', type: 'rewrite' },
+        { question: 'High-speed _____ connects major cities efficiently.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'transportation',
+        'all of the above',
+        'I commute to work daily using public transportation.',
+        'rail'
+      ],
+      quickRecap: 'Key terms: "public transportation", "air travel", "commuting", "traffic congestion", "sustainable transport", "high-speed rail", "ride-sharing", "cycling infrastructure", "transit hubs", "electric vehicles". Use transport vocabulary accurately!',
+      collocations: [
+        'public transportation', 'air travel', 'commuting', 'traffic congestion',
+        'sustainable transport', 'high-speed rail', 'ride-sharing', 'cycling infrastructure',
+        'flight delays', 'border crossings', 'transit hubs', 'electric vehicles'
+      ],
+      synonyms: [
+        { word: 'transport', synonyms: ['transportation', 'travel', 'transit', 'conveyance'] },
+        { word: 'car', synonyms: ['vehicle', 'automobile', 'motor vehicle', 'private transport'] },
+        { word: 'travel', synonyms: ['journey', 'commute', 'transit', 'move'] }
+      ],
+      speakingLines: [
+        'Public transportation is essential for sustainable urban mobility.',
+        'Traffic congestion is a major challenge in growing cities.',
+        'Sustainable transport options are increasingly important for reducing emissions.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-travel-4',
+    title: 'Travel Experiences & Adventures',
+    slug: 'travel-experiences-adventures',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Travel',
+    description: 'Vocabulary for discussing travel experiences, adventures, and memorable journeys.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2024-09-08T10:00:00Z',
+    updated_at: '2024-09-08T10:00:00Z',
+    content: {
+      title: 'Travel Experiences & Adventures',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 travel experience terms',
+        'Discuss adventures and journeys',
+        'Use experiential vocabulary'
+      ],
+      coreExplanation: `Travel experiences are common IELTS Speaking topics. To achieve Band 7+, you need vocabulary that allows you to describe journeys and adventures vividly.
+
+This lesson covers travel experiences, adventures, and memorable journeys. Understanding these concepts helps you discuss personal travel stories effectively.`,
+      examples: [
+        { sentence: 'Adventure travel involves exciting and challenging activities.', explanation: '"Adventure travel" is travel for thrilling experiences.' },
+        { sentence: 'Backpacking offers budget-friendly exploration.', explanation: '"Backpacking" is low-cost independent travel.' },
+        { sentence: 'Cultural immersion deepens travel experiences.', explanation: '"Cultural immersion" is engaging deeply with local culture.' },
+        { sentence: 'Scenic routes offer beautiful landscapes.', explanation: '"Scenic routes" are roads with attractive views.' },
+        { sentence: 'Off-the-beaten-path destinations avoid crowds.', explanation: '"Off-the-beaten-path" means less visited places.' },
+        { sentence: 'Travel photography captures memorable moments.', explanation: '"Travel photography" is taking pictures while traveling.' },
+        { sentence: 'Local cuisine enhances travel experiences.', explanation: '"Local cuisine" is regional food.' },
+        { sentence: 'Guided tours provide expert information.', explanation: '"Guided tours" are tours led by knowledgeable guides.' },
+        { sentence: 'Solo travel offers independence and self-discovery.', explanation: '"Solo travel" is traveling alone.' },
+        { sentence: 'Travel companions share experiences.', explanation: '"Travel companions" are people you travel with.' },
+        { sentence: 'Bucket list destinations are must-visit places.', explanation: '"Bucket list" is a list of desired experiences.' },
+        { sentence: 'Travel memoirs document journeys.', explanation: '"Travel memoirs" are written accounts of travels.' },
+        { sentence: 'Wanderlust drives the desire to travel.', explanation: '"Wanderlust" is a strong desire to travel.' },
+        { sentence: 'Jet lag affects travelers crossing time zones.', explanation: '"Jet lag" is fatigue from time zone changes.' },
+        { sentence: 'Travel insurance protects against unexpected events.', explanation: '"Travel insurance" is coverage for travel problems.' }
+      ],
+      commonMistakes: [
+        { mistake: 'I went to many places.', correction: 'I explored diverse destinations / experienced various cultures during my travels.', explanation: 'Use more descriptive travel language.' },
+        { mistake: 'The trip was nice.', correction: 'The journey was enriching / memorable / transformative.', explanation: 'Use more specific descriptive vocabulary.' },
+        { mistake: 'I took pictures.', correction: 'I captured memorable moments through travel photography.', explanation: 'Elevate simple descriptions.' }
+      ],
+      miniPractice: [
+        { question: '_____ travel involves exciting and challenging activities.', type: 'fill-blank' },
+        { question: 'Which term describes a strong desire to travel?', options: ['wanderlust', 'travel bug', 'itchy feet', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "I visited a beautiful place."', type: 'rewrite' },
+        { question: 'Cultural _____ deepens travel experiences.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Adventure',
+        'all of the above',
+        'I explored a breathtaking destination with stunning natural scenery.',
+        'immersion'
+      ],
+      quickRecap: 'Key terms: "adventure travel", "backpacking", "cultural immersion", "scenic routes", "off-the-beaten-path", "local cuisine", "guided tours", "solo travel", "bucket list", "wanderlust". Use vivid travel vocabulary!',
+      collocations: [
+        'adventure travel', 'backpacking', 'cultural immersion', 'scenic routes',
+        'off-the-beaten-path', 'travel photography', 'local cuisine', 'guided tours',
+        'solo travel', 'travel companions', 'bucket list', 'wanderlust'
+      ],
+      synonyms: [
+        { word: 'beautiful', synonyms: ['stunning', 'breathtaking', 'picturesque', 'spectacular'] },
+        { word: 'interesting', synonyms: ['fascinating', 'captivating', 'intriguing', 'compelling'] },
+        { word: 'fun', synonyms: ['enjoyable', 'exciting', 'thrilling', 'exhilarating'] }
+      ],
+      speakingLines: [
+        'Cultural immersion transforms travel from sightseeing into meaningful experience.',
+        'Adventure travel offers opportunities for personal growth and challenge.',
+        'Off-the-beaten-path destinations often provide more authentic cultural experiences.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-travel-5',
+    title: 'Global Travel & Cross-Cultural Communication',
+    slug: 'global-travel-cross-cultural',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Travel',
+    description: 'Advanced vocabulary for discussing international travel, cultural differences, and global communication.',
+    is_premium: true,
+    is_published: true,
+    view_count: 680,
+    created_at: '2024-09-12T10:00:00Z',
+    updated_at: '2024-09-12T10:00:00Z',
+    content: {
+      title: 'Global Travel & Cross-Cultural Communication',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 cross-cultural terms',
+        'Discuss international travel',
+        'Use cultural communication vocabulary'
+      ],
+      coreExplanation: `Cross-cultural communication is important for discussing international travel. To achieve Band 8+, you need vocabulary that allows you to discuss cultural differences and global communication.
+
+This lesson covers international travel, cultural differences, and cross-cultural communication. Understanding these concepts helps you discuss global travel experiences effectively.`,
+      examples: [
+        { sentence: 'Cross-cultural communication bridges cultural differences.', explanation: '"Cross-cultural communication" is interaction between cultures.' },
+        { sentence: 'Cultural sensitivity respects different customs.', explanation: '"Cultural sensitivity" is awareness of cultural differences.' },
+        { sentence: 'Language barriers can complicate travel.', explanation: '"Language barriers" are communication difficulties due to language.' },
+        { sentence: 'Cultural etiquette varies between countries.', explanation: '"Cultural etiquette" is appropriate behavior in different cultures.' },
+        { sentence: 'Global citizenship embraces international perspectives.', explanation: '"Global citizenship" is identifying with the world community.' },
+        { sentence: 'Cultural stereotypes oversimplify complex societies.', explanation: '"Cultural stereotypes" are oversimplified cultural beliefs.' },
+        { sentence: 'Intercultural competence enables effective communication.', explanation: '"Intercultural competence" is ability to communicate across cultures.' },
+        { sentence: 'Cultural shock affects travelers in unfamiliar environments.', explanation: '"Cultural shock" is disorientation in new cultures.' },
+        { sentence: 'Local customs should be respected by visitors.', explanation: '"Local customs" are traditional practices.' },
+        { sentence: 'Cultural exchange benefits both visitors and hosts.', explanation: '"Cultural exchange" is sharing between cultures.' },
+        { sentence: 'Travel broadens perspectives and understanding.', explanation: '"Broadens perspectives" means expanding viewpoints.' },
+        { sentence: 'Cultural adaptation involves adjusting to new environments.', explanation: '"Cultural adaptation" is adjusting to different cultures.' },
+        { sentence: 'International etiquette guides appropriate behavior.', explanation: '"International etiquette" is proper conduct globally.' },
+        { sentence: 'Cultural awareness prevents misunderstandings.', explanation: '"Cultural awareness" is understanding cultural differences.' },
+        { sentence: 'Respectful tourism honors local traditions.', explanation: '"Respectful tourism" is culturally sensitive travel.' }
+      ],
+      commonMistakes: [
+        { mistake: 'All people from [country] are the same.', correction: 'Cultural generalizations oversimplify diverse societies with significant internal variation.', explanation: 'Avoid cultural stereotypes.' },
+        { mistake: 'My culture is normal; others are strange.', correction: 'Cultural practices vary globally, with different approaches to social norms and customs.', explanation: 'Recognize cultural relativity.' },
+        { mistake: 'Everyone should speak English.', correction: 'Language diversity is valuable, and travelers benefit from learning basic local phrases.', explanation: 'Respect linguistic diversity.' }
+      ],
+      miniPractice: [
+        { question: 'Cross-cultural _____ bridges cultural differences.', type: 'fill-blank' },
+        { question: 'Which term describes disorientation in new cultures?', options: ['cultural shock', 'culture shock', 'cultural disorientation', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Their customs are weird."', type: 'rewrite' },
+        { question: 'Cultural _____ respects different customs.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'communication',
+        'all of the above',
+        'Their cultural practices differ from what I am accustomed to.',
+        'sensitivity'
+      ],
+      quickRecap: 'Key terms: "cross-cultural communication", "cultural sensitivity", "language barriers", "cultural etiquette", "global citizenship", "intercultural competence", "cultural shock", "cultural exchange", "cultural adaptation", "cultural awareness". Use respectful cross-cultural vocabulary!',
+      collocations: [
+        'cross-cultural communication', 'cultural sensitivity', 'language barriers', 'cultural etiquette',
+        'global citizenship', 'cultural stereotypes', 'intercultural competence', 'cultural shock',
+        'local customs', 'cultural exchange', 'cultural adaptation', 'cultural awareness'
+      ],
+      synonyms: [
+        { word: 'different', synonyms: ['diverse', 'varied', 'distinct', 'unique'] },
+        { word: 'strange', synonyms: ['unfamiliar', 'different', 'foreign', 'novel'] },
+        { word: 'respect', synonyms: ['honor', 'appreciate', 'value', 'acknowledge'] }
+      ],
+      speakingLines: [
+        'Cross-cultural communication skills are essential for meaningful international travel.',
+        'Cultural sensitivity helps travelers avoid misunderstandings and show respect.',
+        'Travel broadens perspectives by exposing us to different ways of life.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 12: Arts & Entertainment (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-arts-2',
+    title: 'Visual Arts & Museums',
+    slug: 'visual-arts-museums',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Arts',
+    description: 'Vocabulary for discussing painting, sculpture, museums, and visual art forms.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2024-09-15T10:00:00Z',
+    updated_at: '2024-09-15T10:00:00Z',
+    content: {
+      title: 'Visual Arts & Museums',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 visual arts terms',
+        'Discuss art and museums',
+        'Use artistic vocabulary'
+      ],
+      coreExplanation: `Visual arts and museums are common IELTS Speaking topics. To achieve Band 7+, you need vocabulary that allows you to discuss art forms and cultural institutions.
+
+This lesson covers visual arts, museums, and artistic expression. Understanding these concepts helps you discuss art-related topics effectively.`,
+      examples: [
+        { sentence: 'Contemporary art reflects modern society.', explanation: '"Contemporary art" is art from the present era.' },
+        { sentence: 'Art galleries display works for public viewing.', explanation: '"Art galleries" are spaces exhibiting art.' },
+        { sentence: 'Abstract art does not represent reality directly.', explanation: '"Abstract art" is non-representational art.' },
+        { sentence: 'Art exhibitions showcase collections.', explanation: '"Art exhibitions" are organized displays of art.' },
+        { sentence: 'Sculpture creates three-dimensional forms.', explanation: '"Sculpture" is 3D artistic work.' },
+        { sentence: 'Art appreciation develops through exposure.', explanation: '"Art appreciation" is understanding and enjoying art.' },
+        { sentence: 'Museums preserve cultural heritage.', explanation: '"Museums" are institutions housing collections.' },
+        { sentence: 'Artistic expression conveys emotions and ideas.', explanation: '"Artistic expression" is communicating through art.' },
+        { sentence: 'Art movements share common characteristics.', explanation: '"Art movements" are styles shared by artists.' },
+        { sentence: 'Curators organize museum collections.', explanation: '"Curators" are people managing collections.' },
+        { sentence: 'Art criticism analyzes and evaluates works.', explanation: '"Art criticism" is professional art analysis.' },
+        { sentence: 'Visual aesthetics concern beauty and appearance.', explanation: '"Visual aesthetics" is the study of visual beauty.' },
+        { sentence: 'Art restoration preserves damaged works.', explanation: '"Art restoration" is repairing artworks.' },
+        { sentence: 'Installation art creates immersive environments.', explanation: '"Installation art" is art designed for specific spaces.' },
+        { sentence: 'Art patronage supports artists financially.', explanation: '"Art patronage" is financial support for artists.' }
+      ],
+      commonMistakes: [
+        { mistake: 'I don\'t understand modern art.', correction: 'Contemporary art often challenges traditional aesthetics, inviting viewers to engage with new perspectives.', explanation: 'Discuss art openly.' },
+        { mistake: 'Art is just decoration.', correction: 'Art serves multiple functions including cultural expression, social commentary, and aesthetic experience.', explanation: 'Recognize art\'s diverse purposes.' },
+        { mistake: 'Good art is realistic.', correction: 'Artistic value encompasses various styles and approaches, from realism to abstraction.', explanation: 'Acknowledge diverse artistic styles.' }
+      ],
+      miniPractice: [
+        { question: '_____ art reflects modern society.', type: 'fill-blank' },
+        { question: 'Which term describes non-representational art?', options: ['abstract art', 'modern art', 'conceptual art', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "I saw some nice paintings."', type: 'rewrite' },
+        { question: 'Art _____ display works for public viewing.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Contemporary',
+        'abstract art',
+        'I viewed an impressive collection of paintings at the gallery.',
+        'galleries'
+      ],
+      quickRecap: 'Key terms: "contemporary art", "art galleries", "abstract art", "art exhibitions", "sculpture", "art appreciation", "museums", "artistic expression", "art movements", "curators". Use artistic vocabulary accurately!',
+      collocations: [
+        'contemporary art', 'art galleries', 'abstract art', 'art exhibitions',
+        'sculpture', 'art appreciation', 'museums', 'artistic expression',
+        'art movements', 'curators', 'art criticism', 'installation art'
+      ],
+      synonyms: [
+        { word: 'art', synonyms: ['artwork', 'piece', 'creation', 'work'] },
+        { word: 'beautiful', synonyms: ['aesthetic', 'striking', 'visually appealing', 'captivating'] },
+        { word: 'display', synonyms: ['exhibit', 'showcase', 'present', 'feature'] }
+      ],
+      speakingLines: [
+        'Museums play a vital role in preserving and sharing cultural heritage.',
+        'Contemporary art often challenges viewers to engage with new perspectives.',
+        'Art appreciation develops through exposure to diverse artistic styles and movements.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-arts-3',
+    title: 'Music & Performance',
+    slug: 'music-performance',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Arts',
+    description: 'Vocabulary for discussing music genres, performances, and the music industry.',
+    is_premium: true,
+    is_published: true,
+    view_count: 880,
+    created_at: '2024-09-18T10:00:00Z',
+    updated_at: '2024-09-18T10:00:00Z',
+    content: {
+      title: 'Music & Performance',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 music and performance terms',
+        'Discuss music genres and concerts',
+        'Use musical vocabulary'
+      ],
+      coreExplanation: `Music and performance are common IELTS Speaking topics. To achieve Band 7+, you need vocabulary that allows you to discuss music, concerts, and the music industry.
+
+This lesson covers music genres, performances, and the music industry. Understanding these concepts helps you discuss music-related topics effectively.`,
+      examples: [
+        { sentence: 'Music genres include classical, jazz, and pop.', explanation: '"Music genres" are categories of music.' },
+        { sentence: 'Live performances create unique experiences.', explanation: '"Live performances" are real-time musical events.' },
+        { sentence: 'Concert venues host musical events.', explanation: '"Concert venues" are places for performances.' },
+        { sentence: 'Musical instruments produce different sounds.', explanation: '"Musical instruments" are devices for making music.' },
+        { sentence: 'Composers create original musical works.', explanation: '"Composers" are people who write music.' },
+        { sentence: 'Music streaming has transformed consumption.', explanation: '"Music streaming" is online music access.' },
+        { sentence: 'Orchestras perform classical compositions.', explanation: '"Orchestras" are large musical ensembles.' },
+        { sentence: 'Music festivals attract large audiences.', explanation: '"Music festivals" are multi-day musical events.' },
+        { sentence: 'Acoustic performances use non-electric instruments.', explanation: '"Acoustic" means without electronic amplification.' },
+        { sentence: 'Music therapy uses music for healing.', explanation: '"Music therapy" is therapeutic use of music.' },
+        { sentence: 'Record labels produce and distribute music.', explanation: '"Record labels" are music companies.' },
+        { sentence: 'Musical talent develops through practice.', explanation: '"Musical talent" is ability in music.' },
+        { sentence: 'Lyrics convey meaning through words.', explanation: '"Lyrics" are the words of songs.' },
+        { sentence: 'Music appreciation involves understanding styles.', explanation: '"Music appreciation" is understanding and enjoying music.' },
+        { sentence: 'Sound quality affects listening experience.', explanation: '"Sound quality" is audio fidelity.' }
+      ],
+      commonMistakes: [
+        { mistake: 'I like good music.', correction: 'I enjoy various genres including [specific types] / I appreciate music that [specific qualities].', explanation: 'Be specific about musical preferences.' },
+        { mistake: 'Classical music is boring.', correction: 'Classical music offers complex compositions that reward attentive listening.', explanation: 'Discuss music genres respectfully.' },
+        { mistake: 'Pop music is not real music.', correction: 'Different genres serve different purposes and appeal to different audiences.', explanation: 'Acknowledge diverse musical value.' }
+      ],
+      miniPractice: [
+        { question: 'Music _____ include classical, jazz, and pop.', type: 'fill-blank' },
+        { question: 'Which term describes real-time musical events?', options: ['live performances', 'concerts', 'gigs', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "I like listening to music."', type: 'rewrite' },
+        { question: 'Music _____ has transformed consumption.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'genres',
+        'all of the above',
+        'I enjoy listening to various music genres, particularly [specific type].',
+        'streaming'
+      ],
+      quickRecap: 'Key terms: "music genres", "live performances", "concert venues", "musical instruments", "composers", "music streaming", "orchestras", "music festivals", "acoustic", "music therapy". Use musical vocabulary accurately!',
+      collocations: [
+        'music genres', 'live performances', 'concert venues', 'musical instruments',
+        'composers', 'music streaming', 'orchestras', 'music festivals',
+        'acoustic performances', 'music therapy', 'record labels', 'music appreciation'
+      ],
+      synonyms: [
+        { word: 'music', synonyms: ['melody', 'tune', 'composition', 'piece'] },
+        { word: 'sing', synonyms: ['perform', 'vocalize', 'render', 'interpret'] },
+        { word: 'play', synonyms: ['perform', 'execute', 'render', 'interpret'] }
+      ],
+      speakingLines: [
+        'Live performances create unique experiences that recordings cannot replicate.',
+        'Music streaming has fundamentally changed how people discover and consume music.',
+        'Music appreciation develops through exposure to diverse genres and styles.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-arts-4',
+    title: 'Literature & Writing',
+    slug: 'literature-writing',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Arts',
+    description: 'Vocabulary for discussing books, literature, and creative writing.',
+    is_premium: true,
+    is_published: true,
+    view_count: 750,
+    created_at: '2024-09-22T10:00:00Z',
+    updated_at: '2024-09-22T10:00:00Z',
+    content: {
+      title: 'Literature & Writing',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 literature terms',
+        'Discuss books and writing',
+        'Use literary vocabulary'
+      ],
+      coreExplanation: `Literature and writing are common IELTS Speaking topics. To achieve Band 7+, you need vocabulary that allows you to discuss books, authors, and literary works.
+
+This lesson covers literature, creative writing, and reading. Understanding these concepts helps you discuss literary topics effectively.`,
+      examples: [
+        { sentence: 'Literary genres include fiction, poetry, and drama.', explanation: '"Literary genres" are categories of literature.' },
+        { sentence: 'Novels tell extended fictional stories.', explanation: '"Novels" are long fictional narratives.' },
+        { sentence: 'Authors create written works.', explanation: '"Authors" are writers of books.' },
+        { sentence: 'Plot development drives narrative forward.', explanation: '"Plot development" is story progression.' },
+        { sentence: 'Character development reveals personalities.', explanation: '"Character development" is how characters evolve.' },
+        { sentence: 'Literary analysis examines texts critically.', explanation: '"Literary analysis" is critical examination of literature.' },
+        { sentence: 'Poetry uses language artistically.', explanation: '"Poetry" is artistic literary expression.' },
+        { sentence: 'Bestsellers achieve high sales.', explanation: '"Bestsellers" are popular books.' },
+        { sentence: 'Book reviews evaluate literary works.', explanation: '"Book reviews" are assessments of books.' },
+        { sentence: 'Creative writing expresses imagination.', explanation: '"Creative writing" is imaginative writing.' },
+        { sentence: 'Literary themes explore universal ideas.', explanation: '"Literary themes" are central ideas in works.' },
+        { sentence: 'Publishing industry produces books.', explanation: '"Publishing industry" is the book business.' },
+        { sentence: 'Reading habits vary by individual.', explanation: '"Reading habits" are patterns of reading.' },
+        { sentence: 'Classic literature endures over time.', explanation: '"Classic literature" is enduring literary works.' },
+        { sentence: 'Narrative techniques shape storytelling.', explanation: '"Narrative techniques" are storytelling methods.' }
+      ],
+      commonMistakes: [
+        { mistake: 'I don\'t read books.', correction: 'While I don\'t read extensively, I engage with written content through [alternatives like articles, blogs, etc.].', explanation: 'Discuss reading habits constructively.' },
+        { mistake: 'The book was good.', correction: 'The novel featured compelling characters / an engaging plot / thought-provoking themes.', explanation: 'Use specific literary vocabulary.' },
+        { mistake: 'Old books are boring.', correction: 'Classic literature offers insights into different eras and enduring human themes.', explanation: 'Discuss classics respectfully.' }
+      ],
+      miniPractice: [
+        { question: 'Literary _____ include fiction, poetry, and drama.', type: 'fill-blank' },
+        { question: 'Which term describes long fictional narratives?', options: ['novels', 'stories', 'tales', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "I read a good book."', type: 'rewrite' },
+        { question: 'Plot _____ drives narrative forward.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'genres',
+        'novels',
+        'I read an engaging novel with compelling characters and a thought-provoking plot.',
+        'development'
+      ],
+      quickRecap: 'Key terms: "literary genres", "novels", "authors", "plot development", "character development", "literary analysis", "poetry", "bestsellers", "creative writing", "literary themes". Use literary vocabulary accurately!',
+      collocations: [
+        'literary genres', 'novels', 'authors', 'plot development',
+        'character development', 'literary analysis', 'poetry', 'bestsellers',
+        'book reviews', 'creative writing', 'literary themes', 'classic literature'
+      ],
+      synonyms: [
+        { word: 'book', synonyms: ['novel', 'work', 'publication', 'volume'] },
+        { word: 'write', synonyms: ['compose', 'author', 'pen', 'craft'] },
+        { word: 'read', synonyms: ['peruse', 'study', 'engage with', 'consume'] }
+      ],
+      speakingLines: [
+        'Literature offers insights into human experience across different cultures and eras.',
+        'Character development is essential for creating engaging and memorable stories.',
+        'Reading habits have evolved with digital technology and changing lifestyles.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-arts-5',
+    title: 'Film & Cinema',
+    slug: 'film-cinema',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Arts',
+    description: 'Vocabulary for discussing movies, filmmaking, and the cinema industry.',
+    is_premium: true,
+    is_published: true,
+    view_count: 920,
+    created_at: '2024-09-25T10:00:00Z',
+    updated_at: '2024-09-25T10:00:00Z',
+    content: {
+      title: 'Film & Cinema',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 film and cinema terms',
+        'Discuss movies and filmmaking',
+        'Use cinematic vocabulary'
+      ],
+      coreExplanation: `Film and cinema are common IELTS Speaking topics. To achieve Band 7+, you need vocabulary that allows you to discuss movies, directors, and the film industry.
+
+This lesson covers film, cinema, and the movie industry. Understanding these concepts helps you discuss film-related topics effectively.`,
+      examples: [
+        { sentence: 'Film genres include drama, comedy, and thriller.', explanation: '"Film genres" are categories of movies.' },
+        { sentence: 'Directors guide the creative vision of films.', explanation: '"Directors" are people who direct movies.' },
+        { sentence: 'Cinematography creates visual storytelling.', explanation: '"Cinematography" is the art of filming.' },
+        { sentence: 'Box office success measures commercial performance.', explanation: '"Box office" is ticket sales revenue.' },
+        { sentence: 'Film critics review and analyze movies.', explanation: '"Film critics" are professional movie reviewers.' },
+        { sentence: 'Special effects enhance visual experiences.', explanation: '"Special effects" are visual or audio enhancements.' },
+        { sentence: 'Screenplays provide the written basis for films.', explanation: '"Screenplays" are scripts for movies.' },
+        { sentence: 'Film festivals showcase new works.', explanation: '"Film festivals" are events featuring movies.' },
+        { sentence: 'Acting performances bring characters to life.', explanation: '"Acting performances" are actors\' portrayals.' },
+        { sentence: 'Film soundtracks enhance emotional impact.', explanation: '"Soundtracks" are music accompanying films.' },
+        { sentence: 'Documentary films present factual content.', explanation: '"Documentary films" are non-fiction movies.' },
+        { sentence: 'Film production involves many stages.', explanation: '"Film production" is the process of making movies.' },
+        { sentence: 'Movie theaters provide communal viewing.', explanation: '"Movie theaters" are cinemas.' },
+        { sentence: 'Film adaptations transform books into movies.', explanation: '"Film adaptations" are movies based on other works.' },
+        { sentence: 'Independent films operate outside major studios.', explanation: '"Independent films" are non-studio productions.' }
+      ],
+      commonMistakes: [
+        { mistake: 'The movie was good.', correction: 'The film featured compelling performances / stunning cinematography / an engaging narrative.', explanation: 'Use specific film vocabulary.' },
+        { mistake: 'I like action movies.', correction: 'I enjoy action films for their dynamic pacing and visual spectacle.', explanation: 'Explain preferences with detail.' },
+        { mistake: 'Old movies are boring.', correction: 'Classic films offer insights into different eras of filmmaking and storytelling.', explanation: 'Discuss film history respectfully.' }
+      ],
+      miniPractice: [
+        { question: 'Film _____ include drama, comedy, and thriller.', type: 'fill-blank' },
+        { question: 'Which term describes the art of filming?', options: ['cinematography', 'photography', 'videography', 'filmography'], type: 'multiple-choice' },
+        { question: 'Rewrite: "I watched a good movie."', type: 'rewrite' },
+        { question: '_____ guide the creative vision of films.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'genres',
+        'cinematography',
+        'I viewed an engaging film with compelling performances and stunning cinematography.',
+        'Directors'
+      ],
+      quickRecap: 'Key terms: "film genres", "directors", "cinematography", "box office", "film critics", "special effects", "screenplays", "film festivals", "soundtracks", "documentary films". Use cinematic vocabulary accurately!',
+      collocations: [
+        'film genres', 'directors', 'cinematography', 'box office',
+        'film critics', 'special effects', 'screenplays', 'film festivals',
+        'acting performances', 'soundtracks', 'documentary films', 'independent films'
+      ],
+      synonyms: [
+        { word: 'movie', synonyms: ['film', 'picture', 'motion picture', 'feature'] },
+        { word: 'watch', synonyms: ['view', 'see', 'screen', 'catch'] },
+        { word: 'actor', synonyms: ['performer', 'star', 'lead', 'cast member'] }
+      ],
+      speakingLines: [
+        'Cinematography is essential for creating the visual language of a film.',
+        'Film festivals provide platforms for independent and international cinema.',
+        'Documentary films offer powerful ways to explore real-world issues.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 13: Sports & Recreation (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-sports-2',
+    title: 'Team Sports & Competition',
+    slug: 'team-sports-competition',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Sports',
+    description: 'Vocabulary for discussing team sports, competitions, and athletic events.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2024-09-28T10:00:00Z',
+    updated_at: '2024-09-28T10:00:00Z',
+    content: {
+      title: 'Team Sports & Competition',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 team sports terms',
+        'Discuss competitions and events',
+        'Use sports vocabulary'
+      ],
+      coreExplanation: `Team sports and competition are common IELTS Speaking topics. To achieve Band 7+, you need vocabulary that allows you to discuss sports events and athletic competition.
+
+This lesson covers team sports, competitions, and athletic events. Understanding these concepts helps you discuss sports-related topics effectively.`,
+      examples: [
+        { sentence: 'Team sports require collaboration and coordination.', explanation: '"Team sports" are sports played by groups.' },
+        { sentence: 'Athletic competitions test physical abilities.', explanation: '"Athletic competitions" are sporting contests.' },
+        { sentence: 'Professional athletes train intensively.', explanation: '"Professional athletes" are paid sports players.' },
+        { sentence: 'Sports leagues organize competitive seasons.', explanation: '"Sports leagues" are organized competition systems.' },
+        { sentence: 'Championship tournaments determine winners.', explanation: '"Championship tournaments" are competitions for titles.' },
+        { sentence: 'Teamwork is essential for success.', explanation: '"Teamwork" is collaborative effort.' },
+        { sentence: 'Coaching develops athletic skills.', explanation: '"Coaching" is training and guidance.' },
+        { sentence: 'Sports fans support their teams.', explanation: '"Sports fans" are enthusiastic supporters.' },
+        { sentence: 'Athletic performance depends on training.', explanation: '"Athletic performance" is sports achievement.' },
+        { sentence: 'Sports venues host competitions.', explanation: '"Sports venues" are places for sporting events.' },
+        { sentence: 'Sportsmanship involves fair play.', explanation: '"Sportsmanship" is ethical behavior in sports.' },
+        { sentence: 'Sports injuries require proper treatment.', explanation: '"Sports injuries" are injuries from athletics.' },
+        { sentence: 'Spectator sports attract large audiences.', explanation: '"Spectator sports" are sports watched by audiences.' },
+        { sentence: 'Athletic scholarships support student athletes.', explanation: '"Athletic scholarships" are sports-based financial aid.' },
+        { sentence: 'Sports broadcasting reaches global audiences.', explanation: '"Sports broadcasting" is media coverage of sports.' }
+      ],
+      commonMistakes: [
+        { mistake: 'My team won.', correction: 'My team secured victory / achieved a decisive win in the championship.', explanation: 'Use more descriptive sports language.' },
+        { mistake: 'Sports are just games.', correction: 'Sports serve multiple functions including physical fitness, social bonding, and cultural expression.', explanation: 'Recognize sports\' broader significance.' },
+        { mistake: 'Professional athletes are overpaid.', correction: 'Professional athlete compensation reflects market dynamics in the sports entertainment industry.', explanation: 'Discuss sports economics analytically.' }
+      ],
+      miniPractice: [
+        { question: 'Team _____ require collaboration and coordination.', type: 'fill-blank' },
+        { question: 'Which term describes ethical behavior in sports?', options: ['sportsmanship', 'fair play', 'good conduct', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "The game was exciting."', type: 'rewrite' },
+        { question: 'Athletic _____ test physical abilities.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'sports',
+        'all of the above',
+        'The match featured intense competition and dramatic moments.',
+        'competitions'
+      ],
+      quickRecap: 'Key terms: "team sports", "athletic competitions", "professional athletes", "sports leagues", "championship tournaments", "teamwork", "coaching", "sportsmanship", "spectator sports", "sports broadcasting". Use sports vocabulary accurately!',
+      collocations: [
+        'team sports', 'athletic competitions', 'professional athletes', 'sports leagues',
+        'championship tournaments', 'teamwork', 'coaching', 'sports fans',
+        'athletic performance', 'sports venues', 'sportsmanship', 'sports broadcasting'
+      ],
+      synonyms: [
+        { word: 'win', synonyms: ['victory', 'triumph', 'success', 'achievement'] },
+        { word: 'lose', synonyms: ['defeat', 'loss', 'setback', 'failure'] },
+        { word: 'play', synonyms: ['compete', 'participate', 'perform', 'engage'] }
+      ],
+      speakingLines: [
+        'Team sports develop valuable skills including collaboration and communication.',
+        'Sportsmanship is essential for maintaining the integrity of athletic competition.',
+        'Professional sports have become a significant part of the global entertainment industry.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-sports-3',
+    title: 'Fitness & Exercise',
+    slug: 'fitness-exercise',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Sports',
+    description: 'Vocabulary for discussing physical fitness, exercise routines, and health activities.',
+    is_premium: false,
+    is_published: true,
+    view_count: 920,
+    created_at: '2024-10-01T10:00:00Z',
+    updated_at: '2024-10-01T10:00:00Z',
+    content: {
+      title: 'Fitness & Exercise',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 fitness terms',
+        'Discuss exercise and health',
+        'Use fitness vocabulary'
+      ],
+      coreExplanation: `Fitness and exercise are common IELTS Speaking topics. To achieve Band 7+, you need vocabulary that allows you to discuss physical activity and health routines.
+
+This lesson covers fitness, exercise, and physical health. Understanding these concepts helps you discuss health-related topics effectively.`,
+      examples: [
+        { sentence: 'Physical fitness improves overall health.', explanation: '"Physical fitness" is bodily health and capability.' },
+        { sentence: 'Exercise routines provide structured activity.', explanation: '"Exercise routines" are planned physical activities.' },
+        { sentence: 'Cardiovascular exercise strengthens the heart.', explanation: '"Cardiovascular exercise" is heart-strengthening activity.' },
+        { sentence: 'Strength training builds muscle.', explanation: '"Strength training" is resistance exercise.' },
+        { sentence: 'Flexibility exercises improve range of motion.', explanation: '"Flexibility exercises" are stretching activities.' },
+        { sentence: 'Gym memberships provide access to equipment.', explanation: '"Gym memberships" are fitness facility subscriptions.' },
+        { sentence: 'Personal trainers guide fitness programs.', explanation: '"Personal trainers" are fitness professionals.' },
+        { sentence: 'Workout intensity affects results.', explanation: '"Workout intensity" is exercise difficulty level.' },
+        { sentence: 'Fitness goals motivate exercise.', explanation: '"Fitness goals" are health objectives.' },
+        { sentence: 'Active lifestyles promote wellbeing.', explanation: '"Active lifestyles" involve regular physical activity.' },
+        { sentence: 'Recovery time allows muscles to repair.', explanation: '"Recovery time" is rest between workouts.' },
+        { sentence: 'Fitness tracking monitors progress.', explanation: '"Fitness tracking" is measuring exercise data.' },
+        { sentence: 'Group fitness classes provide motivation.', explanation: '"Group fitness classes" are communal exercise sessions.' },
+        { sentence: 'Sedentary behavior increases health risks.', explanation: '"Sedentary behavior" is inactive lifestyle.' },
+        { sentence: 'Endurance training improves stamina.', explanation: '"Endurance training" is building lasting energy.' }
+      ],
+      commonMistakes: [
+        { mistake: 'I go to the gym.', correction: 'I maintain a regular fitness routine / engage in strength training and cardiovascular exercise.', explanation: 'Be specific about fitness activities.' },
+        { mistake: 'Exercise is boring.', correction: 'Finding enjoyable forms of physical activity makes maintaining fitness more sustainable.', explanation: 'Discuss fitness positively.' },
+        { mistake: 'You need a gym to exercise.', correction: 'Physical activity can be incorporated through various means including outdoor activities and home workouts.', explanation: 'Acknowledge diverse exercise options.' }
+      ],
+      miniPractice: [
+        { question: 'Physical _____ improves overall health.', type: 'fill-blank' },
+        { question: 'Which term describes heart-strengthening activity?', options: ['cardiovascular exercise', 'cardio', 'aerobic exercise', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "I exercise every day."', type: 'rewrite' },
+        { question: 'Strength _____ builds muscle.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'fitness',
+        'all of the above',
+        'I maintain a daily fitness routine that includes cardiovascular and strength training.',
+        'training'
+      ],
+      quickRecap: 'Key terms: "physical fitness", "exercise routines", "cardiovascular exercise", "strength training", "flexibility exercises", "personal trainers", "workout intensity", "fitness goals", "active lifestyles", "endurance training". Use fitness vocabulary accurately!',
+      collocations: [
+        'physical fitness', 'exercise routines', 'cardiovascular exercise', 'strength training',
+        'flexibility exercises', 'gym memberships', 'personal trainers', 'workout intensity',
+        'fitness goals', 'active lifestyles', 'recovery time', 'fitness tracking'
+      ],
+      synonyms: [
+        { word: 'exercise', synonyms: ['workout', 'physical activity', 'training', 'fitness'] },
+        { word: 'healthy', synonyms: ['fit', 'well', 'in shape', 'active'] },
+        { word: 'gym', synonyms: ['fitness center', 'health club', 'workout facility', 'training center'] }
+      ],
+      speakingLines: [
+        'Regular physical fitness activities contribute significantly to overall health and wellbeing.',
+        'Combining cardiovascular exercise with strength training provides comprehensive fitness benefits.',
+        'Active lifestyles help prevent many chronic health conditions.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-sports-4',
+    title: 'Olympic Games & International Sports',
+    slug: 'olympic-games-international-sports',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Sports',
+    description: 'Vocabulary for discussing the Olympics, international competitions, and global sporting events.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2024-10-05T10:00:00Z',
+    updated_at: '2024-10-05T10:00:00Z',
+    content: {
+      title: 'Olympic Games & International Sports',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 international sports terms',
+        'Discuss Olympics and global events',
+        'Use international sports vocabulary'
+      ],
+      coreExplanation: `International sports and the Olympics are common IELTS topics. To achieve Band 7+, you need vocabulary that allows you to discuss global sporting events and international competition.
+
+This lesson covers the Olympics, international sports, and global athletic events. Understanding these concepts helps you discuss international sports effectively.`,
+      examples: [
+        { sentence: 'The Olympic Games bring together athletes worldwide.', explanation: '"Olympic Games" are the premier international sporting event.' },
+        { sentence: 'Medal ceremonies honor top performers.', explanation: '"Medal ceremonies" are award presentations.' },
+        { sentence: 'Olympic athletes represent their countries.', explanation: '"Olympic athletes" are competitors in the Olympics.' },
+        { sentence: 'World championships determine global rankings.', explanation: '"World championships" are international title competitions.' },
+        { sentence: 'Host cities prepare extensive infrastructure.', explanation: '"Host cities" are locations for major events.' },
+        { sentence: 'Paralympic Games showcase adaptive sports.', explanation: '"Paralympic Games" are Olympics for athletes with disabilities.' },
+        { sentence: 'Olympic records mark exceptional achievements.', explanation: '"Olympic records" are best performances at Olympics.' },
+        { sentence: 'International federations govern sports globally.', explanation: '"International federations" are global sports organizations.' },
+        { sentence: 'Doping scandals undermine sports integrity.', explanation: '"Doping scandals" are drug-related controversies.' },
+        { sentence: 'Opening ceremonies celebrate international unity.', explanation: '"Opening ceremonies" are event inaugurations.' },
+        { sentence: 'National pride motivates Olympic participation.', explanation: '"National pride" is patriotic feeling.' },
+        { sentence: 'Sports diplomacy uses athletics for international relations.', explanation: '"Sports diplomacy" is using sports for diplomacy.' },
+        { sentence: 'Olympic legacy includes lasting infrastructure.', explanation: '"Olympic legacy" is long-term event impacts.' },
+        { sentence: 'Qualifying rounds determine Olympic participants.', explanation: '"Qualifying rounds" are selection competitions.' },
+        { sentence: 'Olympic values include excellence and friendship.', explanation: '"Olympic values" are principles of the Olympics.' }
+      ],
+      commonMistakes: [
+        { mistake: 'The Olympics are just sports.', correction: 'The Olympic Games represent international cooperation, cultural exchange, and athletic excellence.', explanation: 'Recognize Olympics\' broader significance.' },
+        { mistake: 'My country should win more medals.', correction: 'Olympic success depends on various factors including sports infrastructure, funding, and athlete development programs.', explanation: 'Discuss Olympic performance analytically.' },
+        { mistake: 'The Olympics are too expensive.', correction: 'Olympic hosting involves significant costs and potential benefits, with debates about long-term legacy.', explanation: 'Present balanced views on Olympic economics.' }
+      ],
+      miniPractice: [
+        { question: 'The Olympic _____ bring together athletes worldwide.', type: 'fill-blank' },
+        { question: 'Which term describes Olympics for athletes with disabilities?', options: ['Paralympic Games', 'Special Olympics', 'Adaptive Olympics', 'Disability Games'], type: 'multiple-choice' },
+        { question: 'Rewrite: "My country won many medals."', type: 'rewrite' },
+        { question: 'Medal _____ honor top performers.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Games',
+        'Paralympic Games',
+        'My country achieved significant success in the medal standings.',
+        'ceremonies'
+      ],
+      quickRecap: 'Key terms: "Olympic Games", "medal ceremonies", "Olympic athletes", "world championships", "host cities", "Paralympic Games", "Olympic records", "doping scandals", "opening ceremonies", "Olympic legacy". Use international sports vocabulary!',
+      collocations: [
+        'Olympic Games', 'medal ceremonies', 'Olympic athletes', 'world championships',
+        'host cities', 'Paralympic Games', 'Olympic records', 'international federations',
+        'doping scandals', 'opening ceremonies', 'national pride', 'Olympic legacy'
+      ],
+      synonyms: [
+        { word: 'compete', synonyms: ['participate', 'contend', 'vie', 'contest'] },
+        { word: 'win', synonyms: ['triumph', 'succeed', 'prevail', 'achieve victory'] },
+        { word: 'represent', synonyms: ['stand for', 'embody', 'symbolize', 'act for'] }
+      ],
+      speakingLines: [
+        'The Olympic Games represent the pinnacle of international athletic competition.',
+        'Paralympic Games showcase the remarkable achievements of athletes with disabilities.',
+        'Olympic legacy includes both infrastructure development and inspiration for future athletes.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-sports-5',
+    title: 'Outdoor Activities & Adventure Sports',
+    slug: 'outdoor-activities-adventure-sports',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Sports',
+    description: 'Vocabulary for discussing outdoor recreation, adventure sports, and nature activities.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2024-10-08T10:00:00Z',
+    updated_at: '2024-10-08T10:00:00Z',
+    content: {
+      title: 'Outdoor Activities & Adventure Sports',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 outdoor activity terms',
+        'Discuss adventure sports',
+        'Use recreation vocabulary'
+      ],
+      coreExplanation: `Outdoor activities and adventure sports are common IELTS Speaking topics. To achieve Band 7+, you need vocabulary that allows you to discuss outdoor recreation and adventure activities.
+
+This lesson covers outdoor activities, adventure sports, and nature recreation. Understanding these concepts helps you discuss leisure activities effectively.`,
+      examples: [
+        { sentence: 'Outdoor activities connect people with nature.', explanation: '"Outdoor activities" are recreation in natural settings.' },
+        { sentence: 'Adventure sports involve risk and excitement.', explanation: '"Adventure sports" are thrilling physical activities.' },
+        { sentence: 'Hiking trails offer varying difficulty levels.', explanation: '"Hiking trails" are paths for walking in nature.' },
+        { sentence: 'Rock climbing requires strength and technique.', explanation: '"Rock climbing" is ascending rock faces.' },
+        { sentence: 'Water sports include surfing and kayaking.', explanation: '"Water sports" are aquatic activities.' },
+        { sentence: 'Camping provides immersive nature experiences.', explanation: '"Camping" is staying outdoors overnight.' },
+        { sentence: 'Extreme sports push physical limits.', explanation: '"Extreme sports" are high-risk activities.' },
+        { sentence: 'Mountain biking combines cycling with terrain.', explanation: '"Mountain biking" is off-road cycling.' },
+        { sentence: 'Skiing and snowboarding are winter sports.', explanation: '"Skiing" and "snowboarding" are snow sports.' },
+        { sentence: 'Scuba diving explores underwater environments.', explanation: '"Scuba diving" is underwater swimming with equipment.' },
+        { sentence: 'Safety equipment protects adventure participants.', explanation: '"Safety equipment" is protective gear.' },
+        { sentence: 'Outdoor recreation promotes physical and mental health.', explanation: '"Outdoor recreation" is leisure in nature.' },
+        { sentence: 'Wildlife observation connects people with animals.', explanation: '"Wildlife observation" is watching animals in nature.' },
+        { sentence: 'Adventure tourism combines travel with activities.', explanation: '"Adventure tourism" is travel for adventure activities.' },
+        { sentence: 'Environmental awareness guides responsible recreation.', explanation: '"Environmental awareness" is understanding nature impact.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Adventure sports are dangerous.', correction: 'Adventure sports involve managed risk, with proper training and equipment significantly reducing dangers.', explanation: 'Discuss risk management.' },
+        { mistake: 'I went hiking.', correction: 'I explored a challenging trail / enjoyed a scenic hike through [specific terrain].', explanation: 'Be descriptive about outdoor activities.' },
+        { mistake: 'Outdoor activities are only for fit people.', correction: 'Outdoor recreation offers activities for various fitness levels and abilities.', explanation: 'Acknowledge accessibility.' }
+      ],
+      miniPractice: [
+        { question: 'Outdoor _____ connect people with nature.', type: 'fill-blank' },
+        { question: 'Which term describes high-risk activities?', options: ['extreme sports', 'adventure sports', 'action sports', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "I like being outside."', type: 'rewrite' },
+        { question: 'Adventure _____ involve risk and excitement.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'activities',
+        'all of the above',
+        'I enjoy outdoor recreation and connecting with natural environments.',
+        'sports'
+      ],
+      quickRecap: 'Key terms: "outdoor activities", "adventure sports", "hiking trails", "rock climbing", "water sports", "camping", "extreme sports", "mountain biking", "scuba diving", "adventure tourism". Use outdoor activity vocabulary!',
+      collocations: [
+        'outdoor activities', 'adventure sports', 'hiking trails', 'rock climbing',
+        'water sports', 'camping', 'extreme sports', 'mountain biking',
+        'skiing', 'scuba diving', 'safety equipment', 'adventure tourism'
+      ],
+      synonyms: [
+        { word: 'outdoor', synonyms: ['outside', 'open-air', 'al fresco', 'nature-based'] },
+        { word: 'adventure', synonyms: ['excitement', 'thrill', 'challenge', 'expedition'] },
+        { word: 'nature', synonyms: ['outdoors', 'wilderness', 'natural environment', 'countryside'] }
+      ],
+      speakingLines: [
+        'Outdoor activities provide valuable opportunities to connect with nature and improve wellbeing.',
+        'Adventure sports offer excitement while developing physical skills and mental resilience.',
+        'Environmental awareness is essential for responsible outdoor recreation.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 14: Food & Agriculture (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-food-2',
+    title: 'Food Production & Agriculture',
+    slug: 'food-production-agriculture',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Food',
+    description: 'Vocabulary for discussing farming, food production, and agricultural systems.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2024-10-12T10:00:00Z',
+    updated_at: '2024-10-12T10:00:00Z',
+    content: {
+      title: 'Food Production & Agriculture',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 agriculture terms',
+        'Discuss food production',
+        'Use farming vocabulary'
+      ],
+      coreExplanation: `Food production and agriculture are important IELTS topics. To achieve Band 7+, you need vocabulary that allows you to discuss farming, food systems, and agricultural practices.
+
+This lesson covers agriculture, food production, and farming systems. Understanding these concepts helps you discuss food-related topics effectively.`,
+      examples: [
+        { sentence: 'Agriculture provides food for global populations.', explanation: '"Agriculture" is farming and food production.' },
+        { sentence: 'Sustainable farming protects environmental resources.', explanation: '"Sustainable farming" is environmentally responsible agriculture.' },
+        { sentence: 'Crop yields determine food availability.', explanation: '"Crop yields" are amounts of food produced.' },
+        { sentence: 'Organic farming avoids synthetic chemicals.', explanation: '"Organic farming" is chemical-free agriculture.' },
+        { sentence: 'Food supply chains connect producers to consumers.', explanation: '"Food supply chains" are distribution networks.' },
+        { sentence: 'Agricultural technology improves efficiency.', explanation: '"Agricultural technology" is farming innovation.' },
+        { sentence: 'Livestock farming raises animals for food.', explanation: '"Livestock farming" is animal agriculture.' },
+        { sentence: 'Irrigation systems provide water for crops.', explanation: '"Irrigation systems" are water delivery for farming.' },
+        { sentence: 'Food processing transforms raw ingredients.', explanation: '"Food processing" is preparing food for consumption.' },
+        { sentence: 'Agricultural subsidies support farmers.', explanation: '"Agricultural subsidies" are government farming support.' },
+        { sentence: 'Genetically modified crops have altered genetics.', explanation: '"Genetically modified crops" are GMO plants.' },
+        { sentence: 'Food waste occurs throughout supply chains.', explanation: '"Food waste" is discarded food.' },
+        { sentence: 'Arable land is suitable for growing crops.', explanation: '"Arable land" is farmable land.' },
+        { sentence: 'Pesticides control agricultural pests.', explanation: '"Pesticides" are chemicals killing pests.' },
+        { sentence: 'Food sovereignty emphasizes local control.', explanation: '"Food sovereignty" is communities controlling food systems.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Organic food is always better.', correction: 'Organic and conventional farming each have advantages and trade-offs regarding yield, cost, and environmental impact.', explanation: 'Present balanced views on farming methods.' },
+        { mistake: 'GMOs are dangerous.', correction: 'Genetically modified crops are subject to scientific debate, with research examining both benefits and concerns.', explanation: 'Discuss GMOs objectively.' },
+        { mistake: 'Farming is simple.', correction: 'Modern agriculture involves complex decisions about technology, sustainability, and market dynamics.', explanation: 'Acknowledge agricultural complexity.' }
+      ],
+      miniPractice: [
+        { question: '_____ provides food for global populations.', type: 'fill-blank' },
+        { question: 'Which term describes chemical-free agriculture?', options: ['organic farming', 'natural farming', 'sustainable farming', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Farmers grow food."', type: 'rewrite' },
+        { question: 'Crop _____ determine food availability.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Agriculture',
+        'organic farming',
+        'Agricultural producers cultivate crops and raise livestock to supply food systems.',
+        'yields'
+      ],
+      quickRecap: 'Key terms: "agriculture", "sustainable farming", "crop yields", "organic farming", "food supply chains", "agricultural technology", "livestock farming", "irrigation systems", "genetically modified crops", "food sovereignty". Use agricultural vocabulary!',
+      collocations: [
+        'agriculture', 'sustainable farming', 'crop yields', 'organic farming',
+        'food supply chains', 'agricultural technology', 'livestock farming', 'irrigation systems',
+        'food processing', 'agricultural subsidies', 'genetically modified crops', 'arable land'
+      ],
+      synonyms: [
+        { word: 'farm', synonyms: ['cultivate', 'grow', 'produce', 'raise'] },
+        { word: 'food', synonyms: ['produce', 'crops', 'harvest', 'yield'] },
+        { word: 'farmer', synonyms: ['agriculturalist', 'grower', 'producer', 'cultivator'] }
+      ],
+      speakingLines: [
+        'Sustainable farming practices are essential for long-term food security.',
+        'Agricultural technology has significantly increased crop yields over recent decades.',
+        'Food supply chains connect producers with consumers across global markets.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-food-3',
+    title: 'Cuisine & Culinary Arts',
+    slug: 'cuisine-culinary-arts',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Food',
+    description: 'Vocabulary for discussing cooking, cuisine types, and culinary traditions.',
+    is_premium: true,
+    is_published: true,
+    view_count: 880,
+    created_at: '2024-10-15T10:00:00Z',
+    updated_at: '2024-10-15T10:00:00Z',
+    content: {
+      title: 'Cuisine & Culinary Arts',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 culinary terms',
+        'Discuss cooking and cuisine',
+        'Use food vocabulary'
+      ],
+      coreExplanation: `Cuisine and cooking are common IELTS Speaking topics. To achieve Band 7+, you need vocabulary that allows you to discuss food, cooking, and culinary traditions.
+
+This lesson covers cuisine, cooking, and culinary arts. Understanding these concepts helps you discuss food-related topics effectively.`,
+      examples: [
+        { sentence: 'Culinary traditions reflect cultural heritage.', explanation: '"Culinary traditions" are food customs.' },
+        { sentence: 'Regional cuisines feature local ingredients.', explanation: '"Regional cuisines" are area-specific food styles.' },
+        { sentence: 'Cooking techniques vary across cultures.', explanation: '"Cooking techniques" are food preparation methods.' },
+        { sentence: 'Gourmet dining offers refined experiences.', explanation: '"Gourmet dining" is high-quality food service.' },
+        { sentence: 'Recipe development creates new dishes.', explanation: '"Recipe development" is creating food instructions.' },
+        { sentence: 'Flavor profiles combine taste elements.', explanation: '"Flavor profiles" are taste combinations.' },
+        { sentence: 'Culinary schools train professional chefs.', explanation: '"Culinary schools" are cooking education institutions.' },
+        { sentence: 'Food presentation enhances dining experiences.', explanation: '"Food presentation" is how food looks.' },
+        { sentence: 'Seasonal ingredients vary by time of year.', explanation: '"Seasonal ingredients" are foods available in certain seasons.' },
+        { sentence: 'Fusion cuisine combines culinary traditions.', explanation: '"Fusion cuisine" is mixed cultural cooking.' },
+        { sentence: 'Traditional recipes preserve cultural knowledge.', explanation: '"Traditional recipes" are inherited cooking instructions.' },
+        { sentence: 'Gastronomy studies food and culture.', explanation: '"Gastronomy" is the study of food and cooking.' },
+        { sentence: 'Culinary innovation creates new approaches.', explanation: '"Culinary innovation" is cooking creativity.' },
+        { sentence: 'Dietary restrictions limit food choices.', explanation: '"Dietary restrictions" are food limitations.' },
+        { sentence: 'Food pairing matches complementary flavors.', explanation: '"Food pairing" is combining compatible foods.' }
+      ],
+      commonMistakes: [
+        { mistake: 'I like good food.', correction: 'I appreciate cuisine that features fresh ingredients / bold flavors / traditional techniques.', explanation: 'Be specific about food preferences.' },
+        { mistake: 'Foreign food is strange.', correction: 'Different cuisines reflect diverse culinary traditions and cultural approaches to food.', explanation: 'Discuss cuisines respectfully.' },
+        { mistake: 'Cooking is easy.', correction: 'Culinary skills develop through practice, with professional cooking requiring extensive training.', explanation: 'Acknowledge culinary complexity.' }
+      ],
+      miniPractice: [
+        { question: 'Culinary _____ reflect cultural heritage.', type: 'fill-blank' },
+        { question: 'Which term describes mixed cultural cooking?', options: ['fusion cuisine', 'cross-cultural cuisine', 'hybrid cuisine', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "The food was delicious."', type: 'rewrite' },
+        { question: 'Cooking _____ vary across cultures.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'traditions',
+        'all of the above',
+        'The cuisine featured exceptional flavor profiles and expert preparation.',
+        'techniques'
+      ],
+      quickRecap: 'Key terms: "culinary traditions", "regional cuisines", "cooking techniques", "gourmet dining", "flavor profiles", "culinary schools", "food presentation", "fusion cuisine", "gastronomy", "food pairing". Use culinary vocabulary!',
+      collocations: [
+        'culinary traditions', 'regional cuisines', 'cooking techniques', 'gourmet dining',
+        'recipe development', 'flavor profiles', 'culinary schools', 'food presentation',
+        'seasonal ingredients', 'fusion cuisine', 'traditional recipes', 'gastronomy'
+      ],
+      synonyms: [
+        { word: 'cook', synonyms: ['prepare', 'make', 'create', 'craft'] },
+        { word: 'delicious', synonyms: ['flavorful', 'tasty', 'appetizing', 'savory'] },
+        { word: 'food', synonyms: ['cuisine', 'dishes', 'fare', 'meals'] }
+      ],
+      speakingLines: [
+        'Culinary traditions reflect the cultural heritage and history of different regions.',
+        'Fusion cuisine demonstrates how culinary innovation can combine diverse food traditions.',
+        'Food presentation is an important aspect of the overall dining experience.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-food-4',
+    title: 'Food Safety & Nutrition',
+    slug: 'food-safety-nutrition',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Food',
+    description: 'Vocabulary for discussing food safety, nutrition science, and healthy eating.',
+    is_premium: true,
+    is_published: true,
+    view_count: 750,
+    created_at: '2024-10-18T10:00:00Z',
+    updated_at: '2024-10-18T10:00:00Z',
+    content: {
+      title: 'Food Safety & Nutrition',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 food safety terms',
+        'Discuss nutrition and health',
+        'Use food science vocabulary'
+      ],
+      coreExplanation: `Food safety and nutrition are important IELTS topics. To achieve Band 7+, you need vocabulary that allows you to discuss food safety, nutrition, and healthy eating.
+
+This lesson covers food safety, nutrition science, and healthy eating. Understanding these concepts helps you discuss health-related food topics effectively.`,
+      examples: [
+        { sentence: 'Food safety regulations protect consumers.', explanation: '"Food safety regulations" are rules ensuring safe food.' },
+        { sentence: 'Nutritional value indicates food healthfulness.', explanation: '"Nutritional value" is food\'s health benefits.' },
+        { sentence: 'Food contamination poses health risks.', explanation: '"Food contamination" is harmful substances in food.' },
+        { sentence: 'Balanced diets include various food groups.', explanation: '"Balanced diets" are nutritionally complete eating patterns.' },
+        { sentence: 'Food allergies require careful management.', explanation: '"Food allergies" are immune reactions to foods.' },
+        { sentence: 'Preservatives extend food shelf life.', explanation: '"Preservatives" are substances preventing spoilage.' },
+        { sentence: 'Calorie counting monitors energy intake.', explanation: '"Calorie counting" is tracking food energy.' },
+        { sentence: 'Food labeling provides nutritional information.', explanation: '"Food labeling" is information on food packages.' },
+        { sentence: 'Foodborne illnesses result from contaminated food.', explanation: '"Foodborne illnesses" are diseases from food.' },
+        { sentence: 'Dietary supplements provide additional nutrients.', explanation: '"Dietary supplements" are nutrient additions.' },
+        { sentence: 'Food hygiene prevents contamination.', explanation: '"Food hygiene" is cleanliness in food handling.' },
+        { sentence: 'Nutrient density measures nutrition per calorie.', explanation: '"Nutrient density" is nutrition relative to energy.' },
+        { sentence: 'Food additives modify food properties.', explanation: '"Food additives" are substances added to food.' },
+        { sentence: 'Healthy eating habits support wellbeing.', explanation: '"Healthy eating habits" are beneficial food patterns.' },
+        { sentence: 'Food quality standards ensure safety.', explanation: '"Food quality standards" are safety requirements.' }
+      ],
+      commonMistakes: [
+        { mistake: 'All processed food is unhealthy.', correction: 'Food processing varies widely, with some methods preserving nutrition while others may reduce it.', explanation: 'Discuss food processing nuancedly.' },
+        { mistake: 'Supplements replace healthy eating.', correction: 'Dietary supplements complement but cannot replace the benefits of a balanced diet.', explanation: 'Explain supplement limitations.' },
+        { mistake: 'Calories are bad.', correction: 'Calories provide essential energy, with the quality and quantity of food intake affecting health.', explanation: 'Discuss calories objectively.' }
+      ],
+      miniPractice: [
+        { question: 'Food safety _____ protect consumers.', type: 'fill-blank' },
+        { question: 'Which term describes diseases from contaminated food?', options: ['foodborne illnesses', 'food poisoning', 'food-related diseases', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Junk food is bad for you."', type: 'rewrite' },
+        { question: 'Nutritional _____ indicates food healthfulness.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'regulations',
+        'all of the above',
+        'Highly processed foods with low nutritional value may negatively impact health when consumed regularly.',
+        'value'
+      ],
+      quickRecap: 'Key terms: "food safety regulations", "nutritional value", "food contamination", "balanced diets", "food allergies", "preservatives", "food labeling", "foodborne illnesses", "dietary supplements", "food hygiene". Use food safety vocabulary!',
+      collocations: [
+        'food safety regulations', 'nutritional value', 'food contamination', 'balanced diets',
+        'food allergies', 'preservatives', 'calorie counting', 'food labeling',
+        'foodborne illnesses', 'dietary supplements', 'food hygiene', 'healthy eating habits'
+      ],
+      synonyms: [
+        { word: 'healthy', synonyms: ['nutritious', 'wholesome', 'beneficial', 'nourishing'] },
+        { word: 'safe', synonyms: ['uncontaminated', 'clean', 'hygienic', 'pure'] },
+        { word: 'unhealthy', synonyms: ['harmful', 'detrimental', 'unwholesome', 'nutritionally poor'] }
+      ],
+      speakingLines: [
+        'Food safety regulations are essential for protecting public health.',
+        'Balanced diets provide the nutritional foundation for overall wellbeing.',
+        'Food labeling helps consumers make informed choices about their nutrition.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-food-5',
+    title: 'Food Culture & Dining',
+    slug: 'food-culture-dining',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Food',
+    description: 'Vocabulary for discussing food culture, dining experiences, and eating customs.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2024-10-22T10:00:00Z',
+    updated_at: '2024-10-22T10:00:00Z',
+    content: {
+      title: 'Food Culture & Dining',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 food culture terms',
+        'Discuss dining experiences',
+        'Use food culture vocabulary'
+      ],
+      coreExplanation: `Food culture and dining are common IELTS Speaking topics. To achieve Band 7+, you need vocabulary that allows you to discuss eating customs, dining experiences, and food culture.
+
+This lesson covers food culture, dining experiences, and eating customs. Understanding these concepts helps you discuss food-related social topics effectively.`,
+      examples: [
+        { sentence: 'Food culture reflects social values.', explanation: '"Food culture" is the role of food in society.' },
+        { sentence: 'Dining etiquette varies between cultures.', explanation: '"Dining etiquette" is proper eating behavior.' },
+        { sentence: 'Restaurant experiences combine food and service.', explanation: '"Restaurant experiences" are dining at restaurants.' },
+        { sentence: 'Street food offers affordable local cuisine.', explanation: '"Street food" is food sold by vendors.' },
+        { sentence: 'Food festivals celebrate culinary traditions.', explanation: '"Food festivals" are events featuring food.' },
+        { sentence: 'Communal dining brings people together.', explanation: '"Communal dining" is eating together.' },
+        { sentence: 'Food trends influence eating habits.', explanation: '"Food trends" are popular food movements.' },
+        { sentence: 'Culinary tourism explores food destinations.', explanation: '"Culinary tourism" is travel for food experiences.' },
+        { sentence: 'Home cooking provides personal meals.', explanation: '"Home cooking" is preparing food at home.' },
+        { sentence: 'Fast food offers quick, convenient meals.', explanation: '"Fast food" is quickly prepared food.' },
+        { sentence: 'Fine dining provides luxury experiences.', explanation: '"Fine dining" is upscale restaurant service.' },
+        { sentence: 'Food rituals mark special occasions.', explanation: '"Food rituals" are ceremonial eating practices.' },
+        { sentence: 'Eating habits develop over time.', explanation: '"Eating habits" are patterns of food consumption.' },
+        { sentence: 'Food memories connect to experiences.', explanation: '"Food memories" are recollections associated with food.' },
+        { sentence: 'Meal preparation involves planning and cooking.', explanation: '"Meal preparation" is getting food ready.' }
+      ],
+      commonMistakes: [
+        { mistake: 'I like eating out.', correction: 'I enjoy dining at restaurants / exploring different culinary experiences.', explanation: 'Use more descriptive dining language.' },
+        { mistake: 'Fast food is bad.', correction: 'Fast food offers convenience, though regular consumption may have health implications.', explanation: 'Discuss fast food objectively.' },
+        { mistake: 'Home cooking is always better.', correction: 'Both home cooking and restaurant dining offer different advantages and experiences.', explanation: 'Compare dining options fairly.' }
+      ],
+      miniPractice: [
+        { question: 'Food _____ reflects social values.', type: 'fill-blank' },
+        { question: 'Which term describes travel for food experiences?', options: ['culinary tourism', 'food tourism', 'gastronomic tourism', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "I like eating at restaurants."', type: 'rewrite' },
+        { question: 'Dining _____ varies between cultures.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'culture',
+        'all of the above',
+        'I enjoy dining out and exploring diverse culinary experiences.',
+        'etiquette'
+      ],
+      quickRecap: 'Key terms: "food culture", "dining etiquette", "restaurant experiences", "street food", "food festivals", "communal dining", "food trends", "culinary tourism", "fine dining", "food rituals". Use food culture vocabulary!',
+      collocations: [
+        'food culture', 'dining etiquette', 'restaurant experiences', 'street food',
+        'food festivals', 'communal dining', 'food trends', 'culinary tourism',
+        'home cooking', 'fast food', 'fine dining', 'eating habits'
+      ],
+      synonyms: [
+        { word: 'eat', synonyms: ['dine', 'consume', 'have a meal', 'partake'] },
+        { word: 'restaurant', synonyms: ['eatery', 'dining establishment', 'café', 'bistro'] },
+        { word: 'meal', synonyms: ['dish', 'course', 'fare', 'repast'] }
+      ],
+      speakingLines: [
+        'Food culture reflects the values and traditions of different societies.',
+        'Culinary tourism has become an important part of the travel industry.',
+        'Communal dining strengthens social bonds and cultural connections.'
+      ]
+    }
   }
 ];
