@@ -19,7 +19,7 @@ import {
   Zap,
   Lock
 } from 'lucide-react';
-import { QUIZZES, getQuizById, Quiz } from '@/data/quizData';
+import { ALL_QUIZZES, getQuizById, Quiz } from '@/data/quizData';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface QuizResult {
@@ -169,9 +169,9 @@ export function QuizPage() {
     }
   };
 
-  const filteredQuizzes = selectedCategory === 'all' 
-    ? QUIZZES 
-    : QUIZZES.filter(q => q.category === selectedCategory);
+    const filteredQuizzes = selectedCategory === 'all' 
+      ? ALL_QUIZZES 
+      : ALL_QUIZZES.filter(q => q.category === selectedCategory);
 
   if (!quizId) {
     return (

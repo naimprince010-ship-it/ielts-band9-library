@@ -757,16 +757,35 @@ export const QUIZZES: Quiz[] = [
   }
 ];
 
+import { SAMPLE_LESSONS, VOCABULARY_TOPICS } from './sampleLessons';
+import { generateAllVocabularyQuizzes, generateTopicQuiz } from './autoQuizGenerator';
+
+// Generate quizzes from all vocabulary lessons
+const AUTO_GENERATED_QUIZZES: Quiz[] = generateAllVocabularyQuizzes(SAMPLE_LESSONS);
+
+// Generate topic-based quizzes
+const TOPIC_QUIZZES: Quiz[] = VOCABULARY_TOPICS
+  .map(topic => generateTopicQuiz(SAMPLE_LESSONS, topic))
+  .filter((quiz): quiz is Quiz => quiz !== null);
+
+// Combine all quizzes: manual + auto-generated + topic-based
+export const ALL_QUIZZES: Quiz[] = [...QUIZZES, ...AUTO_GENERATED_QUIZZES, ...TOPIC_QUIZZES];
+
 export const getQuizzesByCategory = (category: string): Quiz[] => {
-  if (category === 'all') return QUIZZES;
-  return QUIZZES.filter(quiz => quiz.category === category);
+  if (category === 'all') return ALL_QUIZZES;
+  return ALL_QUIZZES.filter(quiz => quiz.category === category);
 };
 
 export const getQuizById = (id: string): Quiz | undefined => {
-  return QUIZZES.find(quiz => quiz.id === id);
+  return ALL_QUIZZES.find(quiz => quiz.id === id);
 };
 
 export const getQuizzesByDifficulty = (difficulty: string): Quiz[] => {
-  if (difficulty === 'all') return QUIZZES;
-  return QUIZZES.filter(quiz => quiz.difficulty === difficulty);
+  if (difficulty === 'all') return ALL_QUIZZES;
+  return ALL_QUIZZES.filter(quiz => quiz.difficulty === difficulty);
+};
+
+export const getQuizzesByTopic = (topic: string): Quiz[] => {
+  if (topic === 'all') return ALL_QUIZZES;
+  return ALL_QUIZZES.filter(quiz => quiz.topic === topic);
 };
