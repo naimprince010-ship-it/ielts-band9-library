@@ -16,80 +16,106 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { useProgress } from '@/contexts/ProgressContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 interface DailyActivity {
   date: string;
-  lessonsCompleted: number;
-  quizzesCompleted: number;
-  minutesStudied: number;
+  lessons_completed: number;
+  quizzes_completed: number;
+  minutes_studied: number;
   score: number;
 }
 
-interface WeeklyStats {
-  week: string;
-  vocabulary: number;
-  grammar: number;
-  reading: number;
-  writing: number;
-  speaking: number;
+interface Achievement {
+  achievement_name: string;
+  description: string;
+  earned_at: string;
 }
 
 const ACTIVITY_KEY = 'ielts_daily_activity';
 
-function getActivityHistory(): DailyActivity[] {
-  const stored = localStorage.getItem(ACTIVITY_KEY);
-  if (stored) return JSON.parse(stored);
-  
-  const mockData: DailyActivity[] = [];
-  for (let i = 29; i >= 0; i--) {
-    const date = new Date();
-    date.setDate(date.getDate() - i);
-    mockData.push({
-      date: date.toISOString().split('T')[0],
-      lessonsCompleted: Math.floor(Math.random() * 5),
-      quizzesCompleted: Math.floor(Math.random() * 3),
-      minutesStudied: Math.floor(Math.random() * 60) + 10,
-      score: Math.floor(Math.random() * 30) + 70
-    });
-  }
-  return mockData;
-}
-
-function getWeeklyStats(): WeeklyStats[] {
-  const weeks: WeeklyStats[] = [];
-  for (let i = 3; i >= 0; i--) {
-    const date = new Date();
-    date.setDate(date.getDate() - (i * 7));
-    weeks.push({
-      week: `Week ${4 - i}`,
-      vocabulary: Math.floor(Math.random() * 20) + 5,
-      grammar: Math.floor(Math.random() * 10) + 2,
-      reading: Math.floor(Math.random() * 8) + 1,
-      writing: Math.floor(Math.random() * 5) + 1,
-      speaking: Math.floor(Math.random() * 6) + 1
-    });
-  }
-  return weeks;
-}
-
 export default function ProgressDashboardPage() {
-  const { getCompletedLessonsCount, lessonProgress } = useProgress();
-  const completedLessonsCount = getCompletedLessonsCount();
-  const bookmarkedCount = Object.keys(lessonProgress).length;
-  const [activityHistory, setActivityHistory] = useState<DailyActivity[]>([]);
-  const [weeklyStats, setWeeklyStats] = useState<WeeklyStats[]>([]);
-  const [streak, setStreak] = useState(0);
-  const [totalStudyTime, setTotalStudyTime] = useState(0);
-  const [averageScore, setAverageScore] = useState(0);
+    const { getCompletedLessonsCount, lessonProgress, quizAttempts } = useProgress();
+    const { user } = useAuth();
+    const completedLessonsCount = getCompletedLessonsCount();
+    const [activityHistory, setActivityHistory] = useState<DailyActivity[]>([]);
+    const [achievements, setAchievements] = useState<Achievement[]>([]);
+    const [streak, setStreak] = useState(0);
+    const [totalStudyTime, setTotalStudyTime] = useState(0);
+    const [averageScore, setAverageScore] = useState(0);
 
   useEffect(() => {
-    const history = getActivityHistory();
-    setActivityHistory(history);
-    setWeeklyStats(getWeeklyStats());
+    fetchActivityData();
+  }, [user]);
 
+    const fetchActivityData = async () => {
+      if (isSupabaseConfigured() && supabase && user) {
+      try {
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        
+        const { data: activityData, error: activityError } = await supabase
+          .from('user_activity')
+          .select('*')
+          .eq('user_id', user.id)
+          .gte('date', thirtyDaysAgo.toISOString().split('T')[0])
+          .order('date', { ascending: true });
+
+        if (!activityError && activityData && activityData.length > 0) {
+          setActivityHistory(activityData);
+          calculateStats(activityData);
+        } else {
+          loadLocalActivity();
+        }
+
+        const { data: achievementData, error: achievementError } = await supabase
+          .from('user_achievements')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('earned_at', { ascending: false })
+          .limit(5);
+
+        if (!achievementError && achievementData) {
+          setAchievements(achievementData);
+        }
+      } catch (err) {
+        console.error('Error fetching activity:', err);
+        loadLocalActivity();
+      }
+      } else {
+        loadLocalActivity();
+      }
+    };
+
+  const loadLocalActivity = () => {
+    const stored = localStorage.getItem(ACTIVITY_KEY);
+    if (stored) {
+      const data = JSON.parse(stored);
+      setActivityHistory(data);
+      calculateStats(data);
+    } else {
+      const emptyData: DailyActivity[] = [];
+      for (let i = 29; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        emptyData.push({
+          date: date.toISOString().split('T')[0],
+          lessons_completed: 0,
+          quizzes_completed: 0,
+          minutes_studied: 0,
+          score: 0
+        });
+      }
+      setActivityHistory(emptyData);
+      calculateStats(emptyData);
+    }
+  };
+
+  const calculateStats = (history: DailyActivity[]) => {
     let currentStreak = 0;
     for (let i = history.length - 1; i >= 0; i--) {
-      if (history[i].lessonsCompleted > 0 || history[i].quizzesCompleted > 0) {
+      if (history[i].lessons_completed > 0 || history[i].quizzes_completed > 0) {
         currentStreak++;
       } else {
         break;
@@ -97,38 +123,86 @@ export default function ProgressDashboardPage() {
     }
     setStreak(currentStreak);
 
-    const totalMinutes = history.reduce((sum, day) => sum + day.minutesStudied, 0);
+    const totalMinutes = history.reduce((sum, day) => sum + (day.minutes_studied || 0), 0);
     setTotalStudyTime(totalMinutes);
 
-    const avgScore = history.reduce((sum, day) => sum + day.score, 0) / history.length;
-    setAverageScore(Math.round(avgScore));
-  }, []);
+    if (quizAttempts && quizAttempts.length > 0) {
+      const avgScore = quizAttempts.reduce((sum, a) => sum + (a.score / a.total) * 100, 0) / quizAttempts.length;
+      setAverageScore(Math.round(avgScore));
+    } else {
+      const scoresWithData = history.filter(day => day.score > 0);
+      if (scoresWithData.length > 0) {
+        const avgScore = scoresWithData.reduce((sum, day) => sum + day.score, 0) / scoresWithData.length;
+        setAverageScore(Math.round(avgScore));
+      } else {
+        setAverageScore(0);
+      }
+    }
+  };
 
   const getActivityLevel = (activity: DailyActivity) => {
-    const total = activity.lessonsCompleted + activity.quizzesCompleted;
+    const total = (activity.lessons_completed || 0) + (activity.quizzes_completed || 0);
     if (total === 0) return 'bg-gray-100';
     if (total <= 2) return 'bg-green-200';
     if (total <= 4) return 'bg-green-400';
     return 'bg-green-600';
   };
 
-  const maxBarHeight = 100;
-  const maxWeeklyTotal = Math.max(...weeklyStats.map(w => 
-    w.vocabulary + w.grammar + w.reading + w.writing + w.speaking
-  ));
+  const calculateSkillProgress = () => {
+    const skills = {
+      vocabulary: { completed: 0, total: 284 },
+      grammar: { completed: 0, total: 30 },
+      reading: { completed: 0, total: 10 },
+      writing: { completed: 0, total: 15 },
+      speaking: { completed: 0, total: 21 }
+    };
 
-  const skillProgress = [
-    { name: 'Vocabulary', icon: BookOpen, color: 'bg-indigo-500', progress: 65, lessons: 45 },
-    { name: 'Grammar', icon: Brain, color: 'bg-purple-500', progress: 48, lessons: 15 },
-    { name: 'Reading', icon: Target, color: 'bg-blue-500', progress: 32, lessons: 8 },
-    { name: 'Writing', icon: PenTool, color: 'bg-emerald-500', progress: 25, lessons: 5 },
-    { name: 'Speaking', icon: Mic, color: 'bg-orange-500', progress: 40, lessons: 12 },
-  ];
+    Object.entries(lessonProgress).forEach(([lessonId, progress]) => {
+      if (progress.completedAt) {
+        if (lessonId.includes('vocab')) skills.vocabulary.completed++;
+        else if (lessonId.includes('grammar')) skills.grammar.completed++;
+        else if (lessonId.includes('reading')) skills.reading.completed++;
+        else if (lessonId.includes('writing')) skills.writing.completed++;
+        else if (lessonId.includes('speaking')) skills.speaking.completed++;
+      }
+    });
 
-  const recentAchievements = [
-    { name: 'Week Warrior', description: '7-day streak achieved', date: '2 days ago' },
-    { name: 'Quiz Master', description: 'Completed 50 quizzes', date: '5 days ago' },
-    { name: 'Vocabulary Builder', description: 'Learned 100 new words', date: '1 week ago' },
+    return [
+      { name: 'Vocabulary', icon: BookOpen, color: 'bg-indigo-500', progress: Math.round((skills.vocabulary.completed / skills.vocabulary.total) * 100), lessons: skills.vocabulary.completed },
+      { name: 'Grammar', icon: Brain, color: 'bg-purple-500', progress: Math.round((skills.grammar.completed / skills.grammar.total) * 100), lessons: skills.grammar.completed },
+      { name: 'Reading', icon: Target, color: 'bg-blue-500', progress: Math.round((skills.reading.completed / skills.reading.total) * 100), lessons: skills.reading.completed },
+      { name: 'Writing', icon: PenTool, color: 'bg-emerald-500', progress: Math.round((skills.writing.completed / skills.writing.total) * 100), lessons: skills.writing.completed },
+      { name: 'Speaking', icon: Mic, color: 'bg-orange-500', progress: Math.round((skills.speaking.completed / skills.speaking.total) * 100), lessons: skills.speaking.completed },
+    ];
+  };
+
+  const skillProgress = calculateSkillProgress();
+
+  const getEstimatedBand = () => {
+    if (averageScore === 0) return 'N/A';
+    if (averageScore >= 90) return '8.0 - 9.0';
+    if (averageScore >= 80) return '7.5 - 8.0';
+    if (averageScore >= 70) return '7.0 - 7.5';
+    if (averageScore >= 60) return '6.5 - 7.0';
+    if (averageScore >= 50) return '6.0 - 6.5';
+    return '5.5 - 6.0';
+  };
+
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) > 1 ? 's' : ''} ago`;
+    return `${Math.floor(diffDays / 30)} month${Math.floor(diffDays / 30) > 1 ? 's' : ''} ago`;
+  };
+
+  const displayAchievements = achievements.length > 0 ? achievements : [
+    { achievement_name: 'Getting Started', description: 'Complete your first lesson to earn achievements!', earned_at: new Date().toISOString() }
   ];
 
   return (
@@ -190,7 +264,7 @@ export default function ProgressDashboardPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-500">Average Score</p>
-                  <p className="text-3xl font-bold text-purple-600">{averageScore}%</p>
+                  <p className="text-3xl font-bold text-purple-600">{averageScore > 0 ? `${averageScore}%` : 'N/A'}</p>
                 </div>
                 <div className="h-12 w-12 bg-purple-100 rounded-full flex items-center justify-center">
                   <TrendingUp className="h-6 w-6 text-purple-600" />
@@ -215,7 +289,7 @@ export default function ProgressDashboardPage() {
                   <div
                     key={idx}
                     className={`w-full aspect-square rounded-sm ${getActivityLevel(day)} cursor-pointer`}
-                    title={`${day.date}: ${day.lessonsCompleted} lessons, ${day.quizzesCompleted} quizzes`}
+                    title={`${day.date}: ${day.lessons_completed || 0} lessons, ${day.quizzes_completed || 0} quizzes`}
                   />
                 ))}
               </div>
@@ -239,15 +313,15 @@ export default function ProgressDashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {recentAchievements.map((achievement, idx) => (
+                {displayAchievements.map((achievement, idx) => (
                   <div key={idx} className="flex items-start gap-3">
                     <div className="h-10 w-10 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
                       <Award className="h-5 w-5 text-amber-600" />
                     </div>
                     <div>
-                      <p className="font-medium">{achievement.name}</p>
+                      <p className="font-medium">{achievement.achievement_name}</p>
                       <p className="text-sm text-gray-500">{achievement.description}</p>
-                      <p className="text-xs text-gray-400">{achievement.date}</p>
+                      <p className="text-xs text-gray-400">{formatTimeAgo(achievement.earned_at)}</p>
                     </div>
                   </div>
                 ))}
@@ -261,25 +335,33 @@ export default function ProgressDashboardPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <BarChart3 className="h-5 w-5" />
-                Weekly Progress
+                Quiz Performance
               </CardTitle>
-              <CardDescription>Lessons completed by category</CardDescription>
+              <CardDescription>Your recent quiz scores</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex items-end justify-around h-48 gap-2">
-                {weeklyStats.map((week, idx) => {
-                  const total = week.vocabulary + week.grammar + week.reading + week.writing + week.speaking;
-                  const height = (total / maxWeeklyTotal) * maxBarHeight;
-                  return (
-                    <div key={idx} className="flex flex-col items-center gap-2">
-                      <div 
-                        className="w-12 bg-gradient-to-t from-indigo-600 to-indigo-400 rounded-t-lg transition-all"
-                        style={{ height: `${height}%` }}
+              {quizAttempts && quizAttempts.length > 0 ? (
+                <div className="h-32 flex items-end gap-1">
+                  {quizAttempts.slice(-20).map((attempt, idx) => {
+                    const percentage = (attempt.score / attempt.total) * 100;
+                    return (
+                      <div
+                        key={idx}
+                        className="flex-1 bg-gradient-to-t from-green-500 to-green-300 rounded-t transition-all hover:from-green-600 hover:to-green-400"
+                        style={{ height: `${percentage}%` }}
+                        title={`${attempt.quizId}: ${attempt.score}/${attempt.total} (${Math.round(percentage)}%)`}
                       />
-                      <span className="text-xs text-gray-500">{week.week}</span>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="h-32 flex items-center justify-center text-gray-400">
+                  Complete quizzes to see your performance
+                </div>
+              )}
+              <div className="flex justify-between mt-2 text-xs text-gray-500">
+                <span>Oldest</span>
+                <span>Most Recent</span>
               </div>
             </CardContent>
           </Card>
@@ -314,37 +396,11 @@ export default function ProgressDashboardPage() {
           </Card>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
-              Score Trend
-            </CardTitle>
-            <CardDescription>Your quiz scores over the past 30 days</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="h-32 flex items-end gap-1">
-              {activityHistory.slice(-30).map((day, idx) => (
-                <div
-                  key={idx}
-                  className="flex-1 bg-gradient-to-t from-green-500 to-green-300 rounded-t transition-all hover:from-green-600 hover:to-green-400"
-                  style={{ height: `${day.score}%` }}
-                  title={`${day.date}: ${day.score}%`}
-                />
-              ))}
-            </div>
-            <div className="flex justify-between mt-2 text-xs text-gray-500">
-              <span>30 days ago</span>
-              <span>Today</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card className="bg-gradient-to-br from-indigo-500 to-indigo-600 text-white">
             <CardContent className="pt-6">
               <h3 className="font-semibold mb-2">Estimated Band Score</h3>
-              <p className="text-4xl font-bold">6.5 - 7.0</p>
+              <p className="text-4xl font-bold">{getEstimatedBand()}</p>
               <p className="text-indigo-200 text-sm mt-2">Based on your quiz performance</p>
             </CardContent>
           </Card>
@@ -359,9 +415,9 @@ export default function ProgressDashboardPage() {
 
           <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white">
             <CardContent className="pt-6">
-              <h3 className="font-semibold mb-2">Bookmarked</h3>
-              <p className="text-4xl font-bold">{bookmarkedCount}</p>
-              <p className="text-purple-200 text-sm mt-2">Lessons saved for review</p>
+              <h3 className="font-semibold mb-2">Quizzes Completed</h3>
+              <p className="text-4xl font-bold">{quizAttempts?.length || 0}</p>
+              <p className="text-purple-200 text-sm mt-2">Keep practicing!</p>
             </CardContent>
           </Card>
         </div>

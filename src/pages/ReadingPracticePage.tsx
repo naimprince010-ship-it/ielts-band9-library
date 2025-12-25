@@ -15,6 +15,7 @@ import {
   ArrowLeft,
   ArrowRight
 } from 'lucide-react';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 interface ReadingPassage {
   id: string;
@@ -268,6 +269,7 @@ function savePracticeSession(session: PracticeHistory) {
 }
 
 export default function ReadingPracticePage() {
+  const [passages, setPassages] = useState<ReadingPassage[]>(READING_PASSAGES);
   const [selectedPassage, setSelectedPassage] = useState<ReadingPassage | null>(null);
   const [stage, setStage] = useState<'select' | 'reading' | 'questions' | 'results'>('select');
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -279,11 +281,56 @@ export default function ReadingPracticePage() {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    fetchPassages();
     const history = getPracticeHistory();
     const today = new Date().toDateString();
     const todayCount = history.filter(h => new Date(h.completedAt).toDateString() === today).length;
     setPracticeCount(todayCount);
   }, []);
+
+    const fetchPassages = async () => {
+      if (isSupabaseConfigured() && supabase) {
+        try {
+          const { data: passageData, error: passageError } = await supabase
+            .from('reading_passages')
+            .select('*')
+            .eq('is_published', true)
+            .order('created_at', { ascending: false });
+
+          if (!passageError && passageData && passageData.length > 0) {
+            const passagesWithQuestions = await Promise.all(
+              passageData.map(async (p) => {
+                const { data: questions } = await supabase!
+                  .from('reading_questions')
+                  .select('*')
+                  .eq('passage_id', p.id)
+                  .order('order_index', { ascending: true });
+
+              return {
+                id: p.id,
+                title: p.title,
+                difficulty: p.difficulty as 'easy' | 'medium' | 'hard',
+                topic: p.topic,
+                passage: p.content,
+                timeLimit: p.time_limit,
+                questions: (questions || []).map((q: { id: string; question_type: string; question: string; options: string[] | null; correct_answer: string; explanation: string | null }) => ({
+                  id: q.id,
+                  type: q.question_type as 'multiple-choice' | 'true-false-not-given' | 'fill-blank' | 'matching',
+                  question: q.question,
+                  options: q.options || [],
+                  correctAnswer: q.correct_answer,
+                  explanation: q.explanation || ''
+                }))
+              };
+            })
+          );
+          setPassages(passagesWithQuestions);
+        }
+          } catch (err) {
+            console.error('Error fetching passages:', err);
+          }
+        }
+      };
 
   useEffect(() => {
     if (isTimerRunning && timeLeft > 0) {
@@ -399,7 +446,7 @@ export default function ReadingPracticePage() {
 
                 <h3 className="font-semibold text-lg mb-4">Select a Passage</h3>
                 <div className="space-y-4">
-                  {READING_PASSAGES.map((passage) => (
+                  {passages.map((passage) => (
                     <div
                       key={passage.id}
                       onClick={() => startPractice(passage)}
