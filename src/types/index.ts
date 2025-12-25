@@ -3,12 +3,16 @@ export type LessonLevel = 'beginner' | 'intermediate' | 'advanced';
 export type UserRole = 'user' | 'admin';
 export type SubscriptionStatus = 'free' | 'premium';
 
+export type PackageType = 'monthly' | 'yearly';
+
 export interface User {
   id: string;
   email: string;
   name: string;
   role: UserRole;
   subscription_status: SubscriptionStatus;
+  package_type?: PackageType;
+  premium_until?: string;
   created_at: string;
   updated_at: string;
 }

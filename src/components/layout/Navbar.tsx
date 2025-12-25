@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { BookOpen, Menu, X, User, LogOut, Settings, Bookmark } from 'lucide-react';
+import { BookOpen, Menu, X, User, LogOut, Settings, Bookmark, Crown } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -64,12 +64,16 @@ export function Navbar() {
                     <span>{user.name}</span>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem onClick={() => navigate('/bookmarks')}>
-                    <Bookmark className="h-4 w-4 mr-2" />
-                    My Bookmarks
-                  </DropdownMenuItem>
-                  {isAdmin && (
+                                <DropdownMenuContent align="end" className="w-48">
+                                  <DropdownMenuItem onClick={() => navigate('/profile')}>
+                                    <Crown className="h-4 w-4 mr-2" />
+                                    My Subscription
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem onClick={() => navigate('/bookmarks')}>
+                                    <Bookmark className="h-4 w-4 mr-2" />
+                                    My Bookmarks
+                                  </DropdownMenuItem>
+                                  {isAdmin && (
                     <>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={() => navigate('/admin')}>
@@ -132,16 +136,23 @@ export function Navbar() {
                         >
                           Pricing
                         </Link>
-            {user ? (
-              <>
-                <Link
-                  to="/bookmarks"
-                  className="block text-gray-600 hover:text-indigo-600 font-medium"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  My Bookmarks
-                </Link>
-                {isAdmin && (
+                        {user ? (
+                          <>
+                            <Link
+                              to="/profile"
+                              className="block text-gray-600 hover:text-indigo-600 font-medium"
+                              onClick={() => setMobileMenuOpen(false)}
+                            >
+                              My Subscription
+                            </Link>
+                            <Link
+                              to="/bookmarks"
+                              className="block text-gray-600 hover:text-indigo-600 font-medium"
+                              onClick={() => setMobileMenuOpen(false)}
+                            >
+                              My Bookmarks
+                            </Link>
+                            {isAdmin && (
                   <Link
                     to="/admin"
                     className="block text-gray-600 hover:text-indigo-600 font-medium"

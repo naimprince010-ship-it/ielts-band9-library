@@ -13,6 +13,7 @@ import { AdminPage } from '@/pages/AdminPage';
 import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage';
 import { ResetPasswordPage } from '@/pages/ResetPasswordPage';
 import { PaymentPage } from '@/pages/PaymentPage';
+import { ProfilePage } from '@/pages/ProfilePage';
 import './App.css';
 
 function App() {
@@ -74,15 +75,16 @@ function App() {
                 </Layout>
               }
             />
-            <Route
-              path="/admin"
-              element={
-                <Layout>
-                  <AdminPage />
-                </Layout>
-              }
-            />
-          </Routes>
+                      <Route
+                        path="/admin"
+                        element={
+                          <Layout>
+                            <AdminPage />
+                          </Layout>
+                        }
+                      />
+                      <Route path="/profile" element={<ProfilePage />} />
+                    </Routes>
         </LessonProvider>
       </AuthProvider>
     </Router>
