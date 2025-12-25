@@ -9206,5 +9206,1227 @@ This lesson teaches you these important pairs for correct pronunciation.`,
         'There is a sharp contrast between the two approaches.'
       ]
     }
+  },
+  // ============================================
+  // BATCH 19: Academic Word List (8 lessons)
+  // ============================================
+  {
+    id: 'vocab-awl-1',
+    title: 'Academic Word List: Sublist 1',
+    slug: 'academic-word-list-sublist-1',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Academic',
+    description: 'Essential academic words from AWL Sublist 1 for IELTS success.',
+    is_premium: true,
+    is_published: true,
+    view_count: 1050,
+    created_at: '2025-01-08T10:00:00Z',
+    updated_at: '2025-01-08T10:00:00Z',
+    content: {
+      title: 'Academic Word List: Sublist 1',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 essential academic words',
+        'Use AWL vocabulary accurately',
+        'Improve academic writing'
+      ],
+      coreExplanation: `The Academic Word List (AWL) contains 570 word families that appear frequently in academic texts. Sublist 1 contains the most common academic words.
+
+Mastering these words is essential for IELTS success, especially in Reading and Writing.`,
+      examples: [
+        { sentence: 'The analysis revealed significant patterns.', explanation: '"Analysis" means detailed examination.' },
+        { sentence: 'We need to approach this problem systematically.', explanation: '"Approach" means a way of dealing with something.' },
+        { sentence: 'The area requires further investigation.', explanation: '"Area" means a subject or field.' },
+        { sentence: 'The assessment showed positive results.', explanation: '"Assessment" means evaluation.' },
+        { sentence: 'We should assume nothing without evidence.', explanation: '"Assume" means to suppose without proof.' },
+        { sentence: 'The authority granted permission.', explanation: '"Authority" means power or official body.' },
+        { sentence: 'The data is available online.', explanation: '"Available" means accessible.' },
+        { sentence: 'The benefit outweighs the cost.', explanation: '"Benefit" means advantage.' },
+        { sentence: 'The concept is difficult to understand.', explanation: '"Concept" means an abstract idea.' },
+        { sentence: 'The consistent results support the theory.', explanation: '"Consistent" means unchanging.' },
+        { sentence: 'The constitutional rights must be protected.', explanation: '"Constitutional" relates to a constitution.' },
+        { sentence: 'The context determines the meaning.', explanation: '"Context" means surrounding circumstances.' },
+        { sentence: 'We need to create new opportunities.', explanation: '"Create" means to bring into existence.' },
+        { sentence: 'The data supports our hypothesis.', explanation: '"Data" means facts and statistics.' },
+        { sentence: 'The definition needs clarification.', explanation: '"Definition" means a statement of meaning.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "data" as singular', correction: '"Data" is technically plural (datum is singular), but singular use is now accepted', explanation: 'Both "data is" and "data are" are acceptable.' },
+        { mistake: 'Confusing "assume" and "presume"', correction: '"Assume" = suppose without proof; "presume" = suppose based on probability', explanation: 'These have slightly different meanings.' },
+        { mistake: 'Using "area" only for physical space', correction: '"Area" also means field or subject', explanation: '"Area of study" is common in academic English.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ of the data revealed important trends.', type: 'fill-blank' },
+        { question: 'Which word means "evaluation"?', options: ['assessment', 'assumption', 'authority', 'approach'], type: 'multiple-choice' },
+        { question: 'Use "concept" in a sentence about education.', type: 'rewrite' },
+        { question: 'The _____ results support the hypothesis.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'analysis',
+        'assessment',
+        'The concept of lifelong learning is essential in modern education.',
+        'consistent'
+      ],
+      quickRecap: 'Key AWL Sublist 1 words: analysis, approach, area, assessment, assume, authority, available, benefit, concept, consistent, constitutional, context, create, data, definition. Master these for academic success!',
+      collocations: [
+        'detailed analysis', 'systematic approach', 'subject area', 'comprehensive assessment',
+        'assume responsibility', 'local authority', 'readily available', 'mutual benefit',
+        'abstract concept', 'consistent results', 'historical context', 'create opportunities'
+      ],
+      synonyms: [
+        { word: 'analysis', synonyms: ['examination', 'study', 'investigation', 'evaluation'] },
+        { word: 'approach', synonyms: ['method', 'strategy', 'technique', 'way'] },
+        { word: 'benefit', synonyms: ['advantage', 'gain', 'profit', 'merit'] }
+      ],
+      speakingLines: [
+        'A detailed analysis of the data reveals significant trends.',
+        'We need to take a systematic approach to this problem.',
+        'The benefits of education extend beyond economic gains.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-awl-2',
+    title: 'Academic Word List: Sublist 2',
+    slug: 'academic-word-list-sublist-2',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Academic',
+    description: 'More essential academic words from AWL Sublist 2.',
+    is_premium: true,
+    is_published: true,
+    view_count: 980,
+    created_at: '2025-01-09T10:00:00Z',
+    updated_at: '2025-01-09T10:00:00Z',
+    content: {
+      title: 'Academic Word List: Sublist 2',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 more academic words',
+        'Expand AWL vocabulary',
+        'Improve academic fluency'
+      ],
+      coreExplanation: `AWL Sublist 2 contains the second most frequent academic words. These words appear across all academic disciplines.
+
+Learning these words will significantly improve your academic reading and writing.`,
+      examples: [
+        { sentence: 'We need to achieve our goals.', explanation: '"Achieve" means to accomplish.' },
+        { sentence: 'The acquisition of knowledge takes time.', explanation: '"Acquisition" means the act of obtaining.' },
+        { sentence: 'The administration implemented new policies.', explanation: '"Administration" means management or government.' },
+        { sentence: 'The affect on the environment is significant.', explanation: '"Affect" (verb) means to influence.' },
+        { sentence: 'We need an appropriate response.', explanation: '"Appropriate" means suitable.' },
+        { sentence: 'The aspects of the problem are complex.', explanation: '"Aspects" means features or elements.' },
+        { sentence: 'We should assist those in need.', explanation: '"Assist" means to help.' },
+        { sentence: 'The categories are clearly defined.', explanation: '"Categories" means classes or groups.' },
+        { sentence: 'The chapter discusses economic theory.', explanation: '"Chapter" means a section of a book.' },
+        { sentence: 'The commission investigated the matter.', explanation: '"Commission" means an official group.' },
+        { sentence: 'The community supports the initiative.', explanation: '"Community" means a group of people.' },
+        { sentence: 'The complex issue requires careful analysis.', explanation: '"Complex" means complicated.' },
+        { sentence: 'We need to compute the results.', explanation: '"Compute" means to calculate.' },
+        { sentence: 'The conclusion summarizes the findings.', explanation: '"Conclusion" means the end or final judgment.' },
+        { sentence: 'We need to conduct more research.', explanation: '"Conduct" means to carry out.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "affect" and "effect"', correction: '"Affect" is usually a verb; "effect" is usually a noun', explanation: '"The policy affects people" vs "The effect is significant".' },
+        { mistake: 'Using "appropriate" incorrectly', correction: '"Appropriate" means suitable for the situation', explanation: 'Consider context when using this word.' },
+        { mistake: 'Confusing "complex" and "complicated"', correction: 'Both mean difficult, but "complex" suggests many interconnected parts', explanation: '"Complex" is more academic.' }
+      ],
+      miniPractice: [
+        { question: 'We need to _____ our goals through hard work.', type: 'fill-blank' },
+        { question: 'Which word means "to carry out"?', options: ['conduct', 'compute', 'conclude', 'commission'], type: 'multiple-choice' },
+        { question: 'Use "complex" in a sentence about society.', type: 'rewrite' },
+        { question: 'The _____ of the problem are multifaceted.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'achieve',
+        'conduct',
+        'Modern society is a complex system with many interconnected elements.',
+        'aspects'
+      ],
+      quickRecap: 'Key AWL Sublist 2 words: achieve, acquisition, administration, affect, appropriate, aspects, assist, categories, chapter, commission, community, complex, compute, conclusion, conduct. Master these for academic success!',
+      collocations: [
+        'achieve goals', 'knowledge acquisition', 'government administration', 'significantly affect',
+        'appropriate response', 'various aspects', 'assist with', 'broad categories',
+        'opening chapter', 'independent commission', 'local community', 'complex issue'
+      ],
+      synonyms: [
+        { word: 'achieve', synonyms: ['accomplish', 'attain', 'reach', 'realize'] },
+        { word: 'appropriate', synonyms: ['suitable', 'proper', 'fitting', 'apt'] },
+        { word: 'complex', synonyms: ['complicated', 'intricate', 'elaborate', 'multifaceted'] }
+      ],
+      speakingLines: [
+        'We need to achieve sustainable development goals.',
+        'The complex nature of this issue requires careful analysis.',
+        'Various aspects of the problem need to be addressed.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-awl-3',
+    title: 'Academic Word List: Sublist 3',
+    slug: 'academic-word-list-sublist-3',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Academic',
+    description: 'Essential academic words from AWL Sublist 3.',
+    is_premium: true,
+    is_published: true,
+    view_count: 920,
+    created_at: '2025-01-10T10:00:00Z',
+    updated_at: '2025-01-10T10:00:00Z',
+    content: {
+      title: 'Academic Word List: Sublist 3',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 more academic words',
+        'Build academic vocabulary',
+        'Improve reading comprehension'
+      ],
+      coreExplanation: `AWL Sublist 3 contains more frequently used academic words. These words are essential for understanding academic texts.
+
+Mastering these words will help you in IELTS Reading and Writing tasks.`,
+      examples: [
+        { sentence: 'The alternative solution is more practical.', explanation: '"Alternative" means another option.' },
+        { sentence: 'The circumstances require immediate action.', explanation: '"Circumstances" means conditions or situation.' },
+        { sentence: 'We need to comment on the findings.', explanation: '"Comment" means to express an opinion.' },
+        { sentence: 'The compensation was adequate.', explanation: '"Compensation" means payment or reward.' },
+        { sentence: 'The components of the system are interconnected.', explanation: '"Components" means parts.' },
+        { sentence: 'We need to consent to the terms.', explanation: '"Consent" means to agree.' },
+        { sentence: 'The considerable effort paid off.', explanation: '"Considerable" means large or significant.' },
+        { sentence: 'The constant change is challenging.', explanation: '"Constant" means continuous.' },
+        { sentence: 'The constraints limit our options.', explanation: '"Constraints" means limitations.' },
+        { sentence: 'We need to contribute to the discussion.', explanation: '"Contribute" means to give or add.' },
+        { sentence: 'The convention was well-attended.', explanation: '"Convention" means a meeting or accepted practice.' },
+        { sentence: 'We need to coordinate our efforts.', explanation: '"Coordinate" means to organize together.' },
+        { sentence: 'The core issue remains unresolved.', explanation: '"Core" means central or essential.' },
+        { sentence: 'The corporate sector is growing.', explanation: '"Corporate" relates to businesses.' },
+        { sentence: 'The corresponding data supports this.', explanation: '"Corresponding" means matching or related.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "alternative" for more than two options', correction: 'Traditionally "alternative" implies two choices, but modern usage accepts multiple', explanation: 'Both uses are now acceptable.' },
+        { mistake: 'Confusing "considerable" and "considerate"', correction: '"Considerable" = large; "considerate" = thoughtful', explanation: 'These have different meanings.' },
+        { mistake: 'Using "constant" and "consistent" interchangeably', correction: '"Constant" = continuous; "consistent" = unchanging in quality', explanation: 'Choose based on context.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ solution may be more effective.', type: 'fill-blank' },
+        { question: 'Which word means "limitations"?', options: ['constraints', 'components', 'conventions', 'coordinates'], type: 'multiple-choice' },
+        { question: 'Use "considerable" in a sentence about effort.', type: 'rewrite' },
+        { question: 'The _____ of the system need maintenance.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'alternative',
+        'constraints',
+        'Considerable effort is required to achieve success.',
+        'components'
+      ],
+      quickRecap: 'Key AWL Sublist 3 words: alternative, circumstances, comment, compensation, components, consent, considerable, constant, constraints, contribute, convention, coordinate, core, corporate, corresponding. Master these for academic success!',
+      collocations: [
+        'alternative solution', 'under circumstances', 'make a comment', 'fair compensation',
+        'key components', 'informed consent', 'considerable effort', 'constant change',
+        'budget constraints', 'contribute to', 'social convention', 'coordinate efforts'
+      ],
+      synonyms: [
+        { word: 'alternative', synonyms: ['option', 'choice', 'substitute', 'replacement'] },
+        { word: 'considerable', synonyms: ['significant', 'substantial', 'large', 'notable'] },
+        { word: 'contribute', synonyms: ['add', 'give', 'provide', 'supply'] }
+      ],
+      speakingLines: [
+        'We need to consider alternative approaches to this problem.',
+        'Considerable effort is required to achieve meaningful change.',
+        'Various factors contribute to this phenomenon.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-awl-4',
+    title: 'Academic Word List: Sublist 4',
+    slug: 'academic-word-list-sublist-4',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Academic',
+    description: 'Essential academic words from AWL Sublist 4.',
+    is_premium: true,
+    is_published: true,
+    view_count: 880,
+    created_at: '2025-01-11T10:00:00Z',
+    updated_at: '2025-01-11T10:00:00Z',
+    content: {
+      title: 'Academic Word List: Sublist 4',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 more academic words',
+        'Expand academic vocabulary',
+        'Improve writing precision'
+      ],
+      coreExplanation: `AWL Sublist 4 contains more academic words essential for IELTS success. These words appear frequently in academic texts across disciplines.
+
+Learning these words will enhance your academic communication skills.`,
+      examples: [
+        { sentence: 'We need to access the database.', explanation: '"Access" means to obtain or reach.' },
+        { sentence: 'The adequate resources are available.', explanation: '"Adequate" means sufficient.' },
+        { sentence: 'The annual report was published.', explanation: '"Annual" means yearly.' },
+        { sentence: 'The apparent contradiction needs explanation.', explanation: '"Apparent" means seeming or obvious.' },
+        { sentence: 'We need to approximate the value.', explanation: '"Approximate" means to estimate.' },
+        { sentence: 'The attitudes have changed significantly.', explanation: '"Attitudes" means opinions or feelings.' },
+        { sentence: 'We need to attribute the success to teamwork.', explanation: '"Attribute" means to assign a cause.' },
+        { sentence: 'The civil rights movement was significant.', explanation: '"Civil" relates to citizens or society.' },
+        { sentence: 'The code of conduct is clear.', explanation: '"Code" means a system of rules.' },
+        { sentence: 'We need to commit to the project.', explanation: '"Commit" means to dedicate.' },
+        { sentence: 'The communication was effective.', explanation: '"Communication" means exchange of information.' },
+        { sentence: 'The concentration of power is concerning.', explanation: '"Concentration" means focusing or gathering.' },
+        { sentence: 'The conference addressed key issues.', explanation: '"Conference" means a formal meeting.' },
+        { sentence: 'The contrast is striking.', explanation: '"Contrast" means difference.' },
+        { sentence: 'The cycle continues indefinitely.', explanation: '"Cycle" means a recurring sequence.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "access" (noun/verb) usage', correction: '"Access" can be both noun and verb', explanation: '"Access the data" (v) vs "have access" (n).' },
+        { mistake: 'Using "adequate" negatively', correction: '"Adequate" means sufficient, not necessarily minimal', explanation: 'Context determines connotation.' },
+        { mistake: 'Confusing "apparent" meanings', correction: '"Apparent" can mean "obvious" or "seeming"', explanation: 'Context clarifies the meaning.' }
+      ],
+      miniPractice: [
+        { question: 'We need to _____ the information quickly.', type: 'fill-blank' },
+        { question: 'Which word means "sufficient"?', options: ['adequate', 'apparent', 'annual', 'approximate'], type: 'multiple-choice' },
+        { question: 'Use "attribute" in a sentence about success.', type: 'rewrite' },
+        { question: 'The _____ report shows positive trends.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'access',
+        'adequate',
+        'We can attribute the success to effective teamwork.',
+        'annual'
+      ],
+      quickRecap: 'Key AWL Sublist 4 words: access, adequate, annual, apparent, approximate, attitudes, attribute, civil, code, commit, communication, concentration, conference, contrast, cycle. Master these for academic success!',
+      collocations: [
+        'access information', 'adequate resources', 'annual report', 'apparent contradiction',
+        'approximate value', 'positive attitudes', 'attribute success', 'civil rights',
+        'code of conduct', 'commit to', 'effective communication', 'sharp contrast'
+      ],
+      synonyms: [
+        { word: 'access', synonyms: ['obtain', 'reach', 'retrieve', 'get'] },
+        { word: 'adequate', synonyms: ['sufficient', 'enough', 'satisfactory', 'acceptable'] },
+        { word: 'apparent', synonyms: ['obvious', 'evident', 'clear', 'seeming'] }
+      ],
+      speakingLines: [
+        'We need adequate resources to complete this project.',
+        'The apparent contradiction requires further investigation.',
+        'Effective communication is essential for success.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-awl-5',
+    title: 'Academic Word List: Research Terms',
+    slug: 'academic-word-list-research-terms',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Academic',
+    description: 'Academic vocabulary specifically for discussing research and studies.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2025-01-12T10:00:00Z',
+    updated_at: '2025-01-12T10:00:00Z',
+    content: {
+      title: 'Academic Word List: Research Terms',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 research vocabulary words',
+        'Discuss studies accurately',
+        'Improve academic writing'
+      ],
+      coreExplanation: `Research vocabulary is essential for IELTS, especially when discussing studies and findings. These words help you describe research processes and results accurately.
+
+Mastering these terms will improve your ability to discuss academic topics.`,
+      examples: [
+        { sentence: 'The hypothesis was tested experimentally.', explanation: '"Hypothesis" means a proposed explanation.' },
+        { sentence: 'The methodology was rigorous.', explanation: '"Methodology" means the system of methods used.' },
+        { sentence: 'The findings were significant.', explanation: '"Findings" means results or discoveries.' },
+        { sentence: 'The sample size was adequate.', explanation: '"Sample" means a representative group.' },
+        { sentence: 'The variables were controlled.', explanation: '"Variables" means factors that can change.' },
+        { sentence: 'The correlation was strong.', explanation: '"Correlation" means a relationship between things.' },
+        { sentence: 'The validity of the study was confirmed.', explanation: '"Validity" means accuracy or soundness.' },
+        { sentence: 'The reliability of the data was tested.', explanation: '"Reliability" means consistency.' },
+        { sentence: 'The bias was minimized.', explanation: '"Bias" means prejudice or systematic error.' },
+        { sentence: 'The participants were randomly selected.', explanation: '"Participants" means people involved in a study.' },
+        { sentence: 'The outcome was positive.', explanation: '"Outcome" means result.' },
+        { sentence: 'The implications are far-reaching.', explanation: '"Implications" means consequences or effects.' },
+        { sentence: 'The limitations were acknowledged.', explanation: '"Limitations" means restrictions or weaknesses.' },
+        { sentence: 'The framework was theoretical.', explanation: '"Framework" means a basic structure.' },
+        { sentence: 'The phenomenon requires explanation.', explanation: '"Phenomenon" means an observable fact or event.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "correlation" and "causation"', correction: 'Correlation shows relationship; causation shows cause', explanation: '"Correlation does not imply causation."' },
+        { mistake: 'Using "hypothesis" and "theory" interchangeably', correction: 'Hypothesis = proposed explanation; theory = well-tested explanation', explanation: 'These have different levels of evidence.' },
+        { mistake: 'Confusing "validity" and "reliability"', correction: 'Validity = accuracy; reliability = consistency', explanation: 'Both are important in research.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ was tested through experiments.', type: 'fill-blank' },
+        { question: 'Which word means "consistency"?', options: ['reliability', 'validity', 'correlation', 'bias'], type: 'multiple-choice' },
+        { question: 'Use "implications" in a sentence about research.', type: 'rewrite' },
+        { question: 'The _____ of the study were significant.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'hypothesis',
+        'reliability',
+        'The implications of this research are far-reaching.',
+        'findings'
+      ],
+      quickRecap: 'Key research terms: hypothesis, methodology, findings, sample, variables, correlation, validity, reliability, bias, participants, outcome, implications, limitations, framework, phenomenon. Master these for discussing research!',
+      collocations: [
+        'test hypothesis', 'research methodology', 'key findings', 'sample size',
+        'control variables', 'strong correlation', 'ensure validity', 'test reliability',
+        'minimize bias', 'study participants', 'positive outcome', 'far-reaching implications'
+      ],
+      synonyms: [
+        { word: 'hypothesis', synonyms: ['theory', 'proposition', 'assumption', 'conjecture'] },
+        { word: 'findings', synonyms: ['results', 'discoveries', 'conclusions', 'outcomes'] },
+        { word: 'implications', synonyms: ['consequences', 'effects', 'ramifications', 'repercussions'] }
+      ],
+      speakingLines: [
+        'The hypothesis was supported by the experimental findings.',
+        'The methodology ensured the validity of the results.',
+        'The implications of this research are significant for policy.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-awl-6',
+    title: 'Academic Word List: Analysis & Evaluation',
+    slug: 'academic-word-list-analysis-evaluation',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Academic',
+    description: 'Academic vocabulary for analyzing and evaluating information.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-01-13T10:00:00Z',
+    updated_at: '2025-01-13T10:00:00Z',
+    content: {
+      title: 'Academic Word List: Analysis & Evaluation',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 analysis vocabulary words',
+        'Evaluate information critically',
+        'Improve academic argumentation'
+      ],
+      coreExplanation: `Analysis and evaluation vocabulary is essential for critical thinking in IELTS. These words help you discuss, analyze, and evaluate information effectively.
+
+Mastering these terms will improve your ability to construct academic arguments.`,
+      examples: [
+        { sentence: 'We need to assess the situation carefully.', explanation: '"Assess" means to evaluate.' },
+        { sentence: 'The criteria for selection were clear.', explanation: '"Criteria" means standards for judgment.' },
+        { sentence: 'We should distinguish between fact and opinion.', explanation: '"Distinguish" means to recognize differences.' },
+        { sentence: 'The evidence supports the conclusion.', explanation: '"Evidence" means proof or support.' },
+        { sentence: 'We need to evaluate the options.', explanation: '"Evaluate" means to judge the value.' },
+        { sentence: 'The interpretation varies among scholars.', explanation: '"Interpretation" means explanation of meaning.' },
+        { sentence: 'We should justify our position.', explanation: '"Justify" means to show reasons for.' },
+        { sentence: 'The perspective influences the analysis.', explanation: '"Perspective" means point of view.' },
+        { sentence: 'We need to prioritize the issues.', explanation: '"Prioritize" means to rank by importance.' },
+        { sentence: 'The rationale was clearly explained.', explanation: '"Rationale" means the reasons behind something.' },
+        { sentence: 'We should scrutinize the data.', explanation: '"Scrutinize" means to examine closely.' },
+        { sentence: 'The significance cannot be overstated.', explanation: '"Significance" means importance.' },
+        { sentence: 'We need to synthesize the information.', explanation: '"Synthesize" means to combine into a whole.' },
+        { sentence: 'The validity of the argument is questionable.', explanation: '"Validity" means soundness or accuracy.' },
+        { sentence: 'We should verify the information.', explanation: '"Verify" means to confirm accuracy.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "criteria" as singular', correction: '"Criteria" is plural; "criterion" is singular', explanation: '"The criterion is..." vs "The criteria are..."' },
+        { mistake: 'Confusing "assess" and "access"', correction: '"Assess" = evaluate; "access" = obtain', explanation: 'These are different words.' },
+        { mistake: 'Using "justify" without providing reasons', correction: 'Always follow "justify" with actual reasons', explanation: '"Justify" requires explanation.' }
+      ],
+      miniPractice: [
+        { question: 'We need to _____ the situation before acting.', type: 'fill-blank' },
+        { question: 'Which word means "standards for judgment"?', options: ['criteria', 'evidence', 'rationale', 'perspective'], type: 'multiple-choice' },
+        { question: 'Use "synthesize" in a sentence about research.', type: 'rewrite' },
+        { question: 'The _____ for this decision was clearly explained.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'assess',
+        'criteria',
+        'Researchers need to synthesize findings from multiple studies.',
+        'rationale'
+      ],
+      quickRecap: 'Key analysis terms: assess, criteria, distinguish, evidence, evaluate, interpretation, justify, perspective, prioritize, rationale, scrutinize, significance, synthesize, validity, verify. Master these for critical analysis!',
+      collocations: [
+        'assess the situation', 'selection criteria', 'distinguish between', 'provide evidence',
+        'evaluate options', 'different interpretations', 'justify decisions', 'from this perspective',
+        'prioritize tasks', 'underlying rationale', 'scrutinize closely', 'great significance'
+      ],
+      synonyms: [
+        { word: 'assess', synonyms: ['evaluate', 'judge', 'appraise', 'analyze'] },
+        { word: 'evidence', synonyms: ['proof', 'support', 'data', 'documentation'] },
+        { word: 'significance', synonyms: ['importance', 'relevance', 'meaning', 'consequence'] }
+      ],
+      speakingLines: [
+        'We need to assess the situation from multiple perspectives.',
+        'The evidence strongly supports this conclusion.',
+        'The significance of this finding cannot be overstated.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-awl-7',
+    title: 'Academic Word List: Process & Change',
+    slug: 'academic-word-list-process-change',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Academic',
+    description: 'Academic vocabulary for describing processes and changes.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-01-14T10:00:00Z',
+    updated_at: '2025-01-14T10:00:00Z',
+    content: {
+      title: 'Academic Word List: Process & Change',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 process vocabulary words',
+        'Describe changes accurately',
+        'Improve Task 1 writing'
+      ],
+      coreExplanation: `Process and change vocabulary is essential for IELTS Writing Task 1 and for describing developments. These words help you explain how things happen and change.
+
+Mastering these terms will improve your ability to describe processes and trends.`,
+      examples: [
+        { sentence: 'The process involves several stages.', explanation: '"Process" means a series of actions.' },
+        { sentence: 'The procedure was followed carefully.', explanation: '"Procedure" means a way of doing something.' },
+        { sentence: 'The sequence of events is important.', explanation: '"Sequence" means order.' },
+        { sentence: 'The phase lasted several months.', explanation: '"Phase" means a stage in a process.' },
+        { sentence: 'The transition was smooth.', explanation: '"Transition" means change from one state to another.' },
+        { sentence: 'The transformation was dramatic.', explanation: '"Transformation" means a complete change.' },
+        { sentence: 'The evolution of technology continues.', explanation: '"Evolution" means gradual development.' },
+        { sentence: 'The shift in attitudes is noticeable.', explanation: '"Shift" means a change in position or direction.' },
+        { sentence: 'The modification improved efficiency.', explanation: '"Modification" means a change or adjustment.' },
+        { sentence: 'The adaptation was necessary.', explanation: '"Adaptation" means adjustment to new conditions.' },
+        { sentence: 'The conversion was completed.', explanation: '"Conversion" means changing from one form to another.' },
+        { sentence: 'The progression was steady.', explanation: '"Progression" means forward movement.' },
+        { sentence: 'The fluctuation was unexpected.', explanation: '"Fluctuation" means irregular variation.' },
+        { sentence: 'The decline was gradual.', explanation: '"Decline" means decrease.' },
+        { sentence: 'The emergence of new trends is evident.', explanation: '"Emergence" means coming into existence.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "process" and "procedure"', correction: '"Process" = series of actions; "procedure" = established way of doing', explanation: 'Both describe steps but differ in formality.' },
+        { mistake: 'Using "evolution" for sudden change', correction: '"Evolution" implies gradual change', explanation: 'Use "revolution" for sudden, dramatic change.' },
+        { mistake: 'Confusing "transition" and "transformation"', correction: '"Transition" = change between states; "transformation" = complete change', explanation: '"Transformation" is more dramatic.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ involves several stages.', type: 'fill-blank' },
+        { question: 'Which word means "gradual development"?', options: ['evolution', 'revolution', 'conversion', 'fluctuation'], type: 'multiple-choice' },
+        { question: 'Use "transition" in a sentence about change.', type: 'rewrite' },
+        { question: 'The _____ in attitudes has been significant.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'process',
+        'evolution',
+        'The transition from traditional to digital methods has been challenging.',
+        'shift'
+      ],
+      quickRecap: 'Key process terms: process, procedure, sequence, phase, transition, transformation, evolution, shift, modification, adaptation, conversion, progression, fluctuation, decline, emergence. Master these for describing changes!',
+      collocations: [
+        'manufacturing process', 'standard procedure', 'logical sequence', 'initial phase',
+        'smooth transition', 'dramatic transformation', 'gradual evolution', 'significant shift',
+        'minor modification', 'successful adaptation', 'complete conversion', 'steady progression'
+      ],
+      synonyms: [
+        { word: 'process', synonyms: ['procedure', 'method', 'system', 'operation'] },
+        { word: 'transition', synonyms: ['change', 'shift', 'move', 'passage'] },
+        { word: 'transformation', synonyms: ['change', 'conversion', 'metamorphosis', 'alteration'] }
+      ],
+      speakingLines: [
+        'The process involves several distinct phases.',
+        'The transition to renewable energy requires significant investment.',
+        'The transformation of the industry has been remarkable.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-awl-8',
+    title: 'Academic Word List: Quantity & Degree',
+    slug: 'academic-word-list-quantity-degree',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Academic',
+    description: 'Academic vocabulary for expressing quantity and degree.',
+    is_premium: true,
+    is_published: true,
+    view_count: 750,
+    created_at: '2025-01-15T10:00:00Z',
+    updated_at: '2025-01-15T10:00:00Z',
+    content: {
+      title: 'Academic Word List: Quantity & Degree',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 quantity vocabulary words',
+        'Express degree accurately',
+        'Improve data description'
+      ],
+      coreExplanation: `Quantity and degree vocabulary is essential for IELTS, especially for describing data and making comparisons. These words help you express amounts and levels precisely.
+
+Mastering these terms will improve your ability to describe statistics and trends.`,
+      examples: [
+        { sentence: 'The majority of respondents agreed.', explanation: '"Majority" means more than half.' },
+        { sentence: 'A minority of people disagreed.', explanation: '"Minority" means less than half.' },
+        { sentence: 'The proportion has increased.', explanation: '"Proportion" means a part of a whole.' },
+        { sentence: 'The percentage rose significantly.', explanation: '"Percentage" means a rate per hundred.' },
+        { sentence: 'The ratio is 2:1.', explanation: '"Ratio" means the relationship between amounts.' },
+        { sentence: 'The volume of trade increased.', explanation: '"Volume" means amount or quantity.' },
+        { sentence: 'The extent of the damage is unclear.', explanation: '"Extent" means the degree or scope.' },
+        { sentence: 'The magnitude of the problem is significant.', explanation: '"Magnitude" means size or importance.' },
+        { sentence: 'The intensity has increased.', explanation: '"Intensity" means strength or degree.' },
+        { sentence: 'The frequency of occurrence is high.', explanation: '"Frequency" means how often something happens.' },
+        { sentence: 'The duration was three months.', explanation: '"Duration" means length of time.' },
+        { sentence: 'The scope of the study was limited.', explanation: '"Scope" means range or extent.' },
+        { sentence: 'The scale of the project is impressive.', explanation: '"Scale" means size or extent.' },
+        { sentence: 'The rate of growth has slowed.', explanation: '"Rate" means speed or frequency.' },
+        { sentence: 'The level of participation was high.', explanation: '"Level" means degree or amount.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "majority" and "most"', correction: '"Majority" is more formal and precise', explanation: 'Use "majority" in academic writing.' },
+        { mistake: 'Using "percentage" without a number', correction: 'Specify the percentage or use "proportion"', explanation: '"A high percentage" is vague.' },
+        { mistake: 'Confusing "ratio" and "rate"', correction: '"Ratio" compares quantities; "rate" measures frequency', explanation: 'These have different uses.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ of respondents supported the proposal.', type: 'fill-blank' },
+        { question: 'Which word means "how often something happens"?', options: ['frequency', 'duration', 'magnitude', 'proportion'], type: 'multiple-choice' },
+        { question: 'Use "extent" in a sentence about damage.', type: 'rewrite' },
+        { question: 'The _____ of growth has increased significantly.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'majority',
+        'frequency',
+        'The extent of the damage is still being assessed.',
+        'rate'
+      ],
+      quickRecap: 'Key quantity terms: majority, minority, proportion, percentage, ratio, volume, extent, magnitude, intensity, frequency, duration, scope, scale, rate, level. Master these for describing data!',
+      collocations: [
+        'vast majority', 'small minority', 'significant proportion', 'high percentage',
+        'ratio of', 'large volume', 'full extent', 'great magnitude',
+        'high intensity', 'increasing frequency', 'short duration', 'broad scope'
+      ],
+      synonyms: [
+        { word: 'majority', synonyms: ['most', 'bulk', 'greater part', 'preponderance'] },
+        { word: 'extent', synonyms: ['degree', 'scope', 'range', 'scale'] },
+        { word: 'magnitude', synonyms: ['size', 'scale', 'extent', 'importance'] }
+      ],
+      speakingLines: [
+        'The majority of people support this policy.',
+        'The extent of the problem is often underestimated.',
+        'The rate of technological change continues to accelerate.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 20: Phrasal Verbs & Idioms (8 lessons)
+  // ============================================
+  {
+    id: 'vocab-phrasal-1',
+    title: 'Essential Phrasal Verbs Part 1',
+    slug: 'essential-phrasal-verbs-1',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Phrasal Verbs',
+    description: 'Common phrasal verbs for IELTS Speaking and informal contexts.',
+    is_premium: true,
+    is_published: true,
+    view_count: 920,
+    created_at: '2025-01-16T10:00:00Z',
+    updated_at: '2025-01-16T10:00:00Z',
+    content: {
+      title: 'Essential Phrasal Verbs Part 1',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 common phrasal verbs',
+        'Use phrasal verbs naturally',
+        'Improve speaking fluency'
+      ],
+      coreExplanation: `Phrasal verbs are combinations of verbs with prepositions or adverbs that create new meanings. They are common in spoken English and can demonstrate natural language use.
+
+While formal writing prefers single-word alternatives, phrasal verbs are appropriate in IELTS Speaking.`,
+      examples: [
+        { sentence: 'I need to look into this matter.', explanation: '"Look into" means to investigate.' },
+        { sentence: 'We should carry out the plan.', explanation: '"Carry out" means to execute or perform.' },
+        { sentence: 'The meeting was put off until next week.', explanation: '"Put off" means to postpone.' },
+        { sentence: 'I came across an interesting article.', explanation: '"Come across" means to find by chance.' },
+        { sentence: 'We need to figure out a solution.', explanation: '"Figure out" means to understand or solve.' },
+        { sentence: 'The company is going through changes.', explanation: '"Go through" means to experience.' },
+        { sentence: 'I grew up in a small town.', explanation: '"Grow up" means to become an adult.' },
+        { sentence: 'We should set up a meeting.', explanation: '"Set up" means to arrange or establish.' },
+        { sentence: 'The project turned out well.', explanation: '"Turn out" means to result.' },
+        { sentence: 'I need to catch up on my work.', explanation: '"Catch up" means to reach the same level.' },
+        { sentence: 'We should point out the problems.', explanation: '"Point out" means to indicate or mention.' },
+        { sentence: 'The issue came up during the meeting.', explanation: '"Come up" means to arise or be mentioned.' },
+        { sentence: 'I look forward to meeting you.', explanation: '"Look forward to" means to anticipate with pleasure.' },
+        { sentence: 'We need to deal with this issue.', explanation: '"Deal with" means to handle or address.' },
+        { sentence: 'The plan fell through.', explanation: '"Fall through" means to fail to happen.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using phrasal verbs in formal writing', correction: 'Use single-word alternatives in formal writing', explanation: '"Investigate" instead of "look into" in essays.' },
+        { mistake: 'Wrong preposition: "look in"', correction: '"Look into" (investigate) vs "look in" (glance inside)', explanation: 'Prepositions change meaning.' },
+        { mistake: 'Forgetting "to" after "look forward"', correction: '"Look forward to" + noun/gerund', explanation: '"I look forward to meeting you."' }
+      ],
+      miniPractice: [
+        { question: 'I need to look _____ this matter carefully.', type: 'fill-blank' },
+        { question: 'Which phrasal verb means "to postpone"?', options: ['put off', 'put on', 'put up', 'put out'], type: 'multiple-choice' },
+        { question: 'Replace with single word: "We need to carry out the plan."', type: 'rewrite' },
+        { question: 'The project turned _____ better than expected.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'into',
+        'put off',
+        'We need to execute/implement the plan.',
+        'out'
+      ],
+      quickRecap: 'Key phrasal verbs: look into, carry out, put off, come across, figure out, go through, grow up, set up, turn out, catch up, point out, come up, look forward to, deal with, fall through. Use these naturally in speaking!',
+      collocations: [
+        'look into the matter', 'carry out research', 'put off the meeting', 'come across information',
+        'figure out a solution', 'go through changes', 'grow up in', 'set up a system',
+        'turn out well', 'catch up on work', 'point out problems', 'deal with issues'
+      ],
+      synonyms: [
+        { word: 'look into', synonyms: ['investigate', 'examine', 'explore', 'research'] },
+        { word: 'carry out', synonyms: ['execute', 'perform', 'conduct', 'implement'] },
+        { word: 'put off', synonyms: ['postpone', 'delay', 'defer', 'reschedule'] }
+      ],
+      speakingLines: [
+        'I need to look into this matter before making a decision.',
+        'The company is going through significant changes.',
+        'I look forward to discussing this further.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-phrasal-2',
+    title: 'Essential Phrasal Verbs Part 2',
+    slug: 'essential-phrasal-verbs-2',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Phrasal Verbs',
+    description: 'More common phrasal verbs for natural English expression.',
+    is_premium: true,
+    is_published: true,
+    view_count: 880,
+    created_at: '2025-01-17T10:00:00Z',
+    updated_at: '2025-01-17T10:00:00Z',
+    content: {
+      title: 'Essential Phrasal Verbs Part 2',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 more phrasal verbs',
+        'Express ideas naturally',
+        'Improve speaking range'
+      ],
+      coreExplanation: `Continuing from Part 1, this lesson covers more essential phrasal verbs. Using phrasal verbs appropriately demonstrates natural language use.
+
+Remember to use single-word alternatives in formal writing.`,
+      examples: [
+        { sentence: 'We need to bring up this issue.', explanation: '"Bring up" means to mention or raise.' },
+        { sentence: 'The company is cutting back on expenses.', explanation: '"Cut back" means to reduce.' },
+        { sentence: 'I need to get over this cold.', explanation: '"Get over" means to recover from.' },
+        { sentence: 'We should give up smoking.', explanation: '"Give up" means to stop or quit.' },
+        { sentence: 'The plane took off on time.', explanation: '"Take off" means to depart (for planes).' },
+        { sentence: 'I ran into an old friend.', explanation: '"Run into" means to meet by chance.' },
+        { sentence: 'We need to work out a solution.', explanation: '"Work out" means to solve or calculate.' },
+        { sentence: 'The fire broke out at midnight.', explanation: '"Break out" means to start suddenly.' },
+        { sentence: 'I need to think over your offer.', explanation: '"Think over" means to consider carefully.' },
+        { sentence: 'We should cut down on sugar.', explanation: '"Cut down" means to reduce consumption.' },
+        { sentence: 'The meeting was called off.', explanation: '"Call off" means to cancel.' },
+        { sentence: 'I need to keep up with the news.', explanation: '"Keep up with" means to stay informed.' },
+        { sentence: 'We should look after the environment.', explanation: '"Look after" means to take care of.' },
+        { sentence: 'The truth came out eventually.', explanation: '"Come out" means to become known.' },
+        { sentence: 'I need to make up for lost time.', explanation: '"Make up for" means to compensate.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "bring up" and "grow up"', correction: '"Bring up" = mention/raise; "grow up" = become adult', explanation: 'Different meanings.' },
+        { mistake: 'Using "give up" without object correctly', correction: '"Give up smoking" or "give it up"', explanation: 'Object placement matters.' },
+        { mistake: 'Confusing "cut back" and "cut down"', correction: 'Both mean reduce, but "cut back on" and "cut down on" are used differently', explanation: 'Both are acceptable for reducing.' }
+      ],
+      miniPractice: [
+        { question: 'We need to bring _____ this issue at the meeting.', type: 'fill-blank' },
+        { question: 'Which phrasal verb means "to cancel"?', options: ['call off', 'call on', 'call up', 'call out'], type: 'multiple-choice' },
+        { question: 'Replace with single word: "I need to get over this illness."', type: 'rewrite' },
+        { question: 'The company is cutting _____ on expenses.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'up',
+        'call off',
+        'I need to recover from this illness.',
+        'back'
+      ],
+      quickRecap: 'Key phrasal verbs: bring up, cut back, get over, give up, take off, run into, work out, break out, think over, cut down, call off, keep up with, look after, come out, make up for. Use these naturally!',
+      collocations: [
+        'bring up a topic', 'cut back on spending', 'get over illness', 'give up habits',
+        'take off smoothly', 'run into problems', 'work out solutions', 'break out suddenly',
+        'think over carefully', 'cut down consumption', 'call off events', 'keep up with trends'
+      ],
+      synonyms: [
+        { word: 'bring up', synonyms: ['mention', 'raise', 'introduce', 'broach'] },
+        { word: 'cut back', synonyms: ['reduce', 'decrease', 'lower', 'diminish'] },
+        { word: 'give up', synonyms: ['quit', 'stop', 'abandon', 'cease'] }
+      ],
+      speakingLines: [
+        'I need to bring up an important issue.',
+        'The company is cutting back on unnecessary expenses.',
+        'We should all try to give up unhealthy habits.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-phrasal-3',
+    title: 'Academic Phrasal Verbs',
+    slug: 'academic-phrasal-verbs',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Phrasal Verbs',
+    description: 'Phrasal verbs acceptable in academic contexts.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-01-18T10:00:00Z',
+    updated_at: '2025-01-18T10:00:00Z',
+    content: {
+      title: 'Academic Phrasal Verbs',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 academic phrasal verbs',
+        'Use appropriate register',
+        'Improve academic writing'
+      ],
+      coreExplanation: `While most phrasal verbs are informal, some are acceptable in academic writing. These phrasal verbs are commonly used in academic texts and formal contexts.
+
+Learning these will help you write more naturally while maintaining academic register.`,
+      examples: [
+        { sentence: 'The study focuses on climate change.', explanation: '"Focus on" is acceptable in academic writing.' },
+        { sentence: 'The theory is based on extensive research.', explanation: '"Based on" is common in academic texts.' },
+        { sentence: 'The results point to a clear trend.', explanation: '"Point to" means to indicate.' },
+        { sentence: 'The data accounts for regional variations.', explanation: '"Account for" means to explain or constitute.' },
+        { sentence: 'The findings build on previous research.', explanation: '"Build on" means to develop from.' },
+        { sentence: 'The study draws on multiple sources.', explanation: '"Draw on" means to use as a resource.' },
+        { sentence: 'The evidence backs up the hypothesis.', explanation: '"Back up" means to support.' },
+        { sentence: 'The research touches on several issues.', explanation: '"Touch on" means to mention briefly.' },
+        { sentence: 'The theory stems from earlier work.', explanation: '"Stem from" means to originate from.' },
+        { sentence: 'The argument breaks down under scrutiny.', explanation: '"Break down" means to fail or analyze.' },
+        { sentence: 'The study sets out to examine...', explanation: '"Set out" means to begin with a purpose.' },
+        { sentence: 'The findings rule out alternative explanations.', explanation: '"Rule out" means to exclude.' },
+        { sentence: 'The research brings together diverse perspectives.', explanation: '"Bring together" means to combine.' },
+        { sentence: 'The study follows up on earlier findings.', explanation: '"Follow up" means to continue investigation.' },
+        { sentence: 'The analysis picks up on subtle patterns.', explanation: '"Pick up on" means to notice.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using informal phrasal verbs in essays', correction: 'Use academic phrasal verbs or single-word alternatives', explanation: '"Focus on" is fine; "hang out" is not.' },
+        { mistake: 'Overusing phrasal verbs in academic writing', correction: 'Balance phrasal verbs with formal vocabulary', explanation: 'Too many phrasal verbs sounds informal.' },
+        { mistake: 'Wrong preposition: "focus in"', correction: '"Focus on"', explanation: 'Learn the correct preposition.' }
+      ],
+      miniPractice: [
+        { question: 'The study focuses _____ environmental issues.', type: 'fill-blank' },
+        { question: 'Which phrasal verb means "to originate from"?', options: ['stem from', 'build on', 'draw on', 'touch on'], type: 'multiple-choice' },
+        { question: 'Use "account for" in a sentence about data.', type: 'rewrite' },
+        { question: 'The findings build _____ previous research.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'on',
+        'stem from',
+        'The data accounts for regional variations in the results.',
+        'on'
+      ],
+      quickRecap: 'Key academic phrasal verbs: focus on, based on, point to, account for, build on, draw on, back up, touch on, stem from, break down, set out, rule out, bring together, follow up, pick up on. These are acceptable in academic writing!',
+      collocations: [
+        'focus on issues', 'based on evidence', 'point to trends', 'account for differences',
+        'build on research', 'draw on sources', 'back up claims', 'touch on topics',
+        'stem from causes', 'break down analysis', 'set out to examine', 'rule out possibilities'
+      ],
+      synonyms: [
+        { word: 'focus on', synonyms: ['concentrate on', 'center on', 'emphasize', 'highlight'] },
+        { word: 'account for', synonyms: ['explain', 'justify', 'constitute', 'represent'] },
+        { word: 'stem from', synonyms: ['originate from', 'arise from', 'derive from', 'result from'] }
+      ],
+      speakingLines: [
+        'The study focuses on the impact of technology on education.',
+        'These findings build on previous research in the field.',
+        'The evidence points to a significant correlation.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-idioms-1',
+    title: 'Common English Idioms Part 1',
+    slug: 'common-english-idioms-1',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Idioms',
+    description: 'Essential idioms for natural English expression in IELTS Speaking.',
+    is_premium: true,
+    is_published: true,
+    view_count: 920,
+    created_at: '2025-01-19T10:00:00Z',
+    updated_at: '2025-01-19T10:00:00Z',
+    content: {
+      title: 'Common English Idioms Part 1',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 common idioms',
+        'Use idioms naturally',
+        'Improve speaking fluency'
+      ],
+      coreExplanation: `Idioms are expressions whose meaning cannot be understood from the individual words. Using idioms appropriately can demonstrate natural language use in IELTS Speaking.
+
+However, avoid idioms in formal writing. Use them sparingly and naturally in speaking.`,
+      examples: [
+        { sentence: 'We need to get to the bottom of this.', explanation: '"Get to the bottom of" means to find the truth.' },
+        { sentence: 'It is a blessing in disguise.', explanation: '"Blessing in disguise" means something good from bad.' },
+        { sentence: 'We should not beat around the bush.', explanation: '"Beat around the bush" means to avoid the main point.' },
+        { sentence: 'The ball is in your court.', explanation: '"Ball is in your court" means it is your decision.' },
+        { sentence: 'We are on the same page.', explanation: '"On the same page" means in agreement.' },
+        { sentence: 'It is easier said than done.', explanation: '"Easier said than done" means difficult to accomplish.' },
+        { sentence: 'We should not put all eggs in one basket.', explanation: '"Put all eggs in one basket" means to risk everything.' },
+        { sentence: 'It is the tip of the iceberg.', explanation: '"Tip of the iceberg" means a small part of a larger problem.' },
+        { sentence: 'We need to think outside the box.', explanation: '"Think outside the box" means to be creative.' },
+        { sentence: 'It is a piece of cake.', explanation: '"Piece of cake" means very easy.' },
+        { sentence: 'We should not judge a book by its cover.', explanation: '"Judge a book by its cover" means to judge by appearance.' },
+        { sentence: 'It costs an arm and a leg.', explanation: '"Costs an arm and a leg" means very expensive.' },
+        { sentence: 'We are in the same boat.', explanation: '"In the same boat" means in the same situation.' },
+        { sentence: 'It is a double-edged sword.', explanation: '"Double-edged sword" means something with both advantages and disadvantages.' },
+        { sentence: 'We should take it with a grain of salt.', explanation: '"Take with a grain of salt" means to be skeptical.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using idioms in formal writing', correction: 'Avoid idioms in IELTS Writing', explanation: 'Idioms are too informal for academic writing.' },
+        { mistake: 'Overusing idioms', correction: 'Use idioms sparingly and naturally', explanation: 'Too many idioms sounds unnatural.' },
+        { mistake: 'Mixing up idioms', correction: 'Learn idioms as complete phrases', explanation: '"Beat around the tree" is incorrect.' }
+      ],
+      miniPractice: [
+        { question: 'We need to get to the _____ of this problem.', type: 'fill-blank' },
+        { question: 'Which idiom means "very easy"?', options: ['piece of cake', 'tip of the iceberg', 'double-edged sword', 'blessing in disguise'], type: 'multiple-choice' },
+        { question: 'Explain the meaning: "It is a double-edged sword."', type: 'rewrite' },
+        { question: 'We should not put all our eggs in one _____.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'bottom',
+        'piece of cake',
+        'It has both advantages and disadvantages.',
+        'basket'
+      ],
+      quickRecap: 'Key idioms: get to the bottom of, blessing in disguise, beat around the bush, on the same page, easier said than done, tip of the iceberg, think outside the box, piece of cake, double-edged sword, take with a grain of salt. Use these naturally in speaking!',
+      collocations: [
+        'get to the bottom of it', 'a blessing in disguise', 'beat around the bush', 'on the same page',
+        'easier said than done', 'tip of the iceberg', 'think outside the box', 'piece of cake',
+        'judge a book by its cover', 'costs an arm and a leg', 'in the same boat', 'double-edged sword'
+      ],
+      synonyms: [
+        { word: 'get to the bottom of', synonyms: ['investigate', 'discover the truth', 'find out', 'uncover'] },
+        { word: 'piece of cake', synonyms: ['easy', 'simple', 'effortless', 'straightforward'] },
+        { word: 'double-edged sword', synonyms: ['mixed blessing', 'two-sided', 'pros and cons', 'trade-off'] }
+      ],
+      speakingLines: [
+        'We need to get to the bottom of this issue.',
+        'Technology is a double-edged sword with both benefits and drawbacks.',
+        'We should think outside the box to find creative solutions.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-idioms-2',
+    title: 'Common English Idioms Part 2',
+    slug: 'common-english-idioms-2',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Idioms',
+    description: 'More essential idioms for natural English expression.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2025-01-20T10:00:00Z',
+    updated_at: '2025-01-20T10:00:00Z',
+    content: {
+      title: 'Common English Idioms Part 2',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 more idioms',
+        'Express ideas colorfully',
+        'Improve speaking range'
+      ],
+      coreExplanation: `Continuing from Part 1, this lesson covers more common idioms. Using idioms appropriately demonstrates natural language use.
+
+Remember to use idioms only in speaking, not in formal writing.`,
+      examples: [
+        { sentence: 'We should not cry over spilled milk.', explanation: '"Cry over spilled milk" means to regret what cannot be changed.' },
+        { sentence: 'It is time to face the music.', explanation: '"Face the music" means to accept consequences.' },
+        { sentence: 'We hit the nail on the head.', explanation: '"Hit the nail on the head" means to be exactly right.' },
+        { sentence: 'It is a hot potato.', explanation: '"Hot potato" means a controversial issue.' },
+        { sentence: 'We should keep our fingers crossed.', explanation: '"Keep fingers crossed" means to hope for good luck.' },
+        { sentence: 'It is the last straw.', explanation: '"Last straw" means the final problem that causes action.' },
+        { sentence: 'We need to let the cat out of the bag.', explanation: '"Let the cat out of the bag" means to reveal a secret.' },
+        { sentence: 'It is like finding a needle in a haystack.', explanation: '"Needle in a haystack" means very difficult to find.' },
+        { sentence: 'We should not miss the boat.', explanation: '"Miss the boat" means to miss an opportunity.' },
+        { sentence: 'It is once in a blue moon.', explanation: '"Once in a blue moon" means very rarely.' },
+        { sentence: 'We are pulling someones leg.', explanation: '"Pull someones leg" means to joke or tease.' },
+        { sentence: 'It is raining cats and dogs.', explanation: '"Raining cats and dogs" means raining heavily.' },
+        { sentence: 'We should see eye to eye.', explanation: '"See eye to eye" means to agree.' },
+        { sentence: 'It is time to turn over a new leaf.', explanation: '"Turn over a new leaf" means to start fresh.' },
+        { sentence: 'We are under the weather.', explanation: '"Under the weather" means feeling ill.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Translating idioms literally', correction: 'Learn the figurative meaning', explanation: 'Idioms do not mean what the words suggest.' },
+        { mistake: 'Using idioms incorrectly', correction: 'Learn the exact form and context', explanation: '"Hit the nail in the head" is incorrect.' },
+        { mistake: 'Using too many idioms', correction: 'Use one or two idioms naturally', explanation: 'Overuse sounds forced.' }
+      ],
+      miniPractice: [
+        { question: 'We should not cry over spilled _____.', type: 'fill-blank' },
+        { question: 'Which idiom means "to agree"?', options: ['see eye to eye', 'face the music', 'miss the boat', 'turn over a new leaf'], type: 'multiple-choice' },
+        { question: 'Explain the meaning: "It is a hot potato."', type: 'rewrite' },
+        { question: 'It is time to face the _____.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'milk',
+        'see eye to eye',
+        'It is a controversial or difficult issue.',
+        'music'
+      ],
+      quickRecap: 'Key idioms: cry over spilled milk, face the music, hit the nail on the head, hot potato, keep fingers crossed, last straw, let the cat out of the bag, needle in a haystack, miss the boat, once in a blue moon, see eye to eye, turn over a new leaf. Use these naturally!',
+      collocations: [
+        'cry over spilled milk', 'face the music', 'hit the nail on the head', 'a hot potato',
+        'keep fingers crossed', 'the last straw', 'let the cat out of the bag', 'needle in a haystack',
+        'miss the boat', 'once in a blue moon', 'see eye to eye', 'turn over a new leaf'
+      ],
+      synonyms: [
+        { word: 'face the music', synonyms: ['accept consequences', 'take responsibility', 'deal with results', 'own up'] },
+        { word: 'see eye to eye', synonyms: ['agree', 'concur', 'be in agreement', 'share views'] },
+        { word: 'turn over a new leaf', synonyms: ['start fresh', 'begin anew', 'make a change', 'reform'] }
+      ],
+      speakingLines: [
+        'We should not cry over spilled milk; lets focus on solutions.',
+        'I think we see eye to eye on this issue.',
+        'It is time to turn over a new leaf and make positive changes.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-idioms-3',
+    title: 'Business & Work Idioms',
+    slug: 'business-work-idioms',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Idioms',
+    description: 'Idioms commonly used in business and work contexts.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-01-21T10:00:00Z',
+    updated_at: '2025-01-21T10:00:00Z',
+    content: {
+      title: 'Business & Work Idioms',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 business idioms',
+        'Discuss work naturally',
+        'Improve professional vocabulary'
+      ],
+      coreExplanation: `Business idioms are commonly used in professional contexts. These expressions can help you discuss work-related topics naturally in IELTS Speaking.
+
+Use these idioms when discussing career, business, or workplace topics.`,
+      examples: [
+        { sentence: 'We need to get the ball rolling.', explanation: '"Get the ball rolling" means to start something.' },
+        { sentence: 'It is back to the drawing board.', explanation: '"Back to the drawing board" means to start over.' },
+        { sentence: 'We should cut corners.', explanation: '"Cut corners" means to do something cheaply or quickly.' },
+        { sentence: 'It is time to call it a day.', explanation: '"Call it a day" means to stop working.' },
+        { sentence: 'We need to go the extra mile.', explanation: '"Go the extra mile" means to make extra effort.' },
+        { sentence: 'It is a win-win situation.', explanation: '"Win-win" means beneficial for everyone.' },
+        { sentence: 'We should touch base later.', explanation: '"Touch base" means to make contact.' },
+        { sentence: 'It is time to think big.', explanation: '"Think big" means to have ambitious plans.' },
+        { sentence: 'We need to raise the bar.', explanation: '"Raise the bar" means to set higher standards.' },
+        { sentence: 'It is a game changer.', explanation: '"Game changer" means something that changes everything.' },
+        { sentence: 'We should keep someone in the loop.', explanation: '"Keep in the loop" means to keep informed.' },
+        { sentence: 'It is time to step up to the plate.', explanation: '"Step up to the plate" means to take responsibility.' },
+        { sentence: 'We need to hit the ground running.', explanation: '"Hit the ground running" means to start quickly.' },
+        { sentence: 'It is a no-brainer.', explanation: '"No-brainer" means an easy decision.' },
+        { sentence: 'We should not reinvent the wheel.', explanation: '"Reinvent the wheel" means to duplicate effort.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using business idioms in academic writing', correction: 'Use formal alternatives in essays', explanation: '"Start the project" instead of "get the ball rolling".' },
+        { mistake: 'Mixing business idioms incorrectly', correction: 'Learn the exact form', explanation: '"Get the ball moving" is less common.' },
+        { mistake: 'Overusing business jargon', correction: 'Use idioms naturally and sparingly', explanation: 'Too much jargon sounds artificial.' }
+      ],
+      miniPractice: [
+        { question: 'We need to get the ball _____.', type: 'fill-blank' },
+        { question: 'Which idiom means "to start over"?', options: ['back to the drawing board', 'hit the ground running', 'raise the bar', 'go the extra mile'], type: 'multiple-choice' },
+        { question: 'Explain the meaning: "It is a win-win situation."', type: 'rewrite' },
+        { question: 'We should go the extra _____ to succeed.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'rolling',
+        'back to the drawing board',
+        'It is beneficial for everyone involved.',
+        'mile'
+      ],
+      quickRecap: 'Key business idioms: get the ball rolling, back to the drawing board, cut corners, call it a day, go the extra mile, win-win, touch base, think big, raise the bar, game changer, keep in the loop, step up to the plate, hit the ground running, no-brainer. Use these for work topics!',
+      collocations: [
+        'get the ball rolling', 'back to the drawing board', 'cut corners', 'call it a day',
+        'go the extra mile', 'win-win situation', 'touch base with', 'think big',
+        'raise the bar', 'game changer', 'keep in the loop', 'hit the ground running'
+      ],
+      synonyms: [
+        { word: 'get the ball rolling', synonyms: ['start', 'begin', 'initiate', 'kick off'] },
+        { word: 'go the extra mile', synonyms: ['make extra effort', 'exceed expectations', 'do more', 'try harder'] },
+        { word: 'game changer', synonyms: ['breakthrough', 'revolution', 'turning point', 'transformation'] }
+      ],
+      speakingLines: [
+        'We need to get the ball rolling on this project.',
+        'Employees who go the extra mile are often promoted.',
+        'This new technology is a real game changer for the industry.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-idioms-4',
+    title: 'Time & Money Idioms',
+    slug: 'time-money-idioms',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Idioms',
+    description: 'Idioms related to time and money for natural expression.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-01-22T10:00:00Z',
+    updated_at: '2025-01-22T10:00:00Z',
+    content: {
+      title: 'Time & Money Idioms',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 time and money idioms',
+        'Discuss finances naturally',
+        'Improve speaking range'
+      ],
+      coreExplanation: `Time and money idioms are common in everyday English. These expressions can help you discuss financial and time-related topics naturally in IELTS Speaking.
+
+Use these idioms when discussing budgets, schedules, or time management.`,
+      examples: [
+        { sentence: 'Time is money.', explanation: '"Time is money" means time is valuable.' },
+        { sentence: 'We are running out of time.', explanation: '"Running out of time" means time is ending.' },
+        { sentence: 'It is time to tighten our belts.', explanation: '"Tighten belts" means to spend less.' },
+        { sentence: 'We should save for a rainy day.', explanation: '"Save for a rainy day" means to save for emergencies.' },
+        { sentence: 'It costs a pretty penny.', explanation: '"Pretty penny" means expensive.' },
+        { sentence: 'We are in the red.', explanation: '"In the red" means in debt.' },
+        { sentence: 'It is time to break the bank.', explanation: '"Break the bank" means to spend all money.' },
+        { sentence: 'We should not throw money down the drain.', explanation: '"Throw money down the drain" means to waste money.' },
+        { sentence: 'It is a race against time.', explanation: '"Race against time" means urgent deadline.' },
+        { sentence: 'We need to make ends meet.', explanation: '"Make ends meet" means to have enough money.' },
+        { sentence: 'It is time to bite the bullet.', explanation: '"Bite the bullet" means to accept difficulty.' },
+        { sentence: 'We are living on borrowed time.', explanation: '"Borrowed time" means time that may end soon.' },
+        { sentence: 'It is money well spent.', explanation: '"Money well spent" means a good investment.' },
+        { sentence: 'We should not put off until tomorrow.', explanation: '"Put off until tomorrow" means to delay.' },
+        { sentence: 'It is better late than never.', explanation: '"Better late than never" means doing something late is better than not at all.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "in the red" incorrectly', correction: '"In the red" = debt; "in the black" = profit', explanation: 'These are opposites.' },
+        { mistake: 'Confusing "save for a rainy day" meaning', correction: 'It means saving for emergencies, not bad weather', explanation: 'This is figurative, not literal.' },
+        { mistake: 'Using "break the bank" literally', correction: '"Break the bank" means to spend too much', explanation: 'It does not mean to rob a bank.' }
+      ],
+      miniPractice: [
+        { question: 'Time is _____.', type: 'fill-blank' },
+        { question: 'Which idiom means "in debt"?', options: ['in the red', 'in the black', 'in the green', 'in the blue'], type: 'multiple-choice' },
+        { question: 'Explain the meaning: "Save for a rainy day."', type: 'rewrite' },
+        { question: 'We need to make ends _____.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'money',
+        'in the red',
+        'Save money for emergencies or difficult times.',
+        'meet'
+      ],
+      quickRecap: 'Key time/money idioms: time is money, running out of time, tighten belts, save for a rainy day, pretty penny, in the red, break the bank, throw money down the drain, race against time, make ends meet, bite the bullet, better late than never. Use these naturally!',
+      collocations: [
+        'time is money', 'running out of time', 'tighten our belts', 'save for a rainy day',
+        'costs a pretty penny', 'in the red', 'break the bank', 'throw money down the drain',
+        'race against time', 'make ends meet', 'bite the bullet', 'better late than never'
+      ],
+      synonyms: [
+        { word: 'time is money', synonyms: ['time is valuable', 'time is precious', 'dont waste time', 'efficiency matters'] },
+        { word: 'make ends meet', synonyms: ['survive financially', 'manage money', 'get by', 'cover expenses'] },
+        { word: 'in the red', synonyms: ['in debt', 'losing money', 'negative balance', 'owing money'] }
+      ],
+      speakingLines: [
+        'In business, time is money, so efficiency is crucial.',
+        'Many families struggle to make ends meet.',
+        'We should save for a rainy day rather than spending everything.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-idioms-5',
+    title: 'Feelings & Emotions Idioms',
+    slug: 'feelings-emotions-idioms',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Idioms',
+    description: 'Idioms for expressing feelings and emotions naturally.',
+    is_premium: true,
+    is_published: true,
+    view_count: 680,
+    created_at: '2025-01-23T10:00:00Z',
+    updated_at: '2025-01-23T10:00:00Z',
+    content: {
+      title: 'Feelings & Emotions Idioms',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 emotion idioms',
+        'Express feelings naturally',
+        'Improve speaking fluency'
+      ],
+      coreExplanation: `Emotion idioms help you express feelings more vividly and naturally. These expressions are common in everyday English and can enhance your IELTS Speaking.
+
+Use these idioms when discussing personal experiences, feelings, or reactions.`,
+      examples: [
+        { sentence: 'I am over the moon.', explanation: '"Over the moon" means extremely happy.' },
+        { sentence: 'I am feeling under the weather.', explanation: '"Under the weather" means feeling ill.' },
+        { sentence: 'I am on cloud nine.', explanation: '"On cloud nine" means very happy.' },
+        { sentence: 'I am down in the dumps.', explanation: '"Down in the dumps" means sad or depressed.' },
+        { sentence: 'I am on edge.', explanation: '"On edge" means nervous or anxious.' },
+        { sentence: 'I am green with envy.', explanation: '"Green with envy" means very jealous.' },
+        { sentence: 'I am at my wits end.', explanation: '"At wits end" means frustrated and confused.' },
+        { sentence: 'I am walking on air.', explanation: '"Walking on air" means extremely happy.' },
+        { sentence: 'I am beside myself.', explanation: '"Beside myself" means overwhelmed with emotion.' },
+        { sentence: 'I am in seventh heaven.', explanation: '"In seventh heaven" means extremely happy.' },
+        { sentence: 'I am feeling blue.', explanation: '"Feeling blue" means sad.' },
+        { sentence: 'I am scared stiff.', explanation: '"Scared stiff" means very frightened.' },
+        { sentence: 'I am tickled pink.', explanation: '"Tickled pink" means very pleased.' },
+        { sentence: 'I am hot under the collar.', explanation: '"Hot under the collar" means angry.' },
+        { sentence: 'I am on top of the world.', explanation: '"On top of the world" means extremely happy.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using emotion idioms in formal writing', correction: 'Use direct expressions in essays', explanation: '"I am very happy" instead of "over the moon" in writing.' },
+        { mistake: 'Mixing up similar idioms', correction: 'Learn the exact form', explanation: '"Over the stars" is incorrect.' },
+        { mistake: 'Using idioms without context', correction: 'Explain the situation that caused the feeling', explanation: 'Context makes idioms more natural.' }
+      ],
+      miniPractice: [
+        { question: 'I am over the _____ about the news.', type: 'fill-blank' },
+        { question: 'Which idiom means "very jealous"?', options: ['green with envy', 'feeling blue', 'on edge', 'tickled pink'], type: 'multiple-choice' },
+        { question: 'Explain the meaning: "I am at my wits end."', type: 'rewrite' },
+        { question: 'I am on cloud _____.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'moon',
+        'green with envy',
+        'I am frustrated and do not know what to do.',
+        'nine'
+      ],
+      quickRecap: 'Key emotion idioms: over the moon, under the weather, on cloud nine, down in the dumps, on edge, green with envy, at wits end, walking on air, beside myself, feeling blue, scared stiff, tickled pink, hot under the collar, on top of the world. Use these to express feelings!',
+      collocations: [
+        'over the moon', 'under the weather', 'on cloud nine', 'down in the dumps',
+        'on edge', 'green with envy', 'at wits end', 'walking on air',
+        'beside myself', 'feeling blue', 'scared stiff', 'tickled pink'
+      ],
+      synonyms: [
+        { word: 'over the moon', synonyms: ['extremely happy', 'delighted', 'thrilled', 'ecstatic'] },
+        { word: 'feeling blue', synonyms: ['sad', 'depressed', 'unhappy', 'melancholy'] },
+        { word: 'on edge', synonyms: ['nervous', 'anxious', 'tense', 'worried'] }
+      ],
+      speakingLines: [
+        'I was over the moon when I received the good news.',
+        'I have been feeling a bit under the weather lately.',
+        'The uncertainty is making everyone feel on edge.'
+      ]
+    }
   }
 ];
