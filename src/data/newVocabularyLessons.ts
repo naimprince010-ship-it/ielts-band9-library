@@ -3467,5 +3467,923 @@ This lesson covers consumer psychology, advertising, and marketing strategies. U
         'Ethical consumerism reflects growing awareness of the social and environmental impact of purchasing decisions.'
       ]
     }
+  },
+  // ============================================
+  // BATCH 6: Society & Culture (7 lessons)
+  // ============================================
+  {
+    id: 'vocab-society-2',
+    title: 'Social Issues & Inequality',
+    slug: 'social-issues-inequality',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Society',
+    description: 'Vocabulary for discussing social problems, discrimination, and inequality.',
+    is_premium: true,
+    is_published: true,
+    view_count: 890,
+    created_at: '2024-06-01T10:00:00Z',
+    updated_at: '2024-06-01T10:00:00Z',
+    content: {
+      title: 'Social Issues & Inequality',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 social issues terms',
+        'Discuss inequality and discrimination',
+        'Use social justice vocabulary'
+      ],
+      coreExplanation: `Social issues are common IELTS topics. To achieve Band 7+, you need vocabulary that allows you to discuss social problems sensitively and analytically.
+
+This lesson covers social inequality, discrimination, and related issues. Understanding these concepts helps you discuss challenges facing modern societies.`,
+      examples: [
+        { sentence: 'Social inequality manifests in various forms across societies.', explanation: '"Social inequality" is uneven distribution of resources and opportunities.' },
+        { sentence: 'Discrimination based on race, gender, or religion persists globally.', explanation: '"Discrimination" is unfair treatment based on characteristics.' },
+        { sentence: 'Marginalized communities face systemic barriers to opportunity.', explanation: '"Marginalized" means pushed to the edges of society.' },
+        { sentence: 'Social exclusion prevents full participation in society.', explanation: '"Social exclusion" is being shut out from social activities.' },
+        { sentence: 'Prejudice involves preconceived opinions not based on reason.', explanation: '"Prejudice" is biased attitudes toward groups.' },
+        { sentence: 'Socioeconomic status influences life outcomes significantly.', explanation: '"Socioeconomic status" is social and economic position.' },
+        { sentence: 'Systemic racism is embedded in institutional structures.', explanation: '"Systemic racism" is racism built into systems.' },
+        { sentence: 'Gender inequality affects women\'s opportunities worldwide.', explanation: '"Gender inequality" is unequal treatment based on gender.' },
+        { sentence: 'Social cohesion promotes harmony within communities.', explanation: '"Social cohesion" is unity and solidarity in society.' },
+        { sentence: 'Vulnerable populations require targeted support.', explanation: '"Vulnerable populations" are groups at higher risk.' },
+        { sentence: 'Social justice advocates for fair treatment of all people.', explanation: '"Social justice" is fairness in society.' },
+        { sentence: 'Intersectionality examines overlapping forms of discrimination.', explanation: '"Intersectionality" is how different identities combine.' },
+        { sentence: 'Affirmative action aims to address historical discrimination.', explanation: '"Affirmative action" is policies favoring disadvantaged groups.' },
+        { sentence: 'Social stratification creates hierarchical divisions.', explanation: '"Social stratification" is society divided into layers.' },
+        { sentence: 'Inclusive policies promote equal participation.', explanation: '"Inclusive" means welcoming to all.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Poor people are lazy.', correction: 'Poverty results from complex structural factors including limited opportunities and systemic barriers.', explanation: 'Avoid blaming individuals for systemic issues.' },
+        { mistake: 'Discrimination doesn\'t exist anymore.', correction: 'Discrimination persists in various forms, though its manifestations have evolved over time.', explanation: 'Acknowledge ongoing challenges.' },
+        { mistake: 'Everyone has equal opportunities.', correction: 'Opportunities vary significantly based on socioeconomic background, location, and other factors.', explanation: 'Recognize structural inequalities.' }
+      ],
+      miniPractice: [
+        { question: 'Social _____ manifests in various forms across societies.', type: 'fill-blank' },
+        { question: 'Which term describes unfair treatment based on characteristics?', options: ['discrimination', 'prejudice', 'bias', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Some people are treated unfairly because of their skin color."', type: 'rewrite' },
+        { question: '_____ communities face systemic barriers to opportunity.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'inequality',
+        'all of the above',
+        'Racial discrimination and systemic racism create barriers to equal opportunity.',
+        'Marginalized'
+      ],
+      quickRecap: 'Key terms: "social inequality", "discrimination", "marginalized", "social exclusion", "prejudice", "socioeconomic status", "systemic racism", "gender inequality", "social cohesion", "intersectionality". Use sensitive, analytical language!',
+      collocations: [
+        'social inequality', 'discrimination', 'marginalized communities', 'social exclusion',
+        'prejudice', 'socioeconomic status', 'systemic racism', 'gender inequality',
+        'social cohesion', 'vulnerable populations', 'social justice', 'affirmative action'
+      ],
+      synonyms: [
+        { word: 'unfair', synonyms: ['inequitable', 'unjust', 'discriminatory', 'biased'] },
+        { word: 'poor', synonyms: ['disadvantaged', 'underprivileged', 'marginalized', 'vulnerable'] },
+        { word: 'equal', synonyms: ['equitable', 'fair', 'just', 'impartial'] }
+      ],
+      speakingLines: [
+        'Social inequality has deep structural roots that require systemic solutions.',
+        'Discrimination persists in various forms despite legal protections.',
+        'Inclusive policies are essential for promoting social cohesion and equal opportunity.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-society-3',
+    title: 'Family & Relationships',
+    slug: 'family-relationships',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Society',
+    description: 'Vocabulary for discussing family structures, relationships, and social bonds.',
+    is_premium: false,
+    is_published: true,
+    view_count: 1020,
+    created_at: '2024-06-05T10:00:00Z',
+    updated_at: '2024-06-05T10:00:00Z',
+    content: {
+      title: 'Family & Relationships',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 family and relationship terms',
+        'Discuss changing family structures',
+        'Use relationship vocabulary accurately'
+      ],
+      coreExplanation: `Family and relationships are common IELTS Speaking topics. To achieve Band 7+, you need vocabulary that allows you to discuss family structures and social relationships.
+
+This lesson covers family types, relationships, and social bonds. Understanding these concepts helps you discuss how families and relationships are changing in modern society.`,
+      examples: [
+        { sentence: 'Nuclear families consist of parents and their children.', explanation: '"Nuclear family" is parents and children living together.' },
+        { sentence: 'Extended families include grandparents, aunts, and uncles.', explanation: '"Extended family" is relatives beyond the nuclear family.' },
+        { sentence: 'Single-parent households have increased significantly.', explanation: '"Single-parent households" have one parent raising children.' },
+        { sentence: 'Blended families combine children from previous relationships.', explanation: '"Blended families" are stepfamilies.' },
+        { sentence: 'Cohabitation has become more common before marriage.', explanation: '"Cohabitation" is living together without marriage.' },
+        { sentence: 'Divorce rates have risen in many countries.', explanation: '"Divorce rates" measure marriage dissolution.' },
+        { sentence: 'Intergenerational relationships connect different age groups.', explanation: '"Intergenerational" means between generations.' },
+        { sentence: 'Parenting styles influence child development.', explanation: '"Parenting styles" are approaches to raising children.' },
+        { sentence: 'Work-life balance affects family relationships.', explanation: '"Work-life balance" is managing work and personal life.' },
+        { sentence: 'Domestic responsibilities are increasingly shared.', explanation: '"Domestic responsibilities" are household duties.' },
+        { sentence: 'Childcare arrangements vary across cultures.', explanation: '"Childcare arrangements" are systems for caring for children.' },
+        { sentence: 'Marriage patterns have evolved over time.', explanation: '"Marriage patterns" are trends in marriage.' },
+        { sentence: 'Family values differ across cultures and generations.', explanation: '"Family values" are beliefs about family importance.' },
+        { sentence: 'Kinship networks provide social support.', explanation: '"Kinship networks" are family connections.' },
+        { sentence: 'Eldercare responsibilities fall on family members.', explanation: '"Eldercare" is caring for elderly relatives.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Traditional families are better.', correction: 'Different family structures can provide supportive environments for children and adults.', explanation: 'Avoid value judgments about family types.' },
+        { mistake: 'Divorce is bad for children.', correction: 'The impact of divorce on children depends on various factors including parental conflict and support systems.', explanation: 'Present nuanced views on family changes.' },
+        { mistake: 'Women should stay home with children.', correction: 'Childcare arrangements vary based on family circumstances, preferences, and available support.', explanation: 'Avoid prescriptive statements about gender roles.' }
+      ],
+      miniPractice: [
+        { question: '_____ families consist of parents and their children.', type: 'fill-blank' },
+        { question: 'Which term describes living together without marriage?', options: ['cohabitation', 'partnership', 'companionship', 'union'], type: 'multiple-choice' },
+        { question: 'Rewrite: "More people are getting divorced now."', type: 'rewrite' },
+        { question: 'Single-parent _____ have increased significantly.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Nuclear',
+        'cohabitation',
+        'Divorce rates have risen significantly in recent decades.',
+        'households'
+      ],
+      quickRecap: 'Key terms: "nuclear family", "extended family", "single-parent households", "blended families", "cohabitation", "divorce rates", "intergenerational", "parenting styles", "work-life balance", "eldercare". Use neutral, non-judgmental language!',
+      collocations: [
+        'nuclear family', 'extended family', 'single-parent households', 'blended families',
+        'cohabitation', 'divorce rates', 'intergenerational relationships', 'parenting styles',
+        'work-life balance', 'domestic responsibilities', 'childcare arrangements', 'family values'
+      ],
+      synonyms: [
+        { word: 'family', synonyms: ['household', 'relatives', 'kin', 'loved ones'] },
+        { word: 'marriage', synonyms: ['matrimony', 'union', 'partnership', 'wedlock'] },
+        { word: 'children', synonyms: ['offspring', 'kids', 'dependents', 'minors'] }
+      ],
+      speakingLines: [
+        'Family structures have diversified significantly in recent decades.',
+        'Work-life balance is increasingly important for maintaining healthy family relationships.',
+        'Intergenerational relationships provide valuable support and cultural transmission.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-society-4',
+    title: 'Immigration & Multiculturalism',
+    slug: 'immigration-multiculturalism',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Society',
+    description: 'Advanced vocabulary for discussing migration, cultural diversity, and integration.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2024-06-08T10:00:00Z',
+    updated_at: '2024-06-08T10:00:00Z',
+    content: {
+      title: 'Immigration & Multiculturalism',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 immigration and diversity terms',
+        'Discuss migration and integration',
+        'Use multicultural vocabulary'
+      ],
+      coreExplanation: `Immigration and multiculturalism are important IELTS topics. To achieve Band 8+, you need vocabulary that allows you to discuss migration patterns and cultural diversity.
+
+This lesson covers immigration, integration, and multicultural societies. Understanding these concepts helps you discuss how societies manage diversity.`,
+      examples: [
+        { sentence: 'Immigration policies regulate the movement of people across borders.', explanation: '"Immigration policies" are rules governing entry to countries.' },
+        { sentence: 'Refugees flee persecution and seek asylum in other countries.', explanation: '"Refugees" are people forced to leave their countries.' },
+        { sentence: 'Cultural integration involves adapting to a new society.', explanation: '"Cultural integration" is becoming part of a new culture.' },
+        { sentence: 'Multiculturalism celebrates diversity within societies.', explanation: '"Multiculturalism" is the coexistence of diverse cultures.' },
+        { sentence: 'Diaspora communities maintain connections to their homelands.', explanation: '"Diaspora" is people dispersed from their homeland.' },
+        { sentence: 'Assimilation involves adopting the dominant culture.', explanation: '"Assimilation" is fully adopting the host culture.' },
+        { sentence: 'Xenophobia is fear or hatred of foreigners.', explanation: '"Xenophobia" is hostility toward outsiders.' },
+        { sentence: 'Brain drain occurs when skilled workers emigrate.', explanation: '"Brain drain" is loss of educated people to other countries.' },
+        { sentence: 'Remittances are money sent by migrants to their home countries.', explanation: '"Remittances" are financial transfers from migrants.' },
+        { sentence: 'Cultural heritage preservation maintains traditional practices.', explanation: '"Cultural heritage" is traditions passed down through generations.' },
+        { sentence: 'Second-generation immigrants often navigate dual identities.', explanation: '"Second-generation" are children of immigrants.' },
+        { sentence: 'Undocumented migrants lack legal immigration status.', explanation: '"Undocumented migrants" are people without legal residency.' },
+        { sentence: 'Social integration promotes participation in host societies.', explanation: '"Social integration" is becoming part of society.' },
+        { sentence: 'Cultural exchange enriches both host and immigrant communities.', explanation: '"Cultural exchange" is sharing between cultures.' },
+        { sentence: 'Migration patterns have shifted due to economic and political factors.', explanation: '"Migration patterns" are trends in population movement.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Immigrants take jobs from locals.', correction: 'Immigration\'s economic effects are complex, with research showing both job creation and labor market competition.', explanation: 'Present evidence-based views on immigration.' },
+        { mistake: 'Immigrants should adopt local culture completely.', correction: 'Integration approaches vary, with some societies favoring multiculturalism and others emphasizing assimilation.', explanation: 'Acknowledge different integration models.' },
+        { mistake: 'Refugees are the same as economic migrants.', correction: 'Refugees flee persecution and have legal protections, while economic migrants move for better opportunities.', explanation: 'Distinguish between migrant categories.' }
+      ],
+      miniPractice: [
+        { question: 'Immigration _____ regulate the movement of people across borders.', type: 'fill-blank' },
+        { question: 'Which term describes people forced to flee their countries?', options: ['refugees', 'migrants', 'immigrants', 'expatriates'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Foreigners should learn our language."', type: 'rewrite' },
+        { question: '_____ is fear or hatred of foreigners.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'policies',
+        'refugees',
+        'Language acquisition is an important aspect of cultural integration for immigrants.',
+        'Xenophobia'
+      ],
+      quickRecap: 'Key terms: "immigration policies", "refugees", "cultural integration", "multiculturalism", "diaspora", "assimilation", "xenophobia", "brain drain", "remittances", "second-generation". Use neutral, respectful language!',
+      collocations: [
+        'immigration policies', 'refugees', 'cultural integration', 'multiculturalism',
+        'diaspora communities', 'assimilation', 'xenophobia', 'brain drain',
+        'remittances', 'cultural heritage', 'second-generation immigrants', 'migration patterns'
+      ],
+      synonyms: [
+        { word: 'immigrant', synonyms: ['migrant', 'newcomer', 'settler', 'foreign-born'] },
+        { word: 'foreigner', synonyms: ['non-native', 'outsider', 'immigrant', 'expatriate'] },
+        { word: 'culture', synonyms: ['heritage', 'traditions', 'customs', 'way of life'] }
+      ],
+      speakingLines: [
+        'Immigration policies must balance economic needs with humanitarian obligations.',
+        'Multiculturalism enriches societies through cultural exchange and diversity.',
+        'Successful integration requires efforts from both immigrants and host communities.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-society-5',
+    title: 'Urban & Rural Life',
+    slug: 'urban-rural-life',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Society',
+    description: 'Vocabulary for discussing urbanization, rural communities, and lifestyle differences.',
+    is_premium: true,
+    is_published: true,
+    view_count: 750,
+    created_at: '2024-06-12T10:00:00Z',
+    updated_at: '2024-06-12T10:00:00Z',
+    content: {
+      title: 'Urban & Rural Life',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 urban and rural terms',
+        'Discuss urbanization and rural issues',
+        'Compare urban and rural lifestyles'
+      ],
+      coreExplanation: `Urban and rural life comparisons are common IELTS topics. To achieve Band 7+, you need vocabulary that allows you to discuss urbanization trends and lifestyle differences.
+
+This lesson covers urban development, rural communities, and the urban-rural divide. Understanding these concepts helps you discuss how living environments affect quality of life.`,
+      examples: [
+        { sentence: 'Urbanization has accelerated globally over recent decades.', explanation: '"Urbanization" is the growth of cities and urban populations.' },
+        { sentence: 'Rural depopulation threatens agricultural communities.', explanation: '"Rural depopulation" is people leaving rural areas.' },
+        { sentence: 'Metropolitan areas offer diverse employment opportunities.', explanation: '"Metropolitan areas" are large urban regions.' },
+        { sentence: 'Rural livelihoods often depend on agriculture.', explanation: '"Rural livelihoods" are ways of earning income in rural areas.' },
+        { sentence: 'Urban infrastructure includes transportation and utilities.', explanation: '"Urban infrastructure" is city facilities and systems.' },
+        { sentence: 'Quality of life varies between urban and rural settings.', explanation: '"Quality of life" is overall wellbeing.' },
+        { sentence: 'Suburban areas combine urban and rural characteristics.', explanation: '"Suburban" is residential areas outside city centers.' },
+        { sentence: 'Rural isolation can affect access to services.', explanation: '"Rural isolation" is remoteness from services.' },
+        { sentence: 'Urban density creates both opportunities and challenges.', explanation: '"Urban density" is concentration of people in cities.' },
+        { sentence: 'Agricultural communities face economic pressures.', explanation: '"Agricultural communities" depend on farming.' },
+        { sentence: 'Commuting patterns reflect urban-suburban relationships.', explanation: '"Commuting patterns" are travel habits for work.' },
+        { sentence: 'Rural development aims to improve countryside living standards.', explanation: '"Rural development" is improving rural areas.' },
+        { sentence: 'Urban amenities attract people to cities.', explanation: '"Urban amenities" are city facilities and services.' },
+        { sentence: 'Rural traditions preserve cultural heritage.', explanation: '"Rural traditions" are countryside customs.' },
+        { sentence: 'Megacities face unique governance challenges.', explanation: '"Megacities" are cities with over 10 million people.' }
+      ],
+      commonMistakes: [
+        { mistake: 'City life is better than rural life.', correction: 'Urban and rural environments offer different advantages and challenges depending on individual priorities.', explanation: 'Avoid value judgments about lifestyles.' },
+        { mistake: 'Rural areas are backward.', correction: 'Rural communities maintain important traditions and contribute significantly to food production and cultural heritage.', explanation: 'Respect rural communities.' },
+        { mistake: 'Everyone wants to live in cities.', correction: 'Migration patterns reflect complex factors including economic opportunities, family ties, and lifestyle preferences.', explanation: 'Acknowledge diverse preferences.' }
+      ],
+      miniPractice: [
+        { question: '_____ has accelerated globally over recent decades.', type: 'fill-blank' },
+        { question: 'Which term describes people leaving rural areas?', options: ['rural depopulation', 'rural exodus', 'rural decline', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Cities are crowded and stressful."', type: 'rewrite' },
+        { question: 'Urban _____ creates both opportunities and challenges.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Urbanization',
+        'all of the above',
+        'Urban density can create challenges including congestion and stress, alongside opportunities.',
+        'density'
+      ],
+      quickRecap: 'Key terms: "urbanization", "rural depopulation", "metropolitan areas", "rural livelihoods", "urban infrastructure", "suburban", "rural isolation", "urban density", "rural development", "megacities". Use balanced comparisons!',
+      collocations: [
+        'urbanization', 'rural depopulation', 'metropolitan areas', 'rural livelihoods',
+        'urban infrastructure', 'quality of life', 'suburban areas', 'rural isolation',
+        'urban density', 'agricultural communities', 'rural development', 'megacities'
+      ],
+      synonyms: [
+        { word: 'city', synonyms: ['urban area', 'metropolis', 'municipality', 'urban center'] },
+        { word: 'countryside', synonyms: ['rural area', 'rural region', 'hinterland', 'provinces'] },
+        { word: 'move', synonyms: ['migrate', 'relocate', 'settle', 'transfer'] }
+      ],
+      speakingLines: [
+        'Urbanization offers economic opportunities but creates challenges including congestion and housing costs.',
+        'Rural communities face depopulation as young people seek opportunities in cities.',
+        'Quality of life depends on individual priorities rather than simply urban or rural location.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-society-6',
+    title: 'Crime & Justice',
+    slug: 'crime-justice',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Society',
+    description: 'Advanced vocabulary for discussing crime, punishment, and the justice system.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2024-06-15T10:00:00Z',
+    updated_at: '2024-06-15T10:00:00Z',
+    content: {
+      title: 'Crime & Justice',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 crime and justice terms',
+        'Discuss criminal justice systems',
+        'Use legal vocabulary accurately'
+      ],
+      coreExplanation: `Crime and justice topics appear frequently in IELTS Writing Task 2. To achieve Band 8+, you need vocabulary that allows you to discuss crime causes, prevention, and punishment.
+
+This lesson covers crime, punishment, and justice systems. Understanding these concepts helps you discuss how societies address criminal behavior.`,
+      examples: [
+        { sentence: 'Crime rates vary significantly across different regions.', explanation: '"Crime rates" measure the frequency of criminal activity.' },
+        { sentence: 'Rehabilitation aims to reform offenders and reduce recidivism.', explanation: '"Rehabilitation" is helping criminals become law-abiding.' },
+        { sentence: 'Deterrence theory suggests punishment prevents crime.', explanation: '"Deterrence" is discouraging crime through punishment.' },
+        { sentence: 'Incarceration rates have increased in many countries.', explanation: '"Incarceration" is imprisonment.' },
+        { sentence: 'Restorative justice focuses on repairing harm.', explanation: '"Restorative justice" involves offenders making amends.' },
+        { sentence: 'White-collar crime includes fraud and embezzlement.', explanation: '"White-collar crime" is non-violent financial crime.' },
+        { sentence: 'Juvenile offenders require different approaches than adults.', explanation: '"Juvenile offenders" are young criminals.' },
+        { sentence: 'Criminal justice reform addresses systemic issues.', explanation: '"Criminal justice reform" is changing the justice system.' },
+        { sentence: 'Recidivism rates indicate reoffending frequency.', explanation: '"Recidivism" is returning to criminal behavior.' },
+        { sentence: 'Community policing builds trust between police and residents.', explanation: '"Community policing" is collaborative law enforcement.' },
+        { sentence: 'Capital punishment remains controversial globally.', explanation: '"Capital punishment" is the death penalty.' },
+        { sentence: 'Crime prevention strategies address root causes.', explanation: '"Crime prevention" is stopping crime before it occurs.' },
+        { sentence: 'Cybercrime has emerged as a significant threat.', explanation: '"Cybercrime" is criminal activity using computers.' },
+        { sentence: 'Sentencing guidelines aim for consistency in punishment.', explanation: '"Sentencing guidelines" are rules for determining punishment.' },
+        { sentence: 'Wrongful convictions undermine justice system credibility.', explanation: '"Wrongful convictions" are incorrect guilty verdicts.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Criminals should be punished harshly.', correction: 'Effective criminal justice balances punishment, deterrence, rehabilitation, and public safety.', explanation: 'Discuss multiple justice objectives.' },
+        { mistake: 'Prison doesn\'t work.', correction: 'Incarceration serves multiple purposes including punishment, deterrence, and public protection, though rehabilitation outcomes vary.', explanation: 'Present nuanced views on imprisonment.' },
+        { mistake: 'Crime is caused by poverty.', correction: 'Crime has multiple causes including socioeconomic factors, individual circumstances, and environmental influences.', explanation: 'Acknowledge complexity in crime causation.' }
+      ],
+      miniPractice: [
+        { question: '_____ aims to reform offenders and reduce recidivism.', type: 'fill-blank' },
+        { question: 'Which term describes returning to criminal behavior?', options: ['recidivism', 'relapse', 'regression', 'reversion'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Criminals should go to jail for a long time."', type: 'rewrite' },
+        { question: 'Crime _____ strategies address root causes.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Rehabilitation',
+        'recidivism',
+        'Sentencing should balance punishment, deterrence, and rehabilitation to reduce recidivism.',
+        'prevention'
+      ],
+      quickRecap: 'Key terms: "crime rates", "rehabilitation", "deterrence", "incarceration", "restorative justice", "white-collar crime", "juvenile offenders", "recidivism", "community policing", "crime prevention". Use balanced, analytical language!',
+      collocations: [
+        'crime rates', 'rehabilitation', 'deterrence', 'incarceration',
+        'restorative justice', 'white-collar crime', 'juvenile offenders', 'criminal justice reform',
+        'recidivism rates', 'community policing', 'capital punishment', 'crime prevention'
+      ],
+      synonyms: [
+        { word: 'crime', synonyms: ['offense', 'criminal activity', 'wrongdoing', 'violation'] },
+        { word: 'criminal', synonyms: ['offender', 'perpetrator', 'lawbreaker', 'convict'] },
+        { word: 'punishment', synonyms: ['penalty', 'sentence', 'sanction', 'consequence'] }
+      ],
+      speakingLines: [
+        'Effective criminal justice systems balance punishment with rehabilitation.',
+        'Crime prevention strategies that address root causes may be more effective than harsh sentencing.',
+        'Restorative justice approaches can help repair harm while reducing recidivism.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-society-7',
+    title: 'Religion & Beliefs',
+    slug: 'religion-beliefs',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Society',
+    description: 'Vocabulary for discussing religion, spirituality, and belief systems.',
+    is_premium: true,
+    is_published: true,
+    view_count: 680,
+    created_at: '2024-06-18T10:00:00Z',
+    updated_at: '2024-06-18T10:00:00Z',
+    content: {
+      title: 'Religion & Beliefs',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 religion and belief terms',
+        'Discuss religious diversity respectfully',
+        'Use spiritual vocabulary accurately'
+      ],
+      coreExplanation: `Religion and beliefs occasionally appear in IELTS topics. To achieve Band 7+, you need vocabulary that allows you to discuss religious diversity and spirituality respectfully.
+
+This lesson covers religion, spirituality, and belief systems. Understanding these concepts helps you discuss the role of religion in society.`,
+      examples: [
+        { sentence: 'Religious diversity characterizes many modern societies.', explanation: '"Religious diversity" is the presence of multiple religions.' },
+        { sentence: 'Secularism separates religion from government.', explanation: '"Secularism" is keeping religion out of public affairs.' },
+        { sentence: 'Spiritual practices provide meaning and purpose.', explanation: '"Spiritual practices" are activities for spiritual growth.' },
+        { sentence: 'Religious tolerance promotes peaceful coexistence.', explanation: '"Religious tolerance" is accepting different religions.' },
+        { sentence: 'Faith communities provide social support networks.', explanation: '"Faith communities" are religious groups.' },
+        { sentence: 'Interfaith dialogue promotes understanding between religions.', explanation: '"Interfaith dialogue" is communication between religions.' },
+        { sentence: 'Religious freedom is a fundamental human right.', explanation: '"Religious freedom" is the right to practice any religion.' },
+        { sentence: 'Atheism is the absence of belief in deities.', explanation: '"Atheism" is not believing in gods.' },
+        { sentence: 'Religious observance varies in intensity.', explanation: '"Religious observance" is practicing religious duties.' },
+        { sentence: 'Sacred texts guide believers\' moral decisions.', explanation: '"Sacred texts" are holy scriptures.' },
+        { sentence: 'Religious institutions play social and cultural roles.', explanation: '"Religious institutions" are organized religious bodies.' },
+        { sentence: 'Spirituality can exist independently of organized religion.', explanation: '"Spirituality" is connection to something greater.' },
+        { sentence: 'Religious extremism threatens social harmony.', explanation: '"Religious extremism" is radical religious beliefs.' },
+        { sentence: 'Moral values often derive from religious teachings.', explanation: '"Moral values" are principles of right and wrong.' },
+        { sentence: 'Religious holidays mark important spiritual events.', explanation: '"Religious holidays" are sacred celebrations.' }
+      ],
+      commonMistakes: [
+        { mistake: 'My religion is the best.', correction: 'Different religious traditions offer various perspectives on meaning, morality, and spirituality.', explanation: 'Avoid religious superiority claims.' },
+        { mistake: 'Religion causes conflict.', correction: 'While religion has been involved in conflicts, it also promotes peace, charity, and community.', explanation: 'Present balanced views on religion.' },
+        { mistake: 'Religious people are old-fashioned.', correction: 'Religious belief and practice remain significant for billions of people across all demographics.', explanation: 'Avoid stereotyping religious people.' }
+      ],
+      miniPractice: [
+        { question: 'Religious _____ characterizes many modern societies.', type: 'fill-blank' },
+        { question: 'Which term describes separating religion from government?', options: ['secularism', 'atheism', 'agnosticism', 'humanism'], type: 'multiple-choice' },
+        { question: 'Rewrite: "People should believe in God."', type: 'rewrite' },
+        { question: 'Religious _____ is a fundamental human right.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'diversity',
+        'secularism',
+        'Religious freedom allows individuals to hold and practice their own beliefs.',
+        'freedom'
+      ],
+      quickRecap: 'Key terms: "religious diversity", "secularism", "spiritual practices", "religious tolerance", "faith communities", "interfaith dialogue", "religious freedom", "atheism", "sacred texts", "spirituality". Use respectful, neutral language!',
+      collocations: [
+        'religious diversity', 'secularism', 'spiritual practices', 'religious tolerance',
+        'faith communities', 'interfaith dialogue', 'religious freedom', 'atheism',
+        'religious observance', 'sacred texts', 'religious institutions', 'moral values'
+      ],
+      synonyms: [
+        { word: 'religion', synonyms: ['faith', 'belief system', 'creed', 'denomination'] },
+        { word: 'believe', synonyms: ['have faith', 'hold beliefs', 'practice', 'follow'] },
+        { word: 'god', synonyms: ['deity', 'divine being', 'higher power', 'supreme being'] }
+      ],
+      speakingLines: [
+        'Religious diversity enriches societies through different perspectives on meaning and morality.',
+        'Secularism allows for religious freedom while maintaining neutral public institutions.',
+        'Interfaith dialogue promotes understanding and reduces religious tensions.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-society-8',
+    title: 'Generations & Social Change',
+    slug: 'generations-social-change',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Society',
+    description: 'Vocabulary for discussing generational differences and social transformation.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2024-06-22T10:00:00Z',
+    updated_at: '2024-06-22T10:00:00Z',
+    content: {
+      title: 'Generations & Social Change',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 generation and change terms',
+        'Discuss generational differences',
+        'Use social change vocabulary'
+      ],
+      coreExplanation: `Generational differences and social change are common IELTS topics. To achieve Band 7+, you need vocabulary that allows you to discuss how societies evolve across generations.
+
+This lesson covers generational characteristics, social transformation, and changing values. Understanding these concepts helps you discuss how societies change over time.`,
+      examples: [
+        { sentence: 'Generational differences reflect changing social contexts.', explanation: '"Generational differences" are variations between age groups.' },
+        { sentence: 'Social norms evolve over time.', explanation: '"Social norms" are accepted behaviors in society.' },
+        { sentence: 'Baby boomers experienced post-war economic growth.', explanation: '"Baby boomers" are people born 1946-1964.' },
+        { sentence: 'Millennials are often characterized as tech-savvy.', explanation: '"Millennials" are people born approximately 1981-1996.' },
+        { sentence: 'Generation Z has grown up with social media.', explanation: '"Generation Z" are people born approximately 1997-2012.' },
+        { sentence: 'Social attitudes toward gender have shifted significantly.', explanation: '"Social attitudes" are collective opinions.' },
+        { sentence: 'Cultural shifts reflect changing values.', explanation: '"Cultural shifts" are changes in cultural norms.' },
+        { sentence: 'Intergenerational conflict arises from different perspectives.', explanation: '"Intergenerational conflict" is tension between generations.' },
+        { sentence: 'Social progress involves expanding rights and opportunities.', explanation: '"Social progress" is improvement in social conditions.' },
+        { sentence: 'Traditional values are challenged by modernization.', explanation: '"Traditional values" are long-held beliefs.' },
+        { sentence: 'Youth culture influences broader social trends.', explanation: '"Youth culture" is culture created by young people.' },
+        { sentence: 'Social movements drive change in society.', explanation: '"Social movements" are organized efforts for change.' },
+        { sentence: 'Generational wealth affects economic opportunities.', explanation: '"Generational wealth" is assets passed between generations.' },
+        { sentence: 'Changing demographics reshape societies.', explanation: '"Demographics" are population characteristics.' },
+        { sentence: 'Social transformation occurs through multiple factors.', explanation: '"Social transformation" is fundamental social change.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Young people are lazy.', correction: 'Different generations face different economic and social circumstances that shape their behaviors and opportunities.', explanation: 'Avoid generational stereotypes.' },
+        { mistake: 'Things were better in the past.', correction: 'Social change brings both benefits and challenges, with progress in some areas and new problems in others.', explanation: 'Present balanced views on change.' },
+        { mistake: 'Old people don\'t understand technology.', correction: 'Technology adoption varies by individual rather than strictly by generation.', explanation: 'Avoid age-based generalizations.' }
+      ],
+      miniPractice: [
+        { question: 'Generational _____ reflect changing social contexts.', type: 'fill-blank' },
+        { question: 'Which generation grew up with social media?', options: ['Generation Z', 'Millennials', 'Generation X', 'Baby Boomers'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Young people today are different from before."', type: 'rewrite' },
+        { question: 'Social _____ evolve over time.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'differences',
+        'Generation Z',
+        'Generational differences reflect the distinct social and technological contexts in which each generation came of age.',
+        'norms'
+      ],
+      quickRecap: 'Key terms: "generational differences", "social norms", "baby boomers", "millennials", "Generation Z", "cultural shifts", "intergenerational conflict", "social progress", "social movements", "social transformation". Avoid stereotypes!',
+      collocations: [
+        'generational differences', 'social norms', 'baby boomers', 'millennials',
+        'Generation Z', 'social attitudes', 'cultural shifts', 'intergenerational conflict',
+        'social progress', 'traditional values', 'youth culture', 'social movements'
+      ],
+      synonyms: [
+        { word: 'generation', synonyms: ['age group', 'cohort', 'demographic', 'age bracket'] },
+        { word: 'change', synonyms: ['transformation', 'shift', 'evolution', 'transition'] },
+        { word: 'old', synonyms: ['traditional', 'established', 'conventional', 'long-standing'] }
+      ],
+      speakingLines: [
+        'Generational differences reflect the distinct contexts in which each generation came of age.',
+        'Social norms evolve as societies adapt to new technologies and changing values.',
+        'Intergenerational dialogue is essential for understanding different perspectives on social change.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 7: Government & Law (5 lessons)
+  // ============================================
+  {
+    id: 'vocab-government-2',
+    title: 'Democracy & Political Systems',
+    slug: 'democracy-political-systems',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Government',
+    description: 'Advanced vocabulary for discussing democratic governance and political structures.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2024-06-25T10:00:00Z',
+    updated_at: '2024-06-25T10:00:00Z',
+    content: {
+      title: 'Democracy & Political Systems',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 democracy and governance terms',
+        'Discuss political systems analytically',
+        'Use political vocabulary accurately'
+      ],
+      coreExplanation: `Political systems and democracy are important IELTS topics. To achieve Band 8+, you need vocabulary that allows you to discuss governance and political structures.
+
+This lesson covers democratic principles, political systems, and governance. Understanding these concepts helps you discuss how societies organize political power.`,
+      examples: [
+        { sentence: 'Democracy involves citizen participation in governance.', explanation: '"Democracy" is government by the people.' },
+        { sentence: 'Electoral systems determine how votes translate to seats.', explanation: '"Electoral systems" are methods of conducting elections.' },
+        { sentence: 'Civil liberties protect individual freedoms.', explanation: '"Civil liberties" are fundamental rights.' },
+        { sentence: 'Separation of powers prevents concentration of authority.', explanation: '"Separation of powers" divides government functions.' },
+        { sentence: 'Political accountability holds leaders responsible.', explanation: '"Political accountability" is answering for decisions.' },
+        { sentence: 'Voter turnout indicates democratic engagement.', explanation: '"Voter turnout" is the proportion of eligible voters who vote.' },
+        { sentence: 'Constitutional rights are protected by law.', explanation: '"Constitutional rights" are rights guaranteed by constitutions.' },
+        { sentence: 'Political polarization divides societies.', explanation: '"Political polarization" is extreme political division.' },
+        { sentence: 'Transparency in government builds public trust.', explanation: '"Transparency" is openness in government operations.' },
+        { sentence: 'Authoritarian regimes restrict political freedoms.', explanation: '"Authoritarian" means concentrating power without accountability.' },
+        { sentence: 'Civic engagement strengthens democratic institutions.', explanation: '"Civic engagement" is participation in community affairs.' },
+        { sentence: 'Political representation ensures diverse voices are heard.', explanation: '"Political representation" is acting on behalf of citizens.' },
+        { sentence: 'Rule of law applies equally to all citizens.', explanation: '"Rule of law" is governance by established laws.' },
+        { sentence: 'Democratic institutions require ongoing maintenance.', explanation: '"Democratic institutions" are organizations supporting democracy.' },
+        { sentence: 'Political participation extends beyond voting.', explanation: '"Political participation" is involvement in political processes.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Democracy is the best system.', correction: 'Democratic systems have various strengths and challenges, with different models suited to different contexts.', explanation: 'Discuss democracy analytically.' },
+        { mistake: 'Politicians are all corrupt.', correction: 'Political systems vary in accountability and transparency, with corruption being a challenge in many contexts.', explanation: 'Avoid sweeping generalizations.' },
+        { mistake: 'Voting doesn\'t matter.', correction: 'Electoral participation is one of several ways citizens can influence political outcomes.', explanation: 'Discuss political engagement constructively.' }
+      ],
+      miniPractice: [
+        { question: '_____ involves citizen participation in governance.', type: 'fill-blank' },
+        { question: 'Which term describes dividing government functions?', options: ['separation of powers', 'division of labor', 'power sharing', 'decentralization'], type: 'multiple-choice' },
+        { question: 'Rewrite: "The government should listen to people."', type: 'rewrite' },
+        { question: 'Civil _____ protect individual freedoms.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Democracy',
+        'separation of powers',
+        'Democratic governance requires political accountability and responsiveness to citizen concerns.',
+        'liberties'
+      ],
+      quickRecap: 'Key terms: "democracy", "electoral systems", "civil liberties", "separation of powers", "political accountability", "voter turnout", "constitutional rights", "political polarization", "transparency", "rule of law". Use analytical language!',
+      collocations: [
+        'democracy', 'electoral systems', 'civil liberties', 'separation of powers',
+        'political accountability', 'voter turnout', 'constitutional rights', 'political polarization',
+        'transparency', 'authoritarian regimes', 'civic engagement', 'rule of law'
+      ],
+      synonyms: [
+        { word: 'government', synonyms: ['administration', 'regime', 'authorities', 'state'] },
+        { word: 'vote', synonyms: ['ballot', 'elect', 'cast a vote', 'go to the polls'] },
+        { word: 'law', synonyms: ['legislation', 'statute', 'regulation', 'ordinance'] }
+      ],
+      speakingLines: [
+        'Democratic governance requires ongoing civic engagement and institutional maintenance.',
+        'Separation of powers helps prevent the concentration of authority.',
+        'Political polarization poses challenges for democratic deliberation and compromise.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-government-3',
+    title: 'Human Rights & Civil Society',
+    slug: 'human-rights-civil-society',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Government',
+    description: 'Advanced vocabulary for discussing human rights, activism, and civil society organizations.',
+    is_premium: true,
+    is_published: true,
+    view_count: 680,
+    created_at: '2024-06-28T10:00:00Z',
+    updated_at: '2024-06-28T10:00:00Z',
+    content: {
+      title: 'Human Rights & Civil Society',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 human rights terms',
+        'Discuss civil society and activism',
+        'Use rights-based vocabulary'
+      ],
+      coreExplanation: `Human rights and civil society are important IELTS topics. To achieve Band 8+, you need vocabulary that allows you to discuss rights, freedoms, and civic activism.
+
+This lesson covers human rights, civil society organizations, and activism. Understanding these concepts helps you discuss how societies protect individual rights.`,
+      examples: [
+        { sentence: 'Human rights are universal and inalienable.', explanation: '"Human rights" are fundamental rights belonging to all people.' },
+        { sentence: 'Civil society organizations advocate for various causes.', explanation: '"Civil society organizations" are non-governmental groups.' },
+        { sentence: 'Freedom of expression is a fundamental right.', explanation: '"Freedom of expression" is the right to speak freely.' },
+        { sentence: 'Human rights violations require international attention.', explanation: '"Human rights violations" are breaches of fundamental rights.' },
+        { sentence: 'Activism promotes social and political change.', explanation: '"Activism" is campaigning for change.' },
+        { sentence: 'Non-governmental organizations (NGOs) address social issues.', explanation: '"NGOs" are independent organizations.' },
+        { sentence: 'Humanitarian intervention responds to crises.', explanation: '"Humanitarian intervention" is action to protect people.' },
+        { sentence: 'Press freedom enables independent journalism.', explanation: '"Press freedom" is media operating without government control.' },
+        { sentence: 'Advocacy campaigns raise awareness of issues.', explanation: '"Advocacy" is public support for causes.' },
+        { sentence: 'Due process protects individuals from arbitrary treatment.', explanation: '"Due process" is fair legal procedures.' },
+        { sentence: 'Grassroots movements emerge from local communities.', explanation: '"Grassroots movements" are community-based initiatives.' },
+        { sentence: 'International law establishes human rights standards.', explanation: '"International law" governs relations between nations.' },
+        { sentence: 'Whistleblowers expose wrongdoing at personal risk.', explanation: '"Whistleblowers" reveal illegal or unethical activities.' },
+        { sentence: 'Peaceful protest is a form of political expression.', explanation: '"Peaceful protest" is non-violent demonstration.' },
+        { sentence: 'Human dignity underlies all human rights.', explanation: '"Human dignity" is inherent worth of all people.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Human rights are Western values.', correction: 'Human rights are recognized as universal, though their implementation varies across cultural and political contexts.', explanation: 'Discuss universality of rights.' },
+        { mistake: 'Activists are troublemakers.', correction: 'Civil society activism plays an important role in democratic societies by advocating for change and holding power accountable.', explanation: 'Recognize legitimate activism.' },
+        { mistake: 'NGOs are always good.', correction: 'Civil society organizations vary in effectiveness, accountability, and alignment with local needs.', explanation: 'Present nuanced views on NGOs.' }
+      ],
+      miniPractice: [
+        { question: 'Human rights are universal and _____.', type: 'fill-blank' },
+        { question: 'Which term describes non-governmental groups?', options: ['civil society organizations', 'government agencies', 'political parties', 'corporations'], type: 'multiple-choice' },
+        { question: 'Rewrite: "People should be allowed to say what they want."', type: 'rewrite' },
+        { question: 'Freedom of _____ is a fundamental right.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'inalienable',
+        'civil society organizations',
+        'Freedom of expression is a fundamental human right that should be protected.',
+        'expression'
+      ],
+      quickRecap: 'Key terms: "human rights", "civil society organizations", "freedom of expression", "human rights violations", "activism", "NGOs", "press freedom", "advocacy", "due process", "grassroots movements". Use rights-based language!',
+      collocations: [
+        'human rights', 'civil society organizations', 'freedom of expression', 'human rights violations',
+        'activism', 'non-governmental organizations', 'humanitarian intervention', 'press freedom',
+        'advocacy campaigns', 'due process', 'grassroots movements', 'international law'
+      ],
+      synonyms: [
+        { word: 'right', synonyms: ['freedom', 'liberty', 'entitlement', 'privilege'] },
+        { word: 'protest', synonyms: ['demonstration', 'rally', 'march', 'activism'] },
+        { word: 'advocate', synonyms: ['campaign', 'champion', 'support', 'promote'] }
+      ],
+      speakingLines: [
+        'Human rights are universal principles that transcend cultural and political boundaries.',
+        'Civil society organizations play a crucial role in holding governments accountable.',
+        'Freedom of expression is essential for democratic discourse and social progress.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-government-4',
+    title: 'Public Policy & Administration',
+    slug: 'public-policy-administration',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Government',
+    description: 'Advanced vocabulary for discussing government policy-making and public administration.',
+    is_premium: true,
+    is_published: true,
+    view_count: 620,
+    created_at: '2024-07-01T10:00:00Z',
+    updated_at: '2024-07-01T10:00:00Z',
+    content: {
+      title: 'Public Policy & Administration',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 policy and administration terms',
+        'Discuss government decision-making',
+        'Use policy vocabulary accurately'
+      ],
+      coreExplanation: `Public policy and administration are important for discussing government actions. To achieve Band 8+, you need vocabulary that allows you to discuss how governments make and implement decisions.
+
+This lesson covers policy-making, public administration, and governance. Understanding these concepts helps you discuss how governments address social issues.`,
+      examples: [
+        { sentence: 'Public policy addresses societal problems through government action.', explanation: '"Public policy" is government decisions and actions.' },
+        { sentence: 'Policy implementation requires effective administration.', explanation: '"Policy implementation" is putting policies into practice.' },
+        { sentence: 'Bureaucracy manages government operations.', explanation: '"Bureaucracy" is the administrative system of government.' },
+        { sentence: 'Stakeholder consultation informs policy development.', explanation: '"Stakeholder consultation" is seeking input from affected parties.' },
+        { sentence: 'Evidence-based policy uses research to guide decisions.', explanation: '"Evidence-based policy" is policy informed by data.' },
+        { sentence: 'Regulatory frameworks establish rules for activities.', explanation: '"Regulatory frameworks" are systems of rules.' },
+        { sentence: 'Public services are provided by government agencies.', explanation: '"Public services" are government-provided services.' },
+        { sentence: 'Policy evaluation assesses effectiveness.', explanation: '"Policy evaluation" is measuring policy outcomes.' },
+        { sentence: 'Decentralization transfers power to local governments.', explanation: '"Decentralization" is distributing authority.' },
+        { sentence: 'Governance involves multiple actors and institutions.', explanation: '"Governance" is the process of governing.' },
+        { sentence: 'Public consultation gathers citizen input.', explanation: '"Public consultation" is seeking public opinion.' },
+        { sentence: 'Administrative efficiency improves service delivery.', explanation: '"Administrative efficiency" is effective government operations.' },
+        { sentence: 'Policy reform addresses shortcomings in existing approaches.', explanation: '"Policy reform" is changing policies.' },
+        { sentence: 'Intergovernmental relations coordinate different levels.', explanation: '"Intergovernmental relations" are between government levels.' },
+        { sentence: 'Public accountability ensures responsible governance.', explanation: '"Public accountability" is answering to citizens.' }
+      ],
+      commonMistakes: [
+        { mistake: 'The government should do something.', correction: 'Effective policy responses require careful analysis, stakeholder consultation, and evidence-based approaches.', explanation: 'Discuss policy-making processes.' },
+        { mistake: 'Bureaucracy is bad.', correction: 'Administrative systems are necessary for implementing policies, though they can be improved for efficiency.', explanation: 'Present balanced views on administration.' },
+        { mistake: 'Policies always work as intended.', correction: 'Policy implementation often faces challenges, requiring ongoing evaluation and adjustment.', explanation: 'Acknowledge implementation challenges.' }
+      ],
+      miniPractice: [
+        { question: 'Public _____ addresses societal problems through government action.', type: 'fill-blank' },
+        { question: 'Which term describes policy informed by research?', options: ['evidence-based policy', 'data-driven policy', 'research policy', 'scientific policy'], type: 'multiple-choice' },
+        { question: 'Rewrite: "The government should fix this problem."', type: 'rewrite' },
+        { question: 'Policy _____ assesses effectiveness.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'policy',
+        'evidence-based policy',
+        'Effective policy responses require careful analysis and stakeholder consultation.',
+        'evaluation'
+      ],
+      quickRecap: 'Key terms: "public policy", "policy implementation", "bureaucracy", "stakeholder consultation", "evidence-based policy", "regulatory frameworks", "public services", "policy evaluation", "decentralization", "governance". Use policy language!',
+      collocations: [
+        'public policy', 'policy implementation', 'bureaucracy', 'stakeholder consultation',
+        'evidence-based policy', 'regulatory frameworks', 'public services', 'policy evaluation',
+        'decentralization', 'governance', 'public consultation', 'policy reform'
+      ],
+      synonyms: [
+        { word: 'policy', synonyms: ['approach', 'strategy', 'plan', 'program'] },
+        { word: 'government', synonyms: ['administration', 'authorities', 'state', 'public sector'] },
+        { word: 'implement', synonyms: ['execute', 'carry out', 'put into practice', 'enact'] }
+      ],
+      speakingLines: [
+        'Evidence-based policy-making leads to more effective government interventions.',
+        'Stakeholder consultation ensures policies address the needs of affected communities.',
+        'Policy evaluation is essential for improving government programs over time.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-government-5',
+    title: 'International Relations & Diplomacy',
+    slug: 'international-relations-diplomacy',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Government',
+    description: 'Advanced vocabulary for discussing foreign policy, diplomacy, and international cooperation.',
+    is_premium: true,
+    is_published: true,
+    view_count: 650,
+    created_at: '2024-07-05T10:00:00Z',
+    updated_at: '2024-07-05T10:00:00Z',
+    content: {
+      title: 'International Relations & Diplomacy',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 international relations terms',
+        'Discuss foreign policy and diplomacy',
+        'Use diplomatic vocabulary'
+      ],
+      coreExplanation: `International relations and diplomacy are important for discussing global issues. To achieve Band 8+, you need vocabulary that allows you to discuss how countries interact.
+
+This lesson covers foreign policy, diplomacy, and international organizations. Understanding these concepts helps you discuss global cooperation and conflict.`,
+      examples: [
+        { sentence: 'Diplomacy resolves disputes through negotiation.', explanation: '"Diplomacy" is managing international relations.' },
+        { sentence: 'Foreign policy guides a country\'s international actions.', explanation: '"Foreign policy" is a nation\'s approach to other countries.' },
+        { sentence: 'International organizations facilitate global cooperation.', explanation: '"International organizations" are bodies like the UN.' },
+        { sentence: 'Bilateral agreements involve two countries.', explanation: '"Bilateral" means between two parties.' },
+        { sentence: 'Multilateral cooperation addresses global challenges.', explanation: '"Multilateral" involves multiple countries.' },
+        { sentence: 'Geopolitical tensions affect regional stability.', explanation: '"Geopolitical" relates to politics and geography.' },
+        { sentence: 'Diplomatic relations enable communication between nations.', explanation: '"Diplomatic relations" are formal connections between countries.' },
+        { sentence: 'International treaties establish binding agreements.', explanation: '"International treaties" are formal agreements between nations.' },
+        { sentence: 'Soft power influences through culture and values.', explanation: '"Soft power" is influence without force.' },
+        { sentence: 'Sovereignty is a nation\'s right to self-governance.', explanation: '"Sovereignty" is supreme authority over territory.' },
+        { sentence: 'Peacekeeping missions maintain stability in conflict zones.', explanation: '"Peacekeeping" is military operations to maintain peace.' },
+        { sentence: 'Economic sanctions pressure countries to change behavior.', explanation: '"Economic sanctions" are trade restrictions.' },
+        { sentence: 'Diplomatic immunity protects foreign officials.', explanation: '"Diplomatic immunity" exempts diplomats from local law.' },
+        { sentence: 'International summits bring leaders together.', explanation: '"International summits" are high-level meetings.' },
+        { sentence: 'Global governance addresses transnational issues.', explanation: '"Global governance" is international decision-making.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Countries should mind their own business.', correction: 'International cooperation is necessary for addressing transnational challenges like climate change and pandemics.', explanation: 'Discuss interdependence.' },
+        { mistake: 'The UN doesn\'t do anything.', correction: 'International organizations face limitations but provide important forums for dialogue and coordination.', explanation: 'Present balanced views on international bodies.' },
+        { mistake: 'War is the only solution to conflicts.', correction: 'Diplomatic approaches and multilateral cooperation can resolve many international disputes peacefully.', explanation: 'Discuss peaceful conflict resolution.' }
+      ],
+      miniPractice: [
+        { question: '_____ resolves disputes through negotiation.', type: 'fill-blank' },
+        { question: 'Which term describes influence without force?', options: ['soft power', 'hard power', 'smart power', 'economic power'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Countries should work together on big problems."', type: 'rewrite' },
+        { question: 'Foreign _____ guides a country\'s international actions.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Diplomacy',
+        'soft power',
+        'Multilateral cooperation is essential for addressing transnational challenges.',
+        'policy'
+      ],
+      quickRecap: 'Key terms: "diplomacy", "foreign policy", "international organizations", "bilateral", "multilateral", "geopolitical", "diplomatic relations", "international treaties", "soft power", "sovereignty". Use diplomatic language!',
+      collocations: [
+        'diplomacy', 'foreign policy', 'international organizations', 'bilateral agreements',
+        'multilateral cooperation', 'geopolitical tensions', 'diplomatic relations', 'international treaties',
+        'soft power', 'sovereignty', 'peacekeeping missions', 'economic sanctions'
+      ],
+      synonyms: [
+        { word: 'country', synonyms: ['nation', 'state', 'sovereign state', 'nation-state'] },
+        { word: 'agreement', synonyms: ['treaty', 'accord', 'pact', 'convention'] },
+        { word: 'conflict', synonyms: ['dispute', 'tension', 'confrontation', 'disagreement'] }
+      ],
+      speakingLines: [
+        'Diplomacy remains the most effective means of resolving international disputes.',
+        'Multilateral cooperation is essential for addressing global challenges like climate change.',
+        'Soft power can be as influential as military or economic pressure in international relations.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-government-6',
+    title: 'Legal Systems & Justice',
+    slug: 'legal-systems-justice',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Government',
+    description: 'Advanced vocabulary for discussing legal frameworks, courts, and the justice system.',
+    is_premium: true,
+    is_published: true,
+    view_count: 690,
+    created_at: '2024-07-08T10:00:00Z',
+    updated_at: '2024-07-08T10:00:00Z',
+    content: {
+      title: 'Legal Systems & Justice',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 legal system terms',
+        'Discuss courts and legal processes',
+        'Use legal vocabulary accurately'
+      ],
+      coreExplanation: `Legal systems and justice are important for discussing how societies maintain order. To achieve Band 8+, you need vocabulary that allows you to discuss legal frameworks and processes.
+
+This lesson covers legal systems, courts, and justice processes. Understanding these concepts helps you discuss how laws are made and enforced.`,
+      examples: [
+        { sentence: 'The judiciary interprets and applies the law.', explanation: '"Judiciary" is the court system.' },
+        { sentence: 'Legislation is created by elected representatives.', explanation: '"Legislation" is laws passed by legislatures.' },
+        { sentence: 'Legal precedent guides future court decisions.', explanation: '"Legal precedent" is past decisions that guide future cases.' },
+        { sentence: 'Civil law governs disputes between individuals.', explanation: '"Civil law" is non-criminal legal matters.' },
+        { sentence: 'Criminal law addresses offenses against society.', explanation: '"Criminal law" is law dealing with crimes.' },
+        { sentence: 'Due process ensures fair legal procedures.', explanation: '"Due process" is proper legal procedures.' },
+        { sentence: 'Legal representation protects defendants\' rights.', explanation: '"Legal representation" is having a lawyer.' },
+        { sentence: 'Judicial independence prevents political interference.', explanation: '"Judicial independence" is courts free from political control.' },
+        { sentence: 'Constitutional law interprets fundamental principles.', explanation: '"Constitutional law" relates to constitutions.' },
+        { sentence: 'Legal aid provides assistance to those who cannot afford lawyers.', explanation: '"Legal aid" is free legal help.' },
+        { sentence: 'Appellate courts review lower court decisions.', explanation: '"Appellate courts" hear appeals.' },
+        { sentence: 'Litigation involves resolving disputes through courts.', explanation: '"Litigation" is the legal process of suing.' },
+        { sentence: 'Arbitration provides alternative dispute resolution.', explanation: '"Arbitration" is settling disputes outside courts.' },
+        { sentence: 'Legal liability determines responsibility for harm.', explanation: '"Legal liability" is legal responsibility.' },
+        { sentence: 'Jurisprudence is the philosophy of law.', explanation: '"Jurisprudence" is legal theory.' }
+      ],
+      commonMistakes: [
+        { mistake: 'The law is always fair.', correction: 'Legal systems aim for justice but may contain biases or gaps that require ongoing reform.', explanation: 'Acknowledge legal system limitations.' },
+        { mistake: 'Lawyers just help criminals.', correction: 'Legal representation is a fundamental right that ensures fair trials for all accused persons.', explanation: 'Explain the role of legal representation.' },
+        { mistake: 'Courts always get it right.', correction: 'Judicial systems include appeals processes to correct errors and ensure justice.', explanation: 'Discuss judicial review mechanisms.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ interprets and applies the law.', type: 'fill-blank' },
+        { question: 'Which term describes past decisions guiding future cases?', options: ['legal precedent', 'case law', 'common law', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Everyone should have a lawyer."', type: 'rewrite' },
+        { question: 'Due _____ ensures fair legal procedures.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'judiciary',
+        'all of the above',
+        'Legal representation is a fundamental right that ensures fair trials.',
+        'process'
+      ],
+      quickRecap: 'Key terms: "judiciary", "legislation", "legal precedent", "civil law", "criminal law", "due process", "legal representation", "judicial independence", "constitutional law", "litigation". Use legal terminology accurately!',
+      collocations: [
+        'judiciary', 'legislation', 'legal precedent', 'civil law',
+        'criminal law', 'due process', 'legal representation', 'judicial independence',
+        'constitutional law', 'legal aid', 'appellate courts', 'arbitration'
+      ],
+      synonyms: [
+        { word: 'law', synonyms: ['legislation', 'statute', 'regulation', 'ordinance'] },
+        { word: 'court', synonyms: ['tribunal', 'judiciary', 'bench', 'bar'] },
+        { word: 'judge', synonyms: ['magistrate', 'justice', 'adjudicator', 'arbiter'] }
+      ],
+      speakingLines: [
+        'Judicial independence is essential for maintaining the rule of law.',
+        'Due process protects individuals from arbitrary government action.',
+        'Legal aid ensures that access to justice is not limited by financial means.'
+      ]
+    }
   }
 ];
