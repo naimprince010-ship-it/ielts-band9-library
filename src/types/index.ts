@@ -1,4 +1,4 @@
-export type LessonType = 'vocabulary' | 'grammar';
+export type LessonType = 'vocabulary' | 'grammar' | 'writing' | 'speaking';
 export type LessonLevel = 'beginner' | 'intermediate' | 'advanced';
 export type UserRole = 'user' | 'admin';
 export type SubscriptionStatus = 'free' | 'premium';

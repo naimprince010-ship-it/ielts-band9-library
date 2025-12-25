@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Search, Filter, BookOpen, GraduationCap, Star, Bookmark, BookmarkCheck, Clock, CheckCircle2, Circle, TrendingUp } from 'lucide-react';
+import { Search, Filter, BookOpen, GraduationCap, Star, Bookmark, BookmarkCheck, Clock, CheckCircle2, Circle, TrendingUp, PenTool } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,7 +16,7 @@ import {
 import { useLessons } from '@/contexts/LessonContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { LessonType, LessonLevel } from '@/types';
-import { GRAMMAR_TOPICS, VOCABULARY_TOPICS, SAMPLE_LESSONS } from '@/data/sampleLessons';
+import { GRAMMAR_TOPICS, VOCABULARY_TOPICS, WRITING_TOPICS, SAMPLE_LESSONS } from '@/data/sampleLessons';
 
 interface LibraryPageProps {
   type: LessonType;
@@ -40,7 +40,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
   const { lessons, loading, fetchLessons, addBookmark, removeBookmark, isBookmarked, getLessonProgress, getCompletionPercentage, getCompletedCount } = useLessons();
   const { user } = useAuth();
 
-  const topics = type === 'vocabulary' ? VOCABULARY_TOPICS : GRAMMAR_TOPICS;
+  const topics = type === 'vocabulary' ? VOCABULARY_TOPICS : type === 'writing' ? WRITING_TOPICS : GRAMMAR_TOPICS;
   const filteredLessons = lessons.filter(l => l.type === type);
 
   const topicCounts = useMemo(() => {
@@ -86,11 +86,13 @@ export function LibraryPage({ type }: LibraryPageProps) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className={`py-12 ${type === 'vocabulary' ? 'bg-indigo-600' : 'bg-purple-600'} text-white`}>
+      <div className={`py-12 ${type === 'vocabulary' ? 'bg-indigo-600' : type === 'writing' ? 'bg-emerald-600' : 'bg-purple-600'} text-white`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 mb-4">
             {type === 'vocabulary' ? (
               <BookOpen className="h-10 w-10" />
+            ) : type === 'writing' ? (
+              <PenTool className="h-10 w-10" />
             ) : (
               <GraduationCap className="h-10 w-10" />
             )}
@@ -99,6 +101,8 @@ export function LibraryPage({ type }: LibraryPageProps) {
           <p className="text-lg opacity-90 max-w-2xl">
             {type === 'vocabulary' 
               ? 'Master academic vocabulary, collocations, and speaking phrases for IELTS Band 7+.'
+              : type === 'writing'
+              ? 'Master IELTS Writing with Band 9 model answers, Band Upgrade Ladder, and examiner insights.'
               : 'Learn essential grammar structures with clear explanations, examples, and practice exercises.'}
           </p>
           

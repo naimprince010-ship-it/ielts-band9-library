@@ -52,6 +52,14 @@ function App() {
               }
             />
             <Route
+              path="/writing"
+              element={
+                <Layout>
+                  <LibraryPage type="writing" />
+                </Layout>
+              }
+            />
+            <Route
               path="/lesson/:slug"
               element={
                 <Layout>

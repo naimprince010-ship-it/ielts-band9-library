@@ -1,6 +1,7 @@
 import { Lesson } from '@/types';
 import { NEW_VOCABULARY_LESSONS } from './newVocabularyLessons';
 import { NEW_GRAMMAR_LESSONS } from './newGrammarLessons';
+import { WRITING_LESSONS, WRITING_TOPICS } from './writingLessons';
 
 export const SAMPLE_LESSONS: Lesson[] = [
   {
@@ -473,7 +474,8 @@ This lesson focuses on words that help you express nuanced views - not just "tec
     }
   },
   ...NEW_VOCABULARY_LESSONS,
-  ...NEW_GRAMMAR_LESSONS
+  ...NEW_GRAMMAR_LESSONS,
+  ...WRITING_LESSONS
 ];
 
 export const GRAMMAR_TOPICS = [
@@ -565,3 +567,5 @@ export const VOCABULARY_TOPICS = [
   'Creativity',
   'Communication'
 ];
+
+export { WRITING_TOPICS };
