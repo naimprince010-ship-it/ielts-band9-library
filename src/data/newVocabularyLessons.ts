@@ -8136,5 +8136,1075 @@ This lesson covers different ways to conclude arguments and summarize points.`,
         'Taking everything into account, a balanced approach is most effective.'
       ]
     }
+  },
+  // ============================================
+  // BATCH 17: Band Upgrades (8 lessons)
+  // ============================================
+  {
+    id: 'vocab-band-upgrade-1',
+    title: 'Band 5 to Band 6 Vocabulary',
+    slug: 'band-5-to-6-vocabulary',
+    type: 'vocabulary',
+    level: 'beginner',
+    topic: 'Band Upgrade',
+    description: 'Essential vocabulary upgrades to move from Band 5 to Band 6.',
+    is_premium: false,
+    is_published: true,
+    view_count: 1250,
+    created_at: '2024-12-25T10:00:00Z',
+    updated_at: '2024-12-25T10:00:00Z',
+    content: {
+      title: 'Band 5 to Band 6 Vocabulary',
+      targetLevel: 'Band 5.0 - 6.0',
+      whatYouWillLearn: [
+        'Upgrade 25 basic words to Band 6 level',
+        'Replace simple vocabulary',
+        'Sound more sophisticated'
+      ],
+      coreExplanation: `Moving from Band 5 to Band 6 requires replacing basic vocabulary with more sophisticated alternatives. This lesson shows you how to upgrade common words.
+
+Simple vocabulary limits your score. By using more precise and varied words, you demonstrate lexical resource.`,
+      examples: [
+        { sentence: 'Instead of "good", say "beneficial" or "advantageous".', explanation: '"Beneficial" is more sophisticated than "good".' },
+        { sentence: 'Instead of "bad", say "detrimental" or "harmful".', explanation: '"Detrimental" is more precise than "bad".' },
+        { sentence: 'Instead of "big", say "significant" or "substantial".', explanation: '"Significant" shows importance, not just size.' },
+        { sentence: 'Instead of "small", say "minor" or "negligible".', explanation: '"Minor" is more academic than "small".' },
+        { sentence: 'Instead of "many", say "numerous" or "a considerable number of".', explanation: '"Numerous" sounds more formal.' },
+        { sentence: 'Instead of "a lot of", say "a great deal of" or "substantial".', explanation: 'Avoid "a lot of" in formal writing.' },
+        { sentence: 'Instead of "important", say "crucial" or "essential".', explanation: '"Crucial" emphasizes importance more.' },
+        { sentence: 'Instead of "problem", say "issue" or "challenge".', explanation: '"Issue" is more neutral and academic.' },
+        { sentence: 'Instead of "thing", say "factor" or "aspect".', explanation: 'Avoid vague words like "thing".' },
+        { sentence: 'Instead of "get", say "obtain" or "acquire".', explanation: '"Obtain" is more formal than "get".' },
+        { sentence: 'Instead of "show", say "demonstrate" or "illustrate".', explanation: '"Demonstrate" is more academic.' },
+        { sentence: 'Instead of "help", say "assist" or "facilitate".', explanation: '"Facilitate" is more sophisticated.' },
+        { sentence: 'Instead of "use", say "utilize" or "employ".', explanation: '"Utilize" is more formal.' },
+        { sentence: 'Instead of "need", say "require" or "necessitate".', explanation: '"Require" is more academic.' },
+        { sentence: 'Instead of "give", say "provide" or "offer".', explanation: '"Provide" is more formal.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "good" and "bad" repeatedly', correction: 'Use varied alternatives like "beneficial", "advantageous", "detrimental", "harmful"', explanation: 'Repetition of basic words lowers your score.' },
+        { mistake: 'Using "thing" and "stuff"', correction: 'Use specific words like "factor", "aspect", "element"', explanation: 'Vague words show limited vocabulary.' },
+        { mistake: 'Using "a lot of" in formal writing', correction: 'Use "numerous", "a considerable number of", "substantial"', explanation: '"A lot of" is too informal for academic writing.' }
+      ],
+      miniPractice: [
+        { question: 'Upgrade: "Technology has many good effects."', type: 'rewrite' },
+        { question: 'Which is more formal?', options: ['numerous', 'many', 'a lot of', 'lots of'], type: 'multiple-choice' },
+        { question: 'Upgrade: "This is a big problem."', type: 'rewrite' },
+        { question: 'Replace "get": "Students should _____ knowledge through reading."', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Technology has numerous beneficial effects.',
+        'numerous',
+        'This is a significant issue.',
+        'acquire'
+      ],
+      quickRecap: 'Key upgrades: good→beneficial, bad→detrimental, big→significant, many→numerous, important→crucial, problem→issue, thing→factor, get→obtain, show→demonstrate, help→facilitate. Use these to reach Band 6!',
+      collocations: [
+        'beneficial effects', 'detrimental impact', 'significant issue', 'substantial number',
+        'crucial factor', 'essential requirement', 'obtain knowledge', 'demonstrate understanding',
+        'facilitate learning', 'provide assistance', 'require attention', 'utilize resources'
+      ],
+      synonyms: [
+        { word: 'good', synonyms: ['beneficial', 'advantageous', 'positive', 'favorable'] },
+        { word: 'bad', synonyms: ['detrimental', 'harmful', 'negative', 'adverse'] },
+        { word: 'big', synonyms: ['significant', 'substantial', 'considerable', 'major'] }
+      ],
+      speakingLines: [
+        'Technology has numerous beneficial effects on education.',
+        'This is a significant issue that requires immediate attention.',
+        'Students should acquire knowledge through various methods.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-band-upgrade-2',
+    title: 'Band 6 to Band 7 Vocabulary',
+    slug: 'band-6-to-7-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Band Upgrade',
+    description: 'Advanced vocabulary upgrades to move from Band 6 to Band 7.',
+    is_premium: true,
+    is_published: true,
+    view_count: 1180,
+    created_at: '2024-12-26T10:00:00Z',
+    updated_at: '2024-12-26T10:00:00Z',
+    content: {
+      title: 'Band 6 to Band 7 Vocabulary',
+      targetLevel: 'Band 6.0 - 7.0',
+      whatYouWillLearn: [
+        'Upgrade 25 intermediate words to Band 7 level',
+        'Use more precise vocabulary',
+        'Demonstrate lexical sophistication'
+      ],
+      coreExplanation: `Moving from Band 6 to Band 7 requires more sophisticated and precise vocabulary. This lesson shows you how to upgrade intermediate words to advanced alternatives.
+
+Band 7 requires demonstrating lexical resource through less common vocabulary and awareness of style and collocation.`,
+      examples: [
+        { sentence: 'Instead of "important", say "paramount" or "pivotal".', explanation: '"Paramount" means of supreme importance.' },
+        { sentence: 'Instead of "increase", say "escalate" or "surge".', explanation: '"Escalate" suggests rapid increase.' },
+        { sentence: 'Instead of "decrease", say "diminish" or "dwindle".', explanation: '"Diminish" is more sophisticated.' },
+        { sentence: 'Instead of "change", say "transform" or "revolutionize".', explanation: '"Transform" suggests fundamental change.' },
+        { sentence: 'Instead of "affect", say "impact" or "influence profoundly".', explanation: '"Impact" is more powerful.' },
+        { sentence: 'Instead of "cause", say "trigger" or "precipitate".', explanation: '"Trigger" suggests immediate causation.' },
+        { sentence: 'Instead of "result in", say "culminate in" or "give rise to".', explanation: '"Culminate in" suggests a final result.' },
+        { sentence: 'Instead of "solve", say "address" or "tackle".', explanation: '"Address" is more nuanced than "solve".' },
+        { sentence: 'Instead of "improve", say "enhance" or "optimize".', explanation: '"Enhance" suggests making better.' },
+        { sentence: 'Instead of "reduce", say "mitigate" or "alleviate".', explanation: '"Mitigate" means to make less severe.' },
+        { sentence: 'Instead of "support", say "advocate" or "endorse".', explanation: '"Advocate" means to actively support.' },
+        { sentence: 'Instead of "oppose", say "contest" or "refute".', explanation: '"Refute" means to prove wrong.' },
+        { sentence: 'Instead of "think", say "contend" or "maintain".', explanation: '"Contend" is more formal for opinions.' },
+        { sentence: 'Instead of "say", say "assert" or "posit".', explanation: '"Assert" is more confident.' },
+        { sentence: 'Instead of "show", say "exemplify" or "epitomize".', explanation: '"Exemplify" means to serve as an example.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Overusing "important"', correction: 'Use "paramount", "pivotal", "crucial", "vital"', explanation: 'Vary your vocabulary for higher scores.' },
+        { mistake: 'Using "affect" without precision', correction: 'Use "impact", "influence", "shape", "determine"', explanation: 'Choose words that show the type of effect.' },
+        { mistake: 'Using "solve" for complex issues', correction: 'Use "address", "tackle", "mitigate"', explanation: 'Complex issues are rarely "solved" completely.' }
+      ],
+      miniPractice: [
+        { question: 'Upgrade: "Education is important for development."', type: 'rewrite' },
+        { question: 'Which word means "to make less severe"?', options: ['mitigate', 'increase', 'cause', 'support'], type: 'multiple-choice' },
+        { question: 'Upgrade: "Technology has changed communication."', type: 'rewrite' },
+        { question: 'Replace "cause": "Pollution can _____ health problems."', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Education is paramount/pivotal for development.',
+        'mitigate',
+        'Technology has revolutionized/transformed communication.',
+        'trigger'
+      ],
+      quickRecap: 'Key upgrades: important→paramount, increase→escalate, change→transform, affect→impact, cause→trigger, solve→address, improve→enhance, reduce→mitigate, support→advocate, show→exemplify. Use these to reach Band 7!',
+      collocations: [
+        'paramount importance', 'escalating costs', 'transform society', 'profound impact',
+        'trigger a response', 'address concerns', 'enhance quality', 'mitigate risks',
+        'advocate for change', 'exemplify excellence', 'pivotal role', 'culminate in success'
+      ],
+      synonyms: [
+        { word: 'important', synonyms: ['paramount', 'pivotal', 'crucial', 'vital', 'essential'] },
+        { word: 'increase', synonyms: ['escalate', 'surge', 'soar', 'multiply', 'intensify'] },
+        { word: 'change', synonyms: ['transform', 'revolutionize', 'alter', 'modify', 'reshape'] }
+      ],
+      speakingLines: [
+        'Education plays a paramount role in economic development.',
+        'Technology has revolutionized the way we communicate.',
+        'Governments should address these concerns to mitigate potential risks.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-band-upgrade-3',
+    title: 'Band 7 to Band 8 Vocabulary',
+    slug: 'band-7-to-8-vocabulary',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Band Upgrade',
+    description: 'Sophisticated vocabulary upgrades to move from Band 7 to Band 8.',
+    is_premium: true,
+    is_published: true,
+    view_count: 980,
+    created_at: '2024-12-27T10:00:00Z',
+    updated_at: '2024-12-27T10:00:00Z',
+    content: {
+      title: 'Band 7 to Band 8 Vocabulary',
+      targetLevel: 'Band 7.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 sophisticated Band 8 words',
+        'Use precise academic vocabulary',
+        'Demonstrate native-like fluency'
+      ],
+      coreExplanation: `Band 8 requires sophisticated vocabulary used with full flexibility and precision. This lesson introduces advanced words that demonstrate native-like command of English.
+
+At Band 8, you should use less common vocabulary naturally and accurately, with awareness of connotation and style.`,
+      examples: [
+        { sentence: 'Instead of "very important", say "indispensable" or "imperative".', explanation: '"Indispensable" means absolutely necessary.' },
+        { sentence: 'Instead of "widespread", say "pervasive" or "ubiquitous".', explanation: '"Pervasive" suggests spreading throughout.' },
+        { sentence: 'Instead of "temporary", say "transient" or "ephemeral".', explanation: '"Ephemeral" means lasting a very short time.' },
+        { sentence: 'Instead of "permanent", say "indelible" or "immutable".', explanation: '"Indelible" means impossible to remove.' },
+        { sentence: 'Instead of "obvious", say "manifest" or "palpable".', explanation: '"Manifest" means clearly apparent.' },
+        { sentence: 'Instead of "hidden", say "latent" or "covert".', explanation: '"Latent" means existing but not yet developed.' },
+        { sentence: 'Instead of "basic", say "rudimentary" or "fundamental".', explanation: '"Rudimentary" means at an elementary level.' },
+        { sentence: 'Instead of "complex", say "intricate" or "multifaceted".', explanation: '"Intricate" means very complicated.' },
+        { sentence: 'Instead of "harmful", say "pernicious" or "deleterious".', explanation: '"Pernicious" means having a harmful effect.' },
+        { sentence: 'Instead of "helpful", say "conducive" or "instrumental".', explanation: '"Conducive" means making something likely.' },
+        { sentence: 'Instead of "strong", say "robust" or "formidable".', explanation: '"Robust" means strong and healthy.' },
+        { sentence: 'Instead of "weak", say "tenuous" or "fragile".', explanation: '"Tenuous" means very weak or slight.' },
+        { sentence: 'Instead of "rich", say "affluent" or "prosperous".', explanation: '"Affluent" means having a great deal of money.' },
+        { sentence: 'Instead of "poor", say "impoverished" or "destitute".', explanation: '"Impoverished" means made poor.' },
+        { sentence: 'Instead of "old", say "antiquated" or "archaic".', explanation: '"Antiquated" means old-fashioned or outdated.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using sophisticated words incorrectly', correction: 'Learn the precise meaning and context of advanced vocabulary', explanation: 'Misusing advanced words is worse than using simple ones.' },
+        { mistake: 'Overusing advanced vocabulary', correction: 'Use sophisticated words naturally, not in every sentence', explanation: 'Natural use is key to Band 8.' },
+        { mistake: 'Ignoring collocations', correction: 'Learn which words go together naturally', explanation: 'Wrong collocations reveal non-native use.' }
+      ],
+      miniPractice: [
+        { question: 'Upgrade: "Technology is very important in modern life."', type: 'rewrite' },
+        { question: 'Which word means "lasting a very short time"?', options: ['ephemeral', 'permanent', 'robust', 'manifest'], type: 'multiple-choice' },
+        { question: 'Upgrade: "Pollution has harmful effects on health."', type: 'rewrite' },
+        { question: 'Replace "widespread": "Smartphone use has become _____ in modern society."', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Technology is indispensable/imperative in modern life.',
+        'ephemeral',
+        'Pollution has pernicious/deleterious effects on health.',
+        'ubiquitous'
+      ],
+      quickRecap: 'Key upgrades: very important→indispensable, widespread→pervasive, temporary→ephemeral, obvious→manifest, complex→intricate, harmful→pernicious, helpful→conducive, strong→robust, weak→tenuous, old→antiquated. Master these for Band 8!',
+      collocations: [
+        'indispensable role', 'pervasive influence', 'ephemeral nature', 'manifest benefits',
+        'intricate relationship', 'pernicious effects', 'conducive environment', 'robust economy',
+        'tenuous connection', 'affluent society', 'impoverished communities', 'antiquated systems'
+      ],
+      synonyms: [
+        { word: 'very important', synonyms: ['indispensable', 'imperative', 'paramount', 'vital'] },
+        { word: 'widespread', synonyms: ['pervasive', 'ubiquitous', 'prevalent', 'rampant'] },
+        { word: 'harmful', synonyms: ['pernicious', 'deleterious', 'detrimental', 'noxious'] }
+      ],
+      speakingLines: [
+        'Technology has become indispensable in contemporary society.',
+        'The pervasive influence of social media has transformed communication.',
+        'Education is conducive to economic prosperity and social mobility.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-band-upgrade-4',
+    title: 'Band 8 to Band 9 Vocabulary',
+    slug: 'band-8-to-9-vocabulary',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Band Upgrade',
+    description: 'Expert-level vocabulary for achieving Band 9.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2024-12-28T10:00:00Z',
+    updated_at: '2024-12-28T10:00:00Z',
+    content: {
+      title: 'Band 8 to Band 9 Vocabulary',
+      targetLevel: 'Band 8.0 - 9.0',
+      whatYouWillLearn: [
+        'Master 25 expert-level words',
+        'Use vocabulary with full flexibility',
+        'Achieve native-like precision'
+      ],
+      coreExplanation: `Band 9 requires expert use of vocabulary with full flexibility and precision. This lesson introduces the most sophisticated words used by native speakers in academic contexts.
+
+At Band 9, vocabulary use should be completely natural, accurate, and appropriate to context.`,
+      examples: [
+        { sentence: 'Use "quintessential" for the perfect example of something.', explanation: '"Quintessential" means representing the most perfect example.' },
+        { sentence: 'Use "paradigm" for a typical example or pattern.', explanation: '"Paradigm" means a typical example or model.' },
+        { sentence: 'Use "dichotomy" for a division into two contrasting things.', explanation: '"Dichotomy" means a division into two opposites.' },
+        { sentence: 'Use "juxtaposition" for placing things side by side for contrast.', explanation: '"Juxtaposition" means placing together for comparison.' },
+        { sentence: 'Use "paradox" for a seemingly contradictory statement.', explanation: '"Paradox" means an apparent contradiction.' },
+        { sentence: 'Use "anomaly" for something that deviates from the norm.', explanation: '"Anomaly" means something unusual or unexpected.' },
+        { sentence: 'Use "catalyst" for something that causes change.', explanation: '"Catalyst" means something that precipitates change.' },
+        { sentence: 'Use "synthesis" for combining elements into a whole.', explanation: '"Synthesis" means combining parts into a unified whole.' },
+        { sentence: 'Use "antithesis" for the direct opposite.', explanation: '"Antithesis" means the exact opposite.' },
+        { sentence: 'Use "epitome" for the perfect example.', explanation: '"Epitome" means a perfect example of a quality.' },
+        { sentence: 'Use "nuance" for subtle differences.', explanation: '"Nuance" means a subtle distinction.' },
+        { sentence: 'Use "ramification" for consequences.', explanation: '"Ramification" means a complex consequence.' },
+        { sentence: 'Use "trajectory" for a path of development.', explanation: '"Trajectory" means the path something follows.' },
+        { sentence: 'Use "zeitgeist" for the spirit of the times.', explanation: '"Zeitgeist" means the defining spirit of an era.' },
+        { sentence: 'Use "symbiosis" for mutually beneficial relationships.', explanation: '"Symbiosis" means a mutually beneficial relationship.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using expert vocabulary without understanding nuance', correction: 'Study the precise meaning and appropriate contexts', explanation: 'Expert words have specific connotations.' },
+        { mistake: 'Forcing sophisticated vocabulary', correction: 'Use advanced words only when they fit naturally', explanation: 'Natural use is essential for Band 9.' },
+        { mistake: 'Neglecting simpler alternatives', correction: 'Sometimes simple words are more appropriate', explanation: 'Band 9 means knowing when to use which word.' }
+      ],
+      miniPractice: [
+        { question: 'Which word means "the perfect example of something"?', options: ['quintessential', 'anomaly', 'dichotomy', 'catalyst'], type: 'multiple-choice' },
+        { question: 'Use "paradigm" in a sentence about education.', type: 'rewrite' },
+        { question: 'Which word describes a mutually beneficial relationship?', options: ['symbiosis', 'antithesis', 'paradox', 'trajectory'], type: 'multiple-choice' },
+        { question: 'The _____ between rich and poor continues to widen.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'quintessential',
+        'The traditional education paradigm is being challenged by online learning.',
+        'symbiosis',
+        'dichotomy'
+      ],
+      quickRecap: 'Key Band 9 words: quintessential, paradigm, dichotomy, juxtaposition, paradox, anomaly, catalyst, synthesis, antithesis, epitome, nuance, ramification, trajectory, zeitgeist, symbiosis. Use these with precision!',
+      collocations: [
+        'quintessential example', 'paradigm shift', 'false dichotomy', 'striking juxtaposition',
+        'apparent paradox', 'statistical anomaly', 'catalyst for change', 'creative synthesis',
+        'complete antithesis', 'epitome of success', 'subtle nuance', 'far-reaching ramifications'
+      ],
+      synonyms: [
+        { word: 'quintessential', synonyms: ['archetypal', 'definitive', 'classic', 'exemplary'] },
+        { word: 'paradigm', synonyms: ['model', 'pattern', 'framework', 'template'] },
+        { word: 'dichotomy', synonyms: ['division', 'split', 'contrast', 'polarity'] }
+      ],
+      speakingLines: [
+        'This represents a paradigm shift in how we approach education.',
+        'The dichotomy between economic growth and environmental protection is a false one.',
+        'Technology has been the catalyst for unprecedented social change.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-band-upgrade-5',
+    title: 'Formal vs Informal Vocabulary',
+    slug: 'formal-vs-informal-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Band Upgrade',
+    description: 'Learn to distinguish and use formal vocabulary appropriately in IELTS.',
+    is_premium: true,
+    is_published: true,
+    view_count: 920,
+    created_at: '2024-12-29T10:00:00Z',
+    updated_at: '2024-12-29T10:00:00Z',
+    content: {
+      title: 'Formal vs Informal Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Distinguish 25 formal/informal pairs',
+        'Use appropriate register',
+        'Improve academic writing'
+      ],
+      coreExplanation: `IELTS Writing requires formal vocabulary. Using informal words can lower your score. This lesson teaches you to recognize and replace informal vocabulary with formal alternatives.
+
+Understanding register (level of formality) is essential for Band 7+.`,
+      examples: [
+        { sentence: 'Informal: "kids" → Formal: "children"', explanation: '"Children" is appropriate for academic writing.' },
+        { sentence: 'Informal: "guys" → Formal: "people" or "individuals"', explanation: '"Individuals" is more formal.' },
+        { sentence: 'Informal: "stuff" → Formal: "items" or "materials"', explanation: 'Avoid vague informal words.' },
+        { sentence: 'Informal: "get" → Formal: "obtain" or "receive"', explanation: '"Get" is too informal for academic writing.' },
+        { sentence: 'Informal: "buy" → Formal: "purchase"', explanation: '"Purchase" is more formal.' },
+        { sentence: 'Informal: "cheap" → Formal: "inexpensive" or "affordable"', explanation: '"Affordable" sounds more professional.' },
+        { sentence: 'Informal: "fix" → Formal: "repair" or "rectify"', explanation: '"Rectify" is more academic.' },
+        { sentence: 'Informal: "find out" → Formal: "discover" or "ascertain"', explanation: 'Phrasal verbs are often informal.' },
+        { sentence: 'Informal: "go up" → Formal: "increase" or "rise"', explanation: 'Replace phrasal verbs with single words.' },
+        { sentence: 'Informal: "go down" → Formal: "decrease" or "decline"', explanation: '"Decline" is more academic.' },
+        { sentence: 'Informal: "look at" → Formal: "examine" or "analyze"', explanation: '"Analyze" is more sophisticated.' },
+        { sentence: 'Informal: "think about" → Formal: "consider" or "contemplate"', explanation: '"Consider" is more formal.' },
+        { sentence: 'Informal: "talk about" → Formal: "discuss" or "address"', explanation: '"Discuss" is appropriate for essays.' },
+        { sentence: 'Informal: "put up with" → Formal: "tolerate" or "endure"', explanation: 'Replace phrasal verbs.' },
+        { sentence: 'Informal: "sort out" → Formal: "resolve" or "address"', explanation: '"Resolve" is more academic.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using contractions (don\'t, can\'t)', correction: 'Use full forms (do not, cannot)', explanation: 'Contractions are too informal for academic writing.' },
+        { mistake: 'Using phrasal verbs excessively', correction: 'Replace with single-word alternatives', explanation: 'Phrasal verbs are often informal.' },
+        { mistake: 'Using slang or colloquialisms', correction: 'Use standard academic vocabulary', explanation: 'Slang is inappropriate in IELTS Writing.' }
+      ],
+      miniPractice: [
+        { question: 'Replace informal: "Kids should learn about the environment."', type: 'rewrite' },
+        { question: 'Which is more formal?', options: ['purchase', 'buy', 'get', 'grab'], type: 'multiple-choice' },
+        { question: 'Replace informal: "Prices went up last year."', type: 'rewrite' },
+        { question: 'Formal alternative to "find out": The study aimed to _____ the causes.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Children should learn about the environment.',
+        'purchase',
+        'Prices increased/rose last year.',
+        'ascertain/discover'
+      ],
+      quickRecap: 'Key formal alternatives: kids→children, stuff→items, get→obtain, buy→purchase, cheap→affordable, fix→repair, find out→discover, go up→increase, look at→examine, think about→consider. Use formal vocabulary in IELTS Writing!',
+      collocations: [
+        'obtain information', 'purchase goods', 'affordable housing', 'repair damage',
+        'discover evidence', 'increase significantly', 'examine closely', 'consider carefully',
+        'discuss issues', 'tolerate behavior', 'resolve conflicts', 'address concerns'
+      ],
+      synonyms: [
+        { word: 'kids', synonyms: ['children', 'young people', 'minors', 'youth'] },
+        { word: 'get', synonyms: ['obtain', 'acquire', 'receive', 'gain'] },
+        { word: 'find out', synonyms: ['discover', 'ascertain', 'determine', 'establish'] }
+      ],
+      speakingLines: [
+        'Children should receive a comprehensive education.',
+        'Prices have increased significantly over the past decade.',
+        'We need to examine this issue more closely.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-band-upgrade-6',
+    title: 'Vague to Precise Vocabulary',
+    slug: 'vague-to-precise-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Band Upgrade',
+    description: 'Replace vague words with precise vocabulary for higher IELTS scores.',
+    is_premium: true,
+    is_published: true,
+    view_count: 880,
+    created_at: '2024-12-30T10:00:00Z',
+    updated_at: '2024-12-30T10:00:00Z',
+    content: {
+      title: 'Vague to Precise Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Replace 25 vague words with precise alternatives',
+        'Be more specific in writing',
+        'Improve clarity and precision'
+      ],
+      coreExplanation: `Vague vocabulary limits your IELTS score. Using precise words demonstrates lexical resource and improves clarity.
+
+This lesson teaches you to replace common vague words with more specific alternatives.`,
+      examples: [
+        { sentence: 'Vague: "nice" → Precise: "pleasant", "enjoyable", "delightful"', explanation: '"Nice" is too vague; choose a specific meaning.' },
+        { sentence: 'Vague: "interesting" → Precise: "fascinating", "intriguing", "compelling"', explanation: 'Be specific about what makes it interesting.' },
+        { sentence: 'Vague: "very" → Precise: Use stronger adjectives', explanation: 'Instead of "very big", say "enormous".' },
+        { sentence: 'Vague: "really" → Precise: Use stronger adverbs or adjectives', explanation: 'Instead of "really good", say "excellent".' },
+        { sentence: 'Vague: "thing" → Precise: "factor", "aspect", "element", "issue"', explanation: 'Identify what the "thing" actually is.' },
+        { sentence: 'Vague: "stuff" → Precise: "materials", "items", "resources"', explanation: 'Be specific about what you mean.' },
+        { sentence: 'Vague: "a lot" → Precise: "numerous", "substantial", "considerable"', explanation: 'Quantify more precisely.' },
+        { sentence: 'Vague: "some" → Precise: "several", "a minority of", "certain"', explanation: 'Be more specific about quantity.' },
+        { sentence: 'Vague: "kind of" → Precise: Remove or use "somewhat", "rather"', explanation: 'Avoid hedging with "kind of".' },
+        { sentence: 'Vague: "sort of" → Precise: Remove or be more specific', explanation: 'This phrase weakens your writing.' },
+        { sentence: 'Vague: "etc." → Precise: List specific examples or use "among others"', explanation: 'Avoid "etc." in formal writing.' },
+        { sentence: 'Vague: "and so on" → Precise: Complete the list or use "and similar"', explanation: 'Be specific about what you mean.' },
+        { sentence: 'Vague: "do" → Precise: "perform", "conduct", "execute", "undertake"', explanation: 'Choose a verb that fits the context.' },
+        { sentence: 'Vague: "make" → Precise: "create", "produce", "generate", "establish"', explanation: 'Be specific about the type of making.' },
+        { sentence: 'Vague: "have" → Precise: "possess", "experience", "exhibit", "demonstrate"', explanation: 'Choose based on context.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "very" + adjective', correction: 'Use a stronger single adjective', explanation: '"Very tired" → "exhausted"; "very big" → "enormous".' },
+        { mistake: 'Using "thing" repeatedly', correction: 'Identify what you actually mean', explanation: 'Is it a factor, issue, aspect, or element?' },
+        { mistake: 'Ending lists with "etc."', correction: 'Complete the list or use "among others"', explanation: '"Etc." is too vague for academic writing.' }
+      ],
+      miniPractice: [
+        { question: 'Replace vague: "It was a very nice experience."', type: 'rewrite' },
+        { question: 'Which is more precise?', options: ['numerous factors', 'a lot of things', 'many stuff', 'lots of things'], type: 'multiple-choice' },
+        { question: 'Replace vague: "There are a lot of problems."', type: 'rewrite' },
+        { question: 'Precise alternative to "very tired": After the exam, students felt _____.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'It was a delightful/memorable experience.',
+        'numerous factors',
+        'There are numerous/substantial problems.',
+        'exhausted'
+      ],
+      quickRecap: 'Key replacements: nice→pleasant/delightful, interesting→fascinating, very→(use stronger adjective), thing→factor/aspect, stuff→materials, a lot→numerous, some→several, do→perform/conduct, make→create/produce. Be precise!',
+      collocations: [
+        'pleasant experience', 'fascinating topic', 'enormous impact', 'substantial evidence',
+        'numerous factors', 'several aspects', 'perform tasks', 'conduct research',
+        'create opportunities', 'produce results', 'demonstrate ability', 'exhibit behavior'
+      ],
+      synonyms: [
+        { word: 'nice', synonyms: ['pleasant', 'enjoyable', 'delightful', 'agreeable'] },
+        { word: 'interesting', synonyms: ['fascinating', 'intriguing', 'compelling', 'engaging'] },
+        { word: 'thing', synonyms: ['factor', 'aspect', 'element', 'issue', 'matter'] }
+      ],
+      speakingLines: [
+        'It was a delightful experience that I will always remember.',
+        'Numerous factors contribute to this phenomenon.',
+        'The research produced substantial evidence to support this theory.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-band-upgrade-7',
+    title: 'Overused Words & Alternatives',
+    slug: 'overused-words-alternatives',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Band Upgrade',
+    description: 'Replace overused IELTS words with varied alternatives.',
+    is_premium: true,
+    is_published: true,
+    view_count: 920,
+    created_at: '2024-12-31T10:00:00Z',
+    updated_at: '2024-12-31T10:00:00Z',
+    content: {
+      title: 'Overused Words & Alternatives',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Replace 25 overused IELTS words',
+        'Vary vocabulary for higher scores',
+        'Avoid repetition'
+      ],
+      coreExplanation: `Certain words are overused in IELTS essays. Using the same words repeatedly lowers your lexical resource score.
+
+This lesson teaches you alternatives to commonly overused words.`,
+      examples: [
+        { sentence: 'Overused: "nowadays" → Alternatives: "in contemporary society", "in the modern era", "currently"', explanation: 'Vary how you refer to the present.' },
+        { sentence: 'Overused: "people" → Alternatives: "individuals", "citizens", "the population", "society"', explanation: 'Be more specific about which people.' },
+        { sentence: 'Overused: "government" → Alternatives: "authorities", "policymakers", "the state", "administration"', explanation: 'Vary references to government.' },
+        { sentence: 'Overused: "technology" → Alternatives: "technological advances", "digital innovation", "modern technology"', explanation: 'Be more specific about technology.' },
+        { sentence: 'Overused: "development" → Alternatives: "progress", "advancement", "growth", "evolution"', explanation: 'Choose based on context.' },
+        { sentence: 'Overused: "problem" → Alternatives: "issue", "challenge", "concern", "difficulty"', explanation: '"Issue" is more neutral.' },
+        { sentence: 'Overused: "solution" → Alternatives: "remedy", "approach", "strategy", "measure"', explanation: 'Vary how you discuss solutions.' },
+        { sentence: 'Overused: "advantage" → Alternatives: "benefit", "merit", "strength", "positive aspect"', explanation: 'Use varied positive terms.' },
+        { sentence: 'Overused: "disadvantage" → Alternatives: "drawback", "limitation", "weakness", "negative aspect"', explanation: 'Use varied negative terms.' },
+        { sentence: 'Overused: "important" → Alternatives: "significant", "crucial", "essential", "vital"', explanation: 'Vary emphasis words.' },
+        { sentence: 'Overused: "because" → Alternatives: "due to", "owing to", "as a result of", "since"', explanation: 'Vary causal connectors.' },
+        { sentence: 'Overused: "but" → Alternatives: "however", "nevertheless", "yet", "although"', explanation: 'Vary contrast connectors.' },
+        { sentence: 'Overused: "also" → Alternatives: "furthermore", "moreover", "in addition", "additionally"', explanation: 'Vary addition connectors.' },
+        { sentence: 'Overused: "so" → Alternatives: "therefore", "consequently", "thus", "hence"', explanation: 'Vary result connectors.' },
+        { sentence: 'Overused: "think" → Alternatives: "believe", "consider", "argue", "maintain"', explanation: 'Vary opinion verbs.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Starting every essay with "Nowadays"', correction: 'Use varied openings: "In contemporary society", "In recent years", "Currently"', explanation: 'Examiners notice overused openings.' },
+        { mistake: 'Using "people" in every sentence', correction: 'Specify: "individuals", "citizens", "young people", "the elderly"', explanation: 'Be specific about which people.' },
+        { mistake: 'Repeating "important" throughout', correction: 'Use "significant", "crucial", "essential", "vital", "key"', explanation: 'Repetition lowers your score.' }
+      ],
+      miniPractice: [
+        { question: 'Replace overused: "Nowadays, technology is very important."', type: 'rewrite' },
+        { question: 'Which is NOT an alternative to "problem"?', options: ['solution', 'issue', 'challenge', 'concern'], type: 'multiple-choice' },
+        { question: 'Replace overused: "Many people think this is a big problem."', type: 'rewrite' },
+        { question: 'Alternative to "because": _____ the economic crisis, unemployment rose.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'In contemporary society, technology plays a crucial role.',
+        'solution',
+        'Many individuals consider this a significant issue.',
+        'Due to / Owing to'
+      ],
+      quickRecap: 'Key alternatives: nowadays→in contemporary society, people→individuals, government→authorities, problem→issue, advantage→benefit, disadvantage→drawback, important→crucial, because→due to, but→however, also→furthermore. Vary your vocabulary!',
+      collocations: [
+        'contemporary society', 'modern era', 'individual citizens', 'government authorities',
+        'technological advances', 'significant progress', 'pressing issue', 'effective remedy',
+        'key benefit', 'major drawback', 'crucial factor', 'due to circumstances'
+      ],
+      synonyms: [
+        { word: 'nowadays', synonyms: ['currently', 'in contemporary society', 'in the modern era', 'at present'] },
+        { word: 'people', synonyms: ['individuals', 'citizens', 'the population', 'members of society'] },
+        { word: 'important', synonyms: ['significant', 'crucial', 'essential', 'vital', 'key'] }
+      ],
+      speakingLines: [
+        'In contemporary society, technological advances have transformed daily life.',
+        'Many individuals consider this a significant issue that requires attention.',
+        'Due to economic factors, numerous challenges have emerged.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-band-upgrade-8',
+    title: 'Academic Verbs for Higher Scores',
+    slug: 'academic-verbs-higher-scores',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Band Upgrade',
+    description: 'Master academic verbs to elevate your IELTS writing and speaking.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2025-01-01T10:00:00Z',
+    updated_at: '2025-01-01T10:00:00Z',
+    content: {
+      title: 'Academic Verbs for Higher Scores',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 academic verbs',
+        'Use sophisticated action words',
+        'Improve academic writing'
+      ],
+      coreExplanation: `Academic verbs are essential for Band 7+ writing. These verbs are commonly used in academic texts and demonstrate sophisticated vocabulary.
+
+This lesson covers verbs that will elevate your writing from good to excellent.`,
+      examples: [
+        { sentence: 'Use "analyze" to examine something in detail.', explanation: '"Analyze" means to examine methodically.' },
+        { sentence: 'Use "evaluate" to assess the value or quality.', explanation: '"Evaluate" means to judge or assess.' },
+        { sentence: 'Use "synthesize" to combine elements into a whole.', explanation: '"Synthesize" means to combine parts.' },
+        { sentence: 'Use "hypothesize" to propose an explanation.', explanation: '"Hypothesize" means to suggest a theory.' },
+        { sentence: 'Use "substantiate" to provide evidence for.', explanation: '"Substantiate" means to support with proof.' },
+        { sentence: 'Use "corroborate" to confirm or support.', explanation: '"Corroborate" means to confirm evidence.' },
+        { sentence: 'Use "elucidate" to make clear or explain.', explanation: '"Elucidate" means to clarify.' },
+        { sentence: 'Use "delineate" to describe precisely.', explanation: '"Delineate" means to outline clearly.' },
+        { sentence: 'Use "postulate" to suggest as a basis for reasoning.', explanation: '"Postulate" means to assume or suggest.' },
+        { sentence: 'Use "extrapolate" to extend conclusions beyond data.', explanation: '"Extrapolate" means to infer beyond known data.' },
+        { sentence: 'Use "juxtapose" to place side by side for comparison.', explanation: '"Juxtapose" means to compare by placing together.' },
+        { sentence: 'Use "underscore" to emphasize importance.', explanation: '"Underscore" means to emphasize.' },
+        { sentence: 'Use "precipitate" to cause something to happen.', explanation: '"Precipitate" means to cause suddenly.' },
+        { sentence: 'Use "exacerbate" to make worse.', explanation: '"Exacerbate" means to worsen.' },
+        { sentence: 'Use "ameliorate" to make better.', explanation: '"Ameliorate" means to improve.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "analyze" and "evaluate" interchangeably', correction: '"Analyze" examines parts; "evaluate" judges quality', explanation: 'These verbs have different meanings.' },
+        { mistake: 'Using academic verbs incorrectly', correction: 'Learn the precise meaning before using', explanation: 'Misuse is worse than using simple verbs.' },
+        { mistake: 'Overusing academic verbs', correction: 'Use them naturally, not in every sentence', explanation: 'Balance is key.' }
+      ],
+      miniPractice: [
+        { question: 'Which verb means "to make worse"?', options: ['exacerbate', 'ameliorate', 'elucidate', 'substantiate'], type: 'multiple-choice' },
+        { question: 'Use "synthesize" in a sentence about research.', type: 'rewrite' },
+        { question: 'Which verb means "to confirm evidence"?', options: ['corroborate', 'hypothesize', 'extrapolate', 'precipitate'], type: 'multiple-choice' },
+        { question: 'The study aimed to _____ the relationship between diet and health.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'exacerbate',
+        'The researcher synthesized findings from multiple studies.',
+        'corroborate',
+        'elucidate/analyze'
+      ],
+      quickRecap: 'Key academic verbs: analyze, evaluate, synthesize, hypothesize, substantiate, corroborate, elucidate, delineate, postulate, extrapolate, juxtapose, underscore, precipitate, exacerbate, ameliorate. Master these for Band 7+!',
+      collocations: [
+        'analyze data', 'evaluate effectiveness', 'synthesize information', 'hypothesize that',
+        'substantiate claims', 'corroborate findings', 'elucidate the relationship', 'delineate boundaries',
+        'postulate a theory', 'extrapolate from data', 'juxtapose ideas', 'underscore importance'
+      ],
+      synonyms: [
+        { word: 'analyze', synonyms: ['examine', 'investigate', 'scrutinize', 'dissect'] },
+        { word: 'evaluate', synonyms: ['assess', 'appraise', 'judge', 'review'] },
+        { word: 'exacerbate', synonyms: ['worsen', 'aggravate', 'intensify', 'compound'] }
+      ],
+      speakingLines: [
+        'We need to analyze the data before drawing conclusions.',
+        'This evidence corroborates the findings of previous research.',
+        'Climate change may exacerbate existing social inequalities.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 18: Word Families & Prefixes (6 lessons)
+  // ============================================
+  {
+    id: 'vocab-word-families-1',
+    title: 'Word Families: Nouns, Verbs, Adjectives',
+    slug: 'word-families-nouns-verbs-adjectives',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Word Families',
+    description: 'Learn to use different forms of words (noun, verb, adjective, adverb) correctly.',
+    is_premium: true,
+    is_published: true,
+    view_count: 920,
+    created_at: '2025-01-02T10:00:00Z',
+    updated_at: '2025-01-02T10:00:00Z',
+    content: {
+      title: 'Word Families: Nouns, Verbs, Adjectives',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 word families',
+        'Use correct word forms',
+        'Avoid common form errors'
+      ],
+      coreExplanation: `Word families are groups of words that share the same root but have different forms (noun, verb, adjective, adverb). Using the correct form is essential for grammatical accuracy.
+
+This lesson teaches you common word families and how to use each form correctly.`,
+      examples: [
+        { sentence: 'develop (v) → development (n) → developed (adj) → developmentally (adv)', explanation: 'Learn all forms of common words.' },
+        { sentence: 'educate (v) → education (n) → educational (adj) → educationally (adv)', explanation: '"Educational" is the adjective form.' },
+        { sentence: 'economy (n) → economize (v) → economic/economical (adj) → economically (adv)', explanation: '"Economic" relates to economy; "economical" means cost-effective.' },
+        { sentence: 'environment (n) → environmental (adj) → environmentally (adv)', explanation: 'No common verb form exists.' },
+        { sentence: 'technology (n) → technological (adj) → technologically (adv)', explanation: '"Technological" is the adjective.' },
+        { sentence: 'society (n) → socialize (v) → social (adj) → socially (adv)', explanation: '"Social" relates to society.' },
+        { sentence: 'culture (n) → cultivate (v) → cultural (adj) → culturally (adv)', explanation: '"Cultural" is the adjective form.' },
+        { sentence: 'politics (n) → politicize (v) → political (adj) → politically (adv)', explanation: '"Political" relates to politics.' },
+        { sentence: 'science (n) → scientific (adj) → scientifically (adv)', explanation: '"Scientific" is the adjective.' },
+        { sentence: 'psychology (n) → psychological (adj) → psychologically (adv)', explanation: '"Psychological" relates to psychology.' },
+        { sentence: 'benefit (n/v) → beneficial (adj) → beneficially (adv)', explanation: '"Benefit" can be noun or verb.' },
+        { sentence: 'success (n) → succeed (v) → successful (adj) → successfully (adv)', explanation: 'Note the spelling changes.' },
+        { sentence: 'analysis (n) → analyze (v) → analytical (adj) → analytically (adv)', explanation: '"Analytical" is the adjective.' },
+        { sentence: 'significance (n) → signify (v) → significant (adj) → significantly (adv)', explanation: '"Significant" is commonly used.' },
+        { sentence: 'creation (n) → create (v) → creative (adj) → creatively (adv)', explanation: '"Creative" describes the quality.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using noun form as adjective: "economy growth"', correction: '"economic growth"', explanation: 'Use the adjective form before nouns.' },
+        { mistake: 'Confusing "economic" and "economical"', correction: '"Economic" = relating to economy; "economical" = cost-effective', explanation: 'These have different meanings.' },
+        { mistake: 'Wrong form: "The technology advance"', correction: '"The technological advance"', explanation: 'Use adjective form to modify nouns.' }
+      ],
+      miniPractice: [
+        { question: 'Choose correct form: "This has _____ (significance) implications."', type: 'fill-blank' },
+        { question: 'Which is the adjective form of "environment"?', options: ['environmental', 'environmently', 'environmented', 'environmenting'], type: 'multiple-choice' },
+        { question: 'Correct the error: "The economy crisis affected many countries."', type: 'rewrite' },
+        { question: 'Choose correct form: "Education is _____ (benefit) for society."', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'significant',
+        'environmental',
+        'The economic crisis affected many countries.',
+        'beneficial'
+      ],
+      quickRecap: 'Key word families: develop/development/developed, educate/education/educational, economy/economic/economical, environment/environmental, technology/technological, society/social, culture/cultural, benefit/beneficial, success/successful, analysis/analytical. Use correct forms!',
+      collocations: [
+        'economic growth', 'educational system', 'environmental protection', 'technological advancement',
+        'social development', 'cultural diversity', 'political stability', 'scientific research',
+        'psychological impact', 'beneficial effects', 'successful outcome', 'significant improvement'
+      ],
+      synonyms: [
+        { word: 'development', synonyms: ['growth', 'progress', 'advancement', 'evolution'] },
+        { word: 'educational', synonyms: ['academic', 'instructional', 'pedagogical', 'scholastic'] },
+        { word: 'significant', synonyms: ['important', 'considerable', 'substantial', 'meaningful'] }
+      ],
+      speakingLines: [
+        'Economic development is closely linked to educational advancement.',
+        'Environmental protection requires technological innovation.',
+        'This has significant implications for social policy.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-word-families-2',
+    title: 'Common Prefixes & Their Meanings',
+    slug: 'common-prefixes-meanings',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Word Families',
+    description: 'Learn common prefixes to expand your vocabulary and understand new words.',
+    is_premium: true,
+    is_published: true,
+    view_count: 880,
+    created_at: '2025-01-03T10:00:00Z',
+    updated_at: '2025-01-03T10:00:00Z',
+    content: {
+      title: 'Common Prefixes & Their Meanings',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 common prefixes',
+        'Understand word meanings',
+        'Expand vocabulary quickly'
+      ],
+      coreExplanation: `Prefixes are added to the beginning of words to change their meaning. Understanding prefixes helps you guess the meaning of unfamiliar words and expand your vocabulary.
+
+This lesson covers the most common prefixes in academic English.`,
+      examples: [
+        { sentence: 'un- (not): unhappy, unusual, unfair, uncertain', explanation: '"Un-" makes words negative.' },
+        { sentence: 'dis- (not/opposite): disagree, disappear, disadvantage, disconnect', explanation: '"Dis-" reverses meaning.' },
+        { sentence: 'mis- (wrongly): misunderstand, mislead, misuse, misinform', explanation: '"Mis-" means wrongly or badly.' },
+        { sentence: 're- (again): rebuild, reconsider, review, rewrite', explanation: '"Re-" means again or back.' },
+        { sentence: 'pre- (before): predict, prevent, prepare, previous', explanation: '"Pre-" means before.' },
+        { sentence: 'post- (after): postwar, postpone, postgraduate, postmodern', explanation: '"Post-" means after.' },
+        { sentence: 'over- (too much): overcrowded, overestimate, overwork, overwhelm', explanation: '"Over-" means excessive.' },
+        { sentence: 'under- (too little): underestimate, underdeveloped, underpaid, undervalue', explanation: '"Under-" means insufficient.' },
+        { sentence: 'inter- (between): international, interact, interconnect, interdependent', explanation: '"Inter-" means between or among.' },
+        { sentence: 'trans- (across): transport, transform, transfer, translate', explanation: '"Trans-" means across.' },
+        { sentence: 'multi- (many): multicultural, multimedia, multinational, multiply', explanation: '"Multi-" means many.' },
+        { sentence: 'anti- (against): antisocial, antibiotics, antiwar, antipollution', explanation: '"Anti-" means against.' },
+        { sentence: 'pro- (for/forward): progress, promote, proactive, productive', explanation: '"Pro-" means for or forward.' },
+        { sentence: 'co- (together): cooperate, coexist, collaborate, coordinate', explanation: '"Co-" means together.' },
+        { sentence: 'sub- (under): submarine, substandard, subdivide, subordinate', explanation: '"Sub-" means under or below.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "un-" and "in-"', correction: 'Both mean "not" but attach to different words', explanation: '"Unhappy" but "incorrect" - learn which prefix each word uses.' },
+        { mistake: 'Using wrong prefix: "disunderstand"', correction: '"misunderstand"', explanation: 'Each word has a specific prefix.' },
+        { mistake: 'Spelling errors with prefixes', correction: 'Check if letters double: "unnecessary", "irregular"', explanation: 'Some prefixes cause spelling changes.' }
+      ],
+      miniPractice: [
+        { question: 'Add prefix meaning "not": "___fair treatment"', type: 'fill-blank' },
+        { question: 'What does "inter-" mean?', options: ['between', 'against', 'before', 'after'], type: 'multiple-choice' },
+        { question: 'Add prefix meaning "again": "We need to ___consider this decision."', type: 'fill-blank' },
+        { question: 'Which prefix means "too much"?', options: ['over-', 'under-', 'pre-', 'post-'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        'un',
+        'between',
+        're',
+        'over-'
+      ],
+      quickRecap: 'Key prefixes: un-/dis-/mis- (negative), re- (again), pre-/post- (before/after), over-/under- (too much/little), inter- (between), trans- (across), multi- (many), anti- (against), pro- (for), co- (together), sub- (under). Use these to understand new words!',
+      collocations: [
+        'unfair treatment', 'disadvantaged groups', 'misunderstand intentions', 'reconsider options',
+        'predict outcomes', 'postpone decisions', 'overcrowded cities', 'underdeveloped regions',
+        'international cooperation', 'transform society', 'multicultural society', 'antisocial behavior'
+      ],
+      synonyms: [
+        { word: 'unfair', synonyms: ['unjust', 'inequitable', 'biased', 'partial'] },
+        { word: 'reconsider', synonyms: ['rethink', 'review', 'reassess', 'reexamine'] },
+        { word: 'transform', synonyms: ['change', 'convert', 'alter', 'revolutionize'] }
+      ],
+      speakingLines: [
+        'International cooperation is essential for addressing global challenges.',
+        'We should reconsider our approach to this problem.',
+        'Overcrowded cities face numerous environmental challenges.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-word-families-3',
+    title: 'Common Suffixes & Their Meanings',
+    slug: 'common-suffixes-meanings',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Word Families',
+    description: 'Learn common suffixes to identify word types and expand vocabulary.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2025-01-04T10:00:00Z',
+    updated_at: '2025-01-04T10:00:00Z',
+    content: {
+      title: 'Common Suffixes & Their Meanings',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 common suffixes',
+        'Identify word types',
+        'Form words correctly'
+      ],
+      coreExplanation: `Suffixes are added to the end of words to change their type (noun, verb, adjective, adverb) or meaning. Understanding suffixes helps you identify word types and form words correctly.
+
+This lesson covers the most common suffixes in academic English.`,
+      examples: [
+        { sentence: '-tion/-sion (noun): education, decision, information, conclusion', explanation: 'These suffixes form nouns from verbs.' },
+        { sentence: '-ment (noun): development, government, improvement, environment', explanation: '"-ment" forms nouns from verbs.' },
+        { sentence: '-ness (noun): happiness, awareness, effectiveness, weakness', explanation: '"-ness" forms nouns from adjectives.' },
+        { sentence: '-ity (noun): ability, possibility, responsibility, diversity', explanation: '"-ity" forms nouns from adjectives.' },
+        { sentence: '-er/-or (noun - person): teacher, worker, actor, investor', explanation: 'These form nouns meaning "person who".' },
+        { sentence: '-able/-ible (adjective): available, possible, responsible, sustainable', explanation: 'These mean "can be" or "able to".' },
+        { sentence: '-ful (adjective): helpful, successful, powerful, meaningful', explanation: '"-ful" means "full of".' },
+        { sentence: '-less (adjective): homeless, careless, endless, harmless', explanation: '"-less" means "without".' },
+        { sentence: '-ive (adjective): effective, creative, productive, competitive', explanation: '"-ive" forms adjectives from verbs.' },
+        { sentence: '-al (adjective): national, cultural, environmental, educational', explanation: '"-al" forms adjectives from nouns.' },
+        { sentence: '-ly (adverb): quickly, significantly, effectively, generally', explanation: '"-ly" forms adverbs from adjectives.' },
+        { sentence: '-ize (verb): modernize, realize, organize, prioritize', explanation: '"-ize" forms verbs meaning "to make".' },
+        { sentence: '-en (verb): strengthen, widen, deepen, shorten', explanation: '"-en" forms verbs meaning "to make".' },
+        { sentence: '-ify (verb): simplify, clarify, identify, justify', explanation: '"-ify" forms verbs meaning "to make".' },
+        { sentence: '-ous (adjective): dangerous, famous, various, numerous', explanation: '"-ous" forms adjectives meaning "full of".' }
+      ],
+      commonMistakes: [
+        { mistake: 'Wrong suffix: "importantness"', correction: '"importance"', explanation: 'Some words have irregular noun forms.' },
+        { mistake: 'Spelling errors: "responsability"', correction: '"responsibility"', explanation: 'Note spelling changes with suffixes.' },
+        { mistake: 'Using adjective as noun: "the effective"', correction: '"the effectiveness"', explanation: 'Add "-ness" or "-ity" to form nouns.' }
+      ],
+      miniPractice: [
+        { question: 'Form noun from "develop": "Economic _____ is important."', type: 'fill-blank' },
+        { question: 'Which suffix forms adjectives meaning "without"?', options: ['-less', '-ful', '-ive', '-al'], type: 'multiple-choice' },
+        { question: 'Form adverb from "significant": "Prices increased _____."', type: 'fill-blank' },
+        { question: 'Which suffix forms verbs meaning "to make"?', options: ['-ize', '-tion', '-ness', '-ful'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        'development',
+        '-less',
+        'significantly',
+        '-ize'
+      ],
+      quickRecap: 'Key suffixes: -tion/-ment/-ness/-ity (nouns), -able/-ful/-less/-ive/-al/-ous (adjectives), -ly (adverbs), -ize/-en/-ify (verbs). Use these to form words correctly!',
+      collocations: [
+        'economic development', 'government policy', 'public awareness', 'social responsibility',
+        'sustainable development', 'successful outcome', 'endless possibilities', 'effective measures',
+        'cultural diversity', 'significantly increase', 'modernize systems', 'strengthen relationships'
+      ],
+      synonyms: [
+        { word: 'development', synonyms: ['growth', 'progress', 'advancement', 'evolution'] },
+        { word: 'effective', synonyms: ['efficient', 'successful', 'productive', 'useful'] },
+        { word: 'significantly', synonyms: ['considerably', 'substantially', 'markedly', 'notably'] }
+      ],
+      speakingLines: [
+        'Economic development requires sustainable practices.',
+        'Public awareness has increased significantly.',
+        'We need to strengthen international cooperation.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-word-families-4',
+    title: 'Negative Prefixes: Un-, In-, Dis-, Mis-',
+    slug: 'negative-prefixes',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Word Families',
+    description: 'Master negative prefixes to express opposite meanings accurately.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-01-05T10:00:00Z',
+    updated_at: '2025-01-05T10:00:00Z',
+    content: {
+      title: 'Negative Prefixes: Un-, In-, Dis-, Mis-',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 negative prefix words',
+        'Choose correct negative prefix',
+        'Express opposites accurately'
+      ],
+      coreExplanation: `Negative prefixes (un-, in-, dis-, mis-) change words to their opposite meaning. Choosing the correct prefix is essential for accuracy.
+
+This lesson teaches you which prefix to use with different words.`,
+      examples: [
+        { sentence: 'un-: unable, unclear, unfair, unlikely, unnecessary, unusual', explanation: '"Un-" is the most common negative prefix.' },
+        { sentence: 'in-: incorrect, incomplete, independent, ineffective, inevitable', explanation: '"In-" often attaches to Latin-origin words.' },
+        { sentence: 'im- (before b, m, p): impossible, impatient, immature, imbalance', explanation: '"In-" becomes "im-" before b, m, p.' },
+        { sentence: 'il- (before l): illegal, illiterate, illogical, illegible', explanation: '"In-" becomes "il-" before l.' },
+        { sentence: 'ir- (before r): irregular, irresponsible, irrelevant, irrational', explanation: '"In-" becomes "ir-" before r.' },
+        { sentence: 'dis-: disagree, disappear, disadvantage, disconnect, discourage', explanation: '"Dis-" often means "opposite of" or "remove".' },
+        { sentence: 'mis-: misunderstand, mislead, misuse, misinform, misinterpret', explanation: '"Mis-" means "wrongly" or "badly".' },
+        { sentence: 'non-: non-existent, non-profit, non-violent, non-essential', explanation: '"Non-" means "not" without negative connotation.' },
+        { sentence: 'a-: atypical, asymmetric, amoral, apolitical', explanation: '"A-" means "without" (Greek origin).' },
+        { sentence: 'de-: decrease, devalue, destabilize, decentralize', explanation: '"De-" means "remove" or "reverse".' },
+        { sentence: 'anti-: antisocial, antibiotic, antiwar, anticorruption', explanation: '"Anti-" means "against".' },
+        { sentence: 'counter-: counterproductive, counterargument, counteract', explanation: '"Counter-" means "against" or "opposite".' },
+        { sentence: 'un- vs in-: unhappy (un-) but incorrect (in-)', explanation: 'Learn which prefix each word takes.' },
+        { sentence: 'dis- vs un-: disagree (dis-) but unable (un-)', explanation: 'Some words only take specific prefixes.' },
+        { sentence: 'mis- vs dis-: misunderstand (mis-) but disapprove (dis-)', explanation: '"Mis-" implies wrong action; "dis-" implies opposite.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using wrong prefix: "unpossible"', correction: '"impossible"', explanation: 'Learn which prefix each word takes.' },
+        { mistake: 'Using wrong prefix: "inresponsible"', correction: '"irresponsible"', explanation: '"In-" becomes "ir-" before r.' },
+        { mistake: 'Confusing "dis-" and "mis-"', correction: '"Dis-" = opposite; "mis-" = wrongly', explanation: '"Disapprove" vs "misunderstand".' }
+      ],
+      miniPractice: [
+        { question: 'Add correct prefix: "This is ___possible to achieve."', type: 'fill-blank' },
+        { question: 'Which prefix means "wrongly"?', options: ['mis-', 'un-', 'dis-', 'in-'], type: 'multiple-choice' },
+        { question: 'Add correct prefix: "The data is ___relevant to this study."', type: 'fill-blank' },
+        { question: 'Which is correct?', options: ['illegal', 'inlegal', 'unlegal', 'dislegal'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        'im',
+        'mis-',
+        'ir',
+        'illegal'
+      ],
+      quickRecap: 'Key negative prefixes: un- (most common), in-/im-/il-/ir- (Latin words), dis- (opposite), mis- (wrongly), non- (not), a- (without), de- (remove), anti- (against), counter- (opposite). Learn which prefix each word takes!',
+      collocations: [
+        'unable to', 'unclear about', 'unfair treatment', 'incorrect information',
+        'impossible task', 'illegal activity', 'irresponsible behavior', 'disagree with',
+        'misunderstand intentions', 'non-profit organization', 'antisocial behavior', 'counterproductive measures'
+      ],
+      synonyms: [
+        { word: 'unable', synonyms: ['incapable', 'powerless', 'incompetent', 'unfit'] },
+        { word: 'incorrect', synonyms: ['wrong', 'inaccurate', 'erroneous', 'mistaken'] },
+        { word: 'impossible', synonyms: ['unachievable', 'unattainable', 'unfeasible', 'impractical'] }
+      ],
+      speakingLines: [
+        'It is impossible to ignore the impact of technology.',
+        'Irresponsible behavior can have serious consequences.',
+        'We should not misunderstand the complexity of this issue.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-word-families-5',
+    title: 'Root Words & Derivatives',
+    slug: 'root-words-derivatives',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Word Families',
+    description: 'Learn common root words to understand and remember vocabulary.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-01-06T10:00:00Z',
+    updated_at: '2025-01-06T10:00:00Z',
+    content: {
+      title: 'Root Words & Derivatives',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 common root words',
+        'Understand word origins',
+        'Expand vocabulary systematically'
+      ],
+      coreExplanation: `Root words are the core parts of words that carry the main meaning. Understanding roots helps you guess meanings of unfamiliar words and remember vocabulary.
+
+This lesson covers common Latin and Greek roots used in academic English.`,
+      examples: [
+        { sentence: 'duct/duc (lead): conduct, produce, reduce, introduce, educate', explanation: '"Duc" means to lead or bring.' },
+        { sentence: 'port (carry): transport, import, export, support, report', explanation: '"Port" means to carry.' },
+        { sentence: 'scrib/script (write): describe, prescribe, manuscript, transcript', explanation: '"Scrib" means to write.' },
+        { sentence: 'spec/spect (look): inspect, respect, perspective, spectator', explanation: '"Spec" means to look or see.' },
+        { sentence: 'ject (throw): project, reject, inject, subject, object', explanation: '"Ject" means to throw.' },
+        { sentence: 'struct (build): construct, structure, instruct, destruction', explanation: '"Struct" means to build.' },
+        { sentence: 'tract (pull/draw): attract, extract, contract, distract', explanation: '"Tract" means to pull or draw.' },
+        { sentence: 'form (shape): transform, reform, inform, conform, perform', explanation: '"Form" means shape.' },
+        { sentence: 'mit/miss (send): transmit, submit, permit, mission, dismiss', explanation: '"Mit" means to send.' },
+        { sentence: 'cred (believe): credit, credible, incredible, credential', explanation: '"Cred" means to believe.' },
+        { sentence: 'dict (say): predict, contradict, dictate, verdict', explanation: '"Dict" means to say or speak.' },
+        { sentence: 'graph (write): photograph, paragraph, biography, geography', explanation: '"Graph" means to write or draw.' },
+        { sentence: 'log/logy (study): biology, psychology, technology, ecology', explanation: '"Log" means study or word.' },
+        { sentence: 'vert/vers (turn): convert, reverse, diverse, controversy', explanation: '"Vert" means to turn.' },
+        { sentence: 'voc/vok (call): advocate, provoke, evoke, vocabulary', explanation: '"Voc" means to call.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Not recognizing related words', correction: 'Look for common roots to understand connections', explanation: '"Conduct", "produce", "reduce" all share "duc" (lead).' },
+        { mistake: 'Guessing meaning without context', correction: 'Use root meaning plus context', explanation: 'Roots give hints but context confirms meaning.' },
+        { mistake: 'Ignoring prefixes and suffixes', correction: 'Combine root + prefix + suffix for full meaning', explanation: '"Re-" + "duc" + "-tion" = reduction (leading back).' }
+      ],
+      miniPractice: [
+        { question: 'What does the root "port" mean?', options: ['carry', 'write', 'look', 'build'], type: 'multiple-choice' },
+        { question: 'Which word contains the root meaning "look"?', options: ['inspect', 'construct', 'conduct', 'contract'], type: 'multiple-choice' },
+        { question: 'The root "struct" means "build". What does "destruction" mean?', type: 'rewrite' },
+        { question: 'Which root means "to send"?', options: ['mit/miss', 'duct', 'port', 'spec'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        'carry',
+        'inspect',
+        'Destruction means the act of un-building or tearing down.',
+        'mit/miss'
+      ],
+      quickRecap: 'Key roots: duct (lead), port (carry), scrib (write), spec (look), ject (throw), struct (build), tract (pull), form (shape), mit (send), cred (believe), dict (say), graph (write), log (study), vert (turn), voc (call). Use these to understand new words!',
+      collocations: [
+        'conduct research', 'transport goods', 'describe accurately', 'inspect carefully',
+        'project outcomes', 'construct arguments', 'attract attention', 'transform society',
+        'transmit information', 'credible source', 'predict trends', 'diverse perspectives'
+      ],
+      synonyms: [
+        { word: 'conduct', synonyms: ['carry out', 'perform', 'execute', 'undertake'] },
+        { word: 'transform', synonyms: ['change', 'convert', 'alter', 'modify'] },
+        { word: 'diverse', synonyms: ['varied', 'different', 'various', 'assorted'] }
+      ],
+      speakingLines: [
+        'We need to conduct more research on this topic.',
+        'Technology has transformed the way we communicate.',
+        'Diverse perspectives contribute to better decision-making.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-word-families-6',
+    title: 'Noun-Verb Pairs with Different Stress',
+    slug: 'noun-verb-pairs-stress',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Word Families',
+    description: 'Learn noun-verb pairs that change stress pattern based on word type.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-01-07T10:00:00Z',
+    updated_at: '2025-01-07T10:00:00Z',
+    content: {
+      title: 'Noun-Verb Pairs with Different Stress',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 noun-verb stress pairs',
+        'Pronounce words correctly',
+        'Distinguish word types by stress'
+      ],
+      coreExplanation: `Some English words are spelled the same but have different stress patterns depending on whether they are nouns or verbs. Nouns typically stress the first syllable; verbs stress the second.
+
+This lesson teaches you these important pairs for correct pronunciation.`,
+      examples: [
+        { sentence: 'REcord (n) vs reCORD (v): Keep a record. / Record the meeting.', explanation: 'Noun stresses first syllable; verb stresses second.' },
+        { sentence: 'PROject (n) vs proJECT (v): Start a project. / Project the image.', explanation: 'Same spelling, different stress.' },
+        { sentence: 'PROgress (n) vs proGRESS (v): Make progress. / Progress through stages.', explanation: 'Stress shifts with word type.' },
+        { sentence: 'CONtrast (n) vs conTRAST (v): A sharp contrast. / Contrast the two.', explanation: 'Noun vs verb stress pattern.' },
+        { sentence: 'CONflict (n) vs conFLICT (v): A conflict arose. / The ideas conflict.', explanation: 'Stress indicates word type.' },
+        { sentence: 'CONduct (n) vs conDUCT (v): Good conduct. / Conduct research.', explanation: 'Different stress for noun and verb.' },
+        { sentence: 'CONtract (n) vs conTRACT (v): Sign a contract. / Contract a disease.', explanation: 'Stress pattern changes.' },
+        { sentence: 'PROduce (n) vs proDUCE (v): Fresh produce. / Produce results.', explanation: 'Noun vs verb pronunciation.' },
+        { sentence: 'REfuse (n) vs reFUSE (v): Collect refuse. / Refuse to accept.', explanation: 'Different meanings and stress.' },
+        { sentence: 'PERmit (n) vs perMIT (v): Get a permit. / Permit entry.', explanation: 'Stress indicates word type.' },
+        { sentence: 'PREsent (n/adj) vs preSENT (v): A present. / Present the findings.', explanation: 'Noun/adjective vs verb.' },
+        { sentence: 'OBject (n) vs obJECT (v): An object. / Object to the proposal.', explanation: 'Different stress patterns.' },
+        { sentence: 'SUBject (n) vs subJECT (v): A subject. / Subject to review.', explanation: 'Noun vs verb stress.' },
+        { sentence: 'INcrease (n) vs inCREASE (v): An increase. / Increase production.', explanation: 'Stress shifts with word type.' },
+        { sentence: 'DEcrease (n) vs deCREASE (v): A decrease. / Decrease spending.', explanation: 'Noun vs verb stress pattern.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using same stress for noun and verb', correction: 'Nouns: stress first syllable; Verbs: stress second syllable', explanation: 'Wrong stress can cause confusion.' },
+        { mistake: 'Pronouncing "record" the same way', correction: 'REcord (n) vs reCORD (v)', explanation: 'Stress changes meaning.' },
+        { mistake: 'Not distinguishing "present"', correction: 'PREsent (n/adj) vs preSENT (v)', explanation: 'Stress indicates word type.' }
+      ],
+      miniPractice: [
+        { question: 'Which syllable is stressed in the noun "project"?', options: ['first (PRO-ject)', 'second (pro-JECT)', 'both equally', 'neither'], type: 'multiple-choice' },
+        { question: 'How do you pronounce the verb "record"?', options: ['reCORD', 'REcord', 'recORD', 'RECord'], type: 'multiple-choice' },
+        { question: 'Identify word type: "We need to inCREASE production."', type: 'rewrite' },
+        { question: 'Which is the noun pronunciation?', options: ['CONtrast', 'conTRAST', 'both are nouns', 'neither'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        'first (PRO-ject)',
+        'reCORD',
+        'Verb (increase)',
+        'CONtrast'
+      ],
+      quickRecap: 'Key noun-verb pairs: REcord/reCORD, PROject/proJECT, PROgress/proGRESS, CONtrast/conTRAST, CONflict/conFLICT, CONduct/conDUCT, PROduce/proDUCE, PERmit/perMIT, PREsent/preSENT, INcrease/inCREASE. Nouns stress first syllable; verbs stress second!',
+      collocations: [
+        'keep a record', 'record data', 'start a project', 'project outcomes',
+        'make progress', 'progress steadily', 'sharp contrast', 'contrast sharply',
+        'armed conflict', 'conflict with', 'good conduct', 'conduct research'
+      ],
+      synonyms: [
+        { word: 'record (n)', synonyms: ['documentation', 'account', 'log', 'register'] },
+        { word: 'record (v)', synonyms: ['document', 'note', 'register', 'log'] },
+        { word: 'progress (n)', synonyms: ['advancement', 'development', 'improvement', 'headway'] }
+      ],
+      speakingLines: [
+        'We need to record the data for future reference.',
+        'The project aims to produce significant results.',
+        'There is a sharp contrast between the two approaches.'
+      ]
+    }
   }
 ];
