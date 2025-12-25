@@ -10428,5 +10428,1078 @@ Use these idioms when discussing personal experiences, feelings, or reactions.`,
         'The uncertainty is making everyone feel on edge.'
       ]
     }
+  },
+  // ============================================
+  // BATCH 21: Linking Words (6 lessons)
+  // ============================================
+  {
+    id: 'vocab-linking-1',
+    title: 'Linking Words: Addition & Sequence',
+    slug: 'linking-words-addition-sequence',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Linking Words',
+    description: 'Essential linking words for adding information and showing sequence.',
+    is_premium: false,
+    is_published: true,
+    view_count: 1150,
+    created_at: '2025-01-24T10:00:00Z',
+    updated_at: '2025-01-24T10:00:00Z',
+    content: {
+      title: 'Linking Words: Addition & Sequence',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 addition and sequence linkers',
+        'Connect ideas smoothly',
+        'Improve coherence and cohesion'
+      ],
+      coreExplanation: `Linking words for addition help you add more information, while sequence linkers show the order of events or ideas. Using these correctly improves your coherence and cohesion score.
+
+These words are essential for both IELTS Writing and Speaking.`,
+      examples: [
+        { sentence: 'Furthermore, the study revealed additional benefits.', explanation: '"Furthermore" adds more information formally.' },
+        { sentence: 'Moreover, the economic impact was significant.', explanation: '"Moreover" adds emphasis to additional points.' },
+        { sentence: 'In addition, we should consider the social effects.', explanation: '"In addition" introduces extra information.' },
+        { sentence: 'Additionally, the research showed positive results.', explanation: '"Additionally" adds more points.' },
+        { sentence: 'Besides, there are other factors to consider.', explanation: '"Besides" introduces additional considerations.' },
+        { sentence: 'Also, the environmental impact is important.', explanation: '"Also" adds information (less formal).' },
+        { sentence: 'As well as this, we need to examine costs.', explanation: '"As well as this" adds related information.' },
+        { sentence: 'Not only that, but the benefits are long-term.', explanation: '"Not only that" emphasizes additional points.' },
+        { sentence: 'Firstly, we need to understand the problem.', explanation: '"Firstly" introduces the first point.' },
+        { sentence: 'Secondly, we should analyze the causes.', explanation: '"Secondly" introduces the second point.' },
+        { sentence: 'Thirdly, we must consider solutions.', explanation: '"Thirdly" introduces the third point.' },
+        { sentence: 'Finally, we should evaluate the outcomes.', explanation: '"Finally" introduces the last point.' },
+        { sentence: 'Subsequently, the situation improved.', explanation: '"Subsequently" shows what happened next.' },
+        { sentence: 'Following this, the government took action.', explanation: '"Following this" shows sequence.' },
+        { sentence: 'Then, the results were analyzed.', explanation: '"Then" shows sequence (less formal).' }
+      ],
+      commonMistakes: [
+        { mistake: 'Starting every sentence with "And"', correction: 'Use "Furthermore", "Moreover", "In addition"', explanation: '"And" is too informal for academic writing.' },
+        { mistake: 'Using "Firstly" without "Secondly"', correction: 'Be consistent: Firstly, Secondly, Thirdly, Finally', explanation: 'Maintain parallel structure.' },
+        { mistake: 'Overusing "Also"', correction: 'Vary with "Furthermore", "Moreover", "In addition"', explanation: '"Also" is less formal and repetitive.' }
+      ],
+      miniPractice: [
+        { question: '_____, the study revealed additional benefits.', type: 'fill-blank' },
+        { question: 'Which is most formal for adding information?', options: ['Furthermore', 'Also', 'And', 'Plus'], type: 'multiple-choice' },
+        { question: 'Rewrite using a sequence word: "After that, the results were analyzed."', type: 'rewrite' },
+        { question: '_____, we need to consider the economic impact.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Furthermore/Moreover',
+        'Furthermore',
+        'Subsequently, the results were analyzed.',
+        'In addition/Moreover'
+      ],
+      quickRecap: 'Key addition linkers: furthermore, moreover, in addition, additionally, besides, also, as well as. Key sequence linkers: firstly, secondly, thirdly, finally, subsequently, following this, then. Use these for coherence!',
+      collocations: [
+        'furthermore, it is', 'moreover, the', 'in addition to', 'additionally, we',
+        'besides this', 'as well as', 'firstly, we need', 'secondly, it is',
+        'thirdly, the', 'finally, we should', 'subsequently, the', 'following this'
+      ],
+      synonyms: [
+        { word: 'furthermore', synonyms: ['moreover', 'in addition', 'additionally', 'besides'] },
+        { word: 'firstly', synonyms: ['first', 'to begin with', 'first of all', 'initially'] },
+        { word: 'finally', synonyms: ['lastly', 'in conclusion', 'ultimately', 'to conclude'] }
+      ],
+      speakingLines: [
+        'Furthermore, the research revealed several additional benefits.',
+        'Firstly, we need to understand the root causes of this problem.',
+        'Subsequently, the government implemented new policies.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-linking-2',
+    title: 'Linking Words: Contrast & Concession',
+    slug: 'linking-words-contrast-concession',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Linking Words',
+    description: 'Essential linking words for showing contrast and making concessions.',
+    is_premium: true,
+    is_published: true,
+    view_count: 1080,
+    created_at: '2025-01-25T10:00:00Z',
+    updated_at: '2025-01-25T10:00:00Z',
+    content: {
+      title: 'Linking Words: Contrast & Concession',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 contrast and concession linkers',
+        'Show opposing ideas clearly',
+        'Improve argument structure'
+      ],
+      coreExplanation: `Contrast linkers show differences between ideas, while concession linkers acknowledge opposing points before presenting your view. These are essential for balanced arguments.
+
+Using these correctly demonstrates sophisticated language use.`,
+      examples: [
+        { sentence: 'However, there are some disadvantages.', explanation: '"However" introduces a contrasting point.' },
+        { sentence: 'Nevertheless, the benefits outweigh the drawbacks.', explanation: '"Nevertheless" shows contrast despite previous point.' },
+        { sentence: 'On the other hand, some argue differently.', explanation: '"On the other hand" presents an alternative view.' },
+        { sentence: 'In contrast, the second study showed different results.', explanation: '"In contrast" highlights differences.' },
+        { sentence: 'Conversely, urban areas face different challenges.', explanation: '"Conversely" shows the opposite situation.' },
+        { sentence: 'Although this is true, we must consider other factors.', explanation: '"Although" introduces a concession.' },
+        { sentence: 'While this may be the case, there are exceptions.', explanation: '"While" acknowledges a point before contrasting.' },
+        { sentence: 'Despite this, the overall trend is positive.', explanation: '"Despite" shows contrast with previous point.' },
+        { sentence: 'Even though costs are high, the benefits are significant.', explanation: '"Even though" emphasizes the concession.' },
+        { sentence: 'Whereas some support this view, others disagree.', explanation: '"Whereas" contrasts two different positions.' },
+        { sentence: 'Yet, the problem persists.', explanation: '"Yet" shows unexpected contrast.' },
+        { sentence: 'Still, there is room for improvement.', explanation: '"Still" shows contrast despite expectations.' },
+        { sentence: 'Nonetheless, progress has been made.', explanation: '"Nonetheless" is similar to "nevertheless".' },
+        { sentence: 'Admittedly, there are some drawbacks.', explanation: '"Admittedly" acknowledges a valid opposing point.' },
+        { sentence: 'Granted, the costs are high, but the returns are greater.', explanation: '"Granted" concedes a point before countering.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "But" at the start of sentences', correction: 'Use "However", "Nevertheless", "Yet"', explanation: '"But" is too informal for academic writing.' },
+        { mistake: 'Confusing "although" and "however"', correction: '"Although" starts a clause; "However" starts a sentence', explanation: '"Although it is expensive, it is worth it." vs "It is expensive. However, it is worth it."' },
+        { mistake: 'Using "On the contrary" incorrectly', correction: '"On the contrary" means "the opposite is true", not just "alternatively"', explanation: 'Use "On the other hand" for alternatives.' }
+      ],
+      miniPractice: [
+        { question: '_____, there are some disadvantages to consider.', type: 'fill-blank' },
+        { question: 'Which word means "the opposite situation"?', options: ['Conversely', 'Furthermore', 'Similarly', 'Therefore'], type: 'multiple-choice' },
+        { question: 'Rewrite: "But the benefits are significant."', type: 'rewrite' },
+        { question: '_____ this may be true, we must consider other factors.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'However',
+        'Conversely',
+        'However, the benefits are significant. / Nevertheless, the benefits are significant.',
+        'Although/While'
+      ],
+      quickRecap: 'Key contrast linkers: however, nevertheless, on the other hand, in contrast, conversely, yet, still. Key concession linkers: although, while, despite, even though, whereas, admittedly, granted. Use these for balanced arguments!',
+      collocations: [
+        'however, it is', 'nevertheless, the', 'on the other hand', 'in contrast to',
+        'conversely, the', 'although this is', 'while it may', 'despite this',
+        'even though the', 'whereas some', 'yet the', 'admittedly, there are'
+      ],
+      synonyms: [
+        { word: 'however', synonyms: ['nevertheless', 'nonetheless', 'yet', 'still'] },
+        { word: 'although', synonyms: ['though', 'even though', 'while', 'whereas'] },
+        { word: 'in contrast', synonyms: ['conversely', 'on the other hand', 'by contrast', 'alternatively'] }
+      ],
+      speakingLines: [
+        'However, there are some disadvantages that need to be considered.',
+        'Although this approach has benefits, it also has limitations.',
+        'On the other hand, some experts argue for a different approach.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-linking-3',
+    title: 'Linking Words: Cause & Effect',
+    slug: 'linking-words-cause-effect',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Linking Words',
+    description: 'Essential linking words for showing cause and effect relationships.',
+    is_premium: true,
+    is_published: true,
+    view_count: 1020,
+    created_at: '2025-01-26T10:00:00Z',
+    updated_at: '2025-01-26T10:00:00Z',
+    content: {
+      title: 'Linking Words: Cause & Effect',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 cause and effect linkers',
+        'Show relationships clearly',
+        'Improve logical flow'
+      ],
+      coreExplanation: `Cause and effect linkers show why something happens (cause) and what happens as a result (effect). These are essential for explaining relationships in IELTS Writing.
+
+Using these correctly demonstrates logical thinking and improves coherence.`,
+      examples: [
+        { sentence: 'Therefore, we need to take action.', explanation: '"Therefore" introduces a logical conclusion.' },
+        { sentence: 'Consequently, the economy suffered.', explanation: '"Consequently" shows a result.' },
+        { sentence: 'As a result, unemployment increased.', explanation: '"As a result" introduces an effect.' },
+        { sentence: 'Thus, the hypothesis was confirmed.', explanation: '"Thus" shows a logical conclusion.' },
+        { sentence: 'Hence, we can conclude that...', explanation: '"Hence" introduces a conclusion.' },
+        { sentence: 'For this reason, changes were implemented.', explanation: '"For this reason" explains why.' },
+        { sentence: 'Because of this, the situation worsened.', explanation: '"Because of this" shows cause.' },
+        { sentence: 'Due to the crisis, many businesses closed.', explanation: '"Due to" introduces a cause.' },
+        { sentence: 'Owing to the weather, the event was cancelled.', explanation: '"Owing to" shows cause (formal).' },
+        { sentence: 'As a consequence, new policies were introduced.', explanation: '"As a consequence" shows result.' },
+        { sentence: 'This led to significant changes.', explanation: '"Led to" shows cause-effect relationship.' },
+        { sentence: 'This resulted in improved outcomes.', explanation: '"Resulted in" shows the effect.' },
+        { sentence: 'The reason for this is that...', explanation: '"The reason for this" explains cause.' },
+        { sentence: 'Since the costs are high, alternatives are needed.', explanation: '"Since" introduces a reason.' },
+        { sentence: 'Given that resources are limited, we must prioritize.', explanation: '"Given that" introduces a condition/reason.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "So" at the start of sentences', correction: 'Use "Therefore", "Consequently", "Thus"', explanation: '"So" is too informal for academic writing.' },
+        { mistake: 'Confusing "due to" and "because of"', correction: 'Both are correct, but "due to" is more formal', explanation: 'Use "due to" in academic writing.' },
+        { mistake: 'Using "reason" with "because"', correction: '"The reason is that..." not "The reason is because..."', explanation: 'Avoid redundancy.' }
+      ],
+      miniPractice: [
+        { question: '_____, we need to take immediate action.', type: 'fill-blank' },
+        { question: 'Which word introduces a cause?', options: ['Due to', 'Therefore', 'Consequently', 'Thus'], type: 'multiple-choice' },
+        { question: 'Rewrite: "So the economy suffered."', type: 'rewrite' },
+        { question: '_____ the crisis, many businesses closed.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Therefore/Consequently',
+        'Due to',
+        'Consequently, the economy suffered. / Therefore, the economy suffered.',
+        'Due to/Owing to'
+      ],
+      quickRecap: 'Key effect linkers: therefore, consequently, as a result, thus, hence. Key cause linkers: due to, owing to, because of, since, given that. Key relationship phrases: led to, resulted in, the reason for this. Use these for logical flow!',
+      collocations: [
+        'therefore, it is', 'consequently, the', 'as a result of', 'thus, we can',
+        'hence, the', 'for this reason', 'because of this', 'due to the',
+        'owing to the', 'as a consequence', 'this led to', 'resulted in'
+      ],
+      synonyms: [
+        { word: 'therefore', synonyms: ['consequently', 'thus', 'hence', 'as a result'] },
+        { word: 'due to', synonyms: ['because of', 'owing to', 'as a result of', 'on account of'] },
+        { word: 'led to', synonyms: ['resulted in', 'caused', 'brought about', 'gave rise to'] }
+      ],
+      speakingLines: [
+        'Therefore, we need to implement new strategies.',
+        'Due to the economic crisis, many businesses were forced to close.',
+        'This led to significant improvements in the overall situation.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-linking-4',
+    title: 'Linking Words: Examples & Emphasis',
+    slug: 'linking-words-examples-emphasis',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Linking Words',
+    description: 'Essential linking words for giving examples and adding emphasis.',
+    is_premium: true,
+    is_published: true,
+    view_count: 950,
+    created_at: '2025-01-27T10:00:00Z',
+    updated_at: '2025-01-27T10:00:00Z',
+    content: {
+      title: 'Linking Words: Examples & Emphasis',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 example and emphasis linkers',
+        'Support arguments effectively',
+        'Add weight to key points'
+      ],
+      coreExplanation: `Example linkers introduce specific instances to support your points, while emphasis linkers highlight important information. Both are essential for strong arguments.
+
+Using these correctly makes your writing more persuasive and clear.`,
+      examples: [
+        { sentence: 'For example, many countries have adopted this policy.', explanation: '"For example" introduces a specific instance.' },
+        { sentence: 'For instance, China has invested heavily in renewable energy.', explanation: '"For instance" is similar to "for example".' },
+        { sentence: 'Such as solar and wind power.', explanation: '"Such as" introduces examples within a sentence.' },
+        { sentence: 'To illustrate, consider the case of Japan.', explanation: '"To illustrate" introduces an explanatory example.' },
+        { sentence: 'A case in point is the success of Singapore.', explanation: '"A case in point" introduces a relevant example.' },
+        { sentence: 'Namely, education and healthcare.', explanation: '"Namely" specifies what was mentioned.' },
+        { sentence: 'In particular, young people are affected.', explanation: '"In particular" highlights a specific group.' },
+        { sentence: 'Specifically, the urban population has grown.', explanation: '"Specifically" provides precise information.' },
+        { sentence: 'Indeed, the evidence supports this view.', explanation: '"Indeed" emphasizes agreement or confirmation.' },
+        { sentence: 'In fact, the opposite is true.', explanation: '"In fact" emphasizes truth or correction.' },
+        { sentence: 'Certainly, this is a significant issue.', explanation: '"Certainly" emphasizes certainty.' },
+        { sentence: 'Undoubtedly, technology has transformed society.', explanation: '"Undoubtedly" emphasizes strong belief.' },
+        { sentence: 'Clearly, more research is needed.', explanation: '"Clearly" emphasizes obviousness.' },
+        { sentence: 'Obviously, this approach has limitations.', explanation: '"Obviously" emphasizes what is apparent.' },
+        { sentence: 'Above all, we must prioritize safety.', explanation: '"Above all" emphasizes the most important point.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "Like" for examples in writing', correction: 'Use "such as", "for example", "for instance"', explanation: '"Like" is too informal for academic writing.' },
+        { mistake: 'Overusing "For example"', correction: 'Vary with "For instance", "To illustrate", "A case in point"', explanation: 'Variety improves your score.' },
+        { mistake: 'Using "etc." after examples', correction: 'Use "among others" or complete the list', explanation: '"Etc." is too vague for academic writing.' }
+      ],
+      miniPractice: [
+        { question: '_____, many countries have adopted this policy.', type: 'fill-blank' },
+        { question: 'Which phrase introduces a specific relevant example?', options: ['A case in point', 'In fact', 'Certainly', 'Above all'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Like China and India have large populations."', type: 'rewrite' },
+        { question: '_____, technology has transformed modern society.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'For example/For instance',
+        'A case in point',
+        'For example, China and India have large populations. / Countries such as China and India have large populations.',
+        'Undoubtedly/Indeed'
+      ],
+      quickRecap: 'Key example linkers: for example, for instance, such as, to illustrate, a case in point, namely, in particular. Key emphasis linkers: indeed, in fact, certainly, undoubtedly, clearly, obviously, above all. Use these for strong arguments!',
+      collocations: [
+        'for example, the', 'for instance, many', 'such as the', 'to illustrate this',
+        'a case in point is', 'namely, the', 'in particular, the', 'specifically, the',
+        'indeed, the', 'in fact, the', 'certainly, this', 'above all, we'
+      ],
+      synonyms: [
+        { word: 'for example', synonyms: ['for instance', 'such as', 'to illustrate', 'e.g.'] },
+        { word: 'indeed', synonyms: ['in fact', 'certainly', 'truly', 'actually'] },
+        { word: 'above all', synonyms: ['most importantly', 'primarily', 'chiefly', 'especially'] }
+      ],
+      speakingLines: [
+        'For example, many developed countries have implemented this policy.',
+        'Indeed, the evidence strongly supports this conclusion.',
+        'Above all, we must prioritize the wellbeing of future generations.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-linking-5',
+    title: 'Linking Words: Comparison & Similarity',
+    slug: 'linking-words-comparison-similarity',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Linking Words',
+    description: 'Essential linking words for showing comparison and similarity.',
+    is_premium: true,
+    is_published: true,
+    view_count: 880,
+    created_at: '2025-01-28T10:00:00Z',
+    updated_at: '2025-01-28T10:00:00Z',
+    content: {
+      title: 'Linking Words: Comparison & Similarity',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 comparison and similarity linkers',
+        'Show relationships between ideas',
+        'Improve analytical writing'
+      ],
+      coreExplanation: `Comparison linkers help you show how things are similar or different. These are essential for Task 1 (comparing data) and Task 2 (comparing viewpoints).
+
+Using these correctly demonstrates analytical thinking.`,
+      examples: [
+        { sentence: 'Similarly, the second study showed positive results.', explanation: '"Similarly" shows that something is the same.' },
+        { sentence: 'Likewise, other countries face this challenge.', explanation: '"Likewise" shows similarity.' },
+        { sentence: 'In the same way, education affects employment.', explanation: '"In the same way" shows parallel situations.' },
+        { sentence: 'By the same token, we should consider costs.', explanation: '"By the same token" shows related reasoning.' },
+        { sentence: 'Equally, both factors are important.', explanation: '"Equally" shows equal importance.' },
+        { sentence: 'Just as technology has evolved, so has society.', explanation: '"Just as...so" shows parallel development.' },
+        { sentence: 'Compared to the past, conditions have improved.', explanation: '"Compared to" introduces comparison.' },
+        { sentence: 'In comparison with other countries, this is high.', explanation: '"In comparison with" compares formally.' },
+        { sentence: 'By comparison, the second option is cheaper.', explanation: '"By comparison" highlights differences.' },
+        { sentence: 'Like developed countries, emerging economies face challenges.', explanation: '"Like" shows similarity (less formal).' },
+        { sentence: 'As with education, healthcare requires investment.', explanation: '"As with" shows parallel situations.' },
+        { sentence: 'Both approaches have advantages.', explanation: '"Both" shows similarity between two things.' },
+        { sentence: 'Neither option is perfect.', explanation: '"Neither" shows similarity in negative sense.' },
+        { sentence: 'The same is true for developing countries.', explanation: '"The same is true" shows similarity.' },
+        { sentence: 'This is also the case in urban areas.', explanation: '"This is also the case" shows similarity.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "same" without "the"', correction: '"The same" not "same"', explanation: '"The same is true" is correct.' },
+        { mistake: 'Confusing "compared to" and "compared with"', correction: 'Both are acceptable; "with" is more formal', explanation: 'Use either consistently.' },
+        { mistake: 'Using "like" in formal comparisons', correction: 'Use "similarly", "likewise", "in the same way"', explanation: '"Like" is less formal.' }
+      ],
+      miniPractice: [
+        { question: '_____, the second study showed positive results.', type: 'fill-blank' },
+        { question: 'Which word shows equal importance?', options: ['Equally', 'However', 'Therefore', 'Although'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Like other countries, Japan faces this issue."', type: 'rewrite' },
+        { question: '_____ to the past, conditions have improved significantly.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Similarly/Likewise',
+        'Equally',
+        'Similarly to other countries, Japan faces this issue. / In the same way as other countries, Japan faces this issue.',
+        'Compared'
+      ],
+      quickRecap: 'Key similarity linkers: similarly, likewise, in the same way, equally, just as...so, the same is true. Key comparison linkers: compared to, in comparison with, by comparison, as with. Use these for analytical writing!',
+      collocations: [
+        'similarly, the', 'likewise, other', 'in the same way', 'by the same token',
+        'equally important', 'just as...so', 'compared to the', 'in comparison with',
+        'by comparison, the', 'as with other', 'both approaches', 'the same is true'
+      ],
+      synonyms: [
+        { word: 'similarly', synonyms: ['likewise', 'in the same way', 'equally', 'correspondingly'] },
+        { word: 'compared to', synonyms: ['in comparison with', 'relative to', 'as opposed to', 'versus'] },
+        { word: 'equally', synonyms: ['similarly', 'likewise', 'in equal measure', 'to the same extent'] }
+      ],
+      speakingLines: [
+        'Similarly, other countries have experienced this phenomenon.',
+        'Compared to previous decades, the situation has improved significantly.',
+        'Equally, both factors play an important role in this process.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-linking-6',
+    title: 'Linking Words: Conclusion & Summary',
+    slug: 'linking-words-conclusion-summary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Linking Words',
+    description: 'Essential linking words for concluding and summarizing arguments.',
+    is_premium: true,
+    is_published: true,
+    view_count: 920,
+    created_at: '2025-01-29T10:00:00Z',
+    updated_at: '2025-01-29T10:00:00Z',
+    content: {
+      title: 'Linking Words: Conclusion & Summary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 conclusion and summary linkers',
+        'End essays effectively',
+        'Summarize key points'
+      ],
+      coreExplanation: `Conclusion and summary linkers help you wrap up your arguments and restate key points. These are essential for strong essay endings.
+
+Using these correctly creates a sense of completion and reinforces your main ideas.`,
+      examples: [
+        { sentence: 'In conclusion, the benefits outweigh the drawbacks.', explanation: '"In conclusion" signals the final paragraph.' },
+        { sentence: 'To conclude, action is needed urgently.', explanation: '"To conclude" introduces the final point.' },
+        { sentence: 'To sum up, education is essential for development.', explanation: '"To sum up" summarizes the main points.' },
+        { sentence: 'In summary, several factors contribute to this issue.', explanation: '"In summary" introduces a brief overview.' },
+        { sentence: 'Overall, the trend is positive.', explanation: '"Overall" gives a general assessment.' },
+        { sentence: 'All in all, the advantages are significant.', explanation: '"All in all" summarizes everything considered.' },
+        { sentence: 'On the whole, progress has been made.', explanation: '"On the whole" gives a general view.' },
+        { sentence: 'Taking everything into account, change is necessary.', explanation: '"Taking everything into account" considers all factors.' },
+        { sentence: 'In brief, the situation requires attention.', explanation: '"In brief" introduces a short summary.' },
+        { sentence: 'To summarize, three main factors were identified.', explanation: '"To summarize" restates key points.' },
+        { sentence: 'Ultimately, the decision rests with governments.', explanation: '"Ultimately" shows the final outcome.' },
+        { sentence: 'In the final analysis, cooperation is key.', explanation: '"In the final analysis" gives the ultimate conclusion.' },
+        { sentence: 'All things considered, the policy is effective.', explanation: '"All things considered" weighs all factors.' },
+        { sentence: 'By and large, the results are encouraging.', explanation: '"By and large" means generally.' },
+        { sentence: 'On balance, the benefits exceed the costs.', explanation: '"On balance" weighs pros and cons.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "In conclusion" in body paragraphs', correction: 'Only use "In conclusion" in the final paragraph', explanation: 'This signals the end of the essay.' },
+        { mistake: 'Starting conclusion with "So"', correction: 'Use "In conclusion", "To conclude", "To sum up"', explanation: '"So" is too informal.' },
+        { mistake: 'Introducing new ideas in conclusion', correction: 'Only summarize and restate existing points', explanation: 'Conclusions should not add new information.' }
+      ],
+      miniPractice: [
+        { question: '_____, the benefits outweigh the drawbacks.', type: 'fill-blank' },
+        { question: 'Which phrase weighs pros and cons?', options: ['On balance', 'In brief', 'Ultimately', 'By and large'], type: 'multiple-choice' },
+        { question: 'Rewrite: "So, education is important."', type: 'rewrite' },
+        { question: '_____, several factors contribute to this phenomenon.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'In conclusion',
+        'On balance',
+        'In conclusion, education is important. / To sum up, education is important.',
+        'In summary/To sum up'
+      ],
+      quickRecap: 'Key conclusion linkers: in conclusion, to conclude, ultimately, in the final analysis. Key summary linkers: to sum up, in summary, overall, all in all, on the whole, taking everything into account, on balance. Use these for strong endings!',
+      collocations: [
+        'in conclusion, the', 'to conclude, it is', 'to sum up, the', 'in summary, several',
+        'overall, the', 'all in all, the', 'on the whole, the', 'taking everything into account',
+        'in brief, the', 'to summarize, the', 'ultimately, the', 'on balance, the'
+      ],
+      synonyms: [
+        { word: 'in conclusion', synonyms: ['to conclude', 'finally', 'in closing', 'to end'] },
+        { word: 'to sum up', synonyms: ['in summary', 'to summarize', 'in brief', 'in short'] },
+        { word: 'overall', synonyms: ['generally', 'on the whole', 'by and large', 'all in all'] }
+      ],
+      speakingLines: [
+        'In conclusion, the benefits of this approach clearly outweigh the drawbacks.',
+        'To sum up, education plays a crucial role in economic development.',
+        'On balance, the advantages of technology exceed its disadvantages.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 22: Housing & Urban Development (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-housing-1',
+    title: 'Housing Vocabulary: Types & Features',
+    slug: 'housing-vocabulary-types-features',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Housing',
+    description: 'Essential vocabulary for discussing housing types and features.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-01-30T10:00:00Z',
+    updated_at: '2025-01-30T10:00:00Z',
+    content: {
+      title: 'Housing Vocabulary: Types & Features',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 housing vocabulary words',
+        'Describe accommodation types',
+        'Discuss housing features'
+      ],
+      coreExplanation: `Housing vocabulary is essential for IELTS Speaking Part 1 (describing your home) and Writing Task 2 (discussing housing issues). This lesson covers types of housing and their features.
+
+Understanding these terms helps you discuss accommodation topics fluently.`,
+      examples: [
+        { sentence: 'I live in a detached house with a garden.', explanation: '"Detached house" is a standalone house.' },
+        { sentence: 'Many people prefer semi-detached houses.', explanation: '"Semi-detached" shares one wall with another house.' },
+        { sentence: 'Terraced houses are common in urban areas.', explanation: '"Terraced houses" are joined in a row.' },
+        { sentence: 'High-rise apartments dominate the skyline.', explanation: '"High-rise" means tall buildings.' },
+        { sentence: 'The flat has an open-plan living area.', explanation: '"Open-plan" means without dividing walls.' },
+        { sentence: 'The property has spacious accommodation.', explanation: '"Spacious" means having lots of space.' },
+        { sentence: 'The house is fully furnished.', explanation: '"Furnished" means with furniture included.' },
+        { sentence: 'We need affordable housing for young people.', explanation: '"Affordable housing" is reasonably priced.' },
+        { sentence: 'Social housing provides homes for low-income families.', explanation: '"Social housing" is government-subsidized.' },
+        { sentence: 'The neighborhood is residential.', explanation: '"Residential" means for living, not business.' },
+        { sentence: 'The area has good amenities.', explanation: '"Amenities" are useful facilities nearby.' },
+        { sentence: 'The property has central heating.', explanation: '"Central heating" heats the whole building.' },
+        { sentence: 'The house has double glazing.', explanation: '"Double glazing" is two-pane windows for insulation.' },
+        { sentence: 'The apartment has a balcony with a view.', explanation: '"Balcony" is an outdoor platform.' },
+        { sentence: 'The house has a mortgage.', explanation: '"Mortgage" is a loan to buy property.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "house" and "home"', correction: '"House" is the building; "home" is where you live', explanation: '"I live in a house" vs "I feel at home".' },
+        { mistake: 'Using "flat" and "apartment" inconsistently', correction: '"Flat" is British; "apartment" is American', explanation: 'Use one consistently.' },
+        { mistake: 'Confusing "rent" and "mortgage"', correction: '"Rent" is payment to landlord; "mortgage" is loan payment', explanation: 'Renters pay rent; owners pay mortgages.' }
+      ],
+      miniPractice: [
+        { question: 'I live in a _____ house with no shared walls.', type: 'fill-blank' },
+        { question: 'Which type of housing is government-subsidized?', options: ['Social housing', 'Detached house', 'High-rise', 'Terraced house'], type: 'multiple-choice' },
+        { question: 'Describe your ideal home using housing vocabulary.', type: 'rewrite' },
+        { question: 'The area has good _____ like shops and schools.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'detached',
+        'Social housing',
+        'My ideal home would be a spacious detached house with a garden and modern amenities.',
+        'amenities'
+      ],
+      quickRecap: 'Key housing types: detached, semi-detached, terraced, high-rise, flat/apartment, social housing. Key features: spacious, furnished, open-plan, central heating, double glazing, amenities. Use these to discuss housing!',
+      collocations: [
+        'detached house', 'semi-detached property', 'terraced housing', 'high-rise building',
+        'open-plan living', 'spacious accommodation', 'fully furnished', 'affordable housing',
+        'social housing', 'residential area', 'local amenities', 'central heating'
+      ],
+      synonyms: [
+        { word: 'house', synonyms: ['home', 'residence', 'dwelling', 'property'] },
+        { word: 'spacious', synonyms: ['roomy', 'large', 'ample', 'generous'] },
+        { word: 'amenities', synonyms: ['facilities', 'services', 'conveniences', 'features'] }
+      ],
+      speakingLines: [
+        'I live in a semi-detached house in a residential area.',
+        'The apartment is spacious with an open-plan living area.',
+        'Affordable housing is a major issue in many cities.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-housing-2',
+    title: 'Urban Development Vocabulary',
+    slug: 'urban-development-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Housing',
+    description: 'Essential vocabulary for discussing urban development and city planning.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-01-31T10:00:00Z',
+    updated_at: '2025-01-31T10:00:00Z',
+    content: {
+      title: 'Urban Development Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 urban development words',
+        'Discuss city planning',
+        'Analyze urbanization issues'
+      ],
+      coreExplanation: `Urban development vocabulary is essential for discussing cities, planning, and urbanization in IELTS Writing Task 2. This lesson covers key terms for urban topics.
+
+Understanding these terms helps you discuss city-related issues effectively.`,
+      examples: [
+        { sentence: 'Urbanization is accelerating globally.', explanation: '"Urbanization" is the growth of cities.' },
+        { sentence: 'The city has undergone urban renewal.', explanation: '"Urban renewal" is redeveloping old areas.' },
+        { sentence: 'Infrastructure investment is crucial.', explanation: '"Infrastructure" is basic systems like roads.' },
+        { sentence: 'The city center is congested.', explanation: '"Congested" means overcrowded with traffic.' },
+        { sentence: 'Urban sprawl is a growing concern.', explanation: '"Urban sprawl" is uncontrolled city expansion.' },
+        { sentence: 'The area has been gentrified.', explanation: '"Gentrified" means renovated for wealthier residents.' },
+        { sentence: 'Sustainable development is the goal.', explanation: '"Sustainable development" meets present needs without compromising future.' },
+        { sentence: 'The city has a green belt.', explanation: '"Green belt" is protected land around cities.' },
+        { sentence: 'Public transportation needs improvement.', explanation: '"Public transportation" is buses, trains, etc.' },
+        { sentence: 'The downtown area is thriving.', explanation: '"Downtown" is the city center.' },
+        { sentence: 'The suburbs are expanding.', explanation: '"Suburbs" are residential areas outside city center.' },
+        { sentence: 'The slums need redevelopment.', explanation: '"Slums" are poor, overcrowded areas.' },
+        { sentence: 'Zoning regulations control land use.', explanation: '"Zoning" divides areas for different uses.' },
+        { sentence: 'The city has a housing shortage.', explanation: '"Housing shortage" is insufficient homes.' },
+        { sentence: 'Urban planning is essential for growth.', explanation: '"Urban planning" is designing city development.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "urban" and "rural"', correction: '"Urban" = city; "rural" = countryside', explanation: 'These are opposites.' },
+        { mistake: 'Using "suburb" as adjective', correction: 'Use "suburban" as adjective', explanation: '"Suburban areas" not "suburb areas".' },
+        { mistake: 'Confusing "infrastructure" scope', correction: '"Infrastructure" includes roads, utilities, communications', explanation: 'It is broader than just roads.' }
+      ],
+      miniPractice: [
+        { question: '_____ is the growth of cities and urban areas.', type: 'fill-blank' },
+        { question: 'Which term means uncontrolled city expansion?', options: ['Urban sprawl', 'Urban renewal', 'Gentrification', 'Zoning'], type: 'multiple-choice' },
+        { question: 'Discuss one urban development issue.', type: 'rewrite' },
+        { question: 'The city needs better _____ like roads and utilities.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Urbanization',
+        'Urban sprawl',
+        'Urban sprawl is a major issue as cities expand uncontrollably, leading to environmental damage and longer commutes.',
+        'infrastructure'
+      ],
+      quickRecap: 'Key urban terms: urbanization, urban renewal, infrastructure, congestion, urban sprawl, gentrification, sustainable development, green belt, public transportation, suburbs, slums, zoning, urban planning. Use these for city topics!',
+      collocations: [
+        'rapid urbanization', 'urban renewal project', 'infrastructure investment', 'traffic congestion',
+        'urban sprawl', 'gentrified neighborhood', 'sustainable development', 'green belt area',
+        'public transportation', 'downtown area', 'suburban expansion', 'urban planning'
+      ],
+      synonyms: [
+        { word: 'urbanization', synonyms: ['urban growth', 'city expansion', 'urban development', 'metropolitanization'] },
+        { word: 'infrastructure', synonyms: ['facilities', 'systems', 'framework', 'foundations'] },
+        { word: 'congestion', synonyms: ['overcrowding', 'gridlock', 'traffic jam', 'bottleneck'] }
+      ],
+      speakingLines: [
+        'Rapid urbanization has led to numerous challenges in developing countries.',
+        'Infrastructure investment is essential for sustainable urban development.',
+        'Urban sprawl has negative environmental consequences.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-housing-3',
+    title: 'Housing Problems & Solutions',
+    slug: 'housing-problems-solutions',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Housing',
+    description: 'Vocabulary for discussing housing problems and potential solutions.',
+    is_premium: true,
+    is_published: true,
+    view_count: 750,
+    created_at: '2025-02-01T10:00:00Z',
+    updated_at: '2025-02-01T10:00:00Z',
+    content: {
+      title: 'Housing Problems & Solutions',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 housing problem vocabulary',
+        'Discuss housing challenges',
+        'Propose solutions effectively'
+      ],
+      coreExplanation: `Housing problems are common IELTS Writing Task 2 topics. This lesson covers vocabulary for discussing challenges like affordability, homelessness, and overcrowding, plus solution-related terms.
+
+Understanding these terms helps you write balanced problem-solution essays.`,
+      examples: [
+        { sentence: 'Housing affordability is a major concern.', explanation: '"Affordability" is ability to pay for housing.' },
+        { sentence: 'Homelessness has increased in cities.', explanation: '"Homelessness" is lacking permanent housing.' },
+        { sentence: 'Overcrowding affects quality of life.', explanation: '"Overcrowding" is too many people in a space.' },
+        { sentence: 'Property prices have skyrocketed.', explanation: '"Skyrocketed" means increased dramatically.' },
+        { sentence: 'Many face housing insecurity.', explanation: '"Housing insecurity" is unstable housing situation.' },
+        { sentence: 'The housing market is overheated.', explanation: '"Overheated market" has unsustainably high prices.' },
+        { sentence: 'Rent control could help tenants.', explanation: '"Rent control" limits how much rent can increase.' },
+        { sentence: 'First-time buyers struggle to get on the property ladder.', explanation: '"Property ladder" is progression of home ownership.' },
+        { sentence: 'Social housing provision has declined.', explanation: '"Provision" means supply or availability.' },
+        { sentence: 'Housing subsidies help low-income families.', explanation: '"Subsidies" are government financial support.' },
+        { sentence: 'Urban regeneration can revitalize areas.', explanation: '"Regeneration" is renewing and improving.' },
+        { sentence: 'Mixed-income developments promote diversity.', explanation: '"Mixed-income" includes various income levels.' },
+        { sentence: 'Squatter settlements lack basic services.', explanation: '"Squatter settlements" are informal housing.' },
+        { sentence: 'Housing policy needs reform.', explanation: '"Policy reform" is changing government approach.' },
+        { sentence: 'The housing crisis requires urgent action.', explanation: '"Housing crisis" is severe housing problems.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "homeless" as noun', correction: '"Homeless people" or "the homeless"', explanation: '"Homeless" is an adjective.' },
+        { mistake: 'Confusing "affordable" and "cheap"', correction: '"Affordable" = within budget; "cheap" = low quality', explanation: '"Affordable" is more appropriate.' },
+        { mistake: 'Using "crisis" for minor problems', correction: 'Reserve "crisis" for severe situations', explanation: '"Crisis" implies urgency.' }
+      ],
+      miniPractice: [
+        { question: 'Housing _____ is a major concern for young people.', type: 'fill-blank' },
+        { question: 'Which term means government financial support?', options: ['Subsidies', 'Mortgages', 'Rent control', 'Property ladder'], type: 'multiple-choice' },
+        { question: 'Propose a solution to housing affordability.', type: 'rewrite' },
+        { question: 'Property prices have _____ in recent years.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'affordability',
+        'Subsidies',
+        'Governments could provide housing subsidies to help low-income families afford decent accommodation.',
+        'skyrocketed'
+      ],
+      quickRecap: 'Key problem terms: affordability, homelessness, overcrowding, housing insecurity, overheated market, housing crisis. Key solution terms: rent control, subsidies, social housing, regeneration, mixed-income, policy reform. Use these for housing essays!',
+      collocations: [
+        'housing affordability', 'rising homelessness', 'severe overcrowding', 'property prices',
+        'housing insecurity', 'overheated market', 'rent control policy', 'property ladder',
+        'housing subsidies', 'urban regeneration', 'mixed-income housing', 'housing crisis'
+      ],
+      synonyms: [
+        { word: 'affordability', synonyms: ['accessibility', 'cost-effectiveness', 'reasonableness', 'attainability'] },
+        { word: 'homelessness', synonyms: ['rough sleeping', 'houselessness', 'vagrancy', 'destitution'] },
+        { word: 'skyrocketed', synonyms: ['soared', 'surged', 'shot up', 'escalated'] }
+      ],
+      speakingLines: [
+        'Housing affordability has become a major concern for young people.',
+        'Homelessness has increased significantly in many urban areas.',
+        'Government subsidies could help address the housing crisis.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-housing-4',
+    title: 'Architecture & Building Vocabulary',
+    slug: 'architecture-building-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Housing',
+    description: 'Vocabulary for discussing architecture and building design.',
+    is_premium: true,
+    is_published: true,
+    view_count: 680,
+    created_at: '2025-02-02T10:00:00Z',
+    updated_at: '2025-02-02T10:00:00Z',
+    content: {
+      title: 'Architecture & Building Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 architecture vocabulary words',
+        'Describe buildings effectively',
+        'Discuss design and construction'
+      ],
+      coreExplanation: `Architecture vocabulary is useful for IELTS Speaking (describing buildings) and Writing (discussing urban development). This lesson covers terms for building design and construction.
+
+Understanding these terms helps you describe buildings and discuss architectural topics.`,
+      examples: [
+        { sentence: 'The building has a modern facade.', explanation: '"Facade" is the front of a building.' },
+        { sentence: 'The architecture is contemporary.', explanation: '"Contemporary" means modern or current style.' },
+        { sentence: 'The structure has a steel framework.', explanation: '"Framework" is the supporting structure.' },
+        { sentence: 'The building is energy-efficient.', explanation: '"Energy-efficient" uses less energy.' },
+        { sentence: 'The design incorporates sustainable materials.', explanation: '"Sustainable materials" are environmentally friendly.' },
+        { sentence: 'The building has a distinctive skyline.', explanation: '"Skyline" is the outline against the sky.' },
+        { sentence: 'The renovation preserved the original features.', explanation: '"Renovation" is restoring and improving.' },
+        { sentence: 'The building is a landmark.', explanation: '"Landmark" is a recognizable structure.' },
+        { sentence: 'The construction uses prefabricated components.', explanation: '"Prefabricated" means made in advance.' },
+        { sentence: 'The building has excellent acoustics.', explanation: '"Acoustics" is sound quality in a space.' },
+        { sentence: 'The design maximizes natural light.', explanation: '"Natural light" is sunlight.' },
+        { sentence: 'The building has a green roof.', explanation: '"Green roof" has plants for insulation.' },
+        { sentence: 'The architecture reflects local heritage.', explanation: '"Heritage" is cultural and historical significance.' },
+        { sentence: 'The building is structurally sound.', explanation: '"Structurally sound" is safe and stable.' },
+        { sentence: 'The design is aesthetically pleasing.', explanation: '"Aesthetically pleasing" is visually attractive.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "architecture" and "building"', correction: '"Architecture" is the design; "building" is the structure', explanation: 'Architecture is the art of designing buildings.' },
+        { mistake: 'Using "modern" for all new buildings', correction: '"Modern" is a specific style; use "contemporary" for current', explanation: '"Modern architecture" refers to a specific movement.' },
+        { mistake: 'Confusing "renovation" and "restoration"', correction: '"Renovation" updates; "restoration" returns to original', explanation: 'These have different goals.' }
+      ],
+      miniPractice: [
+        { question: 'The building has a modern _____ with glass panels.', type: 'fill-blank' },
+        { question: 'Which term means environmentally friendly materials?', options: ['Sustainable materials', 'Prefabricated', 'Acoustics', 'Framework'], type: 'multiple-choice' },
+        { question: 'Describe a building you admire using architecture vocabulary.', type: 'rewrite' },
+        { question: 'The design is _____ pleasing with clean lines.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'facade',
+        'Sustainable materials',
+        'The building I admire has a contemporary facade with sustainable materials and excellent natural light.',
+        'aesthetically'
+      ],
+      quickRecap: 'Key architecture terms: facade, contemporary, framework, energy-efficient, sustainable materials, skyline, renovation, landmark, prefabricated, acoustics, natural light, green roof, heritage, structurally sound, aesthetically pleasing. Use these to describe buildings!',
+      collocations: [
+        'modern facade', 'contemporary architecture', 'steel framework', 'energy-efficient design',
+        'sustainable materials', 'city skyline', 'building renovation', 'historic landmark',
+        'prefabricated components', 'excellent acoustics', 'natural light', 'green roof'
+      ],
+      synonyms: [
+        { word: 'facade', synonyms: ['front', 'exterior', 'face', 'frontage'] },
+        { word: 'contemporary', synonyms: ['modern', 'current', 'present-day', 'up-to-date'] },
+        { word: 'renovation', synonyms: ['refurbishment', 'restoration', 'modernization', 'upgrade'] }
+      ],
+      speakingLines: [
+        'The building has a striking contemporary facade.',
+        'The design incorporates sustainable materials and energy-efficient features.',
+        'The renovation preserved the buildings historic heritage.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 23: Crime & Justice (4 lessons)
+  // ============================================
+  {
+    id: 'vocab-crime-1',
+    title: 'Crime Vocabulary: Types & Offenders',
+    slug: 'crime-vocabulary-types-offenders',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Crime',
+    description: 'Essential vocabulary for discussing types of crime and offenders.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2025-02-03T10:00:00Z',
+    updated_at: '2025-02-03T10:00:00Z',
+    content: {
+      title: 'Crime Vocabulary: Types & Offenders',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 crime vocabulary words',
+        'Discuss crime types accurately',
+        'Describe offenders and victims'
+      ],
+      coreExplanation: `Crime vocabulary is essential for IELTS Writing Task 2 topics about law, punishment, and society. This lesson covers types of crime and terms for people involved.
+
+Understanding these terms helps you discuss crime-related topics effectively.`,
+      examples: [
+        { sentence: 'Violent crime has decreased in recent years.', explanation: '"Violent crime" involves physical harm.' },
+        { sentence: 'Property crime includes theft and burglary.', explanation: '"Property crime" involves stealing or damaging property.' },
+        { sentence: 'White-collar crime affects businesses.', explanation: '"White-collar crime" is non-violent financial crime.' },
+        { sentence: 'Cybercrime is a growing threat.', explanation: '"Cybercrime" is crime using computers/internet.' },
+        { sentence: 'The offender was sentenced to prison.', explanation: '"Offender" is someone who commits a crime.' },
+        { sentence: 'The perpetrator was caught on camera.', explanation: '"Perpetrator" is the person who did the crime.' },
+        { sentence: 'The victim received compensation.', explanation: '"Victim" is the person harmed by crime.' },
+        { sentence: 'Juvenile delinquency is a concern.', explanation: '"Juvenile delinquency" is crime by young people.' },
+        { sentence: 'The suspect was arrested.', explanation: '"Suspect" is someone thought to have committed crime.' },
+        { sentence: 'Recidivism rates remain high.', explanation: '"Recidivism" is reoffending after punishment.' },
+        { sentence: 'The crime rate has fallen.', explanation: '"Crime rate" is frequency of crime.' },
+        { sentence: 'Petty crime is common in cities.', explanation: '"Petty crime" is minor offenses.' },
+        { sentence: 'Organized crime poses serious threats.', explanation: '"Organized crime" is criminal groups.' },
+        { sentence: 'The witness testified in court.', explanation: '"Witness" is someone who saw the crime.' },
+        { sentence: 'The accomplice was also charged.', explanation: '"Accomplice" helps commit a crime.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "offender" and "criminal"', correction: '"Offender" is more neutral; "criminal" is stronger', explanation: 'Use "offender" in academic writing.' },
+        { mistake: 'Using "crime" as countable incorrectly', correction: '"Crime" can be countable (a crime) or uncountable (crime in general)', explanation: '"Crime is increasing" vs "He committed a crime".' },
+        { mistake: 'Confusing "suspect" and "perpetrator"', correction: '"Suspect" = not proven guilty; "perpetrator" = the actual criminal', explanation: 'Use "suspect" before conviction.' }
+      ],
+      miniPractice: [
+        { question: '_____ crime involves physical harm to people.', type: 'fill-blank' },
+        { question: 'Which term means reoffending after punishment?', options: ['Recidivism', 'Delinquency', 'Perpetrator', 'Accomplice'], type: 'multiple-choice' },
+        { question: 'Discuss one type of crime and its impact.', type: 'rewrite' },
+        { question: 'The _____ was sentenced to five years in prison.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Violent',
+        'Recidivism',
+        'Cybercrime has become a growing threat, affecting individuals and businesses through identity theft and fraud.',
+        'offender'
+      ],
+      quickRecap: 'Key crime types: violent crime, property crime, white-collar crime, cybercrime, petty crime, organized crime, juvenile delinquency. Key people: offender, perpetrator, victim, suspect, witness, accomplice. Use these for crime topics!',
+      collocations: [
+        'violent crime', 'property crime', 'white-collar crime', 'cybercrime threat',
+        'juvenile delinquency', 'crime rate', 'petty crime', 'organized crime',
+        'repeat offender', 'crime victim', 'prime suspect', 'high recidivism'
+      ],
+      synonyms: [
+        { word: 'offender', synonyms: ['criminal', 'lawbreaker', 'perpetrator', 'wrongdoer'] },
+        { word: 'crime', synonyms: ['offense', 'wrongdoing', 'violation', 'felony'] },
+        { word: 'victim', synonyms: ['sufferer', 'target', 'casualty', 'injured party'] }
+      ],
+      speakingLines: [
+        'Violent crime has decreased significantly in recent decades.',
+        'Cybercrime is a growing threat in the digital age.',
+        'Recidivism rates suggest that rehabilitation programs need improvement.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-crime-2',
+    title: 'Justice System Vocabulary',
+    slug: 'justice-system-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Crime',
+    description: 'Essential vocabulary for discussing the justice system and legal processes.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-02-04T10:00:00Z',
+    updated_at: '2025-02-04T10:00:00Z',
+    content: {
+      title: 'Justice System Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 justice system words',
+        'Discuss legal processes',
+        'Understand court terminology'
+      ],
+      coreExplanation: `Justice system vocabulary is essential for discussing law, courts, and legal processes in IELTS. This lesson covers key terms for the criminal justice system.
+
+Understanding these terms helps you discuss legal topics accurately.`,
+      examples: [
+        { sentence: 'The defendant pleaded not guilty.', explanation: '"Defendant" is the person accused in court.' },
+        { sentence: 'The prosecution presented evidence.', explanation: '"Prosecution" is the side accusing the defendant.' },
+        { sentence: 'The defense argued for acquittal.', explanation: '"Defense" represents the accused.' },
+        { sentence: 'The jury reached a verdict.', explanation: '"Jury" is citizens who decide guilt.' },
+        { sentence: 'The judge passed sentence.', explanation: '"Judge" is the official who presides over court.' },
+        { sentence: 'The trial lasted three weeks.', explanation: '"Trial" is the court process.' },
+        { sentence: 'The evidence was circumstantial.', explanation: '"Circumstantial" evidence is indirect.' },
+        { sentence: 'The accused was found guilty.', explanation: '"Guilty" means responsible for the crime.' },
+        { sentence: 'The defendant was acquitted.', explanation: '"Acquitted" means found not guilty.' },
+        { sentence: 'The sentence was appealed.', explanation: '"Appealed" means challenged in higher court.' },
+        { sentence: 'The court granted bail.', explanation: '"Bail" is money paid for temporary release.' },
+        { sentence: 'The case was dismissed.', explanation: '"Dismissed" means the case was dropped.' },
+        { sentence: 'The lawyer filed a motion.', explanation: '"Motion" is a formal request to the court.' },
+        { sentence: 'The testimony was compelling.', explanation: '"Testimony" is evidence given by witnesses.' },
+        { sentence: 'Justice must be served.', explanation: '"Justice" is fair treatment under law.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "defendant" and "offender"', correction: '"Defendant" is accused but not proven guilty', explanation: 'Use "defendant" during trial.' },
+        { mistake: 'Using "guilty" before conviction', correction: 'Use "accused" or "alleged" before conviction', explanation: 'Presumption of innocence.' },
+        { mistake: 'Confusing "verdict" and "sentence"', correction: '"Verdict" = guilty/not guilty; "sentence" = punishment', explanation: 'These are different stages.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ pleaded not guilty to the charges.', type: 'fill-blank' },
+        { question: 'Which term means found not guilty?', options: ['Acquitted', 'Convicted', 'Sentenced', 'Appealed'], type: 'multiple-choice' },
+        { question: 'Describe the role of a jury in the justice system.', type: 'rewrite' },
+        { question: 'The _____ reached a unanimous verdict.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'defendant',
+        'Acquitted',
+        'A jury is a group of citizens who listen to evidence and decide whether the defendant is guilty or not guilty.',
+        'jury'
+      ],
+      quickRecap: 'Key court terms: defendant, prosecution, defense, jury, judge, trial, evidence, verdict, sentence. Key outcomes: guilty, acquitted, appealed, dismissed, bail. Use these for justice topics!',
+      collocations: [
+        'the defendant', 'prosecution evidence', 'defense lawyer', 'jury verdict',
+        'presiding judge', 'criminal trial', 'circumstantial evidence', 'found guilty',
+        'acquitted of charges', 'appeal the sentence', 'granted bail', 'case dismissed'
+      ],
+      synonyms: [
+        { word: 'defendant', synonyms: ['accused', 'respondent', 'alleged offender', 'suspect'] },
+        { word: 'verdict', synonyms: ['judgment', 'decision', 'ruling', 'finding'] },
+        { word: 'trial', synonyms: ['court case', 'hearing', 'proceedings', 'litigation'] }
+      ],
+      speakingLines: [
+        'The defendant was found guilty and sentenced to ten years.',
+        'The jury reached a unanimous verdict after three days of deliberation.',
+        'The case was appealed to a higher court.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-crime-3',
+    title: 'Punishment & Rehabilitation Vocabulary',
+    slug: 'punishment-rehabilitation-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Crime',
+    description: 'Vocabulary for discussing punishment, prison, and rehabilitation.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-02-05T10:00:00Z',
+    updated_at: '2025-02-05T10:00:00Z',
+    content: {
+      title: 'Punishment & Rehabilitation Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 punishment vocabulary words',
+        'Discuss prison and alternatives',
+        'Analyze rehabilitation approaches'
+      ],
+      coreExplanation: `Punishment and rehabilitation vocabulary is essential for IELTS Writing Task 2 topics about crime and justice. This lesson covers terms for discussing different approaches to dealing with offenders.
+
+Understanding these terms helps you write balanced essays on punishment topics.`,
+      examples: [
+        { sentence: 'The offender received a custodial sentence.', explanation: '"Custodial sentence" means prison time.' },
+        { sentence: 'Community service is an alternative to prison.', explanation: '"Community service" is unpaid work as punishment.' },
+        { sentence: 'The prisoner was released on parole.', explanation: '"Parole" is early release with conditions.' },
+        { sentence: 'Rehabilitation aims to reform offenders.', explanation: '"Rehabilitation" is helping offenders change.' },
+        { sentence: 'The prison is overcrowded.', explanation: '"Overcrowded" means too many prisoners.' },
+        { sentence: 'Deterrence is one purpose of punishment.', explanation: '"Deterrence" is discouraging crime through fear.' },
+        { sentence: 'Retribution focuses on punishment.', explanation: '"Retribution" is punishment as revenge.' },
+        { sentence: 'The fine was substantial.', explanation: '"Fine" is a monetary punishment.' },
+        { sentence: 'Probation allows supervised freedom.', explanation: '"Probation" is supervision instead of prison.' },
+        { sentence: 'The death penalty is controversial.', explanation: '"Death penalty" is execution as punishment.' },
+        { sentence: 'Life imprisonment is the maximum sentence.', explanation: '"Life imprisonment" is prison for life.' },
+        { sentence: 'Restorative justice involves victims.', explanation: '"Restorative justice" focuses on repairing harm.' },
+        { sentence: 'The inmate participated in education programs.', explanation: '"Inmate" is a prisoner.' },
+        { sentence: 'Reintegration into society is challenging.', explanation: '"Reintegration" is returning to normal life.' },
+        { sentence: 'The correctional facility offers training.', explanation: '"Correctional facility" is a prison.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Using "jail" and "prison" interchangeably', correction: '"Jail" is short-term; "prison" is long-term', explanation: 'In some countries, these differ.' },
+        { mistake: 'Confusing "parole" and "probation"', correction: '"Parole" = early release; "probation" = instead of prison', explanation: 'These are different stages.' },
+        { mistake: 'Using "punishment" and "sentence" interchangeably', correction: '"Sentence" is the specific punishment given', explanation: '"Punishment" is broader.' }
+      ],
+      miniPractice: [
+        { question: 'The offender received a _____ sentence of five years.', type: 'fill-blank' },
+        { question: 'Which term means discouraging crime through fear?', options: ['Deterrence', 'Rehabilitation', 'Retribution', 'Reintegration'], type: 'multiple-choice' },
+        { question: 'Discuss the purpose of rehabilitation.', type: 'rewrite' },
+        { question: 'The prisoner was released on _____ after serving half the sentence.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'custodial',
+        'Deterrence',
+        'Rehabilitation aims to reform offenders by addressing the causes of their criminal behavior and helping them develop skills for reintegration into society.',
+        'parole'
+      ],
+      quickRecap: 'Key punishment terms: custodial sentence, community service, fine, probation, parole, death penalty, life imprisonment. Key concepts: deterrence, retribution, rehabilitation, restorative justice, reintegration. Use these for punishment essays!',
+      collocations: [
+        'custodial sentence', 'community service', 'released on parole', 'rehabilitation program',
+        'overcrowded prison', 'effective deterrence', 'harsh retribution', 'substantial fine',
+        'on probation', 'death penalty', 'life imprisonment', 'restorative justice'
+      ],
+      synonyms: [
+        { word: 'prison', synonyms: ['jail', 'correctional facility', 'penitentiary', 'detention center'] },
+        { word: 'rehabilitation', synonyms: ['reform', 'correction', 'restoration', 'recovery'] },
+        { word: 'punishment', synonyms: ['penalty', 'sentence', 'sanction', 'retribution'] }
+      ],
+      speakingLines: [
+        'Rehabilitation programs can help reduce recidivism rates.',
+        'The debate between deterrence and rehabilitation continues.',
+        'Community service is often more effective than short prison sentences.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-crime-4',
+    title: 'Crime Prevention Vocabulary',
+    slug: 'crime-prevention-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Crime',
+    description: 'Vocabulary for discussing crime prevention strategies and policing.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-02-06T10:00:00Z',
+    updated_at: '2025-02-06T10:00:00Z',
+    content: {
+      title: 'Crime Prevention Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 crime prevention words',
+        'Discuss policing strategies',
+        'Analyze prevention approaches'
+      ],
+      coreExplanation: `Crime prevention vocabulary is essential for discussing how to reduce crime in IELTS Writing Task 2. This lesson covers terms for prevention strategies, policing, and community safety.
+
+Understanding these terms helps you propose solutions to crime problems.`,
+      examples: [
+        { sentence: 'Community policing builds trust.', explanation: '"Community policing" involves police working with communities.' },
+        { sentence: 'CCTV surveillance deters criminals.', explanation: '"CCTV surveillance" is camera monitoring.' },
+        { sentence: 'Neighborhood watch programs are effective.', explanation: '"Neighborhood watch" is community crime monitoring.' },
+        { sentence: 'Crime prevention requires a multi-faceted approach.', explanation: '"Multi-faceted" means having many aspects.' },
+        { sentence: 'Law enforcement agencies cooperate.', explanation: '"Law enforcement" is police and related agencies.' },
+        { sentence: 'Security measures have been increased.', explanation: '"Security measures" are protective actions.' },
+        { sentence: 'The area has a high police presence.', explanation: '"Police presence" is visible policing.' },
+        { sentence: 'Early intervention prevents youth crime.', explanation: '"Early intervention" is acting before problems develop.' },
+        { sentence: 'Social programs address root causes.', explanation: '"Root causes" are underlying reasons.' },
+        { sentence: 'The crime hotspot was identified.', explanation: '"Hotspot" is an area with high crime.' },
+        { sentence: 'Zero tolerance policies are controversial.', explanation: '"Zero tolerance" means strict enforcement.' },
+        { sentence: 'Preventive measures reduce crime.', explanation: '"Preventive measures" stop crime before it happens.' },
+        { sentence: 'Public safety is the priority.', explanation: '"Public safety" is protecting citizens.' },
+        { sentence: 'Crime mapping helps allocate resources.', explanation: '"Crime mapping" is analyzing crime locations.' },
+        { sentence: 'Situational crime prevention modifies environments.', explanation: '"Situational prevention" changes opportunities for crime.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "prevention" and "deterrence"', correction: '"Prevention" stops crime; "deterrence" discourages through fear', explanation: 'These are different approaches.' },
+        { mistake: 'Using "police" as singular', correction: '"Police" is plural: "The police are..."', explanation: '"Police" takes plural verbs.' },
+        { mistake: 'Confusing "security" and "safety"', correction: '"Security" = protection from threats; "safety" = being safe', explanation: 'These overlap but differ.' }
+      ],
+      miniPractice: [
+        { question: '_____ policing involves officers working closely with communities.', type: 'fill-blank' },
+        { question: 'Which term means an area with high crime?', options: ['Hotspot', 'Root cause', 'Intervention', 'Surveillance'], type: 'multiple-choice' },
+        { question: 'Propose a crime prevention strategy.', type: 'rewrite' },
+        { question: 'CCTV _____ can deter potential criminals.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Community',
+        'Hotspot',
+        'Early intervention programs for at-risk youth can prevent crime by addressing root causes such as poverty and lack of education.',
+        'surveillance'
+      ],
+      quickRecap: 'Key prevention terms: community policing, CCTV surveillance, neighborhood watch, law enforcement, security measures, early intervention, root causes, hotspot, zero tolerance, preventive measures, public safety, crime mapping. Use these for prevention essays!',
+      collocations: [
+        'community policing', 'CCTV surveillance', 'neighborhood watch', 'crime prevention',
+        'law enforcement', 'security measures', 'police presence', 'early intervention',
+        'root causes', 'crime hotspot', 'zero tolerance', 'public safety'
+      ],
+      synonyms: [
+        { word: 'prevention', synonyms: ['deterrence', 'avoidance', 'precaution', 'protection'] },
+        { word: 'surveillance', synonyms: ['monitoring', 'observation', 'watching', 'scrutiny'] },
+        { word: 'law enforcement', synonyms: ['police', 'authorities', 'security forces', 'constabulary'] }
+      ],
+      speakingLines: [
+        'Community policing has proven effective in reducing crime rates.',
+        'Early intervention programs can address the root causes of criminal behavior.',
+        'CCTV surveillance serves as a deterrent to potential offenders.'
+      ]
+    }
   }
 ];
