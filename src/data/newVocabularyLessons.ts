@@ -1402,5 +1402,2070 @@ This lesson introduces terms used by education researchers, policymakers, and an
         'While meritocracy is an appealing ideal, educational stratification often reproduces existing hierarchies.'
       ]
     }
+  },
+  // ============================================
+  // BATCH 2: Environment & Climate (7 lessons)
+  // ============================================
+  {
+    id: 'vocab-environment-2',
+    title: 'Climate Change: Causes & Effects',
+    slug: 'climate-change-causes-effects',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Environment',
+    description: 'Advanced vocabulary for discussing climate change causes, effects, and scientific evidence in IELTS.',
+    is_premium: true,
+    is_published: true,
+    view_count: 890,
+    created_at: '2024-03-01T10:00:00Z',
+    updated_at: '2024-03-01T10:00:00Z',
+    content: {
+      title: 'Climate Change: Causes & Effects',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 climate change terms for sophisticated discussions',
+        'Discuss causes and effects of global warming accurately',
+        'Use scientific vocabulary naturally in essays'
+      ],
+      coreExplanation: `Climate change is one of the most common IELTS topics. To achieve Band 8+, you need vocabulary that demonstrates understanding of the science, causes, and consequences of climate change.
+
+This lesson focuses on precise terminology that allows you to discuss climate issues with scientific accuracy while remaining accessible. Avoid oversimplification while ensuring your language is clear and natural.`,
+      examples: [
+        { sentence: 'Greenhouse gas emissions are the primary driver of anthropogenic climate change.', explanation: '"Anthropogenic" means caused by humans; "driver" means main cause.' },
+        { sentence: 'Rising sea levels threaten coastal communities and low-lying island nations.', explanation: '"Rising sea levels" is a key consequence of global warming.' },
+        { sentence: 'Extreme weather events have become more frequent and intense.', explanation: '"Extreme weather events" include hurricanes, floods, droughts.' },
+        { sentence: 'The carbon footprint of developed nations far exceeds that of developing countries.', explanation: '"Carbon footprint" is total greenhouse gas emissions.' },
+        { sentence: 'Deforestation contributes significantly to carbon dioxide levels in the atmosphere.', explanation: '"Deforestation" is clearing forests; trees absorb CO2.' },
+        { sentence: 'Global temperatures have risen by approximately 1.1°C since pre-industrial times.', explanation: '"Pre-industrial times" refers to before widespread industrialization.' },
+        { sentence: 'Melting ice caps are accelerating the rate of sea level rise.', explanation: '"Ice caps" are polar ice; "accelerating" means speeding up.' },
+        { sentence: 'Ocean acidification poses a severe threat to marine ecosystems.', explanation: '"Ocean acidification" is decreasing pH due to CO2 absorption.' },
+        { sentence: 'Climate refugees are displaced by environmental degradation and natural disasters.', explanation: '"Climate refugees" are people forced to migrate due to climate impacts.' },
+        { sentence: 'The Paris Agreement aims to limit global warming to 1.5°C above pre-industrial levels.', explanation: '"Paris Agreement" is the 2015 international climate accord.' },
+        { sentence: 'Feedback loops can amplify the effects of initial warming.', explanation: '"Feedback loops" are cycles that intensify or reduce effects.' },
+        { sentence: 'Biodiversity loss is accelerating due to habitat destruction and climate change.', explanation: '"Biodiversity loss" is decline in species variety.' },
+        { sentence: 'Permafrost thawing releases methane, a potent greenhouse gas.', explanation: '"Permafrost" is permanently frozen ground; "potent" means powerful.' },
+        { sentence: 'Climate models predict increasingly severe impacts without intervention.', explanation: '"Climate models" are computer simulations of climate systems.' },
+        { sentence: 'The scientific consensus on human-caused climate change is overwhelming.', explanation: '"Scientific consensus" is agreement among experts.' }
+      ],
+      commonMistakes: [
+        { mistake: 'The weather is changing because of pollution.', correction: 'Climate patterns are shifting due to greenhouse gas emissions.', explanation: 'Distinguish "weather" (short-term) from "climate" (long-term patterns).' },
+        { mistake: 'Global warming makes everywhere hotter.', correction: 'Climate change causes varied regional impacts, including both warming and cooling in different areas.', explanation: 'Climate change effects are complex and varied.' },
+        { mistake: 'We need to stop climate change.', correction: 'We need to mitigate climate change and adapt to its inevitable impacts.', explanation: '"Mitigate" (reduce) and "adapt" (adjust) are key terms.' },
+        { mistake: 'Carbon dioxide is bad for the environment.', correction: 'Excessive carbon dioxide emissions contribute to the greenhouse effect.', explanation: 'CO2 is natural; the problem is excessive human-caused emissions.' }
+      ],
+      miniPractice: [
+        { question: '_____ gas emissions are the primary cause of global warming.', type: 'fill-blank' },
+        { question: 'Which term describes climate change caused by human activities?', options: ['anthropogenic', 'natural', 'cyclical', 'geological'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Pollution is making the Earth hotter."', type: 'rewrite' },
+        { question: 'The melting of polar _____ contributes to rising sea levels.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Greenhouse',
+        'anthropogenic',
+        'Greenhouse gas emissions are driving global temperature increases / contributing to climate change.',
+        'ice caps'
+      ],
+      quickRecap: 'Key terms: "greenhouse gas emissions", "anthropogenic", "carbon footprint", "sea level rise", "extreme weather events", "climate refugees", "feedback loops", "scientific consensus". Use "mitigate" and "adapt" when discussing solutions!',
+      collocations: [
+        'greenhouse gas emissions', 'carbon footprint', 'sea level rise', 'extreme weather events',
+        'climate refugees', 'feedback loops', 'scientific consensus', 'biodiversity loss',
+        'ocean acidification', 'permafrost thawing', 'climate models', 'Paris Agreement'
+      ],
+      synonyms: [
+        { word: 'cause', synonyms: ['driver', 'contributor', 'factor', 'catalyst'] },
+        { word: 'effect', synonyms: ['impact', 'consequence', 'outcome', 'result'] },
+        { word: 'increase', synonyms: ['rise', 'escalate', 'accelerate', 'intensify'] }
+      ],
+      speakingLines: [
+        'The scientific consensus on anthropogenic climate change is now overwhelming.',
+        'Rising sea levels pose an existential threat to low-lying island nations.',
+        'We need both mitigation strategies to reduce emissions and adaptation measures to cope with inevitable changes.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-environment-3',
+    title: 'Sustainability & Green Solutions',
+    slug: 'sustainability-green-solutions',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Environment',
+    description: 'Vocabulary for discussing sustainable development, renewable energy, and environmental solutions.',
+    is_premium: true,
+    is_published: true,
+    view_count: 920,
+    created_at: '2024-03-05T10:00:00Z',
+    updated_at: '2024-03-05T10:00:00Z',
+    content: {
+      title: 'Sustainability & Green Solutions',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 sustainability and green technology terms',
+        'Discuss environmental solutions confidently',
+        'Use renewable energy vocabulary accurately'
+      ],
+      coreExplanation: `Sustainability topics are increasingly common in IELTS as environmental awareness grows. To achieve Band 7+, you need vocabulary that allows you to discuss solutions, not just problems.
+
+This lesson focuses on positive environmental vocabulary - renewable energy, sustainable practices, and green technologies. Being able to discuss solutions demonstrates sophisticated thinking and balanced argumentation.`,
+      examples: [
+        { sentence: 'Renewable energy sources such as solar and wind power are becoming increasingly cost-effective.', explanation: '"Renewable" means naturally replenished; "cost-effective" means economically viable.' },
+        { sentence: 'Sustainable development meets present needs without compromising future generations.', explanation: '"Sustainable development" is the key concept from the UN definition.' },
+        { sentence: 'The circular economy aims to eliminate waste through recycling and reuse.', explanation: '"Circular economy" contrasts with linear "take-make-dispose" model.' },
+        { sentence: 'Carbon neutrality requires balancing emissions with carbon removal.', explanation: '"Carbon neutrality" means net-zero carbon emissions.' },
+        { sentence: 'Green infrastructure includes parks, green roofs, and urban forests.', explanation: '"Green infrastructure" is nature-based solutions in urban areas.' },
+        { sentence: 'Electric vehicles are essential for decarbonizing the transport sector.', explanation: '"Decarbonizing" means reducing carbon emissions from a sector.' },
+        { sentence: 'Energy efficiency measures can significantly reduce consumption.', explanation: '"Energy efficiency" means using less energy for the same output.' },
+        { sentence: 'Biodegradable materials break down naturally without harming the environment.', explanation: '"Biodegradable" means decomposable by natural processes.' },
+        { sentence: 'Corporate sustainability initiatives are driven by both ethics and economics.', explanation: '"Corporate sustainability" is business environmental responsibility.' },
+        { sentence: 'The green economy creates jobs while protecting the environment.', explanation: '"Green economy" is economic development that is environmentally sustainable.' },
+        { sentence: 'Zero-waste lifestyles aim to minimize landfill contributions.', explanation: '"Zero-waste" is reducing waste to absolute minimum.' },
+        { sentence: 'Sustainable agriculture practices preserve soil health and biodiversity.', explanation: '"Sustainable agriculture" is farming that maintains long-term productivity.' },
+        { sentence: 'Carbon capture technology removes CO2 directly from the atmosphere.', explanation: '"Carbon capture" is technology to remove and store carbon.' },
+        { sentence: 'Eco-friendly products have minimal environmental impact.', explanation: '"Eco-friendly" means not harmful to the environment.' },
+        { sentence: 'The transition to clean energy requires significant investment.', explanation: '"Clean energy" produces minimal pollution; "transition" is the shift.' }
+      ],
+      commonMistakes: [
+        { mistake: 'We should use green energy.', correction: 'We should transition to renewable energy sources / invest in clean energy infrastructure.', explanation: '"Green energy" is vague; be specific about types and actions.' },
+        { mistake: 'Recycling will solve pollution.', correction: 'Recycling is one component of a circular economy approach to waste reduction.', explanation: 'Recycling alone is insufficient; discuss broader strategies.' },
+        { mistake: 'Solar power is the best solution.', correction: 'A diverse mix of renewable energy sources is needed for a sustainable energy system.', explanation: 'Avoid oversimplification; acknowledge complexity.' }
+      ],
+      miniPractice: [
+        { question: '_____ energy sources include solar, wind, and hydroelectric power.', type: 'fill-blank' },
+        { question: 'Which term describes an economy that eliminates waste through recycling?', options: ['circular economy', 'green economy', 'sustainable economy', 'renewable economy'], type: 'multiple-choice' },
+        { question: 'Rewrite: "We should use less electricity."', type: 'rewrite' },
+        { question: 'Carbon _____ means achieving net-zero emissions.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Renewable',
+        'circular economy',
+        'We should implement energy efficiency measures / reduce energy consumption through sustainable practices.',
+        'neutrality'
+      ],
+      quickRecap: 'Key terms: "renewable energy", "sustainable development", "circular economy", "carbon neutrality", "green infrastructure", "decarbonizing", "energy efficiency", "biodegradable". Use these to discuss environmental solutions sophisticatedly!',
+      collocations: [
+        'renewable energy', 'sustainable development', 'circular economy', 'carbon neutrality',
+        'green infrastructure', 'energy efficiency', 'electric vehicles', 'biodegradable materials',
+        'corporate sustainability', 'green economy', 'zero-waste', 'clean energy'
+      ],
+      synonyms: [
+        { word: 'green', synonyms: ['sustainable', 'eco-friendly', 'environmentally friendly', 'clean'] },
+        { word: 'reduce', synonyms: ['minimize', 'decrease', 'cut', 'lower'] },
+        { word: 'protect', synonyms: ['preserve', 'conserve', 'safeguard', 'maintain'] }
+      ],
+      speakingLines: [
+        'The transition to renewable energy is not just environmentally necessary but economically beneficial.',
+        'A circular economy approach could significantly reduce waste and resource consumption.',
+        'Sustainable development requires balancing economic growth with environmental protection.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-environment-4',
+    title: 'Pollution & Environmental Degradation',
+    slug: 'pollution-environmental-degradation',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Environment',
+    description: 'Vocabulary for discussing various types of pollution and environmental damage.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2024-03-08T10:00:00Z',
+    updated_at: '2024-03-08T10:00:00Z',
+    content: {
+      title: 'Pollution & Environmental Degradation',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 pollution and degradation terms',
+        'Discuss environmental problems precisely',
+        'Differentiate between pollution types'
+      ],
+      coreExplanation: `Understanding different types of pollution and environmental damage is essential for IELTS environmental topics. To achieve Band 7+, you need precise vocabulary that distinguishes between various environmental problems.
+
+This lesson covers air, water, soil, and noise pollution, as well as broader environmental degradation. Being specific about environmental problems demonstrates sophisticated understanding.`,
+      examples: [
+        { sentence: 'Air pollution from vehicle emissions contributes to respiratory diseases.', explanation: '"Emissions" are substances released; "respiratory" relates to breathing.' },
+        { sentence: 'Industrial effluent contaminates waterways and harms aquatic life.', explanation: '"Effluent" is liquid waste; "aquatic" means water-related.' },
+        { sentence: 'Plastic pollution has reached crisis levels in the world\'s oceans.', explanation: '"Plastic pollution" is a major environmental concern.' },
+        { sentence: 'Soil degradation reduces agricultural productivity and food security.', explanation: '"Soil degradation" is decline in soil quality.' },
+        { sentence: 'Light pollution disrupts wildlife behavior and human sleep patterns.', explanation: '"Light pollution" is excessive artificial light.' },
+        { sentence: 'Noise pollution in urban areas affects mental health and wellbeing.', explanation: '"Noise pollution" is harmful or annoying levels of noise.' },
+        { sentence: 'Toxic waste disposal requires strict regulatory oversight.', explanation: '"Toxic waste" is hazardous materials; "regulatory oversight" is government control.' },
+        { sentence: 'Eutrophication occurs when excess nutrients cause algal blooms.', explanation: '"Eutrophication" is nutrient pollution in water bodies.' },
+        { sentence: 'Smog is a combination of smoke and fog caused by air pollution.', explanation: '"Smog" is visible air pollution common in cities.' },
+        { sentence: 'Microplastics have been found in drinking water and food chains.', explanation: '"Microplastics" are tiny plastic particles.' },
+        { sentence: 'Habitat fragmentation isolates wildlife populations.', explanation: '"Habitat fragmentation" is breaking up of natural habitats.' },
+        { sentence: 'Desertification threatens agricultural land in arid regions.', explanation: '"Desertification" is land becoming desert-like.' },
+        { sentence: 'E-waste contains hazardous materials requiring specialized recycling.', explanation: '"E-waste" is electronic waste.' },
+        { sentence: 'Groundwater contamination affects drinking water supplies.', explanation: '"Groundwater" is underground water; "contamination" is pollution.' },
+        { sentence: 'Particulate matter in the air causes serious health problems.', explanation: '"Particulate matter" is tiny particles suspended in air.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Pollution is bad for the environment.', correction: 'Various forms of pollution - air, water, and soil - cause distinct environmental and health impacts.', explanation: 'Be specific about pollution types and effects.' },
+        { mistake: 'Factories cause pollution.', correction: 'Industrial facilities emit pollutants that contaminate air and water systems.', explanation: 'Use precise terms like "emit" and "contaminate".' },
+        { mistake: 'We need to stop pollution.', correction: 'We need to implement stricter emission controls and pollution prevention measures.', explanation: 'Discuss specific actions rather than vague goals.' }
+      ],
+      miniPractice: [
+        { question: 'Industrial _____ contaminates rivers and lakes.', type: 'fill-blank' },
+        { question: 'Which term describes tiny plastic particles found in oceans?', options: ['microplastics', 'nanoplastics', 'macroplastics', 'bioplastics'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Cars make the air dirty."', type: 'rewrite' },
+        { question: '_____ matter in the air causes respiratory problems.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'effluent',
+        'microplastics',
+        'Vehicle emissions contribute to air pollution and degrade air quality.',
+        'Particulate'
+      ],
+      quickRecap: 'Key terms: "emissions", "effluent", "contamination", "degradation", "microplastics", "eutrophication", "smog", "particulate matter", "habitat fragmentation", "desertification". Be specific about pollution types!',
+      collocations: [
+        'air pollution', 'water contamination', 'soil degradation', 'plastic pollution',
+        'toxic waste', 'industrial effluent', 'particulate matter', 'habitat fragmentation',
+        'groundwater contamination', 'emission controls', 'environmental degradation', 'noise pollution'
+      ],
+      synonyms: [
+        { word: 'pollution', synonyms: ['contamination', 'degradation', 'damage', 'harm'] },
+        { word: 'dirty', synonyms: ['polluted', 'contaminated', 'degraded', 'toxic'] },
+        { word: 'harm', synonyms: ['damage', 'degrade', 'impair', 'adversely affect'] }
+      ],
+      speakingLines: [
+        'Air pollution from vehicle emissions is a major public health concern in urban areas.',
+        'Plastic pollution has reached alarming levels, with microplastics now found throughout the food chain.',
+        'Industrial effluent continues to contaminate waterways despite environmental regulations.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-environment-5',
+    title: 'Conservation & Wildlife Protection',
+    slug: 'conservation-wildlife-protection',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Environment',
+    description: 'Vocabulary for discussing wildlife conservation, endangered species, and habitat protection.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2024-03-12T10:00:00Z',
+    updated_at: '2024-03-12T10:00:00Z',
+    content: {
+      title: 'Conservation & Wildlife Protection',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 conservation and wildlife terms',
+        'Discuss endangered species and protection efforts',
+        'Use ecological vocabulary accurately'
+      ],
+      coreExplanation: `Conservation topics appear frequently in IELTS, especially in discussions about biodiversity and environmental protection. To achieve Band 7+, you need vocabulary that allows you to discuss wildlife issues with precision.
+
+This lesson covers endangered species, habitat protection, and conservation strategies. Understanding ecological concepts helps you discuss the interconnections between species and environments.`,
+      examples: [
+        { sentence: 'Endangered species face extinction without immediate conservation efforts.', explanation: '"Endangered" means at risk of extinction; "conservation" is protection.' },
+        { sentence: 'Protected areas such as national parks preserve critical habitats.', explanation: '"Protected areas" are legally designated conservation zones.' },
+        { sentence: 'Poaching remains a significant threat to wildlife populations.', explanation: '"Poaching" is illegal hunting or capturing of animals.' },
+        { sentence: 'Ecosystem services include pollination, water purification, and carbon storage.', explanation: '"Ecosystem services" are benefits nature provides to humans.' },
+        { sentence: 'Captive breeding programs help recover endangered species populations.', explanation: '"Captive breeding" is breeding animals in controlled environments.' },
+        { sentence: 'Wildlife corridors connect fragmented habitats for animal migration.', explanation: '"Wildlife corridors" are strips of habitat connecting larger areas.' },
+        { sentence: 'Invasive species threaten native biodiversity.', explanation: '"Invasive species" are non-native species that cause harm.' },
+        { sentence: 'The IUCN Red List classifies species by extinction risk.', explanation: '"IUCN Red List" is the global standard for species conservation status.' },
+        { sentence: 'Habitat restoration aims to return degraded ecosystems to natural states.', explanation: '"Habitat restoration" is repairing damaged ecosystems.' },
+        { sentence: 'Keystone species play crucial roles in maintaining ecosystem balance.', explanation: '"Keystone species" have disproportionate effects on their environments.' },
+        { sentence: 'Ecotourism can fund conservation while raising awareness.', explanation: '"Ecotourism" is responsible travel to natural areas.' },
+        { sentence: 'Wildlife trafficking is a multi-billion dollar illegal industry.', explanation: '"Wildlife trafficking" is illegal trade in animals and plants.' },
+        { sentence: 'Marine protected areas safeguard ocean biodiversity.', explanation: '"Marine protected areas" are ocean conservation zones.' },
+        { sentence: 'Rewilding involves reintroducing species to restore ecosystems.', explanation: '"Rewilding" is large-scale conservation to restore natural processes.' },
+        { sentence: 'Biodiversity hotspots contain exceptional concentrations of endemic species.', explanation: '"Biodiversity hotspots" are areas with high species diversity; "endemic" means found only in that area.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Animals are dying because of humans.', correction: 'Human activities such as habitat destruction and poaching threaten wildlife populations.', explanation: 'Be specific about which human activities cause harm.' },
+        { mistake: 'We should save animals.', correction: 'We should implement comprehensive conservation strategies to protect endangered species and their habitats.', explanation: 'Use specific conservation terminology.' },
+        { mistake: 'Zoos help animals.', correction: 'Accredited zoos contribute to conservation through captive breeding programs and public education.', explanation: 'Be specific about how zoos contribute to conservation.' }
+      ],
+      miniPractice: [
+        { question: '_____ species face the risk of extinction.', type: 'fill-blank' },
+        { question: 'Which term describes illegal hunting of wildlife?', options: ['poaching', 'hunting', 'trapping', 'capturing'], type: 'multiple-choice' },
+        { question: 'Rewrite: "We need to protect animals."', type: 'rewrite' },
+        { question: 'Wildlife _____ connect fragmented habitats.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Endangered',
+        'poaching',
+        'We need to implement conservation measures to protect endangered species and preserve biodiversity.',
+        'corridors'
+      ],
+      quickRecap: 'Key terms: "endangered species", "conservation", "poaching", "ecosystem services", "captive breeding", "wildlife corridors", "invasive species", "habitat restoration", "keystone species", "biodiversity hotspots". Use these for sophisticated wildlife discussions!',
+      collocations: [
+        'endangered species', 'protected areas', 'conservation efforts', 'ecosystem services',
+        'captive breeding', 'wildlife corridors', 'invasive species', 'habitat restoration',
+        'keystone species', 'biodiversity hotspots', 'wildlife trafficking', 'marine protected areas'
+      ],
+      synonyms: [
+        { word: 'protect', synonyms: ['conserve', 'preserve', 'safeguard', 'defend'] },
+        { word: 'animal', synonyms: ['species', 'wildlife', 'fauna', 'creature'] },
+        { word: 'home', synonyms: ['habitat', 'ecosystem', 'environment', 'territory'] }
+      ],
+      speakingLines: [
+        'Endangered species require comprehensive conservation strategies that address both habitat protection and anti-poaching measures.',
+        'Ecosystem services provided by biodiversity are essential for human wellbeing and economic prosperity.',
+        'Wildlife corridors are crucial for maintaining genetic diversity among fragmented populations.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-environment-6',
+    title: 'Environmental Policy & Governance',
+    slug: 'environmental-policy-governance',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Environment',
+    description: 'Advanced vocabulary for discussing environmental laws, international agreements, and policy measures.',
+    is_premium: true,
+    is_published: true,
+    view_count: 650,
+    created_at: '2024-03-15T10:00:00Z',
+    updated_at: '2024-03-15T10:00:00Z',
+    content: {
+      title: 'Environmental Policy & Governance',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 environmental policy terms',
+        'Discuss international agreements and regulations',
+        'Analyze government environmental measures'
+      ],
+      coreExplanation: `Environmental policy discussions are common in IELTS Writing Task 2, especially questions about government responsibility. To achieve Band 8+, you need vocabulary that allows you to discuss policy measures, regulations, and international cooperation.
+
+This lesson covers environmental governance at local, national, and international levels. Understanding policy terminology helps you discuss the role of governments and institutions in addressing environmental challenges.`,
+      examples: [
+        { sentence: 'Environmental regulations impose limits on industrial emissions.', explanation: '"Regulations" are official rules; "impose limits" means set restrictions.' },
+        { sentence: 'Carbon pricing mechanisms include carbon taxes and cap-and-trade systems.', explanation: '"Carbon pricing" makes polluters pay for emissions.' },
+        { sentence: 'The polluter pays principle holds companies accountable for environmental damage.', explanation: '"Polluter pays principle" is a key environmental policy concept.' },
+        { sentence: 'Environmental impact assessments evaluate proposed projects.', explanation: '"Environmental impact assessments" (EIAs) analyze potential effects.' },
+        { sentence: 'Multilateral environmental agreements require international cooperation.', explanation: '"Multilateral" means involving multiple countries.' },
+        { sentence: 'Subsidies for renewable energy accelerate the clean energy transition.', explanation: '"Subsidies" are government financial support.' },
+        { sentence: 'Emission standards set maximum allowable pollution levels.', explanation: '"Emission standards" are legal limits on pollutants.' },
+        { sentence: 'Environmental enforcement ensures compliance with regulations.', explanation: '"Enforcement" is ensuring rules are followed.' },
+        { sentence: 'Green taxation discourages environmentally harmful activities.', explanation: '"Green taxation" uses taxes to promote environmental goals.' },
+        { sentence: 'The precautionary principle advocates action despite scientific uncertainty.', explanation: '"Precautionary principle" means acting to prevent harm even without full proof.' },
+        { sentence: 'Environmental governance involves multiple stakeholders.', explanation: '"Governance" is the system of rules and decision-making.' },
+        { sentence: 'Regulatory frameworks provide the legal basis for environmental protection.', explanation: '"Regulatory frameworks" are systems of rules and regulations.' },
+        { sentence: 'International environmental law addresses transboundary issues.', explanation: '"Transboundary" means crossing national borders.' },
+        { sentence: 'Policy instruments include regulations, incentives, and voluntary agreements.', explanation: '"Policy instruments" are tools governments use to achieve goals.' },
+        { sentence: 'Environmental compliance monitoring tracks adherence to regulations.', explanation: '"Compliance monitoring" is checking if rules are followed.' }
+      ],
+      commonMistakes: [
+        { mistake: 'The government should make laws to protect the environment.', correction: 'Governments should implement comprehensive environmental regulations and enforcement mechanisms.', explanation: 'Use specific policy terminology.' },
+        { mistake: 'Countries should work together on climate change.', correction: 'International cooperation through multilateral environmental agreements is essential for addressing global challenges.', explanation: 'Use formal diplomatic and policy language.' },
+        { mistake: 'Companies should pay for pollution.', correction: 'The polluter pays principle should be enforced through carbon pricing mechanisms and environmental liability laws.', explanation: 'Reference specific policy concepts.' }
+      ],
+      miniPractice: [
+        { question: 'Carbon _____ mechanisms make polluters pay for emissions.', type: 'fill-blank' },
+        { question: 'Which principle holds companies responsible for environmental damage?', options: ['polluter pays', 'precautionary', 'sustainability', 'conservation'], type: 'multiple-choice' },
+        { question: 'Rewrite: "The government should make companies stop polluting."', type: 'rewrite' },
+        { question: 'Environmental impact _____ evaluate proposed development projects.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'pricing',
+        'polluter pays',
+        'Governments should implement stricter emission standards and enforce the polluter pays principle.',
+        'assessments'
+      ],
+      quickRecap: 'Key terms: "environmental regulations", "carbon pricing", "polluter pays principle", "environmental impact assessments", "multilateral agreements", "emission standards", "green taxation", "precautionary principle", "regulatory frameworks". Use these for policy discussions!',
+      collocations: [
+        'environmental regulations', 'carbon pricing', 'polluter pays principle', 'impact assessments',
+        'multilateral agreements', 'emission standards', 'green taxation', 'precautionary principle',
+        'regulatory frameworks', 'policy instruments', 'compliance monitoring', 'environmental governance'
+      ],
+      synonyms: [
+        { word: 'law', synonyms: ['regulation', 'legislation', 'statute', 'ordinance'] },
+        { word: 'rule', synonyms: ['regulation', 'standard', 'requirement', 'guideline'] },
+        { word: 'agreement', synonyms: ['accord', 'treaty', 'convention', 'protocol'] }
+      ],
+      speakingLines: [
+        'Effective environmental governance requires both strong regulations and robust enforcement mechanisms.',
+        'Carbon pricing mechanisms are essential for internalizing the environmental costs of pollution.',
+        'The precautionary principle should guide policy decisions when scientific uncertainty exists.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-environment-7',
+    title: 'Urban Environment & Smart Cities',
+    slug: 'urban-environment-smart-cities',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Environment',
+    description: 'Vocabulary for discussing urban environmental challenges and sustainable city solutions.',
+    is_premium: true,
+    is_published: true,
+    view_count: 580,
+    created_at: '2024-03-18T10:00:00Z',
+    updated_at: '2024-03-18T10:00:00Z',
+    content: {
+      title: 'Urban Environment & Smart Cities',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 urban environment terms',
+        'Discuss sustainable city planning',
+        'Use smart city vocabulary accurately'
+      ],
+      coreExplanation: `Urban environmental issues are increasingly relevant as more people live in cities. To achieve Band 7+, you need vocabulary that allows you to discuss urban challenges and solutions.
+
+This lesson covers urban planning, sustainable transportation, and smart city technologies. Understanding how cities can become more sustainable is essential for discussing modern environmental challenges.`,
+      examples: [
+        { sentence: 'Urban sprawl contributes to increased car dependency and emissions.', explanation: '"Urban sprawl" is uncontrolled city expansion.' },
+        { sentence: 'Public transportation reduces traffic congestion and air pollution.', explanation: '"Traffic congestion" is overcrowding of roads.' },
+        { sentence: 'Green spaces in cities improve air quality and mental health.', explanation: '"Green spaces" are parks and natural areas in urban settings.' },
+        { sentence: 'Smart cities use technology to optimize resource management.', explanation: '"Smart cities" use digital technology for efficiency.' },
+        { sentence: 'Sustainable urban planning prioritizes walkability and mixed-use development.', explanation: '"Walkability" is how easy it is to walk around; "mixed-use" combines residential and commercial.' },
+        { sentence: 'Urban heat islands cause cities to be warmer than surrounding areas.', explanation: '"Urban heat islands" are temperature increases due to urban development.' },
+        { sentence: 'Cycling infrastructure encourages sustainable commuting.', explanation: '"Cycling infrastructure" includes bike lanes and parking.' },
+        { sentence: 'Waste management systems are crucial for urban sustainability.', explanation: '"Waste management" is collection and disposal of waste.' },
+        { sentence: 'High-density housing reduces land consumption and commuting distances.', explanation: '"High-density housing" is compact residential development.' },
+        { sentence: 'Urban greening initiatives combat pollution and improve livability.', explanation: '"Urban greening" is adding plants and trees to cities.' },
+        { sentence: 'Pedestrian zones create car-free areas in city centers.', explanation: '"Pedestrian zones" are areas restricted to foot traffic.' },
+        { sentence: 'Sustainable drainage systems manage stormwater naturally.', explanation: '"Sustainable drainage" uses natural processes for water management.' },
+        { sentence: 'Transit-oriented development concentrates housing near public transport.', explanation: '"Transit-oriented development" is building around transport hubs.' },
+        { sentence: 'Air quality monitoring tracks pollution levels in real-time.', explanation: '"Air quality monitoring" measures pollutants in the atmosphere.' },
+        { sentence: 'Carbon-neutral buildings minimize environmental impact.', explanation: '"Carbon-neutral" means producing no net carbon emissions.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Cities have too many cars.', correction: 'Urban areas face significant traffic congestion and car dependency issues.', explanation: 'Use formal urban planning terminology.' },
+        { mistake: 'Cities should have more parks.', correction: 'Urban greening initiatives and green space development improve city livability and air quality.', explanation: 'Use specific planning terms.' },
+        { mistake: 'Public transport is good for the environment.', correction: 'Efficient public transportation systems reduce emissions and traffic congestion while improving urban mobility.', explanation: 'Be specific about benefits.' }
+      ],
+      miniPractice: [
+        { question: 'Urban _____ refers to uncontrolled city expansion.', type: 'fill-blank' },
+        { question: 'Which term describes cities that use technology for efficiency?', options: ['smart cities', 'green cities', 'eco cities', 'digital cities'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Cities should have more buses and trains."', type: 'rewrite' },
+        { question: 'Urban heat _____ cause cities to be warmer than rural areas.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'sprawl',
+        'smart cities',
+        'Cities should invest in public transportation infrastructure to reduce car dependency and emissions.',
+        'islands'
+      ],
+      quickRecap: 'Key terms: "urban sprawl", "traffic congestion", "green spaces", "smart cities", "walkability", "urban heat islands", "cycling infrastructure", "high-density housing", "urban greening", "transit-oriented development". Use these for urban environment discussions!',
+      collocations: [
+        'urban sprawl', 'traffic congestion', 'green spaces', 'smart cities',
+        'sustainable urban planning', 'urban heat islands', 'cycling infrastructure', 'waste management',
+        'high-density housing', 'urban greening', 'pedestrian zones', 'transit-oriented development'
+      ],
+      synonyms: [
+        { word: 'city', synonyms: ['urban area', 'metropolitan area', 'municipality', 'urban center'] },
+        { word: 'traffic', synonyms: ['congestion', 'gridlock', 'vehicle flow', 'road traffic'] },
+        { word: 'park', synonyms: ['green space', 'public garden', 'urban forest', 'recreational area'] }
+      ],
+      speakingLines: [
+        'Smart city technologies can significantly improve urban sustainability and quality of life.',
+        'Transit-oriented development is essential for reducing car dependency in growing cities.',
+        'Urban greening initiatives provide multiple benefits including improved air quality and mental health.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-environment-8',
+    title: 'Water Resources & Ocean Conservation',
+    slug: 'water-resources-ocean-conservation',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Environment',
+    description: 'Advanced vocabulary for discussing water scarcity, ocean health, and marine conservation.',
+    is_premium: true,
+    is_published: true,
+    view_count: 620,
+    created_at: '2024-03-22T10:00:00Z',
+    updated_at: '2024-03-22T10:00:00Z',
+    content: {
+      title: 'Water Resources & Ocean Conservation',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 water and ocean terms',
+        'Discuss water scarcity and management',
+        'Use marine conservation vocabulary'
+      ],
+      coreExplanation: `Water-related environmental issues are increasingly important as climate change affects water availability. To achieve Band 8+, you need vocabulary that allows you to discuss both freshwater and marine issues.
+
+This lesson covers water scarcity, ocean health, and conservation strategies. Understanding water issues is essential as they connect to climate change, food security, and biodiversity.`,
+      examples: [
+        { sentence: 'Water scarcity affects billions of people worldwide.', explanation: '"Water scarcity" is insufficient water to meet demands.' },
+        { sentence: 'Desalination plants convert seawater into freshwater.', explanation: '"Desalination" is removing salt from seawater.' },
+        { sentence: 'Overfishing has depleted fish stocks in many regions.', explanation: '"Overfishing" is catching fish faster than they reproduce.' },
+        { sentence: 'Coral bleaching occurs when ocean temperatures rise.', explanation: '"Coral bleaching" is corals expelling algae due to stress.' },
+        { sentence: 'Watershed management protects freshwater sources.', explanation: '"Watershed" is an area draining into a water body.' },
+        { sentence: 'Marine debris accumulates in ocean gyres.', explanation: '"Marine debris" is human-made waste in oceans; "gyres" are circular currents.' },
+        { sentence: 'Aquifer depletion threatens groundwater supplies.', explanation: '"Aquifer" is underground water-bearing rock; "depletion" is using up.' },
+        { sentence: 'Sustainable fisheries management ensures long-term fish populations.', explanation: '"Sustainable fisheries" balance fishing with conservation.' },
+        { sentence: 'Water stress occurs when demand exceeds available supply.', explanation: '"Water stress" is insufficient water for all uses.' },
+        { sentence: 'Ocean dead zones result from nutrient pollution.', explanation: '"Dead zones" are areas with too little oxygen for marine life.' },
+        { sentence: 'Rainwater harvesting captures precipitation for later use.', explanation: '"Rainwater harvesting" is collecting and storing rainwater.' },
+        { sentence: 'Illegal, unreported, and unregulated fishing threatens marine ecosystems.', explanation: '"IUU fishing" is fishing that violates laws or regulations.' },
+        { sentence: 'Water recycling and reuse reduce freshwater consumption.', explanation: '"Water recycling" is treating wastewater for reuse.' },
+        { sentence: 'Mangrove forests protect coastlines and support marine biodiversity.', explanation: '"Mangroves" are coastal trees with important ecological functions.' },
+        { sentence: 'Transboundary water management requires international cooperation.', explanation: '"Transboundary" means crossing national borders.' }
+      ],
+      commonMistakes: [
+        { mistake: 'There is not enough water.', correction: 'Water scarcity and stress affect regions with insufficient freshwater resources.', explanation: 'Use specific water management terminology.' },
+        { mistake: 'The ocean is polluted.', correction: 'Marine pollution, including plastic debris and nutrient runoff, threatens ocean ecosystems.', explanation: 'Be specific about pollution types.' },
+        { mistake: 'We are catching too many fish.', correction: 'Overfishing has depleted fish stocks, threatening marine biodiversity and food security.', explanation: 'Use formal fisheries terminology.' }
+      ],
+      miniPractice: [
+        { question: 'Water _____ occurs when demand exceeds available supply.', type: 'fill-blank' },
+        { question: 'Which process converts seawater into freshwater?', options: ['desalination', 'purification', 'filtration', 'distillation'], type: 'multiple-choice' },
+        { question: 'Rewrite: "The ocean is getting too warm for coral."', type: 'rewrite' },
+        { question: 'Coral _____ occurs when ocean temperatures rise.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'scarcity / stress',
+        'desalination',
+        'Rising ocean temperatures are causing widespread coral bleaching events.',
+        'bleaching'
+      ],
+      quickRecap: 'Key terms: "water scarcity", "desalination", "overfishing", "coral bleaching", "watershed management", "marine debris", "aquifer depletion", "sustainable fisheries", "ocean dead zones", "mangrove forests". Use these for water and ocean discussions!',
+      collocations: [
+        'water scarcity', 'desalination plants', 'overfishing', 'coral bleaching',
+        'watershed management', 'marine debris', 'aquifer depletion', 'sustainable fisheries',
+        'water stress', 'ocean dead zones', 'rainwater harvesting', 'mangrove forests'
+      ],
+      synonyms: [
+        { word: 'ocean', synonyms: ['sea', 'marine environment', 'maritime', 'oceanic'] },
+        { word: 'water', synonyms: ['freshwater', 'aquatic resources', 'water resources', 'hydro'] },
+        { word: 'fish', synonyms: ['marine life', 'fish stocks', 'fisheries', 'aquatic species'] }
+      ],
+      speakingLines: [
+        'Water scarcity is becoming a critical issue as climate change affects precipitation patterns.',
+        'Sustainable fisheries management is essential for maintaining marine biodiversity and food security.',
+        'Coral bleaching events are increasing in frequency and severity due to rising ocean temperatures.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 3: Technology & Innovation (7 lessons)
+  // ============================================
+  {
+    id: 'vocab-technology-2',
+    title: 'Artificial Intelligence & Automation',
+    slug: 'artificial-intelligence-automation',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Technology',
+    description: 'Advanced vocabulary for discussing AI, machine learning, and automation in IELTS.',
+    is_premium: true,
+    is_published: true,
+    view_count: 1050,
+    created_at: '2024-03-25T10:00:00Z',
+    updated_at: '2024-03-25T10:00:00Z',
+    content: {
+      title: 'Artificial Intelligence & Automation',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 AI and automation terms',
+        'Discuss technological impacts on society',
+        'Use technical vocabulary accurately'
+      ],
+      coreExplanation: `AI and automation are increasingly common IELTS topics. To achieve Band 8+, you need vocabulary that allows you to discuss both the benefits and concerns surrounding these technologies.
+
+This lesson covers artificial intelligence, machine learning, and automation. Understanding these concepts helps you discuss technological change, employment, and ethical considerations.`,
+      examples: [
+        { sentence: 'Artificial intelligence systems can process vast amounts of data.', explanation: '"Artificial intelligence" (AI) is computer systems performing human-like tasks.' },
+        { sentence: 'Machine learning algorithms improve through experience.', explanation: '"Machine learning" is AI that learns from data without explicit programming.' },
+        { sentence: 'Automation threatens to displace workers in routine occupations.', explanation: '"Automation" is using technology to perform tasks without human intervention.' },
+        { sentence: 'Deep learning enables advanced pattern recognition.', explanation: '"Deep learning" is a type of machine learning using neural networks.' },
+        { sentence: 'Autonomous vehicles could revolutionize transportation.', explanation: '"Autonomous" means self-governing; self-driving vehicles.' },
+        { sentence: 'Natural language processing allows computers to understand human speech.', explanation: '"Natural language processing" (NLP) is AI understanding human language.' },
+        { sentence: 'Algorithmic bias can perpetuate discrimination.', explanation: '"Algorithmic bias" is unfair outcomes from AI systems.' },
+        { sentence: 'Robotics is transforming manufacturing and logistics.', explanation: '"Robotics" is the design and use of robots.' },
+        { sentence: 'Predictive analytics uses data to forecast future trends.', explanation: '"Predictive analytics" is using data to make predictions.' },
+        { sentence: 'The digital divide separates those with and without technology access.', explanation: '"Digital divide" is inequality in technology access.' },
+        { sentence: 'Technological unemployment occurs when automation replaces human workers.', explanation: '"Technological unemployment" is job loss due to technology.' },
+        { sentence: 'Human-machine collaboration combines human and AI capabilities.', explanation: '"Human-machine collaboration" is people and AI working together.' },
+        { sentence: 'Data privacy concerns arise from AI systems collecting personal information.', explanation: '"Data privacy" is protecting personal information.' },
+        { sentence: 'Ethical AI development requires addressing bias and transparency.', explanation: '"Ethical AI" is developing AI responsibly.' },
+        { sentence: 'The Fourth Industrial Revolution is characterized by digital transformation.', explanation: '"Fourth Industrial Revolution" is the current era of technological change.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Robots will take all jobs.', correction: 'Automation may displace workers in routine occupations while creating new roles requiring different skills.', explanation: 'Avoid oversimplification; discuss nuanced impacts.' },
+        { mistake: 'AI is dangerous.', correction: 'AI development raises important ethical considerations regarding bias, privacy, and accountability.', explanation: 'Discuss specific concerns rather than general fear.' },
+        { mistake: 'Computers are getting smarter.', correction: 'Advances in machine learning and artificial intelligence are enabling increasingly sophisticated computational capabilities.', explanation: 'Use technical terminology accurately.' }
+      ],
+      miniPractice: [
+        { question: 'Machine _____ algorithms improve through experience with data.', type: 'fill-blank' },
+        { question: 'Which term describes AI systems that can drive without human input?', options: ['autonomous vehicles', 'smart cars', 'robot cars', 'AI cars'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Robots are taking people\'s jobs."', type: 'rewrite' },
+        { question: 'Algorithmic _____ can lead to unfair outcomes in AI systems.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'learning',
+        'autonomous vehicles',
+        'Automation is displacing workers in routine occupations, leading to technological unemployment.',
+        'bias'
+      ],
+      quickRecap: 'Key terms: "artificial intelligence", "machine learning", "automation", "deep learning", "autonomous", "natural language processing", "algorithmic bias", "technological unemployment", "human-machine collaboration", "ethical AI". Use these for technology discussions!',
+      collocations: [
+        'artificial intelligence', 'machine learning', 'deep learning', 'autonomous vehicles',
+        'natural language processing', 'algorithmic bias', 'predictive analytics', 'digital divide',
+        'technological unemployment', 'human-machine collaboration', 'data privacy', 'ethical AI'
+      ],
+      synonyms: [
+        { word: 'robot', synonyms: ['automated system', 'machine', 'bot', 'automaton'] },
+        { word: 'smart', synonyms: ['intelligent', 'automated', 'AI-powered', 'algorithmic'] },
+        { word: 'replace', synonyms: ['displace', 'substitute', 'automate', 'supersede'] }
+      ],
+      speakingLines: [
+        'Artificial intelligence is transforming industries, but we must address algorithmic bias and ethical concerns.',
+        'Automation may displace some workers, but it also creates opportunities for human-machine collaboration.',
+        'The digital divide must be addressed to ensure equitable access to technological benefits.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-technology-3',
+    title: 'Digital Communication & Social Media',
+    slug: 'digital-communication-social-media',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Technology',
+    description: 'Vocabulary for discussing social media, online communication, and digital culture.',
+    is_premium: true,
+    is_published: true,
+    view_count: 980,
+    created_at: '2024-03-28T10:00:00Z',
+    updated_at: '2024-03-28T10:00:00Z',
+    content: {
+      title: 'Digital Communication & Social Media',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 digital communication terms',
+        'Discuss social media impacts',
+        'Use online culture vocabulary'
+      ],
+      coreExplanation: `Social media and digital communication are common IELTS topics. To achieve Band 7+, you need vocabulary that allows you to discuss both benefits and drawbacks of online communication.
+
+This lesson covers social media platforms, digital communication, and online culture. Understanding these concepts helps you discuss how technology affects relationships, information, and society.`,
+      examples: [
+        { sentence: 'Social media platforms have transformed how people communicate.', explanation: '"Social media platforms" are websites/apps for social networking.' },
+        { sentence: 'Digital literacy is essential for navigating online information.', explanation: '"Digital literacy" is the ability to use digital technology effectively.' },
+        { sentence: 'Misinformation spreads rapidly through social networks.', explanation: '"Misinformation" is false information spread unintentionally.' },
+        { sentence: 'Online communities connect people with shared interests.', explanation: '"Online communities" are groups interacting through the internet.' },
+        { sentence: 'Cyberbullying has become a serious concern for young people.', explanation: '"Cyberbullying" is bullying through digital devices.' },
+        { sentence: 'Viral content can reach millions of users within hours.', explanation: '"Viral" means spreading rapidly online.' },
+        { sentence: 'Echo chambers reinforce existing beliefs and limit exposure to diverse views.', explanation: '"Echo chambers" are environments where beliefs are amplified.' },
+        { sentence: 'Influencer marketing has become a major advertising strategy.', explanation: '"Influencer marketing" uses social media personalities to promote products.' },
+        { sentence: 'Screen time affects attention spans and sleep patterns.', explanation: '"Screen time" is time spent using digital devices.' },
+        { sentence: 'Digital detox involves taking breaks from technology.', explanation: '"Digital detox" is abstaining from electronic devices.' },
+        { sentence: 'User-generated content has democratized media production.', explanation: '"User-generated content" is content created by users rather than professionals.' },
+        { sentence: 'Online privacy is increasingly difficult to maintain.', explanation: '"Online privacy" is protecting personal information on the internet.' },
+        { sentence: 'Social media addiction affects mental health and productivity.', explanation: '"Social media addiction" is compulsive use of social platforms.' },
+        { sentence: 'Fake news undermines trust in traditional media.', explanation: '"Fake news" is deliberately false information presented as news.' },
+        { sentence: 'Digital footprints are permanent records of online activity.', explanation: '"Digital footprint" is the trail of data left by online activity.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Social media is bad for people.', correction: 'Social media has both benefits and drawbacks, affecting communication, mental health, and information access.', explanation: 'Present balanced views rather than absolute statements.' },
+        { mistake: 'Young people spend too much time on their phones.', correction: 'Excessive screen time and social media use can affect attention spans and mental wellbeing.', explanation: 'Use specific terminology and avoid generalizations.' },
+        { mistake: 'Fake news is a big problem.', correction: 'The spread of misinformation and disinformation through social media undermines public discourse.', explanation: 'Use precise terms and explain the impact.' }
+      ],
+      miniPractice: [
+        { question: 'Digital _____ is the ability to use technology effectively.', type: 'fill-blank' },
+        { question: 'Which term describes environments that reinforce existing beliefs?', options: ['echo chambers', 'filter bubbles', 'information silos', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "People believe fake things they see online."', type: 'rewrite' },
+        { question: '_____ content can reach millions of users within hours.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'literacy',
+        'all of the above',
+        'Misinformation spreads rapidly through social media, influencing public opinion.',
+        'Viral'
+      ],
+      quickRecap: 'Key terms: "social media platforms", "digital literacy", "misinformation", "online communities", "cyberbullying", "viral content", "echo chambers", "influencer marketing", "screen time", "digital footprint". Use these for digital communication discussions!',
+      collocations: [
+        'social media platforms', 'digital literacy', 'online communities', 'cyberbullying',
+        'viral content', 'echo chambers', 'influencer marketing', 'screen time',
+        'digital detox', 'user-generated content', 'online privacy', 'fake news'
+      ],
+      synonyms: [
+        { word: 'online', synonyms: ['digital', 'virtual', 'internet-based', 'web-based'] },
+        { word: 'share', synonyms: ['post', 'distribute', 'disseminate', 'circulate'] },
+        { word: 'connect', synonyms: ['network', 'interact', 'communicate', 'engage'] }
+      ],
+      speakingLines: [
+        'Social media has transformed communication, but echo chambers can limit exposure to diverse perspectives.',
+        'Digital literacy is essential for distinguishing reliable information from misinformation.',
+        'While social media connects people globally, excessive screen time can negatively affect mental health.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-technology-4',
+    title: 'Cybersecurity & Data Protection',
+    slug: 'cybersecurity-data-protection',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Technology',
+    description: 'Advanced vocabulary for discussing online security, privacy, and data protection.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2024-04-01T10:00:00Z',
+    updated_at: '2024-04-01T10:00:00Z',
+    content: {
+      title: 'Cybersecurity & Data Protection',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 cybersecurity terms',
+        'Discuss data privacy and protection',
+        'Use security vocabulary accurately'
+      ],
+      coreExplanation: `Cybersecurity and data protection are increasingly important topics as digital technology expands. To achieve Band 8+, you need vocabulary that allows you to discuss online threats and protective measures.
+
+This lesson covers cyber threats, data protection, and privacy regulations. Understanding these concepts helps you discuss the challenges of maintaining security in the digital age.`,
+      examples: [
+        { sentence: 'Cybersecurity measures protect systems from digital attacks.', explanation: '"Cybersecurity" is protection of computer systems from threats.' },
+        { sentence: 'Data breaches expose sensitive personal information.', explanation: '"Data breach" is unauthorized access to confidential data.' },
+        { sentence: 'Encryption protects data by converting it into unreadable code.', explanation: '"Encryption" is encoding information for security.' },
+        { sentence: 'Phishing attacks trick users into revealing personal information.', explanation: '"Phishing" is fraudulent attempts to obtain sensitive data.' },
+        { sentence: 'Two-factor authentication adds an extra layer of security.', explanation: '"Two-factor authentication" requires two verification methods.' },
+        { sentence: 'Malware includes viruses, ransomware, and spyware.', explanation: '"Malware" is malicious software designed to cause harm.' },
+        { sentence: 'Privacy regulations such as GDPR protect personal data.', explanation: '"GDPR" is the EU\'s General Data Protection Regulation.' },
+        { sentence: 'Identity theft occurs when criminals use stolen personal information.', explanation: '"Identity theft" is fraudulent use of someone\'s identity.' },
+        { sentence: 'Firewalls monitor and control network traffic.', explanation: '"Firewall" is a security system controlling network access.' },
+        { sentence: 'Cyber attacks can target critical infrastructure.', explanation: '"Critical infrastructure" includes essential systems like power grids.' },
+        { sentence: 'Data sovereignty concerns where data is stored and processed.', explanation: '"Data sovereignty" is the concept that data is subject to local laws.' },
+        { sentence: 'Biometric authentication uses physical characteristics for verification.', explanation: '"Biometric" means using biological data like fingerprints.' },
+        { sentence: 'Ransomware encrypts data and demands payment for release.', explanation: '"Ransomware" is malware that holds data hostage.' },
+        { sentence: 'Vulnerability assessments identify security weaknesses.', explanation: '"Vulnerability assessment" is evaluating security gaps.' },
+        { sentence: 'Cyber hygiene involves practices to maintain online security.', explanation: '"Cyber hygiene" is routine security practices.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Hackers steal information.', correction: 'Cyber criminals exploit vulnerabilities to conduct data breaches and identity theft.', explanation: 'Use specific cybersecurity terminology.' },
+        { mistake: 'We need stronger passwords.', correction: 'Robust authentication measures, including strong passwords and two-factor authentication, enhance security.', explanation: 'Discuss comprehensive security measures.' },
+        { mistake: 'The internet is not safe.', correction: 'Online activities carry inherent risks that can be mitigated through proper cybersecurity practices.', explanation: 'Discuss specific risks and solutions.' }
+      ],
+      miniPractice: [
+        { question: 'Data _____ occur when unauthorized parties access confidential information.', type: 'fill-blank' },
+        { question: 'Which term describes malicious software?', options: ['malware', 'hardware', 'software', 'firmware'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Hackers can steal your information online."', type: 'rewrite' },
+        { question: '_____ attacks trick users into revealing personal information.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'breaches',
+        'malware',
+        'Cyber criminals can exploit vulnerabilities to access personal data through various attack vectors.',
+        'Phishing'
+      ],
+      quickRecap: 'Key terms: "cybersecurity", "data breach", "encryption", "phishing", "two-factor authentication", "malware", "privacy regulations", "identity theft", "ransomware", "cyber hygiene". Use these for security discussions!',
+      collocations: [
+        'cybersecurity measures', 'data breach', 'encryption', 'phishing attacks',
+        'two-factor authentication', 'malware', 'privacy regulations', 'identity theft',
+        'critical infrastructure', 'data sovereignty', 'biometric authentication', 'ransomware'
+      ],
+      synonyms: [
+        { word: 'hack', synonyms: ['breach', 'compromise', 'infiltrate', 'exploit'] },
+        { word: 'protect', synonyms: ['secure', 'safeguard', 'defend', 'shield'] },
+        { word: 'steal', synonyms: ['exfiltrate', 'compromise', 'access illegally', 'extract'] }
+      ],
+      speakingLines: [
+        'Cybersecurity is essential as data breaches can expose sensitive personal and financial information.',
+        'Privacy regulations like GDPR represent important steps toward protecting personal data.',
+        'Two-factor authentication and encryption are fundamental cybersecurity measures everyone should adopt.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-technology-5',
+    title: 'Biotechnology & Medical Innovation',
+    slug: 'biotechnology-medical-innovation',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Technology',
+    description: 'Advanced vocabulary for discussing genetic engineering, medical technology, and bioethics.',
+    is_premium: true,
+    is_published: true,
+    view_count: 680,
+    created_at: '2024-04-05T10:00:00Z',
+    updated_at: '2024-04-05T10:00:00Z',
+    content: {
+      title: 'Biotechnology & Medical Innovation',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 biotechnology terms',
+        'Discuss genetic engineering and ethics',
+        'Use medical technology vocabulary'
+      ],
+      coreExplanation: `Biotechnology and medical innovation are important IELTS topics that often involve ethical considerations. To achieve Band 8+, you need vocabulary that allows you to discuss scientific advances and their implications.
+
+This lesson covers genetic engineering, medical technologies, and bioethical debates. Understanding these concepts helps you discuss the benefits and concerns surrounding biological sciences.`,
+      examples: [
+        { sentence: 'Genetic engineering allows modification of organisms\' DNA.', explanation: '"Genetic engineering" is directly manipulating an organism\'s genes.' },
+        { sentence: 'CRISPR technology enables precise gene editing.', explanation: '"CRISPR" is a revolutionary gene-editing tool.' },
+        { sentence: 'Stem cell research offers potential treatments for diseases.', explanation: '"Stem cells" can develop into different cell types.' },
+        { sentence: 'Personalized medicine tailors treatments to individual genetics.', explanation: '"Personalized medicine" is customized treatment based on genetic profile.' },
+        { sentence: 'Bioethics examines moral issues in biological sciences.', explanation: '"Bioethics" is the study of ethical issues in biology and medicine.' },
+        { sentence: 'Genetically modified organisms (GMOs) are controversial in agriculture.', explanation: '"GMOs" are organisms with altered genetic material.' },
+        { sentence: 'Clinical trials test the safety and efficacy of new treatments.', explanation: '"Clinical trials" are research studies testing medical interventions.' },
+        { sentence: 'Gene therapy aims to treat diseases by modifying genes.', explanation: '"Gene therapy" is treating disease by altering genetic material.' },
+        { sentence: 'Cloning raises ethical concerns about genetic manipulation.', explanation: '"Cloning" is creating genetically identical copies.' },
+        { sentence: 'Pharmaceutical research develops new drugs and treatments.', explanation: '"Pharmaceutical" relates to medicinal drugs.' },
+        { sentence: 'Telemedicine enables remote medical consultations.', explanation: '"Telemedicine" is healthcare delivered remotely via technology.' },
+        { sentence: 'Organ transplantation saves lives but faces donor shortages.', explanation: '"Organ transplantation" is surgically replacing failing organs.' },
+        { sentence: 'Vaccine development has accelerated through new technologies.', explanation: '"Vaccine development" is creating immunizations against diseases.' },
+        { sentence: 'Biomedical engineering combines engineering with medical sciences.', explanation: '"Biomedical engineering" applies engineering to healthcare.' },
+        { sentence: 'Ethical oversight ensures responsible scientific research.', explanation: '"Ethical oversight" is monitoring research for ethical compliance.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Genetic engineering is dangerous.', correction: 'Genetic engineering raises important bioethical questions regarding safety, consent, and unintended consequences.', explanation: 'Discuss specific concerns rather than general fear.' },
+        { mistake: 'GMO food is bad for health.', correction: 'The safety and environmental impact of genetically modified organisms remain subjects of scientific debate.', explanation: 'Present balanced, evidence-based views.' },
+        { mistake: 'Scientists should not play God.', correction: 'Biotechnology advances require careful ethical oversight to balance potential benefits with moral considerations.', explanation: 'Use academic language rather than emotional phrases.' }
+      ],
+      miniPractice: [
+        { question: 'CRISPR technology enables precise gene _____.', type: 'fill-blank' },
+        { question: 'Which field examines moral issues in biological sciences?', options: ['bioethics', 'biology', 'biochemistry', 'biophysics'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Changing genes is wrong."', type: 'rewrite' },
+        { question: '_____ medicine tailors treatments to individual genetic profiles.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'editing',
+        'bioethics',
+        'Genetic modification raises complex bioethical questions that require careful consideration.',
+        'Personalized'
+      ],
+      quickRecap: 'Key terms: "genetic engineering", "CRISPR", "stem cell research", "personalized medicine", "bioethics", "GMOs", "clinical trials", "gene therapy", "cloning", "telemedicine". Use these for biotechnology discussions!',
+      collocations: [
+        'genetic engineering', 'gene editing', 'stem cell research', 'personalized medicine',
+        'bioethics', 'genetically modified', 'clinical trials', 'gene therapy',
+        'pharmaceutical research', 'telemedicine', 'organ transplantation', 'ethical oversight'
+      ],
+      synonyms: [
+        { word: 'modify', synonyms: ['alter', 'engineer', 'manipulate', 'edit'] },
+        { word: 'treatment', synonyms: ['therapy', 'intervention', 'cure', 'remedy'] },
+        { word: 'research', synonyms: ['study', 'investigation', 'experimentation', 'inquiry'] }
+      ],
+      speakingLines: [
+        'Genetic engineering offers tremendous potential but requires robust bioethical oversight.',
+        'Personalized medicine represents a paradigm shift from one-size-fits-all treatments.',
+        'The rapid development of CRISPR technology has outpaced the ethical frameworks needed to govern its use.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-technology-6',
+    title: 'Space Technology & Exploration',
+    slug: 'space-technology-exploration',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Technology',
+    description: 'Vocabulary for discussing space exploration, satellites, and astronomical discoveries.',
+    is_premium: true,
+    is_published: true,
+    view_count: 590,
+    created_at: '2024-04-08T10:00:00Z',
+    updated_at: '2024-04-08T10:00:00Z',
+    content: {
+      title: 'Space Technology & Exploration',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 space technology terms',
+        'Discuss space exploration benefits',
+        'Use astronomical vocabulary'
+      ],
+      coreExplanation: `Space exploration topics occasionally appear in IELTS, often in discussions about scientific priorities and government spending. To achieve Band 7+, you need vocabulary that allows you to discuss space technology and its benefits.
+
+This lesson covers space exploration, satellite technology, and astronomical discoveries. Understanding these concepts helps you discuss the value of space research and its practical applications.`,
+      examples: [
+        { sentence: 'Space exploration has yielded numerous technological spin-offs.', explanation: '"Spin-offs" are secondary benefits from research.' },
+        { sentence: 'Satellites enable global communication and navigation systems.', explanation: '"Satellites" are objects orbiting Earth for various purposes.' },
+        { sentence: 'The International Space Station facilitates scientific research.', explanation: '"International Space Station" (ISS) is a habitable satellite.' },
+        { sentence: 'Mars colonization is a long-term goal of space agencies.', explanation: '"Colonization" is establishing permanent settlements.' },
+        { sentence: 'Rocket technology has advanced significantly in recent decades.', explanation: '"Rocket technology" is propulsion systems for space travel.' },
+        { sentence: 'Space debris poses risks to operational satellites.', explanation: '"Space debris" is defunct human-made objects in orbit.' },
+        { sentence: 'Astronomical observations reveal the universe\'s origins.', explanation: '"Astronomical" relates to the study of celestial objects.' },
+        { sentence: 'Space tourism is becoming commercially viable.', explanation: '"Space tourism" is recreational space travel.' },
+        { sentence: 'Reusable rockets have reduced launch costs dramatically.', explanation: '"Reusable rockets" can be used for multiple missions.' },
+        { sentence: 'Extraterrestrial life remains a subject of scientific inquiry.', explanation: '"Extraterrestrial" means originating outside Earth.' },
+        { sentence: 'GPS technology relies on satellite networks.', explanation: '"GPS" (Global Positioning System) uses satellites for location.' },
+        { sentence: 'Space agencies collaborate on international missions.', explanation: '"Space agencies" are organizations conducting space programs.' },
+        { sentence: 'Asteroid mining could provide valuable resources.', explanation: '"Asteroid mining" is extracting materials from asteroids.' },
+        { sentence: 'Telescopes detect electromagnetic radiation from distant objects.', explanation: '"Telescopes" are instruments for observing distant objects.' },
+        { sentence: 'Microgravity research enables unique scientific experiments.', explanation: '"Microgravity" is very weak gravity, as in orbit.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Space exploration wastes money.', correction: 'Space exploration generates technological innovations and scientific knowledge with practical applications.', explanation: 'Discuss specific benefits rather than dismissing the field.' },
+        { mistake: 'We should fix Earth before going to space.', correction: 'Space research and addressing terrestrial challenges are not mutually exclusive; both can be pursued simultaneously.', explanation: 'Avoid false dichotomies.' },
+        { mistake: 'Space travel is only for rich countries.', correction: 'International collaboration in space exploration enables participation by nations with varying resources.', explanation: 'Acknowledge international cooperation.' }
+      ],
+      miniPractice: [
+        { question: 'Space exploration has yielded numerous technological _____.', type: 'fill-blank' },
+        { question: 'Which term describes defunct objects orbiting Earth?', options: ['space debris', 'satellites', 'asteroids', 'meteors'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Going to space costs too much money."', type: 'rewrite' },
+        { question: '_____ rockets can be used for multiple missions.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'spin-offs',
+        'space debris',
+        'Space exploration requires significant investment but generates valuable technological innovations and scientific knowledge.',
+        'Reusable'
+      ],
+      quickRecap: 'Key terms: "space exploration", "satellites", "International Space Station", "colonization", "space debris", "astronomical", "space tourism", "reusable rockets", "extraterrestrial", "microgravity". Use these for space discussions!',
+      collocations: [
+        'space exploration', 'satellite technology', 'International Space Station', 'Mars colonization',
+        'rocket technology', 'space debris', 'astronomical observations', 'space tourism',
+        'reusable rockets', 'extraterrestrial life', 'space agencies', 'asteroid mining'
+      ],
+      synonyms: [
+        { word: 'space', synonyms: ['outer space', 'cosmos', 'universe', 'celestial'] },
+        { word: 'explore', synonyms: ['investigate', 'discover', 'research', 'probe'] },
+        { word: 'launch', synonyms: ['deploy', 'send', 'propel', 'blast off'] }
+      ],
+      speakingLines: [
+        'Space exploration has generated numerous technological spin-offs that benefit everyday life.',
+        'International collaboration on space missions demonstrates the potential for global scientific cooperation.',
+        'Reusable rocket technology has dramatically reduced the cost of space access.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-technology-7',
+    title: 'Digital Economy & E-commerce',
+    slug: 'digital-economy-ecommerce',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Technology',
+    description: 'Vocabulary for discussing online business, digital payments, and the gig economy.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2024-04-12T10:00:00Z',
+    updated_at: '2024-04-12T10:00:00Z',
+    content: {
+      title: 'Digital Economy & E-commerce',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 digital economy terms',
+        'Discuss e-commerce and online business',
+        'Use gig economy vocabulary'
+      ],
+      coreExplanation: `The digital economy is transforming how we work and do business. To achieve Band 7+, you need vocabulary that allows you to discuss online commerce, digital payments, and new work arrangements.
+
+This lesson covers e-commerce, digital payments, and the gig economy. Understanding these concepts helps you discuss how technology is changing economic activities and employment.`,
+      examples: [
+        { sentence: 'E-commerce has transformed retail and consumer behavior.', explanation: '"E-commerce" is buying and selling online.' },
+        { sentence: 'Digital payments are replacing cash transactions.', explanation: '"Digital payments" are electronic money transfers.' },
+        { sentence: 'The gig economy offers flexibility but lacks job security.', explanation: '"Gig economy" is short-term, freelance work arrangements.' },
+        { sentence: 'Platform businesses connect buyers and sellers digitally.', explanation: '"Platform businesses" are companies like Uber and Airbnb.' },
+        { sentence: 'Cryptocurrency operates independently of central banks.', explanation: '"Cryptocurrency" is digital currency using cryptography.' },
+        { sentence: 'Online marketplaces aggregate products from multiple sellers.', explanation: '"Online marketplaces" are platforms like Amazon and eBay.' },
+        { sentence: 'Fintech innovations are disrupting traditional banking.', explanation: '"Fintech" is technology applied to financial services.' },
+        { sentence: 'Remote work has become normalized since the pandemic.', explanation: '"Remote work" is working outside traditional offices.' },
+        { sentence: 'Digital transformation is essential for business competitiveness.', explanation: '"Digital transformation" is integrating technology into business.' },
+        { sentence: 'Subscription models provide recurring revenue streams.', explanation: '"Subscription models" charge regular fees for ongoing access.' },
+        { sentence: 'Contactless payments have accelerated during the pandemic.', explanation: '"Contactless payments" don\'t require physical contact.' },
+        { sentence: 'Freelance workers lack traditional employment benefits.', explanation: '"Freelance" is self-employed, working for multiple clients.' },
+        { sentence: 'Data monetization generates revenue from user information.', explanation: '"Data monetization" is making money from data.' },
+        { sentence: 'Supply chain digitization improves efficiency and transparency.', explanation: '"Supply chain digitization" is using technology in logistics.' },
+        { sentence: 'The sharing economy enables peer-to-peer resource sharing.', explanation: '"Sharing economy" is economic systems based on sharing resources.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Online shopping is convenient.', correction: 'E-commerce offers convenience and accessibility while transforming traditional retail models.', explanation: 'Use specific e-commerce terminology.' },
+        { mistake: 'Gig workers have freedom.', correction: 'The gig economy offers flexibility but raises concerns about job security and worker protections.', explanation: 'Present balanced views on gig work.' },
+        { mistake: 'Everyone uses digital money now.', correction: 'Digital payment adoption varies significantly across demographics and regions.', explanation: 'Avoid overgeneralizations.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ economy involves short-term, freelance work arrangements.', type: 'fill-blank' },
+        { question: 'Which term describes technology applied to financial services?', options: ['fintech', 'biotech', 'edtech', 'medtech'], type: 'multiple-choice' },
+        { question: 'Rewrite: "People buy things online now."', type: 'rewrite' },
+        { question: 'Digital _____ is integrating technology into all business areas.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'gig',
+        'fintech',
+        'E-commerce has transformed consumer behavior, with online retail experiencing significant growth.',
+        'transformation'
+      ],
+      quickRecap: 'Key terms: "e-commerce", "digital payments", "gig economy", "platform businesses", "cryptocurrency", "fintech", "remote work", "digital transformation", "subscription models", "sharing economy". Use these for digital economy discussions!',
+      collocations: [
+        'e-commerce', 'digital payments', 'gig economy', 'platform businesses',
+        'cryptocurrency', 'online marketplaces', 'fintech', 'remote work',
+        'digital transformation', 'subscription models', 'contactless payments', 'sharing economy'
+      ],
+      synonyms: [
+        { word: 'online', synonyms: ['digital', 'electronic', 'virtual', 'internet-based'] },
+        { word: 'buy', synonyms: ['purchase', 'acquire', 'procure', 'order'] },
+        { word: 'work', synonyms: ['employment', 'labor', 'occupation', 'job'] }
+      ],
+      speakingLines: [
+        'E-commerce has fundamentally transformed retail, offering convenience while challenging traditional stores.',
+        'The gig economy provides flexibility but raises important questions about worker protections.',
+        'Digital transformation is no longer optional for businesses seeking to remain competitive.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-technology-8',
+    title: 'Internet of Things & Smart Devices',
+    slug: 'internet-of-things-smart-devices',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Technology',
+    description: 'Vocabulary for discussing connected devices, smart homes, and IoT applications.',
+    is_premium: true,
+    is_published: true,
+    view_count: 620,
+    created_at: '2024-04-15T10:00:00Z',
+    updated_at: '2024-04-15T10:00:00Z',
+    content: {
+      title: 'Internet of Things & Smart Devices',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 IoT and smart device terms',
+        'Discuss connected technology benefits and risks',
+        'Use smart home vocabulary'
+      ],
+      coreExplanation: `The Internet of Things (IoT) is connecting everyday objects to the internet. To achieve Band 7+, you need vocabulary that allows you to discuss smart devices, their benefits, and potential concerns.
+
+This lesson covers IoT technology, smart homes, and connected devices. Understanding these concepts helps you discuss how technology is integrating into daily life and its implications.`,
+      examples: [
+        { sentence: 'The Internet of Things connects everyday objects to the internet.', explanation: '"Internet of Things" (IoT) is the network of connected devices.' },
+        { sentence: 'Smart home devices automate household functions.', explanation: '"Smart home" uses technology for automated control.' },
+        { sentence: 'Wearable technology monitors health and fitness metrics.', explanation: '"Wearable technology" includes smartwatches and fitness trackers.' },
+        { sentence: 'Connected devices generate vast amounts of data.', explanation: '"Connected devices" are objects linked to the internet.' },
+        { sentence: 'Voice assistants respond to spoken commands.', explanation: '"Voice assistants" are AI systems like Alexa and Siri.' },
+        { sentence: 'Smart sensors detect environmental changes automatically.', explanation: '"Smart sensors" are devices that collect and transmit data.' },
+        { sentence: 'Home automation improves energy efficiency.', explanation: '"Home automation" is automatic control of household systems.' },
+        { sentence: 'IoT security vulnerabilities pose privacy risks.', explanation: '"Security vulnerabilities" are weaknesses that can be exploited.' },
+        { sentence: 'Smart grids optimize electricity distribution.', explanation: '"Smart grids" are modernized electrical networks.' },
+        { sentence: 'Connected cars communicate with infrastructure and other vehicles.', explanation: '"Connected cars" have internet connectivity.' },
+        { sentence: 'Edge computing processes data closer to its source.', explanation: '"Edge computing" is processing data near where it\'s generated.' },
+        { sentence: 'Smart cities use IoT for urban management.', explanation: '"Smart cities" integrate technology into urban infrastructure.' },
+        { sentence: 'Device interoperability enables seamless communication.', explanation: '"Interoperability" is the ability of systems to work together.' },
+        { sentence: 'Ambient intelligence creates responsive environments.', explanation: '"Ambient intelligence" is technology that responds to human presence.' },
+        { sentence: 'IoT platforms manage connected device networks.', explanation: '"IoT platforms" are software for managing IoT devices.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Smart devices are convenient.', correction: 'IoT devices offer convenience and efficiency but raise concerns about privacy and security.', explanation: 'Present balanced views including risks.' },
+        { mistake: 'Everything will be connected to the internet.', correction: 'IoT adoption is expanding, though concerns about security and privacy may limit certain applications.', explanation: 'Avoid absolute predictions.' },
+        { mistake: 'Smart homes save energy.', correction: 'Home automation can optimize energy consumption, though actual savings depend on usage patterns.', explanation: 'Qualify claims appropriately.' }
+      ],
+      miniPractice: [
+        { question: 'The Internet of _____ connects everyday objects to the internet.', type: 'fill-blank' },
+        { question: 'Which term describes AI systems that respond to voice commands?', options: ['voice assistants', 'smart speakers', 'audio bots', 'sound AI'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Smart devices can be hacked."', type: 'rewrite' },
+        { question: 'Smart _____ optimize electricity distribution.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Things',
+        'voice assistants',
+        'IoT devices have security vulnerabilities that can be exploited by malicious actors.',
+        'grids'
+      ],
+      quickRecap: 'Key terms: "Internet of Things", "smart home", "wearable technology", "connected devices", "voice assistants", "smart sensors", "home automation", "smart grids", "edge computing", "interoperability". Use these for IoT discussions!',
+      collocations: [
+        'Internet of Things', 'smart home', 'wearable technology', 'connected devices',
+        'voice assistants', 'smart sensors', 'home automation', 'security vulnerabilities',
+        'smart grids', 'connected cars', 'edge computing', 'smart cities'
+      ],
+      synonyms: [
+        { word: 'smart', synonyms: ['intelligent', 'connected', 'automated', 'digital'] },
+        { word: 'device', synonyms: ['gadget', 'appliance', 'equipment', 'technology'] },
+        { word: 'connect', synonyms: ['link', 'network', 'integrate', 'interface'] }
+      ],
+      speakingLines: [
+        'The Internet of Things is transforming how we interact with everyday objects.',
+        'Smart home technology offers convenience but raises legitimate privacy concerns.',
+        'IoT security must be prioritized as connected devices become more prevalent.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 4: Health & Wellbeing (6 more lessons)
+  // ============================================
+  {
+    id: 'vocab-health-3',
+    title: 'Mental Health & Psychology',
+    slug: 'mental-health-psychology',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Health',
+    description: 'Vocabulary for discussing mental health issues, psychological wellbeing, and therapy.',
+    is_premium: true,
+    is_published: true,
+    view_count: 920,
+    created_at: '2024-04-18T10:00:00Z',
+    updated_at: '2024-04-18T10:00:00Z',
+    content: {
+      title: 'Mental Health & Psychology',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 mental health terms',
+        'Discuss psychological wellbeing sensitively',
+        'Use therapy and treatment vocabulary'
+      ],
+      coreExplanation: `Mental health topics are increasingly common in IELTS as awareness grows. To achieve Band 7+, you need vocabulary that allows you to discuss psychological issues sensitively and accurately.
+
+This lesson covers mental health conditions, treatments, and wellbeing concepts. Understanding these terms helps you discuss the importance of mental health in modern society.`,
+      examples: [
+        { sentence: 'Mental health awareness has increased significantly in recent years.', explanation: '"Mental health awareness" is understanding of psychological wellbeing.' },
+        { sentence: 'Depression and anxiety are the most common mental health conditions.', explanation: '"Depression" and "anxiety" are prevalent psychological disorders.' },
+        { sentence: 'Stigma surrounding mental illness prevents many from seeking help.', explanation: '"Stigma" is negative attitudes and discrimination.' },
+        { sentence: 'Cognitive behavioral therapy is an effective treatment approach.', explanation: '"Cognitive behavioral therapy" (CBT) is a common psychological treatment.' },
+        { sentence: 'Psychological resilience helps people cope with adversity.', explanation: '"Resilience" is the ability to recover from difficulties.' },
+        { sentence: 'Work-related stress contributes to burnout and mental health issues.', explanation: '"Burnout" is exhaustion from prolonged stress.' },
+        { sentence: 'Early intervention improves outcomes for mental health conditions.', explanation: '"Early intervention" is treatment at the onset of problems.' },
+        { sentence: 'Mindfulness practices reduce stress and improve wellbeing.', explanation: '"Mindfulness" is awareness of the present moment.' },
+        { sentence: 'Social isolation negatively impacts mental health.', explanation: '"Social isolation" is lack of social contact.' },
+        { sentence: 'Trauma can have lasting psychological effects.', explanation: '"Trauma" is deeply distressing experiences.' },
+        { sentence: 'Self-care practices support mental wellbeing.', explanation: '"Self-care" is activities that maintain health.' },
+        { sentence: 'Mental health services are often underfunded.', explanation: '"Mental health services" are professional psychological support.' },
+        { sentence: 'Emotional intelligence involves understanding and managing emotions.', explanation: '"Emotional intelligence" is awareness of emotions.' },
+        { sentence: 'Substance abuse often co-occurs with mental health disorders.', explanation: '"Substance abuse" is harmful use of drugs or alcohol.' },
+        { sentence: 'Destigmatization encourages people to seek mental health support.', explanation: '"Destigmatization" is reducing negative attitudes.' }
+      ],
+      commonMistakes: [
+        { mistake: 'He is crazy.', correction: 'He is experiencing mental health challenges / living with a mental health condition.', explanation: 'Avoid stigmatizing language; use respectful terms.' },
+        { mistake: 'Depression is just sadness.', correction: 'Depression is a clinical condition distinct from normal sadness, affecting mood, energy, and functioning.', explanation: 'Distinguish clinical conditions from normal emotions.' },
+        { mistake: 'People with mental illness are dangerous.', correction: 'People with mental health conditions are more likely to be victims than perpetrators of violence.', explanation: 'Challenge harmful stereotypes.' }
+      ],
+      miniPractice: [
+        { question: '_____ surrounding mental illness prevents many from seeking help.', type: 'fill-blank' },
+        { question: 'Which therapy focuses on changing thought patterns?', options: ['cognitive behavioral therapy', 'psychoanalysis', 'group therapy', 'art therapy'], type: 'multiple-choice' },
+        { question: 'Rewrite: "He went crazy from stress."', type: 'rewrite' },
+        { question: 'Psychological _____ helps people cope with adversity.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Stigma',
+        'cognitive behavioral therapy',
+        'He experienced burnout / mental health challenges due to prolonged work-related stress.',
+        'resilience'
+      ],
+      quickRecap: 'Key terms: "mental health awareness", "depression", "anxiety", "stigma", "cognitive behavioral therapy", "resilience", "burnout", "mindfulness", "trauma", "emotional intelligence". Use respectful, person-first language!',
+      collocations: [
+        'mental health awareness', 'mental health conditions', 'cognitive behavioral therapy', 'psychological resilience',
+        'work-related stress', 'early intervention', 'mindfulness practices', 'social isolation',
+        'self-care practices', 'emotional intelligence', 'substance abuse', 'mental health services'
+      ],
+      synonyms: [
+        { word: 'crazy', synonyms: ['experiencing mental health challenges', 'living with a condition', 'struggling with', 'affected by'] },
+        { word: 'sad', synonyms: ['depressed', 'low mood', 'melancholic', 'despondent'] },
+        { word: 'stressed', synonyms: ['overwhelmed', 'anxious', 'burnt out', 'under pressure'] }
+      ],
+      speakingLines: [
+        'Mental health awareness has improved, but stigma still prevents many from seeking help.',
+        'Work-related stress and burnout have become significant public health concerns.',
+        'Early intervention and accessible mental health services are crucial for positive outcomes.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-health-4',
+    title: 'Healthcare Systems & Access',
+    slug: 'healthcare-systems-access',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Health',
+    description: 'Advanced vocabulary for discussing healthcare systems, insurance, and access to medical care.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2024-04-22T10:00:00Z',
+    updated_at: '2024-04-22T10:00:00Z',
+    content: {
+      title: 'Healthcare Systems & Access',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 healthcare system terms',
+        'Discuss healthcare policy and access',
+        'Compare different healthcare models'
+      ],
+      coreExplanation: `Healthcare systems are a common IELTS Writing Task 2 topic. To achieve Band 8+, you need vocabulary that allows you to discuss different healthcare models, funding mechanisms, and access issues.
+
+This lesson covers healthcare policy, insurance systems, and access to care. Understanding these concepts helps you discuss the role of government in healthcare provision.`,
+      examples: [
+        { sentence: 'Universal healthcare provides coverage for all citizens.', explanation: '"Universal healthcare" is a system covering everyone.' },
+        { sentence: 'Healthcare expenditure varies significantly between countries.', explanation: '"Healthcare expenditure" is spending on health services.' },
+        { sentence: 'Private insurance supplements public healthcare in many countries.', explanation: '"Private insurance" is non-government health coverage.' },
+        { sentence: 'Healthcare disparities exist between different socioeconomic groups.', explanation: '"Healthcare disparities" are differences in health outcomes.' },
+        { sentence: 'Primary care physicians serve as the first point of contact.', explanation: '"Primary care" is initial, general medical care.' },
+        { sentence: 'Out-of-pocket expenses can be a barrier to healthcare access.', explanation: '"Out-of-pocket expenses" are costs paid directly by patients.' },
+        { sentence: 'Healthcare rationing involves allocating limited resources.', explanation: '"Rationing" is distributing scarce resources.' },
+        { sentence: 'Preventive care reduces long-term healthcare costs.', explanation: '"Preventive care" is healthcare to prevent illness.' },
+        { sentence: 'Healthcare workforce shortages affect service delivery.', explanation: '"Workforce shortages" are insufficient healthcare workers.' },
+        { sentence: 'Single-payer systems are funded through taxation.', explanation: '"Single-payer" is government-funded healthcare.' },
+        { sentence: 'Healthcare privatization has both supporters and critics.', explanation: '"Privatization" is transferring to private ownership.' },
+        { sentence: 'Medical tourism involves traveling abroad for treatment.', explanation: '"Medical tourism" is seeking healthcare in other countries.' },
+        { sentence: 'Healthcare infrastructure includes hospitals and clinics.', explanation: '"Healthcare infrastructure" is physical facilities.' },
+        { sentence: 'Copayments require patients to share treatment costs.', explanation: '"Copayments" are patient contributions to costs.' },
+        { sentence: 'Healthcare reform aims to improve system efficiency.', explanation: '"Healthcare reform" is changing healthcare systems.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Free healthcare is better.', correction: 'Universal healthcare systems, while publicly funded, involve trade-offs between access, quality, and cost.', explanation: 'Avoid oversimplification; discuss nuances.' },
+        { mistake: 'Private healthcare is only for rich people.', correction: 'Private healthcare access varies based on insurance coverage, employer benefits, and individual circumstances.', explanation: 'Acknowledge complexity in healthcare access.' },
+        { mistake: 'The government should pay for all healthcare.', correction: 'Healthcare funding models involve complex trade-offs between public provision, private insurance, and individual responsibility.', explanation: 'Present balanced policy discussions.' }
+      ],
+      miniPractice: [
+        { question: '_____ healthcare provides coverage for all citizens.', type: 'fill-blank' },
+        { question: 'Which term describes differences in health outcomes between groups?', options: ['healthcare disparities', 'health gaps', 'medical differences', 'care variations'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Poor people cannot afford doctors."', type: 'rewrite' },
+        { question: 'Out-of-pocket _____ can be a barrier to healthcare access.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Universal',
+        'healthcare disparities',
+        'Socioeconomic factors create healthcare disparities, limiting access to medical services for lower-income populations.',
+        'expenses'
+      ],
+      quickRecap: 'Key terms: "universal healthcare", "healthcare expenditure", "healthcare disparities", "primary care", "out-of-pocket expenses", "preventive care", "single-payer", "healthcare privatization", "medical tourism", "healthcare reform". Use these for policy discussions!',
+      collocations: [
+        'universal healthcare', 'healthcare expenditure', 'private insurance', 'healthcare disparities',
+        'primary care', 'out-of-pocket expenses', 'preventive care', 'workforce shortages',
+        'single-payer system', 'healthcare privatization', 'medical tourism', 'healthcare reform'
+      ],
+      synonyms: [
+        { word: 'free', synonyms: ['publicly funded', 'universal', 'government-provided', 'tax-funded'] },
+        { word: 'expensive', synonyms: ['costly', 'unaffordable', 'prohibitive', 'high-cost'] },
+        { word: 'doctor', synonyms: ['physician', 'healthcare provider', 'medical practitioner', 'clinician'] }
+      ],
+      speakingLines: [
+        'Universal healthcare systems aim to provide equitable access regardless of socioeconomic status.',
+        'Healthcare disparities reflect broader social inequalities that require systemic solutions.',
+        'Preventive care investment can reduce long-term healthcare expenditure significantly.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-health-5',
+    title: 'Aging & Elderly Care',
+    slug: 'aging-elderly-care',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Health',
+    description: 'Vocabulary for discussing aging populations, elderly care, and age-related health issues.',
+    is_premium: true,
+    is_published: true,
+    view_count: 680,
+    created_at: '2024-04-25T10:00:00Z',
+    updated_at: '2024-04-25T10:00:00Z',
+    content: {
+      title: 'Aging & Elderly Care',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 aging and elderly care terms',
+        'Discuss demographic changes and challenges',
+        'Use age-related vocabulary sensitively'
+      ],
+      coreExplanation: `Aging populations are a significant global trend and common IELTS topic. To achieve Band 7+, you need vocabulary that allows you to discuss demographic changes and their implications.
+
+This lesson covers aging demographics, elderly care, and age-related issues. Understanding these concepts helps you discuss the challenges and opportunities of aging societies.`,
+      examples: [
+        { sentence: 'Aging populations pose challenges for healthcare and pension systems.', explanation: '"Aging populations" have increasing proportions of elderly people.' },
+        { sentence: 'Life expectancy has increased dramatically over the past century.', explanation: '"Life expectancy" is average lifespan.' },
+        { sentence: 'Elderly care facilities provide residential support for seniors.', explanation: '"Elderly care facilities" are nursing homes and care centers.' },
+        { sentence: 'Dementia affects millions of older adults worldwide.', explanation: '"Dementia" is cognitive decline affecting memory and thinking.' },
+        { sentence: 'Intergenerational solidarity involves support between age groups.', explanation: '"Intergenerational solidarity" is cooperation across generations.' },
+        { sentence: 'Age discrimination in employment affects older workers.', explanation: '"Age discrimination" is unfair treatment based on age.' },
+        { sentence: 'Retirement planning is essential for financial security.', explanation: '"Retirement planning" is preparing for post-work life.' },
+        { sentence: 'Active aging promotes continued participation in society.', explanation: '"Active aging" is staying engaged in later life.' },
+        { sentence: 'Geriatric medicine specializes in elderly healthcare.', explanation: '"Geriatric" relates to elderly health.' },
+        { sentence: 'Pension systems face sustainability challenges.', explanation: '"Pension systems" provide retirement income.' },
+        { sentence: 'Home care allows elderly people to age in place.', explanation: '"Age in place" is remaining in one\'s home while aging.' },
+        { sentence: 'Chronic conditions are more prevalent among older adults.', explanation: '"Chronic conditions" are long-term health issues.' },
+        { sentence: 'Social isolation affects many elderly people.', explanation: '"Social isolation" is lack of social connections.' },
+        { sentence: 'Dependency ratios measure working-age to elderly populations.', explanation: '"Dependency ratio" is ratio of dependents to workers.' },
+        { sentence: 'End-of-life care focuses on comfort and dignity.', explanation: '"End-of-life care" is care for terminally ill patients.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Old people are a burden on society.', correction: 'Aging populations present both challenges and opportunities, with older adults contributing valuable experience and wisdom.', explanation: 'Avoid ageist language; present balanced views.' },
+        { mistake: 'Elderly people should live in nursing homes.', correction: 'Care options for older adults range from home care to assisted living, depending on individual needs and preferences.', explanation: 'Acknowledge diverse care options.' },
+        { mistake: 'Old people cannot work.', correction: 'Many older adults remain productive and engaged, with age discrimination being a barrier to continued employment.', explanation: 'Challenge stereotypes about aging.' }
+      ],
+      miniPractice: [
+        { question: 'Life _____ has increased dramatically over the past century.', type: 'fill-blank' },
+        { question: 'Which term describes cognitive decline in older adults?', options: ['dementia', 'amnesia', 'confusion', 'forgetfulness'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Old people are a problem for the economy."', type: 'rewrite' },
+        { question: 'Active _____ promotes continued participation in society.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'expectancy',
+        'dementia',
+        'Aging populations present economic challenges that require policy adaptations in healthcare and pension systems.',
+        'aging'
+      ],
+      quickRecap: 'Key terms: "aging populations", "life expectancy", "elderly care", "dementia", "intergenerational solidarity", "age discrimination", "active aging", "geriatric", "pension systems", "dependency ratio". Use respectful, non-ageist language!',
+      collocations: [
+        'aging populations', 'life expectancy', 'elderly care', 'dementia',
+        'intergenerational solidarity', 'age discrimination', 'retirement planning', 'active aging',
+        'geriatric medicine', 'pension systems', 'home care', 'end-of-life care'
+      ],
+      synonyms: [
+        { word: 'old', synonyms: ['elderly', 'senior', 'older adult', 'aged'] },
+        { word: 'nursing home', synonyms: ['care facility', 'residential care', 'assisted living', 'care home'] },
+        { word: 'retire', synonyms: ['stop working', 'leave employment', 'exit the workforce', 'step down'] }
+      ],
+      speakingLines: [
+        'Aging populations require policy adaptations in healthcare, pensions, and social services.',
+        'Active aging initiatives help older adults remain engaged and contribute to society.',
+        'Intergenerational solidarity is essential for addressing the challenges of demographic change.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-health-6',
+    title: 'Public Health & Epidemiology',
+    slug: 'public-health-epidemiology',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Health',
+    description: 'Advanced vocabulary for discussing disease outbreaks, public health measures, and epidemiology.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2024-04-28T10:00:00Z',
+    updated_at: '2024-04-28T10:00:00Z',
+    content: {
+      title: 'Public Health & Epidemiology',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 public health terms',
+        'Discuss disease outbreaks and responses',
+        'Use epidemiological vocabulary'
+      ],
+      coreExplanation: `Public health topics have become more prominent following recent global health events. To achieve Band 8+, you need vocabulary that allows you to discuss disease outbreaks, prevention measures, and health policy.
+
+This lesson covers epidemiology, disease control, and public health interventions. Understanding these concepts helps you discuss how societies respond to health threats.`,
+      examples: [
+        { sentence: 'Epidemiology studies the distribution and determinants of disease.', explanation: '"Epidemiology" is the study of disease patterns.' },
+        { sentence: 'Pandemic preparedness requires coordinated international efforts.', explanation: '"Pandemic preparedness" is planning for disease outbreaks.' },
+        { sentence: 'Contact tracing identifies people exposed to infectious diseases.', explanation: '"Contact tracing" is tracking disease transmission.' },
+        { sentence: 'Herd immunity occurs when enough people are immune to a disease.', explanation: '"Herd immunity" is community-level protection.' },
+        { sentence: 'Quarantine measures isolate potentially infected individuals.', explanation: '"Quarantine" is separating exposed people.' },
+        { sentence: 'Disease surveillance monitors health trends in populations.', explanation: '"Disease surveillance" is tracking disease occurrence.' },
+        { sentence: 'Vaccination campaigns aim to achieve widespread immunity.', explanation: '"Vaccination campaigns" are organized immunization efforts.' },
+        { sentence: 'Infectious disease transmission occurs through various pathways.', explanation: '"Transmission" is how diseases spread.' },
+        { sentence: 'Public health interventions target population-level health.', explanation: '"Public health interventions" are measures to improve community health.' },
+        { sentence: 'Mortality rates indicate the frequency of death in a population.', explanation: '"Mortality rates" measure death frequency.' },
+        { sentence: 'Morbidity refers to the incidence of disease.', explanation: '"Morbidity" is disease occurrence.' },
+        { sentence: 'Health literacy enables people to make informed decisions.', explanation: '"Health literacy" is understanding health information.' },
+        { sentence: 'Social determinants of health include income and education.', explanation: '"Social determinants" are non-medical factors affecting health.' },
+        { sentence: 'Outbreak investigation identifies disease sources.', explanation: '"Outbreak investigation" is studying disease clusters.' },
+        { sentence: 'Health promotion encourages healthy behaviors.', explanation: '"Health promotion" is activities to improve health.' }
+      ],
+      commonMistakes: [
+        { mistake: 'The virus spread everywhere.', correction: 'The pathogen exhibited rapid transmission, reaching pandemic proportions.', explanation: 'Use precise epidemiological terminology.' },
+        { mistake: 'Everyone should get vaccinated.', correction: 'Vaccination campaigns aim to achieve herd immunity through widespread immunization.', explanation: 'Frame vaccination in public health terms.' },
+        { mistake: 'The disease killed many people.', correction: 'The outbreak resulted in significant mortality, with elevated case fatality rates.', explanation: 'Use epidemiological measures.' }
+      ],
+      miniPractice: [
+        { question: '_____ studies the distribution and determinants of disease.', type: 'fill-blank' },
+        { question: 'Which term describes community-level disease protection?', options: ['herd immunity', 'group protection', 'mass immunity', 'collective resistance'], type: 'multiple-choice' },
+        { question: 'Rewrite: "The disease spread to many countries."', type: 'rewrite' },
+        { question: 'Contact _____ identifies people exposed to infectious diseases.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Epidemiology',
+        'herd immunity',
+        'The pathogen exhibited rapid international transmission, reaching pandemic proportions.',
+        'tracing'
+      ],
+      quickRecap: 'Key terms: "epidemiology", "pandemic preparedness", "contact tracing", "herd immunity", "quarantine", "disease surveillance", "vaccination campaigns", "transmission", "mortality rates", "social determinants". Use these for public health discussions!',
+      collocations: [
+        'epidemiology', 'pandemic preparedness', 'contact tracing', 'herd immunity',
+        'quarantine measures', 'disease surveillance', 'vaccination campaigns', 'infectious disease',
+        'public health interventions', 'mortality rates', 'health literacy', 'outbreak investigation'
+      ],
+      synonyms: [
+        { word: 'spread', synonyms: ['transmit', 'propagate', 'disseminate', 'circulate'] },
+        { word: 'disease', synonyms: ['illness', 'condition', 'pathology', 'infection'] },
+        { word: 'prevent', synonyms: ['control', 'contain', 'mitigate', 'curb'] }
+      ],
+      speakingLines: [
+        'Pandemic preparedness requires investment in disease surveillance and healthcare infrastructure.',
+        'Herd immunity through vaccination is essential for protecting vulnerable populations.',
+        'Social determinants of health significantly influence disease outcomes across populations.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-health-7',
+    title: 'Nutrition & Diet Science',
+    slug: 'nutrition-diet-science',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Health',
+    description: 'Vocabulary for discussing nutrition science, dietary guidelines, and food-related health issues.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2024-05-01T10:00:00Z',
+    updated_at: '2024-05-01T10:00:00Z',
+    content: {
+      title: 'Nutrition & Diet Science',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 nutrition and diet terms',
+        'Discuss dietary guidelines and health',
+        'Use food science vocabulary'
+      ],
+      coreExplanation: `Nutrition and diet topics appear frequently in IELTS, especially in discussions about health and lifestyle. To achieve Band 7+, you need vocabulary that allows you to discuss dietary science accurately.
+
+This lesson covers nutrition concepts, dietary patterns, and food-related health issues. Understanding these terms helps you discuss the relationship between diet and health.`,
+      examples: [
+        { sentence: 'Macronutrients include carbohydrates, proteins, and fats.', explanation: '"Macronutrients" are nutrients needed in large amounts.' },
+        { sentence: 'Micronutrient deficiencies affect billions worldwide.', explanation: '"Micronutrients" are vitamins and minerals needed in small amounts.' },
+        { sentence: 'Dietary guidelines recommend balanced nutrient intake.', explanation: '"Dietary guidelines" are official nutrition recommendations.' },
+        { sentence: 'Food security ensures access to sufficient, nutritious food.', explanation: '"Food security" is reliable access to adequate food.' },
+        { sentence: 'Malnutrition encompasses both undernutrition and overnutrition.', explanation: '"Malnutrition" is inadequate or excessive nutrition.' },
+        { sentence: 'Plant-based diets have gained popularity for health and environmental reasons.', explanation: '"Plant-based diets" emphasize foods from plants.' },
+        { sentence: 'Caloric intake should match energy expenditure.', explanation: '"Caloric intake" is energy consumed from food.' },
+        { sentence: 'Ultra-processed foods are linked to various health problems.', explanation: '"Ultra-processed foods" are heavily manufactured products.' },
+        { sentence: 'Nutritional labeling helps consumers make informed choices.', explanation: '"Nutritional labeling" is food package information.' },
+        { sentence: 'Dietary fiber promotes digestive health.', explanation: '"Dietary fiber" is indigestible plant material.' },
+        { sentence: 'Food additives include preservatives and colorings.', explanation: '"Food additives" are substances added to food.' },
+        { sentence: 'Metabolic disorders affect how the body processes nutrients.', explanation: '"Metabolic disorders" are conditions affecting metabolism.' },
+        { sentence: 'Sustainable diets consider both health and environmental impact.', explanation: '"Sustainable diets" are nutritious and environmentally friendly.' },
+        { sentence: 'Portion sizes have increased significantly over decades.', explanation: '"Portion sizes" are amounts of food served.' },
+        { sentence: 'Nutritional epidemiology studies diet-disease relationships.', explanation: '"Nutritional epidemiology" is research on diet and health.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Carbs are bad for you.', correction: 'Carbohydrates are essential macronutrients, though the type and quantity consumed affect health outcomes.', explanation: 'Avoid oversimplified nutrition claims.' },
+        { mistake: 'You should eat less to be healthy.', correction: 'Optimal nutrition involves balanced macronutrient and micronutrient intake appropriate for individual needs.', explanation: 'Discuss nutrition comprehensively.' },
+        { mistake: 'Organic food is healthier.', correction: 'The health benefits of organic versus conventional foods remain a subject of ongoing research and debate.', explanation: 'Present evidence-based views.' }
+      ],
+      miniPractice: [
+        { question: '_____ include carbohydrates, proteins, and fats.', type: 'fill-blank' },
+        { question: 'Which term describes reliable access to adequate food?', options: ['food security', 'food safety', 'food access', 'food availability'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Junk food is bad for health."', type: 'rewrite' },
+        { question: 'Ultra-_____ foods are linked to various health problems.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Macronutrients',
+        'food security',
+        'Ultra-processed foods are associated with increased risk of various health conditions.',
+        'processed'
+      ],
+      quickRecap: 'Key terms: "macronutrients", "micronutrients", "dietary guidelines", "food security", "malnutrition", "plant-based diets", "caloric intake", "ultra-processed foods", "dietary fiber", "sustainable diets". Use these for nutrition discussions!',
+      collocations: [
+        'macronutrients', 'micronutrient deficiencies', 'dietary guidelines', 'food security',
+        'malnutrition', 'plant-based diets', 'caloric intake', 'ultra-processed foods',
+        'nutritional labeling', 'dietary fiber', 'metabolic disorders', 'sustainable diets'
+      ],
+      synonyms: [
+        { word: 'healthy', synonyms: ['nutritious', 'wholesome', 'nourishing', 'beneficial'] },
+        { word: 'diet', synonyms: ['nutrition', 'eating habits', 'food intake', 'dietary pattern'] },
+        { word: 'food', synonyms: ['nutrition', 'nourishment', 'sustenance', 'dietary intake'] }
+      ],
+      speakingLines: [
+        'Balanced macronutrient intake is more important than following restrictive diets.',
+        'Ultra-processed foods have been linked to various health problems in nutritional research.',
+        'Sustainable diets consider both nutritional adequacy and environmental impact.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-health-8',
+    title: 'Global Health Challenges',
+    slug: 'global-health-challenges',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Health',
+    description: 'Advanced vocabulary for discussing international health issues, disease burden, and global health initiatives.',
+    is_premium: true,
+    is_published: true,
+    view_count: 620,
+    created_at: '2024-05-05T10:00:00Z',
+    updated_at: '2024-05-05T10:00:00Z',
+    content: {
+      title: 'Global Health Challenges',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 global health terms',
+        'Discuss international health issues',
+        'Use development health vocabulary'
+      ],
+      coreExplanation: `Global health topics connect health to international development and inequality. To achieve Band 8+, you need vocabulary that allows you to discuss health challenges across different countries and contexts.
+
+This lesson covers global health challenges, international initiatives, and health equity. Understanding these concepts helps you discuss health in a global context.`,
+      examples: [
+        { sentence: 'The global disease burden falls disproportionately on developing countries.', explanation: '"Disease burden" is the impact of health problems.' },
+        { sentence: 'Neglected tropical diseases affect the world\'s poorest populations.', explanation: '"Neglected tropical diseases" are conditions affecting poor regions.' },
+        { sentence: 'Health equity requires addressing social determinants of health.', explanation: '"Health equity" is fair distribution of health outcomes.' },
+        { sentence: 'International health organizations coordinate global responses.', explanation: '"International health organizations" include WHO and others.' },
+        { sentence: 'Maternal mortality remains high in many developing regions.', explanation: '"Maternal mortality" is death during pregnancy or childbirth.' },
+        { sentence: 'Child vaccination rates have improved globally.', explanation: '"Vaccination rates" measure immunization coverage.' },
+        { sentence: 'Antimicrobial resistance threatens global health security.', explanation: '"Antimicrobial resistance" is when pathogens resist treatments.' },
+        { sentence: 'Health systems strengthening improves service delivery.', explanation: '"Health systems strengthening" is improving healthcare capacity.' },
+        { sentence: 'Non-communicable diseases are rising in developing countries.', explanation: '"Non-communicable diseases" are not spread between people.' },
+        { sentence: 'Global health governance involves multiple stakeholders.', explanation: '"Global health governance" is international health decision-making.' },
+        { sentence: 'Health aid flows from developed to developing countries.', explanation: '"Health aid" is international assistance for health.' },
+        { sentence: 'Sustainable Development Goals include health targets.', explanation: '"Sustainable Development Goals" are UN development objectives.' },
+        { sentence: 'Health workforce migration affects developing countries.', explanation: '"Health workforce migration" is healthcare workers moving abroad.' },
+        { sentence: 'Essential medicines should be accessible to all.', explanation: '"Essential medicines" are basic necessary drugs.' },
+        { sentence: 'Health diplomacy addresses health through international relations.', explanation: '"Health diplomacy" is using health for diplomatic purposes.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Poor countries have bad healthcare.', correction: 'Developing countries face healthcare challenges including limited resources, infrastructure gaps, and workforce shortages.', explanation: 'Discuss specific challenges rather than generalizing.' },
+        { mistake: 'Rich countries should help poor countries.', correction: 'International health cooperation and aid can support health systems strengthening in resource-limited settings.', explanation: 'Use development terminology.' },
+        { mistake: 'Diseases only affect poor people.', correction: 'While disease burden is higher in lower-income populations, health challenges affect all socioeconomic groups globally.', explanation: 'Acknowledge complexity in global health.' }
+      ],
+      miniPractice: [
+        { question: 'The global disease _____ falls disproportionately on developing countries.', type: 'fill-blank' },
+        { question: 'Which term describes fair distribution of health outcomes?', options: ['health equity', 'health equality', 'health justice', 'health fairness'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Poor countries have more diseases."', type: 'rewrite' },
+        { question: 'Antimicrobial _____ threatens global health security.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'burden',
+        'health equity',
+        'Developing countries bear a disproportionate share of the global disease burden.',
+        'resistance'
+      ],
+      quickRecap: 'Key terms: "disease burden", "neglected tropical diseases", "health equity", "maternal mortality", "antimicrobial resistance", "health systems strengthening", "non-communicable diseases", "global health governance", "Sustainable Development Goals", "health diplomacy". Use these for global health discussions!',
+      collocations: [
+        'disease burden', 'neglected tropical diseases', 'health equity', 'international health organizations',
+        'maternal mortality', 'vaccination rates', 'antimicrobial resistance', 'health systems strengthening',
+        'non-communicable diseases', 'global health governance', 'Sustainable Development Goals', 'essential medicines'
+      ],
+      synonyms: [
+        { word: 'poor', synonyms: ['developing', 'low-income', 'resource-limited', 'underserved'] },
+        { word: 'help', synonyms: ['aid', 'assistance', 'support', 'cooperation'] },
+        { word: 'disease', synonyms: ['illness', 'condition', 'health challenge', 'morbidity'] }
+      ],
+      speakingLines: [
+        'Global health equity requires addressing the social determinants that drive health disparities.',
+        'Antimicrobial resistance is an emerging threat that requires coordinated international action.',
+        'Health systems strengthening is essential for achieving the Sustainable Development Goals.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 5: Economy & Business (7 more lessons)
+  // ============================================
+  {
+    id: 'vocab-economy-2',
+    title: 'Employment & Labor Markets',
+    slug: 'employment-labor-markets',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Economy',
+    description: 'Vocabulary for discussing employment, unemployment, and labor market dynamics.',
+    is_premium: true,
+    is_published: true,
+    view_count: 880,
+    created_at: '2024-05-08T10:00:00Z',
+    updated_at: '2024-05-08T10:00:00Z',
+    content: {
+      title: 'Employment & Labor Markets',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 employment and labor terms',
+        'Discuss unemployment and job markets',
+        'Use workforce vocabulary accurately'
+      ],
+      coreExplanation: `Employment topics are common in IELTS, especially in discussions about economic policy and social issues. To achieve Band 7+, you need vocabulary that allows you to discuss labor markets and employment trends.
+
+This lesson covers employment, unemployment, and workforce dynamics. Understanding these concepts helps you discuss economic and social aspects of work.`,
+      examples: [
+        { sentence: 'The unemployment rate measures the percentage of jobless workers.', explanation: '"Unemployment rate" is the proportion of unemployed people.' },
+        { sentence: 'Labor force participation has changed significantly over decades.', explanation: '"Labor force participation" is the proportion of working-age people employed or seeking work.' },
+        { sentence: 'Job creation is essential for economic growth.', explanation: '"Job creation" is generating new employment opportunities.' },
+        { sentence: 'Underemployment occurs when workers have insufficient work.', explanation: '"Underemployment" is working less than desired or below skill level.' },
+        { sentence: 'Minimum wage policies aim to ensure fair compensation.', explanation: '"Minimum wage" is the lowest legal hourly pay.' },
+        { sentence: 'Labor unions advocate for workers\' rights.', explanation: '"Labor unions" are organizations representing workers.' },
+        { sentence: 'Structural unemployment results from economic changes.', explanation: '"Structural unemployment" is joblessness from economic shifts.' },
+        { sentence: 'The gig economy has transformed traditional employment.', explanation: '"Gig economy" is short-term, freelance work arrangements.' },
+        { sentence: 'Workforce development programs improve employability.', explanation: '"Workforce development" is training to improve job skills.' },
+        { sentence: 'Job security has declined in many sectors.', explanation: '"Job security" is stability of employment.' },
+        { sentence: 'Labor market flexibility affects hiring and firing practices.', explanation: '"Labor market flexibility" is ease of employment changes.' },
+        { sentence: 'Youth unemployment is particularly high in many countries.', explanation: '"Youth unemployment" is joblessness among young people.' },
+        { sentence: 'Wage stagnation has affected living standards.', explanation: '"Wage stagnation" is lack of salary growth.' },
+        { sentence: 'Employment contracts define working conditions.', explanation: '"Employment contracts" are formal work agreements.' },
+        { sentence: 'Labor shortages affect certain industries.', explanation: '"Labor shortages" are insufficient workers for available jobs.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Many people don\'t have jobs.', correction: 'The unemployment rate has risen / Many workers face joblessness due to economic conditions.', explanation: 'Use specific employment terminology.' },
+        { mistake: 'Workers should be paid more.', correction: 'Wage policies should ensure fair compensation that reflects productivity and living costs.', explanation: 'Discuss wages in economic context.' },
+        { mistake: 'Jobs are disappearing.', correction: 'Structural changes in the economy are transforming employment patterns across sectors.', explanation: 'Discuss employment changes precisely.' }
+      ],
+      miniPractice: [
+        { question: 'The _____ rate measures the percentage of jobless workers.', type: 'fill-blank' },
+        { question: 'Which term describes working less than desired?', options: ['underemployment', 'unemployment', 'part-time work', 'casual work'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Young people can\'t find jobs."', type: 'rewrite' },
+        { question: 'Labor _____ advocate for workers\' rights.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'unemployment',
+        'underemployment',
+        'Youth unemployment remains elevated, with young people facing significant barriers to entering the labor market.',
+        'unions'
+      ],
+      quickRecap: 'Key terms: "unemployment rate", "labor force participation", "job creation", "underemployment", "minimum wage", "labor unions", "structural unemployment", "gig economy", "job security", "wage stagnation". Use these for employment discussions!',
+      collocations: [
+        'unemployment rate', 'labor force participation', 'job creation', 'underemployment',
+        'minimum wage', 'labor unions', 'structural unemployment', 'gig economy',
+        'workforce development', 'job security', 'labor market flexibility', 'youth unemployment'
+      ],
+      synonyms: [
+        { word: 'job', synonyms: ['employment', 'position', 'occupation', 'work'] },
+        { word: 'worker', synonyms: ['employee', 'laborer', 'staff member', 'workforce'] },
+        { word: 'pay', synonyms: ['wages', 'salary', 'compensation', 'remuneration'] }
+      ],
+      speakingLines: [
+        'Structural unemployment requires workforce development programs to help workers transition to new sectors.',
+        'The gig economy offers flexibility but raises concerns about job security and worker protections.',
+        'Youth unemployment has long-term consequences for both individuals and the broader economy.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-economy-3',
+    title: 'International Trade & Globalization',
+    slug: 'international-trade-globalization',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Economy',
+    description: 'Advanced vocabulary for discussing global trade, tariffs, and economic integration.',
+    is_premium: true,
+    is_published: true,
+    view_count: 760,
+    created_at: '2024-05-12T10:00:00Z',
+    updated_at: '2024-05-12T10:00:00Z',
+    content: {
+      title: 'International Trade & Globalization',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 international trade terms',
+        'Discuss globalization and trade policy',
+        'Use economic integration vocabulary'
+      ],
+      coreExplanation: `International trade and globalization are common IELTS topics. To achieve Band 8+, you need vocabulary that allows you to discuss trade relationships, policies, and their effects.
+
+This lesson covers trade policy, economic integration, and globalization debates. Understanding these concepts helps you discuss how countries interact economically.`,
+      examples: [
+        { sentence: 'Free trade agreements reduce barriers between countries.', explanation: '"Free trade agreements" are treaties reducing trade restrictions.' },
+        { sentence: 'Tariffs are taxes imposed on imported goods.', explanation: '"Tariffs" are import taxes.' },
+        { sentence: 'Trade deficits occur when imports exceed exports.', explanation: '"Trade deficit" is negative balance of trade.' },
+        { sentence: 'Protectionism shields domestic industries from foreign competition.', explanation: '"Protectionism" is restricting imports to protect local businesses.' },
+        { sentence: 'Supply chains have become increasingly globalized.', explanation: '"Supply chains" are networks producing and distributing goods.' },
+        { sentence: 'Economic sanctions restrict trade with certain countries.', explanation: '"Economic sanctions" are trade penalties.' },
+        { sentence: 'Comparative advantage explains why countries specialize.', explanation: '"Comparative advantage" is producing goods more efficiently than others.' },
+        { sentence: 'Trade liberalization removes barriers to international commerce.', explanation: '"Trade liberalization" is reducing trade restrictions.' },
+        { sentence: 'Multinational corporations operate across national borders.', explanation: '"Multinational corporations" are companies in multiple countries.' },
+        { sentence: 'Export-oriented economies depend on foreign markets.', explanation: '"Export-oriented" means focused on selling abroad.' },
+        { sentence: 'Trade wars involve retaliatory tariffs between countries.', explanation: '"Trade wars" are escalating trade restrictions.' },
+        { sentence: 'Economic integration deepens ties between nations.', explanation: '"Economic integration" is combining economies.' },
+        { sentence: 'Outsourcing moves production to lower-cost locations.', explanation: '"Outsourcing" is contracting work to external providers.' },
+        { sentence: 'Balance of payments records international transactions.', explanation: '"Balance of payments" is a country\'s financial transactions with others.' },
+        { sentence: 'Trade negotiations aim to reach mutually beneficial agreements.', explanation: '"Trade negotiations" are discussions to establish trade terms.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Free trade is good for everyone.', correction: 'Free trade creates both winners and losers, with benefits and costs distributed unevenly across sectors and populations.', explanation: 'Present balanced views on trade.' },
+        { mistake: 'Countries should make everything themselves.', correction: 'Comparative advantage suggests countries benefit from specializing in goods they produce most efficiently.', explanation: 'Discuss economic theory.' },
+        { mistake: 'Globalization only helps rich countries.', correction: 'Globalization has complex effects, with both developed and developing countries experiencing benefits and challenges.', explanation: 'Acknowledge complexity.' }
+      ],
+      miniPractice: [
+        { question: 'Free trade _____ reduce barriers between countries.', type: 'fill-blank' },
+        { question: 'Which term describes taxes on imported goods?', options: ['tariffs', 'duties', 'levies', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Countries should protect their own businesses."', type: 'rewrite' },
+        { question: 'Trade _____ occur when imports exceed exports.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'agreements',
+        'all of the above',
+        'Protectionist policies aim to shield domestic industries from foreign competition.',
+        'deficits'
+      ],
+      quickRecap: 'Key terms: "free trade agreements", "tariffs", "trade deficits", "protectionism", "supply chains", "comparative advantage", "trade liberalization", "multinational corporations", "outsourcing", "balance of payments". Use these for trade discussions!',
+      collocations: [
+        'free trade agreements', 'tariffs', 'trade deficits', 'protectionism',
+        'supply chains', 'economic sanctions', 'comparative advantage', 'trade liberalization',
+        'multinational corporations', 'export-oriented', 'trade wars', 'economic integration'
+      ],
+      synonyms: [
+        { word: 'trade', synonyms: ['commerce', 'exchange', 'business', 'transactions'] },
+        { word: 'import', synonyms: ['bring in', 'purchase from abroad', 'foreign goods', 'inbound trade'] },
+        { word: 'export', synonyms: ['sell abroad', 'ship overseas', 'foreign sales', 'outbound trade'] }
+      ],
+      speakingLines: [
+        'Free trade agreements can boost economic growth but may disadvantage certain domestic industries.',
+        'Globalized supply chains have increased efficiency but also created vulnerabilities.',
+        'Trade policy involves balancing economic benefits with domestic political considerations.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-economy-4',
+    title: 'Financial Markets & Investment',
+    slug: 'financial-markets-investment',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Economy',
+    description: 'Advanced vocabulary for discussing stock markets, investment, and financial systems.',
+    is_premium: true,
+    is_published: true,
+    view_count: 690,
+    created_at: '2024-05-15T10:00:00Z',
+    updated_at: '2024-05-15T10:00:00Z',
+    content: {
+      title: 'Financial Markets & Investment',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 financial market terms',
+        'Discuss investment and markets',
+        'Use financial vocabulary accurately'
+      ],
+      coreExplanation: `Financial markets and investment topics occasionally appear in IELTS. To achieve Band 8+, you need vocabulary that allows you to discuss financial systems and their role in the economy.
+
+This lesson covers stock markets, investment, and financial instruments. Understanding these concepts helps you discuss how capital flows through economies.`,
+      examples: [
+        { sentence: 'Stock markets facilitate the buying and selling of company shares.', explanation: '"Stock markets" are exchanges for trading company ownership.' },
+        { sentence: 'Investment portfolios should be diversified to manage risk.', explanation: '"Diversified" means spread across different assets.' },
+        { sentence: 'Interest rates influence borrowing and saving behavior.', explanation: '"Interest rates" are the cost of borrowing money.' },
+        { sentence: 'Financial regulation aims to ensure market stability.', explanation: '"Financial regulation" is government oversight of financial systems.' },
+        { sentence: 'Capital markets connect savers with borrowers.', explanation: '"Capital markets" are markets for long-term securities.' },
+        { sentence: 'Bonds are debt instruments issued by governments and corporations.', explanation: '"Bonds" are loans to issuers that pay interest.' },
+        { sentence: 'Market volatility creates both risks and opportunities.', explanation: '"Volatility" is the degree of price variation.' },
+        { sentence: 'Venture capital funds early-stage companies.', explanation: '"Venture capital" is investment in startups.' },
+        { sentence: 'Financial literacy helps individuals make informed decisions.', explanation: '"Financial literacy" is understanding financial concepts.' },
+        { sentence: 'Asset bubbles occur when prices exceed fundamental values.', explanation: '"Asset bubbles" are unsustainable price increases.' },
+        { sentence: 'Derivatives are financial instruments based on underlying assets.', explanation: '"Derivatives" are contracts deriving value from other assets.' },
+        { sentence: 'Institutional investors manage large pools of capital.', explanation: '"Institutional investors" are organizations investing money.' },
+        { sentence: 'Market liquidity enables easy buying and selling.', explanation: '"Liquidity" is the ease of converting assets to cash.' },
+        { sentence: 'Financial crises can have devastating economic effects.', explanation: '"Financial crises" are severe disruptions to financial systems.' },
+        { sentence: 'Return on investment measures profitability.', explanation: '"Return on investment" (ROI) is profit relative to cost.' }
+      ],
+      commonMistakes: [
+        { mistake: 'The stock market crashed.', correction: 'Financial markets experienced significant volatility / a sharp correction.', explanation: 'Use precise financial terminology.' },
+        { mistake: 'Investing is gambling.', correction: 'Investment involves calculated risk management based on analysis and diversification strategies.', explanation: 'Distinguish investment from speculation.' },
+        { mistake: 'Banks just keep people\'s money.', correction: 'Financial institutions intermediate between savers and borrowers, allocating capital throughout the economy.', explanation: 'Explain financial system functions.' }
+      ],
+      miniPractice: [
+        { question: 'Stock _____ facilitate the buying and selling of company shares.', type: 'fill-blank' },
+        { question: 'Which term describes the degree of price variation?', options: ['volatility', 'liquidity', 'stability', 'flexibility'], type: 'multiple-choice' },
+        { question: 'Rewrite: "The stock market went down a lot."', type: 'rewrite' },
+        { question: 'Investment portfolios should be _____ to manage risk.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'markets',
+        'volatility',
+        'Financial markets experienced significant volatility / a sharp correction in equity prices.',
+        'diversified'
+      ],
+      quickRecap: 'Key terms: "stock markets", "diversified", "interest rates", "financial regulation", "capital markets", "bonds", "volatility", "venture capital", "financial literacy", "asset bubbles". Use these for financial discussions!',
+      collocations: [
+        'stock markets', 'investment portfolios', 'interest rates', 'financial regulation',
+        'capital markets', 'bonds', 'market volatility', 'venture capital',
+        'financial literacy', 'asset bubbles', 'institutional investors', 'return on investment'
+      ],
+      synonyms: [
+        { word: 'invest', synonyms: ['allocate capital', 'put money into', 'fund', 'finance'] },
+        { word: 'profit', synonyms: ['return', 'gain', 'yield', 'earnings'] },
+        { word: 'risk', synonyms: ['exposure', 'uncertainty', 'volatility', 'downside'] }
+      ],
+      speakingLines: [
+        'Financial literacy is essential for individuals to make informed investment decisions.',
+        'Market volatility creates both risks and opportunities for investors.',
+        'Financial regulation aims to balance market efficiency with systemic stability.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-economy-5',
+    title: 'Economic Development & Poverty',
+    slug: 'economic-development-poverty',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Economy',
+    description: 'Vocabulary for discussing economic development, poverty reduction, and inequality.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2024-05-18T10:00:00Z',
+    updated_at: '2024-05-18T10:00:00Z',
+    content: {
+      title: 'Economic Development & Poverty',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 development and poverty terms',
+        'Discuss inequality and development',
+        'Use development economics vocabulary'
+      ],
+      coreExplanation: `Economic development and poverty are important IELTS topics. To achieve Band 7+, you need vocabulary that allows you to discuss development challenges and solutions.
+
+This lesson covers poverty, inequality, and development strategies. Understanding these concepts helps you discuss global economic disparities and efforts to address them.`,
+      examples: [
+        { sentence: 'Extreme poverty affects billions of people worldwide.', explanation: '"Extreme poverty" is living on less than $2.15 per day.' },
+        { sentence: 'Income inequality has widened in many countries.', explanation: '"Income inequality" is uneven distribution of earnings.' },
+        { sentence: 'Economic development improves living standards.', explanation: '"Economic development" is progress in economic wellbeing.' },
+        { sentence: 'Foreign aid supports development in poorer countries.', explanation: '"Foreign aid" is assistance from other countries.' },
+        { sentence: 'Microfinance provides small loans to entrepreneurs.', explanation: '"Microfinance" is financial services for low-income people.' },
+        { sentence: 'Human development encompasses health, education, and income.', explanation: '"Human development" is broader than economic growth.' },
+        { sentence: 'The poverty line defines the minimum income for basic needs.', explanation: '"Poverty line" is the threshold below which people are considered poor.' },
+        { sentence: 'Social mobility allows people to improve their economic status.', explanation: '"Social mobility" is movement between economic classes.' },
+        { sentence: 'Developing countries face unique economic challenges.', explanation: '"Developing countries" are nations with lower incomes.' },
+        { sentence: 'Wealth redistribution aims to reduce inequality.', explanation: '"Wealth redistribution" is transferring resources from rich to poor.' },
+        { sentence: 'Infrastructure investment supports economic growth.', explanation: '"Infrastructure investment" is spending on basic facilities.' },
+        { sentence: 'The middle class is expanding in many emerging economies.', explanation: '"Middle class" is the economic group between rich and poor.' },
+        { sentence: 'Subsistence farming provides only basic survival needs.', explanation: '"Subsistence farming" is growing food only for family consumption.' },
+        { sentence: 'Economic empowerment enables people to improve their lives.', explanation: '"Economic empowerment" is gaining economic independence.' },
+        { sentence: 'The Gini coefficient measures income inequality.', explanation: '"Gini coefficient" is a statistical measure of inequality.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Poor countries need more money.', correction: 'Developing countries require sustainable development strategies addressing infrastructure, education, and governance.', explanation: 'Discuss comprehensive development approaches.' },
+        { mistake: 'Rich people should give money to poor people.', correction: 'Wealth redistribution policies and social safety nets can help reduce inequality.', explanation: 'Use policy terminology.' },
+        { mistake: 'Poverty is caused by laziness.', correction: 'Poverty results from complex factors including structural barriers, limited opportunities, and systemic inequalities.', explanation: 'Avoid oversimplified explanations.' }
+      ],
+      miniPractice: [
+        { question: 'Income _____ has widened in many countries.', type: 'fill-blank' },
+        { question: 'Which term describes living on less than $2.15 per day?', options: ['extreme poverty', 'relative poverty', 'absolute poverty', 'deep poverty'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Poor countries need help from rich countries."', type: 'rewrite' },
+        { question: 'Social _____ allows people to improve their economic status.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'inequality',
+        'extreme poverty',
+        'Developing countries benefit from international cooperation and sustainable development assistance.',
+        'mobility'
+      ],
+      quickRecap: 'Key terms: "extreme poverty", "income inequality", "economic development", "foreign aid", "microfinance", "human development", "poverty line", "social mobility", "wealth redistribution", "Gini coefficient". Use these for development discussions!',
+      collocations: [
+        'extreme poverty', 'income inequality', 'economic development', 'foreign aid',
+        'microfinance', 'human development', 'poverty line', 'social mobility',
+        'developing countries', 'wealth redistribution', 'infrastructure investment', 'economic empowerment'
+      ],
+      synonyms: [
+        { word: 'poor', synonyms: ['impoverished', 'low-income', 'disadvantaged', 'underprivileged'] },
+        { word: 'rich', synonyms: ['wealthy', 'affluent', 'high-income', 'prosperous'] },
+        { word: 'help', synonyms: ['aid', 'assistance', 'support', 'development cooperation'] }
+      ],
+      speakingLines: [
+        'Income inequality has significant social and economic consequences that require policy attention.',
+        'Sustainable economic development requires investment in human capital and infrastructure.',
+        'Social mobility is essential for ensuring that economic growth benefits all segments of society.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-economy-6',
+    title: 'Entrepreneurship & Startups',
+    slug: 'entrepreneurship-startups',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Economy',
+    description: 'Vocabulary for discussing business creation, innovation, and the startup ecosystem.',
+    is_premium: true,
+    is_published: true,
+    view_count: 750,
+    created_at: '2024-05-22T10:00:00Z',
+    updated_at: '2024-05-22T10:00:00Z',
+    content: {
+      title: 'Entrepreneurship & Startups',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 entrepreneurship terms',
+        'Discuss business creation and innovation',
+        'Use startup vocabulary accurately'
+      ],
+      coreExplanation: `Entrepreneurship and startups are increasingly relevant topics in IELTS. To achieve Band 7+, you need vocabulary that allows you to discuss business creation and innovation.
+
+This lesson covers entrepreneurship, startup culture, and business development. Understanding these concepts helps you discuss economic innovation and job creation.`,
+      examples: [
+        { sentence: 'Entrepreneurs identify opportunities and create new businesses.', explanation: '"Entrepreneurs" are people who start businesses.' },
+        { sentence: 'Startups often disrupt established industries.', explanation: '"Startups" are newly established businesses.' },
+        { sentence: 'Venture capital provides funding for high-growth companies.', explanation: '"Venture capital" is investment in early-stage companies.' },
+        { sentence: 'Business incubators support early-stage companies.', explanation: '"Business incubators" are programs helping new businesses.' },
+        { sentence: 'Scalability determines a startup\'s growth potential.', explanation: '"Scalability" is the ability to grow efficiently.' },
+        { sentence: 'Innovation drives competitive advantage.', explanation: '"Innovation" is introducing new ideas or methods.' },
+        { sentence: 'Market research identifies customer needs.', explanation: '"Market research" is gathering information about markets.' },
+        { sentence: 'Business models define how companies create value.', explanation: '"Business models" are frameworks for generating revenue.' },
+        { sentence: 'Seed funding supports the earliest stages of development.', explanation: '"Seed funding" is initial investment in startups.' },
+        { sentence: 'Pivoting involves changing business strategy.', explanation: '"Pivoting" is fundamentally changing direction.' },
+        { sentence: 'Intellectual property protects innovations.', explanation: '"Intellectual property" includes patents and trademarks.' },
+        { sentence: 'Bootstrapping means self-funding a business.', explanation: '"Bootstrapping" is starting without external investment.' },
+        { sentence: 'Unicorns are startups valued at over $1 billion.', explanation: '"Unicorns" are rare, highly valued startups.' },
+        { sentence: 'Accelerators provide intensive support for startups.', explanation: '"Accelerators" are programs that speed up startup growth.' },
+        { sentence: 'Exit strategies include acquisition or IPO.', explanation: '"Exit strategies" are plans for investors to realize returns.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Starting a business is easy.', correction: 'Entrepreneurship involves significant risk, requiring careful planning, market research, and often multiple iterations.', explanation: 'Acknowledge entrepreneurship challenges.' },
+        { mistake: 'All startups become successful.', correction: 'Most startups fail, with success depending on factors including market timing, execution, and funding.', explanation: 'Present realistic views on startups.' },
+        { mistake: 'You need a lot of money to start a business.', correction: 'Bootstrapping and lean startup methodologies enable entrepreneurs to launch with minimal initial capital.', explanation: 'Discuss various funding approaches.' }
+      ],
+      miniPractice: [
+        { question: '_____ identify opportunities and create new businesses.', type: 'fill-blank' },
+        { question: 'Which term describes startups valued at over $1 billion?', options: ['unicorns', 'gazelles', 'dragons', 'phoenixes'], type: 'multiple-choice' },
+        { question: 'Rewrite: "He started a new company."', type: 'rewrite' },
+        { question: 'Business _____ support early-stage companies.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Entrepreneurs',
+        'unicorns',
+        'He launched a startup / founded an entrepreneurial venture.',
+        'incubators'
+      ],
+      quickRecap: 'Key terms: "entrepreneurs", "startups", "venture capital", "business incubators", "scalability", "innovation", "business models", "seed funding", "pivoting", "intellectual property". Use these for entrepreneurship discussions!',
+      collocations: [
+        'entrepreneurs', 'startups', 'venture capital', 'business incubators',
+        'scalability', 'innovation', 'market research', 'business models',
+        'seed funding', 'pivoting', 'intellectual property', 'exit strategies'
+      ],
+      synonyms: [
+        { word: 'start', synonyms: ['launch', 'found', 'establish', 'create'] },
+        { word: 'business', synonyms: ['company', 'venture', 'enterprise', 'firm'] },
+        { word: 'idea', synonyms: ['concept', 'innovation', 'proposition', 'solution'] }
+      ],
+      speakingLines: [
+        'Entrepreneurship drives economic innovation and job creation.',
+        'Startups often disrupt established industries through technological innovation.',
+        'The startup ecosystem requires supportive infrastructure including incubators and access to capital.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-economy-7',
+    title: 'Taxation & Government Finance',
+    slug: 'taxation-government-finance',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Economy',
+    description: 'Advanced vocabulary for discussing tax systems, government spending, and fiscal policy.',
+    is_premium: true,
+    is_published: true,
+    view_count: 620,
+    created_at: '2024-05-25T10:00:00Z',
+    updated_at: '2024-05-25T10:00:00Z',
+    content: {
+      title: 'Taxation & Government Finance',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 taxation and fiscal terms',
+        'Discuss government finance and spending',
+        'Use fiscal policy vocabulary'
+      ],
+      coreExplanation: `Taxation and government finance are important topics for discussing economic policy. To achieve Band 8+, you need vocabulary that allows you to discuss how governments raise and spend money.
+
+This lesson covers tax systems, government budgets, and fiscal policy. Understanding these concepts helps you discuss the role of government in the economy.`,
+      examples: [
+        { sentence: 'Progressive taxation imposes higher rates on higher incomes.', explanation: '"Progressive taxation" means tax rates increase with income.' },
+        { sentence: 'Government expenditure funds public services.', explanation: '"Government expenditure" is public spending.' },
+        { sentence: 'Budget deficits occur when spending exceeds revenue.', explanation: '"Budget deficits" are shortfalls in government finances.' },
+        { sentence: 'Tax evasion is illegal avoidance of tax obligations.', explanation: '"Tax evasion" is illegally not paying taxes.' },
+        { sentence: 'Fiscal policy uses taxation and spending to influence the economy.', explanation: '"Fiscal policy" is government economic policy through budgets.' },
+        { sentence: 'Public debt accumulates from persistent deficits.', explanation: '"Public debt" is total government borrowing.' },
+        { sentence: 'Tax incentives encourage certain economic behaviors.', explanation: '"Tax incentives" are tax benefits for specific activities.' },
+        { sentence: 'Austerity measures reduce government spending.', explanation: '"Austerity measures" are spending cuts to reduce deficits.' },
+        { sentence: 'Value-added tax is applied at each production stage.', explanation: '"Value-added tax" (VAT) is a consumption tax.' },
+        { sentence: 'Tax havens offer low tax rates to attract capital.', explanation: '"Tax havens" are jurisdictions with minimal taxes.' },
+        { sentence: 'Fiscal stimulus increases government spending during recessions.', explanation: '"Fiscal stimulus" is expansionary government spending.' },
+        { sentence: 'Corporate taxation affects business investment decisions.', explanation: '"Corporate taxation" is taxes on company profits.' },
+        { sentence: 'Tax compliance requires accurate reporting and payment.', explanation: '"Tax compliance" is following tax laws.' },
+        { sentence: 'Sovereign debt is government borrowing from markets.', explanation: '"Sovereign debt" is national government debt.' },
+        { sentence: 'Tax reform aims to improve system efficiency and fairness.', explanation: '"Tax reform" is changing tax systems.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Taxes are too high.', correction: 'Tax policy involves trade-offs between revenue generation, economic efficiency, and distributional fairness.', explanation: 'Discuss taxation analytically.' },
+        { mistake: 'The government should spend less.', correction: 'Fiscal policy decisions involve balancing public service provision with fiscal sustainability.', explanation: 'Present balanced fiscal views.' },
+        { mistake: 'Rich people don\'t pay taxes.', correction: 'Tax systems vary in progressivity, with debates about appropriate rates for different income levels.', explanation: 'Discuss tax policy objectively.' }
+      ],
+      miniPractice: [
+        { question: '_____ taxation imposes higher rates on higher incomes.', type: 'fill-blank' },
+        { question: 'Which term describes illegal avoidance of tax obligations?', options: ['tax evasion', 'tax avoidance', 'tax planning', 'tax minimization'], type: 'multiple-choice' },
+        { question: 'Rewrite: "The government spends too much money."', type: 'rewrite' },
+        { question: 'Budget _____ occur when spending exceeds revenue.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Progressive',
+        'tax evasion',
+        'Government expenditure levels and fiscal sustainability are subjects of ongoing policy debate.',
+        'deficits'
+      ],
+      quickRecap: 'Key terms: "progressive taxation", "government expenditure", "budget deficits", "tax evasion", "fiscal policy", "public debt", "tax incentives", "austerity measures", "fiscal stimulus", "tax reform". Use these for fiscal policy discussions!',
+      collocations: [
+        'progressive taxation', 'government expenditure', 'budget deficits', 'tax evasion',
+        'fiscal policy', 'public debt', 'tax incentives', 'austerity measures',
+        'value-added tax', 'tax havens', 'fiscal stimulus', 'corporate taxation'
+      ],
+      synonyms: [
+        { word: 'tax', synonyms: ['levy', 'duty', 'tariff', 'contribution'] },
+        { word: 'spend', synonyms: ['expenditure', 'outlay', 'disbursement', 'allocation'] },
+        { word: 'debt', synonyms: ['borrowing', 'liability', 'deficit', 'obligation'] }
+      ],
+      speakingLines: [
+        'Progressive taxation aims to distribute the tax burden according to ability to pay.',
+        'Fiscal policy must balance economic stimulus with long-term fiscal sustainability.',
+        'Tax reform debates involve trade-offs between efficiency, simplicity, and fairness.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-economy-8',
+    title: 'Consumer Behavior & Marketing',
+    slug: 'consumer-behavior-marketing',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Economy',
+    description: 'Vocabulary for discussing consumer psychology, advertising, and marketing strategies.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2024-05-28T10:00:00Z',
+    updated_at: '2024-05-28T10:00:00Z',
+    content: {
+      title: 'Consumer Behavior & Marketing',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 consumer and marketing terms',
+        'Discuss advertising and consumer psychology',
+        'Use marketing vocabulary accurately'
+      ],
+      coreExplanation: `Consumer behavior and marketing are relevant to many IELTS topics. To achieve Band 7+, you need vocabulary that allows you to discuss how businesses influence consumers and how people make purchasing decisions.
+
+This lesson covers consumer psychology, advertising, and marketing strategies. Understanding these concepts helps you discuss the relationship between businesses and consumers.`,
+      examples: [
+        { sentence: 'Consumer behavior is influenced by psychological and social factors.', explanation: '"Consumer behavior" is how people make purchasing decisions.' },
+        { sentence: 'Brand loyalty keeps customers returning to familiar products.', explanation: '"Brand loyalty" is consistent preference for a brand.' },
+        { sentence: 'Targeted advertising reaches specific demographic groups.', explanation: '"Targeted advertising" is ads aimed at particular audiences.' },
+        { sentence: 'Market segmentation divides consumers into distinct groups.', explanation: '"Market segmentation" is categorizing consumers.' },
+        { sentence: 'Impulse buying occurs without prior planning.', explanation: '"Impulse buying" is unplanned purchasing.' },
+        { sentence: 'Consumer protection laws safeguard buyer rights.', explanation: '"Consumer protection" is legal safeguards for buyers.' },
+        { sentence: 'Advertising campaigns shape brand perception.', explanation: '"Advertising campaigns" are coordinated marketing efforts.' },
+        { sentence: 'Price sensitivity varies among consumer segments.', explanation: '"Price sensitivity" is how price affects purchasing.' },
+        { sentence: 'Product placement integrates brands into media content.', explanation: '"Product placement" is featuring products in entertainment.' },
+        { sentence: 'Consumer confidence affects spending patterns.', explanation: '"Consumer confidence" is optimism about the economy.' },
+        { sentence: 'Ethical consumerism considers social and environmental impact.', explanation: '"Ethical consumerism" is values-based purchasing.' },
+        { sentence: 'Marketing strategies aim to influence purchasing decisions.', explanation: '"Marketing strategies" are plans to promote products.' },
+        { sentence: 'Brand awareness measures consumer recognition.', explanation: '"Brand awareness" is how well consumers know a brand.' },
+        { sentence: 'Consumer rights include safety and information.', explanation: '"Consumer rights" are legal protections for buyers.' },
+        { sentence: 'Persuasive techniques influence consumer choices.', explanation: '"Persuasive techniques" are methods to convince consumers.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Advertising makes people buy things.', correction: 'Advertising influences consumer behavior through various persuasive techniques and brand messaging.', explanation: 'Discuss advertising effects precisely.' },
+        { mistake: 'Companies trick customers.', correction: 'Marketing strategies employ psychological principles to influence purchasing decisions.', explanation: 'Use neutral, analytical language.' },
+        { mistake: 'People buy what they need.', correction: 'Consumer behavior is influenced by both rational needs and emotional, social, and psychological factors.', explanation: 'Acknowledge complexity in consumer decisions.' }
+      ],
+      miniPractice: [
+        { question: 'Brand _____ keeps customers returning to familiar products.', type: 'fill-blank' },
+        { question: 'Which term describes unplanned purchasing?', options: ['impulse buying', 'spontaneous shopping', 'random purchasing', 'quick buying'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Ads make people buy things they don\'t need."', type: 'rewrite' },
+        { question: 'Market _____ divides consumers into distinct groups.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'loyalty',
+        'impulse buying',
+        'Advertising can influence consumer behavior, sometimes encouraging purchases beyond immediate needs.',
+        'segmentation'
+      ],
+      quickRecap: 'Key terms: "consumer behavior", "brand loyalty", "targeted advertising", "market segmentation", "impulse buying", "consumer protection", "price sensitivity", "consumer confidence", "ethical consumerism", "brand awareness". Use these for marketing discussions!',
+      collocations: [
+        'consumer behavior', 'brand loyalty', 'targeted advertising', 'market segmentation',
+        'impulse buying', 'consumer protection', 'advertising campaigns', 'price sensitivity',
+        'product placement', 'consumer confidence', 'ethical consumerism', 'brand awareness'
+      ],
+      synonyms: [
+        { word: 'buy', synonyms: ['purchase', 'acquire', 'consume', 'procure'] },
+        { word: 'sell', synonyms: ['market', 'promote', 'advertise', 'merchandise'] },
+        { word: 'customer', synonyms: ['consumer', 'buyer', 'client', 'shopper'] }
+      ],
+      speakingLines: [
+        'Consumer behavior is influenced by a complex mix of psychological, social, and economic factors.',
+        'Targeted advertising raises questions about privacy and manipulation.',
+        'Ethical consumerism reflects growing awareness of the social and environmental impact of purchasing decisions.'
+      ]
+    }
   }
 ];
