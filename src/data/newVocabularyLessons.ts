@@ -4385,5 +4385,1154 @@ This lesson covers legal systems, courts, and justice processes. Understanding t
         'Legal aid ensures that access to justice is not limited by financial means.'
       ]
     }
+  },
+  // ============================================
+  // BATCH 8: Media & Communication (5 lessons)
+  // ============================================
+  {
+    id: 'vocab-media-2',
+    title: 'News Media & Journalism',
+    slug: 'news-media-journalism',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Media',
+    description: 'Vocabulary for discussing news reporting, journalism ethics, and media coverage.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2024-07-12T10:00:00Z',
+    updated_at: '2024-07-12T10:00:00Z',
+    content: {
+      title: 'News Media & Journalism',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 journalism and news terms',
+        'Discuss media coverage and ethics',
+        'Use news vocabulary accurately'
+      ],
+      coreExplanation: `News media and journalism are important topics for discussing information and democracy. To achieve Band 7+, you need vocabulary that allows you to discuss how news is produced and consumed.
+
+This lesson covers journalism, news media, and media ethics. Understanding these concepts helps you discuss the role of media in society.`,
+      examples: [
+        { sentence: 'Investigative journalism uncovers hidden information.', explanation: '"Investigative journalism" is in-depth reporting.' },
+        { sentence: 'Media bias affects how news is presented.', explanation: '"Media bias" is slanted reporting.' },
+        { sentence: 'Press freedom enables independent reporting.', explanation: '"Press freedom" is media operating without government control.' },
+        { sentence: 'Fact-checking verifies the accuracy of claims.', explanation: '"Fact-checking" is verifying information.' },
+        { sentence: 'Breaking news reports events as they happen.', explanation: '"Breaking news" is immediate reporting of events.' },
+        { sentence: 'Editorial content expresses opinions.', explanation: '"Editorial" is opinion-based content.' },
+        { sentence: 'News sources provide information to journalists.', explanation: '"News sources" are people or documents providing information.' },
+        { sentence: 'Media literacy helps people evaluate information.', explanation: '"Media literacy" is understanding media messages.' },
+        { sentence: 'Sensationalism exaggerates news for attention.', explanation: '"Sensationalism" is dramatic, exaggerated reporting.' },
+        { sentence: 'Journalistic ethics guide responsible reporting.', explanation: '"Journalistic ethics" are professional standards.' },
+        { sentence: 'News coverage shapes public perception.', explanation: '"News coverage" is how events are reported.' },
+        { sentence: 'Citizen journalism involves non-professionals reporting news.', explanation: '"Citizen journalism" is amateur news reporting.' },
+        { sentence: 'Media ownership affects editorial independence.', explanation: '"Media ownership" is who controls media outlets.' },
+        { sentence: 'Headlines summarize news stories.', explanation: '"Headlines" are titles of news articles.' },
+        { sentence: 'News consumption patterns have changed dramatically.', explanation: '"News consumption" is how people access news.' }
+      ],
+      commonMistakes: [
+        { mistake: 'The news is always true.', correction: 'News accuracy varies by source, and media literacy helps evaluate reliability.', explanation: 'Encourage critical evaluation of news.' },
+        { mistake: 'All journalists are biased.', correction: 'Professional journalism follows ethical standards, though bias can exist in varying degrees.', explanation: 'Distinguish professional journalism from opinion.' },
+        { mistake: 'Social media is better than traditional news.', correction: 'Different news sources have different strengths and limitations.', explanation: 'Compare media types objectively.' }
+      ],
+      miniPractice: [
+        { question: '_____ journalism uncovers hidden information.', type: 'fill-blank' },
+        { question: 'Which term describes slanted reporting?', options: ['media bias', 'fake news', 'propaganda', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "The news lies to people."', type: 'rewrite' },
+        { question: 'Media _____ helps people evaluate information.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Investigative',
+        'all of the above',
+        'Media bias and misinformation can affect the accuracy of news reporting.',
+        'literacy'
+      ],
+      quickRecap: 'Key terms: "investigative journalism", "media bias", "press freedom", "fact-checking", "editorial", "media literacy", "sensationalism", "journalistic ethics", "citizen journalism", "news consumption". Use media vocabulary accurately!',
+      collocations: [
+        'investigative journalism', 'media bias', 'press freedom', 'fact-checking',
+        'breaking news', 'editorial content', 'news sources', 'media literacy',
+        'sensationalism', 'journalistic ethics', 'news coverage', 'citizen journalism'
+      ],
+      synonyms: [
+        { word: 'news', synonyms: ['reporting', 'coverage', 'journalism', 'media'] },
+        { word: 'journalist', synonyms: ['reporter', 'correspondent', 'newsperson', 'media professional'] },
+        { word: 'report', synonyms: ['cover', 'document', 'chronicle', 'publish'] }
+      ],
+      speakingLines: [
+        'Media literacy is essential for evaluating the reliability of news sources.',
+        'Press freedom is fundamental to democratic accountability.',
+        'Investigative journalism plays a crucial role in exposing wrongdoing.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-media-3',
+    title: 'Social Media & Digital Communication',
+    slug: 'social-media-digital-communication',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Media',
+    description: 'Vocabulary for discussing social media platforms, online communication, and digital culture.',
+    is_premium: true,
+    is_published: true,
+    view_count: 920,
+    created_at: '2024-07-15T10:00:00Z',
+    updated_at: '2024-07-15T10:00:00Z',
+    content: {
+      title: 'Social Media & Digital Communication',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 social media terms',
+        'Discuss digital communication',
+        'Use online culture vocabulary'
+      ],
+      coreExplanation: `Social media and digital communication are highly relevant IELTS topics. To achieve Band 7+, you need vocabulary that allows you to discuss online platforms and their effects.
+
+This lesson covers social media, digital communication, and online culture. Understanding these concepts helps you discuss how technology has transformed communication.`,
+      examples: [
+        { sentence: 'Social media platforms connect billions of users globally.', explanation: '"Social media platforms" are online networking sites.' },
+        { sentence: 'Viral content spreads rapidly across networks.', explanation: '"Viral content" is widely shared material.' },
+        { sentence: 'Online engagement measures user interaction.', explanation: '"Online engagement" is user participation.' },
+        { sentence: 'Digital footprints record online activities.', explanation: '"Digital footprints" are traces of online activity.' },
+        { sentence: 'Influencers shape opinions through social media.', explanation: '"Influencers" are people with large online followings.' },
+        { sentence: 'Cyberbullying is harassment conducted online.', explanation: '"Cyberbullying" is online harassment.' },
+        { sentence: 'Content moderation removes harmful material.', explanation: '"Content moderation" is reviewing and removing content.' },
+        { sentence: 'Echo chambers reinforce existing beliefs.', explanation: '"Echo chambers" are environments where views are amplified.' },
+        { sentence: 'Online privacy concerns have increased.', explanation: '"Online privacy" is protection of personal information.' },
+        { sentence: 'User-generated content is created by platform users.', explanation: '"User-generated content" is content made by users.' },
+        { sentence: 'Algorithm-driven feeds personalize content.', explanation: '"Algorithm-driven" means determined by computer programs.' },
+        { sentence: 'Digital detox involves reducing screen time.', explanation: '"Digital detox" is taking breaks from technology.' },
+        { sentence: 'Online communities form around shared interests.', explanation: '"Online communities" are internet-based groups.' },
+        { sentence: 'Misinformation spreads easily on social media.', explanation: '"Misinformation" is false information.' },
+        { sentence: 'Social media addiction affects mental health.', explanation: '"Social media addiction" is compulsive platform use.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Social media is bad.', correction: 'Social media has both benefits and drawbacks, including connection and information alongside risks like misinformation.', explanation: 'Present balanced views on social media.' },
+        { mistake: 'Everyone uses social media the same way.', correction: 'Social media usage patterns vary significantly by age, culture, and individual preferences.', explanation: 'Acknowledge diverse usage patterns.' },
+        { mistake: 'Online friends aren\'t real friends.', correction: 'Online relationships can be meaningful, though they differ from in-person connections.', explanation: 'Recognize value of online connections.' }
+      ],
+      miniPractice: [
+        { question: '_____ content spreads rapidly across networks.', type: 'fill-blank' },
+        { question: 'Which term describes environments where views are amplified?', options: ['echo chambers', 'filter bubbles', 'information silos', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "People waste time on social media."', type: 'rewrite' },
+        { question: 'Digital _____ record online activities.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Viral',
+        'all of the above',
+        'Social media usage patterns vary, with some users spending significant time on platforms.',
+        'footprints'
+      ],
+      quickRecap: 'Key terms: "social media platforms", "viral content", "online engagement", "digital footprints", "influencers", "cyberbullying", "content moderation", "echo chambers", "misinformation", "digital detox". Use balanced social media vocabulary!',
+      collocations: [
+        'social media platforms', 'viral content', 'online engagement', 'digital footprints',
+        'influencers', 'cyberbullying', 'content moderation', 'echo chambers',
+        'online privacy', 'user-generated content', 'algorithm-driven', 'online communities'
+      ],
+      synonyms: [
+        { word: 'post', synonyms: ['share', 'publish', 'upload', 'put online'] },
+        { word: 'like', synonyms: ['engage with', 'react to', 'interact with', 'respond to'] },
+        { word: 'follow', synonyms: ['subscribe to', 'connect with', 'track', 'keep up with'] }
+      ],
+      speakingLines: [
+        'Social media has transformed how people communicate and access information.',
+        'Echo chambers can reinforce existing beliefs and limit exposure to diverse perspectives.',
+        'Digital literacy is essential for navigating social media responsibly.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-media-4',
+    title: 'Advertising & Persuasion',
+    slug: 'advertising-persuasion',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Media',
+    description: 'Vocabulary for discussing advertising techniques, marketing messages, and persuasion.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2024-07-18T10:00:00Z',
+    updated_at: '2024-07-18T10:00:00Z',
+    content: {
+      title: 'Advertising & Persuasion',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 advertising terms',
+        'Discuss marketing and persuasion',
+        'Use advertising vocabulary'
+      ],
+      coreExplanation: `Advertising and persuasion are relevant to many IELTS topics. To achieve Band 7+, you need vocabulary that allows you to discuss how advertising influences people.
+
+This lesson covers advertising techniques, marketing strategies, and persuasion. Understanding these concepts helps you discuss the role of advertising in society.`,
+      examples: [
+        { sentence: 'Advertising campaigns promote products and services.', explanation: '"Advertising campaigns" are coordinated marketing efforts.' },
+        { sentence: 'Target audiences are specific consumer groups.', explanation: '"Target audiences" are intended recipients of messages.' },
+        { sentence: 'Brand recognition increases through repeated exposure.', explanation: '"Brand recognition" is consumer awareness of brands.' },
+        { sentence: 'Persuasive techniques influence consumer decisions.', explanation: '"Persuasive techniques" are methods to convince people.' },
+        { sentence: 'Celebrity endorsements associate products with famous people.', explanation: '"Celebrity endorsements" are famous people promoting products.' },
+        { sentence: 'Subliminal messaging operates below conscious awareness.', explanation: '"Subliminal messaging" is hidden persuasion.' },
+        { sentence: 'Advertising regulations protect consumers.', explanation: '"Advertising regulations" are rules governing ads.' },
+        { sentence: 'Product placement integrates brands into content.', explanation: '"Product placement" is featuring products in media.' },
+        { sentence: 'Emotional appeals connect with consumers\' feelings.', explanation: '"Emotional appeals" are persuasion through emotions.' },
+        { sentence: 'Advertising revenue funds media content.', explanation: '"Advertising revenue" is income from ads.' },
+        { sentence: 'Digital advertising targets users based on data.', explanation: '"Digital advertising" is online marketing.' },
+        { sentence: 'Advertising ethics address responsible marketing.', explanation: '"Advertising ethics" are moral standards in advertising.' },
+        { sentence: 'Call to action prompts immediate response.', explanation: '"Call to action" is a prompt to act.' },
+        { sentence: 'Advertising saturation overwhelms consumers.', explanation: '"Advertising saturation" is excessive advertising.' },
+        { sentence: 'Native advertising blends with editorial content.', explanation: '"Native advertising" is ads resembling content.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Advertising is manipulation.', correction: 'Advertising uses persuasive techniques, though ethical standards distinguish legitimate marketing from manipulation.', explanation: 'Discuss advertising analytically.' },
+        { mistake: 'Ads don\'t affect me.', correction: 'Advertising influences consumer behavior in various ways, often below conscious awareness.', explanation: 'Acknowledge advertising effects.' },
+        { mistake: 'All advertising is bad.', correction: 'Advertising serves economic functions and can inform consumers, though it raises ethical concerns.', explanation: 'Present balanced views on advertising.' }
+      ],
+      miniPractice: [
+        { question: 'Advertising _____ promote products and services.', type: 'fill-blank' },
+        { question: 'Which term describes famous people promoting products?', options: ['celebrity endorsements', 'influencer marketing', 'brand ambassadors', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Ads trick people into buying things."', type: 'rewrite' },
+        { question: 'Target _____ are specific consumer groups.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'campaigns',
+        'all of the above',
+        'Advertising uses persuasive techniques to influence consumer purchasing decisions.',
+        'audiences'
+      ],
+      quickRecap: 'Key terms: "advertising campaigns", "target audiences", "brand recognition", "persuasive techniques", "celebrity endorsements", "product placement", "emotional appeals", "digital advertising", "advertising ethics", "native advertising". Use advertising vocabulary accurately!',
+      collocations: [
+        'advertising campaigns', 'target audiences', 'brand recognition', 'persuasive techniques',
+        'celebrity endorsements', 'subliminal messaging', 'advertising regulations', 'product placement',
+        'emotional appeals', 'advertising revenue', 'digital advertising', 'native advertising'
+      ],
+      synonyms: [
+        { word: 'advertise', synonyms: ['promote', 'market', 'publicize', 'sell'] },
+        { word: 'ad', synonyms: ['advertisement', 'commercial', 'promotion', 'marketing'] },
+        { word: 'buy', synonyms: ['purchase', 'acquire', 'consume', 'obtain'] }
+      ],
+      speakingLines: [
+        'Advertising uses various persuasive techniques to influence consumer behavior.',
+        'Digital advertising raises concerns about privacy and data collection.',
+        'Advertising ethics require balancing commercial interests with consumer protection.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-media-5',
+    title: 'Entertainment & Popular Culture',
+    slug: 'entertainment-popular-culture',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Media',
+    description: 'Vocabulary for discussing entertainment media, popular culture, and cultural trends.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2024-07-22T10:00:00Z',
+    updated_at: '2024-07-22T10:00:00Z',
+    content: {
+      title: 'Entertainment & Popular Culture',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 entertainment terms',
+        'Discuss popular culture trends',
+        'Use entertainment vocabulary'
+      ],
+      coreExplanation: `Entertainment and popular culture are common IELTS Speaking topics. To achieve Band 7+, you need vocabulary that allows you to discuss entertainment media and cultural trends.
+
+This lesson covers entertainment, popular culture, and media consumption. Understanding these concepts helps you discuss how entertainment shapes and reflects society.`,
+      examples: [
+        { sentence: 'Streaming services have transformed entertainment consumption.', explanation: '"Streaming services" are online content platforms.' },
+        { sentence: 'Popular culture reflects and shapes social values.', explanation: '"Popular culture" is mainstream cultural products.' },
+        { sentence: 'Binge-watching involves viewing multiple episodes consecutively.', explanation: '"Binge-watching" is watching many episodes at once.' },
+        { sentence: 'Cultural phenomena capture widespread attention.', explanation: '"Cultural phenomena" are widely noticed cultural events.' },
+        { sentence: 'Entertainment industry generates significant revenue.', explanation: '"Entertainment industry" is the business of entertainment.' },
+        { sentence: 'Fan communities form around entertainment properties.', explanation: '"Fan communities" are groups of enthusiastic followers.' },
+        { sentence: 'Media franchises extend across multiple platforms.', explanation: '"Media franchises" are entertainment properties across media.' },
+        { sentence: 'Celebrity culture influences public behavior.', explanation: '"Celebrity culture" is fascination with famous people.' },
+        { sentence: 'Content creators produce original material.', explanation: '"Content creators" are people making media content.' },
+        { sentence: 'Entertainment preferences vary by demographic.', explanation: '"Entertainment preferences" are what people like to watch.' },
+        { sentence: 'Cultural exports spread national culture globally.', explanation: '"Cultural exports" are culture shared internationally.' },
+        { sentence: 'Nostalgia drives interest in retro entertainment.', explanation: '"Nostalgia" is longing for the past.' },
+        { sentence: 'Reality television depicts unscripted situations.', explanation: '"Reality television" is unscripted TV shows.' },
+        { sentence: 'Entertainment escapism provides relief from daily life.', explanation: '"Escapism" is seeking distraction from reality.' },
+        { sentence: 'Mainstream entertainment appeals to broad audiences.', explanation: '"Mainstream" is widely popular.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Entertainment is just a waste of time.', correction: 'Entertainment serves various functions including relaxation, social bonding, and cultural expression.', explanation: 'Recognize entertainment value.' },
+        { mistake: 'Popular culture is shallow.', correction: 'Popular culture can reflect and influence social values, providing insight into contemporary society.', explanation: 'Acknowledge cultural significance.' },
+        { mistake: 'Old entertainment was better.', correction: 'Entertainment quality is subjective, with different eras producing valuable cultural products.', explanation: 'Avoid nostalgia bias.' }
+      ],
+      miniPractice: [
+        { question: '_____ services have transformed entertainment consumption.', type: 'fill-blank' },
+        { question: 'Which term describes watching many episodes at once?', options: ['binge-watching', 'marathon viewing', 'continuous watching', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "People watch too much TV."', type: 'rewrite' },
+        { question: 'Popular _____ reflects and shapes social values.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Streaming',
+        'all of the above',
+        'Entertainment consumption patterns have changed significantly with the rise of streaming services.',
+        'culture'
+      ],
+      quickRecap: 'Key terms: "streaming services", "popular culture", "binge-watching", "cultural phenomena", "entertainment industry", "fan communities", "media franchises", "celebrity culture", "content creators", "escapism". Use entertainment vocabulary accurately!',
+      collocations: [
+        'streaming services', 'popular culture', 'binge-watching', 'cultural phenomena',
+        'entertainment industry', 'fan communities', 'media franchises', 'celebrity culture',
+        'content creators', 'entertainment preferences', 'cultural exports', 'reality television'
+      ],
+      synonyms: [
+        { word: 'entertainment', synonyms: ['amusement', 'recreation', 'leisure', 'diversion'] },
+        { word: 'watch', synonyms: ['view', 'consume', 'stream', 'tune in'] },
+        { word: 'popular', synonyms: ['mainstream', 'widely-liked', 'trendy', 'fashionable'] }
+      ],
+      speakingLines: [
+        'Streaming services have fundamentally changed how people consume entertainment.',
+        'Popular culture both reflects and influences broader social values.',
+        'Entertainment serves important functions including relaxation and social connection.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-media-6',
+    title: 'Misinformation & Media Criticism',
+    slug: 'misinformation-media-criticism',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Media',
+    description: 'Advanced vocabulary for discussing fake news, propaganda, and critical media analysis.',
+    is_premium: true,
+    is_published: true,
+    view_count: 680,
+    created_at: '2024-07-25T10:00:00Z',
+    updated_at: '2024-07-25T10:00:00Z',
+    content: {
+      title: 'Misinformation & Media Criticism',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 misinformation terms',
+        'Discuss media criticism',
+        'Use critical analysis vocabulary'
+      ],
+      coreExplanation: `Misinformation and media criticism are increasingly important topics. To achieve Band 8+, you need vocabulary that allows you to discuss false information and media analysis.
+
+This lesson covers misinformation, propaganda, and critical media analysis. Understanding these concepts helps you discuss challenges to information quality.`,
+      examples: [
+        { sentence: 'Misinformation is false information spread unintentionally.', explanation: '"Misinformation" is incorrect information shared without intent to deceive.' },
+        { sentence: 'Disinformation is deliberately false information.', explanation: '"Disinformation" is intentionally deceptive content.' },
+        { sentence: 'Propaganda promotes particular political views.', explanation: '"Propaganda" is biased information to promote a cause.' },
+        { sentence: 'Fact-checking organizations verify claims.', explanation: '"Fact-checking organizations" are groups that verify information.' },
+        { sentence: 'Deepfakes use AI to create fake videos.', explanation: '"Deepfakes" are AI-generated fake media.' },
+        { sentence: 'Information warfare uses media to influence adversaries.', explanation: '"Information warfare" is using information as a weapon.' },
+        { sentence: 'Conspiracy theories propose secret explanations.', explanation: '"Conspiracy theories" are beliefs in secret plots.' },
+        { sentence: 'Source credibility affects information trustworthiness.', explanation: '"Source credibility" is how trustworthy a source is.' },
+        { sentence: 'Media manipulation distorts public perception.', explanation: '"Media manipulation" is controlling media to deceive.' },
+        { sentence: 'Critical thinking evaluates information quality.', explanation: '"Critical thinking" is careful analysis of information.' },
+        { sentence: 'Information literacy enables evaluation of sources.', explanation: '"Information literacy" is ability to find and evaluate information.' },
+        { sentence: 'Clickbait uses sensational headlines to attract clicks.', explanation: '"Clickbait" is content designed to attract clicks.' },
+        { sentence: 'Filter bubbles limit exposure to diverse information.', explanation: '"Filter bubbles" are personalized information environments.' },
+        { sentence: 'Verification processes confirm information accuracy.', explanation: '"Verification" is confirming something is true.' },
+        { sentence: 'Media skepticism questions information sources.', explanation: '"Media skepticism" is doubting media claims.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Everything online is fake.', correction: 'Information quality varies, and critical evaluation helps distinguish reliable from unreliable sources.', explanation: 'Encourage nuanced evaluation.' },
+        { mistake: 'Only certain groups spread misinformation.', correction: 'Misinformation can come from various sources and affect people across the political spectrum.', explanation: 'Avoid partisan framing.' },
+        { mistake: 'I can always tell what\'s fake.', correction: 'Sophisticated misinformation can be difficult to identify, requiring careful verification.', explanation: 'Acknowledge detection challenges.' }
+      ],
+      miniPractice: [
+        { question: '_____ is false information spread unintentionally.', type: 'fill-blank' },
+        { question: 'Which term describes AI-generated fake videos?', options: ['deepfakes', 'synthetic media', 'fake videos', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Everything on the internet is lies."', type: 'rewrite' },
+        { question: '_____ is deliberately false information.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Misinformation',
+        'all of the above',
+        'Information quality varies online, requiring critical evaluation of sources.',
+        'Disinformation'
+      ],
+      quickRecap: 'Key terms: "misinformation", "disinformation", "propaganda", "fact-checking", "deepfakes", "information warfare", "conspiracy theories", "source credibility", "critical thinking", "information literacy". Use critical analysis vocabulary!',
+      collocations: [
+        'misinformation', 'disinformation', 'propaganda', 'fact-checking organizations',
+        'deepfakes', 'information warfare', 'conspiracy theories', 'source credibility',
+        'media manipulation', 'critical thinking', 'information literacy', 'filter bubbles'
+      ],
+      synonyms: [
+        { word: 'fake', synonyms: ['false', 'fabricated', 'misleading', 'deceptive'] },
+        { word: 'true', synonyms: ['accurate', 'verified', 'factual', 'reliable'] },
+        { word: 'check', synonyms: ['verify', 'confirm', 'validate', 'authenticate'] }
+      ],
+      speakingLines: [
+        'Information literacy is essential for navigating the modern media environment.',
+        'Distinguishing misinformation from disinformation helps understand intent.',
+        'Critical thinking skills are crucial for evaluating source credibility.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 9: Science & Research (5 lessons)
+  // ============================================
+  {
+    id: 'vocab-science-2',
+    title: 'Scientific Method & Research',
+    slug: 'scientific-method-research',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Science',
+    description: 'Advanced vocabulary for discussing scientific methodology, research processes, and evidence.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2024-07-28T10:00:00Z',
+    updated_at: '2024-07-28T10:00:00Z',
+    content: {
+      title: 'Scientific Method & Research',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 scientific method terms',
+        'Discuss research processes',
+        'Use scientific vocabulary'
+      ],
+      coreExplanation: `Scientific methodology is important for discussing research and evidence. To achieve Band 8+, you need vocabulary that allows you to discuss how scientific knowledge is produced.
+
+This lesson covers the scientific method, research processes, and evidence evaluation. Understanding these concepts helps you discuss science and research accurately.`,
+      examples: [
+        { sentence: 'The scientific method involves systematic observation and experimentation.', explanation: '"Scientific method" is the process of scientific inquiry.' },
+        { sentence: 'Hypotheses are testable predictions.', explanation: '"Hypotheses" are proposed explanations to be tested.' },
+        { sentence: 'Empirical evidence is based on observation.', explanation: '"Empirical evidence" is evidence from observation or experiment.' },
+        { sentence: 'Peer review evaluates research quality.', explanation: '"Peer review" is expert evaluation of research.' },
+        { sentence: 'Controlled experiments isolate variables.', explanation: '"Controlled experiments" test one variable at a time.' },
+        { sentence: 'Data analysis reveals patterns and relationships.', explanation: '"Data analysis" is examining data systematically.' },
+        { sentence: 'Replication confirms research findings.', explanation: '"Replication" is repeating experiments to verify results.' },
+        { sentence: 'Scientific consensus represents expert agreement.', explanation: '"Scientific consensus" is widespread agreement among scientists.' },
+        { sentence: 'Research methodology determines study design.', explanation: '"Research methodology" is the approach to conducting research.' },
+        { sentence: 'Variables are factors that can change.', explanation: '"Variables" are changeable elements in experiments.' },
+        { sentence: 'Sample sizes affect statistical reliability.', explanation: '"Sample sizes" are the number of subjects studied.' },
+        { sentence: 'Correlation does not imply causation.', explanation: '"Correlation" is a relationship between variables.' },
+        { sentence: 'Bias can affect research outcomes.', explanation: '"Bias" is systematic error in research.' },
+        { sentence: 'Longitudinal studies track subjects over time.', explanation: '"Longitudinal studies" follow subjects for extended periods.' },
+        { sentence: 'Quantitative research uses numerical data.', explanation: '"Quantitative research" involves measurable data.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Scientists prove things.', correction: 'Science provides evidence supporting or refuting hypotheses, with findings subject to revision.', explanation: 'Explain scientific uncertainty.' },
+        { mistake: 'One study proves something.', correction: 'Scientific knowledge builds through multiple studies, replication, and peer review.', explanation: 'Discuss cumulative evidence.' },
+        { mistake: 'Correlation means causation.', correction: 'Correlation indicates a relationship but does not establish that one factor causes another.', explanation: 'Distinguish correlation from causation.' }
+      ],
+      miniPractice: [
+        { question: 'The scientific _____ involves systematic observation and experimentation.', type: 'fill-blank' },
+        { question: 'Which term describes expert evaluation of research?', options: ['peer review', 'editorial review', 'quality control', 'expert assessment'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Scientists proved this is true."', type: 'rewrite' },
+        { question: '_____ evidence is based on observation.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'method',
+        'peer review',
+        'Scientific research provides strong evidence supporting this conclusion.',
+        'Empirical'
+      ],
+      quickRecap: 'Key terms: "scientific method", "hypotheses", "empirical evidence", "peer review", "controlled experiments", "data analysis", "replication", "scientific consensus", "variables", "correlation". Use scientific vocabulary accurately!',
+      collocations: [
+        'scientific method', 'hypotheses', 'empirical evidence', 'peer review',
+        'controlled experiments', 'data analysis', 'replication', 'scientific consensus',
+        'research methodology', 'variables', 'sample sizes', 'longitudinal studies'
+      ],
+      synonyms: [
+        { word: 'study', synonyms: ['research', 'investigation', 'experiment', 'analysis'] },
+        { word: 'prove', synonyms: ['demonstrate', 'show', 'provide evidence', 'support'] },
+        { word: 'test', synonyms: ['examine', 'investigate', 'evaluate', 'assess'] }
+      ],
+      speakingLines: [
+        'The scientific method provides a systematic approach to understanding the natural world.',
+        'Peer review is essential for maintaining research quality and credibility.',
+        'Scientific consensus emerges from accumulated evidence across multiple studies.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-science-3',
+    title: 'Space & Astronomy',
+    slug: 'space-astronomy',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Science',
+    description: 'Vocabulary for discussing space exploration, astronomy, and the universe.',
+    is_premium: true,
+    is_published: true,
+    view_count: 850,
+    created_at: '2024-08-01T10:00:00Z',
+    updated_at: '2024-08-01T10:00:00Z',
+    content: {
+      title: 'Space & Astronomy',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 space and astronomy terms',
+        'Discuss space exploration',
+        'Use astronomical vocabulary'
+      ],
+      coreExplanation: `Space and astronomy are fascinating topics that appear in IELTS. To achieve Band 7+, you need vocabulary that allows you to discuss space exploration and astronomical concepts.
+
+This lesson covers space exploration, astronomy, and the universe. Understanding these concepts helps you discuss humanity's exploration of space.`,
+      examples: [
+        { sentence: 'Space exploration has expanded human knowledge.', explanation: '"Space exploration" is investigating outer space.' },
+        { sentence: 'Satellites orbit Earth for various purposes.', explanation: '"Satellites" are objects orbiting planets.' },
+        { sentence: 'The solar system includes eight planets.', explanation: '"Solar system" is the sun and objects orbiting it.' },
+        { sentence: 'Galaxies contain billions of stars.', explanation: '"Galaxies" are vast systems of stars.' },
+        { sentence: 'Astronauts conduct research in space.', explanation: '"Astronauts" are people trained for space travel.' },
+        { sentence: 'Space missions achieve scientific objectives.', explanation: '"Space missions" are organized space expeditions.' },
+        { sentence: 'Telescopes observe distant celestial objects.', explanation: '"Telescopes" are instruments for viewing distant objects.' },
+        { sentence: 'The universe is constantly expanding.', explanation: '"Universe" is all of space and everything in it.' },
+        { sentence: 'Black holes have extreme gravitational pull.', explanation: '"Black holes" are regions of intense gravity.' },
+        { sentence: 'Mars exploration seeks signs of past life.', explanation: '"Mars exploration" is investigating the red planet.' },
+        { sentence: 'Space agencies coordinate international efforts.', explanation: '"Space agencies" are organizations managing space programs.' },
+        { sentence: 'Cosmic phenomena include supernovae and quasars.', explanation: '"Cosmic phenomena" are events in space.' },
+        { sentence: 'Orbital mechanics govern spacecraft movement.', explanation: '"Orbital mechanics" is the physics of orbits.' },
+        { sentence: 'Extraterrestrial life remains unconfirmed.', explanation: '"Extraterrestrial life" is life beyond Earth.' },
+        { sentence: 'Space tourism is becoming commercially viable.', explanation: '"Space tourism" is recreational space travel.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Space exploration is a waste of money.', correction: 'Space exploration provides scientific knowledge, technological innovation, and potential long-term benefits.', explanation: 'Discuss space exploration value.' },
+        { mistake: 'We know everything about space.', correction: 'Much of the universe remains unexplored and poorly understood.', explanation: 'Acknowledge scientific uncertainty.' },
+        { mistake: 'Aliens definitely exist.', correction: 'While conditions for life may exist elsewhere, extraterrestrial life has not been confirmed.', explanation: 'Present evidence-based views.' }
+      ],
+      miniPractice: [
+        { question: 'Space _____ has expanded human knowledge.', type: 'fill-blank' },
+        { question: 'Which term describes regions of intense gravity?', options: ['black holes', 'neutron stars', 'dark matter', 'singularities'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Going to space is pointless."', type: 'rewrite' },
+        { question: '_____ orbit Earth for various purposes.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'exploration',
+        'black holes',
+        'Space exploration provides scientific knowledge and technological benefits.',
+        'Satellites'
+      ],
+      quickRecap: 'Key terms: "space exploration", "satellites", "solar system", "galaxies", "astronauts", "space missions", "telescopes", "universe", "black holes", "space tourism". Use astronomical vocabulary accurately!',
+      collocations: [
+        'space exploration', 'satellites', 'solar system', 'galaxies',
+        'astronauts', 'space missions', 'telescopes', 'universe',
+        'black holes', 'Mars exploration', 'space agencies', 'space tourism'
+      ],
+      synonyms: [
+        { word: 'space', synonyms: ['outer space', 'cosmos', 'universe', 'heavens'] },
+        { word: 'planet', synonyms: ['world', 'celestial body', 'heavenly body', 'orb'] },
+        { word: 'star', synonyms: ['sun', 'celestial body', 'stellar object', 'luminary'] }
+      ],
+      speakingLines: [
+        'Space exploration has yielded significant scientific discoveries and technological innovations.',
+        'International cooperation in space programs demonstrates the potential for global collaboration.',
+        'The search for extraterrestrial life continues to drive space exploration efforts.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-science-4',
+    title: 'Genetics & Biology',
+    slug: 'genetics-biology',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Science',
+    description: 'Advanced vocabulary for discussing genetics, evolution, and biological sciences.',
+    is_premium: true,
+    is_published: true,
+    view_count: 680,
+    created_at: '2024-08-05T10:00:00Z',
+    updated_at: '2024-08-05T10:00:00Z',
+    content: {
+      title: 'Genetics & Biology',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 genetics and biology terms',
+        'Discuss biological concepts',
+        'Use scientific vocabulary'
+      ],
+      coreExplanation: `Genetics and biology are important scientific topics. To achieve Band 8+, you need vocabulary that allows you to discuss biological concepts and genetic science.
+
+This lesson covers genetics, evolution, and biological sciences. Understanding these concepts helps you discuss life sciences accurately.`,
+      examples: [
+        { sentence: 'DNA contains genetic information.', explanation: '"DNA" is the molecule carrying genetic instructions.' },
+        { sentence: 'Genetic engineering modifies organisms.', explanation: '"Genetic engineering" is altering genetic material.' },
+        { sentence: 'Evolution explains species development.', explanation: '"Evolution" is change in species over time.' },
+        { sentence: 'Biodiversity encompasses all living species.', explanation: '"Biodiversity" is the variety of life.' },
+        { sentence: 'Ecosystems include organisms and their environment.', explanation: '"Ecosystems" are communities of organisms.' },
+        { sentence: 'Mutations are changes in genetic material.', explanation: '"Mutations" are alterations in DNA.' },
+        { sentence: 'Natural selection drives evolutionary change.', explanation: '"Natural selection" is survival of the fittest.' },
+        { sentence: 'Cells are the basic units of life.', explanation: '"Cells" are fundamental biological units.' },
+        { sentence: 'Heredity transmits traits between generations.', explanation: '"Heredity" is passing traits to offspring.' },
+        { sentence: 'Cloning creates genetically identical organisms.', explanation: '"Cloning" is producing genetic copies.' },
+        { sentence: 'Stem cells can develop into various cell types.', explanation: '"Stem cells" are undifferentiated cells.' },
+        { sentence: 'Gene therapy treats diseases by modifying genes.', explanation: '"Gene therapy" is treating disease through genetics.' },
+        { sentence: 'Microorganisms include bacteria and viruses.', explanation: '"Microorganisms" are microscopic living things.' },
+        { sentence: 'Photosynthesis converts sunlight to energy.', explanation: '"Photosynthesis" is how plants make food.' },
+        { sentence: 'Extinction eliminates species permanently.', explanation: '"Extinction" is the end of a species.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Evolution is just a theory.', correction: 'In science, "theory" means a well-supported explanation; evolution is supported by extensive evidence.', explanation: 'Explain scientific terminology.' },
+        { mistake: 'Genetic engineering is unnatural.', correction: 'Humans have modified organisms through selective breeding for millennia; genetic engineering is a more precise method.', explanation: 'Provide context for genetic modification.' },
+        { mistake: 'Cloning creates identical people.', correction: 'Even genetic clones would develop differently due to environmental factors and experiences.', explanation: 'Distinguish genetics from identity.' }
+      ],
+      miniPractice: [
+        { question: '_____ contains genetic information.', type: 'fill-blank' },
+        { question: 'Which term describes the variety of life?', options: ['biodiversity', 'ecology', 'biology', 'genetics'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Evolution is not real."', type: 'rewrite' },
+        { question: 'Genetic _____ modifies organisms.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'DNA',
+        'biodiversity',
+        'Evolution is a well-supported scientific theory explaining species development.',
+        'engineering'
+      ],
+      quickRecap: 'Key terms: "DNA", "genetic engineering", "evolution", "biodiversity", "ecosystems", "mutations", "natural selection", "heredity", "cloning", "stem cells". Use biological vocabulary accurately!',
+      collocations: [
+        'DNA', 'genetic engineering', 'evolution', 'biodiversity',
+        'ecosystems', 'mutations', 'natural selection', 'cells',
+        'heredity', 'cloning', 'stem cells', 'gene therapy'
+      ],
+      synonyms: [
+        { word: 'gene', synonyms: ['genetic material', 'hereditary unit', 'DNA segment', 'genetic code'] },
+        { word: 'species', synonyms: ['organism', 'life form', 'creature', 'living thing'] },
+        { word: 'change', synonyms: ['evolve', 'mutate', 'adapt', 'develop'] }
+      ],
+      speakingLines: [
+        'Genetic engineering raises both exciting possibilities and ethical concerns.',
+        'Biodiversity loss threatens ecosystem stability and human wellbeing.',
+        'Evolution through natural selection explains the diversity of life on Earth.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-science-5',
+    title: 'Physics & Chemistry Basics',
+    slug: 'physics-chemistry-basics',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Science',
+    description: 'Vocabulary for discussing fundamental physics and chemistry concepts.',
+    is_premium: true,
+    is_published: true,
+    view_count: 620,
+    created_at: '2024-08-08T10:00:00Z',
+    updated_at: '2024-08-08T10:00:00Z',
+    content: {
+      title: 'Physics & Chemistry Basics',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 physics and chemistry terms',
+        'Discuss scientific concepts',
+        'Use physical science vocabulary'
+      ],
+      coreExplanation: `Physics and chemistry concepts appear in various IELTS contexts. To achieve Band 7+, you need vocabulary that allows you to discuss fundamental scientific concepts.
+
+This lesson covers basic physics and chemistry concepts. Understanding these terms helps you discuss scientific topics accurately.`,
+      examples: [
+        { sentence: 'Energy cannot be created or destroyed.', explanation: '"Energy" is the capacity to do work.' },
+        { sentence: 'Atoms are the building blocks of matter.', explanation: '"Atoms" are the smallest units of elements.' },
+        { sentence: 'Chemical reactions transform substances.', explanation: '"Chemical reactions" are processes changing substances.' },
+        { sentence: 'Gravity attracts objects toward each other.', explanation: '"Gravity" is the force of attraction between masses.' },
+        { sentence: 'Molecules consist of bonded atoms.', explanation: '"Molecules" are groups of atoms bonded together.' },
+        { sentence: 'Temperature measures thermal energy.', explanation: '"Temperature" is a measure of heat.' },
+        { sentence: 'Electricity powers modern technology.', explanation: '"Electricity" is the flow of electric charge.' },
+        { sentence: 'Elements are pure chemical substances.', explanation: '"Elements" are substances with one type of atom.' },
+        { sentence: 'Force causes objects to accelerate.', explanation: '"Force" is a push or pull on objects.' },
+        { sentence: 'Compounds combine different elements.', explanation: '"Compounds" are substances with multiple elements.' },
+        { sentence: 'Radiation includes various energy forms.', explanation: '"Radiation" is energy transmitted as waves or particles.' },
+        { sentence: 'Pressure is force per unit area.', explanation: '"Pressure" is force applied over an area.' },
+        { sentence: 'Velocity describes speed and direction.', explanation: '"Velocity" is speed in a specific direction.' },
+        { sentence: 'Solutions dissolve substances in liquids.', explanation: '"Solutions" are mixtures with dissolved substances.' },
+        { sentence: 'Magnetism attracts certain materials.', explanation: '"Magnetism" is the force from magnets.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Heat and temperature are the same.', correction: 'Heat is energy transfer, while temperature measures thermal energy.', explanation: 'Distinguish related concepts.' },
+        { mistake: 'Chemicals are always dangerous.', correction: 'Everything is made of chemicals; the term refers to substances, not just hazardous ones.', explanation: 'Clarify chemical terminology.' },
+        { mistake: 'Radiation is always harmful.', correction: 'Radiation includes many forms, some beneficial (like visible light) and some potentially harmful.', explanation: 'Explain radiation types.' }
+      ],
+      miniPractice: [
+        { question: '_____ cannot be created or destroyed.', type: 'fill-blank' },
+        { question: 'Which term describes the smallest units of elements?', options: ['atoms', 'molecules', 'particles', 'cells'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Chemicals are bad for you."', type: 'rewrite' },
+        { question: 'Chemical _____ transform substances.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Energy',
+        'atoms',
+        'Some chemical substances can be harmful, while others are essential for life.',
+        'reactions'
+      ],
+      quickRecap: 'Key terms: "energy", "atoms", "chemical reactions", "gravity", "molecules", "temperature", "electricity", "elements", "force", "radiation". Use scientific vocabulary accurately!',
+      collocations: [
+        'energy', 'atoms', 'chemical reactions', 'gravity',
+        'molecules', 'temperature', 'electricity', 'elements',
+        'force', 'compounds', 'radiation', 'pressure'
+      ],
+      synonyms: [
+        { word: 'energy', synonyms: ['power', 'force', 'strength', 'capacity'] },
+        { word: 'substance', synonyms: ['material', 'matter', 'compound', 'element'] },
+        { word: 'change', synonyms: ['transform', 'convert', 'alter', 'modify'] }
+      ],
+      speakingLines: [
+        'Understanding basic physics and chemistry helps explain everyday phenomena.',
+        'Energy conservation is a fundamental principle in physics.',
+        'Chemical reactions are essential for both industrial processes and biological life.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-science-6',
+    title: 'Scientific Ethics & Responsibility',
+    slug: 'scientific-ethics-responsibility',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Science',
+    description: 'Advanced vocabulary for discussing ethical issues in science and research responsibility.',
+    is_premium: true,
+    is_published: true,
+    view_count: 580,
+    created_at: '2024-08-12T10:00:00Z',
+    updated_at: '2024-08-12T10:00:00Z',
+    content: {
+      title: 'Scientific Ethics & Responsibility',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 scientific ethics terms',
+        'Discuss research responsibility',
+        'Use ethics vocabulary'
+      ],
+      coreExplanation: `Scientific ethics and responsibility are important for discussing research conduct. To achieve Band 8+, you need vocabulary that allows you to discuss ethical issues in science.
+
+This lesson covers research ethics, scientific responsibility, and ethical debates. Understanding these concepts helps you discuss the moral dimensions of science.`,
+      examples: [
+        { sentence: 'Research ethics govern scientific conduct.', explanation: '"Research ethics" are moral principles for research.' },
+        { sentence: 'Informed consent protects research participants.', explanation: '"Informed consent" is agreement based on understanding.' },
+        { sentence: 'Scientific integrity requires honest reporting.', explanation: '"Scientific integrity" is honesty in research.' },
+        { sentence: 'Animal testing raises ethical concerns.', explanation: '"Animal testing" is using animals in research.' },
+        { sentence: 'Bioethics addresses moral issues in biology.', explanation: '"Bioethics" is ethics related to life sciences.' },
+        { sentence: 'Research misconduct includes fabrication and plagiarism.', explanation: '"Research misconduct" is unethical research behavior.' },
+        { sentence: 'Dual-use research has both beneficial and harmful potential.', explanation: '"Dual-use research" can be used for good or harm.' },
+        { sentence: 'Ethical review boards evaluate research proposals.', explanation: '"Ethical review boards" assess research ethics.' },
+        { sentence: 'Scientific responsibility extends beyond the laboratory.', explanation: '"Scientific responsibility" is accountability for research impacts.' },
+        { sentence: 'Conflicts of interest can bias research.', explanation: '"Conflicts of interest" are competing loyalties.' },
+        { sentence: 'Data transparency enables verification.', explanation: '"Data transparency" is openness about research data.' },
+        { sentence: 'Human subjects research requires special protections.', explanation: '"Human subjects research" involves people as participants.' },
+        { sentence: 'Intellectual property protects innovations.', explanation: '"Intellectual property" is legal protection for ideas.' },
+        { sentence: 'Science communication informs the public.', explanation: '"Science communication" is explaining science to non-experts.' },
+        { sentence: 'Ethical guidelines evolve with scientific advances.', explanation: '"Ethical guidelines" are rules for ethical conduct.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Scientists should do whatever advances knowledge.', correction: 'Scientific research must balance knowledge advancement with ethical considerations and potential harms.', explanation: 'Discuss ethical limits on research.' },
+        { mistake: 'Ethics slow down scientific progress.', correction: 'Ethical guidelines protect research participants and maintain public trust in science.', explanation: 'Explain ethics value.' },
+        { mistake: 'Animal testing is always wrong.', correction: 'Animal research involves ethical trade-offs between scientific benefits and animal welfare.', explanation: 'Present balanced views on animal research.' }
+      ],
+      miniPractice: [
+        { question: 'Research _____ govern scientific conduct.', type: 'fill-blank' },
+        { question: 'Which term describes agreement based on understanding?', options: ['informed consent', 'voluntary participation', 'ethical approval', 'research agreement'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Scientists can do whatever they want."', type: 'rewrite' },
+        { question: 'Scientific _____ requires honest reporting.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'ethics',
+        'informed consent',
+        'Scientific research must adhere to ethical guidelines and consider potential impacts.',
+        'integrity'
+      ],
+      quickRecap: 'Key terms: "research ethics", "informed consent", "scientific integrity", "animal testing", "bioethics", "research misconduct", "dual-use research", "ethical review boards", "conflicts of interest", "data transparency". Use ethics vocabulary accurately!',
+      collocations: [
+        'research ethics', 'informed consent', 'scientific integrity', 'animal testing',
+        'bioethics', 'research misconduct', 'dual-use research', 'ethical review boards',
+        'scientific responsibility', 'conflicts of interest', 'data transparency', 'human subjects research'
+      ],
+      synonyms: [
+        { word: 'ethical', synonyms: ['moral', 'principled', 'responsible', 'conscientious'] },
+        { word: 'honest', synonyms: ['truthful', 'transparent', 'forthright', 'candid'] },
+        { word: 'responsible', synonyms: ['accountable', 'answerable', 'liable', 'duty-bound'] }
+      ],
+      speakingLines: [
+        'Research ethics are essential for maintaining public trust in science.',
+        'Informed consent ensures that research participants understand and agree to their involvement.',
+        'Scientific integrity requires transparent reporting of methods and results.'
+      ]
+    }
+  },
+  // ============================================
+  // BATCH 10: Work & Career (5 lessons)
+  // ============================================
+  {
+    id: 'vocab-work-2',
+    title: 'Workplace Skills & Competencies',
+    slug: 'workplace-skills-competencies',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Work',
+    description: 'Vocabulary for discussing professional skills, competencies, and workplace abilities.',
+    is_premium: true,
+    is_published: true,
+    view_count: 880,
+    created_at: '2024-08-15T10:00:00Z',
+    updated_at: '2024-08-15T10:00:00Z',
+    content: {
+      title: 'Workplace Skills & Competencies',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 workplace skills terms',
+        'Discuss professional competencies',
+        'Use career vocabulary'
+      ],
+      coreExplanation: `Workplace skills and competencies are common IELTS Speaking topics. To achieve Band 7+, you need vocabulary that allows you to discuss professional abilities and career development.
+
+This lesson covers workplace skills, competencies, and professional development. Understanding these concepts helps you discuss career-related topics effectively.`,
+      examples: [
+        { sentence: 'Soft skills include communication and teamwork.', explanation: '"Soft skills" are interpersonal abilities.' },
+        { sentence: 'Technical skills are job-specific abilities.', explanation: '"Technical skills" are specialized knowledge.' },
+        { sentence: 'Problem-solving is valued across industries.', explanation: '"Problem-solving" is finding solutions to challenges.' },
+        { sentence: 'Leadership involves guiding and motivating others.', explanation: '"Leadership" is directing and inspiring people.' },
+        { sentence: 'Time management improves productivity.', explanation: '"Time management" is using time effectively.' },
+        { sentence: 'Critical thinking analyzes information objectively.', explanation: '"Critical thinking" is careful analysis.' },
+        { sentence: 'Adaptability helps workers handle change.', explanation: '"Adaptability" is adjusting to new situations.' },
+        { sentence: 'Communication skills enable effective interaction.', explanation: '"Communication skills" are abilities to convey information.' },
+        { sentence: 'Teamwork involves collaborating with colleagues.', explanation: '"Teamwork" is working together effectively.' },
+        { sentence: 'Initiative means taking action without being asked.', explanation: '"Initiative" is self-motivated action.' },
+        { sentence: 'Creativity generates innovative solutions.', explanation: '"Creativity" is producing original ideas.' },
+        { sentence: 'Attention to detail ensures accuracy.', explanation: '"Attention to detail" is careful focus on specifics.' },
+        { sentence: 'Emotional intelligence manages interpersonal dynamics.', explanation: '"Emotional intelligence" is understanding emotions.' },
+        { sentence: 'Multitasking handles multiple responsibilities.', explanation: '"Multitasking" is doing several things at once.' },
+        { sentence: 'Professional development enhances career skills.', explanation: '"Professional development" is improving work abilities.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Technical skills are more important than soft skills.', correction: 'Both technical and soft skills are essential for career success, with their relative importance varying by role.', explanation: 'Balance skill types.' },
+        { mistake: 'You either have skills or you don\'t.', correction: 'Most skills can be developed through practice, training, and experience.', explanation: 'Emphasize skill development.' },
+        { mistake: 'Multitasking is always good.', correction: 'While multitasking can be useful, focused attention often produces better results for complex tasks.', explanation: 'Present nuanced views on multitasking.' }
+      ],
+      miniPractice: [
+        { question: '_____ skills include communication and teamwork.', type: 'fill-blank' },
+        { question: 'Which term describes adjusting to new situations?', options: ['adaptability', 'flexibility', 'versatility', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "He is good at his job."', type: 'rewrite' },
+        { question: 'Time _____ improves productivity.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Soft',
+        'all of the above',
+        'He demonstrates strong technical competencies and professional skills.',
+        'management'
+      ],
+      quickRecap: 'Key terms: "soft skills", "technical skills", "problem-solving", "leadership", "time management", "critical thinking", "adaptability", "communication skills", "teamwork", "emotional intelligence". Use workplace vocabulary accurately!',
+      collocations: [
+        'soft skills', 'technical skills', 'problem-solving', 'leadership',
+        'time management', 'critical thinking', 'adaptability', 'communication skills',
+        'teamwork', 'initiative', 'creativity', 'professional development'
+      ],
+      synonyms: [
+        { word: 'skill', synonyms: ['ability', 'competency', 'capability', 'expertise'] },
+        { word: 'good at', synonyms: ['proficient in', 'skilled at', 'competent in', 'adept at'] },
+        { word: 'work', synonyms: ['collaborate', 'cooperate', 'contribute', 'participate'] }
+      ],
+      speakingLines: [
+        'Soft skills like communication and teamwork are increasingly valued in the modern workplace.',
+        'Adaptability is essential in rapidly changing work environments.',
+        'Professional development helps workers maintain relevant skills throughout their careers.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-work-3',
+    title: 'Job Search & Recruitment',
+    slug: 'job-search-recruitment',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Work',
+    description: 'Vocabulary for discussing job applications, interviews, and the hiring process.',
+    is_premium: true,
+    is_published: true,
+    view_count: 920,
+    created_at: '2024-08-18T10:00:00Z',
+    updated_at: '2024-08-18T10:00:00Z',
+    content: {
+      title: 'Job Search & Recruitment',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 job search terms',
+        'Discuss recruitment processes',
+        'Use hiring vocabulary'
+      ],
+      coreExplanation: `Job search and recruitment are practical topics for IELTS. To achieve Band 7+, you need vocabulary that allows you to discuss the hiring process and job applications.
+
+This lesson covers job searching, recruitment, and the hiring process. Understanding these concepts helps you discuss employment-related topics effectively.`,
+      examples: [
+        { sentence: 'Job applications include resumes and cover letters.', explanation: '"Job applications" are requests for employment.' },
+        { sentence: 'Recruitment processes identify suitable candidates.', explanation: '"Recruitment" is finding and hiring employees.' },
+        { sentence: 'Interviews assess candidate suitability.', explanation: '"Interviews" are formal meetings to evaluate candidates.' },
+        { sentence: 'Qualifications include education and certifications.', explanation: '"Qualifications" are credentials for jobs.' },
+        { sentence: 'Job postings advertise available positions.', explanation: '"Job postings" are advertisements for jobs.' },
+        { sentence: 'Networking helps discover job opportunities.', explanation: '"Networking" is building professional connections.' },
+        { sentence: 'References provide information about candidates.', explanation: '"References" are people who vouch for candidates.' },
+        { sentence: 'Shortlisting narrows down applicants.', explanation: '"Shortlisting" is selecting top candidates.' },
+        { sentence: 'Background checks verify candidate information.', explanation: '"Background checks" are investigations of candidates.' },
+        { sentence: 'Job offers specify employment terms.', explanation: '"Job offers" are formal employment proposals.' },
+        { sentence: 'Salary negotiations determine compensation.', explanation: '"Salary negotiations" are discussions about pay.' },
+        { sentence: 'Onboarding integrates new employees.', explanation: '"Onboarding" is introducing new hires to the organization.' },
+        { sentence: 'Headhunters recruit for specialized positions.', explanation: '"Headhunters" are recruiters for executive roles.' },
+        { sentence: 'Applicant tracking systems manage applications.', explanation: '"Applicant tracking systems" are software for recruitment.' },
+        { sentence: 'Probationary periods evaluate new employees.', explanation: '"Probationary periods" are trial employment periods.' }
+      ],
+      commonMistakes: [
+        { mistake: 'I need a job.', correction: 'I am seeking employment / exploring career opportunities in [field].', explanation: 'Use professional job search language.' },
+        { mistake: 'The interview went well.', correction: 'The interview provided an opportunity to demonstrate my qualifications and discuss the role.', explanation: 'Describe interviews professionally.' },
+        { mistake: 'They didn\'t hire me.', correction: 'I was not selected for the position / The role was offered to another candidate.', explanation: 'Use professional rejection language.' }
+      ],
+      miniPractice: [
+        { question: 'Job _____ include resumes and cover letters.', type: 'fill-blank' },
+        { question: 'Which term describes building professional connections?', options: ['networking', 'connecting', 'socializing', 'meeting'], type: 'multiple-choice' },
+        { question: 'Rewrite: "I want to get this job."', type: 'rewrite' },
+        { question: '_____ processes identify suitable candidates.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'applications',
+        'networking',
+        'I am interested in this position and believe my qualifications align well with the requirements.',
+        'Recruitment'
+      ],
+      quickRecap: 'Key terms: "job applications", "recruitment", "interviews", "qualifications", "job postings", "networking", "references", "shortlisting", "job offers", "onboarding". Use professional job search vocabulary!',
+      collocations: [
+        'job applications', 'recruitment processes', 'interviews', 'qualifications',
+        'job postings', 'networking', 'references', 'shortlisting',
+        'background checks', 'job offers', 'salary negotiations', 'onboarding'
+      ],
+      synonyms: [
+        { word: 'job', synonyms: ['position', 'role', 'opportunity', 'employment'] },
+        { word: 'hire', synonyms: ['recruit', 'employ', 'engage', 'appoint'] },
+        { word: 'apply', synonyms: ['submit application', 'express interest', 'seek', 'pursue'] }
+      ],
+      speakingLines: [
+        'Networking is often as important as formal applications in finding job opportunities.',
+        'Interview preparation should include researching the company and practicing responses.',
+        'Salary negotiations require understanding market rates and articulating your value.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-work-4',
+    title: 'Workplace Culture & Environment',
+    slug: 'workplace-culture-environment',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Work',
+    description: 'Vocabulary for discussing organizational culture, work environments, and office dynamics.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2024-08-22T10:00:00Z',
+    updated_at: '2024-08-22T10:00:00Z',
+    content: {
+      title: 'Workplace Culture & Environment',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 workplace culture terms',
+        'Discuss organizational environments',
+        'Use office vocabulary'
+      ],
+      coreExplanation: `Workplace culture and environment are important topics for discussing work life. To achieve Band 7+, you need vocabulary that allows you to discuss organizational dynamics and office environments.
+
+This lesson covers workplace culture, organizational environments, and office dynamics. Understanding these concepts helps you discuss work-related topics effectively.`,
+      examples: [
+        { sentence: 'Corporate culture shapes employee behavior.', explanation: '"Corporate culture" is the values and practices of an organization.' },
+        { sentence: 'Work-life balance affects employee wellbeing.', explanation: '"Work-life balance" is managing work and personal life.' },
+        { sentence: 'Remote work has become more common.', explanation: '"Remote work" is working from outside the office.' },
+        { sentence: 'Workplace diversity includes various backgrounds.', explanation: '"Workplace diversity" is variety in employee characteristics.' },
+        { sentence: 'Employee engagement measures commitment.', explanation: '"Employee engagement" is worker involvement and enthusiasm.' },
+        { sentence: 'Organizational hierarchy defines reporting structures.', explanation: '"Organizational hierarchy" is the chain of command.' },
+        { sentence: 'Workplace harassment is unacceptable behavior.', explanation: '"Workplace harassment" is unwanted conduct at work.' },
+        { sentence: 'Team dynamics affect collaboration.', explanation: '"Team dynamics" are interactions within groups.' },
+        { sentence: 'Open-plan offices encourage interaction.', explanation: '"Open-plan offices" are workspaces without walls.' },
+        { sentence: 'Flexible working allows schedule adjustments.', explanation: '"Flexible working" is adaptable work arrangements.' },
+        { sentence: 'Performance reviews evaluate employee work.', explanation: '"Performance reviews" are formal assessments.' },
+        { sentence: 'Workplace wellness programs support health.', explanation: '"Workplace wellness" is health promotion at work.' },
+        { sentence: 'Organizational values guide company behavior.', explanation: '"Organizational values" are company principles.' },
+        { sentence: 'Workplace conflict requires resolution.', explanation: '"Workplace conflict" is disagreement at work.' },
+        { sentence: 'Employee retention keeps workers at companies.', explanation: '"Employee retention" is keeping employees.' }
+      ],
+      commonMistakes: [
+        { mistake: 'My workplace is bad.', correction: 'My workplace has challenges including [specific issues] that affect employee satisfaction.', explanation: 'Be specific about workplace issues.' },
+        { mistake: 'Remote work is better than office work.', correction: 'Remote and office work each have advantages and disadvantages depending on individual and organizational needs.', explanation: 'Present balanced views on work arrangements.' },
+        { mistake: 'Hierarchy is outdated.', correction: 'Organizational structures vary, with different approaches suited to different contexts and industries.', explanation: 'Acknowledge diverse organizational models.' }
+      ],
+      miniPractice: [
+        { question: 'Corporate _____ shapes employee behavior.', type: 'fill-blank' },
+        { question: 'Which term describes working from outside the office?', options: ['remote work', 'telecommuting', 'working from home', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "My job is stressful."', type: 'rewrite' },
+        { question: 'Work-life _____ affects employee wellbeing.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'culture',
+        'all of the above',
+        'My role involves significant demands that can affect work-life balance.',
+        'balance'
+      ],
+      quickRecap: 'Key terms: "corporate culture", "work-life balance", "remote work", "workplace diversity", "employee engagement", "organizational hierarchy", "team dynamics", "flexible working", "performance reviews", "employee retention". Use workplace vocabulary accurately!',
+      collocations: [
+        'corporate culture', 'work-life balance', 'remote work', 'workplace diversity',
+        'employee engagement', 'organizational hierarchy', 'workplace harassment', 'team dynamics',
+        'open-plan offices', 'flexible working', 'performance reviews', 'employee retention'
+      ],
+      synonyms: [
+        { word: 'workplace', synonyms: ['office', 'work environment', 'organization', 'company'] },
+        { word: 'colleague', synonyms: ['coworker', 'team member', 'associate', 'peer'] },
+        { word: 'boss', synonyms: ['manager', 'supervisor', 'superior', 'line manager'] }
+      ],
+      speakingLines: [
+        'Corporate culture significantly influences employee satisfaction and retention.',
+        'Work-life balance has become increasingly important for employee wellbeing.',
+        'Remote work offers flexibility but requires effective communication and self-discipline.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-work-5',
+    title: 'Career Development & Advancement',
+    slug: 'career-development-advancement',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Work',
+    description: 'Vocabulary for discussing career progression, professional growth, and advancement.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2024-08-25T10:00:00Z',
+    updated_at: '2024-08-25T10:00:00Z',
+    content: {
+      title: 'Career Development & Advancement',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 career development terms',
+        'Discuss professional advancement',
+        'Use career vocabulary'
+      ],
+      coreExplanation: `Career development and advancement are important topics for discussing professional growth. To achieve Band 7+, you need vocabulary that allows you to discuss career progression and professional development.
+
+This lesson covers career development, advancement, and professional growth. Understanding these concepts helps you discuss career-related topics effectively.`,
+      examples: [
+        { sentence: 'Career progression involves advancing through positions.', explanation: '"Career progression" is moving up in one\'s career.' },
+        { sentence: 'Promotions recognize employee contributions.', explanation: '"Promotions" are advancements to higher positions.' },
+        { sentence: 'Mentorship guides professional development.', explanation: '"Mentorship" is guidance from experienced professionals.' },
+        { sentence: 'Career goals provide direction for development.', explanation: '"Career goals" are professional objectives.' },
+        { sentence: 'Skill development enhances employability.', explanation: '"Skill development" is improving abilities.' },
+        { sentence: 'Career transitions involve changing fields.', explanation: '"Career transitions" are moves between careers.' },
+        { sentence: 'Professional certifications validate expertise.', explanation: '"Professional certifications" are credentials demonstrating competence.' },
+        { sentence: 'Career plateaus occur when advancement stalls.', explanation: '"Career plateaus" are periods without advancement.' },
+        { sentence: 'Continuous learning maintains relevance.', explanation: '"Continuous learning" is ongoing education.' },
+        { sentence: 'Career counseling provides guidance.', explanation: '"Career counseling" is professional career advice.' },
+        { sentence: 'Upskilling adds new capabilities.', explanation: '"Upskilling" is learning new skills.' },
+        { sentence: 'Career paths outline progression routes.', explanation: '"Career paths" are typical advancement trajectories.' },
+        { sentence: 'Professional networks support advancement.', explanation: '"Professional networks" are career connections.' },
+        { sentence: 'Career satisfaction affects overall wellbeing.', explanation: '"Career satisfaction" is contentment with one\'s career.' },
+        { sentence: 'Lateral moves provide new experiences.', explanation: '"Lateral moves" are transfers at the same level.' }
+      ],
+      commonMistakes: [
+        { mistake: 'I want to be promoted.', correction: 'I am seeking opportunities for career advancement and increased responsibility.', explanation: 'Use professional advancement language.' },
+        { mistake: 'My career is stuck.', correction: 'I am experiencing a career plateau and exploring options for professional growth.', explanation: 'Describe career challenges professionally.' },
+        { mistake: 'I need to change jobs.', correction: 'I am considering a career transition to align with my evolving professional goals.', explanation: 'Frame career changes positively.' }
+      ],
+      miniPractice: [
+        { question: 'Career _____ involves advancing through positions.', type: 'fill-blank' },
+        { question: 'Which term describes guidance from experienced professionals?', options: ['mentorship', 'coaching', 'advising', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "I want a better job."', type: 'rewrite' },
+        { question: '_____ recognize employee contributions.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'progression',
+        'all of the above',
+        'I am seeking career advancement opportunities that align with my professional goals.',
+        'Promotions'
+      ],
+      quickRecap: 'Key terms: "career progression", "promotions", "mentorship", "career goals", "skill development", "career transitions", "professional certifications", "continuous learning", "upskilling", "career satisfaction". Use career development vocabulary!',
+      collocations: [
+        'career progression', 'promotions', 'mentorship', 'career goals',
+        'skill development', 'career transitions', 'professional certifications', 'career plateaus',
+        'continuous learning', 'career counseling', 'upskilling', 'career paths'
+      ],
+      synonyms: [
+        { word: 'advance', synonyms: ['progress', 'move up', 'climb', 'rise'] },
+        { word: 'develop', synonyms: ['grow', 'improve', 'enhance', 'build'] },
+        { word: 'career', synonyms: ['profession', 'occupation', 'vocation', 'field'] }
+      ],
+      speakingLines: [
+        'Career progression requires both skill development and strategic networking.',
+        'Mentorship can accelerate professional development and provide valuable guidance.',
+        'Continuous learning is essential for maintaining relevance in evolving industries.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-work-6',
+    title: 'Future of Work & Automation',
+    slug: 'future-of-work-automation',
+    type: 'vocabulary',
+    level: 'advanced',
+    topic: 'Work',
+    description: 'Advanced vocabulary for discussing workplace automation, AI impact, and future employment trends.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2024-08-28T10:00:00Z',
+    updated_at: '2024-08-28T10:00:00Z',
+    content: {
+      title: 'Future of Work & Automation',
+      targetLevel: 'Band 7.0 - 8.5',
+      whatYouWillLearn: [
+        'Master 25 future of work terms',
+        'Discuss automation and AI impact',
+        'Use technology-work vocabulary'
+      ],
+      coreExplanation: `The future of work and automation are important topics for discussing employment trends. To achieve Band 8+, you need vocabulary that allows you to discuss how technology is changing work.
+
+This lesson covers automation, AI impact, and future employment trends. Understanding these concepts helps you discuss the evolving nature of work.`,
+      examples: [
+        { sentence: 'Automation replaces repetitive tasks with machines.', explanation: '"Automation" is using technology to perform tasks.' },
+        { sentence: 'Artificial intelligence transforms many industries.', explanation: '"Artificial intelligence" is machine intelligence.' },
+        { sentence: 'Job displacement occurs when technology replaces workers.', explanation: '"Job displacement" is losing jobs to technology.' },
+        { sentence: 'Reskilling prepares workers for new roles.', explanation: '"Reskilling" is learning new skills for different jobs.' },
+        { sentence: 'The gig economy offers flexible work arrangements.', explanation: '"Gig economy" is short-term, freelance work.' },
+        { sentence: 'Digital transformation changes business operations.', explanation: '"Digital transformation" is adopting digital technology.' },
+        { sentence: 'Human-machine collaboration combines strengths.', explanation: '"Human-machine collaboration" is people and technology working together.' },
+        { sentence: 'Technological unemployment results from automation.', explanation: '"Technological unemployment" is joblessness from technology.' },
+        { sentence: 'Future-proof skills remain valuable despite change.', explanation: '"Future-proof skills" are abilities that stay relevant.' },
+        { sentence: 'Remote collaboration tools enable distributed work.', explanation: '"Remote collaboration tools" are technology for working together remotely.' },
+        { sentence: 'Algorithmic management uses software to supervise.', explanation: '"Algorithmic management" is computer-based supervision.' },
+        { sentence: 'Platform work connects workers with tasks online.', explanation: '"Platform work" is work arranged through digital platforms.' },
+        { sentence: 'Workforce transformation adapts to technological change.', explanation: '"Workforce transformation" is changing how people work.' },
+        { sentence: 'Universal basic income addresses automation concerns.', explanation: '"Universal basic income" is guaranteed income for all.' },
+        { sentence: 'Lifelong learning adapts to changing requirements.', explanation: '"Lifelong learning" is continuous education throughout life.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Robots will take all jobs.', correction: 'Automation will transform many jobs while creating new roles, though the transition requires adaptation.', explanation: 'Present nuanced views on automation.' },
+        { mistake: 'AI is smarter than humans.', correction: 'AI excels at specific tasks but lacks human capabilities like creativity, empathy, and general reasoning.', explanation: 'Distinguish AI capabilities.' },
+        { mistake: 'Technology always improves work.', correction: 'Technological change brings both benefits and challenges for workers and organizations.', explanation: 'Acknowledge technology trade-offs.' }
+      ],
+      miniPractice: [
+        { question: '_____ replaces repetitive tasks with machines.', type: 'fill-blank' },
+        { question: 'Which term describes learning new skills for different jobs?', options: ['reskilling', 'upskilling', 'retraining', 'all of the above'], type: 'multiple-choice' },
+        { question: 'Rewrite: "Machines will replace all workers."', type: 'rewrite' },
+        { question: 'Job _____ occurs when technology replaces workers.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Automation',
+        'all of the above',
+        'Automation will transform many jobs, requiring workers to adapt through reskilling.',
+        'displacement'
+      ],
+      quickRecap: 'Key terms: "automation", "artificial intelligence", "job displacement", "reskilling", "gig economy", "digital transformation", "human-machine collaboration", "future-proof skills", "platform work", "lifelong learning". Use future of work vocabulary!',
+      collocations: [
+        'automation', 'artificial intelligence', 'job displacement', 'reskilling',
+        'gig economy', 'digital transformation', 'human-machine collaboration', 'technological unemployment',
+        'future-proof skills', 'remote collaboration', 'platform work', 'lifelong learning'
+      ],
+      synonyms: [
+        { word: 'automate', synonyms: ['mechanize', 'computerize', 'digitize', 'streamline'] },
+        { word: 'replace', synonyms: ['displace', 'substitute', 'supersede', 'supplant'] },
+        { word: 'adapt', synonyms: ['adjust', 'evolve', 'transform', 'transition'] }
+      ],
+      speakingLines: [
+        'Automation will transform many jobs, requiring workers to develop new skills.',
+        'Human-machine collaboration can enhance productivity while preserving human roles.',
+        'Lifelong learning is essential for adapting to the changing nature of work.'
+      ]
+    }
   }
 ];
