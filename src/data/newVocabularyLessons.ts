@@ -20787,5 +20787,616 @@ Understanding these terms helps you discuss global topics effectively.`,
         'International cooperation is essential.'
       ]
     }
+  },
+  // ============================================
+  // BATCH 54: Final 8 Lessons to Reach 280 Total
+  // ============================================
+  {
+    id: 'vocab-extra-1',
+    title: 'Communication Skills Vocabulary',
+    slug: 'communication-skills-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Communication',
+    description: 'Essential vocabulary for effective communication.',
+    is_premium: false,
+    is_published: true,
+    view_count: 850,
+    created_at: '2025-06-08T10:00:00Z',
+    updated_at: '2025-06-08T10:00:00Z',
+    content: {
+      title: 'Communication Skills Vocabulary',
+      targetLevel: 'Band 6.0 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 communication vocabulary words',
+        'Discuss communication effectively',
+        'Improve speaking skills'
+      ],
+      coreExplanation: `Communication vocabulary is essential for IELTS Speaking. This lesson covers terms for discussing communication skills.
+
+Understanding these terms helps you communicate effectively.`,
+      examples: [
+        { sentence: 'Communication is key.', explanation: '"Communication" is exchanging information.' },
+        { sentence: 'Conversation flows naturally.', explanation: '"Conversation" is talking.' },
+        { sentence: 'Discussion leads to solutions.', explanation: '"Discussion" is talking about.' },
+        { sentence: 'Dialogue promotes understanding.', explanation: '"Dialogue" is two-way talk.' },
+        { sentence: 'Expression conveys meaning.', explanation: '"Expression" is showing.' },
+        { sentence: 'Articulation is clear.', explanation: '"Articulation" is clear speaking.' },
+        { sentence: 'Pronunciation matters.', explanation: '"Pronunciation" is saying words.' },
+        { sentence: 'Fluency improves with practice.', explanation: '"Fluency" is smooth speaking.' },
+        { sentence: 'Clarity ensures understanding.', explanation: '"Clarity" is clearness.' },
+        { sentence: 'Listening is important.', explanation: '"Listening" is hearing attentively.' },
+        { sentence: 'Feedback helps improvement.', explanation: '"Feedback" is response.' },
+        { sentence: 'Interaction builds relationships.', explanation: '"Interaction" is engaging.' },
+        { sentence: 'Negotiation reaches agreements.', explanation: '"Negotiation" is discussing terms.' },
+        { sentence: 'Persuasion influences others.', explanation: '"Persuasion" is convincing.' },
+        { sentence: 'Presentation shares information.', explanation: '"Presentation" is showing formally.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "speak" and "talk"', correction: '"Speak" is more formal than "talk"', explanation: 'Use appropriately.' },
+        { mistake: 'Using "say" and "tell" incorrectly', correction: '"Say" = words; "tell" = person', explanation: 'Tell needs an object.' },
+        { mistake: 'Confusing "hear" and "listen"', correction: '"Hear" = perceive; "listen" = pay attention', explanation: 'Listen is active.' }
+      ],
+      miniPractice: [
+        { question: 'Effective _____ is essential in the workplace.', type: 'fill-blank' },
+        { question: 'Which word means smooth speaking?', options: ['Fluency', 'Clarity', 'Articulation', 'Pronunciation'], type: 'multiple-choice' },
+        { question: 'Discuss the importance of communication skills.', type: 'rewrite' },
+        { question: 'Good _____ skills help in understanding others.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'communication',
+        'Fluency',
+        'Communication skills are essential for success in both personal and professional life, enabling us to express ideas clearly and build relationships.',
+        'listening'
+      ],
+      quickRecap: 'Key communication terms: communication, conversation, discussion, dialogue, expression, articulation, pronunciation, fluency, clarity, listening, feedback, interaction, negotiation, persuasion, presentation. Use these for communication topics!',
+      collocations: [
+        'effective communication', 'casual conversation', 'group discussion', 'open dialogue',
+        'facial expression', 'clear articulation', 'correct pronunciation', 'speaking fluency',
+        'absolute clarity', 'active listening', 'constructive feedback', 'social interaction'
+      ],
+      synonyms: [
+        { word: 'communication', synonyms: ['interaction', 'exchange', 'dialogue', 'correspondence'] },
+        { word: 'conversation', synonyms: ['talk', 'chat', 'discussion', 'dialogue'] },
+        { word: 'fluency', synonyms: ['eloquence', 'articulacy', 'smoothness', 'ease'] }
+      ],
+      speakingLines: [
+        'Communication is essential in daily life.',
+        'I try to improve my fluency.',
+        'Active listening is important.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-extra-2',
+    title: 'Decision Making Vocabulary',
+    slug: 'decision-making-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Decision',
+    description: 'Vocabulary for discussing decision making.',
+    is_premium: true,
+    is_published: true,
+    view_count: 780,
+    created_at: '2025-06-09T10:00:00Z',
+    updated_at: '2025-06-09T10:00:00Z',
+    content: {
+      title: 'Decision Making Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 decision vocabulary words',
+        'Discuss choices',
+        'Analyze decision processes'
+      ],
+      coreExplanation: `Decision making vocabulary is useful for IELTS Speaking topics. This lesson covers terms for discussing decisions.
+
+Understanding these terms helps you discuss decisions effectively.`,
+      examples: [
+        { sentence: 'The decision was difficult.', explanation: '"Decision" is choice made.' },
+        { sentence: 'The choice was clear.', explanation: '"Choice" is option selected.' },
+        { sentence: 'Options were considered.', explanation: '"Options" are possibilities.' },
+        { sentence: 'Alternatives were explored.', explanation: '"Alternatives" are other choices.' },
+        { sentence: 'The outcome was positive.', explanation: '"Outcome" is result.' },
+        { sentence: 'Consequences were weighed.', explanation: '"Consequences" are results.' },
+        { sentence: 'Factors influenced the decision.', explanation: '"Factors" are elements.' },
+        { sentence: 'Criteria were established.', explanation: '"Criteria" are standards.' },
+        { sentence: 'Priorities were set.', explanation: '"Priorities" are important things.' },
+        { sentence: 'Trade-offs were made.', explanation: '"Trade-offs" are compromises.' },
+        { sentence: 'Judgment was required.', explanation: '"Judgment" is assessment.' },
+        { sentence: 'Deliberation took time.', explanation: '"Deliberation" is careful thought.' },
+        { sentence: 'Resolution was reached.', explanation: '"Resolution" is decision.' },
+        { sentence: 'Commitment was made.', explanation: '"Commitment" is dedication.' },
+        { sentence: 'Implementation followed.', explanation: '"Implementation" is carrying out.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "decide" and "determine"', correction: '"Decide" = make choice; "determine" = find out', explanation: 'These differ in meaning.' },
+        { mistake: 'Using "choice" and "option" interchangeably', correction: '"Choice" = selected; "option" = available', explanation: 'Choice is what you pick.' },
+        { mistake: 'Confusing "consequence" and "result"', correction: '"Consequence" often implies negative; "result" is neutral', explanation: 'Consequence can be negative.' }
+      ],
+      miniPractice: [
+        { question: 'Making the right _____ is important.', type: 'fill-blank' },
+        { question: 'Which word means careful thought?', options: ['Deliberation', 'Resolution', 'Commitment', 'Implementation'], type: 'multiple-choice' },
+        { question: 'Describe how you make important decisions.', type: 'rewrite' },
+        { question: 'We need to consider all _____ before deciding.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'decision',
+        'Deliberation',
+        'I make important decisions by considering all options, weighing the consequences, and consulting with trusted people.',
+        'options/factors'
+      ],
+      quickRecap: 'Key decision terms: decision, choice, options, alternatives, outcome, consequences, factors, criteria, priorities, trade-offs, judgment, deliberation, resolution, commitment, implementation. Use these for decision topics!',
+      collocations: [
+        'make decision', 'difficult choice', 'available options', 'explore alternatives',
+        'positive outcome', 'serious consequences', 'key factors', 'selection criteria',
+        'top priorities', 'necessary trade-offs', 'sound judgment', 'careful deliberation'
+      ],
+      synonyms: [
+        { word: 'decision', synonyms: ['choice', 'resolution', 'determination', 'verdict'] },
+        { word: 'option', synonyms: ['choice', 'alternative', 'possibility', 'selection'] },
+        { word: 'consequence', synonyms: ['result', 'outcome', 'effect', 'repercussion'] }
+      ],
+      speakingLines: [
+        'Making decisions can be challenging.',
+        'I consider all options carefully.',
+        'The consequences of decisions matter.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-extra-3',
+    title: 'Learning & Knowledge Vocabulary',
+    slug: 'learning-knowledge-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Learning',
+    description: 'Vocabulary for discussing learning and knowledge.',
+    is_premium: true,
+    is_published: true,
+    view_count: 820,
+    created_at: '2025-06-10T10:00:00Z',
+    updated_at: '2025-06-10T10:00:00Z',
+    content: {
+      title: 'Learning & Knowledge Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 learning vocabulary words',
+        'Discuss knowledge',
+        'Analyze learning processes'
+      ],
+      coreExplanation: `Learning vocabulary is essential for IELTS topics about education. This lesson covers terms for discussing learning and knowledge.
+
+Understanding these terms helps you discuss learning effectively.`,
+      examples: [
+        { sentence: 'Learning is lifelong.', explanation: '"Learning" is gaining knowledge.' },
+        { sentence: 'Knowledge is power.', explanation: '"Knowledge" is information.' },
+        { sentence: 'Understanding deepens.', explanation: '"Understanding" is comprehension.' },
+        { sentence: 'Skills are developed.', explanation: '"Skills" are abilities.' },
+        { sentence: 'Comprehension improves.', explanation: '"Comprehension" is understanding.' },
+        { sentence: 'Retention is important.', explanation: '"Retention" is remembering.' },
+        { sentence: 'Application is key.', explanation: '"Application" is using.' },
+        { sentence: 'Practice makes perfect.', explanation: '"Practice" is repeated doing.' },
+        { sentence: 'Experience teaches.', explanation: '"Experience" is lived knowledge.' },
+        { sentence: 'Curiosity drives learning.', explanation: '"Curiosity" is desire to know.' },
+        { sentence: 'Discovery is exciting.', explanation: '"Discovery" is finding.' },
+        { sentence: 'Insight comes suddenly.', explanation: '"Insight" is deep understanding.' },
+        { sentence: 'Wisdom comes with age.', explanation: '"Wisdom" is good judgment.' },
+        { sentence: 'Expertise takes time.', explanation: '"Expertise" is specialist knowledge.' },
+        { sentence: 'Mastery requires dedication.', explanation: '"Mastery" is complete skill.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "learn" and "study"', correction: '"Learn" = gain knowledge; "study" = examine', explanation: 'Study is the process.' },
+        { mistake: 'Using "knowledge" as countable', correction: '"Knowledge" is usually uncountable', explanation: 'Say "pieces of knowledge".' },
+        { mistake: 'Confusing "skill" and "ability"', correction: '"Skill" = learned; "ability" = natural', explanation: 'Skills are acquired.' }
+      ],
+      miniPractice: [
+        { question: '_____ is a lifelong process.', type: 'fill-blank' },
+        { question: 'Which word means deep understanding?', options: ['Insight', 'Retention', 'Application', 'Practice'], type: 'multiple-choice' },
+        { question: 'Discuss how you learn best.', type: 'rewrite' },
+        { question: '_____ is essential for remembering information.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Learning',
+        'Insight',
+        'I learn best through a combination of reading, practice, and discussion. Hands-on experience helps me retain information.',
+        'Retention/Practice'
+      ],
+      quickRecap: 'Key learning terms: learning, knowledge, understanding, skills, comprehension, retention, application, practice, experience, curiosity, discovery, insight, wisdom, expertise, mastery. Use these for learning topics!',
+      collocations: [
+        'lifelong learning', 'general knowledge', 'deep understanding', 'practical skills',
+        'reading comprehension', 'memory retention', 'practical application', 'regular practice',
+        'hands-on experience', 'natural curiosity', 'scientific discovery', 'valuable insight'
+      ],
+      synonyms: [
+        { word: 'learning', synonyms: ['education', 'study', 'training', 'instruction'] },
+        { word: 'knowledge', synonyms: ['information', 'understanding', 'awareness', 'expertise'] },
+        { word: 'skill', synonyms: ['ability', 'competence', 'expertise', 'proficiency'] }
+      ],
+      speakingLines: [
+        'Learning is a lifelong journey.',
+        'Knowledge is essential for success.',
+        'Practice helps develop skills.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-extra-4',
+    title: 'Creativity & Innovation Vocabulary',
+    slug: 'creativity-innovation-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Creativity',
+    description: 'Vocabulary for discussing creativity and innovation.',
+    is_premium: true,
+    is_published: true,
+    view_count: 750,
+    created_at: '2025-06-11T10:00:00Z',
+    updated_at: '2025-06-11T10:00:00Z',
+    content: {
+      title: 'Creativity & Innovation Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 creativity vocabulary words',
+        'Discuss innovation',
+        'Analyze creative processes'
+      ],
+      coreExplanation: `Creativity vocabulary is useful for IELTS topics about ideas and progress. This lesson covers terms for discussing creativity and innovation.
+
+Understanding these terms helps you discuss creativity effectively.`,
+      examples: [
+        { sentence: 'Creativity drives progress.', explanation: '"Creativity" is making new things.' },
+        { sentence: 'Innovation transforms industries.', explanation: '"Innovation" is new ideas.' },
+        { sentence: 'Imagination has no limits.', explanation: '"Imagination" is mental images.' },
+        { sentence: 'Inspiration strikes suddenly.', explanation: '"Inspiration" is creative influence.' },
+        { sentence: 'Ideas flow freely.', explanation: '"Ideas" are thoughts.' },
+        { sentence: 'Invention changes lives.', explanation: '"Invention" is new creation.' },
+        { sentence: 'Design solves problems.', explanation: '"Design" is planning.' },
+        { sentence: 'Originality is valued.', explanation: '"Originality" is being new.' },
+        { sentence: 'Vision guides creation.', explanation: '"Vision" is future image.' },
+        { sentence: 'Experimentation leads to discovery.', explanation: '"Experimentation" is testing.' },
+        { sentence: 'Brainstorming generates ideas.', explanation: '"Brainstorming" is group thinking.' },
+        { sentence: 'Breakthrough changes everything.', explanation: '"Breakthrough" is major advance.' },
+        { sentence: 'Ingenuity solves problems.', explanation: '"Ingenuity" is cleverness.' },
+        { sentence: 'Artistry shows skill.', explanation: '"Artistry" is creative skill.' },
+        { sentence: 'Expression is personal.', explanation: '"Expression" is showing.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "creative" and "innovative"', correction: '"Creative" = making new; "innovative" = introducing new', explanation: 'Innovation is implementation.' },
+        { mistake: 'Using "idea" and "concept" interchangeably', correction: '"Idea" = thought; "concept" = abstract notion', explanation: 'Concept is more abstract.' },
+        { mistake: 'Confusing "invention" and "innovation"', correction: '"Invention" = new creation; "innovation" = new application', explanation: 'Innovation applies inventions.' }
+      ],
+      miniPractice: [
+        { question: '_____ is essential for solving new problems.', type: 'fill-blank' },
+        { question: 'Which word means a major advance?', options: ['Breakthrough', 'Brainstorming', 'Experimentation', 'Artistry'], type: 'multiple-choice' },
+        { question: 'Discuss the importance of creativity.', type: 'rewrite' },
+        { question: '_____ drives technological progress.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Creativity',
+        'Breakthrough',
+        'Creativity is important because it enables us to solve problems in new ways, express ourselves, and drive progress in all fields.',
+        'Innovation'
+      ],
+      quickRecap: 'Key creativity terms: creativity, innovation, imagination, inspiration, ideas, invention, design, originality, vision, experimentation, brainstorming, breakthrough, ingenuity, artistry, expression. Use these for creativity topics!',
+      collocations: [
+        'artistic creativity', 'technological innovation', 'vivid imagination', 'creative inspiration',
+        'brilliant ideas', 'new invention', 'product design', 'complete originality',
+        'clear vision', 'scientific experimentation', 'team brainstorming', 'major breakthrough'
+      ],
+      synonyms: [
+        { word: 'creativity', synonyms: ['imagination', 'originality', 'inventiveness', 'ingenuity'] },
+        { word: 'innovation', synonyms: ['invention', 'novelty', 'breakthrough', 'advancement'] },
+        { word: 'idea', synonyms: ['concept', 'thought', 'notion', 'plan'] }
+      ],
+      speakingLines: [
+        'Creativity is essential in modern life.',
+        'Innovation drives economic growth.',
+        'Imagination has no boundaries.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-extra-5',
+    title: 'Responsibility & Ethics Vocabulary',
+    slug: 'responsibility-ethics-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Ethics',
+    description: 'Vocabulary for discussing responsibility and ethics.',
+    is_premium: true,
+    is_published: true,
+    view_count: 720,
+    created_at: '2025-06-12T10:00:00Z',
+    updated_at: '2025-06-12T10:00:00Z',
+    content: {
+      title: 'Responsibility & Ethics Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 ethics vocabulary words',
+        'Discuss responsibility',
+        'Analyze moral issues'
+      ],
+      coreExplanation: `Ethics vocabulary is essential for IELTS Writing topics about values. This lesson covers terms for discussing responsibility and ethics.
+
+Understanding these terms helps you discuss ethical topics effectively.`,
+      examples: [
+        { sentence: 'Responsibility is important.', explanation: '"Responsibility" is duty.' },
+        { sentence: 'Ethics guide behavior.', explanation: '"Ethics" are moral principles.' },
+        { sentence: 'Morality shapes decisions.', explanation: '"Morality" is right and wrong.' },
+        { sentence: 'Integrity is valued.', explanation: '"Integrity" is honesty.' },
+        { sentence: 'Accountability is expected.', explanation: '"Accountability" is being answerable.' },
+        { sentence: 'Duty calls.', explanation: '"Duty" is obligation.' },
+        { sentence: 'Obligation must be met.', explanation: '"Obligation" is requirement.' },
+        { sentence: 'Conscience guides us.', explanation: '"Conscience" is inner sense.' },
+        { sentence: 'Principles are firm.', explanation: '"Principles" are basic beliefs.' },
+        { sentence: 'Values shape character.', explanation: '"Values" are important beliefs.' },
+        { sentence: 'Honesty is best.', explanation: '"Honesty" is truthfulness.' },
+        { sentence: 'Fairness matters.', explanation: '"Fairness" is just treatment.' },
+        { sentence: 'Justice prevails.', explanation: '"Justice" is rightness.' },
+        { sentence: 'Transparency builds trust.', explanation: '"Transparency" is openness.' },
+        { sentence: 'Trust is earned.', explanation: '"Trust" is confidence.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "ethics" and "morals"', correction: '"Ethics" = rules; "morals" = personal beliefs', explanation: 'Ethics are external.' },
+        { mistake: 'Using "responsible" and "accountable" interchangeably', correction: '"Responsible" = duty; "accountable" = answerable', explanation: 'Accountable is about consequences.' },
+        { mistake: 'Confusing "honest" and "truthful"', correction: 'These are largely synonymous', explanation: 'Both mean not lying.' }
+      ],
+      miniPractice: [
+        { question: 'Taking _____ for our actions is important.', type: 'fill-blank' },
+        { question: 'Which word means being answerable?', options: ['Accountability', 'Integrity', 'Conscience', 'Transparency'], type: 'multiple-choice' },
+        { question: 'Discuss the importance of ethics in business.', type: 'rewrite' },
+        { question: '_____ is essential for building trust.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'responsibility',
+        'Accountability',
+        'Ethics in business are important because they build trust with customers, create a positive work environment, and ensure fair practices.',
+        'Honesty/Transparency'
+      ],
+      quickRecap: 'Key ethics terms: responsibility, ethics, morality, integrity, accountability, duty, obligation, conscience, principles, values, honesty, fairness, justice, transparency, trust. Use these for ethics topics!',
+      collocations: [
+        'personal responsibility', 'business ethics', 'public morality', 'personal integrity',
+        'corporate accountability', 'moral duty', 'legal obligation', 'clear conscience',
+        'guiding principles', 'core values', 'complete honesty', 'absolute fairness'
+      ],
+      synonyms: [
+        { word: 'responsibility', synonyms: ['duty', 'obligation', 'accountability', 'liability'] },
+        { word: 'ethics', synonyms: ['morals', 'principles', 'values', 'standards'] },
+        { word: 'integrity', synonyms: ['honesty', 'honor', 'uprightness', 'virtue'] }
+      ],
+      speakingLines: [
+        'Responsibility is essential in life.',
+        'Ethics guide our decisions.',
+        'Integrity is highly valued.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-extra-6',
+    title: 'Risk & Safety Vocabulary',
+    slug: 'risk-safety-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Safety',
+    description: 'Vocabulary for discussing risk and safety.',
+    is_premium: true,
+    is_published: true,
+    view_count: 680,
+    created_at: '2025-06-13T10:00:00Z',
+    updated_at: '2025-06-13T10:00:00Z',
+    content: {
+      title: 'Risk & Safety Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 risk vocabulary words',
+        'Discuss safety',
+        'Analyze hazards'
+      ],
+      coreExplanation: `Risk vocabulary is useful for IELTS topics about safety and precautions. This lesson covers terms for discussing risk and safety.
+
+Understanding these terms helps you discuss safety effectively.`,
+      examples: [
+        { sentence: 'Risk must be assessed.', explanation: '"Risk" is potential danger.' },
+        { sentence: 'Safety is priority.', explanation: '"Safety" is being safe.' },
+        { sentence: 'Danger was avoided.', explanation: '"Danger" is threat.' },
+        { sentence: 'Hazards were identified.', explanation: '"Hazards" are dangers.' },
+        { sentence: 'Precautions were taken.', explanation: '"Precautions" are preventive measures.' },
+        { sentence: 'Prevention is better.', explanation: '"Prevention" is stopping before.' },
+        { sentence: 'Protection is needed.', explanation: '"Protection" is keeping safe.' },
+        { sentence: 'Security was enhanced.', explanation: '"Security" is safety measures.' },
+        { sentence: 'Vulnerability was reduced.', explanation: '"Vulnerability" is weakness.' },
+        { sentence: 'Exposure was limited.', explanation: '"Exposure" is being subject to.' },
+        { sentence: 'Threat was neutralized.', explanation: '"Threat" is potential harm.' },
+        { sentence: 'Emergency was handled.', explanation: '"Emergency" is urgent situation.' },
+        { sentence: 'Caution is advised.', explanation: '"Caution" is carefulness.' },
+        { sentence: 'Warning was issued.', explanation: '"Warning" is alert.' },
+        { sentence: 'Accident was prevented.', explanation: '"Accident" is unplanned event.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "risk" and "danger"', correction: '"Risk" = probability; "danger" = actual threat', explanation: 'Risk is potential.' },
+        { mistake: 'Using "safe" and "secure" interchangeably', correction: '"Safe" = no danger; "secure" = protected', explanation: 'Secure implies protection.' },
+        { mistake: 'Confusing "hazard" and "risk"', correction: '"Hazard" = source of danger; "risk" = likelihood', explanation: 'Hazard is the source.' }
+      ],
+      miniPractice: [
+        { question: '_____ assessment is important in the workplace.', type: 'fill-blank' },
+        { question: 'Which word means preventive measures?', options: ['Precautions', 'Hazards', 'Exposure', 'Vulnerability'], type: 'multiple-choice' },
+        { question: 'Discuss the importance of safety measures.', type: 'rewrite' },
+        { question: '_____ is better than cure.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Risk',
+        'Precautions',
+        'Safety measures are important because they prevent accidents, protect lives, and create a secure environment for everyone.',
+        'Prevention'
+      ],
+      quickRecap: 'Key risk terms: risk, safety, danger, hazards, precautions, prevention, protection, security, vulnerability, exposure, threat, emergency, caution, warning, accident. Use these for risk topics!',
+      collocations: [
+        'risk assessment', 'public safety', 'immediate danger', 'potential hazards',
+        'safety precautions', 'accident prevention', 'personal protection', 'national security',
+        'reduce vulnerability', 'limit exposure', 'serious threat', 'state of emergency'
+      ],
+      synonyms: [
+        { word: 'risk', synonyms: ['danger', 'hazard', 'threat', 'peril'] },
+        { word: 'safety', synonyms: ['security', 'protection', 'safeguard', 'welfare'] },
+        { word: 'danger', synonyms: ['hazard', 'risk', 'threat', 'peril'] }
+      ],
+      speakingLines: [
+        'Risk assessment is essential.',
+        'Safety should always be a priority.',
+        'Prevention is better than cure.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-extra-7',
+    title: 'Quality & Standards Vocabulary',
+    slug: 'quality-standards-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Quality',
+    description: 'Vocabulary for discussing quality and standards.',
+    is_premium: true,
+    is_published: true,
+    view_count: 650,
+    created_at: '2025-06-14T10:00:00Z',
+    updated_at: '2025-06-14T10:00:00Z',
+    content: {
+      title: 'Quality & Standards Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 quality vocabulary words',
+        'Discuss standards',
+        'Analyze quality issues'
+      ],
+      coreExplanation: `Quality vocabulary is useful for IELTS topics about products and services. This lesson covers terms for discussing quality and standards.
+
+Understanding these terms helps you discuss quality effectively.`,
+      examples: [
+        { sentence: 'Quality is paramount.', explanation: '"Quality" is degree of excellence.' },
+        { sentence: 'Standards are high.', explanation: '"Standards" are levels of quality.' },
+        { sentence: 'Excellence is achieved.', explanation: '"Excellence" is outstanding quality.' },
+        { sentence: 'Performance is measured.', explanation: '"Performance" is how well done.' },
+        { sentence: 'Efficiency is improved.', explanation: '"Efficiency" is effective use.' },
+        { sentence: 'Effectiveness is key.', explanation: '"Effectiveness" is achieving goals.' },
+        { sentence: 'Reliability is expected.', explanation: '"Reliability" is consistency.' },
+        { sentence: 'Consistency is maintained.', explanation: '"Consistency" is uniformity.' },
+        { sentence: 'Accuracy is essential.', explanation: '"Accuracy" is correctness.' },
+        { sentence: 'Precision is required.', explanation: '"Precision" is exactness.' },
+        { sentence: 'Durability is valued.', explanation: '"Durability" is lasting quality.' },
+        { sentence: 'Value is delivered.', explanation: '"Value" is worth.' },
+        { sentence: 'Improvement is continuous.', explanation: '"Improvement" is getting better.' },
+        { sentence: 'Benchmark is set.', explanation: '"Benchmark" is standard.' },
+        { sentence: 'Certification is obtained.', explanation: '"Certification" is official approval.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "quality" and "quantity"', correction: '"Quality" = how good; "quantity" = how much', explanation: 'These are different.' },
+        { mistake: 'Using "effective" and "efficient" interchangeably', correction: '"Effective" = achieves goal; "efficient" = uses resources well', explanation: 'These differ.' },
+        { mistake: 'Confusing "accuracy" and "precision"', correction: '"Accuracy" = correctness; "precision" = exactness', explanation: 'Precision is about detail.' }
+      ],
+      miniPractice: [
+        { question: '_____ control is essential in manufacturing.', type: 'fill-blank' },
+        { question: 'Which word means lasting quality?', options: ['Durability', 'Efficiency', 'Accuracy', 'Consistency'], type: 'multiple-choice' },
+        { question: 'Discuss the importance of quality in products.', type: 'rewrite' },
+        { question: 'High _____ are expected in professional work.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Quality',
+        'Durability',
+        'Quality is important in products because it ensures customer satisfaction, builds brand reputation, and reduces returns and complaints.',
+        'standards'
+      ],
+      quickRecap: 'Key quality terms: quality, standards, excellence, performance, efficiency, effectiveness, reliability, consistency, accuracy, precision, durability, value, improvement, benchmark, certification. Use these for quality topics!',
+      collocations: [
+        'high quality', 'industry standards', 'achieve excellence', 'measure performance',
+        'improve efficiency', 'ensure effectiveness', 'product reliability', 'maintain consistency',
+        'ensure accuracy', 'high precision', 'product durability', 'good value'
+      ],
+      synonyms: [
+        { word: 'quality', synonyms: ['standard', 'grade', 'caliber', 'level'] },
+        { word: 'excellence', synonyms: ['superiority', 'distinction', 'greatness', 'merit'] },
+        { word: 'standard', synonyms: ['benchmark', 'criterion', 'measure', 'norm'] }
+      ],
+      speakingLines: [
+        'Quality is very important to me.',
+        'High standards should be maintained.',
+        'Excellence requires dedication.'
+      ]
+    }
+  },
+  {
+    id: 'vocab-extra-8',
+    title: 'Influence & Impact Vocabulary',
+    slug: 'influence-impact-vocabulary',
+    type: 'vocabulary',
+    level: 'intermediate',
+    topic: 'Influence',
+    description: 'Vocabulary for discussing influence and impact.',
+    is_premium: true,
+    is_published: true,
+    view_count: 700,
+    created_at: '2025-06-15T10:00:00Z',
+    updated_at: '2025-06-15T10:00:00Z',
+    content: {
+      title: 'Influence & Impact Vocabulary',
+      targetLevel: 'Band 6.5 - 8.0',
+      whatYouWillLearn: [
+        'Master 25 influence vocabulary words',
+        'Discuss impact',
+        'Analyze effects'
+      ],
+      coreExplanation: `Influence vocabulary is essential for IELTS Writing topics about effects. This lesson covers terms for discussing influence and impact.
+
+Understanding these terms helps you discuss influence effectively.`,
+      examples: [
+        { sentence: 'Influence shapes opinions.', explanation: '"Influence" is effect on.' },
+        { sentence: 'Impact is significant.', explanation: '"Impact" is strong effect.' },
+        { sentence: 'Effect is noticeable.', explanation: '"Effect" is result.' },
+        { sentence: 'Consequence follows action.', explanation: '"Consequence" is outcome.' },
+        { sentence: 'Outcome was positive.', explanation: '"Outcome" is result.' },
+        { sentence: 'Result was expected.', explanation: '"Result" is consequence.' },
+        { sentence: 'Implication is serious.', explanation: '"Implication" is possible effect.' },
+        { sentence: 'Repercussion was felt.', explanation: '"Repercussion" is indirect effect.' },
+        { sentence: 'Significance is clear.', explanation: '"Significance" is importance.' },
+        { sentence: 'Importance is recognized.', explanation: '"Importance" is value.' },
+        { sentence: 'Relevance is established.', explanation: '"Relevance" is connection.' },
+        { sentence: 'Contribution is valued.', explanation: '"Contribution" is giving.' },
+        { sentence: 'Role is defined.', explanation: '"Role" is function.' },
+        { sentence: 'Power is exercised.', explanation: '"Power" is ability to influence.' },
+        { sentence: 'Authority is respected.', explanation: '"Authority" is right to control.' }
+      ],
+      commonMistakes: [
+        { mistake: 'Confusing "affect" and "effect"', correction: '"Affect" = verb; "effect" = noun', explanation: 'Affect is the action.' },
+        { mistake: 'Using "impact" as a verb informally', correction: '"Impact" as verb is informal; use "affect"', explanation: 'Impact is better as noun.' },
+        { mistake: 'Confusing "influence" and "effect"', correction: '"Influence" = power to affect; "effect" = result', explanation: 'Influence is the cause.' }
+      ],
+      miniPractice: [
+        { question: 'Technology has a significant _____ on society.', type: 'fill-blank' },
+        { question: 'Which word means indirect effect?', options: ['Repercussion', 'Outcome', 'Result', 'Contribution'], type: 'multiple-choice' },
+        { question: 'Discuss the influence of media on society.', type: 'rewrite' },
+        { question: 'The _____ of this decision will be felt for years.', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'impact/influence',
+        'Repercussion',
+        'Media has a significant influence on society by shaping opinions, spreading information, and affecting cultural values.',
+        'consequences/effects'
+      ],
+      quickRecap: 'Key influence terms: influence, impact, effect, consequence, outcome, result, implication, repercussion, significance, importance, relevance, contribution, role, power, authority. Use these for influence topics!',
+      collocations: [
+        'strong influence', 'significant impact', 'positive effect', 'serious consequence',
+        'final outcome', 'direct result', 'serious implication', 'negative repercussion',
+        'great significance', 'vital importance', 'direct relevance', 'valuable contribution'
+      ],
+      synonyms: [
+        { word: 'influence', synonyms: ['impact', 'effect', 'sway', 'power'] },
+        { word: 'impact', synonyms: ['effect', 'influence', 'consequence', 'result'] },
+        { word: 'consequence', synonyms: ['result', 'outcome', 'effect', 'repercussion'] }
+      ],
+      speakingLines: [
+        'Technology has a significant influence.',
+        'The impact of this change is clear.',
+        'The consequences are far-reaching.'
+      ]
+    }
   }
 ];
