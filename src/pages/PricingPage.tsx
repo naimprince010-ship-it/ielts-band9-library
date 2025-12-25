@@ -9,6 +9,10 @@ export function PricingPage() {
   const { user, isPremium } = useAuth();
   const navigate = useNavigate();
 
+  const userPackageType = user?.package_type;
+  const isMonthlyUser = isPremium && userPackageType === 'monthly';
+  const isYearlyUser = isPremium && userPackageType === 'yearly';
+
   const handleUpgrade = (packageType: 'monthly' | 'yearly') => {
     if (!user) {
       navigate('/login');
@@ -35,10 +39,11 @@ export function PricingPage() {
         'No premium content',
         'No advanced lessons',
       ],
-      cta: user ? 'Current Plan' : 'Get Started',
+      cta: user && !isPremium ? 'Current Plan' : user ? 'Free Plan' : 'Get Started',
       ctaLink: user ? '#' : '/signup',
       popular: false,
-      disabled: !!user && !isPremium,
+      disabled: !!user,
+      isCurrent: !!user && !isPremium,
     },
     {
       name: 'Premium Monthly',
@@ -57,10 +62,11 @@ export function PricingPage() {
         'Priority support',
       ],
       limitations: [],
-      cta: isPremium ? 'Current Plan' : 'Upgrade Now',
+      cta: isMonthlyUser ? 'Current Plan' : 'Upgrade Now',
       ctaLink: '#',
       popular: true,
-      disabled: isPremium,
+      disabled: isMonthlyUser,
+      isCurrent: isMonthlyUser,
     },
     {
       name: 'Premium Yearly',
@@ -76,11 +82,12 @@ export function PricingPage() {
         'Priority email support',
       ],
       limitations: [],
-      cta: isPremium ? 'Current Plan' : 'Get Best Value',
+      cta: isYearlyUser ? 'Current Plan' : 'Get Best Value',
       ctaLink: '#',
       popular: false,
-      disabled: isPremium,
+      disabled: isYearlyUser,
       badge: 'Best Value',
+      isCurrent: isYearlyUser,
     },
   ];
 
@@ -141,39 +148,39 @@ export function PricingPage() {
                   ))}
                 </ul>
                 
-                                {plan.name === 'Free' ? (
-                                  plan.ctaLink === '#' ? (
-                                    <Button 
-                                      className="w-full" 
-                                      variant="outline"
-                                      disabled={plan.disabled}
-                                    >
-                                      {plan.disabled ? 'Current Plan' : plan.cta}
-                                    </Button>
-                                  ) : (
-                                    <Link to={plan.ctaLink}>
-                                      <Button className="w-full" variant="outline">
-                                        {plan.cta}
-                                      </Button>
-                                    </Link>
-                                  )
-                                ) : (
-                                  <Button 
-                                    className="w-full" 
-                                    variant={plan.popular ? 'default' : 'outline'}
-                                    disabled={plan.disabled}
-                                    onClick={() => handleUpgrade(plan.name === 'Premium Monthly' ? 'monthly' : 'yearly')}
-                                  >
-                                    {plan.disabled && isPremium ? (
-                                      <>
-                                        <Crown className="h-4 w-4 mr-2" />
-                                        Current Plan
-                                      </>
-                                    ) : (
-                                      plan.cta
-                                    )}
-                                  </Button>
-                                )}
+                                                                {plan.name === 'Free' ? (
+                                                                  plan.ctaLink === '#' ? (
+                                                                    <Button 
+                                                                      className="w-full" 
+                                                                      variant="outline"
+                                                                      disabled={plan.isCurrent}
+                                                                    >
+                                                                      {plan.cta}
+                                                                    </Button>
+                                                                  ) : (
+                                                                    <Link to={plan.ctaLink}>
+                                                                      <Button className="w-full" variant="outline">
+                                                                        {plan.cta}
+                                                                      </Button>
+                                                                    </Link>
+                                                                  )
+                                                                ) : (
+                                                                  <Button 
+                                                                    className="w-full" 
+                                                                    variant={plan.popular ? 'default' : 'outline'}
+                                                                    disabled={plan.isCurrent}
+                                                                    onClick={() => !plan.isCurrent && handleUpgrade(plan.name === 'Premium Monthly' ? 'monthly' : 'yearly')}
+                                                                  >
+                                                                    {plan.isCurrent ? (
+                                                                      <>
+                                                                        <Crown className="h-4 w-4 mr-2" />
+                                                                        Current Plan
+                                                                      </>
+                                                                    ) : (
+                                                                      plan.cta
+                                                                    )}
+                                                                  </Button>
+                                                                )}
               </CardContent>
             </Card>
           ))}
