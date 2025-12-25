@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { BookOpen, Menu, X, User, LogOut, Settings, Bookmark, Crown, Brain, Trophy, BarChart3, Target, Award } from 'lucide-react';
+import { BookOpen, Menu, X, User, LogOut, Settings, Bookmark, Crown, Brain, Trophy, BarChart3, Target, Award, PenTool, FileText } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -98,11 +98,19 @@ export function Navbar() {
                                                                       <Target className="h-4 w-4 mr-2" />
                                                                       Mock Test
                                                                     </DropdownMenuItem>
-                                                                    <DropdownMenuItem onClick={() => navigate('/certificate')}>
-                                                                      <Award className="h-4 w-4 mr-2" />
-                                                                      Certificate
-                                                                    </DropdownMenuItem>
-                                                                    <DropdownMenuSeparator />
+                                                                                                                                        <DropdownMenuItem onClick={() => navigate('/certificate')}>
+                                                                                                                                          <Award className="h-4 w-4 mr-2" />
+                                                                                                                                          Certificate
+                                                                                                                                        </DropdownMenuItem>
+                                                                                                                                        <DropdownMenuItem onClick={() => navigate('/grammar-exercises')}>
+                                                                                                                                          <PenTool className="h-4 w-4 mr-2" />
+                                                                                                                                          Grammar Exercises
+                                                                                                                                        </DropdownMenuItem>
+                                                                                                                                        <DropdownMenuItem onClick={() => navigate('/essay-bank')}>
+                                                                                                                                          <FileText className="h-4 w-4 mr-2" />
+                                                                                                                                          Essay Bank
+                                                                                                                                        </DropdownMenuItem>
+                                                                                                                                        <DropdownMenuSeparator />
                                   <DropdownMenuItem onClick={() => navigate('/profile')}>
                                     <Crown className="h-4 w-4 mr-2" />
                                     My Subscription
@@ -204,14 +212,28 @@ export function Navbar() {
                             >
                               My Subscription
                             </Link>
-                            <Link
-                              to="/bookmarks"
-                              className="block text-gray-600 hover:text-indigo-600 font-medium"
-                              onClick={() => setMobileMenuOpen(false)}
-                            >
-                              My Bookmarks
-                            </Link>
-                            {isAdmin && (
+                                                        <Link
+                                                          to="/bookmarks"
+                                                          className="block text-gray-600 hover:text-indigo-600 font-medium"
+                                                          onClick={() => setMobileMenuOpen(false)}
+                                                        >
+                                                          My Bookmarks
+                                                        </Link>
+                                                        <Link
+                                                          to="/grammar-exercises"
+                                                          className="block text-gray-600 hover:text-indigo-600 font-medium"
+                                                          onClick={() => setMobileMenuOpen(false)}
+                                                        >
+                                                          Grammar Exercises
+                                                        </Link>
+                                                        <Link
+                                                          to="/essay-bank"
+                                                          className="block text-gray-600 hover:text-indigo-600 font-medium"
+                                                          onClick={() => setMobileMenuOpen(false)}
+                                                        >
+                                                          Essay Bank
+                                                        </Link>
+                                                        {isAdmin && (
                   <Link
                     to="/admin"
                     className="block text-gray-600 hover:text-indigo-600 font-medium"
