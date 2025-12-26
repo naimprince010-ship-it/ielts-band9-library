@@ -16,7 +16,9 @@ import {
   CheckCircle2,
   AlertTriangle,
   Lightbulb,
-  ArrowRight
+  ArrowRight,
+  FolderOpen,
+  Play
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -40,11 +42,24 @@ interface Achievement {
 
 const ACTIVITY_KEY = 'ielts_daily_activity';
 
+const COLLECTION_NAMES: Record<string, { title: string; lessonCount: number }> = {
+  'band7-writing-toolkit': { title: 'Band 7 Writing Toolkit', lessonCount: 8 },
+  'common-grammar-mistakes': { title: 'Most Common Grammar Mistakes', lessonCount: 10 },
+  'education-vocabulary-pack': { title: 'Education Vocabulary Pack', lessonCount: 6 },
+  'environment-vocabulary-pack': { title: 'Environment & Climate Pack', lessonCount: 5 },
+  'health-vocabulary-pack': { title: 'Health & Wellbeing Pack', lessonCount: 5 },
+  'work-career-pack': { title: 'Work & Career Pack', lessonCount: 5 },
+  'band8-advanced-grammar': { title: 'Band 8+ Advanced Grammar', lessonCount: 8 },
+  'quick-start-beginners': { title: 'Quick Start for Beginners', lessonCount: 10 },
+};
+
 export default function ProgressDashboardPage() {
-    const { getCompletedLessonsCount, lessonProgress, quizAttempts } = useProgress();
+    const { getCompletedLessonsCount, lessonProgress, quizAttempts, getAllCollectionProgress, getContinueCollection } = useProgress();
     const { user } = useAuth();
     const navigate = useNavigate();
     const completedLessonsCount = getCompletedLessonsCount();
+    const collectionProgressList = getAllCollectionProgress();
+    const continueCollection = getContinueCollection();
     const [activityHistory, setActivityHistory] = useState<DailyActivity[]>([]);
     const [achievements, setAchievements] = useState<Achievement[]>([]);
     const [streak, setStreak] = useState(0);
@@ -483,6 +498,94 @@ export default function ProgressDashboardPage() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Collection Progress Section */}
+        {(collectionProgressList.length > 0 || continueCollection) && (
+          <Card className="mb-8 border-2 border-indigo-200">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FolderOpen className="h-5 w-5 text-indigo-600" />
+                Collection Progress
+              </CardTitle>
+              <CardDescription>Track your progress through curated learning collections</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {continueCollection && (
+                <div className="mb-6 p-4 bg-indigo-50 rounded-lg border border-indigo-200">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-indigo-600 font-medium">Continue where you left off</p>
+                      <p className="font-semibold text-lg">
+                        {COLLECTION_NAMES[continueCollection.collectionId]?.title || continueCollection.collectionId}
+                      </p>
+                    </div>
+                    <Button onClick={() => navigate(`/collections/${continueCollection.collectionId}`)}>
+                      <Play className="mr-2 h-4 w-4" />
+                      Continue
+                    </Button>
+                  </div>
+                </div>
+              )}
+              
+              {collectionProgressList.length > 0 ? (
+                <div className="space-y-4">
+                  {collectionProgressList.map((cp) => {
+                    const collectionInfo = COLLECTION_NAMES[cp.collectionId];
+                    if (!collectionInfo) return null;
+                    
+                    const progressPercent = Math.round((cp.completedLessons.length / collectionInfo.lessonCount) * 100);
+                    const isComplete = progressPercent === 100;
+                    
+                    return (
+                      <div 
+                        key={cp.collectionId} 
+                        className={`p-4 rounded-lg border ${isComplete ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'}`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            {isComplete ? (
+                              <CheckCircle2 className="h-5 w-5 text-green-600" />
+                            ) : (
+                              <FolderOpen className="h-5 w-5 text-indigo-600" />
+                            )}
+                            <span className="font-medium">{collectionInfo.title}</span>
+                          </div>
+                          <span className={`text-sm font-medium ${isComplete ? 'text-green-600' : 'text-gray-600'}`}>
+                            {cp.completedLessons.length}/{collectionInfo.lessonCount} lessons
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <Progress value={progressPercent} className="flex-1" />
+                          <span className="text-sm font-medium w-12 text-right">{progressPercent}%</span>
+                          {!isComplete && (
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => navigate(`/collections/${cp.collectionId}`)}
+                            >
+                              Continue
+                              <ArrowRight className="ml-1 h-3 w-3" />
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="text-center py-6 text-gray-500">
+                  <FolderOpen className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+                  <p className="font-medium">No collections started yet</p>
+                  <p className="text-sm mb-4">Start a curated collection to track your progress</p>
+                  <Button variant="outline" onClick={() => navigate('/collections')}>
+                    Browse Collections
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                   <Card className="border-2 border-amber-200">

@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { useProgress } from '@/contexts/ProgressContext';
 import { 
   BookOpen, 
   GraduationCap, 
@@ -18,7 +19,9 @@ import {
   Globe,
   Heart,
   Lightbulb,
-  Sparkles
+  Sparkles,
+  Play,
+  RotateCcw
 } from 'lucide-react';
 
 interface CollectionLesson {
@@ -246,8 +249,35 @@ const getLessonIcon = (type: string) => {
 export default function CollectionDetailPage() {
   const { collectionId } = useParams<{ collectionId: string }>();
   const navigate = useNavigate();
+  const { getCollectionProgress, startCollection, markCollectionLessonComplete } = useProgress();
 
   const collection = CURATED_COLLECTIONS.find(c => c.id === collectionId);
+  const progress = collectionId ? getCollectionProgress(collectionId) : null;
+  
+  const completedLessons = progress?.completedLessons || [];
+  const progressPercentage = collection 
+    ? Math.round((completedLessons.length / collection.lessonCount) * 100) 
+    : 0;
+  
+  const nextLessonIndex = progress?.lastLessonIndex !== undefined 
+    ? Math.min(progress.lastLessonIndex + 1, (collection?.lessonCount || 1) - 1)
+    : 0;
+
+  const handleStartCollection = () => {
+    if (collectionId) {
+      startCollection(collectionId);
+    }
+  };
+
+  const handleMarkLessonComplete = (lessonIndex: number, lessonTitle: string) => {
+    if (collectionId) {
+      markCollectionLessonComplete(collectionId, lessonIndex, lessonTitle);
+    }
+  };
+
+  const isLessonCompleted = (lessonTitle: string) => {
+    return completedLessons.includes(lessonTitle);
+  };
 
   if (!collection) {
     return (
@@ -315,9 +345,14 @@ export default function CollectionDetailPage() {
             <div className="space-y-2 mb-6">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-500">Your Progress</span>
-                <span className="font-medium">0%</span>
+                <span className="font-medium">{progressPercentage}%</span>
               </div>
-              <Progress value={0} className="h-2" />
+              <Progress value={progressPercentage} className="h-2" />
+              {completedLessons.length > 0 && (
+                <p className="text-xs text-gray-500">
+                  {completedLessons.length} of {collection.lessonCount} lessons completed
+                </p>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -325,43 +360,130 @@ export default function CollectionDetailPage() {
         <h2 className="text-xl font-semibold mb-4">Lessons in this Collection</h2>
         
         <div className="space-y-3">
-          {collection.lessons.map((lesson, index) => (
-            <Card key={index} className="hover:shadow-md transition-shadow">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-sm font-medium text-gray-600">
-                      {index + 1}
+          {collection.lessons.map((lesson, index) => {
+            const completed = isLessonCompleted(lesson.title);
+            const isNextLesson = index === nextLessonIndex && !completed;
+            
+            return (
+              <Card 
+                key={index} 
+                className={`hover:shadow-md transition-shadow ${completed ? 'bg-green-50 border-green-200' : ''} ${isNextLesson ? 'ring-2 ring-indigo-500 ring-offset-2' : ''}`}
+              >
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                        completed 
+                          ? 'bg-green-500 text-white' 
+                          : isNextLesson 
+                            ? 'bg-indigo-500 text-white'
+                            : 'bg-gray-100 text-gray-600'
+                      }`}>
+                        {completed ? <CheckCircle2 className="h-4 w-4" /> : index + 1}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {getLessonIcon(lesson.type)}
+                        <span className={`font-medium ${completed ? 'text-green-700' : ''}`}>{lesson.title}</span>
+                      </div>
+                      <Badge variant="outline" className="text-xs capitalize">
+                        {lesson.type}
+                      </Badge>
+                      {completed && (
+                        <Badge variant="secondary" className="text-xs bg-green-100 text-green-700">
+                          Completed
+                        </Badge>
+                      )}
+                      {isNextLesson && (
+                        <Badge className="text-xs bg-indigo-100 text-indigo-700">
+                          Continue Here
+                        </Badge>
+                      )}
                     </div>
                     <div className="flex items-center gap-2">
-                      {getLessonIcon(lesson.type)}
-                      <span className="font-medium">{lesson.title}</span>
+                      {!completed && (
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => handleMarkLessonComplete(index, lesson.title)}
+                        >
+                          <CheckCircle2 className="mr-1 h-3 w-3" />
+                          Mark Done
+                        </Button>
+                      )}
+                      <Link to={lesson.link} onClick={handleStartCollection}>
+                        <Button size="sm" variant={completed ? "outline" : "default"}>
+                          {completed ? (
+                            <>
+                              <RotateCcw className="mr-1 h-3 w-3" />
+                              Review
+                            </>
+                          ) : isNextLesson ? (
+                            <>
+                              <Play className="mr-1 h-3 w-3" />
+                              Continue
+                            </>
+                          ) : (
+                            <>
+                              Start
+                              <ArrowRight className="ml-1 h-3 w-3" />
+                            </>
+                          )}
+                        </Button>
+                      </Link>
                     </div>
-                    <Badge variant="outline" className="text-xs capitalize">
-                      {lesson.type}
-                    </Badge>
                   </div>
-                  <Link to={lesson.link}>
-                    <Button size="sm">
-                      Start
-                      <ArrowRight className="ml-1 h-3 w-3" />
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
 
         <div className="mt-8 p-6 bg-indigo-50 rounded-xl text-center">
-          <h3 className="font-semibold mb-2">Ready to start learning?</h3>
-          <p className="text-gray-600 mb-4">Begin with the first lesson and work your way through the collection.</p>
-          <Link to={collection.lessons[0]?.link || '/vocabulary'}>
-            <Button size="lg">
-              Start First Lesson
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
+          {progressPercentage === 100 ? (
+            <>
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle2 className="h-8 w-8 text-green-600" />
+              </div>
+              <h3 className="font-semibold mb-2 text-green-700">Collection Completed!</h3>
+              <p className="text-gray-600 mb-4">Congratulations! You've completed all lessons in this collection.</p>
+              <div className="flex gap-3 justify-center">
+                <Button size="lg" variant="outline" onClick={() => navigate('/collections')}>
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Browse More Collections
+                </Button>
+                <Link to={collection.lessons[0]?.link || '/vocabulary'}>
+                  <Button size="lg">
+                    <RotateCcw className="mr-2 h-4 w-4" />
+                    Review Again
+                  </Button>
+                </Link>
+              </div>
+            </>
+          ) : progress ? (
+            <>
+              <h3 className="font-semibold mb-2">Continue where you left off</h3>
+              <p className="text-gray-600 mb-4">
+                You're {progressPercentage}% through this collection. Keep going!
+              </p>
+              <Link to={collection.lessons[nextLessonIndex]?.link || '/vocabulary'} onClick={handleStartCollection}>
+                <Button size="lg">
+                  <Play className="mr-2 h-4 w-4" />
+                  Continue: {collection.lessons[nextLessonIndex]?.title}
+                </Button>
+              </Link>
+            </>
+          ) : (
+            <>
+              <h3 className="font-semibold mb-2">Ready to start learning?</h3>
+              <p className="text-gray-600 mb-4">Begin with the first lesson and work your way through the collection.</p>
+              <Link to={collection.lessons[0]?.link || '/vocabulary'} onClick={handleStartCollection}>
+                <Button size="lg">
+                  Start First Lesson
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </div>

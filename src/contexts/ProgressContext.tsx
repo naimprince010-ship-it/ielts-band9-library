@@ -46,12 +46,21 @@ export interface StreakData {
   lastActivityDate: string;
 }
 
+export interface CollectionProgress {
+  collectionId: string;
+  startedAt: string;
+  completedLessons: string[];
+  lastLessonIndex: number;
+  completedAt?: string;
+}
+
 interface ProgressContextType {
   lessonProgress: Record<string, LessonProgress>;
   quizAttempts: QuizAttempt[];
   userPreferences: UserPreferences;
   dailyActivity: DailyActivity;
   streakData: StreakData;
+  collectionProgress: Record<string, CollectionProgress>;
   loading: boolean;
   
   updateLessonProgress: (lessonId: string, updates: Partial<LessonProgress>) => void;
@@ -60,6 +69,12 @@ interface ProgressContextType {
   updateUserPreferences: (prefs: Partial<UserPreferences>) => void;
   incrementDailyQuestions: (count?: number) => void;
   addLessonTime: (seconds: number) => void;
+  
+  startCollection: (collectionId: string) => void;
+  markCollectionLessonComplete: (collectionId: string, lessonIndex: number, lessonTitle: string) => void;
+  getCollectionProgress: (collectionId: string) => CollectionProgress | null;
+  getAllCollectionProgress: () => CollectionProgress[];
+  getContinueCollection: () => { collectionId: string; lessonIndex: number } | null;
   
   getRecentLessons: () => LessonProgress[];
   getCompletedLessonsCount: (type?: string) => number;
@@ -76,6 +91,7 @@ const STORAGE_KEYS = {
   userPreferences: 'ielts_user_preferences',
   dailyActivity: 'ielts_daily_activity',
   streakData: 'ielts_streak_data',
+  collectionProgress: 'ielts_collection_progress',
 };
 
 const DEFAULT_PREFERENCES: UserPreferences = {
@@ -123,6 +139,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   const [userPreferences, setUserPreferences] = useState<UserPreferences>(DEFAULT_PREFERENCES);
   const [dailyActivity, setDailyActivity] = useState<DailyActivity>(DEFAULT_DAILY_ACTIVITY);
   const [streakData, setStreakData] = useState<StreakData>(DEFAULT_STREAK);
+  const [collectionProgress, setCollectionProgress] = useState<Record<string, CollectionProgress>>({});
 
   useEffect(() => {
     loadProgress();
@@ -135,6 +152,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     const storedQuizAttempts = getFromStorage<QuizAttempt[]>(STORAGE_KEYS.quizAttempts, []);
     const storedPreferences = getFromStorage<UserPreferences>(STORAGE_KEYS.userPreferences, DEFAULT_PREFERENCES);
     const storedStreak = getFromStorage<StreakData>(STORAGE_KEYS.streakData, DEFAULT_STREAK);
+    const storedCollectionProgress = getFromStorage<Record<string, CollectionProgress>>(STORAGE_KEYS.collectionProgress, {});
     
     let storedDailyActivity = getFromStorage<DailyActivity>(STORAGE_KEYS.dailyActivity, DEFAULT_DAILY_ACTIVITY);
     const today = new Date().toISOString().split('T')[0];
@@ -149,6 +167,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     setUserPreferences(storedPreferences);
     setDailyActivity(storedDailyActivity);
     setStreakData(storedStreak);
+    setCollectionProgress(storedCollectionProgress);
     
     if (user && isSupabaseConfigured() && supabase) {
       try {
@@ -335,12 +354,83 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     return { questions, goal, percentage };
   }, [dailyActivity.questionsAnswered, userPreferences.dailyGoalQuestions]);
 
+  const startCollection = useCallback((collectionId: string) => {
+    setCollectionProgress(prev => {
+      if (prev[collectionId]) {
+        return prev;
+      }
+      const newProgress: CollectionProgress = {
+        collectionId,
+        startedAt: new Date().toISOString(),
+        completedLessons: [],
+        lastLessonIndex: 0,
+      };
+      const updated = { ...prev, [collectionId]: newProgress };
+      saveToStorage(STORAGE_KEYS.collectionProgress, updated);
+      return updated;
+    });
+  }, []);
+
+  const markCollectionLessonComplete = useCallback((collectionId: string, lessonIndex: number, lessonTitle: string) => {
+    setCollectionProgress(prev => {
+      const existing = prev[collectionId];
+      if (!existing) {
+        const newProgress: CollectionProgress = {
+          collectionId,
+          startedAt: new Date().toISOString(),
+          completedLessons: [lessonTitle],
+          lastLessonIndex: lessonIndex,
+        };
+        const updated = { ...prev, [collectionId]: newProgress };
+        saveToStorage(STORAGE_KEYS.collectionProgress, updated);
+        return updated;
+      }
+      
+      const completedLessons = existing.completedLessons.includes(lessonTitle)
+        ? existing.completedLessons
+        : [...existing.completedLessons, lessonTitle];
+      
+      const updatedProgress: CollectionProgress = {
+        ...existing,
+        completedLessons,
+        lastLessonIndex: Math.max(existing.lastLessonIndex, lessonIndex),
+      };
+      
+      const updated = { ...prev, [collectionId]: updatedProgress };
+      saveToStorage(STORAGE_KEYS.collectionProgress, updated);
+      return updated;
+    });
+  }, []);
+
+  const getCollectionProgress = useCallback((collectionId: string): CollectionProgress | null => {
+    return collectionProgress[collectionId] || null;
+  }, [collectionProgress]);
+
+  const getAllCollectionProgress = useCallback((): CollectionProgress[] => {
+    return Object.values(collectionProgress);
+  }, [collectionProgress]);
+
+  const getContinueCollection = useCallback((): { collectionId: string; lessonIndex: number } | null => {
+    const inProgressCollections = Object.values(collectionProgress)
+      .filter(cp => !cp.completedAt)
+      .sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime());
+    
+    if (inProgressCollections.length === 0) return null;
+    
+    const mostRecent = inProgressCollections[0];
+    return {
+      collectionId: mostRecent.collectionId,
+      lessonIndex: mostRecent.lastLessonIndex,
+    };
+  }, [collectionProgress]);
+
   const value: ProgressContextType = {
     lessonProgress,
     quizAttempts,
     userPreferences,
     dailyActivity,
     streakData,
+    collectionProgress,
     loading,
     updateLessonProgress,
     markLessonCompleted,
@@ -348,6 +438,11 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     updateUserPreferences,
     incrementDailyQuestions,
     addLessonTime,
+    startCollection,
+    markCollectionLessonComplete,
+    getCollectionProgress,
+    getAllCollectionProgress,
+    getContinueCollection,
     getRecentLessons,
     getCompletedLessonsCount,
     getBestQuizScore,
