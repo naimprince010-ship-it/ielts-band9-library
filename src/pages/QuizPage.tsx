@@ -27,6 +27,8 @@ import { ALL_QUIZZES, getQuizById, Quiz } from '@/data/quizData';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProgress, WrongQuestion } from '@/contexts/ProgressContext';
 import { useQuizKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { useConfetti } from '@/hooks/useConfetti';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
 
 interface QuizResult {
   questionId: string;
@@ -39,6 +41,8 @@ export function QuizPage() {
   const { quizId } = useParams<{ quizId: string }>();
   const { isPremium } = useAuth();
   const { addQuizAttempt, getAllWrongQuestions, streakData, getTodayProgress } = useProgress();
+  const { fireStars } = useConfetti();
+  const { playCorrect, playIncorrect, playComplete } = useSoundEffects();
   
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -101,6 +105,9 @@ export function QuizPage() {
     setQuizCompleted(true);
     setQuizStarted(false);
     
+    fireStars();
+    playComplete();
+    
     if (quiz && results.length > 0) {
       const wrongQuestions: WrongQuestion[] = results
         .filter(r => !r.isCorrect)
@@ -122,7 +129,7 @@ export function QuizPage() {
         wrongQuestions,
       });
     }
-  }, [quiz, results, addQuizAttempt]);
+  }, [quiz, results, addQuizAttempt, fireStars, playComplete]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -140,6 +147,12 @@ export function QuizPage() {
     const correct = normalizedUserAnswer === normalizedCorrectAnswer;
     setIsCorrect(correct);
     setShowFeedback(true);
+    
+    if (correct) {
+      playCorrect();
+    } else {
+      playIncorrect();
+    }
     
     setResults(prev => [...prev, {
       questionId: currentQuestion.id,
