@@ -2,16 +2,19 @@ import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, BookOpen, GraduationCap, Star, Bookmark, BookmarkCheck, 
-  CheckCircle, XCircle, AlertTriangle, Lightbulb, ChevronDown, ChevronUp,
+  CheckCircle, XCircle, AlertTriangle, Lightbulb,
   Lock, CheckCircle2, Circle, FileText, MessageSquare, Zap, BookMarked
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { MistakeFlipCard } from '@/components/ui/FlipCard';
 import { TableOfContents, MobileTableOfContents } from '@/components/ui/TableOfContents';
+import { ReadingProgressBar } from '@/components/ui/ReadingProgressBar';
+import { InteractivePractice } from '@/components/ui/InteractivePractice';
+import { CopyableBadge } from '@/components/ui/CopyButton';
+import { SpeakButton } from '@/components/ui/SpeakButton';
 import { useLessons } from '@/contexts/LessonContext';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -20,7 +23,6 @@ export function LessonPage() {
   const navigate = useNavigate();
   const { getLessonBySlug, addBookmark, removeBookmark, isBookmarked, incrementViewCount, lessons, getLessonProgress, setLessonProgress } = useLessons();
   const { user, isPremium } = useAuth();
-  const [showAnswers, setShowAnswers] = useState(false);
   const [lesson, setLesson] = useState(getLessonBySlug(slug || ''));
   
   const lessonProgress = lesson ? getLessonProgress(lesson.id) : 'not_started';
@@ -76,7 +78,8 @@ export function LessonPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className={`py-8 ${lesson.type === 'vocabulary' ? 'bg-indigo-600' : 'bg-purple-600'} text-white`}>
+      <ReadingProgressBar estimatedMinutes={5} />
+      <div className={`py-8 ${lesson.type === 'vocabulary' ? 'bg-indigo-600' : 'bg-purple-600'} text-white mt-1`}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link 
             to={`/${lesson.type}`} 
@@ -261,7 +264,10 @@ export function LessonPage() {
                   {content.examples.map((example, index) => (
                     <AccordionItem key={index} value={`examples-${index}`}>
                       <AccordionTrigger className="text-left">
-                        <span className="font-medium text-gray-900 pr-4">"{example.sentence}"</span>
+                        <div className="flex items-center gap-2 pr-4">
+                          <SpeakButton text={example.sentence} size="sm" />
+                          <span className="font-medium text-gray-900">"{example.sentence}"</span>
+                        </div>
                       </AccordionTrigger>
                       <AccordionContent>
                         <div className="border-l-4 border-indigo-500 pl-4 py-2">
@@ -300,13 +306,12 @@ export function LessonPage() {
               <Card className="mb-6" id="collocations">
                 <CardHeader>
                   <CardTitle>Collocations</CardTitle>
+                  <p className="text-sm text-gray-500 mt-1">Click to copy</p>
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
                     {content.collocations.map((collocation, index) => (
-                      <Badge key={index} variant="secondary" className="text-sm">
-                        {collocation}
-                      </Badge>
+                      <CopyableBadge key={index} text={collocation} />
                     ))}
                   </div>
                 </CardContent>
@@ -336,11 +341,15 @@ export function LessonPage() {
               <Card className="mb-6 border-green-200 bg-green-50" id="speaking-phrases">
                 <CardHeader>
                   <CardTitle className="text-green-900">Speaking Phrases</CardTitle>
+                  <p className="text-sm text-green-700 mt-1">Click speaker to listen, click text to copy</p>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2">
+                  <ul className="space-y-3">
                     {content.speakingLines.map((line, index) => (
-                      <li key={index} className="text-green-800 italic">"{line}"</li>
+                      <li key={index} className="flex items-start gap-2">
+                        <SpeakButton text={line} size="sm" className="flex-shrink-0 mt-0.5" />
+                        <CopyableBadge text={line} className="bg-green-100 hover:bg-green-200 text-green-800 text-left whitespace-normal" />
+                      </li>
                     ))}
                   </ul>
                 </CardContent>
@@ -369,71 +378,13 @@ export function LessonPage() {
               </Card>
             )}
 
-            <Card className="mb-6 border-amber-200" id="mini-practice">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-amber-700">
-                  <AlertTriangle className="h-5 w-5" />
-                  Mini Practice ({content.miniPractice.length} questions)
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  {content.miniPractice.map((question, index) => (
-                    <div key={index} className="border-b border-gray-200 pb-4 last:border-0">
-                      <p className="font-medium mb-2">
-                        {index + 1}. {question.question}
-                      </p>
-                      {question.options && (
-                        <div className="ml-4 space-y-1">
-                          {question.options.map((option, optIndex) => (
-                            <p key={optIndex} className="text-gray-600">
-                              {String.fromCharCode(65 + optIndex)}) {option}
-                            </p>
-                          ))}
-                        </div>
-                      )}
-                      {question.type === 'fill-blank' && (
-                        <p className="text-gray-500 text-sm ml-4">(Fill in the blank)</p>
-                      )}
-                      {question.type === 'rewrite' && (
-                        <p className="text-gray-500 text-sm ml-4">(Rewrite the sentence)</p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-
-                <Separator className="my-6" />
-
-                <Button
-                  variant="outline"
-                  onClick={() => setShowAnswers(!showAnswers)}
-                  className="w-full"
-                >
-                  {showAnswers ? (
-                    <>
-                      <ChevronUp className="h-4 w-4 mr-2" />
-                      Hide Answers
-                    </>
-                  ) : (
-                    <>
-                      <ChevronDown className="h-4 w-4 mr-2" />
-                      Show Answers
-                    </>
-                  )}
-                </Button>
-
-                {showAnswers && (
-                  <div className="mt-4 bg-green-50 rounded-lg p-4">
-                    <h4 className="font-semibold text-green-900 mb-2">Answer Key</h4>
-                    <ol className="list-decimal list-inside space-y-1">
-                      {content.answerKey.map((answer, index) => (
-                        <li key={index} className="text-green-800">{answer}</li>
-                      ))}
-                    </ol>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            <InteractivePractice 
+              questions={content.miniPractice.map((q, index) => ({
+                ...q,
+                correctAnswer: content.answerKey[index] || ''
+              }))}
+              title={`Mini Practice (${content.miniPractice.length} questions)`}
+            />
 
             <Card className="mb-6 bg-indigo-50 border-indigo-200" id="quick-recap">
               <CardHeader>
