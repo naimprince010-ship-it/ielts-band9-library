@@ -326,3 +326,67 @@ CREATE POLICY "Admins can view all plan items" ON daily_plan_items FOR SELECT US
 CREATE POLICY "Admins can view all streaks" ON user_streaks FOR SELECT USING (
   EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin')
 );
+
+-- =====================================================
+-- SPACED REPETITION SYSTEM (SRS) TABLES
+-- =====================================================
+
+-- 10. SRS Items Table (tracks each item's SRS state)
+CREATE TABLE IF NOT EXISTS srs_items (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  content_type TEXT NOT NULL CHECK (content_type IN ('vocab', 'grammar', 'quiz_mistake', 'custom')),
+  content_id TEXT NOT NULL,
+  front TEXT NOT NULL,
+  back TEXT NOT NULL,
+  hint TEXT,
+  category TEXT,
+  level INTEGER DEFAULT 0 CHECK (level >= 0 AND level <= 5),
+  due_date DATE NOT NULL DEFAULT CURRENT_DATE,
+  ease_factor NUMERIC(3,2) DEFAULT 2.50,
+  interval_days INTEGER DEFAULT 1,
+  repetitions INTEGER DEFAULT 0,
+  last_reviewed_at TIMESTAMP WITH TIME ZONE,
+  suspended BOOLEAN DEFAULT false,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(user_id, content_type, content_id)
+);
+
+-- 11. SRS Reviews Table (tracks review history)
+CREATE TABLE IF NOT EXISTS srs_reviews (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  srs_item_id UUID REFERENCES srs_items(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  reviewed_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  quality INTEGER CHECK (quality >= 0 AND quality <= 5),
+  prev_level INTEGER,
+  next_level INTEGER,
+  prev_interval INTEGER,
+  next_interval INTEGER
+);
+
+-- Enable RLS for SRS tables
+ALTER TABLE srs_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE srs_reviews ENABLE ROW LEVEL SECURITY;
+
+-- RLS Policies for srs_items
+CREATE POLICY "Users can view own SRS items" ON srs_items FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own SRS items" ON srs_items FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update own SRS items" ON srs_items FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Users can delete own SRS items" ON srs_items FOR DELETE USING (auth.uid() = user_id);
+
+-- RLS Policies for srs_reviews
+CREATE POLICY "Users can view own SRS reviews" ON srs_reviews FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own SRS reviews" ON srs_reviews FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+-- Admin policies for SRS tables
+CREATE POLICY "Admins can view all SRS items" ON srs_items FOR SELECT USING (
+  EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin')
+);
+CREATE POLICY "Admins can view all SRS reviews" ON srs_reviews FOR SELECT USING (
+  EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin')
+);
+
+-- Index for efficient due card queries
+CREATE INDEX IF NOT EXISTS idx_srs_items_due ON srs_items(user_id, due_date) WHERE suspended = false;

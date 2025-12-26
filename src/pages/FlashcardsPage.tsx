@@ -4,6 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { useProgress } from '@/contexts/ProgressContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { 
   RotateCcw, 
   ThumbsUp, 
@@ -13,7 +15,9 @@ import {
   Clock,
   CheckCircle2,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  Cloud,
+  CloudOff
 } from 'lucide-react';
 
 interface Flashcard {
@@ -101,6 +105,7 @@ const SAMPLE_FLASHCARDS: Omit<Flashcard, 'nextReview' | 'interval' | 'easeFactor
 
 export default function FlashcardsPage() {
   const { getAllWrongQuestions, streakData } = useProgress();
+  const { user } = useAuth();
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
@@ -108,49 +113,125 @@ export default function FlashcardsPage() {
   const [reviewedToday, setReviewedToday] = useState(0);
   const [mode, setMode] = useState<'menu' | 'review' | 'complete'>('menu');
   const [sessionStats, setSessionStats] = useState({ correct: 0, incorrect: 0, total: 0 });
+  const [isSynced, setIsSynced] = useState(false);
+  const [syncing, setSyncing] = useState(false);
 
   useEffect(() => {
     loadFlashcards();
-  }, []);
+  }, [user]);
 
-  const loadFlashcards = () => {
-    let cards = getFlashcardsFromStorage();
+    const loadFlashcards = async () => {
+      if (user && isSupabaseConfigured() && supabase) {
+        setSyncing(true);
+        try {
+          const today = new Date();
+          const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        
+          const { data: srsItems, error } = await supabase
+            .from('srs_items')
+            .select('*')
+            .eq('user_id', user.id)
+            .eq('suspended', false);
+
+          if (!error && srsItems && srsItems.length > 0) {
+            const cards: Flashcard[] = srsItems.map(item => ({
+              id: item.id,
+              front: item.front,
+              back: item.back,
+              hint: item.hint || undefined,
+              category: item.category || 'vocabulary',
+              difficulty: item.level >= 4 ? 'easy' as const : item.level >= 2 ? 'medium' as const : 'hard' as const,
+              nextReview: item.due_date,
+              interval: item.interval_days,
+              easeFactor: parseFloat(item.ease_factor) || 2.5,
+              repetitions: item.repetitions
+            }));
+          
+            setFlashcards(cards);
+            setDueCards(cards.filter(c => c.nextReview <= todayStr));
+            setIsSynced(true);
+            setSyncing(false);
+          
+            const historyStr = localStorage.getItem(REVIEW_HISTORY_KEY);
+            const history = historyStr ? JSON.parse(historyStr) : {};
+            setReviewedToday(history[todayStr] || 0);
+            return;
+          }
+        } catch (err) {
+          console.log('Error loading from Supabase, falling back to localStorage:', err);
+        }
+        setSyncing(false);
+      }
     
-    if (cards.length === 0) {
-      const wrongQuestions = getAllWrongQuestions();
-      const wrongCards: Flashcard[] = wrongQuestions.slice(0, 20).map((wq, index) => ({
-        id: `wrong-${index}`,
-        front: wq.question,
-        back: wq.correctAnswer,
-        hint: wq.hint,
-        category: 'quiz-mistakes',
-        difficulty: 'medium' as const,
-        nextReview: new Date().toISOString(),
-        interval: 1,
-        easeFactor: 2.5,
-        repetitions: 0
-      }));
+      let cards = getFlashcardsFromStorage();
+    
+      if (cards.length === 0) {
+        const wrongQuestions = getAllWrongQuestions();
+        const wrongCards: Flashcard[] = wrongQuestions.slice(0, 20).map((wq, index) => ({
+          id: `wrong-${index}`,
+          front: wq.question,
+          back: wq.correctAnswer,
+          hint: wq.hint,
+          category: 'quiz-mistakes',
+          difficulty: 'medium' as const,
+          nextReview: new Date().toISOString(),
+          interval: 1,
+          easeFactor: 2.5,
+          repetitions: 0
+        }));
       
-      const sampleCards: Flashcard[] = SAMPLE_FLASHCARDS.map(card => ({
-        ...card,
-        nextReview: new Date().toISOString(),
-        interval: 1,
-        easeFactor: 2.5,
-        repetitions: 0
-      }));
+        const sampleCards: Flashcard[] = SAMPLE_FLASHCARDS.map(card => ({
+          ...card,
+          nextReview: new Date().toISOString(),
+          interval: 1,
+          easeFactor: 2.5,
+          repetitions: 0
+        }));
       
-      cards = [...wrongCards, ...sampleCards];
-      saveFlashcardsToStorage(cards);
-    }
+        cards = [...wrongCards, ...sampleCards];
+        saveFlashcardsToStorage(cards);
+      
+        if (user && isSupabaseConfigured() && supabase) {
+          syncCardsToSupabase(cards);
+        }
+      }
     
-    setFlashcards(cards);
-    setDueCards(getDueCards(cards));
+      setFlashcards(cards);
+      setDueCards(getDueCards(cards));
     
-    const today = new Date().toISOString().split('T')[0];
-    const historyStr = localStorage.getItem(REVIEW_HISTORY_KEY);
-    const history = historyStr ? JSON.parse(historyStr) : {};
-    setReviewedToday(history[today] || 0);
-  };
+      const today = new Date().toISOString().split('T')[0];
+      const historyStr = localStorage.getItem(REVIEW_HISTORY_KEY);
+      const history = historyStr ? JSON.parse(historyStr) : {};
+      setReviewedToday(history[today] || 0);
+    };
+
+    const syncCardsToSupabase = async (cards: Flashcard[]) => {
+      if (!user || !isSupabaseConfigured() || !supabase) return;
+    
+      try {
+        const srsItems = cards.map(card => ({
+          user_id: user.id,
+          content_type: 'custom',
+          content_id: card.id,
+          front: card.front,
+          back: card.back,
+          hint: card.hint || null,
+          category: card.category,
+          level: card.difficulty === 'easy' ? 4 : card.difficulty === 'medium' ? 2 : 0,
+          due_date: card.nextReview.split('T')[0],
+          ease_factor: card.easeFactor,
+          interval_days: card.interval,
+          repetitions: card.repetitions,
+        }));
+
+        await supabase.from('srs_items').upsert(srsItems, { 
+          onConflict: 'user_id,content_type,content_id' 
+        });
+        setIsSynced(true);
+      } catch (err) {
+        console.log('Error syncing to Supabase:', err);
+      }
+    };
 
   const startReview = () => {
     const due = getDueCards(flashcards);
@@ -165,36 +246,68 @@ export default function FlashcardsPage() {
     setMode('review');
   };
 
-  const handleResponse = useCallback((quality: number) => {
-    const currentCard = dueCards[currentIndex];
-    const updatedCard = calculateNextReview(currentCard, quality);
+    const handleResponse = useCallback(async (quality: number) => {
+      const currentCard = dueCards[currentIndex];
+      const updatedCard = calculateNextReview(currentCard, quality);
     
-    const updatedCards = flashcards.map(c => 
-      c.id === currentCard.id ? updatedCard : c
-    );
-    setFlashcards(updatedCards);
-    saveFlashcardsToStorage(updatedCards);
+      const updatedCards = flashcards.map(c => 
+        c.id === currentCard.id ? updatedCard : c
+      );
+      setFlashcards(updatedCards);
+      saveFlashcardsToStorage(updatedCards);
     
-    setSessionStats(prev => ({
-      correct: quality >= 3 ? prev.correct + 1 : prev.correct,
-      incorrect: quality < 3 ? prev.incorrect + 1 : prev.incorrect,
-      total: prev.total + 1
-    }));
+      if (user && isSupabaseConfigured() && supabase) {
+        try {
+          const newLevel = quality >= 3 ? Math.min((currentCard.repetitions || 0) + 1, 5) : 0;
+          const intervals = [0, 1, 3, 7, 14, 30];
+          const newDueDate = new Date();
+          newDueDate.setDate(newDueDate.getDate() + intervals[newLevel]);
+          const dueDateStr = `${newDueDate.getFullYear()}-${String(newDueDate.getMonth() + 1).padStart(2, '0')}-${String(newDueDate.getDate()).padStart(2, '0')}`;
+        
+          await supabase.from('srs_items').update({
+            level: newLevel,
+            due_date: dueDateStr,
+            ease_factor: updatedCard.easeFactor,
+            interval_days: updatedCard.interval,
+            repetitions: updatedCard.repetitions,
+            last_reviewed_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }).eq('id', currentCard.id);
+        
+          await supabase.from('srs_reviews').insert({
+            srs_item_id: currentCard.id,
+            user_id: user.id,
+            quality: quality,
+            prev_level: currentCard.repetitions || 0,
+            next_level: newLevel,
+            prev_interval: currentCard.interval,
+            next_interval: updatedCard.interval
+          });
+        } catch (err) {
+          console.log('Error syncing review to Supabase:', err);
+        }
+      }
     
-    const today = new Date().toISOString().split('T')[0];
-    const historyStr = localStorage.getItem(REVIEW_HISTORY_KEY);
-    const history = historyStr ? JSON.parse(historyStr) : {};
-    history[today] = (history[today] || 0) + 1;
-    localStorage.setItem(REVIEW_HISTORY_KEY, JSON.stringify(history));
-    setReviewedToday(history[today]);
+      setSessionStats(prev => ({
+        correct: quality >= 3 ? prev.correct + 1 : prev.correct,
+        incorrect: quality < 3 ? prev.incorrect + 1 : prev.incorrect,
+        total: prev.total + 1
+      }));
     
-    if (currentIndex < dueCards.length - 1) {
-      setCurrentIndex(prev => prev + 1);
-      setIsFlipped(false);
-    } else {
-      setMode('complete');
-    }
-  }, [currentIndex, dueCards, flashcards]);
+      const today = new Date().toISOString().split('T')[0];
+      const historyStr = localStorage.getItem(REVIEW_HISTORY_KEY);
+      const history = historyStr ? JSON.parse(historyStr) : {};
+      history[today] = (history[today] || 0) + 1;
+      localStorage.setItem(REVIEW_HISTORY_KEY, JSON.stringify(history));
+      setReviewedToday(history[today]);
+    
+      if (currentIndex < dueCards.length - 1) {
+        setCurrentIndex(prev => prev + 1);
+        setIsFlipped(false);
+      } else {
+        setMode('complete');
+      }
+    }, [currentIndex, dueCards, flashcards, user]);
 
   const addWrongQuestionsAsFlashcards = () => {
     const wrongQuestions = getAllWrongQuestions();
@@ -233,15 +346,32 @@ export default function FlashcardsPage() {
         {mode === 'menu' && (
           <div className="space-y-6">
             <Card className="border-2 border-amber-100">
-              <CardHeader className="text-center">
-                <div className="mx-auto w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mb-4">
-                  <Brain className="h-8 w-8 text-amber-600" />
-                </div>
-                <CardTitle className="text-2xl">Spaced Repetition Flashcards</CardTitle>
-                <CardDescription>
-                  Review vocabulary with scientifically-proven spaced repetition
-                </CardDescription>
-              </CardHeader>
+                            <CardHeader className="text-center">
+                              <div className="mx-auto w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mb-4">
+                                <Brain className="h-8 w-8 text-amber-600" />
+                              </div>
+                              <CardTitle className="text-2xl">Spaced Repetition Flashcards</CardTitle>
+                              <CardDescription>
+                                Review vocabulary with scientifically-proven spaced repetition
+                              </CardDescription>
+                              {user && (
+                                <div className="flex items-center justify-center gap-2 mt-2">
+                                  {syncing ? (
+                                    <span className="text-xs text-gray-500 flex items-center gap-1">
+                                      <Cloud className="h-3 w-3 animate-pulse" /> Syncing...
+                                    </span>
+                                  ) : isSynced ? (
+                                    <span className="text-xs text-green-600 flex items-center gap-1">
+                                      <Cloud className="h-3 w-3" /> Synced to cloud
+                                    </span>
+                                  ) : (
+                                    <span className="text-xs text-gray-400 flex items-center gap-1">
+                                      <CloudOff className="h-3 w-3" /> Local only
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+                            </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="p-4 bg-blue-50 rounded-lg text-center">
