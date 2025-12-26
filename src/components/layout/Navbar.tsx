@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { BookOpen, Menu, X, User, LogOut, Settings, Bookmark, Crown, Brain, Trophy, BarChart3, Target, Award, PenTool, FileText, Calendar } from 'lucide-react';
+import { BookOpen, Menu, X, User, LogOut, Settings, Bookmark, Crown, Brain, Trophy, BarChart3, Target, Award, PenTool, FileText, Calendar, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -78,12 +78,16 @@ export function Navbar() {
                                                                                                                       <PenTool className="h-4 w-4 mr-2" />
                                                                                                                       Grammar Exercises
                                                                                                                     </DropdownMenuItem>
-                                                                                                                    <DropdownMenuItem onClick={() => navigate('/essay-bank')}>
-                                                                                                                      <FileText className="h-4 w-4 mr-2" />
-                                                                                                                      Essay Bank
-                                                                                                                    </DropdownMenuItem>
-                                                                                                                  </DropdownMenuContent>
-                                                                                                                </DropdownMenu>
+                                                                                                                                                                                                                                    <DropdownMenuItem onClick={() => navigate('/essay-bank')}>
+                                                                                                                                                                                                                                      <FileText className="h-4 w-4 mr-2" />
+                                                                                                                                                                                                                                      Essay Bank
+                                                                                                                                                                                                                                    </DropdownMenuItem>
+                                                                                                                                                                                                                                    <DropdownMenuItem onClick={() => navigate('/collections')}>
+                                                                                                                                                                                                                                      <Sparkles className="h-4 w-4 mr-2" />
+                                                                                                                                                                                                                                      Collections
+                                                                                                                                                                                                                                    </DropdownMenuItem>
+                                                                                                                                                                                                                                  </DropdownMenuContent>
+                                                                                                                                                                                                                                </DropdownMenu>
             
                         {user ? (
               <DropdownMenu>

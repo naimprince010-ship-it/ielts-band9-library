@@ -2,8 +2,15 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Crown, Calendar, Clock, CreditCard, AlertCircle } from 'lucide-react';
+import { Crown, Calendar, Clock, CreditCard, AlertCircle, CheckCircle2, ArrowUpCircle, ArrowDownCircle, History } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
+interface PaymentEvent {
+  date: string;
+  type: 'payment' | 'activation' | 'renewal' | 'expiry';
+  description: string;
+  amount?: string;
+}
 
 export function SubscriptionDashboard() {
   const { user, isPremium } = useAuth();
@@ -35,6 +42,63 @@ export function SubscriptionDashboard() {
     if (user.package_type === 'yearly') return 'Yearly Premium';
     if (user.package_type === 'monthly') return 'Monthly Premium';
     return 'Premium';
+  };
+
+  const getPaymentTimeline = (): PaymentEvent[] => {
+    const events: PaymentEvent[] = [];
+    
+    if (user.created_at) {
+      events.push({
+        date: new Date(user.created_at).toLocaleDateString(),
+        type: 'activation',
+        description: 'Account created'
+      });
+    }
+    
+    if (isPremium && premiumUntil) {
+      const activationDate = new Date(premiumUntil);
+      if (user.package_type === 'yearly') {
+        activationDate.setFullYear(activationDate.getFullYear() - 1);
+      } else if (user.package_type === 'monthly') {
+        activationDate.setMonth(activationDate.getMonth() - 1);
+      }
+      
+      events.push({
+        date: activationDate.toLocaleDateString(),
+        type: 'payment',
+        description: `${getPackageLabel()} activated`,
+        amount: user.package_type === 'yearly' ? '৳2,499' : user.package_type === 'monthly' ? '৳299' : ''
+      });
+      
+      if (!isExpired) {
+        events.push({
+          date: formatDate(premiumUntil),
+          type: 'renewal',
+          description: 'Next renewal due'
+        });
+      } else {
+        events.push({
+          date: formatDate(premiumUntil),
+          type: 'expiry',
+          description: 'Subscription expired'
+        });
+      }
+    }
+    
+    return events.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  };
+
+  const getEventIcon = (type: PaymentEvent['type']) => {
+    switch (type) {
+      case 'payment':
+        return <CreditCard className="h-4 w-4 text-green-600" />;
+      case 'activation':
+        return <CheckCircle2 className="h-4 w-4 text-blue-600" />;
+      case 'renewal':
+        return <Calendar className="h-4 w-4 text-indigo-600" />;
+      case 'expiry':
+        return <AlertCircle className="h-4 w-4 text-red-600" />;
+    }
   };
 
   return (
@@ -124,13 +188,73 @@ export function SubscriptionDashboard() {
               </div>
             )}
 
-            {premiumUntil && !isExpired && (
-              <div className="text-sm text-gray-500">
-                <p>Next payment due: <span className="font-medium">{getNextPaymentDate()}</span></p>
-              </div>
-            )}
-          </>
-        ) : (
+                    {premiumUntil && !isExpired && (
+                      <div className="text-sm text-gray-500">
+                        <p>Next payment due: <span className="font-medium">{getNextPaymentDate()}</span></p>
+                      </div>
+                    )}
+
+                    <div className="border-t pt-6">
+                      <h4 className="font-medium flex items-center gap-2 mb-4">
+                        <History className="h-4 w-4 text-gray-500" />
+                        Payment Timeline
+                      </h4>
+                      <div className="space-y-3">
+                        {getPaymentTimeline().map((event, index) => (
+                          <div key={index} className="flex items-start gap-3">
+                            <div className="mt-0.5">{getEventIcon(event.type)}</div>
+                            <div className="flex-1">
+                              <p className="text-sm font-medium">{event.description}</p>
+                              <p className="text-xs text-gray-500">{event.date}</p>
+                            </div>
+                            {event.amount && (
+                              <span className="text-sm font-medium text-green-600">{event.amount}</span>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="border-t pt-6">
+                      <h4 className="font-medium mb-4">Change Plan</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {user.package_type === 'monthly' && (
+                          <Link to="/pricing" className="block">
+                            <div className="p-4 border-2 border-indigo-200 rounded-lg hover:border-indigo-400 transition-colors cursor-pointer">
+                              <div className="flex items-center gap-2 mb-2">
+                                <ArrowUpCircle className="h-5 w-5 text-indigo-600" />
+                                <span className="font-medium">Upgrade to Yearly</span>
+                              </div>
+                              <p className="text-sm text-gray-600">Save ৳1,089/year (30% off)</p>
+                              <p className="text-xs text-indigo-600 mt-1">৳2,499/year instead of ৳3,588</p>
+                            </div>
+                          </Link>
+                        )}
+                        {user.package_type === 'yearly' && (
+                          <Link to="/pricing" className="block">
+                            <div className="p-4 border-2 border-gray-200 rounded-lg hover:border-gray-400 transition-colors cursor-pointer">
+                              <div className="flex items-center gap-2 mb-2">
+                                <ArrowDownCircle className="h-5 w-5 text-gray-600" />
+                                <span className="font-medium">Switch to Monthly</span>
+                              </div>
+                              <p className="text-sm text-gray-600">More flexibility, pay as you go</p>
+                              <p className="text-xs text-gray-500 mt-1">৳299/month</p>
+                            </div>
+                          </Link>
+                        )}
+                        <Link to="/pricing" className="block">
+                          <div className="p-4 border-2 border-green-200 rounded-lg hover:border-green-400 transition-colors cursor-pointer">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Crown className="h-5 w-5 text-green-600" />
+                              <span className="font-medium">View All Plans</span>
+                            </div>
+                            <p className="text-sm text-gray-600">Compare features and pricing</p>
+                          </div>
+                        </Link>
+                      </div>
+                    </div>
+                  </>
+                ) : (
           <div className="text-center py-8">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Crown className="h-8 w-8 text-gray-400" />
