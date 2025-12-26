@@ -13,8 +13,13 @@ import {
   Brain,
   PenTool,
   Mic,
-  CheckCircle2
+  CheckCircle2,
+  AlertTriangle,
+  Lightbulb,
+  ArrowRight
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 import { useProgress } from '@/contexts/ProgressContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
@@ -38,6 +43,7 @@ const ACTIVITY_KEY = 'ielts_daily_activity';
 export default function ProgressDashboardPage() {
     const { getCompletedLessonsCount, lessonProgress, quizAttempts } = useProgress();
     const { user } = useAuth();
+    const navigate = useNavigate();
     const completedLessonsCount = getCompletedLessonsCount();
     const [activityHistory, setActivityHistory] = useState<DailyActivity[]>([]);
     const [achievements, setAchievements] = useState<Achievement[]>([]);
@@ -178,15 +184,97 @@ export default function ProgressDashboardPage() {
 
   const skillProgress = calculateSkillProgress();
 
-  const getEstimatedBand = () => {
-    if (averageScore === 0) return 'N/A';
-    if (averageScore >= 90) return '8.0 - 9.0';
-    if (averageScore >= 80) return '7.5 - 8.0';
-    if (averageScore >= 70) return '7.0 - 7.5';
-    if (averageScore >= 60) return '6.5 - 7.0';
-    if (averageScore >= 50) return '6.0 - 6.5';
-    return '5.5 - 6.0';
-  };
+    const getEstimatedBand = () => {
+      if (averageScore === 0) return 'N/A';
+      if (averageScore >= 90) return '8.0 - 9.0';
+      if (averageScore >= 80) return '7.5 - 8.0';
+      if (averageScore >= 70) return '7.0 - 7.5';
+      if (averageScore >= 60) return '6.5 - 7.0';
+      if (averageScore >= 50) return '6.0 - 6.5';
+      return '5.5 - 6.0';
+    };
+
+    const getWeakAreas = () => {
+      const skills = calculateSkillProgress();
+      const weakAreas = skills
+        .filter(skill => skill.progress < 30)
+        .sort((a, b) => a.progress - b.progress);
+      return weakAreas;
+    };
+
+    const getRecommendations = () => {
+      const skills = calculateSkillProgress();
+      const recommendations: { title: string; description: string; action: string; link: string; priority: 'high' | 'medium' | 'low' }[] = [];
+    
+      const weakestSkill = skills.reduce((min, skill) => skill.progress < min.progress ? skill : min, skills[0]);
+    
+      if (weakestSkill.progress < 20) {
+        recommendations.push({
+          title: `Focus on ${weakestSkill.name}`,
+          description: `Your ${weakestSkill.name.toLowerCase()} skills need the most attention. Start with basic lessons.`,
+          action: `Start ${weakestSkill.name} Lessons`,
+          link: weakestSkill.name === 'Vocabulary' ? '/vocabulary' : 
+                weakestSkill.name === 'Grammar' ? '/grammar' :
+                weakestSkill.name === 'Reading' ? '/reading' :
+                weakestSkill.name === 'Writing' ? '/writing' : '/speaking',
+          priority: 'high'
+        });
+      }
+    
+      if (streak < 3) {
+        recommendations.push({
+          title: 'Build Your Study Habit',
+          description: 'Consistency is key! Try to study at least 15 minutes daily to build a streak.',
+          action: 'Start Daily Plan',
+          link: '/daily-plan',
+          priority: 'high'
+        });
+      }
+    
+      if (quizAttempts && quizAttempts.length < 5) {
+        recommendations.push({
+          title: 'Take More Practice Quizzes',
+          description: 'Quizzes help reinforce learning. Try to complete at least 5 quizzes this week.',
+          action: 'Start Quiz',
+          link: '/quiz',
+          priority: 'medium'
+        });
+      }
+    
+      const vocabSkill = skills.find(s => s.name === 'Vocabulary');
+      if (vocabSkill && vocabSkill.progress < 50) {
+        recommendations.push({
+          title: 'Expand Your Vocabulary',
+          description: 'A strong vocabulary is essential for all IELTS sections. Use flashcards for spaced repetition.',
+          action: 'Practice Flashcards',
+          link: '/flashcards',
+          priority: 'medium'
+        });
+      }
+    
+      const writingSkill = skills.find(s => s.name === 'Writing');
+      if (writingSkill && writingSkill.progress < 30) {
+        recommendations.push({
+          title: 'Practice Writing Essays',
+          description: 'Writing Task 2 is worth 2/3 of your writing score. Practice with timed essays.',
+          action: 'Writing Practice',
+          link: '/writing',
+          priority: 'medium'
+        });
+      }
+    
+      if (recommendations.length === 0) {
+        recommendations.push({
+          title: 'Keep Up the Great Work!',
+          description: 'You\'re making excellent progress. Consider taking a mock test to assess your readiness.',
+          action: 'Take Mock Test',
+          link: '/mock-test',
+          priority: 'low'
+        });
+      }
+    
+      return recommendations.slice(0, 4);
+    };
 
   const formatTimeAgo = (dateString: string) => {
     const date = new Date(dateString);
@@ -396,31 +484,121 @@ export default function ProgressDashboardPage() {
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="bg-gradient-to-br from-indigo-500 to-indigo-600 text-white">
-            <CardContent className="pt-6">
-              <h3 className="font-semibold mb-2">Estimated Band Score</h3>
-              <p className="text-4xl font-bold">{getEstimatedBand()}</p>
-              <p className="text-indigo-200 text-sm mt-2">Based on your quiz performance</p>
-            </CardContent>
-          </Card>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                  <Card className="border-2 border-amber-200">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <AlertTriangle className="h-5 w-5 text-amber-600" />
+                        Areas Needing Attention
+                      </CardTitle>
+                      <CardDescription>Skills that need more practice based on your progress</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      {getWeakAreas().length > 0 ? (
+                        <div className="space-y-4">
+                          {getWeakAreas().map((skill) => (
+                            <div key={skill.name} className="flex items-center justify-between p-3 bg-amber-50 rounded-lg">
+                              <div className="flex items-center gap-3">
+                                <div className={`h-10 w-10 rounded-full ${skill.color} flex items-center justify-center`}>
+                                  <skill.icon className="h-5 w-5 text-white" />
+                                </div>
+                                <div>
+                                  <p className="font-medium">{skill.name}</p>
+                                  <p className="text-sm text-gray-500">{skill.progress}% complete</p>
+                                </div>
+                              </div>
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                onClick={() => navigate(
+                                  skill.name === 'Vocabulary' ? '/vocabulary' : 
+                                  skill.name === 'Grammar' ? '/grammar' :
+                                  skill.name === 'Reading' ? '/reading' :
+                                  skill.name === 'Writing' ? '/writing' : '/speaking'
+                                )}
+                              >
+                                Practice
+                                <ArrowRight className="h-4 w-4 ml-1" />
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-center py-8 text-gray-500">
+                          <CheckCircle2 className="h-12 w-12 mx-auto mb-3 text-green-500" />
+                          <p className="font-medium">Great job!</p>
+                          <p className="text-sm">You're making good progress in all areas.</p>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
 
-          <Card className="bg-gradient-to-br from-green-500 to-green-600 text-white">
-            <CardContent className="pt-6">
-              <h3 className="font-semibold mb-2">Words Learned</h3>
-              <p className="text-4xl font-bold">{completedLessonsCount * 25}</p>
-              <p className="text-green-200 text-sm mt-2">~25 words per lesson</p>
-            </CardContent>
-          </Card>
+                  <Card className="border-2 border-blue-200">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Lightbulb className="h-5 w-5 text-blue-600" />
+                        Personalized Recommendations
+                      </CardTitle>
+                      <CardDescription>Suggestions to improve your IELTS score</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        {getRecommendations().map((rec, idx) => (
+                          <div 
+                            key={idx} 
+                            className={`p-4 rounded-lg border-l-4 ${
+                              rec.priority === 'high' ? 'bg-red-50 border-red-500' :
+                              rec.priority === 'medium' ? 'bg-blue-50 border-blue-500' :
+                              'bg-green-50 border-green-500'
+                            }`}
+                          >
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <p className="font-medium">{rec.title}</p>
+                                <p className="text-sm text-gray-600 mt-1">{rec.description}</p>
+                              </div>
+                              <Button 
+                                size="sm" 
+                                variant="ghost"
+                                onClick={() => navigate(rec.link)}
+                                className="ml-2 flex-shrink-0"
+                              >
+                                {rec.action}
+                                <ArrowRight className="h-4 w-4 ml-1" />
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
 
-          <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white">
-            <CardContent className="pt-6">
-              <h3 className="font-semibold mb-2">Quizzes Completed</h3>
-              <p className="text-4xl font-bold">{quizAttempts?.length || 0}</p>
-              <p className="text-purple-200 text-sm mt-2">Keep practicing!</p>
-            </CardContent>
-          </Card>
-        </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <Card className="bg-gradient-to-br from-indigo-500 to-indigo-600 text-white">
+                    <CardContent className="pt-6">
+                      <h3 className="font-semibold mb-2">Estimated Band Score</h3>
+                      <p className="text-4xl font-bold">{getEstimatedBand()}</p>
+                      <p className="text-indigo-200 text-sm mt-2">Based on your quiz performance</p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-gradient-to-br from-green-500 to-green-600 text-white">
+                    <CardContent className="pt-6">
+                      <h3 className="font-semibold mb-2">Words Learned</h3>
+                      <p className="text-4xl font-bold">{completedLessonsCount * 25}</p>
+                      <p className="text-green-200 text-sm mt-2">~25 words per lesson</p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white">
+                    <CardContent className="pt-6">
+                      <h3 className="font-semibold mb-2">Quizzes Completed</h3>
+                      <p className="text-4xl font-bold">{quizAttempts?.length || 0}</p>
+                      <p className="text-purple-200 text-sm mt-2">Keep practicing!</p>
+                    </CardContent>
+                  </Card>
+                </div>
       </div>
     </div>
   );
