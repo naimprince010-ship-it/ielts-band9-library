@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ielts-tree-v1';
+const CACHE_NAME = 'ielts-tree-v2';
 const OFFLINE_URL = '/offline.html';
 
 const STATIC_ASSETS = [
