@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { BookOpen, Menu, X, User, LogOut, Settings, Bookmark, Crown, Brain, Trophy, BarChart3, Target, Award, PenTool, FileText } from 'lucide-react';
+import { BookOpen, Menu, X, User, LogOut, Settings, Bookmark, Crown, Brain, Trophy, BarChart3, Target, Award, PenTool, FileText, Calendar } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -70,16 +70,20 @@ export function Navbar() {
                                                             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                                                           </DropdownMenuTrigger>
                                                           <DropdownMenuContent align="end">
-                                                            <DropdownMenuItem onClick={() => navigate('/grammar-exercises')}>
-                                                              <PenTool className="h-4 w-4 mr-2" />
-                                                              Grammar Exercises
-                                                            </DropdownMenuItem>
-                                                            <DropdownMenuItem onClick={() => navigate('/essay-bank')}>
-                                                              <FileText className="h-4 w-4 mr-2" />
-                                                              Essay Bank
-                                                            </DropdownMenuItem>
-                                                          </DropdownMenuContent>
-                                                        </DropdownMenu>
+                                                                                                                    <DropdownMenuItem onClick={() => navigate('/daily-plan')}>
+                                                                                                                      <Calendar className="h-4 w-4 mr-2" />
+                                                                                                                      Daily Study Plan
+                                                                                                                    </DropdownMenuItem>
+                                                                                                                    <DropdownMenuItem onClick={() => navigate('/grammar-exercises')}>
+                                                                                                                      <PenTool className="h-4 w-4 mr-2" />
+                                                                                                                      Grammar Exercises
+                                                                                                                    </DropdownMenuItem>
+                                                                                                                    <DropdownMenuItem onClick={() => navigate('/essay-bank')}>
+                                                                                                                      <FileText className="h-4 w-4 mr-2" />
+                                                                                                                      Essay Bank
+                                                                                                                    </DropdownMenuItem>
+                                                                                                                  </DropdownMenuContent>
+                                                                                                                </DropdownMenu>
             
                         {user ? (
               <DropdownMenu>
