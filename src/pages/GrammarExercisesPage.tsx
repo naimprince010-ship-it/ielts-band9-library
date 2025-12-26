@@ -661,7 +661,16 @@ export default function GrammarExercisesPage() {
   const checkAnswer = () => {
     if (!selectedTopic) return;
     const exercise = selectedTopic.exercises[currentExercise];
-    const correct = userAnswer.toLowerCase().trim() === exercise.correctAnswer.toLowerCase().trim();
+    const normalizedUserAnswer = userAnswer.toLowerCase().trim();
+    const normalizedCorrectAnswer = exercise.correctAnswer.toLowerCase().trim();
+    
+    let correct = normalizedUserAnswer === normalizedCorrectAnswer;
+    
+    if (normalizedCorrectAnswer === 'no article') {
+      const noArticleAliases = ['', '-', 'none', 'nothing', 'no article', 'no-article', 'blank', 'empty'];
+      correct = noArticleAliases.includes(normalizedUserAnswer);
+    }
+    
     setIsCorrect(correct);
     if (correct) setScore(score + 1);
     setShowResult(true);
@@ -822,10 +831,10 @@ export default function GrammarExercisesPage() {
                     <Input
                       value={userAnswer}
                       onChange={(e) => setUserAnswer(e.target.value)}
-                      placeholder={exercise.type === 'error-correction' ? 'Write the corrected sentence...' : 'Type your answer...'}
+                      placeholder={exercise.type === 'error-correction' ? 'Write the corrected sentence...' : exercise.correctAnswer.toLowerCase() === 'no article' ? 'Type your answer or leave blank for no article...' : 'Type your answer...'}
                       disabled={showResult}
                       className="text-lg"
-                      onKeyDown={(e) => e.key === 'Enter' && !showResult && userAnswer && checkAnswer()}
+                      onKeyDown={(e) => e.key === 'Enter' && !showResult && (userAnswer || exercise.correctAnswer.toLowerCase() === 'no article') && checkAnswer()}
                     />
                     {exercise.hint && !showResult && (
                       <button
@@ -870,7 +879,7 @@ export default function GrammarExercisesPage() {
 
               <div className="flex justify-end gap-4">
                 {!showResult ? (
-                  <Button onClick={checkAnswer} disabled={!userAnswer}>
+                  <Button onClick={checkAnswer} disabled={!userAnswer && exercise.correctAnswer.toLowerCase() !== 'no article'}>
                     Check Answer
                   </Button>
                 ) : (
