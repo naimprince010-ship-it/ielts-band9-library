@@ -37,15 +37,18 @@ export function SiteSettings() {
       try {
         const { data, error } = await supabase
           .from('site_settings')
-          .select('*')
-          .single();
+          .select('*');
       
-      if (data && !error) {
+      if (data && !error && data.length > 0) {
+        const settingsMap: Record<string, string> = {};
+        data.forEach((item: { key: string; value: string }) => {
+          settingsMap[item.key] = item.value;
+        });
         setSettings({
-          favicon_url: data.favicon_url || DEFAULT_SETTINGS.favicon_url,
-          og_image_url: data.og_image_url || DEFAULT_SETTINGS.og_image_url,
-          site_title: data.site_title || DEFAULT_SETTINGS.site_title,
-          site_description: data.site_description || DEFAULT_SETTINGS.site_description
+          favicon_url: settingsMap.favicon_url || DEFAULT_SETTINGS.favicon_url,
+          og_image_url: settingsMap.og_image_url || DEFAULT_SETTINGS.og_image_url,
+          site_title: settingsMap.site_title || DEFAULT_SETTINGS.site_title,
+          site_description: settingsMap.site_description || DEFAULT_SETTINGS.site_description
         });
       }
     } catch (err) {
@@ -101,15 +104,25 @@ export function SiteSettings() {
       setMessage(null);
 
       try {
-        const { error } = await supabase
-          .from('site_settings')
-          .upsert({
-          id: 1,
-          ...settings,
-          updated_at: new Date().toISOString()
-        });
+        // Save each setting as a key-value pair
+        const settingsToSave = [
+          { key: 'favicon_url', value: settings.favicon_url },
+          { key: 'og_image_url', value: settings.og_image_url },
+          { key: 'site_title', value: settings.site_title },
+          { key: 'site_description', value: settings.site_description },
+        ];
 
-      if (error) throw error;
+        for (const setting of settingsToSave) {
+          const { error } = await supabase
+            .from('site_settings')
+            .upsert({
+              key: setting.key,
+              value: setting.value,
+              updated_at: new Date().toISOString()
+            }, { onConflict: 'key' });
+
+          if (error) throw error;
+        }
 
       updateMetaTags(settings);
       setMessage({ type: 'success', text: 'Settings saved successfully! Changes will apply on next page load.' });
