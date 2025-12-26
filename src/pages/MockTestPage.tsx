@@ -73,6 +73,63 @@ interface TestResult {
 
 const STORAGE_KEY = 'ielts_mock_tests';
 
+interface MockQuestion {
+  id: string;
+  type: 'multiple-choice' | 'fill-blank' | 'true-false-ng';
+  question: string;
+  options?: string[];
+  correctAnswer: string;
+  passage?: string;
+}
+
+const SAMPLE_LISTENING_QUESTIONS: MockQuestion[] = [
+  {
+    id: 'l1',
+    type: 'multiple-choice',
+    question: 'What is the main purpose of the speaker\'s talk?',
+    options: ['To describe a new product', 'To explain a process', 'To give directions', 'To make a complaint'],
+    correctAnswer: 'To explain a process'
+  },
+  {
+    id: 'l2',
+    type: 'fill-blank',
+    question: 'The meeting will be held on _____ at 3 PM.',
+    correctAnswer: 'Tuesday'
+  },
+  {
+    id: 'l3',
+    type: 'multiple-choice',
+    question: 'How many people attended the conference?',
+    options: ['About 50', 'About 100', 'About 200', 'About 500'],
+    correctAnswer: 'About 200'
+  },
+];
+
+const SAMPLE_READING_QUESTIONS: MockQuestion[] = [
+  {
+    id: 'r1',
+    type: 'true-false-ng',
+    question: 'The Industrial Revolution began in the 18th century.',
+    passage: 'The Industrial Revolution, which began in Britain in the late 18th century, transformed the way goods were produced. Before this period, most manufacturing was done in homes using hand tools or basic machines.',
+    correctAnswer: 'True'
+  },
+  {
+    id: 'r2',
+    type: 'true-false-ng',
+    question: 'Manufacturing before the Industrial Revolution was primarily done in factories.',
+    passage: 'The Industrial Revolution, which began in Britain in the late 18th century, transformed the way goods were produced. Before this period, most manufacturing was done in homes using hand tools or basic machines.',
+    correctAnswer: 'False'
+  },
+  {
+    id: 'r3',
+    type: 'multiple-choice',
+    question: 'What was the main change brought by the Industrial Revolution?',
+    options: ['Agricultural methods', 'Production methods', 'Political systems', 'Educational approaches'],
+    passage: 'The Industrial Revolution, which began in Britain in the late 18th century, transformed the way goods were produced.',
+    correctAnswer: 'Production methods'
+  },
+];
+
 function getTestHistory(): TestResult[][] {
   const stored = localStorage.getItem(STORAGE_KEY);
   return stored ? JSON.parse(stored) : [];
@@ -84,16 +141,28 @@ function saveTestResult(results: TestResult[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(0, 10)));
 }
 
+const getSectionQuestions = (sectionId: string): MockQuestion[] => {
+  switch (sectionId) {
+    case 'listening':
+      return SAMPLE_LISTENING_QUESTIONS;
+    case 'reading':
+      return SAMPLE_READING_QUESTIONS;
+    default:
+      return [];
+  }
+};
+
 export default function MockTestPage() {
   const [stage, setStage] = useState<'select' | 'test' | 'results'>('select');
   const [selectedSections, setSelectedSections] = useState<string[]>([]);
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [timeLeft, setTimeLeft] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [results, setResults] = useState<TestResult[]>([]);
-  const [currentAnswers, setCurrentAnswers] = useState<Record<string, string>>({});
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const [currentAnswers, setCurrentAnswers] = useState<Record<string, string>>({});
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (isRunning && !isPaused && timeLeft > 0) {
@@ -135,24 +204,34 @@ export default function MockTestPage() {
     }
   };
 
-  const handleSectionComplete = () => {
-    if (timerRef.current) clearInterval(timerRef.current);
+    const handleSectionComplete = () => {
+      if (timerRef.current) clearInterval(timerRef.current);
     
-    const currentSection = MOCK_TEST_SECTIONS.find(s => s.id === selectedSections[currentSectionIndex]);
-    if (currentSection) {
-      const answeredCount = Object.keys(currentAnswers).filter(k => k.startsWith(currentSection.id)).length;
-      const score = Math.floor(Math.random() * 20) + answeredCount;
+      const currentSection = MOCK_TEST_SECTIONS.find(s => s.id === selectedSections[currentSectionIndex]);
+      if (currentSection) {
+        const questions = getSectionQuestions(currentSection.id);
+        let correctCount = 0;
       
-      const result: TestResult = {
-        sectionId: currentSection.id,
-        score: Math.min(score, currentSection.questions),
-        totalQuestions: currentSection.questions,
-        timeSpent: currentSection.duration * 60 - timeLeft,
-        completedAt: new Date().toISOString()
-      };
+        questions.forEach(q => {
+          const userAnswer = currentAnswers[q.id];
+          if (userAnswer && userAnswer.toLowerCase().trim() === q.correctAnswer.toLowerCase().trim()) {
+            correctCount++;
+          }
+        });
       
-      setResults(prev => [...prev, result]);
-    }
+        const totalQuestions = questions.length > 0 ? questions.length : currentSection.questions;
+        const score = questions.length > 0 ? correctCount : Math.floor(Math.random() * 20) + Object.keys(currentAnswers).length;
+      
+        const result: TestResult = {
+          sectionId: currentSection.id,
+          score: Math.min(score, totalQuestions),
+          totalQuestions: totalQuestions,
+          timeSpent: currentSection.duration * 60 - timeLeft,
+          completedAt: new Date().toISOString()
+        };
+      
+        setResults(prev => [...prev, result]);
+      }
 
     if (currentSectionIndex < selectedSections.length - 1) {
       const nextSection = MOCK_TEST_SECTIONS.find(s => s.id === selectedSections[currentSectionIndex + 1]);
@@ -342,19 +421,140 @@ export default function MockTestPage() {
                   className="h-2"
                 />
 
-                <div className="min-h-[300px] flex items-center justify-center bg-gray-50 rounded-lg p-8">
-                  <div className="text-center">
-                    <currentSection.icon className="h-16 w-16 text-purple-600 mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold mb-2">{currentSection.name} Practice</h3>
-                    <p className="text-gray-600 mb-4">
-                      This is a simulated {currentSection.name.toLowerCase()} section. 
-                      In a real test, you would see actual IELTS-style questions here.
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      Answer {currentSection.questions} questions within {currentSection.duration} minutes.
-                    </p>
-                  </div>
-                </div>
+                                {(() => {
+                                  const questions = getSectionQuestions(currentSection.id);
+                                  if (questions.length === 0) {
+                                    return (
+                                      <div className="min-h-[300px] flex items-center justify-center bg-gray-50 rounded-lg p-8">
+                                        <div className="text-center">
+                                          <currentSection.icon className="h-16 w-16 text-purple-600 mx-auto mb-4" />
+                                          <h3 className="text-xl font-semibold mb-2">{currentSection.name} Practice</h3>
+                                          <p className="text-gray-600 mb-4">
+                                            This section simulates the {currentSection.name.toLowerCase()} test experience.
+                                          </p>
+                                          <p className="text-sm text-gray-500">
+                                            Complete within {currentSection.duration} minutes.
+                                          </p>
+                                        </div>
+                                      </div>
+                                    );
+                                  }
+                  
+                                  const currentQuestion = questions[currentQuestionIndex];
+                                  if (!currentQuestion) return null;
+                  
+                                  return (
+                                    <div className="space-y-6">
+                                      <div className="flex items-center justify-between">
+                                        <Badge variant="outline">Question {currentQuestionIndex + 1} of {questions.length}</Badge>
+                                        <div className="flex gap-2">
+                                          {questions.map((_, idx) => (
+                                            <button
+                                              key={idx}
+                                              onClick={() => setCurrentQuestionIndex(idx)}
+                                              className={`w-8 h-8 rounded-full text-sm font-medium ${
+                                                currentAnswers[questions[idx].id] 
+                                                  ? 'bg-green-500 text-white' 
+                                                  : idx === currentQuestionIndex 
+                                                    ? 'bg-purple-500 text-white' 
+                                                    : 'bg-gray-200'
+                                              }`}
+                                            >
+                                              {idx + 1}
+                                            </button>
+                                          ))}
+                                        </div>
+                                      </div>
+                      
+                                      {currentQuestion.passage && (
+                                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                          <p className="text-sm font-medium text-blue-800 mb-2">Reading Passage:</p>
+                                          <p className="text-sm text-gray-700">{currentQuestion.passage}</p>
+                                        </div>
+                                      )}
+                      
+                                      <div className="bg-white border rounded-lg p-6">
+                                        <p className="font-medium mb-4">{currentQuestion.question}</p>
+                        
+                                        {currentQuestion.type === 'multiple-choice' && currentQuestion.options && (
+                                          <div className="space-y-3">
+                                            {currentQuestion.options.map((option, idx) => (
+                                              <label
+                                                key={idx}
+                                                className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
+                                                  currentAnswers[currentQuestion.id] === option
+                                                    ? 'border-purple-500 bg-purple-50'
+                                                    : 'border-gray-200 hover:border-purple-300'
+                                                }`}
+                                              >
+                                                <input
+                                                  type="radio"
+                                                  name={currentQuestion.id}
+                                                  value={option}
+                                                  checked={currentAnswers[currentQuestion.id] === option}
+                                                  onChange={() => setCurrentAnswers(prev => ({ ...prev, [currentQuestion.id]: option }))}
+                                                  className="w-4 h-4 text-purple-600"
+                                                />
+                                                <span>{option}</span>
+                                              </label>
+                                            ))}
+                                          </div>
+                                        )}
+                        
+                                        {currentQuestion.type === 'true-false-ng' && (
+                                          <div className="space-y-3">
+                                            {['True', 'False', 'Not Given'].map((option) => (
+                                              <label
+                                                key={option}
+                                                className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
+                                                  currentAnswers[currentQuestion.id] === option
+                                                    ? 'border-purple-500 bg-purple-50'
+                                                    : 'border-gray-200 hover:border-purple-300'
+                                                }`}
+                                              >
+                                                <input
+                                                  type="radio"
+                                                  name={currentQuestion.id}
+                                                  value={option}
+                                                  checked={currentAnswers[currentQuestion.id] === option}
+                                                  onChange={() => setCurrentAnswers(prev => ({ ...prev, [currentQuestion.id]: option }))}
+                                                  className="w-4 h-4 text-purple-600"
+                                                />
+                                                <span>{option}</span>
+                                              </label>
+                                            ))}
+                                          </div>
+                                        )}
+                        
+                                        {currentQuestion.type === 'fill-blank' && (
+                                          <input
+                                            type="text"
+                                            value={currentAnswers[currentQuestion.id] || ''}
+                                            onChange={(e) => setCurrentAnswers(prev => ({ ...prev, [currentQuestion.id]: e.target.value }))}
+                                            placeholder="Type your answer..."
+                                            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                                          />
+                                        )}
+                                      </div>
+                      
+                                      <div className="flex justify-between">
+                                        <Button
+                                          variant="outline"
+                                          onClick={() => setCurrentQuestionIndex(prev => Math.max(0, prev - 1))}
+                                          disabled={currentQuestionIndex === 0}
+                                        >
+                                          Previous
+                                        </Button>
+                                        <Button
+                                          onClick={() => setCurrentQuestionIndex(prev => Math.min(questions.length - 1, prev + 1))}
+                                          disabled={currentQuestionIndex === questions.length - 1}
+                                        >
+                                          Next
+                                        </Button>
+                                      </div>
+                                    </div>
+                                  );
+                                })()}
 
                 <div className="flex justify-between">
                   <Button variant="outline" onClick={resetTest}>
