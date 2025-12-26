@@ -390,3 +390,97 @@ CREATE POLICY "Admins can view all SRS reviews" ON srs_reviews FOR SELECT USING 
 
 -- Index for efficient due card queries
 CREATE INDEX IF NOT EXISTS idx_srs_items_due ON srs_items(user_id, due_date) WHERE suspended = false;
+
+-- =====================================================
+-- DYNAMIC CONTENT MANAGEMENT TABLES (FAQ, Pages, Settings)
+-- =====================================================
+
+-- 10. FAQ Items Table (for dynamic FAQ management)
+CREATE TABLE IF NOT EXISTS faq_items (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  category TEXT NOT NULL,
+  question TEXT NOT NULL,
+  answer TEXT NOT NULL,
+  sort_order INTEGER DEFAULT 0,
+  is_published BOOLEAN DEFAULT true,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 11. Site Pages Table (for Terms, Privacy, etc.)
+CREATE TABLE IF NOT EXISTS site_pages (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  slug TEXT UNIQUE NOT NULL,
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  meta_description TEXT,
+  is_published BOOLEAN DEFAULT true,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 12. Site Settings Table (for contact info, support details)
+CREATE TABLE IF NOT EXISTS site_settings (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  key TEXT UNIQUE NOT NULL,
+  value TEXT NOT NULL,
+  description TEXT,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Enable RLS for content management tables
+ALTER TABLE faq_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE site_pages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
+
+-- RLS Policies for faq_items (public read, admin write)
+CREATE POLICY "Anyone can view published FAQs" ON faq_items FOR SELECT USING (is_published = true);
+CREATE POLICY "Admins can manage FAQs" ON faq_items FOR ALL USING (
+  EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin')
+);
+
+-- RLS Policies for site_pages (public read, admin write)
+CREATE POLICY "Anyone can view published pages" ON site_pages FOR SELECT USING (is_published = true);
+CREATE POLICY "Admins can manage pages" ON site_pages FOR ALL USING (
+  EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin')
+);
+
+-- RLS Policies for site_settings (public read, admin write)
+CREATE POLICY "Anyone can view settings" ON site_settings FOR SELECT USING (true);
+CREATE POLICY "Admins can manage settings" ON site_settings FOR ALL USING (
+  EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'admin')
+);
+
+-- Insert default site settings
+INSERT INTO site_settings (key, value, description) VALUES
+('support_phone', '+880 1712-345678', 'Support phone/WhatsApp number'),
+('support_email', 'support@ieltstree.com', 'Support email address'),
+('support_hours', '9 AM - 10 PM (BST)', 'Support hours'),
+('whatsapp_link', 'https://wa.me/8801712345678', 'WhatsApp chat link'),
+('company_name', 'IELTS Band 9 Materials Library', 'Company name'),
+('company_address', 'Dhaka, Bangladesh', 'Company address')
+ON CONFLICT (key) DO NOTHING;
+
+-- Insert default FAQ categories
+INSERT INTO faq_items (category, question, answer, sort_order) VALUES
+('Getting Started', 'What is IELTS Band 9 Materials Library?', 'IELTS Band 9 Materials Library is a comprehensive self-study platform designed to help you prepare for the IELTS exam. We offer vocabulary lessons, grammar tutorials, writing practice, speaking exercises, and mock tests to help you achieve your target band score.', 1),
+('Getting Started', 'How do I start learning?', 'Simply create a free account, take our diagnostic test to assess your current level, and start with the recommended lessons. You can also browse our vocabulary and grammar sections directly from the navigation menu.', 2),
+('Getting Started', 'Is there a mobile app available?', 'Our website is fully responsive and works great on mobile devices. You can add it to your home screen for an app-like experience. A dedicated mobile app is coming soon!', 3),
+('Getting Started', 'What IELTS band score can I achieve with this platform?', 'Our materials are designed to help you achieve Band 7 and above. With consistent practice and dedication, many of our students have achieved Band 8 and even Band 9 scores.', 4),
+('Account & Subscription', 'How do I create an account?', 'Click the "Get Started" button on the homepage or navigate to the Sign Up page. You can register using your email address or sign in with Google for quick access.', 5),
+('Account & Subscription', 'What is included in the free plan?', 'The free plan includes access to basic vocabulary and grammar lessons, limited quiz attempts, and progress tracking. Premium features like advanced lessons, writing feedback, and mock tests require a subscription.', 6),
+('Account & Subscription', 'How do I upgrade to Premium?', 'Go to the Pricing page and select your preferred plan. We accept bKash payments for Bangladesh users. After payment, send your transaction ID to our support team for instant activation.', 7),
+('Account & Subscription', 'Can I cancel my subscription?', 'Yes, you can cancel your subscription at any time. Your premium access will continue until the end of your billing period. Contact our support team for assistance.', 8),
+('Payment & Billing', 'What payment methods do you accept?', 'We currently accept bKash payments for users in Bangladesh. Send your payment to our bKash number and share the transaction ID with our support team for activation.', 9),
+('Payment & Billing', 'How long does it take to activate my subscription?', 'Once you send your payment and transaction ID, our team typically activates your subscription within 1-2 hours during business hours. For urgent requests, contact us via WhatsApp.', 10),
+('Payment & Billing', 'Do you offer refunds?', 'We offer a 7-day money-back guarantee for new subscribers. If you are not satisfied with our service, contact our support team within 7 days of purchase for a full refund.', 11),
+('Payment & Billing', 'Are there any discounts available?', 'Yes! We offer discounts for students and group subscriptions. Check our Pricing page for current offers or contact support for special discount codes.', 12),
+('Features & Content', 'How many vocabulary words are available?', 'Our library contains over 7,000 IELTS-relevant vocabulary words organized by topics like Education, Environment, Health, Technology, and more. Each word includes definitions, examples, and audio pronunciation.', 13),
+('Features & Content', 'What is the Spaced Repetition System?', 'Our flashcard system uses spaced repetition to help you memorize vocabulary more effectively. Words you find difficult will appear more frequently, while words you know well will appear less often.', 14),
+('Features & Content', 'How does the Writing Checker work?', 'Submit your IELTS Task 1 or Task 2 essays and receive instant AI-powered feedback on grammar, vocabulary, coherence, and task achievement. You will also get an estimated band score and suggestions for improvement.', 15),
+('Features & Content', 'Can I track my progress?', 'Yes! Our Progress Dashboard shows your study streak, lessons completed, quiz scores, skill progress, and personalized recommendations. You can also earn achievements and certificates.', 16),
+('Technical Support', 'The website is not loading properly. What should I do?', 'Try clearing your browser cache and cookies, then refresh the page. If the issue persists, try using a different browser or device. Contact our support team if the problem continues.', 17),
+('Technical Support', 'I forgot my password. How can I reset it?', 'Click "Forgot Password" on the login page and enter your email address. You will receive a password reset link within a few minutes. Check your spam folder if you do not see the email.', 18),
+('Technical Support', 'My progress is not saving. What should I do?', 'Make sure you are logged in to your account. Progress is saved automatically when you complete lessons and quizzes. If issues persist, try logging out and back in, or contact support.', 19),
+('Technical Support', 'How do I contact support?', 'You can reach our support team via WhatsApp, email at support@ieltstree.com, or through our Contact Us page. We typically respond within 24 hours.', 20)
+ON CONFLICT DO NOTHING;

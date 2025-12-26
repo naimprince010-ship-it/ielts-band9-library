@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,10 +11,32 @@ import {
   Clock, 
   MapPin, 
   Send,
-  CheckCircle2
+  CheckCircle2,
+  Loader2
 } from 'lucide-react';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+
+interface SiteSettings {
+  support_phone: string;
+  support_email: string;
+  support_hours: string;
+  whatsapp_link: string;
+  company_name: string;
+  company_address: string;
+}
+
+const defaultSettings: SiteSettings = {
+  support_phone: '+880 1712-345678',
+  support_email: 'support@ieltstree.com',
+  support_hours: '9 AM - 10 PM (BST)',
+  whatsapp_link: 'https://wa.me/8801712345678',
+  company_name: 'IELTS Band 9 Materials Library',
+  company_address: 'Dhaka, Bangladesh',
+};
 
 export default function ContactPage() {
+  const [settings, setSettings] = useState<SiteSettings>(defaultSettings);
+  const [pageLoading, setPageLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -23,6 +45,37 @@ export default function ContactPage() {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      if (!isSupabaseConfigured() || !supabase) {
+        setPageLoading(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('site_settings')
+          .select('*');
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          const settingsMap: Record<string, string> = {};
+          data.forEach((setting: { key: string; value: string }) => {
+            settingsMap[setting.key] = setting.value;
+          });
+          setSettings(prev => ({ ...prev, ...settingsMap }));
+        }
+      } catch (err) {
+        console.error('Failed to fetch settings:', err);
+      } finally {
+        setPageLoading(false);
+      }
+    };
+
+    fetchSettings();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,32 +98,40 @@ export default function ContactPage() {
     {
       icon: Phone,
       title: 'Phone / WhatsApp',
-      value: '+880 1712-345678',
-      link: 'https://wa.me/8801712345678',
+      value: settings.support_phone,
+      link: settings.whatsapp_link,
       description: 'Call or message us on WhatsApp'
     },
     {
       icon: Mail,
       title: 'Email',
-      value: 'support@ieltstree.com',
-      link: 'mailto:support@ieltstree.com',
+      value: settings.support_email,
+      link: `mailto:${settings.support_email}`,
       description: 'Send us an email anytime'
     },
     {
       icon: MessageCircle,
       title: 'Live Chat',
       value: 'WhatsApp Support',
-      link: 'https://wa.me/8801712345678',
+      link: settings.whatsapp_link,
       description: 'Get instant help via WhatsApp'
     },
     {
       icon: Clock,
       title: 'Support Hours',
-      value: '9 AM - 10 PM (BST)',
+      value: settings.support_hours,
       link: null,
       description: 'Bangladesh Standard Time'
     }
   ];
+
+  if (pageLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white py-12 flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white py-12">
@@ -127,11 +188,11 @@ export default function ContactPage() {
                   Our Location
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  IELTS Band 9 Materials Library<br />
-                  Dhaka, Bangladesh
-                </p>
+                            <CardContent>
+                              <p className="text-gray-600">
+                                {settings.company_name}<br />
+                                {settings.company_address}
+                              </p>
                 <p className="text-sm text-gray-500 mt-2">
                   We are an online-only platform. For support, please use the contact methods above.
                 </p>
@@ -147,12 +208,12 @@ export default function ContactPage() {
                 <p className="text-green-700 text-sm">
                   For fastest response, contact us via WhatsApp. We typically reply within 1-2 hours during support hours.
                 </p>
-                <a href="https://wa.me/8801712345678" target="_blank" rel="noopener noreferrer">
-                  <Button className="w-full mt-4 bg-green-600 hover:bg-green-700">
-                    <MessageCircle className="mr-2 h-4 w-4" />
-                    Chat on WhatsApp
-                  </Button>
-                </a>
+                                <a href={settings.whatsapp_link} target="_blank" rel="noopener noreferrer">
+                                  <Button className="w-full mt-4 bg-green-600 hover:bg-green-700">
+                                    <MessageCircle className="mr-2 h-4 w-4" />
+                                    Chat on WhatsApp
+                                  </Button>
+                                </a>
               </CardContent>
             </Card>
           </div>
