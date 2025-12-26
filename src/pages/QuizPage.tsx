@@ -20,11 +20,13 @@ import {
   Lock,
   AlertCircle,
   Flame,
-  Star
+  Star,
+  Keyboard
 } from 'lucide-react';
 import { ALL_QUIZZES, getQuizById, Quiz } from '@/data/quizData';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProgress, WrongQuestion } from '@/contexts/ProgressContext';
+import { useQuizKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 interface QuizResult {
   questionId: string;
@@ -48,10 +50,29 @@ export function QuizPage() {
   const [timeLeft, setTimeLeft] = useState(0);
   const [quizStarted, setQuizStarted] = useState(false);
   const [quizCompleted, setQuizCompleted] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('all');
+    const [selectedCategory, setSelectedCategory] = useState('all');
 
-  useEffect(() => {
-    if (quizId) {
+    useQuizKeyboardShortcuts({
+      onSubmit: () => {
+        if (userAnswer.trim() && !showFeedback) {
+          checkAnswer();
+        }
+      },
+      onNext: () => {
+        if (showFeedback) {
+          nextQuestion();
+        }
+      },
+      onHint: () => {
+        if (!showFeedback) {
+          setShowHint(prev => !prev);
+        }
+      },
+      enabled: quizStarted && !quizCompleted,
+    });
+
+    useEffect(() => {
+      if (quizId) {
       const foundQuiz = getQuizById(quizId);
       if (foundQuiz) {
         setQuiz(foundQuiz);
@@ -525,15 +546,26 @@ export function QuizPage() {
                 </div>
               </div>
 
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                <h4 className="font-semibold text-yellow-800 mb-2">Instructions:</h4>
-                <ul className="text-sm text-yellow-700 space-y-1">
-                  <li>• Fill in the blank with the correct word</li>
-                  <li>• Answers are case-insensitive</li>
-                  <li>• Use the hint button if you need help</li>
-                  <li>• Complete before the timer runs out</li>
-                </ul>
-              </div>
+                            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                              <h4 className="font-semibold text-yellow-800 mb-2">Instructions:</h4>
+                              <ul className="text-sm text-yellow-700 space-y-1">
+                                <li>• Fill in the blank with the correct word</li>
+                                <li>• Answers are case-insensitive</li>
+                                <li>• Use the hint button if you need help</li>
+                                <li>• Complete before the timer runs out</li>
+                              </ul>
+                            </div>
+
+                            <div className="bg-violet-50 border border-violet-200 rounded-lg p-4">
+                              <div className="flex items-center gap-2 mb-2">
+                                <Keyboard className="h-4 w-4 text-violet-600" />
+                                <h4 className="font-semibold text-violet-800">Keyboard Shortcuts:</h4>
+                              </div>
+                              <ul className="text-sm text-violet-700 space-y-1">
+                                <li>• <kbd className="px-1.5 py-0.5 bg-violet-100 rounded text-xs font-mono">Enter</kbd> - Submit answer / Next question</li>
+                                <li>• <kbd className="px-1.5 py-0.5 bg-violet-100 rounded text-xs font-mono">H</kbd> - Toggle hint</li>
+                              </ul>
+                            </div>
 
               <div className="flex gap-4">
                 <Link to="/quiz" className="flex-1">
