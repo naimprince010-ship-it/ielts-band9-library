@@ -249,17 +249,41 @@ export default function WritingCheckerPage() {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const calculateScore = () => {
-    const total = CHECKLIST_ITEMS.length;
-    const checked = checkedItems.size;
-    const percentage = (checked / total) * 100;
+    const calculateScore = () => {
+      const total = CHECKLIST_ITEMS.length;
+      const checked = checkedItems.size;
+      const percentage = (checked / total) * 100;
     
-    if (percentage >= 90) return { band: '7.5-8.0', color: 'text-green-600' };
-    if (percentage >= 75) return { band: '7.0', color: 'text-green-600' };
-    if (percentage >= 60) return { band: '6.5', color: 'text-blue-600' };
-    if (percentage >= 45) return { band: '6.0', color: 'text-amber-600' };
-    return { band: '5.5 or below', color: 'text-red-600' };
-  };
+      if (percentage >= 90) return { band: '7.5-8.0', color: 'text-green-600' };
+      if (percentage >= 75) return { band: '7.0', color: 'text-green-600' };
+      if (percentage >= 60) return { band: '6.5', color: 'text-blue-600' };
+      if (percentage >= 45) return { band: '6.0', color: 'text-amber-600' };
+      return { band: '5.5 or below', color: 'text-red-600' };
+    };
+
+    const calculateCriterionScores = () => {
+      const categories = ['Task Response', 'Coherence', 'Lexical Resource', 'Grammar'];
+      const scores: { [key: string]: { checked: number; total: number; band: number } } = {};
+    
+      categories.forEach(category => {
+        const categoryItems = CHECKLIST_ITEMS.filter(item => item.category === category);
+        const checkedCount = categoryItems.filter(item => checkedItems.has(item.id)).length;
+        const total = categoryItems.length;
+        const percentage = total > 0 ? (checkedCount / total) * 100 : 0;
+      
+        let band = 5.0;
+        if (percentage >= 100) band = 8.0;
+        else if (percentage >= 80) band = 7.5;
+        else if (percentage >= 60) band = 7.0;
+        else if (percentage >= 40) band = 6.5;
+        else if (percentage >= 20) band = 6.0;
+        else band = 5.5;
+      
+        scores[category] = { checked: checkedCount, total, band };
+      });
+    
+      return scores;
+    };
 
   const getWordCountStatus = () => {
     if (!selectedPrompt) return { status: 'neutral', message: '' };
@@ -550,26 +574,45 @@ export default function WritingCheckerPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                  <div className="p-3 bg-gray-50 rounded-lg">
-                    <p className="text-2xl font-bold">{wordCount}</p>
-                    <p className="text-sm text-gray-500">Words</p>
-                  </div>
-                  <div className="p-3 bg-gray-50 rounded-lg">
-                    <p className="text-2xl font-bold">{formatTime(selectedPrompt.timeLimit - timeLeft)}</p>
-                    <p className="text-sm text-gray-500">Time Used</p>
-                  </div>
-                  <div className="p-3 bg-gray-50 rounded-lg">
-                    <p className="text-2xl font-bold">{checkedItems.size}/{CHECKLIST_ITEMS.length}</p>
-                    <p className="text-sm text-gray-500">Criteria Met</p>
-                  </div>
-                  <div className="p-3 bg-purple-50 rounded-lg">
-                    <p className={`text-2xl font-bold ${calculateScore().color}`}>
-                      {calculateScore().band}
-                    </p>
-                    <p className="text-sm text-gray-500">Est. Band</p>
-                  </div>
-                </div>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                                  <div className="p-3 bg-gray-50 rounded-lg">
+                                    <p className="text-2xl font-bold">{wordCount}</p>
+                                    <p className="text-sm text-gray-500">Words</p>
+                                  </div>
+                                  <div className="p-3 bg-gray-50 rounded-lg">
+                                    <p className="text-2xl font-bold">{formatTime(selectedPrompt.timeLimit - timeLeft)}</p>
+                                    <p className="text-sm text-gray-500">Time Used</p>
+                                  </div>
+                                  <div className="p-3 bg-gray-50 rounded-lg">
+                                    <p className="text-2xl font-bold">{checkedItems.size}/{CHECKLIST_ITEMS.length}</p>
+                                    <p className="text-sm text-gray-500">Criteria Met</p>
+                                  </div>
+                                  <div className="p-3 bg-purple-50 rounded-lg">
+                                    <p className={`text-2xl font-bold ${calculateScore().color}`}>
+                                      {calculateScore().band}
+                                    </p>
+                                    <p className="text-sm text-gray-500">Est. Band</p>
+                                  </div>
+                                </div>
+                
+                                <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-4">
+                                  <h3 className="font-medium mb-3 text-center">Individual Criterion Scores</h3>
+                                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                    {Object.entries(calculateCriterionScores()).map(([criterion, data]) => (
+                                      <div key={criterion} className="bg-white rounded-lg p-3 text-center shadow-sm">
+                                        <p className="text-xs text-gray-500 mb-1">{criterion}</p>
+                                        <p className={`text-xl font-bold ${
+                                          data.band >= 7.0 ? 'text-green-600' : 
+                                          data.band >= 6.5 ? 'text-blue-600' : 
+                                          data.band >= 6.0 ? 'text-amber-600' : 'text-red-600'
+                                        }`}>
+                                          {data.band.toFixed(1)}
+                                        </p>
+                                        <p className="text-xs text-gray-400">{data.checked}/{data.total} items</p>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
