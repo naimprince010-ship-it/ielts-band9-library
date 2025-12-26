@@ -90,7 +90,7 @@ export function MistakeFlipCard({ mistake, correction, explanation }: MistakeFli
 
   return (
     <div
-      className="cursor-pointer min-h-[120px]"
+      className="cursor-pointer relative isolate"
       onClick={() => setIsFlipped(!isFlipped)}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -103,43 +103,37 @@ export function MistakeFlipCard({ mistake, correction, explanation }: MistakeFli
       aria-pressed={isFlipped}
     >
       <div
-        className="relative w-full"
-        style={{
-          transformStyle: 'preserve-3d',
-          transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-          transition: 'transform 0.5s ease-in-out',
-        }}
+        className={cn(
+          "w-full rounded-lg p-4 border-2 transition-all duration-500",
+          isFlipped 
+            ? "bg-green-50 border-green-200" 
+            : "bg-red-50 border-red-200"
+        )}
       >
-        <div
-          className="w-full bg-red-50 rounded-lg p-4 border-2 border-red-200"
-          style={{ backfaceVisibility: 'hidden' }}
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-red-500 text-lg">✗</span>
-            <span className="text-xs font-medium text-red-600 uppercase tracking-wide">Incorrect</span>
-          </div>
-          <p className="text-red-700 font-medium">{mistake}</p>
-          <p className="text-sm text-red-500 mt-3 flex items-center gap-1">
-            <span className="animate-pulse">👆</span> Tap to see correction
-          </p>
-        </div>
-        <div
-          className="absolute inset-0 w-full bg-green-50 rounded-lg p-4 border-2 border-green-200"
-          style={{ 
-            backfaceVisibility: 'hidden',
-            transform: 'rotateY(180deg)',
-          }}
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-green-500 text-lg">✓</span>
-            <span className="text-xs font-medium text-green-600 uppercase tracking-wide">Correct</span>
-          </div>
-          <p className="text-green-700 font-medium mb-2">{correction}</p>
-          <p className="text-gray-600 text-sm">{explanation}</p>
-          <p className="text-sm text-green-500 mt-2 flex items-center gap-1">
-            <span>👆</span> Tap to see mistake again
-          </p>
-        </div>
+        {!isFlipped ? (
+          <>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-red-500 text-lg">✗</span>
+              <span className="text-xs font-medium text-red-600 uppercase tracking-wide">Incorrect</span>
+            </div>
+            <p className="text-red-700 font-medium">{mistake}</p>
+            <p className="text-sm text-red-500 mt-3 flex items-center gap-1">
+              <span className="animate-pulse">👆</span> Tap to see correction
+            </p>
+          </>
+        ) : (
+          <>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-green-500 text-lg">✓</span>
+              <span className="text-xs font-medium text-green-600 uppercase tracking-wide">Correct</span>
+            </div>
+            <p className="text-green-700 font-medium mb-2">{correction}</p>
+            <p className="text-gray-600 text-sm">{explanation}</p>
+            <p className="text-sm text-green-500 mt-2 flex items-center gap-1">
+              <span>👆</span> Tap to see mistake again
+            </p>
+          </>
+        )}
       </div>
     </div>
   );
