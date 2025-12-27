@@ -45,13 +45,33 @@ export function InteractivePractice({
     setSubmitted(prev => ({ ...prev, [questionIndex]: true }));
   };
 
+  // Helper function to get the correct option index for MCQ questions
+  const getCorrectOptionIndex = (question: PracticeQuestion): number | null => {
+    if (!question.options || question.correctAnswer === undefined) return null;
+    
+    // If correctAnswer is already a number, use it directly
+    if (typeof question.correctAnswer === 'number') {
+      return question.correctAnswer;
+    }
+    
+    // If correctAnswer is a string, find the matching option index
+    const correctAnswerStr = String(question.correctAnswer).trim().toLowerCase();
+    const matchIndex = question.options.findIndex(
+      opt => opt.trim().toLowerCase() === correctAnswerStr
+    );
+    
+    return matchIndex >= 0 ? matchIndex : null;
+  };
+
   const isCorrect = (questionIndex: number): boolean | null => {
     if (!submitted[questionIndex]) return null;
     const question = questions[questionIndex];
     const answer = answers[questionIndex];
     
     if ((question.type === 'mcq' || question.type === 'multiple-choice') && question.correctAnswer !== undefined) {
-      return answer === question.correctAnswer;
+      const correctIndex = getCorrectOptionIndex(question);
+      if (correctIndex === null) return null;
+      return answer === correctIndex;
     }
     return null;
   };
@@ -184,7 +204,7 @@ export function InteractivePractice({
               <div className="space-y-2 ml-4">
                 {question.options.map((option, optIndex) => {
                   const isSelected = answers[index] === optIndex;
-                  const isCorrectOption = question.correctAnswer === optIndex;
+                  const isCorrectOption = getCorrectOptionIndex(question) === optIndex;
                   
                   return (
                     <button
@@ -243,7 +263,7 @@ export function InteractivePractice({
                     ) : (
                       <span className="flex items-center gap-2">
                         <XCircle className="h-4 w-4" />
-                        Incorrect. The correct answer is {String.fromCharCode(65 + (typeof question.correctAnswer === 'number' ? question.correctAnswer : 0))}.
+                        Incorrect. The correct answer is {String.fromCharCode(65 + (getCorrectOptionIndex(question) ?? 0))}.
                       </span>
                     )}
                   </div>
