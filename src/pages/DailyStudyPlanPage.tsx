@@ -13,7 +13,9 @@ import {
   Clock,
   Sparkles,
   ArrowRight,
-  RotateCcw
+  RotateCcw,
+  Lock,
+  AlertCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -119,10 +121,38 @@ export default function DailyStudyPlanPage() {
     last_completed_date: null,
     total_days_studied: 0,
   });
-  const [loading, setLoading] = useState(true);
-  const [completing, setCompleting] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [completing, setCompleting] = useState<string | null>(null);
+    const [lockedWarning, setLockedWarning] = useState<string | null>(null);
 
-  const today = new Date().toISOString().split('T')[0];
+    const today = new Date().toISOString().split('T')[0];
+
+    const isItemLocked = (itemIndex: number): boolean => {
+      if (!plan || itemIndex === 0) return false;
+      const sortedItems = [...plan.items].sort((a, b) => a.sort_order - b.sort_order);
+      for (let i = 0; i < itemIndex; i++) {
+        if (!sortedItems[i].completed_at) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    const getNextUnlockedIndex = (): number => {
+      if (!plan) return 0;
+      const sortedItems = [...plan.items].sort((a, b) => a.sort_order - b.sort_order);
+      for (let i = 0; i < sortedItems.length; i++) {
+        if (!sortedItems[i].completed_at) {
+          return i;
+        }
+      }
+      return sortedItems.length;
+    };
+
+    const handleLockedClick = (itemTitle: string) => {
+      setLockedWarning(`Complete the previous task first before starting "${itemTitle}"`);
+      setTimeout(() => setLockedWarning(null), 3000);
+    };
 
   useEffect(() => {
     if (user) {
@@ -520,62 +550,126 @@ export default function DailyStudyPlanPage() {
           </div>
         )}
 
+        {lockedWarning && (
+          <div className="mb-4 p-4 bg-amber-50 border border-amber-200 rounded-lg flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
+            <AlertCircle className="h-5 w-5 text-amber-600 flex-shrink-0" />
+            <p className="text-amber-800 text-sm">{lockedWarning}</p>
+          </div>
+        )}
+
         <div className="space-y-4">
-          {plan?.items.map((item) => (
-            <Card 
-              key={item.id} 
-              className={`transition-all ${item.completed_at ? 'bg-gray-50 opacity-75' : 'hover:shadow-md'}`}
-            >
-              <CardContent className="p-4">
-                <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center ${getTypeColor(item.type)}`}>
-                    {getTypeIcon(item.type)}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <h3 className={`font-semibold ${item.completed_at ? 'line-through text-gray-400' : ''}`}>
-                        {item.title}
-                      </h3>
-                      <Badge variant="outline" className="text-xs">
-                        ~{item.recommended_minutes} min
-                      </Badge>
-                    </div>
-                    <p className="text-sm text-gray-500">{item.description}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {item.completed_at ? (
-                      <div className="flex items-center gap-2 text-green-600">
-                        <CheckCircle2 className="h-6 w-6" />
-                        <span className="text-sm font-medium">Done</span>
+          {[...plan?.items || []].sort((a, b) => a.sort_order - b.sort_order).map((item, index) => {
+            const locked = isItemLocked(index);
+            const isCurrentTask = index === getNextUnlockedIndex();
+            
+            return (
+              <Card 
+                key={item.id} 
+                className={`transition-all ${
+                  item.completed_at 
+                    ? 'bg-gray-50 opacity-75' 
+                    : locked 
+                      ? 'bg-gray-50 opacity-60 cursor-not-allowed' 
+                      : isCurrentTask 
+                        ? 'ring-2 ring-indigo-500 ring-offset-2 hover:shadow-md' 
+                        : 'hover:shadow-md'
+                }`}
+              >
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-4">
+                    <div className="relative">
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                        locked ? 'bg-gray-200 text-gray-400' : getTypeColor(item.type)
+                      }`}>
+                        {locked ? <Lock className="h-5 w-5" /> : getTypeIcon(item.type)}
                       </div>
-                    ) : (
-                      <>
+                      {isCurrentTask && !item.completed_at && (
+                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-indigo-500 rounded-full flex items-center justify-center">
+                          <span className="text-white text-xs font-bold">{index + 1}</span>
+                        </div>
+                      )}
+                      {item.completed_at && (
+                        <div className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                          <CheckCircle2 className="h-3 w-3 text-white" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <h3 className={`font-semibold ${
+                          item.completed_at 
+                            ? 'line-through text-gray-400' 
+                            : locked 
+                              ? 'text-gray-400' 
+                              : ''
+                        }`}>
+                          {item.title}
+                        </h3>
+                        <Badge variant="outline" className={`text-xs ${locked ? 'opacity-50' : ''}`}>
+                          ~{item.recommended_minutes} min
+                        </Badge>
+                        {isCurrentTask && !item.completed_at && (
+                          <Badge className="bg-indigo-100 text-indigo-700 text-xs">
+                            Current
+                          </Badge>
+                        )}
+                        {locked && (
+                          <Badge variant="outline" className="text-xs text-gray-400 border-gray-300">
+                            <Lock className="h-3 w-3 mr-1" />
+                            Locked
+                          </Badge>
+                        )}
+                      </div>
+                      <p className={`text-sm ${locked ? 'text-gray-400' : 'text-gray-500'}`}>
+                        {item.description}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {item.completed_at ? (
+                        <div className="flex items-center gap-2 text-green-600">
+                          <CheckCircle2 className="h-6 w-6" />
+                          <span className="text-sm font-medium">Done</span>
+                        </div>
+                      ) : locked ? (
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => goToTask(item)}
+                          className="opacity-50"
+                          onClick={() => handleLockedClick(item.title)}
                         >
-                          Start
-                          <ArrowRight className="h-4 w-4 ml-1" />
+                          <Lock className="h-4 w-4 mr-1" />
+                          Locked
                         </Button>
-                        <Button
-                          size="sm"
-                          onClick={() => completeItem(item.id)}
-                          disabled={completing === item.id}
-                        >
-                          {completing === item.id ? (
-                            <RotateCcw className="h-4 w-4 animate-spin" />
-                          ) : (
-                            <CheckCircle2 className="h-4 w-4" />
-                          )}
-                        </Button>
-                      </>
-                    )}
+                      ) : (
+                        <>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => goToTask(item)}
+                          >
+                            Start
+                            <ArrowRight className="h-4 w-4 ml-1" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            onClick={() => completeItem(item.id)}
+                            disabled={completing === item.id}
+                            title="Mark as complete"
+                          >
+                            {completing === item.id ? (
+                              <RotateCcw className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <CheckCircle2 className="h-4 w-4" />
+                            )}
+                          </Button>
+                        </>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
 
         <Card className="mt-8 bg-indigo-50 border-indigo-200">
