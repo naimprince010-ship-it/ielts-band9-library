@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { CheckCircle, XCircle, RotateCcw, Trophy, AlertTriangle } from 'lucide-react';
+import { CheckCircle, XCircle, RotateCcw, Trophy, AlertTriangle, Sparkles, Eye, Loader2 } from 'lucide-react';
 import { Button } from './button';
 import { Card, CardContent, CardHeader, CardTitle } from './card';
 
@@ -27,6 +27,9 @@ export function InteractivePractice({
   const [answers, setAnswers] = useState<Record<number, string | number>>({});
   const [submitted, setSubmitted] = useState<Record<number, boolean>>({});
   const [showAllAnswers, setShowAllAnswers] = useState(false);
+  const [checkedRewrite, setCheckedRewrite] = useState<Record<number, boolean>>({});
+  const [aiFeedback, setAiFeedback] = useState<Record<number, string>>({});
+  const [loadingAI, setLoadingAI] = useState<Record<number, boolean>>({});
 
   const handleSelectOption = (questionIndex: number, optionIndex: number) => {
     if (submitted[questionIndex]) return;
@@ -69,6 +72,79 @@ export function InteractivePractice({
     setAnswers({});
     setSubmitted({});
     setShowAllAnswers(false);
+    setCheckedRewrite({});
+    setAiFeedback({});
+    setLoadingAI({});
+  };
+
+  const handleCheckRewrite = (questionIndex: number) => {
+    setCheckedRewrite(prev => ({ ...prev, [questionIndex]: true }));
+  };
+
+  const handleGetAIFeedback = async (questionIndex: number, userAnswer: string, sampleAnswer: string, question: string) => {
+    setLoadingAI(prev => ({ ...prev, [questionIndex]: true }));
+    
+    // Simulate AI feedback generation (in production, this would call an AI API)
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // Generate feedback based on comparison
+    const userLower = userAnswer.toLowerCase().trim();
+    const sampleLower = sampleAnswer.toLowerCase().trim();
+    
+    let feedback = '';
+    
+    if (userLower === sampleLower) {
+      feedback = "Perfect! Your answer matches the sample answer exactly. Great job!";
+    } else if (userLower.length === 0) {
+      feedback = "Please write your answer first before requesting feedback.";
+    } else {
+      // Analyze common grammar issues
+      const issues: string[] = [];
+      
+      // Check for subject-verb agreement with "number of"
+      if (question.toLowerCase().includes('number of') && userAnswer.includes('are')) {
+        issues.push("Subject-verb agreement: 'The number of' takes a singular verb (is), not plural (are).");
+      }
+      
+      // Check for article issues
+      if (question.toLowerCase().includes('the education') && userAnswer.toLowerCase().includes('the education')) {
+        issues.push("Article usage: General concepts like 'education' don't need 'the' article.");
+      }
+      
+      // Check for preposition issues
+      if (question.toLowerCase().includes('depends of') && userAnswer.toLowerCase().includes('depends of')) {
+        issues.push("Preposition error: Use 'depends on' not 'depends of'.");
+      }
+      
+      // Check for comma splice
+      if (userAnswer.includes(', it') && !userAnswer.includes('because') && !userAnswer.includes(';')) {
+        issues.push("Comma splice: Consider using a semicolon, conjunction, or separate sentences.");
+      }
+      
+      // Check for conditional errors
+      if (question.toLowerCase().includes('would have') && userAnswer.toLowerCase().includes('would have')) {
+        issues.push("Conditional error: In 'if' clauses, use past simple (had), not 'would have'.");
+      }
+      
+      if (issues.length > 0) {
+        feedback = "Feedback:\n" + issues.map(i => "• " + i).join("\n") + "\n\nCompare with the sample answer above for the correct version.";
+      } else {
+        // Check similarity
+        const userWords = new Set(userLower.split(/\s+/));
+        const sampleWords = new Set(sampleLower.split(/\s+/));
+        const commonWords = [...userWords].filter(w => sampleWords.has(w));
+        const similarity = commonWords.length / Math.max(userWords.size, sampleWords.size);
+        
+        if (similarity > 0.7) {
+          feedback = "Good attempt! Your answer is close to the sample. Check the sample answer above for any minor differences in grammar or word choice.";
+        } else {
+          feedback = "Your answer differs from the sample. Compare your response with the sample answer above and note the grammatical corrections made.";
+        }
+      }
+    }
+    
+    setAiFeedback(prev => ({ ...prev, [questionIndex]: feedback }));
+    setLoadingAI(prev => ({ ...prev, [questionIndex]: false }));
   };
 
   const allMCQSubmitted = questions.every((q, i) => 
@@ -195,7 +271,7 @@ export function InteractivePractice({
             )}
             
             {question.type === 'rewrite' && (
-              <div className="ml-4">
+              <div className="ml-4 space-y-3">
                 <textarea
                   value={(answers[index] as string) || ''}
                   onChange={(e) => handleInputChange(index, e.target.value)}
@@ -204,11 +280,78 @@ export function InteractivePractice({
                   rows={2}
                   className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
                 />
-                <p className="text-gray-500 text-sm mt-1">(Rewrite the sentence)</p>
-                {(showAllAnswers || questionSubmitted) && (
-                  <p className="mt-2 text-green-700 text-sm">
-                    <strong>Sample Answer:</strong> {answerKey[index]}
-                  </p>
+                <p className="text-gray-500 text-sm">(Rewrite the sentence)</p>
+                
+                {/* Action Buttons */}
+                {!showAllAnswers && !checkedRewrite[index] && (
+                  <div className="flex gap-2 flex-wrap">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleCheckRewrite(index)}
+                      disabled={!answers[index] || (answers[index] as string).trim().length === 0}
+                      className="gap-1"
+                    >
+                      <Eye className="h-4 w-4" />
+                      Check Answer
+                    </Button>
+                  </div>
+                )}
+                
+                {/* Comparison View - Shows when checked or showAllAnswers */}
+                {(showAllAnswers || checkedRewrite[index]) && (
+                  <div className="space-y-3">
+                    {/* User's Answer */}
+                    {answers[index] && (answers[index] as string).trim().length > 0 && (
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                        <p className="text-xs font-medium text-blue-600 mb-1">Your Answer:</p>
+                        <p className="text-blue-800">{answers[index] as string}</p>
+                      </div>
+                    )}
+                    
+                    {/* Sample Answer */}
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                      <p className="text-xs font-medium text-green-600 mb-1">Sample Answer:</p>
+                      <p className="text-green-800 font-medium">{answerKey[index]}</p>
+                    </div>
+                    
+                    {/* AI Feedback Button */}
+                    {!aiFeedback[index] && !loadingAI[index] && (
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        onClick={() => handleGetAIFeedback(
+                          index, 
+                          (answers[index] as string) || '', 
+                          answerKey[index] || '',
+                          question.question
+                        )}
+                        className="gap-1 bg-purple-100 hover:bg-purple-200 text-purple-700"
+                      >
+                        <Sparkles className="h-4 w-4" />
+                        Get AI Feedback
+                      </Button>
+                    )}
+                    
+                    {/* Loading AI */}
+                    {loadingAI[index] && (
+                      <div className="flex items-center gap-2 text-purple-600 text-sm">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Analyzing your answer...
+                      </div>
+                    )}
+                    
+                    {/* AI Feedback Display */}
+                    {aiFeedback[index] && (
+                      <div className="bg-purple-50 border border-purple-200 rounded-lg p-3">
+                        <p className="text-xs font-medium text-purple-600 mb-1 flex items-center gap-1">
+                          <Sparkles className="h-3 w-3" />
+                          AI Feedback:
+                        </p>
+                        <p className="text-purple-800 text-sm whitespace-pre-line">{aiFeedback[index]}</p>
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
             )}
