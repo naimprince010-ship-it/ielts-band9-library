@@ -24,6 +24,30 @@ import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
+const VOCABULARY_TOPICS = [
+  'education', 'environment', 'technology', 'health', 'society', 
+  'economy', 'travel', 'work', 'media', 'government', 'science',
+  'crime', 'transportation', 'collocations', 'speaking', 'academic',
+  'sports', 'food', 'arts', 'ethics', 'emotions'
+];
+
+const GRAMMAR_TOPICS = [
+  'articles', 'passive-voice', 'relative-clauses', 'conditionals',
+  'reported-speech', 'modals', 'tenses', 'comparatives'
+];
+
+const getDailyTopic = (topics: string[], userId: string, date: string): string => {
+  const seed = userId + date;
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    const char = seed.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  const index = Math.abs(hash) % topics.length;
+  return topics[index];
+};
+
 interface PlanItem {
   id: string;
   type: 'vocab_review' | 'grammar_exercise' | 'reading' | 'speaking' | 'writing' | 'quiz';
@@ -228,15 +252,26 @@ export default function DailyStudyPlanPage() {
 
       if (planError) throw planError;
 
-      const items = PLAN_ITEM_TEMPLATES.map((template, index) => ({
-        plan_id: newPlan.id,
-        type: template.type,
-        title: template.title,
-        description: template.description,
-        target: template.target,
-        recommended_minutes: template.recommended_minutes,
-        sort_order: index,
-      }));
+            const dailyVocabTopic = getDailyTopic(VOCABULARY_TOPICS, user.id, today);
+            const dailyGrammarTopic = getDailyTopic(GRAMMAR_TOPICS, user.id, today);
+      
+            const items = PLAN_ITEM_TEMPLATES.map((template, index) => {
+              let target = { ...template.target };
+              if (template.type === 'vocab_review') {
+                target.topic = dailyVocabTopic;
+              } else if (template.type === 'grammar_exercise') {
+                target.topic = dailyGrammarTopic;
+              }
+              return {
+                plan_id: newPlan.id,
+                type: template.type,
+                title: template.title,
+                description: template.description,
+                target,
+                recommended_minutes: template.recommended_minutes,
+                sort_order: index,
+              };
+            });
 
       const { data: planItems, error: itemsError } = await supabase
         .from('daily_plan_items')
@@ -257,25 +292,37 @@ export default function DailyStudyPlanPage() {
     }
   };
 
-  const generateLocalPlan = () => {
-    const localPlan: DailyPlan = {
-      id: 'local-' + today,
-      plan_date: today,
-      status: 'active',
-      items: PLAN_ITEM_TEMPLATES.map((template, index) => ({
-        id: `local-item-${index}`,
-        type: template.type,
-        title: template.title,
-        description: template.description,
-        target: template.target,
-        recommended_minutes: template.recommended_minutes,
-        completed_at: null,
-        sort_order: index,
-      })),
+    const generateLocalPlan = () => {
+      const userId = user?.id || 'anonymous';
+      const dailyVocabTopic = getDailyTopic(VOCABULARY_TOPICS, userId, today);
+      const dailyGrammarTopic = getDailyTopic(GRAMMAR_TOPICS, userId, today);
+    
+      const localPlan: DailyPlan = {
+        id: 'local-' + today,
+        plan_date: today,
+        status: 'active',
+        items: PLAN_ITEM_TEMPLATES.map((template, index) => {
+          let target = { ...template.target };
+          if (template.type === 'vocab_review') {
+            target.topic = dailyVocabTopic;
+          } else if (template.type === 'grammar_exercise') {
+            target.topic = dailyGrammarTopic;
+          }
+          return {
+            id: `local-item-${index}`,
+            type: template.type,
+            title: template.title,
+            description: template.description,
+            target,
+            recommended_minutes: template.recommended_minutes,
+            completed_at: null,
+            sort_order: index,
+          };
+        }),
+      };
+      setPlan(localPlan);
+      setLoading(false);
     };
-    setPlan(localPlan);
-    setLoading(false);
-  };
 
   const loadStreak = async () => {
     if (!isSupabaseConfigured() || !supabase || !user) {
