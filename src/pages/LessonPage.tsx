@@ -136,7 +136,7 @@ export function LessonPage() {
               items={[
                 { id: 'what-you-will-learn', title: 'What You Will Learn', icon: <Lightbulb className="h-4 w-4" /> },
                 { id: 'core-explanation', title: 'Core Explanation', icon: <FileText className="h-4 w-4" /> },
-                ...(lesson.type === 'grammar' && content.grammarForm ? [{ id: 'grammar-form', title: 'Grammar Form', icon: <BookMarked className="h-4 w-4" /> }] : []),
+                ...(lesson.type === 'grammar' && (content.grammarForm || content.grammarFormItems?.length) ? [{ id: 'grammar-form', title: 'Grammar Form', icon: <BookMarked className="h-4 w-4" /> }] : []),
                 ...(lesson.type === 'grammar' && content.grammarUse ? [{ id: 'grammar-use', title: 'When to Use', icon: <Zap className="h-4 w-4" /> }] : []),
                 { id: 'examples', title: `Examples (${content.examples.length})`, icon: <CheckCircle className="h-4 w-4" /> },
                 { id: 'common-mistakes', title: `Common Mistakes (${content.commonMistakes.length})`, icon: <XCircle className="h-4 w-4" /> },
@@ -157,7 +157,7 @@ export function LessonPage() {
               items={[
                 { id: 'what-you-will-learn', title: 'What You Will Learn' },
                 { id: 'core-explanation', title: 'Core Explanation' },
-                ...(lesson.type === 'grammar' && content.grammarForm ? [{ id: 'grammar-form', title: 'Grammar Form' }] : []),
+                ...(lesson.type === 'grammar' && (content.grammarForm || content.grammarFormItems?.length) ? [{ id: 'grammar-form', title: 'Grammar Form' }] : []),
                 ...(lesson.type === 'grammar' && content.grammarUse ? [{ id: 'grammar-use', title: 'When to Use' }] : []),
                 { id: 'examples', title: `Examples (${content.examples.length})` },
                 { id: 'common-mistakes', title: `Common Mistakes (${content.commonMistakes.length})` },
@@ -226,18 +226,68 @@ export function LessonPage() {
               </CardContent>
             </Card>
 
-            {lesson.type === 'grammar' && content.grammarForm && (
-              <Card className="mb-6 border-indigo-200 bg-indigo-50" id="grammar-form">
-                <CardHeader>
-                  <CardTitle className="text-indigo-900">Grammar Form</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <pre className="whitespace-pre-wrap text-indigo-800 font-mono text-sm">
-                    {content.grammarForm}
-                  </pre>
-                </CardContent>
-              </Card>
-            )}
+                        {lesson.type === 'grammar' && content.grammarFormItems && content.grammarFormItems.length > 0 ? (
+                          <Card className="mb-6 border-indigo-200 bg-indigo-50" id="grammar-form">
+                            <CardHeader>
+                              <CardTitle className="text-indigo-900">Grammar Form</CardTitle>
+                              <p className="text-sm text-indigo-600 mt-1">Click each item to see details and examples</p>
+                            </CardHeader>
+                            <CardContent>
+                              <Accordion type="single" collapsible className="w-full space-y-2">
+                                {content.grammarFormItems.map((item, index) => (
+                                  <AccordionItem 
+                                    key={index} 
+                                    value={`grammar-form-${index}`}
+                                    className="border border-indigo-200 rounded-lg bg-white overflow-hidden"
+                                  >
+                                    <AccordionTrigger className="px-4 py-3 hover:bg-indigo-50 hover:no-underline">
+                                      <div className="flex items-center gap-3 text-left">
+                                        <span className="font-semibold text-indigo-900">{item.name}</span>
+                                        <div className="flex gap-1">
+                                          {item.tags.map((tag, tagIndex) => (
+                                            <Badge key={tagIndex} variant="secondary" className="bg-indigo-100 text-indigo-700 text-xs">
+                                              {tag}
+                                            </Badge>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    </AccordionTrigger>
+                                    <AccordionContent className="px-4 pb-4">
+                                      <div className="space-y-4">
+                                        <div>
+                                          <p className="text-sm font-medium text-gray-500 mb-1">Definition</p>
+                                          <p className="text-gray-700">{item.definition}</p>
+                                        </div>
+                                        <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+                                          <p className="text-sm font-medium text-gray-500">Comparison</p>
+                                          <div className="flex items-start gap-2">
+                                            <XCircle className="h-4 w-4 text-gray-400 mt-1 flex-shrink-0" />
+                                            <p className="text-gray-500">{item.comparison.standard}</p>
+                                          </div>
+                                          <div className="flex items-start gap-2">
+                                            <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
+                                            <p className="text-green-700 font-semibold">{item.comparison.band8}</p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </AccordionContent>
+                                  </AccordionItem>
+                                ))}
+                              </Accordion>
+                            </CardContent>
+                          </Card>
+                        ) : lesson.type === 'grammar' && content.grammarForm && (
+                          <Card className="mb-6 border-indigo-200 bg-indigo-50" id="grammar-form">
+                            <CardHeader>
+                              <CardTitle className="text-indigo-900">Grammar Form</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <pre className="whitespace-pre-wrap text-indigo-800 font-mono text-sm">
+                                {content.grammarForm}
+                              </pre>
+                            </CardContent>
+                          </Card>
+                        )}
 
             {lesson.type === 'grammar' && content.grammarUse && (
               <Card className="mb-6 border-purple-200 bg-purple-50" id="grammar-use">

@@ -17,6 +17,16 @@ export interface User {
   updated_at: string;
 }
 
+export interface GrammarFormItem {
+  name: string;
+  tags: string[];
+  definition: string;
+  comparison: {
+    standard: string;
+    band8: string;
+  };
+}
+
 export interface LessonContent {
   title: string;
   targetLevel: string;
@@ -31,6 +41,7 @@ export interface LessonContent {
   synonyms?: { word: string; synonyms: string[] }[];
   speakingLines?: string[];
   grammarForm?: string;
+  grammarFormItems?: GrammarFormItem[];
   grammarUse?: string;
   sentenceUpgrade?: { basic: string; upgraded: string }[];
 }

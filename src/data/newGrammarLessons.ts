@@ -2817,7 +2817,81 @@ Reducing errors is often easier than adding complexity - and just as effective f
 8. Parallel structure
 9. Conditionals (no "would" in if-clause)
 10. Redundant conjunctions`,
-      grammarUse: `**Proofreading strategy:**
+      grammarFormItems: [
+        {
+          name: 'Subject-Verb Agreement',
+          tags: ['Writing Task 1', 'Writing Task 2'],
+          definition: 'The verb must agree with its subject in number. Singular subjects need singular verbs, plural subjects need plural verbs.',
+          comparison: {
+            standard: 'The number of students are increasing every year.',
+            band8: 'The number of students is increasing every year.'
+          }
+        },
+        {
+          name: 'Article Usage',
+          tags: ['Writing Task 2'],
+          definition: 'Use "the" for specific nouns, "a/an" for general singular countable nouns, and no article for general plural/uncountable nouns.',
+          comparison: {
+            standard: 'The technology is important for the development.',
+            band8: 'Technology is important for development.'
+          }
+        },
+        {
+          name: 'Preposition Errors',
+          tags: ['Writing Task 1', 'Writing Task 2'],
+          definition: 'Prepositions must be used correctly with specific verbs and expressions. Common errors include "depend of" instead of "depend on".',
+          comparison: {
+            standard: 'This depends of many factors and results of the study.',
+            band8: 'This depends on many factors and the results of the study.'
+          }
+        },
+        {
+          name: 'Tense Consistency',
+          tags: ['Writing Task 1'],
+          definition: 'Maintain consistent tense throughout your writing. Use past simple for specific past times, present perfect for unspecified times.',
+          comparison: {
+            standard: 'Yesterday, I have seen the news and I am shocked.',
+            band8: 'Yesterday, I saw the news and I was shocked.'
+          }
+        },
+        {
+          name: 'Comma Splices',
+          tags: ['Writing Task 2'],
+          definition: 'Two independent clauses cannot be joined with just a comma. Use a semicolon, conjunction, or separate sentences.',
+          comparison: {
+            standard: 'Technology is useful, it helps communication.',
+            band8: 'Technology is useful because it helps communication.'
+          }
+        },
+        {
+          name: 'Word Form Errors',
+          tags: ['Writing Task 1', 'Writing Task 2'],
+          definition: 'Use the correct word form (noun, verb, adjective, adverb) based on the grammatical context.',
+          comparison: {
+            standard: 'This is an importantly issue that needs immediately attention.',
+            band8: 'This is an important issue that needs immediate attention.'
+          }
+        },
+        {
+          name: 'Parallel Structure',
+          tags: ['Writing Task 2'],
+          definition: 'Items in a list or comparison should have the same grammatical form for clarity and flow.',
+          comparison: {
+            standard: 'I like reading, to write, and swimming.',
+            band8: 'I like reading, writing, and swimming.'
+          }
+        },
+        {
+          name: 'Conditional Errors',
+          tags: ['Writing Task 2'],
+          definition: 'In second conditionals, use past simple in the if-clause and would + infinitive in the main clause. Never use "would" in the if-clause.',
+          comparison: {
+            standard: 'If I would have more time, I would study harder.',
+            band8: 'If I had more time, I would study harder.'
+          }
+        }
+      ],
+      grammarUse:`**Proofreading strategy:**
 1. Read once for meaning
 2. Check subject-verb agreement
 3. Check articles
