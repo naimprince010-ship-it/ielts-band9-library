@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { 
   CheckCircle2, 
   XCircle, 
@@ -8,7 +8,11 @@ import {
   BookOpen,
   Trophy,
   Target,
-  ChevronRight
+  ChevronRight,
+  Clock,
+  Award,
+  Flame,
+  AlertCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -33,6 +37,12 @@ interface GrammarTopic {
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   exercises: Exercise[];
   tips: string[];
+  ieltsContext?: string;
+  writingTask?: {
+    prompt: string;
+    targetStructure: string;
+    exampleSentence: string;
+  };
 }
 
 const GRAMMAR_EXERCISES: GrammarTopic[] = [
@@ -41,6 +51,12 @@ const GRAMMAR_EXERCISES: GrammarTopic[] = [
     title: 'Conditional Sentences',
     description: 'Master all four types of conditionals for IELTS Writing and Speaking',
     difficulty: 'intermediate',
+    ieltsContext: 'In IELTS Writing Task 2, conditionals are essential for discussing hypothetical situations, consequences, and solutions. For example: "If governments invested more in renewable energy, carbon emissions would decrease significantly." This demonstrates your ability to express complex ideas about cause and effect.',
+    writingTask: {
+      prompt: 'Write 2-3 sentences about education using conditionals. Discuss what would happen if governments increased funding for schools.',
+      targetStructure: 'Use at least one second conditional (If + past, would + verb)',
+      exampleSentence: 'If the government allocated more resources to education, students would have access to better facilities and qualified teachers.'
+    },
     tips: [
       'Zero conditional: general truths (If + present, present)',
       'First conditional: real future (If + present, will + verb)',
@@ -123,18 +139,24 @@ const GRAMMAR_EXERCISES: GrammarTopic[] = [
       }
     ]
   },
-  {
-    id: 'passive-voice',
-    title: 'Passive Voice',
-    description: 'Learn when and how to use passive constructions effectively',
-    difficulty: 'intermediate',
-    tips: [
-      'Form: be + past participle',
-      'Use passive when the action is more important than the doer',
-      'Common in academic writing and formal reports',
-      'Avoid overusing passive - mix with active voice',
-      'Perfect passive: have/has been + past participle'
-    ],
+    {
+      id: 'passive-voice',
+      title: 'Passive Voice',
+      description: 'Learn when and how to use passive constructions effectively',
+      difficulty: 'intermediate',
+      ieltsContext: 'Passive voice is frequently used in IELTS Writing Task 1 to describe processes and data objectively. For example: "The raw materials are transported to the factory, where they are processed and packaged." It helps maintain an impersonal, academic tone.',
+      writingTask: {
+        prompt: 'Write 2-3 sentences describing how a product is manufactured or a process works, using passive voice.',
+        targetStructure: 'Use at least two passive constructions (be + past participle)',
+        exampleSentence: 'The components are assembled in the factory, and the finished products are then shipped to retailers worldwide.'
+      },
+      tips: [
+        'Form: be + past participle',
+        'Use passive when the action is more important than the doer',
+        'Common in academic writing and formal reports',
+        'Avoid overusing passive - mix with active voice',
+        'Perfect passive: have/has been + past participle'
+      ],
     exercises: [
       {
         id: 'pass-1',
@@ -194,18 +216,24 @@ const GRAMMAR_EXERCISES: GrammarTopic[] = [
       }
     ]
   },
-  {
-    id: 'relative-clauses',
-    title: 'Relative Clauses',
-    description: 'Master defining and non-defining relative clauses',
-    difficulty: 'intermediate',
-    tips: [
-      'Defining clauses: essential information, no commas',
-      'Non-defining clauses: extra information, use commas',
-      'Who/that for people, which/that for things',
-      'Whose for possession',
-      'Where for places, when for times'
-    ],
+    {
+      id: 'relative-clauses',
+      title: 'Relative Clauses',
+      description: 'Master defining and non-defining relative clauses',
+      difficulty: 'intermediate',
+      ieltsContext: 'Relative clauses help you write more sophisticated sentences in IELTS Writing. Instead of short, choppy sentences, you can combine ideas: "The policy, which was introduced last year, has significantly reduced pollution levels." This demonstrates grammatical range and accuracy.',
+      writingTask: {
+        prompt: 'Write 2-3 sentences about technology using relative clauses. Combine information about a device or innovation.',
+        targetStructure: 'Use at least one defining and one non-defining relative clause',
+        exampleSentence: 'Smartphones, which have become essential in modern life, enable people who live in remote areas to access information instantly.'
+      },
+      tips: [
+        'Defining clauses: essential information, no commas',
+        'Non-defining clauses: extra information, use commas',
+        'Who/that for people, which/that for things',
+        'Whose for possession',
+        'Where for places, when for times'
+      ],
     exercises: [
       {
         id: 'rel-1',
@@ -260,18 +288,24 @@ const GRAMMAR_EXERCISES: GrammarTopic[] = [
       }
     ]
   },
-  {
-    id: 'articles',
-    title: 'Articles (A, An, The)',
-    description: 'Perfect your use of definite and indefinite articles',
-    difficulty: 'beginner',
-    tips: [
-      'A/An: first mention, non-specific, one of many',
-      'The: specific, already mentioned, unique items',
-      'No article: general plurals, uncountable nouns (general)',
-      'The + superlatives: the best, the most important',
-      'Geographic rules: the UK, the USA, but France, Japan'
-    ],
+    {
+      id: 'articles',
+      title: 'Articles (A, An, The)',
+      description: 'Perfect your use of definite and indefinite articles',
+      difficulty: 'beginner',
+      ieltsContext: 'Article errors are among the most common mistakes in IELTS Writing. Correct usage shows grammatical accuracy: "Education plays a vital role in society" (general) vs "The education system in my country needs reform" (specific). Mastering articles can significantly improve your band score.',
+      writingTask: {
+        prompt: 'Write 2-3 sentences about the environment, paying careful attention to article usage with general and specific nouns.',
+        targetStructure: 'Use a mix of definite (the), indefinite (a/an), and zero articles correctly',
+        exampleSentence: 'Pollution is a major problem in cities. The air quality in urban areas has deteriorated significantly over the past decade.'
+      },
+      tips: [
+        'A/An: first mention, non-specific, one of many',
+        'The: specific, already mentioned, unique items',
+        'No article: general plurals, uncountable nouns (general)',
+        'The + superlatives: the best, the most important',
+        'Geographic rules: the UK, the USA, but France, Japan'
+      ],
     exercises: [
       {
         id: 'art-1',
@@ -331,18 +365,24 @@ const GRAMMAR_EXERCISES: GrammarTopic[] = [
       }
     ]
   },
-  {
-    id: 'tenses',
-    title: 'Verb Tenses',
-    description: 'Master all 12 English tenses for accurate expression',
-    difficulty: 'intermediate',
-    tips: [
-      'Present perfect: past action with present relevance',
-      'Past simple: completed past action with specific time',
-      'Present perfect continuous: action started in past, still continuing',
-      'Future perfect: action completed before a future time',
-      'Past perfect: action before another past action'
-    ],
+    {
+      id: 'tenses',
+      title: 'Verb Tenses',
+      description: 'Master all 12 English tenses for accurate expression',
+      difficulty: 'intermediate',
+      ieltsContext: 'Accurate tense usage is crucial in IELTS Writing Task 1 for describing trends and in Task 2 for discussing past, present, and future situations. For example: "The number of students has increased significantly since 2010" shows present perfect for trends continuing to now.',
+      writingTask: {
+        prompt: 'Write 2-3 sentences describing changes in your city over the past decade, using appropriate tenses.',
+        targetStructure: 'Use present perfect for changes with present relevance and past simple for completed changes',
+        exampleSentence: 'The population has grown rapidly since 2010. Many new buildings were constructed last year, and development is still ongoing.'
+      },
+      tips: [
+        'Present perfect: past action with present relevance',
+        'Past simple: completed past action with specific time',
+        'Present perfect continuous: action started in past, still continuing',
+        'Future perfect: action completed before a future time',
+        'Past perfect: action before another past action'
+      ],
     exercises: [
       {
         id: 'tense-1',
@@ -403,18 +443,24 @@ const GRAMMAR_EXERCISES: GrammarTopic[] = [
       }
     ]
   },
-  {
-    id: 'reported-speech',
-    title: 'Reported Speech',
-    description: 'Transform direct speech to indirect speech accurately',
-    difficulty: 'advanced',
-    tips: [
-      'Backshift tenses: present → past, past → past perfect',
-      'Change pronouns and time expressions',
-      'Say vs Tell: say (no object), tell (+ object)',
-      'Questions: if/whether for yes/no, wh- word for wh- questions',
-      'Commands: told + object + to infinitive'
-    ],
+    {
+      id: 'reported-speech',
+      title: 'Reported Speech',
+      description: 'Transform direct speech to indirect speech accurately',
+      difficulty: 'advanced',
+      ieltsContext: 'Reported speech is essential in IELTS Speaking Part 2 when describing conversations and in Writing when citing sources or opinions. For example: "Experts claim that climate change poses a significant threat" demonstrates academic reporting style.',
+      writingTask: {
+        prompt: 'Write 2-3 sentences reporting what experts or researchers have said about a social issue (health, education, or environment).',
+        targetStructure: 'Use reporting verbs (claim, argue, suggest, state) with appropriate tense backshift',
+        exampleSentence: 'Researchers have argued that regular exercise reduces the risk of heart disease. They also suggested that a balanced diet was equally important.'
+      },
+      tips: [
+        'Backshift tenses: present → past, past → past perfect',
+        'Change pronouns and time expressions',
+        'Say vs Tell: say (no object), tell (+ object)',
+        'Questions: if/whether for yes/no, wh- word for wh- questions',
+        'Commands: told + object + to infinitive'
+      ],
     exercises: [
       {
         id: 'rep-1',
@@ -474,18 +520,24 @@ const GRAMMAR_EXERCISES: GrammarTopic[] = [
       }
     ]
   },
-  {
-    id: 'modals',
-    title: 'Modal Verbs',
-    description: 'Express possibility, obligation, and advice with modals',
-    difficulty: 'intermediate',
-    tips: [
-      'Must: strong obligation, logical deduction',
-      'Should/Ought to: advice, recommendation',
-      'Could/Might/May: possibility',
-      'Can/Could: ability, permission',
-      'Would: hypothetical, polite requests'
-    ],
+    {
+      id: 'modals',
+      title: 'Modal Verbs',
+      description: 'Express possibility, obligation, and advice with modals',
+      difficulty: 'intermediate',
+      ieltsContext: 'Modal verbs are essential in IELTS Writing Task 2 for expressing opinions, giving recommendations, and discussing possibilities. For example: "Governments should invest more in public transport" shows recommendation, while "This could lead to environmental benefits" shows possibility.',
+      writingTask: {
+        prompt: 'Write 2-3 sentences giving recommendations about how to improve public health, using modal verbs.',
+        targetStructure: 'Use should/must for recommendations and could/might for possibilities',
+        exampleSentence: 'Governments should implement stricter regulations on junk food advertising. This could significantly reduce obesity rates among children.'
+      },
+      tips: [
+        'Must: strong obligation, logical deduction',
+        'Should/Ought to: advice, recommendation',
+        'Could/Might/May: possibility',
+        'Can/Could: ability, permission',
+        'Would: hypothetical, polite requests'
+      ],
     exercises: [
       {
         id: 'mod-1',
@@ -546,18 +598,24 @@ const GRAMMAR_EXERCISES: GrammarTopic[] = [
       }
     ]
   },
-  {
-    id: 'comparatives-superlatives',
-    title: 'Comparatives & Superlatives',
-    description: 'Compare things accurately using correct forms',
-    difficulty: 'beginner',
-    tips: [
-      'Short adjectives: -er/-est (bigger, biggest)',
-      'Long adjectives: more/most (more beautiful, most beautiful)',
-      'Irregular: good-better-best, bad-worse-worst',
-      'As...as for equal comparison',
-      'The more...the more for parallel increase'
-    ],
+    {
+      id: 'comparatives-superlatives',
+      title: 'Comparatives & Superlatives',
+      description: 'Compare things accurately using correct forms',
+      difficulty: 'beginner',
+      ieltsContext: 'Comparatives and superlatives are crucial in IELTS Writing Task 1 for comparing data and in Task 2 for making arguments. For example: "Urban areas have significantly higher pollution levels than rural regions" or "The most effective solution would be to invest in renewable energy."',
+      writingTask: {
+        prompt: 'Write 2-3 sentences comparing two countries or cities in terms of development, population, or quality of life.',
+        targetStructure: 'Use at least one comparative and one superlative form',
+        exampleSentence: 'Japan has a higher life expectancy than most Western countries. It is one of the most developed nations in Asia, with better healthcare facilities than its neighbors.'
+      },
+      tips: [
+        'Short adjectives: -er/-est (bigger, biggest)',
+        'Long adjectives: more/most (more beautiful, most beautiful)',
+        'Irregular: good-better-best, bad-worse-worst',
+        'As...as for equal comparison',
+        'The more...the more for parallel increase'
+      ],
     exercises: [
       {
         id: 'comp-1',
@@ -621,6 +679,27 @@ const GRAMMAR_EXERCISES: GrammarTopic[] = [
 ];
 
 const STORAGE_KEY = 'grammar_exercise_progress';
+const MISTAKES_KEY = 'grammar_mistakes';
+const MASTERY_KEY = 'grammar_mastery';
+
+interface MistakeRecord {
+  topicId: string;
+  exerciseId: string;
+  wrongCount: number;
+  lastWrongAt: string;
+  lastAnswer: string;
+  dueAt: string;
+  consecutiveCorrect: number;
+}
+
+interface MasteryLevel {
+  topicId: string;
+  level: 'bronze' | 'silver' | 'gold' | 'none';
+  totalAttempts: number;
+  totalCorrect: number;
+  streak: number;
+  lastPracticed: string;
+}
 
 function getStoredProgress(): Record<string, { completed: boolean; score: number; total: number }> {
   const stored = localStorage.getItem(STORAGE_KEY);
@@ -633,7 +712,111 @@ function saveProgress(topicId: string, score: number, total: number) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
 }
 
+function getMistakes(): MistakeRecord[] {
+  const stored = localStorage.getItem(MISTAKES_KEY);
+  return stored ? JSON.parse(stored) : [];
+}
+
+function saveMistake(topicId: string, exerciseId: string, userAnswer: string) {
+  const mistakes = getMistakes();
+  const existingIndex = mistakes.findIndex(m => m.topicId === topicId && m.exerciseId === exerciseId);
+  const now = new Date().toISOString();
+  const dueAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+  
+  if (existingIndex >= 0) {
+    mistakes[existingIndex].wrongCount += 1;
+    mistakes[existingIndex].lastWrongAt = now;
+    mistakes[existingIndex].lastAnswer = userAnswer;
+    mistakes[existingIndex].dueAt = dueAt;
+    mistakes[existingIndex].consecutiveCorrect = 0;
+  } else {
+    mistakes.push({
+      topicId,
+      exerciseId,
+      wrongCount: 1,
+      lastWrongAt: now,
+      lastAnswer: userAnswer,
+      dueAt,
+      consecutiveCorrect: 0
+    });
+  }
+  localStorage.setItem(MISTAKES_KEY, JSON.stringify(mistakes));
+}
+
+function markMistakeCorrect(topicId: string, exerciseId: string) {
+  const mistakes = getMistakes();
+  const existingIndex = mistakes.findIndex(m => m.topicId === topicId && m.exerciseId === exerciseId);
+  
+  if (existingIndex >= 0) {
+    const mistake = mistakes[existingIndex];
+    mistake.consecutiveCorrect += 1;
+    
+    const intervals = [1, 3, 7, 14, 30];
+    const intervalIndex = Math.min(mistake.consecutiveCorrect - 1, intervals.length - 1);
+    const daysUntilNext = intervals[intervalIndex];
+    mistake.dueAt = new Date(Date.now() + daysUntilNext * 24 * 60 * 60 * 1000).toISOString();
+    
+    if (mistake.consecutiveCorrect >= 5) {
+      mistakes.splice(existingIndex, 1);
+    }
+    
+    localStorage.setItem(MISTAKES_KEY, JSON.stringify(mistakes));
+  }
+}
+
+function getDueMistakes(): MistakeRecord[] {
+  const mistakes = getMistakes();
+  const now = new Date().toISOString();
+  return mistakes.filter(m => m.dueAt <= now);
+}
+
+function getMastery(): Record<string, MasteryLevel> {
+  const stored = localStorage.getItem(MASTERY_KEY);
+  return stored ? JSON.parse(stored) : {};
+}
+
+function updateMastery(topicId: string, correct: number, total: number) {
+  const mastery = getMastery();
+  const now = new Date().toISOString();
+  
+  if (!mastery[topicId]) {
+    mastery[topicId] = {
+      topicId,
+      level: 'none',
+      totalAttempts: 0,
+      totalCorrect: 0,
+      streak: 0,
+      lastPracticed: now
+    };
+  }
+  
+  const m = mastery[topicId];
+  m.totalAttempts += total;
+  m.totalCorrect += correct;
+  m.lastPracticed = now;
+  
+  const percentage = (correct / total) * 100;
+  if (percentage >= 80) {
+    m.streak += 1;
+  } else {
+    m.streak = 0;
+  }
+  
+  const overallPercentage = (m.totalCorrect / m.totalAttempts) * 100;
+  if (overallPercentage >= 90 && m.streak >= 3) {
+    m.level = 'gold';
+  } else if (overallPercentage >= 75 && m.streak >= 2) {
+    m.level = 'silver';
+  } else if (overallPercentage >= 60 && m.streak >= 1) {
+    m.level = 'bronze';
+  }
+  
+  localStorage.setItem(MASTERY_KEY, JSON.stringify(mastery));
+  return m;
+}
+
 export default function GrammarExercisesPage() {
+  const [searchParams] = useSearchParams();
   const [selectedTopic, setSelectedTopic] = useState<GrammarTopic | null>(null);
   const [currentExercise, setCurrentExercise] = useState(0);
   const [userAnswer, setUserAnswer] = useState('');
@@ -642,11 +825,28 @@ export default function GrammarExercisesPage() {
   const [score, setScore] = useState(0);
   const [showHint, setShowHint] = useState(false);
   const [progress, setProgress] = useState<Record<string, { completed: boolean; score: number; total: number }>>(getStoredProgress());
-  const [stage, setStage] = useState<'select' | 'practice' | 'results'>('select');
+  const [stage, setStage] = useState<'select' | 'practice' | 'results' | 'review'>('select');
+  const [mistakes, setMistakes] = useState<MistakeRecord[]>(getMistakes());
+  const [dueMistakes, setDueMistakes] = useState<MistakeRecord[]>(getDueMistakes());
+  const [mastery, setMastery] = useState<Record<string, MasteryLevel>>(getMastery());
+  const [reviewExercises, setReviewExercises] = useState<Array<{ topic: GrammarTopic; exercise: Exercise; mistake: MistakeRecord }>>([]);
+  const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+  const [reviewScore, setReviewScore] = useState(0);
 
   useEffect(() => {
     setProgress(getStoredProgress());
-  }, []);
+    setMistakes(getMistakes());
+    setDueMistakes(getDueMistakes());
+    setMastery(getMastery());
+    
+    const topicParam = searchParams.get('topic');
+    if (topicParam && stage === 'select') {
+      const topic = GRAMMAR_EXERCISES.find(t => t.id === topicParam);
+      if (topic) {
+        startPractice(topic);
+      }
+    }
+  }, [searchParams]);
 
   const startPractice = (topic: GrammarTopic) => {
     setSelectedTopic(topic);
@@ -656,6 +856,31 @@ export default function GrammarExercisesPage() {
     setShowResult(false);
     setShowHint(false);
     setStage('practice');
+  };
+
+  const startReview = () => {
+    const due = getDueMistakes();
+    const exercises: Array<{ topic: GrammarTopic; exercise: Exercise; mistake: MistakeRecord }> = [];
+    
+    due.forEach(mistake => {
+      const topic = GRAMMAR_EXERCISES.find(t => t.id === mistake.topicId);
+      if (topic) {
+        const exercise = topic.exercises.find(e => e.id === mistake.exerciseId);
+        if (exercise) {
+          exercises.push({ topic, exercise, mistake });
+        }
+      }
+    });
+    
+    if (exercises.length > 0) {
+      setReviewExercises(exercises);
+      setCurrentReviewIndex(0);
+      setReviewScore(0);
+      setUserAnswer('');
+      setShowResult(false);
+      setShowHint(false);
+      setStage('review');
+    }
   };
 
   const checkAnswer = () => {
@@ -672,8 +897,52 @@ export default function GrammarExercisesPage() {
     }
     
     setIsCorrect(correct);
-    if (correct) setScore(score + 1);
+    if (correct) {
+      setScore(score + 1);
+      markMistakeCorrect(selectedTopic.id, exercise.id);
+    } else {
+      saveMistake(selectedTopic.id, exercise.id, userAnswer);
+    }
     setShowResult(true);
+    setMistakes(getMistakes());
+    setDueMistakes(getDueMistakes());
+  };
+
+    const checkReviewAnswer = () => {
+      if (reviewExercises.length === 0) return;
+      const { topic, exercise } = reviewExercises[currentReviewIndex];
+    const normalizedUserAnswer = userAnswer.toLowerCase().trim();
+    const normalizedCorrectAnswer = exercise.correctAnswer.toLowerCase().trim();
+    
+    let correct = normalizedUserAnswer === normalizedCorrectAnswer;
+    
+    if (normalizedCorrectAnswer === 'no article') {
+      const noArticleAliases = ['', '-', 'none', 'nothing', 'no article', 'no-article', 'blank', 'empty'];
+      correct = noArticleAliases.includes(normalizedUserAnswer);
+    }
+    
+    setIsCorrect(correct);
+    if (correct) {
+      setReviewScore(reviewScore + 1);
+      markMistakeCorrect(topic.id, exercise.id);
+    } else {
+      saveMistake(topic.id, exercise.id, userAnswer);
+    }
+    setShowResult(true);
+    setMistakes(getMistakes());
+    setDueMistakes(getDueMistakes());
+  };
+
+  const nextReviewExercise = () => {
+    if (currentReviewIndex < reviewExercises.length - 1) {
+      setCurrentReviewIndex(currentReviewIndex + 1);
+      setUserAnswer('');
+      setShowResult(false);
+      setShowHint(false);
+    } else {
+      setStage('select');
+      setDueMistakes(getDueMistakes());
+    }
   };
 
   const nextExercise = () => {
@@ -684,8 +953,10 @@ export default function GrammarExercisesPage() {
       setShowResult(false);
       setShowHint(false);
     } else {
-      saveProgress(selectedTopic.id, score + (isCorrect ? 0 : 0), selectedTopic.exercises.length);
+      saveProgress(selectedTopic.id, score, selectedTopic.exercises.length);
+      updateMastery(selectedTopic.id, score, selectedTopic.exercises.length);
       setProgress(getStoredProgress());
+      setMastery(getMastery());
       setStage('results');
     }
   };
@@ -697,6 +968,7 @@ export default function GrammarExercisesPage() {
     setUserAnswer('');
     setShowResult(false);
     setShowHint(false);
+    setDueMistakes(getDueMistakes());
     setStage('select');
   };
 
@@ -733,19 +1005,45 @@ export default function GrammarExercisesPage() {
               </p>
               <Progress value={percentage} className="h-3" />
               
-              <div className="bg-purple-50 rounded-lg p-4 text-left">
-                <h4 className="font-semibold text-purple-800 mb-2">Key Tips to Remember:</h4>
-                <ul className="space-y-1 text-sm text-purple-700">
-                  {selectedTopic.tips.map((tip, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <CheckCircle2 className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                      {tip}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                            <div className="bg-purple-50 rounded-lg p-4 text-left">
+                              <h4 className="font-semibold text-purple-800 mb-2">Key Tips to Remember:</h4>
+                              <ul className="space-y-1 text-sm text-purple-700">
+                                {selectedTopic.tips.map((tip, idx) => (
+                                  <li key={idx} className="flex items-start gap-2">
+                                    <CheckCircle2 className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                                    {tip}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
 
-              <div className="flex gap-4 justify-center">
+                            {selectedTopic.ieltsContext && (
+                              <div className="bg-blue-50 rounded-lg p-4 text-left border border-blue-200">
+                                <h4 className="font-semibold text-blue-800 mb-2 flex items-center gap-2">
+                                  <BookOpen className="h-4 w-4" />
+                                  IELTS Context
+                                </h4>
+                                <p className="text-sm text-blue-700">{selectedTopic.ieltsContext}</p>
+                              </div>
+                            )}
+
+                            {selectedTopic.writingTask && (
+                              <div className="bg-green-50 rounded-lg p-4 text-left border border-green-200">
+                                <h4 className="font-semibold text-green-800 mb-2 flex items-center gap-2">
+                                  <Target className="h-4 w-4" />
+                                  Practice Writing Task
+                                </h4>
+                                <p className="text-sm text-green-700 mb-3">{selectedTopic.writingTask.prompt}</p>
+                                <div className="bg-white rounded p-3 border border-green-200">
+                                  <p className="text-xs text-green-600 font-medium mb-1">Target Structure:</p>
+                                  <p className="text-sm text-gray-700 mb-2">{selectedTopic.writingTask.targetStructure}</p>
+                                  <p className="text-xs text-green-600 font-medium mb-1">Example:</p>
+                                  <p className="text-sm text-gray-600 italic">"{selectedTopic.writingTask.exampleSentence}"</p>
+                                </div>
+                              </div>
+                            )}
+
+                            <div className="flex gap-4 justify-center">
                 <Button variant="outline" onClick={() => startPractice(selectedTopic)}>
                   <RotateCcw className="h-4 w-4 mr-2" />
                   Try Again
@@ -761,11 +1059,154 @@ export default function GrammarExercisesPage() {
     );
   }
 
-  if (stage === 'practice' && selectedTopic) {
-    const exercise = selectedTopic.exercises[currentExercise];
-    const progressPercent = ((currentExercise + 1) / selectedTopic.exercises.length) * 100;
+    if (stage === 'review' && reviewExercises.length > 0) {
+      const { topic, exercise } = reviewExercises[currentReviewIndex];
+      const progressPercent = ((currentReviewIndex + 1) / reviewExercises.length) * 100;
 
-    return (
+      return (
+        <div className="min-h-screen bg-gray-50 py-12">
+          <div className="max-w-3xl mx-auto px-4">
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-2">
+                <Button variant="ghost" onClick={resetPractice}>
+                  ← Back to Topics
+                </Button>
+                <Badge variant="outline" className="text-orange-600 border-orange-600">
+                  <Clock className="h-3 w-3 mr-1" />
+                  Review {currentReviewIndex + 1} / {reviewExercises.length}
+                </Badge>
+              </div>
+              <Progress value={progressPercent} className="h-2" />
+            </div>
+
+            <Card className="border-orange-200">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <Badge className="bg-orange-100 text-orange-800">
+                    <AlertCircle className="h-3 w-3 mr-1" />
+                    Review Mode
+                  </Badge>
+                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <Target className="h-4 w-4" />
+                    Score: {reviewScore}
+                  </div>
+                </div>
+                <CardTitle className="text-xl mt-4">{topic.title}</CardTitle>
+                <CardDescription>Previously missed question - let's try again!</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="bg-gray-50 rounded-lg p-6">
+                  <p className="text-lg font-medium mb-4">{exercise.question}</p>
+                
+                  {exercise.type === 'multiple-choice' && exercise.options && (
+                    <div className="space-y-2">
+                      {exercise.options.map((option, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => !showResult && setUserAnswer(option)}
+                          disabled={showResult}
+                          className={`w-full text-left p-3 rounded-lg border transition-all ${
+                            userAnswer === option
+                              ? showResult
+                                ? option === exercise.correctAnswer
+                                  ? 'border-green-500 bg-green-50'
+                                  : 'border-red-500 bg-red-50'
+                                : 'border-orange-500 bg-orange-50'
+                              : showResult && option === exercise.correctAnswer
+                                ? 'border-green-500 bg-green-50'
+                                : 'border-gray-200 hover:border-gray-300'
+                          }`}
+                        >
+                          {option}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {(exercise.type === 'fill-blank' || exercise.type === 'error-correction') && (
+                    <div>
+                      <Input
+                        value={userAnswer}
+                        onChange={(e) => setUserAnswer(e.target.value)}
+                        placeholder={exercise.type === 'error-correction' ? 'Write the corrected sentence...' : 'Type your answer...'}
+                        disabled={showResult}
+                        className="text-lg"
+                        onKeyDown={(e) => e.key === 'Enter' && !showResult && userAnswer && checkReviewAnswer()}
+                      />
+                      {exercise.hint && !showResult && (
+                        <button
+                          onClick={() => setShowHint(!showHint)}
+                          className="text-sm text-orange-600 mt-2 hover:underline"
+                        >
+                          {showHint ? 'Hide hint' : 'Show hint'}
+                        </button>
+                      )}
+                      {showHint && exercise.hint && (
+                        <p className="text-sm text-orange-600 mt-2 bg-orange-50 p-2 rounded">
+                          💡 {exercise.hint}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {showResult && (
+                  <div className={`p-4 rounded-lg ${isCorrect ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
+                    <div className="flex items-center gap-2 mb-2">
+                      {isCorrect ? (
+                        <>
+                          <CheckCircle2 className="h-5 w-5 text-green-600" />
+                          <span className="font-semibold text-green-800">Correct! Great improvement!</span>
+                        </>
+                      ) : (
+                        <>
+                          <XCircle className="h-5 w-5 text-red-600" />
+                          <span className="font-semibold text-red-800">Not quite - we'll review this again</span>
+                        </>
+                      )}
+                    </div>
+                    {!isCorrect && (
+                      <p className="text-sm text-gray-700 mb-2">
+                        <strong>Correct answer:</strong> {exercise.correctAnswer}
+                      </p>
+                    )}
+                    <p className="text-sm text-gray-600">{exercise.explanation}</p>
+                  </div>
+                )}
+
+                <div className="flex justify-end gap-4">
+                  {!showResult ? (
+                    <Button onClick={checkReviewAnswer} disabled={!userAnswer} className="bg-orange-600 hover:bg-orange-700">
+                      Check Answer
+                    </Button>
+                  ) : (
+                    <Button onClick={nextReviewExercise} className="bg-orange-600 hover:bg-orange-700">
+                      {currentReviewIndex < reviewExercises.length - 1 ? (
+                        <>
+                          Next Review
+                          <ArrowRight className="h-4 w-4 ml-2" />
+                        </>
+                      ) : (
+                        <>
+                          Finish Review
+                          <CheckCircle2 className="h-4 w-4 ml-2" />
+                        </>
+                      )}
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      );
+    }
+
+    if (stage === 'practice' && selectedTopic) {
+      const exercise = selectedTopic.exercises[currentExercise];
+      const progressPercent = ((currentExercise + 1) / selectedTopic.exercises.length) * 100;
+
+      return (
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-3xl mx-auto px-4">
           <div className="mb-6">
@@ -905,90 +1346,181 @@ export default function GrammarExercisesPage() {
     );
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="py-12 bg-purple-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3 mb-4">
-            <BookOpen className="h-10 w-10" />
-            <h1 className="text-3xl font-bold">Grammar Exercises</h1>
-          </div>
-          <p className="text-lg opacity-90 max-w-2xl">
-            Interactive fill-in-the-blank exercises for each grammar topic. Practice makes perfect!
-          </p>
+    const getMasteryIcon = (level: string) => {
+      switch (level) {
+        case 'gold': return <Award className="h-4 w-4 text-yellow-500" />;
+        case 'silver': return <Award className="h-4 w-4 text-gray-400" />;
+        case 'bronze': return <Award className="h-4 w-4 text-orange-600" />;
+        default: return null;
+      }
+    };
+
+    const getMasteryColor = (level: string) => {
+      switch (level) {
+        case 'gold': return 'bg-yellow-100 text-yellow-800 border-yellow-300';
+        case 'silver': return 'bg-gray-100 text-gray-800 border-gray-300';
+        case 'bronze': return 'bg-orange-100 text-orange-800 border-orange-300';
+        default: return '';
+      }
+    };
+
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="py-12 bg-purple-600 text-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center gap-3 mb-4">
+              <BookOpen className="h-10 w-10" />
+              <h1 className="text-3xl font-bold">Grammar Exercises</h1>
+            </div>
+            <p className="text-lg opacity-90 max-w-2xl">
+              Interactive fill-in-the-blank exercises for each grammar topic. Practice makes perfect!
+            </p>
           
-          <div className="mt-6 grid grid-cols-3 gap-4 max-w-md">
-            <div className="bg-white/10 rounded-lg p-3 text-center">
-              <div className="text-2xl font-bold">{GRAMMAR_EXERCISES.length}</div>
-              <div className="text-sm opacity-80">Topics</div>
-            </div>
-            <div className="bg-white/10 rounded-lg p-3 text-center">
-              <div className="text-2xl font-bold">{getTotalProgress()}%</div>
-              <div className="text-sm opacity-80">Complete</div>
-            </div>
-            <div className="bg-white/10 rounded-lg p-3 text-center">
-              <div className="text-2xl font-bold">{getTotalScore()}%</div>
-              <div className="text-sm opacity-80">Avg Score</div>
+            <div className="mt-6 grid grid-cols-4 gap-4 max-w-xl">
+              <div className="bg-white/10 rounded-lg p-3 text-center">
+                <div className="text-2xl font-bold">{GRAMMAR_EXERCISES.length}</div>
+                <div className="text-sm opacity-80">Topics</div>
+              </div>
+              <div className="bg-white/10 rounded-lg p-3 text-center">
+                <div className="text-2xl font-bold">{getTotalProgress()}%</div>
+                <div className="text-sm opacity-80">Complete</div>
+              </div>
+              <div className="bg-white/10 rounded-lg p-3 text-center">
+                <div className="text-2xl font-bold">{getTotalScore()}%</div>
+                <div className="text-sm opacity-80">Avg Score</div>
+              </div>
+              <div className="bg-white/10 rounded-lg p-3 text-center">
+                <div className="text-2xl font-bold">{dueMistakes.length}</div>
+                <div className="text-sm opacity-80">Due Review</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {GRAMMAR_EXERCISES.map((topic) => {
-            const topicProgress = progress[topic.id];
-            return (
-              <Card 
-                key={topic.id} 
-                className="hover:shadow-lg transition-shadow cursor-pointer group"
-                onClick={() => startPractice(topic)}
-              >
-                <CardHeader>
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge className={
-                      topic.difficulty === 'beginner' ? 'bg-green-100 text-green-800' :
-                      topic.difficulty === 'intermediate' ? 'bg-blue-100 text-blue-800' :
-                      'bg-purple-100 text-purple-800'
-                    }>
-                      {topic.difficulty}
-                    </Badge>
-                    {topicProgress?.completed && (
-                      <div className="flex items-center gap-1 text-sm text-green-600">
-                        <CheckCircle2 className="h-4 w-4" />
-                        {Math.round((topicProgress.score / topicProgress.total) * 100)}%
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {dueMistakes.length > 0 && (
+            <Card className="mb-8 border-orange-200 bg-orange-50">
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                      <Clock className="h-6 w-6 text-orange-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-orange-800">Daily Review Ready!</h3>
+                      <p className="text-sm text-orange-600">
+                        You have {dueMistakes.length} question{dueMistakes.length > 1 ? 's' : ''} to review from previous mistakes
+                      </p>
+                    </div>
+                  </div>
+                  <Button onClick={startReview} className="bg-orange-600 hover:bg-orange-700">
+                    <RotateCcw className="h-4 w-4 mr-2" />
+                    Start Review
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {mistakes.length > 0 && dueMistakes.length === 0 && (
+            <Card className="mb-8 border-green-200 bg-green-50">
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                    <CheckCircle2 className="h-6 w-6 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-green-800">All caught up!</h3>
+                    <p className="text-sm text-green-600">
+                      No reviews due right now. Keep practicing to build your skills!
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {GRAMMAR_EXERCISES.map((topic) => {
+              const topicProgress = progress[topic.id];
+              const topicMastery = mastery[topic.id];
+              const topicMistakeCount = mistakes.filter(m => m.topicId === topic.id).length;
+            
+              return (
+                <Card 
+                  key={topic.id} 
+                  className="hover:shadow-lg transition-shadow cursor-pointer group"
+                  onClick={() => startPractice(topic)}
+                >
+                  <CardHeader>
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <Badge className={
+                          topic.difficulty === 'beginner' ? 'bg-green-100 text-green-800' :
+                          topic.difficulty === 'intermediate' ? 'bg-blue-100 text-blue-800' :
+                          'bg-purple-100 text-purple-800'
+                        }>
+                          {topic.difficulty}
+                        </Badge>
+                        {topicMastery && topicMastery.level !== 'none' && (
+                          <Badge className={`${getMasteryColor(topicMastery.level)} border`}>
+                            {getMasteryIcon(topicMastery.level)}
+                            <span className="ml-1 capitalize">{topicMastery.level}</span>
+                          </Badge>
+                        )}
                       </div>
-                    )}
-                  </div>
-                  <CardTitle className="text-lg group-hover:text-purple-600 transition-colors">
-                    {topic.title}
-                  </CardTitle>
-                  <CardDescription>{topic.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between text-sm text-gray-500">
-                    <span>{topic.exercises.length} exercises</span>
-                    <span className="flex items-center gap-1 text-purple-600 group-hover:translate-x-1 transition-transform">
-                      Start Practice
-                      <ChevronRight className="h-4 w-4" />
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+                      <div className="flex items-center gap-2">
+                        {topicMistakeCount > 0 && (
+                          <Badge variant="outline" className="text-orange-600 border-orange-300">
+                            <AlertCircle className="h-3 w-3 mr-1" />
+                            {topicMistakeCount}
+                          </Badge>
+                        )}
+                        {topicProgress?.completed && (
+                          <div className="flex items-center gap-1 text-sm text-green-600">
+                            <CheckCircle2 className="h-4 w-4" />
+                            {Math.round((topicProgress.score / topicProgress.total) * 100)}%
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <CardTitle className="text-lg group-hover:text-purple-600 transition-colors">
+                      {topic.title}
+                    </CardTitle>
+                    <CardDescription>{topic.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between text-sm text-gray-500">
+                      <div className="flex items-center gap-2">
+                        <span>{topic.exercises.length} exercises</span>
+                        {topicMastery && topicMastery.streak > 0 && (
+                          <span className="flex items-center gap-1 text-orange-500">
+                            <Flame className="h-3 w-3" />
+                            {topicMastery.streak}
+                          </span>
+                        )}
+                      </div>
+                      <span className="flex items-center gap-1 text-purple-600 group-hover:translate-x-1 transition-transform">
+                        Start Practice
+                        <ChevronRight className="h-4 w-4" />
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
 
-        <div className="mt-12 text-center">
-          <p className="text-gray-600 mb-4">Want to learn the grammar rules first?</p>
-          <Link to="/grammar">
-            <Button variant="outline">
-              <BookOpen className="h-4 w-4 mr-2" />
-              Browse Grammar Lessons
-            </Button>
-          </Link>
+          <div className="mt-12 text-center">
+            <p className="text-gray-600 mb-4">Want to learn the grammar rules first?</p>
+            <Link to="/grammar">
+              <Button variant="outline">
+                <BookOpen className="h-4 w-4 mr-2" />
+                Browse Grammar Lessons
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
 }
