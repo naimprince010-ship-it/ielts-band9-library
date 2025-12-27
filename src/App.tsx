@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { LessonProvider } from '@/contexts/LessonContext';
@@ -290,8 +290,10 @@ function App() {
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 <Route path="/faq" element={<Layout><Suspense fallback={<LoadingSpinner />}><FAQPage /></Suspense></Layout>} />
             <Route path="/contact" element={<Layout><Suspense fallback={<LoadingSpinner />}><ContactPage /></Suspense></Layout>} />
             <Route path="/terms" element={<Layout><Suspense fallback={<LoadingSpinner />}><TermsPage /></Suspense></Layout>} />
-            <Route path="/privacy" element={<Layout><Suspense fallback={<LoadingSpinner />}><PrivacyPage /></Suspense></Layout>} />
-            </Routes>
+                        <Route path="/privacy" element={<Layout><Suspense fallback={<LoadingSpinner />}><PrivacyPage /></Suspense></Layout>} />
+                        <Route path="/daily-study-plan" element={<Navigate to="/daily-plan" replace />} />
+                        <Route path="*" element={<Navigate to="/" replace />} />
+                        </Routes>
           </LessonProvider>
         </ProgressProvider>
       </AuthProvider>
