@@ -264,7 +264,7 @@ export function InteractivePractice({
                 <p className="text-gray-500 text-sm mt-1">(Fill in the blank)</p>
                 {(showAllAnswers || questionSubmitted) && (
                   <p className="mt-2 text-green-700 text-sm">
-                    <strong>Answer:</strong> {answerKey[index]}
+                    <strong>Answer:</strong> {typeof question.correctAnswer === 'string' ? question.correctAnswer : answerKey[index] || 'Answer not available'}
                   </p>
                 )}
               </div>
@@ -309,11 +309,11 @@ export function InteractivePractice({
                       </div>
                     )}
                     
-                    {/* Sample Answer */}
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                      <p className="text-xs font-medium text-green-600 mb-1">Sample Answer:</p>
-                      <p className="text-green-800 font-medium">{answerKey[index]}</p>
-                    </div>
+                        {/* Sample Answer */}
+                        <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                          <p className="text-xs font-medium text-green-600 mb-1">Sample Answer:</p>
+                          <p className="text-green-800 font-medium">{typeof question.correctAnswer === 'string' ? question.correctAnswer : answerKey[index] || 'Sample answer not available'}</p>
+                        </div>
                     
                     {/* AI Feedback Button */}
                     {!aiFeedback[index] && !loadingAI[index] && (
@@ -323,7 +323,7 @@ export function InteractivePractice({
                         onClick={() => handleGetAIFeedback(
                           index, 
                           (answers[index] as string) || '', 
-                          answerKey[index] || '',
+                          (typeof question.correctAnswer === 'string' ? question.correctAnswer : answerKey[index]) || '',
                           question.question
                         )}
                         className="gap-1 bg-purple-100 hover:bg-purple-200 text-purple-700"
