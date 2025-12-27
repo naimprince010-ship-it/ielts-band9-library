@@ -15,6 +15,7 @@ import { ReadingProgressBar } from '@/components/ui/ReadingProgressBar';
 import { InteractivePractice } from '@/components/ui/InteractivePractice';
 import { CopyableBadge } from '@/components/ui/CopyButton';
 import { SpeakButton } from '@/components/ui/SpeakButton';
+import { PieChartCoreExplanation } from '@/components/ui/PieChartVisuals';
 import { useLessons } from '@/contexts/LessonContext';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -216,13 +217,17 @@ export function LessonPage() {
                 <CardTitle>Core Explanation</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="prose prose-indigo max-w-none">
-                  {content.coreExplanation.split('\n\n').map((paragraph, index) => (
-                    <p key={index} className="mb-4 text-gray-700 whitespace-pre-line">
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
+                {slug === 'task1-pie-chart-description' ? (
+                  <PieChartCoreExplanation />
+                ) : (
+                  <div className="prose prose-indigo max-w-none">
+                    {content.coreExplanation.split('\n\n').map((paragraph, index) => (
+                      <p key={index} className="mb-4 text-gray-700 whitespace-pre-line">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
 
