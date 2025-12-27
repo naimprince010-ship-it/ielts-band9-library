@@ -418,11 +418,16 @@ export default function DailyStudyPlanPage() {
     setStreak(newStreakData);
   };
 
-  const goToTask = (item: PlanItem) => {
-    if (item.target?.path) {
-      navigate(item.target.path);
-    }
-  };
+    const goToTask = (item: PlanItem) => {
+      if (item.target?.path) {
+        const params = new URLSearchParams();
+        if (item.target.topic) {
+          params.set('topic', item.target.topic);
+        }
+        const queryString = params.toString();
+        navigate(queryString ? `${item.target.path}?${queryString}` : item.target.path);
+      }
+    };
 
   const completedCount = plan?.items.filter(item => item.completed_at).length || 0;
   const totalCount = plan?.items.length || 0;

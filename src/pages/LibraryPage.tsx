@@ -37,9 +37,9 @@ const ITEMS_PER_PAGE = 12;
 
 export function LibraryPage({ type }: LibraryPageProps) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
-  const [levelFilter, setLevelFilter] = useState<LessonLevel | 'all'>('all');
-  const [topicFilter, setTopicFilter] = useState<string>('all');
+    const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
+    const [levelFilter, setLevelFilter] = useState<LessonLevel | 'all'>('all');
+    const [topicFilter, setTopicFilter] = useState<string>(searchParams.get('topic') || 'all');
   const [sortBy, setSortBy] = useState<SortOption>('newest');
   const [currentPage, setCurrentPage] = useState(1);
   const [showBackToTop, setShowBackToTop] = useState(false);
