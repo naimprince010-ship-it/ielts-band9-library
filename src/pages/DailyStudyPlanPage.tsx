@@ -465,16 +465,27 @@ export default function DailyStudyPlanPage() {
     setStreak(newStreakData);
   };
 
-    const goToTask = (item: PlanItem) => {
-      if (item.target?.path) {
-        const params = new URLSearchParams();
-        if (item.target.topic) {
-          params.set('topic', item.target.topic);
-        }
-        const queryString = params.toString();
-        navigate(queryString ? `${item.target.path}?${queryString}` : item.target.path);
-      }
-    };
+        const goToTask = (item: PlanItem) => {
+          if (item.target?.path) {
+            const params = new URLSearchParams();
+            let topic = item.target.topic;
+        
+            if (!topic) {
+              const userId = user?.id || 'anonymous';
+              if (item.type === 'vocab_review') {
+                topic = getDailyTopic(VOCABULARY_TOPICS, userId, today);
+              } else if (item.type === 'grammar_exercise') {
+                topic = getDailyTopic(GRAMMAR_TOPICS, userId, today);
+              }
+            }
+        
+            if (topic) {
+              params.set('topic', topic);
+            }
+            const queryString = params.toString();
+            navigate(queryString ? `${item.target.path}?${queryString}` : item.target.path);
+          }
+        };
 
   const completedCount = plan?.items.filter(item => item.completed_at).length || 0;
   const totalCount = plan?.items.length || 0;
