@@ -184,3 +184,107 @@ export interface NaturalLesson {
   is_premium: boolean;
   estimated_time?: number;        // in minutes
 }
+
+// ============================================
+// Reading Module Types (IELTS Style Mock Test)
+// ============================================
+
+// Question types for Reading Module
+export type ReadingQuestionType = 
+  | 'mcq'                    // Multiple Choice Question
+  | 'fill-blank'             // Fill in the blank
+  | 'true-false-not-given'   // True/False/Not Given
+  | 'yes-no-not-given'       // Yes/No/Not Given
+  | 'matching-headings'      // Match headings to paragraphs
+  | 'matching-information'   // Match information to paragraphs
+  | 'matching-features'      // Match features/names to statements
+  | 'sentence-completion'    // Complete sentences
+  | 'summary-completion'     // Complete a summary
+  | 'diagram-labeling'       // Label a diagram
+  | 'short-answer';          // Short answer questions
+
+// Question status for palette display
+export type QuestionStatus = 'unseen' | 'seen' | 'answered' | 'flagged';
+
+// Individual Reading Question
+export interface ReadingQuestion {
+  id: string;
+  questionNumber: number;        // 1-40 for IELTS
+  type: ReadingQuestionType;
+  questionText: string;          // The question prompt
+  options?: string[];            // For MCQ, True/False, etc.
+  correctAnswer: string;         // The correct answer
+  acceptedAnswers?: string[];    // Alternative correct answers
+  passageRef?: string;           // Reference to specific paragraph (e.g., "Paragraph A")
+  hint?: string;                 // Optional hint
+  explanation?: string;          // Explanation for the answer
+}
+
+// Reading Passage
+export interface ReadingPassage {
+  id: string;
+  passageNumber: number;         // 1, 2, or 3 for IELTS
+  title: string;                 // Passage title
+  textContent: string;           // The full passage text (can include HTML for paragraphs)
+  paragraphs?: {                 // Optional structured paragraphs
+    label: string;               // A, B, C, etc.
+    content: string;
+  }[];
+  questions: ReadingQuestion[];  // Questions for this passage
+  questionRange: {               // Question number range (e.g., 1-13)
+    start: number;
+    end: number;
+  };
+}
+
+// Complete Reading Test
+export interface ReadingTest {
+  id: string;
+  title: string;                 // Test title (e.g., "Academic Reading Test 1")
+  testType: 'academic' | 'general';
+  totalQuestions: number;        // Usually 40 for IELTS
+  timeLimit: number;             // Time in seconds (3600 for 60 minutes)
+  passages: ReadingPassage[];    // 3 passages for IELTS
+  instructions?: string;         // Test instructions
+  is_premium: boolean;
+  created_at?: string;
+}
+
+// User's answer for a question
+export interface UserAnswer {
+  questionId: string;
+  questionNumber: number;
+  answer: string;
+  status: QuestionStatus;
+  answeredAt?: number;           // Timestamp
+}
+
+// Test session state (for localStorage persistence)
+export interface ReadingTestSession {
+  testId: string;
+  startedAt: number;             // Timestamp when test started
+  timeRemaining: number;         // Remaining time in seconds
+  answers: Record<string, UserAnswer>;  // questionId -> UserAnswer
+  currentPassage: number;        // Current passage being viewed (1, 2, or 3)
+  currentQuestion: number;       // Current question number (1-40)
+  isSubmitted: boolean;
+  submittedAt?: number;
+}
+
+// Test result after submission
+export interface ReadingTestResult {
+  testId: string;
+  totalQuestions: number;
+  correctAnswers: number;
+  incorrectAnswers: number;
+  unanswered: number;
+  score: number;                 // Percentage
+  bandScore?: number;            // IELTS band score (1-9)
+  timeTaken: number;             // Time taken in seconds
+  answers: {
+    questionNumber: number;
+    userAnswer: string;
+    correctAnswer: string;
+    isCorrect: boolean;
+  }[];
+}
