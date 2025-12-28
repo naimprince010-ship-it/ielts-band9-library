@@ -290,72 +290,90 @@ export interface ReadingTestResult {
 }
 
 // ============================================
-// Writing Module Types (IELTS Style Mock Test)
+// Listening Module Types (IELTS Style Mock Test)
 // ============================================
 
-// Writing task type
-export type WritingTaskType = 'task1' | 'task2';
+// Question types for Listening Module (similar to Reading but fewer types)
+export type ListeningQuestionType = 
+  | 'mcq'                    // Multiple Choice Question
+  | 'fill-blank'             // Fill in the blank (form/note completion)
+  | 'matching'               // Match items
+  | 'map-labeling'           // Label a map/plan
+  | 'sentence-completion'    // Complete sentences
+  | 'short-answer';          // Short answer questions
 
-// Writing test type (Academic vs General)
-export type WritingTestType = 'academic' | 'general';
-
-// Individual Writing Task
-export interface WritingTask {
+// Listening Section (4 sections in IELTS)
+export interface ListeningSection {
   id: string;
-  taskNumber: 1 | 2;
-  taskType: WritingTaskType;
-  title: string;                 // Task title (e.g., "Task 1: Report Writing")
-  prompt: string;                // The question/prompt text (can include HTML)
-  imageUrl?: string;             // Optional image (chart, graph, diagram for Task 1)
-  minWords: number;              // Minimum word count (150 for Task 1, 250 for Task 2)
-  recommendedTime: number;       // Recommended time in minutes (20 for Task 1, 40 for Task 2)
-  tips?: string[];               // Optional writing tips
-  sampleAnswer?: string;         // Optional sample answer (shown after submission)
+  sectionNumber: number;         // 1, 2, 3, or 4
+  title: string;                 // Section title (e.g., "Section 1: Conversation")
+  description?: string;          // Brief description of the audio context
+  audioStartTime: number;        // When this section starts in the audio (seconds)
+  audioEndTime: number;          // When this section ends in the audio (seconds)
+  questions: ListeningQuestion[];
+  questionRange: {
+    start: number;
+    end: number;
+  };
 }
 
-// Complete Writing Test
-export interface WritingTest {
+// Individual Listening Question
+export interface ListeningQuestion {
   id: string;
-  title: string;                 // Test title (e.g., "Academic Writing Test 1")
-  testType: WritingTestType;
-  timeLimit: number;             // Total time in seconds (3600 for 60 minutes)
-  tasks: [WritingTask, WritingTask]; // Always 2 tasks
+  questionNumber: number;        // 1-40 for IELTS
+  type: ListeningQuestionType;
+  questionText: string;          // The question prompt
+  options?: string[];            // For MCQ
+  correctAnswer: string;         // The correct answer
+  acceptedAnswers?: string[];    // Alternative correct answers
+  hint?: string;                 // Optional hint
+  explanation?: string;          // Explanation for the answer
+  wordLimit?: number;            // Max words for fill-blank (e.g., "NO MORE THAN TWO WORDS")
+}
+
+// Complete Listening Test
+export interface ListeningTest {
+  id: string;
+  title: string;                 // Test title (e.g., "Listening Test 1")
+  totalQuestions: number;        // Usually 40 for IELTS
+  audioUrl: string;              // URL to the audio file
+  audioDuration: number;         // Total audio duration in seconds
+  transferTime: number;          // Time to review answers after audio (600 for 10 min, 120 for 2 min)
+  sections: ListeningSection[];  // 4 sections for IELTS
   instructions?: string;         // Test instructions
   is_premium: boolean;
   created_at?: string;
 }
 
-// User's writing response for a task
-export interface WritingResponse {
-  taskId: string;
-  taskNumber: 1 | 2;
-  content: string;               // The written text
-  wordCount: number;             // Current word count
-  lastUpdatedAt: number;         // Timestamp of last edit
-}
+// Audio player state
+export type AudioState = 'not-started' | 'test-sound' | 'playing' | 'finished' | 'transfer-time';
 
-// Writing test session state (for localStorage persistence)
-export interface WritingTestSession {
+// Listening test session state (for localStorage persistence)
+export interface ListeningTestSession {
   testId: string;
   startedAt: number;             // Timestamp when test started
-  timeRemaining: number;         // Remaining time in seconds
-  responses: {
-    task1: WritingResponse;
-    task2: WritingResponse;
-  };
-  currentTask: WritingTaskType;  // Currently active task tab
+  audioState: AudioState;        // Current audio state
+  audioCurrentTime: number;      // Current position in audio (seconds)
+  transferTimeRemaining: number; // Remaining transfer time in seconds
+  answers: Record<string, UserAnswer>;  // questionId -> UserAnswer
+  currentSection: number;        // Current section being viewed (1-4)
   isSubmitted: boolean;
   submittedAt?: number;
 }
 
-// Writing test result after submission
-export interface WritingTestResult {
+// Listening test result after submission
+export interface ListeningTestResult {
   testId: string;
-  timeTaken: number;             // Time taken in seconds
-  responses: {
-    taskNumber: 1 | 2;
-    content: string;
-    wordCount: number;
-    meetsMinWords: boolean;
+  totalQuestions: number;
+  correctAnswers: number;
+  incorrectAnswers: number;
+  unanswered: number;
+  score: number;                 // Percentage
+  bandScore?: number;            // IELTS band score (1-9)
+  answers: {
+    questionNumber: number;
+    userAnswer: string;
+    correctAnswer: string;
+    isCorrect: boolean;
   }[];
 }
