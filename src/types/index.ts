@@ -288,3 +288,74 @@ export interface ReadingTestResult {
     isCorrect: boolean;
   }[];
 }
+
+// ============================================
+// Writing Module Types (IELTS Style Mock Test)
+// ============================================
+
+// Writing task type
+export type WritingTaskType = 'task1' | 'task2';
+
+// Writing test type (Academic vs General)
+export type WritingTestType = 'academic' | 'general';
+
+// Individual Writing Task
+export interface WritingTask {
+  id: string;
+  taskNumber: 1 | 2;
+  taskType: WritingTaskType;
+  title: string;                 // Task title (e.g., "Task 1: Report Writing")
+  prompt: string;                // The question/prompt text (can include HTML)
+  imageUrl?: string;             // Optional image (chart, graph, diagram for Task 1)
+  minWords: number;              // Minimum word count (150 for Task 1, 250 for Task 2)
+  recommendedTime: number;       // Recommended time in minutes (20 for Task 1, 40 for Task 2)
+  tips?: string[];               // Optional writing tips
+  sampleAnswer?: string;         // Optional sample answer (shown after submission)
+}
+
+// Complete Writing Test
+export interface WritingTest {
+  id: string;
+  title: string;                 // Test title (e.g., "Academic Writing Test 1")
+  testType: WritingTestType;
+  timeLimit: number;             // Total time in seconds (3600 for 60 minutes)
+  tasks: [WritingTask, WritingTask]; // Always 2 tasks
+  instructions?: string;         // Test instructions
+  is_premium: boolean;
+  created_at?: string;
+}
+
+// User's writing response for a task
+export interface WritingResponse {
+  taskId: string;
+  taskNumber: 1 | 2;
+  content: string;               // The written text
+  wordCount: number;             // Current word count
+  lastUpdatedAt: number;         // Timestamp of last edit
+}
+
+// Writing test session state (for localStorage persistence)
+export interface WritingTestSession {
+  testId: string;
+  startedAt: number;             // Timestamp when test started
+  timeRemaining: number;         // Remaining time in seconds
+  responses: {
+    task1: WritingResponse;
+    task2: WritingResponse;
+  };
+  currentTask: WritingTaskType;  // Currently active task tab
+  isSubmitted: boolean;
+  submittedAt?: number;
+}
+
+// Writing test result after submission
+export interface WritingTestResult {
+  testId: string;
+  timeTaken: number;             // Time taken in seconds
+  responses: {
+    taskNumber: 1 | 2;
+    content: string;
+    wordCount: number;
+    meetsMinWords: boolean;
+  }[];
+}
