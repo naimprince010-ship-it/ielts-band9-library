@@ -37,6 +37,7 @@ const FAQPage = lazy(() => import('@/pages/FAQPage'));
 const ContactPage = lazy(() => import('@/pages/ContactPage'));
 const TermsPage = lazy(() => import('@/pages/TermsPage'));
 const PrivacyPage = lazy(() => import('@/pages/PrivacyPage'));
+const NaturalGrammarPage = lazy(() => import('@/pages/NaturalGrammarPage'));
 
 function LoadingSpinner() {
   return (
@@ -290,8 +291,18 @@ function App() {
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 <Route path="/faq" element={<Layout><Suspense fallback={<LoadingSpinner />}><FAQPage /></Suspense></Layout>} />
             <Route path="/contact" element={<Layout><Suspense fallback={<LoadingSpinner />}><ContactPage /></Suspense></Layout>} />
             <Route path="/terms" element={<Layout><Suspense fallback={<LoadingSpinner />}><TermsPage /></Suspense></Layout>} />
-                        <Route path="/privacy" element={<Layout><Suspense fallback={<LoadingSpinner />}><PrivacyPage /></Suspense></Layout>} />
-                        <Route path="/daily-study-plan" element={<Navigate to="/daily-plan" replace />} />
+                                                <Route path="/privacy" element={<Layout><Suspense fallback={<LoadingSpinner />}><PrivacyPage /></Suspense></Layout>} />
+                                                <Route
+                                                  path="/grammar/natural"
+                                                  element={
+                                                    <Layout>
+                                                      <Suspense fallback={<LoadingSpinner />}>
+                                                        <NaturalGrammarPage />
+                                                      </Suspense>
+                                                    </Layout>
+                                                  }
+                                                />
+                                                <Route path="/daily-study-plan" element={<Navigate to="/daily-plan" replace />} />
                         <Route path="*" element={<Navigate to="/" replace />} />
                         </Routes>
           </LessonProvider>
