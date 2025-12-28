@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Search, Filter, BookOpen, GraduationCap, Star, Bookmark, BookmarkCheck, Clock, CheckCircle2, Circle, TrendingUp, PenTool, Mic, ArrowUp, X } from 'lucide-react';
+import { Search, Filter, BookOpen, GraduationCap, Star, Bookmark, BookmarkCheck, Clock, CheckCircle2, Circle, TrendingUp, PenTool, Mic, ArrowUp, X, Sparkles, ListChecks } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -179,18 +179,38 @@ export function LibraryPage({ type }: LibraryPageProps) {
               : 'Learn essential grammar structures with clear explanations, examples, and practice exercises.'}
           </p>
           
-          {user && (
-            <div className="mt-6 bg-white/10 rounded-lg p-4 max-w-md">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium">Your Progress</span>
-                <span className="text-sm">{completedCount} / {totalLessons} lessons completed</span>
-              </div>
-              <Progress value={completionPercent} className="h-2 bg-white/20" />
-              <p className="text-xs mt-2 opacity-80">
-                {completionPercent}% complete - {totalLessons - completedCount} lessons remaining
-              </p>
-            </div>
-          )}
+                    {user && (
+                      <div className="mt-6 bg-white/10 rounded-lg p-4 max-w-md">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium">Your Progress</span>
+                          <span className="text-sm">{completedCount} / {totalLessons} lessons completed</span>
+                        </div>
+                        <Progress value={completionPercent} className="h-2 bg-white/20" />
+                        <p className="text-xs mt-2 opacity-80">
+                          {completionPercent}% complete - {totalLessons - completedCount} lessons remaining
+                        </p>
+                      </div>
+                    )}
+          
+                    {type === 'grammar' && (
+                      <div className="mt-6">
+                        <p className="text-sm opacity-80 mb-3">Choose your learning style:</p>
+                        <div className="flex flex-wrap gap-3">
+                          <Link to="/grammar-exercises">
+                            <Button className="bg-white text-purple-700 hover:bg-purple-50 gap-2">
+                              <ListChecks className="h-4 w-4" />
+                              Traditional Exercises
+                            </Button>
+                          </Link>
+                          <Link to="/grammar/natural">
+                            <Button className="bg-purple-800 hover:bg-purple-900 text-white gap-2 border border-white/30">
+                              <Sparkles className="h-4 w-4" />
+                              Natural Approach
+                            </Button>
+                          </Link>
+                        </div>
+                      </div>
+                    )}
         </div>
       </div>
 
