@@ -42,6 +42,7 @@ const ReadingTestPage = lazy(() => import('@/pages/ReadingTestPage'));
 const WritingTestPage = lazy(() => import('@/pages/WritingTestPage'));
 const ListeningTestPage = lazy(() => import('@/pages/ListeningTestPage'));
 const SpeakingTestPage = lazy(() => import('@/pages/SpeakingTestPage'));
+const ResultDashboardPage = lazy(() => import('@/pages/ResultDashboardPage'));
 
 function LoadingSpinner() {
   return (
@@ -335,6 +336,14 @@ function App() {
                                                                                                                                                                                                   element={
                                                                                                                                                                                                     <Suspense fallback={<LoadingSpinner />}>
                                                                                                                                                                                                       <SpeakingTestPage />
+                                                                                                                                                                                                    </Suspense>
+                                                                                                                                                                                                  }
+                                                                                                                                                                                                />
+                                                                                                                                                                                                <Route
+                                                                                                                                                                                                  path="/results"
+                                                                                                                                                                                                  element={
+                                                                                                                                                                                                    <Suspense fallback={<LoadingSpinner />}>
+                                                                                                                                                                                                      <ResultDashboardPage />
                                                                                                                                                                                                     </Suspense>
                                                                                                                                                                                                   }
                                                                                                                                                                                                 />
