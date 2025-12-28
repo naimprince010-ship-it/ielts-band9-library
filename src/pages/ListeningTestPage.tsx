@@ -30,6 +30,12 @@ import {
   ListeningTestResult,
   AudioState
 } from '@/types';
+import { 
+  gradeObjectiveTest, 
+  formatBandScore, 
+  getBandScoreColor,
+  getBandScoreLevel
+} from '@/utils/scoring';
 
 // ============================================
 // Sample Listening Test Data
@@ -256,17 +262,6 @@ const getStatusColor = (status: QuestionStatus): string => {
   }
 };
 
-const calculateBandScore = (percentage: number): number => {
-  if (percentage >= 90) return 9;
-  if (percentage >= 80) return 8;
-  if (percentage >= 70) return 7;
-  if (percentage >= 60) return 6;
-  if (percentage >= 50) return 5;
-  if (percentage >= 40) return 4;
-  if (percentage >= 30) return 3;
-  if (percentage >= 20) return 2;
-  return 1;
-};
 
 // ============================================
 // Main Component
@@ -474,32 +469,32 @@ export default function ListeningTestPage() {
   // Submit test
   // ============================================
   const handleSubmit = () => {
-    const resultAnswers = allQuestions.map(q => {
-      const userAnswer = answers[q.id]?.answer || '';
-      const isCorrect = q.acceptedAnswers 
-        ? q.acceptedAnswers.some(a => a.toLowerCase() === userAnswer.toLowerCase())
-        : userAnswer.toLowerCase() === q.correctAnswer.toLowerCase();
-      
-      return {
+    // Use the new grading utility for proper IELTS band score calculation
+    const gradingResult = gradeObjectiveTest(
+      answers,
+      allQuestions.map(q => ({
+        id: q.id,
         questionNumber: q.questionNumber,
-        userAnswer,
         correctAnswer: q.correctAnswer,
-        isCorrect
-      };
-    });
-
-    const correctCount = resultAnswers.filter(a => a.isCorrect).length;
-    const percentage = (correctCount / allQuestions.length) * 100;
+        acceptedAnswers: q.acceptedAnswers
+      })),
+      'listening'
+    );
 
     const testResult: ListeningTestResult = {
       testId: test.id,
-      totalQuestions: allQuestions.length,
-      correctAnswers: correctCount,
-      incorrectAnswers: resultAnswers.filter(a => !a.isCorrect && a.userAnswer).length,
-      unanswered: resultAnswers.filter(a => !a.userAnswer).length,
-      score: percentage,
-      bandScore: calculateBandScore(percentage),
-      answers: resultAnswers
+      totalQuestions: gradingResult.totalQuestions,
+      correctAnswers: gradingResult.correctAnswers,
+      incorrectAnswers: gradingResult.incorrectAnswers,
+      unanswered: gradingResult.unanswered,
+      score: gradingResult.percentage,
+      bandScore: gradingResult.bandScore,
+      answers: gradingResult.gradedAnswers.map(ga => ({
+        questionNumber: ga.questionNumber,
+        userAnswer: ga.userAnswer,
+        correctAnswer: ga.correctAnswer,
+        isCorrect: ga.isCorrect
+      }))
     };
 
     setResult(testResult);
@@ -641,7 +636,7 @@ export default function ListeningTestPage() {
                 <p className="text-gray-600">{test.title}</p>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
                 <div className="bg-emerald-50 rounded-lg p-4 text-center">
                   <div className="text-3xl font-bold text-emerald-600">{result.correctAnswers}</div>
                   <div className="text-sm text-emerald-700">Correct</div>
@@ -654,15 +649,25 @@ export default function ListeningTestPage() {
                   <div className="text-3xl font-bold text-gray-600">{result.unanswered}</div>
                   <div className="text-sm text-gray-700">Unanswered</div>
                 </div>
-                <div className="bg-indigo-50 rounded-lg p-4 text-center">
-                  <div className="text-3xl font-bold text-indigo-600">{result.bandScore}</div>
-                  <div className="text-sm text-indigo-700">Band Score</div>
+                <div className="bg-amber-50 rounded-lg p-4 text-center">
+                  <div className="text-3xl font-bold text-amber-600">{result.correctAnswers}/40</div>
+                  <div className="text-sm text-amber-700">Raw Score</div>
+                </div>
+                <div className={`rounded-lg p-4 text-center ${getBandScoreColor(result.bandScore ?? 0)}`}>
+                  <div className="text-3xl font-bold">{formatBandScore(result.bandScore ?? 0)}</div>
+                  <div className="text-sm">Band Score</div>
                 </div>
               </div>
 
               <div className="text-center mb-8">
-                <div className="text-5xl font-bold text-indigo-600 mb-2">
-                  {result.score.toFixed(1)}%
+                <div className={`text-5xl font-bold mb-2 ${getBandScoreColor(result.bandScore ?? 0).split(' ')[0]}`}>
+                  {formatBandScore(result.bandScore ?? 0)}
+                </div>
+                <div className="text-xl text-gray-700 mb-2">
+                  {getBandScoreLevel(result.bandScore ?? 0)} User
+                </div>
+                <div className="text-gray-600">
+                  {result.score.toFixed(1)}% accuracy
                 </div>
               </div>
 
