@@ -39,7 +39,9 @@ const TermsPage = lazy(() => import('@/pages/TermsPage'));
 const PrivacyPage = lazy(() => import('@/pages/PrivacyPage'));
 const NaturalGrammarPage = lazy(() => import('@/pages/NaturalGrammarPage'));
 const ReadingTestPage = lazy(() => import('@/pages/ReadingTestPage'));
+const WritingTestPage = lazy(() => import('@/pages/WritingTestPage'));
 const ListeningTestPage = lazy(() => import('@/pages/ListeningTestPage'));
+const SpeakingTestPage = lazy(() => import('@/pages/SpeakingTestPage'));
 
 function LoadingSpinner() {
   return (
@@ -313,10 +315,26 @@ function App() {
                                                                                                                                                                                                   }
                                                                                                                                                                                                 />
                                                                                                                                                                                                 <Route
+                                                                                                                                                                                                  path="/writing-test"
+                                                                                                                                                                                                  element={
+                                                                                                                                                                                                    <Suspense fallback={<LoadingSpinner />}>
+                                                                                                                                                                                                      <WritingTestPage />
+                                                                                                                                                                                                    </Suspense>
+                                                                                                                                                                                                  }
+                                                                                                                                                                                                />
+                                                                                                                                                                                                <Route
                                                                                                                                                                                                   path="/listening-test"
                                                                                                                                                                                                   element={
                                                                                                                                                                                                     <Suspense fallback={<LoadingSpinner />}>
                                                                                                                                                                                                       <ListeningTestPage />
+                                                                                                                                                                                                    </Suspense>
+                                                                                                                                                                                                  }
+                                                                                                                                                                                                />
+                                                                                                                                                                                                <Route
+                                                                                                                                                                                                  path="/speaking-test"
+                                                                                                                                                                                                  element={
+                                                                                                                                                                                                    <Suspense fallback={<LoadingSpinner />}>
+                                                                                                                                                                                                      <SpeakingTestPage />
                                                                                                                                                                                                     </Suspense>
                                                                                                                                                                                                   }
                                                                                                                                                                                                 />

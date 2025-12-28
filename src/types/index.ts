@@ -290,6 +290,77 @@ export interface ReadingTestResult {
 }
 
 // ============================================
+// Writing Module Types (IELTS Style Mock Test)
+// ============================================
+
+// Writing task type
+export type WritingTaskType = 'task1' | 'task2';
+
+// Writing test type (Academic vs General)
+export type WritingTestType = 'academic' | 'general';
+
+// Individual Writing Task
+export interface WritingTask {
+  id: string;
+  taskNumber: 1 | 2;
+  taskType: WritingTaskType;
+  title: string;                 // Task title (e.g., "Task 1: Report Writing")
+  prompt: string;                // The question/prompt text (can include HTML)
+  imageUrl?: string;             // Optional image (chart, graph, diagram for Task 1)
+  minWords: number;              // Minimum word count (150 for Task 1, 250 for Task 2)
+  recommendedTime: number;       // Recommended time in minutes (20 for Task 1, 40 for Task 2)
+  tips?: string[];               // Optional writing tips
+  sampleAnswer?: string;         // Optional sample answer (shown after submission)
+}
+
+// Complete Writing Test
+export interface WritingTest {
+  id: string;
+  title: string;                 // Test title (e.g., "Academic Writing Test 1")
+  testType: WritingTestType;
+  timeLimit: number;             // Total time in seconds (3600 for 60 minutes)
+  tasks: [WritingTask, WritingTask]; // Always 2 tasks
+  instructions?: string;         // Test instructions
+  is_premium: boolean;
+  created_at?: string;
+}
+
+// User's writing response for a task
+export interface WritingResponse {
+  taskId: string;
+  taskNumber: 1 | 2;
+  content: string;               // The written text
+  wordCount: number;             // Current word count
+  lastUpdatedAt: number;         // Timestamp of last edit
+}
+
+// Writing test session state (for localStorage persistence)
+export interface WritingTestSession {
+  testId: string;
+  startedAt: number;             // Timestamp when test started
+  timeRemaining: number;         // Remaining time in seconds
+  responses: {
+    task1: WritingResponse;
+    task2: WritingResponse;
+  };
+  currentTask: WritingTaskType;  // Currently active task tab
+  isSubmitted: boolean;
+  submittedAt?: number;
+}
+
+// Writing test result after submission
+export interface WritingTestResult {
+  testId: string;
+  timeTaken: number;             // Time taken in seconds
+  responses: {
+    taskNumber: 1 | 2;
+    content: string;
+    wordCount: number;
+    meetsMinWords: boolean;
+  }[];
+}
+
+// ============================================
 // Listening Module Types (IELTS Style Mock Test)
 // ============================================
 
@@ -375,5 +446,87 @@ export interface ListeningTestResult {
     userAnswer: string;
     correctAnswer: string;
     isCorrect: boolean;
+  }[];
+}
+
+// ============================================
+// Speaking Module Types (IELTS Style Mock Test)
+// ============================================
+
+// Speaking test part type
+export type SpeakingPartType = 'part1' | 'part2' | 'part3';
+
+// Speaking question for Part 1 and Part 3
+export interface SpeakingQuestion {
+  id: string;
+  questionNumber: number;
+  text: string;                  // The question text
+  audioUrl?: string;             // Optional audio of examiner asking question
+  thinkTime: number;             // Think time in seconds (3-5 for Part 1/3)
+  recordTime: number;            // Recording time in seconds
+}
+
+// Cue Card for Part 2
+export interface SpeakingCueCard {
+  id: string;
+  topic: string;                 // Main topic
+  bulletPoints: string[];        // Points to cover
+  prepTime: number;              // Preparation time in seconds (60)
+  recordTime: number;            // Recording time in seconds (120)
+}
+
+// Speaking Part (Part 1, 2, or 3)
+export interface SpeakingPart {
+  id: string;
+  partNumber: 1 | 2 | 3;
+  partType: SpeakingPartType;
+  title: string;                 // e.g., "Introduction & Interview"
+  instructions: string;
+  questions?: SpeakingQuestion[]; // For Part 1 and Part 3
+  cueCard?: SpeakingCueCard;     // For Part 2 only
+}
+
+// Complete Speaking Test
+export interface SpeakingTest {
+  id: string;
+  title: string;                 // Test title
+  parts: [SpeakingPart, SpeakingPart, SpeakingPart]; // Always 3 parts
+  instructions?: string;         // General test instructions
+  is_premium: boolean;
+  created_at?: string;
+}
+
+// Recording state for a single question/cue card
+export interface SpeakingRecording {
+  questionId: string;
+  partNumber: 1 | 2 | 3;
+  audioBlob?: Blob;              // The recorded audio
+  audioUrl?: string;             // Object URL for playback
+  duration: number;              // Actual recording duration in seconds
+  uploadStatus: 'pending' | 'uploading' | 'uploaded' | 'failed';
+  uploadedUrl?: string;          // URL after upload
+}
+
+// Speaking test session state
+export interface SpeakingTestSession {
+  testId: string;
+  startedAt: number;             // Timestamp when test started
+  currentPart: SpeakingPartType;
+  currentQuestionIndex: number;
+  phase: 'system-check' | 'instructions' | 'think' | 'prep' | 'recording' | 'between' | 'completed';
+  recordings: SpeakingRecording[];
+  isSubmitted: boolean;
+  submittedAt?: number;
+}
+
+// Speaking test result after submission
+export interface SpeakingTestResult {
+  testId: string;
+  timeTaken: number;             // Total time taken in seconds
+  recordings: {
+    partNumber: 1 | 2 | 3;
+    questionId: string;
+    duration: number;
+    uploadedUrl?: string;
   }[];
 }
