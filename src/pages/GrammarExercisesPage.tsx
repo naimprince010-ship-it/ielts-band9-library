@@ -883,18 +883,32 @@ export default function GrammarExercisesPage() {
     }
   };
 
+  // Helper function to check if user answer matches any accepted answer (supports synonyms with "/" delimiter)
+  const isAnswerCorrect = (userAnswer: string, correctAnswer: string): boolean => {
+    const normalizedUserAnswer = userAnswer.toLowerCase().trim();
+    const normalizedCorrectAnswer = correctAnswer.toLowerCase().trim();
+    
+    // Special handling for "no article"
+    if (normalizedCorrectAnswer === 'no article') {
+      const noArticleAliases = ['', '-', 'none', 'nothing', 'no article', 'no-article', 'blank', 'empty'];
+      return noArticleAliases.includes(normalizedUserAnswer);
+    }
+    
+    // Check if correctAnswer contains synonyms (separated by "/")
+    if (normalizedCorrectAnswer.includes('/')) {
+      const acceptedAnswers = normalizedCorrectAnswer.split('/').map(a => a.trim());
+      return acceptedAnswers.some(accepted => normalizedUserAnswer === accepted);
+    }
+    
+    // Standard exact match
+    return normalizedUserAnswer === normalizedCorrectAnswer;
+  };
+
   const checkAnswer = () => {
     if (!selectedTopic) return;
     const exercise = selectedTopic.exercises[currentExercise];
-    const normalizedUserAnswer = userAnswer.toLowerCase().trim();
-    const normalizedCorrectAnswer = exercise.correctAnswer.toLowerCase().trim();
     
-    let correct = normalizedUserAnswer === normalizedCorrectAnswer;
-    
-    if (normalizedCorrectAnswer === 'no article') {
-      const noArticleAliases = ['', '-', 'none', 'nothing', 'no article', 'no-article', 'blank', 'empty'];
-      correct = noArticleAliases.includes(normalizedUserAnswer);
-    }
+    const correct = isAnswerCorrect(userAnswer, exercise.correctAnswer);
     
     setIsCorrect(correct);
     if (correct) {
@@ -908,18 +922,11 @@ export default function GrammarExercisesPage() {
     setDueMistakes(getDueMistakes());
   };
 
-    const checkReviewAnswer = () => {
-      if (reviewExercises.length === 0) return;
-      const { topic, exercise } = reviewExercises[currentReviewIndex];
-    const normalizedUserAnswer = userAnswer.toLowerCase().trim();
-    const normalizedCorrectAnswer = exercise.correctAnswer.toLowerCase().trim();
+  const checkReviewAnswer = () => {
+    if (reviewExercises.length === 0) return;
+    const { topic, exercise } = reviewExercises[currentReviewIndex];
     
-    let correct = normalizedUserAnswer === normalizedCorrectAnswer;
-    
-    if (normalizedCorrectAnswer === 'no article') {
-      const noArticleAliases = ['', '-', 'none', 'nothing', 'no article', 'no-article', 'blank', 'empty'];
-      correct = noArticleAliases.includes(normalizedUserAnswer);
-    }
+    const correct = isAnswerCorrect(userAnswer, exercise.correctAnswer);
     
     setIsCorrect(correct);
     if (correct) {

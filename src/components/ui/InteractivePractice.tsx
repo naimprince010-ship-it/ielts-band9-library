@@ -63,6 +63,21 @@ export function InteractivePractice({
     return matchIndex >= 0 ? matchIndex : null;
   };
 
+  // Helper function to check fill-blank answers (supports synonyms with "/" delimiter)
+  const isFillBlankCorrect = (userAnswer: string, correctAnswer: string): boolean => {
+    const normalizedUserAnswer = userAnswer.toLowerCase().trim();
+    const normalizedCorrectAnswer = correctAnswer.toLowerCase().trim();
+    
+    // Check if correctAnswer contains synonyms (separated by "/")
+    if (normalizedCorrectAnswer.includes('/')) {
+      const acceptedAnswers = normalizedCorrectAnswer.split('/').map(a => a.trim());
+      return acceptedAnswers.some(accepted => normalizedUserAnswer === accepted);
+    }
+    
+    // Standard exact match
+    return normalizedUserAnswer === normalizedCorrectAnswer;
+  };
+
   const isCorrect = (questionIndex: number): boolean | null => {
     if (!submitted[questionIndex]) return null;
     const question = questions[questionIndex];
@@ -73,6 +88,15 @@ export function InteractivePractice({
       if (correctIndex === null) return null;
       return answer === correctIndex;
     }
+    
+    // Fill-blank validation with synonym support
+    if (question.type === 'fill-blank' && question.correctAnswer !== undefined && typeof answer === 'string') {
+      const correctAnswerStr = typeof question.correctAnswer === 'string' 
+        ? question.correctAnswer 
+        : String(question.correctAnswer);
+      return isFillBlankCorrect(answer, correctAnswerStr);
+    }
+    
     return null;
   };
 
@@ -272,19 +296,55 @@ export function InteractivePractice({
             )}
             
             {question.type === 'fill-blank' && (
-              <div className="ml-4">
+              <div className="ml-4 space-y-2">
                 <input
                   type="text"
                   value={(answers[index] as string) || ''}
                   onChange={(e) => handleInputChange(index, e.target.value)}
                   placeholder="Type your answer..."
                   disabled={questionSubmitted}
-                  className="w-full max-w-md px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className={cn(
+                    "w-full max-w-md px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500",
+                    questionSubmitted && correct === true && "border-green-500 bg-green-50",
+                    questionSubmitted && correct === false && "border-red-500 bg-red-50"
+                  )}
                 />
-                <p className="text-gray-500 text-sm mt-1">(Fill in the blank)</p>
+                <p className="text-gray-500 text-sm">(Fill in the blank)</p>
+                
+                {/* Check Answer Button */}
+                {!questionSubmitted && !showAllAnswers && answers[index] && (answers[index] as string).trim().length > 0 && (
+                  <Button 
+                    onClick={() => handleSubmitQuestion(index)}
+                    size="sm"
+                  >
+                    Check Answer
+                  </Button>
+                )}
+                
+                {/* Result Feedback */}
+                {questionSubmitted && correct !== null && (
+                  <div className={cn(
+                    "p-3 rounded-lg text-sm",
+                    correct ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                  )}>
+                    {correct ? (
+                      <span className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4" />
+                        Correct! Well done.
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-2">
+                        <XCircle className="h-4 w-4" />
+                        Not quite right.
+                      </span>
+                    )}
+                  </div>
+                )}
+                
+                {/* Show Answer */}
                 {(showAllAnswers || questionSubmitted) && (
-                  <p className="mt-2 text-green-700 text-sm">
-                    <strong>Answer:</strong> {typeof question.correctAnswer === 'string' ? question.correctAnswer : answerKey[index] || 'Answer not available'}
+                  <p className="text-green-700 text-sm">
+                    <strong>Accepted Answer{(typeof question.correctAnswer === 'string' && question.correctAnswer.includes('/')) ? 's' : ''}:</strong> {typeof question.correctAnswer === 'string' ? question.correctAnswer.split('/').join(' / ') : answerKey[index] || 'Answer not available'}
                   </p>
                 )}
               </div>
