@@ -359,3 +359,85 @@ export interface WritingTestResult {
     meetsMinWords: boolean;
   }[];
 }
+
+// ============================================
+// Speaking Module Types (IELTS Style Mock Test)
+// ============================================
+
+// Speaking test part type
+export type SpeakingPartType = 'part1' | 'part2' | 'part3';
+
+// Speaking question for Part 1 and Part 3
+export interface SpeakingQuestion {
+  id: string;
+  questionNumber: number;
+  text: string;                  // The question text
+  audioUrl?: string;             // Optional audio of examiner asking question
+  thinkTime: number;             // Think time in seconds (3-5 for Part 1/3)
+  recordTime: number;            // Recording time in seconds
+}
+
+// Cue Card for Part 2
+export interface SpeakingCueCard {
+  id: string;
+  topic: string;                 // Main topic
+  bulletPoints: string[];        // Points to cover
+  prepTime: number;              // Preparation time in seconds (60)
+  recordTime: number;            // Recording time in seconds (120)
+}
+
+// Speaking Part (Part 1, 2, or 3)
+export interface SpeakingPart {
+  id: string;
+  partNumber: 1 | 2 | 3;
+  partType: SpeakingPartType;
+  title: string;                 // e.g., "Introduction & Interview"
+  instructions: string;
+  questions?: SpeakingQuestion[]; // For Part 1 and Part 3
+  cueCard?: SpeakingCueCard;     // For Part 2 only
+}
+
+// Complete Speaking Test
+export interface SpeakingTest {
+  id: string;
+  title: string;                 // Test title
+  parts: [SpeakingPart, SpeakingPart, SpeakingPart]; // Always 3 parts
+  instructions?: string;         // General test instructions
+  is_premium: boolean;
+  created_at?: string;
+}
+
+// Recording state for a single question/cue card
+export interface SpeakingRecording {
+  questionId: string;
+  partNumber: 1 | 2 | 3;
+  audioBlob?: Blob;              // The recorded audio
+  audioUrl?: string;             // Object URL for playback
+  duration: number;              // Actual recording duration in seconds
+  uploadStatus: 'pending' | 'uploading' | 'uploaded' | 'failed';
+  uploadedUrl?: string;          // URL after upload
+}
+
+// Speaking test session state
+export interface SpeakingTestSession {
+  testId: string;
+  startedAt: number;             // Timestamp when test started
+  currentPart: SpeakingPartType;
+  currentQuestionIndex: number;
+  phase: 'system-check' | 'instructions' | 'think' | 'prep' | 'recording' | 'between' | 'completed';
+  recordings: SpeakingRecording[];
+  isSubmitted: boolean;
+  submittedAt?: number;
+}
+
+// Speaking test result after submission
+export interface SpeakingTestResult {
+  testId: string;
+  timeTaken: number;             // Total time taken in seconds
+  recordings: {
+    partNumber: 1 | 2 | 3;
+    questionId: string;
+    duration: number;
+    uploadedUrl?: string;
+  }[];
+}
