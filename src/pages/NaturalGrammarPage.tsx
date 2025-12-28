@@ -536,6 +536,743 @@ const SAMPLE_NATURAL_LESSONS: NaturalLesson[] = [
     ],
     chunks: ['next to', 'in front of', 'in the middle of', 'on the shelf', 'under the desk'],
     quickRecap: 'Prepositions show location! "In" for enclosed spaces (in the room), "on" for surfaces (on the table), "under" for below, "next to" for beside, "between" for middle of two things, "behind" for back, "in front of" for facing.'
+  },
+
+  // Lesson 6: Shopping - Comparatives and Superlatives
+  {
+    id: 'natural-comparatives',
+    title: 'Shopping for Clothes',
+    slug: 'shopping-for-clothes',
+    description: 'Learn comparatives and superlatives naturally through a shopping experience.',
+    level: 'beginner',
+    topic: 'Comparatives & Superlatives',
+    targetPattern: 'adjective + -er / more + adjective / the + adjective + -est / the most + adjective',
+    is_premium: false,
+    estimated_time: 14,
+    contexts: [
+      {
+        id: 'shopping-story-1',
+        title: 'At the Clothing Store',
+        text: 'Lisa went shopping with her sister. She tried on three dresses. The blue dress was nice, but the red one was nicer. The green dress was the nicest of all! However, it was also the most expensive. Her sister said, "The red dress is cheaper than the green one, and it looks better on you." Lisa agreed. She also bought a jacket. The leather jacket was warmer than the cotton one, but the wool jacket was the warmest. In the end, Lisa chose the most comfortable clothes that fit her budget.',
+        annotations: [
+          { start: 127, end: 132, kind: 'pattern', label: 'comparative', targetId: 'nicer-1', tooltip: 'nicer = nice + r (comparative)' },
+          { start: 159, end: 165, kind: 'pattern', label: 'superlative', targetId: 'nicest-1', tooltip: 'the nicest = the + nice + st (superlative)' },
+          { start: 206, end: 220, kind: 'pattern', label: 'superlative', targetId: 'most-expensive-1', tooltip: 'the most expensive = superlative for long adjectives' },
+          { start: 256, end: 263, kind: 'pattern', label: 'comparative', targetId: 'cheaper-1', tooltip: 'cheaper = cheap + er (comparative)' },
+          { start: 264, end: 268, kind: 'chunk', label: 'comparison word', targetId: 'than-1', tooltip: 'than = used after comparatives' },
+          { start: 299, end: 305, kind: 'pattern', label: 'comparative', targetId: 'better-1', tooltip: 'better = comparative of "good" (irregular)' },
+          { start: 365, end: 371, kind: 'pattern', label: 'comparative', targetId: 'warmer-1', tooltip: 'warmer = warm + er (comparative)' },
+          { start: 372, end: 376, kind: 'chunk', label: 'comparison word', targetId: 'than-2', tooltip: 'than = used after comparatives' },
+          { start: 418, end: 425, kind: 'pattern', label: 'superlative', targetId: 'warmest-1', tooltip: 'the warmest = the + warm + est (superlative)' },
+          { start: 455, end: 471, kind: 'pattern', label: 'superlative', targetId: 'most-comfortable-1', tooltip: 'the most comfortable = superlative for long adjectives' }
+        ],
+        audioUrl: undefined
+      }
+    ],
+    exercises: [
+      {
+        id: 'comp-ex-1',
+        type: 'pattern-recognition',
+        contextId: 'shopping-story-1',
+        prompt: 'Find all the comparative forms (adjectives comparing two things).',
+        interaction: 'select-highlight',
+        correctTargets: ['nicer-1', 'cheaper-1', 'better-1', 'warmer-1'],
+        hint: 'Comparatives often end in "-er" or use "more"',
+        successMessage: 'Great! Comparatives compare two things using -er or more.'
+      },
+      {
+        id: 'comp-ex-2',
+        type: 'pattern-recognition',
+        contextId: 'shopping-story-1',
+        prompt: 'Find all the superlative forms (the best/most of all).',
+        interaction: 'select-highlight',
+        correctTargets: ['nicest-1', 'most-expensive-1', 'warmest-1', 'most-comfortable-1'],
+        hint: 'Superlatives use "the" + "-est" or "the most"',
+        successMessage: 'Excellent! Superlatives show the highest degree.'
+      },
+      {
+        id: 'comp-ex-3',
+        type: 'fill-blank',
+        contextId: 'shopping-story-1',
+        prompt: 'Complete: This phone is _____ than that one. (expensive)',
+        interaction: 'short-answer',
+        correctAnswer: 'more expensive',
+        acceptedAnswers: ['more expensive'],
+        recastExamples: [
+          { commonWrong: 'expensiver', recast: 'Almost! Long adjectives use "more", not "-er". Say: "more expensive than"' },
+          { commonWrong: 'most expensive', recast: 'Close! For comparing two things, use "more", not "most". Say: "more expensive than"' }
+        ],
+        hint: 'Long adjectives (3+ syllables) use "more" for comparatives',
+        successMessage: 'Perfect! "More expensive" is correct for long adjectives.'
+      },
+      {
+        id: 'comp-ex-4',
+        type: 'fill-blank',
+        contextId: 'shopping-story-1',
+        prompt: 'Complete: This is _____ book I have ever read. (good)',
+        interaction: 'short-answer',
+        correctAnswer: 'the best',
+        acceptedAnswers: ['the best'],
+        recastExamples: [
+          { commonWrong: 'the goodest', recast: 'Almost! "Good" is irregular: good → better → best. Say: "the best book"' },
+          { commonWrong: 'the most good', recast: 'Close! "Good" is irregular. The superlative is "the best".' }
+        ],
+        hint: '"Good" is irregular: good → better → best',
+        successMessage: 'Correct! "The best" is the superlative of "good".'
+      },
+      {
+        id: 'comp-ex-5',
+        type: 'mcq',
+        contextId: 'shopping-story-1',
+        prompt: 'Which is correct?',
+        interaction: 'mcq',
+        options: ['She is more tall than me.', 'She is taller than me.', 'She is the tallest than me.', 'She is most tall than me.'],
+        correctAnswer: 'She is taller than me.',
+        hint: 'Short adjectives (1-2 syllables) use "-er"',
+        successMessage: 'Right! Short adjectives like "tall" use "-er" for comparatives.'
+      }
+    ],
+    chunks: ['more than', 'less than', 'the most', 'the least', 'better than', 'worse than'],
+    quickRecap: 'Comparatives compare two things: short adjectives add -er (taller, nicer), long adjectives use "more" (more expensive). Superlatives show the highest: short adjectives add -est (the tallest), long adjectives use "the most" (the most beautiful). Irregular: good→better→best, bad→worse→worst.'
+  },
+
+  // Lesson 7: Conditionals (If sentences)
+  {
+    id: 'natural-conditionals',
+    title: 'Making Plans and Dreams',
+    slug: 'making-plans-and-dreams',
+    description: 'Learn conditional sentences naturally through everyday situations and dreams.',
+    level: 'intermediate',
+    topic: 'Conditionals',
+    targetPattern: 'If + present, will + verb / If + past, would + verb',
+    is_premium: false,
+    estimated_time: 16,
+    contexts: [
+      {
+        id: 'conditional-story-1',
+        title: 'Weekend Plans',
+        text: 'Tom is planning his weekend. He thinks, "If it rains tomorrow, I will stay home and watch movies. If the weather is nice, I will go to the beach with my friends." His friend asks, "What would you do if you won the lottery?" Tom laughs and says, "If I won a million dollars, I would travel around the world! I would buy a house by the sea and I would help my family." Then he adds, "But if I had more time, I would learn to play the guitar. If I were rich, I would donate to charity too."',
+        annotations: [
+          { start: 47, end: 49, kind: 'pattern', label: 'if (condition)', targetId: 'if-1', tooltip: 'If = introduces a condition' },
+          { start: 50, end: 55, kind: 'verb', label: 'present simple', targetId: 'rains-1', tooltip: 'Present simple after "if" for real possibilities' },
+          { start: 67, end: 71, kind: 'pattern', label: 'will (result)', targetId: 'will-1', tooltip: 'will = result of the condition' },
+          { start: 103, end: 105, kind: 'pattern', label: 'if (condition)', targetId: 'if-2', tooltip: 'If = introduces a condition' },
+          { start: 122, end: 124, kind: 'verb', label: 'present simple', targetId: 'is-1', tooltip: 'Present simple after "if"' },
+          { start: 133, end: 137, kind: 'pattern', label: 'will (result)', targetId: 'will-2', tooltip: 'will = result of the condition' },
+          { start: 198, end: 203, kind: 'pattern', label: 'would (unreal)', targetId: 'would-1', tooltip: 'would = unreal/imaginary result' },
+          { start: 215, end: 217, kind: 'pattern', label: 'if (unreal)', targetId: 'if-3', tooltip: 'If = introduces unreal condition' },
+          { start: 222, end: 225, kind: 'verb', label: 'past simple', targetId: 'won-1', tooltip: 'Past simple for unreal conditions' },
+          { start: 253, end: 256, kind: 'pattern', label: 'if (unreal)', targetId: 'if-4', tooltip: 'If = introduces unreal condition' },
+          { start: 259, end: 262, kind: 'verb', label: 'past simple', targetId: 'won-2', tooltip: 'Past simple for unreal conditions' },
+          { start: 287, end: 292, kind: 'pattern', label: 'would (unreal)', targetId: 'would-2', tooltip: 'would = unreal/imaginary result' },
+          { start: 325, end: 330, kind: 'pattern', label: 'would (unreal)', targetId: 'would-3', tooltip: 'would = unreal/imaginary result' },
+          { start: 369, end: 374, kind: 'pattern', label: 'would (unreal)', targetId: 'would-4', tooltip: 'would = unreal/imaginary result' },
+          { start: 410, end: 412, kind: 'pattern', label: 'if (unreal)', targetId: 'if-5', tooltip: 'If = introduces unreal condition' },
+          { start: 415, end: 418, kind: 'verb', label: 'past simple', targetId: 'had-1', tooltip: 'Past simple for unreal conditions' },
+          { start: 435, end: 440, kind: 'pattern', label: 'would (unreal)', targetId: 'would-5', tooltip: 'would = unreal/imaginary result' },
+          { start: 472, end: 474, kind: 'pattern', label: 'if (unreal)', targetId: 'if-6', tooltip: 'If = introduces unreal condition' },
+          { start: 477, end: 481, kind: 'verb', label: 'were (subjunctive)', targetId: 'were-1', tooltip: 'were = used for all subjects in unreal conditions' },
+          { start: 492, end: 497, kind: 'pattern', label: 'would (unreal)', targetId: 'would-6', tooltip: 'would = unreal/imaginary result' }
+        ],
+        audioUrl: undefined
+      }
+    ],
+    exercises: [
+      {
+        id: 'cond-ex-1',
+        type: 'pattern-recognition',
+        contextId: 'conditional-story-1',
+        prompt: 'Find all the "will" patterns (for real/possible situations).',
+        interaction: 'select-highlight',
+        correctTargets: ['will-1', 'will-2'],
+        hint: '"Will" is used for real possibilities in the future',
+        successMessage: 'Great! "Will" shows real possibilities (First Conditional).'
+      },
+      {
+        id: 'cond-ex-2',
+        type: 'pattern-recognition',
+        contextId: 'conditional-story-1',
+        prompt: 'Find all the "would" patterns (for unreal/imaginary situations).',
+        interaction: 'select-highlight',
+        correctTargets: ['would-1', 'would-2', 'would-3', 'would-4', 'would-5', 'would-6'],
+        hint: '"Would" is used for imaginary or unreal situations',
+        successMessage: 'Excellent! "Would" shows unreal situations (Second Conditional).'
+      },
+      {
+        id: 'cond-ex-3',
+        type: 'fill-blank',
+        contextId: 'conditional-story-1',
+        prompt: 'Complete: If I _____ you, I would apologize. (be)',
+        interaction: 'short-answer',
+        correctAnswer: 'were',
+        acceptedAnswers: ['were'],
+        recastExamples: [
+          { commonWrong: 'was', recast: 'Almost! In unreal conditions, we use "were" for all subjects. Say: "If I were you"' },
+          { commonWrong: 'am', recast: 'Good try! For unreal conditions, use past tense. Say: "If I were you"' }
+        ],
+        hint: 'In unreal conditions, we use "were" for all subjects (I, he, she, it)',
+        successMessage: 'Perfect! "If I were you" is the correct form for advice.'
+      },
+      {
+        id: 'cond-ex-4',
+        type: 'fill-blank',
+        contextId: 'conditional-story-1',
+        prompt: 'Complete: If it _____ sunny tomorrow, we will have a picnic. (be)',
+        interaction: 'short-answer',
+        correctAnswer: 'is',
+        acceptedAnswers: ['is', "'s"],
+        recastExamples: [
+          { commonWrong: 'will be', recast: 'Almost! After "if" for real possibilities, use present simple, not "will". Say: "If it is sunny"' },
+          { commonWrong: 'was', recast: 'Close! For real future possibilities, use present simple. Say: "If it is sunny"' }
+        ],
+        hint: 'For real possibilities, use present simple after "if"',
+        successMessage: 'Correct! Present simple after "if" for real possibilities.'
+      },
+      {
+        id: 'cond-ex-5',
+        type: 'mcq',
+        contextId: 'conditional-story-1',
+        prompt: 'Which sentence talks about an UNREAL situation?',
+        interaction: 'mcq',
+        options: ['If I have time, I will call you.', 'If I had wings, I would fly.', 'If she comes, we will start.', 'If it rains, I will take an umbrella.'],
+        correctAnswer: 'If I had wings, I would fly.',
+        hint: 'Unreal situations use past tense + would',
+        successMessage: 'Right! Having wings is impossible, so it\'s unreal (Second Conditional).'
+      }
+    ],
+    chunks: ['if I were you', 'what would you do', 'I would love to', 'if only'],
+    quickRecap: 'First Conditional (real): If + present simple, will + verb (If it rains, I will stay home). Second Conditional (unreal): If + past simple, would + verb (If I won the lottery, I would travel). Use "were" for all subjects in unreal conditions (If I were rich...).'
+  },
+
+  // Lesson 8: Present Perfect (Life experiences)
+  {
+    id: 'natural-present-perfect',
+    title: 'Life Experiences',
+    slug: 'life-experiences',
+    description: 'Learn Present Perfect naturally through sharing life experiences.',
+    level: 'intermediate',
+    topic: 'Present Perfect',
+    targetPattern: 'have/has + past participle (V3)',
+    is_premium: false,
+    estimated_time: 15,
+    contexts: [
+      {
+        id: 'experience-story-1',
+        title: 'Travel Stories',
+        text: 'At a party, friends are sharing their experiences. Maria says, "I have visited Paris three times. It is my favorite city!" John replies, "I have never been to Europe, but I have traveled to Japan twice. Have you ever tried sushi?" Maria answers, "Yes, I have eaten sushi many times. I have also learned to make it at home." Their friend asks, "Has anyone here climbed a mountain?" Tom raises his hand. "I have climbed Mount Fuji! It was amazing. I have taken hundreds of photos there."',
+        annotations: [
+          { start: 60, end: 72, kind: 'pattern', label: 'present perfect', targetId: 'have-visited-1', tooltip: 'have visited = have + past participle' },
+          { start: 123, end: 138, kind: 'pattern', label: 'present perfect negative', targetId: 'have-never-been-1', tooltip: 'have never been = negative present perfect' },
+          { start: 159, end: 173, kind: 'pattern', label: 'present perfect', targetId: 'have-traveled-1', tooltip: 'have traveled = have + past participle' },
+          { start: 188, end: 202, kind: 'pattern', label: 'present perfect question', targetId: 'have-you-ever-1', tooltip: 'Have you ever = question about life experience' },
+          { start: 234, end: 246, kind: 'pattern', label: 'present perfect', targetId: 'have-eaten-1', tooltip: 'have eaten = have + past participle' },
+          { start: 268, end: 284, kind: 'pattern', label: 'present perfect', targetId: 'have-also-learned-1', tooltip: 'have also learned = have + past participle' },
+          { start: 330, end: 341, kind: 'pattern', label: 'present perfect question', targetId: 'has-anyone-1', tooltip: 'Has anyone = question with he/she/it form' },
+          { start: 387, end: 399, kind: 'pattern', label: 'present perfect', targetId: 'have-climbed-1', tooltip: 'have climbed = have + past participle' },
+          { start: 432, end: 442, kind: 'pattern', label: 'present perfect', targetId: 'have-taken-1', tooltip: 'have taken = have + past participle' },
+          { start: 73, end: 84, kind: 'chunk', label: 'frequency', targetId: 'three-times', tooltip: 'three times = how many times' },
+          { start: 174, end: 179, kind: 'chunk', label: 'frequency', targetId: 'twice-1', tooltip: 'twice = two times' },
+          { start: 247, end: 257, kind: 'chunk', label: 'frequency', targetId: 'many-times', tooltip: 'many times = often' }
+        ],
+        audioUrl: undefined
+      }
+    ],
+    exercises: [
+      {
+        id: 'pp-ex-1',
+        type: 'pattern-recognition',
+        contextId: 'experience-story-1',
+        prompt: 'Find all the "have + past participle" patterns.',
+        interaction: 'select-highlight',
+        correctTargets: ['have-visited-1', 'have-never-been-1', 'have-traveled-1', 'have-eaten-1', 'have-also-learned-1', 'have-climbed-1', 'have-taken-1'],
+        hint: 'Look for "have" or "has" followed by a verb in past participle form',
+        successMessage: 'Great! Present Perfect uses have/has + past participle.'
+      },
+      {
+        id: 'pp-ex-2',
+        type: 'pattern-recognition',
+        contextId: 'experience-story-1',
+        prompt: 'Find the question forms of Present Perfect.',
+        interaction: 'select-highlight',
+        correctTargets: ['have-you-ever-1', 'has-anyone-1'],
+        hint: 'Questions start with "Have" or "Has"',
+        successMessage: 'Excellent! Questions invert: Have you...? Has she...?'
+      },
+      {
+        id: 'pp-ex-3',
+        type: 'fill-blank',
+        contextId: 'experience-story-1',
+        prompt: 'Complete: I _____ never _____ to Australia. (be)',
+        interaction: 'short-answer',
+        correctAnswer: 'have been',
+        acceptedAnswers: ['have been', "have never been"],
+        recastExamples: [
+          { commonWrong: 'have went', recast: 'Almost! The past participle of "go" is "been" (for places). Say: "I have never been to Australia."' },
+          { commonWrong: 'was', recast: 'Good try! For experiences, use Present Perfect. Say: "I have never been to Australia."' }
+        ],
+        hint: 'Use "been" (not "went") for places with Present Perfect',
+        successMessage: 'Perfect! "Have been" is correct for places.'
+      },
+      {
+        id: 'pp-ex-4',
+        type: 'fill-blank',
+        contextId: 'experience-story-1',
+        prompt: 'Complete: She _____ already _____ the movie. (see)',
+        interaction: 'short-answer',
+        correctAnswer: 'has seen',
+        acceptedAnswers: ['has seen', "has already seen"],
+        recastExamples: [
+          { commonWrong: 'has saw', recast: 'Almost! The past participle of "see" is "seen". Say: "She has already seen the movie."' },
+          { commonWrong: 'have seen', recast: 'Close! For she/he/it, use "has", not "have". Say: "She has seen the movie."' }
+        ],
+        hint: 'She/he/it uses "has", and "see" becomes "seen"',
+        successMessage: 'Correct! "Has seen" is the right form for she/he/it.'
+      },
+      {
+        id: 'pp-ex-5',
+        type: 'mcq',
+        contextId: 'experience-story-1',
+        prompt: 'Which question is correct?',
+        interaction: 'mcq',
+        options: ['Did you ever eat sushi?', 'Have you ever eaten sushi?', 'Do you ever eaten sushi?', 'Are you ever eat sushi?'],
+        correctAnswer: 'Have you ever eaten sushi?',
+        hint: 'For life experiences, use Present Perfect',
+        successMessage: 'Right! "Have you ever + past participle" asks about life experiences.'
+      }
+    ],
+    chunks: ['have you ever', 'I have never', 'has already', 'have just', 'have been to'],
+    quickRecap: 'Present Perfect (have/has + past participle) talks about life experiences and actions connected to now. Use "ever" in questions (Have you ever...?), "never" for negative experiences (I have never...), and "already/just/yet" for recent actions. For places, use "been" (I have been to Paris).'
+  },
+
+  // Lesson 9: Passive Voice
+  {
+    id: 'natural-passive',
+    title: 'How Things Are Made',
+    slug: 'how-things-are-made',
+    description: 'Learn Passive Voice naturally through descriptions of processes.',
+    level: 'intermediate',
+    topic: 'Passive Voice',
+    targetPattern: 'be + past participle (is made, was built, will be done)',
+    is_premium: false,
+    estimated_time: 14,
+    contexts: [
+      {
+        id: 'passive-story-1',
+        title: 'The Chocolate Factory',
+        text: 'Today we visited a chocolate factory. The guide explained how chocolate is made. First, cocoa beans are collected from farms in Africa and South America. Then, the beans are roasted and ground into a paste. Sugar and milk are added to create different flavors. The mixture is heated and stirred for hours. Finally, the chocolate is poured into molds and cooled. The finished chocolates are wrapped in colorful paper and packed into boxes. Over 1000 boxes are produced every day! The factory was built in 1950 and has been expanded twice since then.',
+        annotations: [
+          { start: 79, end: 86, kind: 'pattern', label: 'passive (present)', targetId: 'is-made-1', tooltip: 'is made = passive voice (present)' },
+          { start: 107, end: 120, kind: 'pattern', label: 'passive (present)', targetId: 'are-collected-1', tooltip: 'are collected = passive voice (present)' },
+          { start: 175, end: 186, kind: 'pattern', label: 'passive (present)', targetId: 'are-roasted-1', tooltip: 'are roasted = passive voice (present)' },
+          { start: 191, end: 197, kind: 'pattern', label: 'passive (present)', targetId: 'ground-1', tooltip: 'ground = past participle of "grind"' },
+          { start: 221, end: 230, kind: 'pattern', label: 'passive (present)', targetId: 'are-added-1', tooltip: 'are added = passive voice (present)' },
+          { start: 270, end: 279, kind: 'pattern', label: 'passive (present)', targetId: 'is-heated-1', tooltip: 'is heated = passive voice (present)' },
+          { start: 284, end: 291, kind: 'pattern', label: 'passive (present)', targetId: 'stirred-1', tooltip: 'stirred = past participle' },
+          { start: 322, end: 331, kind: 'pattern', label: 'passive (present)', targetId: 'is-poured-1', tooltip: 'is poured = passive voice (present)' },
+          { start: 349, end: 355, kind: 'pattern', label: 'passive (present)', targetId: 'cooled-1', tooltip: 'cooled = past participle' },
+          { start: 381, end: 392, kind: 'pattern', label: 'passive (present)', targetId: 'are-wrapped-1', tooltip: 'are wrapped = passive voice (present)' },
+          { start: 418, end: 424, kind: 'pattern', label: 'passive (present)', targetId: 'packed-1', tooltip: 'packed = past participle' },
+          { start: 449, end: 461, kind: 'pattern', label: 'passive (present)', targetId: 'are-produced-1', tooltip: 'are produced = passive voice (present)' },
+          { start: 487, end: 496, kind: 'pattern', label: 'passive (past)', targetId: 'was-built-1', tooltip: 'was built = passive voice (past)' },
+          { start: 509, end: 525, kind: 'pattern', label: 'passive (present perfect)', targetId: 'has-been-expanded-1', tooltip: 'has been expanded = passive voice (present perfect)' }
+        ],
+        audioUrl: undefined
+      }
+    ],
+    exercises: [
+      {
+        id: 'pass-ex-1',
+        type: 'pattern-recognition',
+        contextId: 'passive-story-1',
+        prompt: 'Find all the present passive forms (is/are + past participle).',
+        interaction: 'select-highlight',
+        correctTargets: ['is-made-1', 'are-collected-1', 'are-roasted-1', 'are-added-1', 'is-heated-1', 'is-poured-1', 'are-wrapped-1', 'are-produced-1'],
+        hint: 'Look for "is" or "are" followed by a past participle',
+        successMessage: 'Great! Present passive uses is/are + past participle.'
+      },
+      {
+        id: 'pass-ex-2',
+        type: 'pattern-recognition',
+        contextId: 'passive-story-1',
+        prompt: 'Find the past passive form (was/were + past participle).',
+        interaction: 'select-highlight',
+        correctTargets: ['was-built-1'],
+        hint: 'Look for "was" or "were" followed by a past participle',
+        successMessage: 'Excellent! Past passive uses was/were + past participle.'
+      },
+      {
+        id: 'pass-ex-3',
+        type: 'fill-blank',
+        contextId: 'passive-story-1',
+        prompt: 'Complete: English _____ in many countries. (speak)',
+        interaction: 'short-answer',
+        correctAnswer: 'is spoken',
+        acceptedAnswers: ['is spoken'],
+        recastExamples: [
+          { commonWrong: 'is speak', recast: 'Almost! Use the past participle after "is". Say: "English is spoken in many countries."' },
+          { commonWrong: 'speaks', recast: 'Good try! For passive, use "is + past participle". Say: "English is spoken."' }
+        ],
+        hint: 'Passive = is/are + past participle',
+        successMessage: 'Perfect! "Is spoken" is the correct passive form.'
+      },
+      {
+        id: 'pass-ex-4',
+        type: 'fill-blank',
+        contextId: 'passive-story-1',
+        prompt: 'Complete: The Eiffel Tower _____ in 1889. (build)',
+        interaction: 'short-answer',
+        correctAnswer: 'was built',
+        acceptedAnswers: ['was built'],
+        recastExamples: [
+          { commonWrong: 'was build', recast: 'Almost! Use the past participle "built". Say: "The Eiffel Tower was built in 1889."' },
+          { commonWrong: 'built', recast: 'Close! For passive, add "was". Say: "The Eiffel Tower was built in 1889."' }
+        ],
+        hint: 'Past passive = was/were + past participle',
+        successMessage: 'Correct! "Was built" is the past passive form.'
+      },
+      {
+        id: 'pass-ex-5',
+        type: 'mcq',
+        contextId: 'passive-story-1',
+        prompt: 'Which sentence is in passive voice?',
+        interaction: 'mcq',
+        options: ['The chef cooked the meal.', 'The meal was cooked by the chef.', 'The chef is cooking.', 'The meal tastes delicious.'],
+        correctAnswer: 'The meal was cooked by the chef.',
+        hint: 'Passive focuses on the action, not who did it',
+        successMessage: 'Right! "Was cooked" is passive - the meal receives the action.'
+      }
+    ],
+    chunks: ['is made of', 'was built by', 'is known for', 'are used for'],
+    quickRecap: 'Passive Voice focuses on the action, not who does it. Form: be + past participle. Present: is/are + V3 (Coffee is grown in Brazil). Past: was/were + V3 (The book was written in 1990). Use "by" to mention who did it (The cake was made by my mother).'
+  },
+
+  // Lesson 10: Reported Speech
+  {
+    id: 'natural-reported-speech',
+    title: 'What Did They Say?',
+    slug: 'what-did-they-say',
+    description: 'Learn Reported Speech naturally through conversations and stories.',
+    level: 'intermediate',
+    topic: 'Reported Speech',
+    targetPattern: 'said (that) + backshift tense',
+    is_premium: false,
+    estimated_time: 15,
+    contexts: [
+      {
+        id: 'reported-story-1',
+        title: 'The Job Interview Story',
+        text: 'After his interview, Mark told his friends about it. He said that the interviewer had been very friendly. She had asked him about his experience. Mark told them that he had worked at a bank for five years. The interviewer said that she was impressed with his skills. She told him that they would call him next week. Mark said he felt confident about the job. His friend asked what the salary was. Mark replied that they had offered him a good package. Everyone said that they were happy for him.',
+        annotations: [
+          { start: 59, end: 63, kind: 'pattern', label: 'reporting verb', targetId: 'said-1', tooltip: 'said = reporting verb' },
+          { start: 64, end: 68, kind: 'pattern', label: 'that clause', targetId: 'that-1', tooltip: 'that = introduces reported speech' },
+          { start: 89, end: 97, kind: 'verb', label: 'past perfect', targetId: 'had-been-1', tooltip: 'had been = backshift from "was"' },
+          { start: 120, end: 129, kind: 'verb', label: 'past perfect', targetId: 'had-asked-1', tooltip: 'had asked = backshift from "asked"' },
+          { start: 159, end: 163, kind: 'pattern', label: 'reporting verb', targetId: 'told-1', tooltip: 'told = reporting verb (needs object)' },
+          { start: 179, end: 189, kind: 'verb', label: 'past perfect', targetId: 'had-worked-1', tooltip: 'had worked = backshift from "worked"' },
+          { start: 228, end: 232, kind: 'pattern', label: 'reporting verb', targetId: 'said-2', tooltip: 'said = reporting verb' },
+          { start: 243, end: 246, kind: 'verb', label: 'past simple', targetId: 'was-1', tooltip: 'was = backshift from "am"' },
+          { start: 282, end: 286, kind: 'pattern', label: 'reporting verb', targetId: 'told-2', tooltip: 'told = reporting verb (needs object)' },
+          { start: 302, end: 307, kind: 'verb', label: 'would', targetId: 'would-1', tooltip: 'would = backshift from "will"' },
+          { start: 337, end: 341, kind: 'pattern', label: 'reporting verb', targetId: 'said-3', tooltip: 'said = reporting verb' },
+          { start: 345, end: 349, kind: 'verb', label: 'past simple', targetId: 'felt-1', tooltip: 'felt = backshift from "feel"' },
+          { start: 385, end: 390, kind: 'pattern', label: 'reporting verb', targetId: 'asked-1', tooltip: 'asked = reporting verb for questions' },
+          { start: 419, end: 426, kind: 'pattern', label: 'reporting verb', targetId: 'replied-1', tooltip: 'replied = reporting verb' },
+          { start: 437, end: 448, kind: 'verb', label: 'past perfect', targetId: 'had-offered-1', tooltip: 'had offered = backshift from "offered"' },
+          { start: 478, end: 482, kind: 'pattern', label: 'reporting verb', targetId: 'said-4', tooltip: 'said = reporting verb' },
+          { start: 493, end: 497, kind: 'verb', label: 'past simple', targetId: 'were-1', tooltip: 'were = backshift from "are"' }
+        ],
+        audioUrl: undefined
+      }
+    ],
+    exercises: [
+      {
+        id: 'rep-ex-1',
+        type: 'pattern-recognition',
+        contextId: 'reported-story-1',
+        prompt: 'Find all the reporting verbs (said, told, asked, replied).',
+        interaction: 'select-highlight',
+        correctTargets: ['said-1', 'told-1', 'said-2', 'told-2', 'said-3', 'asked-1', 'replied-1', 'said-4'],
+        hint: 'Reporting verbs introduce what someone said',
+        successMessage: 'Great! These verbs introduce reported speech.'
+      },
+      {
+        id: 'rep-ex-2',
+        type: 'pattern-recognition',
+        contextId: 'reported-story-1',
+        prompt: 'Find the past perfect verbs (had + past participle).',
+        interaction: 'select-highlight',
+        correctTargets: ['had-been-1', 'had-asked-1', 'had-worked-1', 'had-offered-1'],
+        hint: 'Past perfect is used when the original was past simple',
+        successMessage: 'Excellent! Past simple becomes past perfect in reported speech.'
+      },
+      {
+        id: 'rep-ex-3',
+        type: 'fill-blank',
+        contextId: 'reported-story-1',
+        prompt: 'Direct: "I am happy." → Reported: She said she _____ happy.',
+        interaction: 'short-answer',
+        correctAnswer: 'was',
+        acceptedAnswers: ['was'],
+        recastExamples: [
+          { commonWrong: 'is', recast: 'Almost! In reported speech, "am/is" becomes "was". Say: "She said she was happy."' },
+          { commonWrong: 'were', recast: 'Close! For "she", use "was", not "were". Say: "She said she was happy."' }
+        ],
+        hint: '"Am/is" becomes "was" in reported speech',
+        successMessage: 'Perfect! "Am" becomes "was" in reported speech.'
+      },
+      {
+        id: 'rep-ex-4',
+        type: 'fill-blank',
+        contextId: 'reported-story-1',
+        prompt: 'Direct: "I will call you." → Reported: He said he _____ call me.',
+        interaction: 'short-answer',
+        correctAnswer: 'would',
+        acceptedAnswers: ['would'],
+        recastExamples: [
+          { commonWrong: 'will', recast: 'Almost! In reported speech, "will" becomes "would". Say: "He said he would call me."' }
+        ],
+        hint: '"Will" becomes "would" in reported speech',
+        successMessage: 'Correct! "Will" becomes "would" in reported speech.'
+      },
+      {
+        id: 'rep-ex-5',
+        type: 'mcq',
+        contextId: 'reported-story-1',
+        prompt: 'Direct: "I have finished." → Reported: She said she _____.',
+        interaction: 'mcq',
+        options: ['has finished', 'had finished', 'have finished', 'finished'],
+        correctAnswer: 'had finished',
+        hint: 'Present perfect becomes past perfect',
+        successMessage: 'Right! "Have/has" becomes "had" in reported speech.'
+      }
+    ],
+    chunks: ['said that', 'told me that', 'asked if', 'replied that'],
+    quickRecap: 'Reported Speech tells what someone said. Tenses shift back: am/is→was, are→were, will→would, have→had. Use "said" alone or "told + person". For questions, use "asked if/whether". Pronouns change too (I→he/she, my→his/her).'
+  },
+
+  // Lesson 11: Articles (a/an/the)
+  {
+    id: 'natural-articles',
+    title: 'A Day at the Zoo',
+    slug: 'a-day-at-the-zoo',
+    description: 'Learn articles naturally through a story about visiting the zoo.',
+    level: 'beginner',
+    topic: 'Articles',
+    targetPattern: 'a/an (indefinite) vs the (definite) vs zero article',
+    is_premium: false,
+    estimated_time: 13,
+    contexts: [
+      {
+        id: 'articles-story-1',
+        title: 'Visiting the Zoo',
+        text: 'Last Sunday, we went to the zoo. It was a beautiful day with a clear blue sky. At the entrance, we bought a map and an ice cream. The map showed all the animals. First, we saw the elephants. An elephant was eating leaves. The elephant was huge! Then we visited the monkey house. A monkey was playing with a ball. We also saw a lion sleeping in the sun. The lion looked very peaceful. For lunch, we ate at a restaurant near the lake. The food was delicious. It was an amazing day!',
+        annotations: [
+          { start: 28, end: 31, kind: 'pattern', label: 'the (specific)', targetId: 'the-1', tooltip: 'the zoo = specific place we\'re talking about' },
+          { start: 42, end: 43, kind: 'pattern', label: 'a (first mention)', targetId: 'a-1', tooltip: 'a beautiful day = first mention, not specific' },
+          { start: 62, end: 63, kind: 'pattern', label: 'a (first mention)', targetId: 'a-2', tooltip: 'a clear blue sky = first mention' },
+          { start: 79, end: 82, kind: 'pattern', label: 'the (known)', targetId: 'the-2', tooltip: 'the entrance = the entrance of the zoo (known)' },
+          { start: 94, end: 95, kind: 'pattern', label: 'a (first mention)', targetId: 'a-3', tooltip: 'a map = first mention' },
+          { start: 104, end: 106, kind: 'pattern', label: 'an (before vowel)', targetId: 'an-1', tooltip: 'an ice cream = "an" before vowel sound' },
+          { start: 119, end: 122, kind: 'pattern', label: 'the (mentioned before)', targetId: 'the-3', tooltip: 'the map = already mentioned' },
+          { start: 138, end: 141, kind: 'pattern', label: 'the (general group)', targetId: 'the-4', tooltip: 'the animals = all animals at the zoo' },
+          { start: 161, end: 164, kind: 'pattern', label: 'the (specific group)', targetId: 'the-5', tooltip: 'the elephants = the elephants at this zoo' },
+          { start: 166, end: 168, kind: 'pattern', label: 'an (first mention)', targetId: 'an-2', tooltip: 'an elephant = one elephant, first mention' },
+          { start: 193, end: 196, kind: 'pattern', label: 'the (same one)', targetId: 'the-6', tooltip: 'the elephant = the same elephant mentioned before' },
+          { start: 227, end: 230, kind: 'pattern', label: 'the (specific)', targetId: 'the-7', tooltip: 'the monkey house = specific place' },
+          { start: 232, end: 233, kind: 'pattern', label: 'a (first mention)', targetId: 'a-4', tooltip: 'a monkey = one monkey, first mention' },
+          { start: 257, end: 258, kind: 'pattern', label: 'a (first mention)', targetId: 'a-5', tooltip: 'a ball = first mention' },
+          { start: 276, end: 277, kind: 'pattern', label: 'a (first mention)', targetId: 'a-6', tooltip: 'a lion = first mention' },
+          { start: 296, end: 299, kind: 'pattern', label: 'the (unique)', targetId: 'the-8', tooltip: 'the sun = unique, only one sun' },
+          { start: 301, end: 304, kind: 'pattern', label: 'the (same one)', targetId: 'the-9', tooltip: 'the lion = the same lion mentioned before' },
+          { start: 351, end: 352, kind: 'pattern', label: 'a (first mention)', targetId: 'a-7', tooltip: 'a restaurant = first mention' },
+          { start: 363, end: 366, kind: 'pattern', label: 'the (specific)', targetId: 'the-10', tooltip: 'the lake = specific lake at the zoo' },
+          { start: 368, end: 371, kind: 'pattern', label: 'the (mentioned)', targetId: 'the-11', tooltip: 'the food = the food at the restaurant' },
+          { start: 400, end: 402, kind: 'pattern', label: 'an (before vowel)', targetId: 'an-3', tooltip: 'an amazing day = "an" before vowel sound' }
+        ],
+        audioUrl: undefined
+      }
+    ],
+    exercises: [
+      {
+        id: 'art-ex-1',
+        type: 'pattern-recognition',
+        contextId: 'articles-story-1',
+        prompt: 'Find all uses of "a" (first mention of something).',
+        interaction: 'select-highlight',
+        correctTargets: ['a-1', 'a-2', 'a-3', 'a-4', 'a-5', 'a-6', 'a-7'],
+        hint: '"A" is used for first mention or non-specific things',
+        successMessage: 'Great! "A" introduces something for the first time.'
+      },
+      {
+        id: 'art-ex-2',
+        type: 'pattern-recognition',
+        contextId: 'articles-story-1',
+        prompt: 'Find all uses of "an" (before vowel sounds).',
+        interaction: 'select-highlight',
+        correctTargets: ['an-1', 'an-2', 'an-3'],
+        hint: '"An" is used before words starting with vowel sounds (a, e, i, o, u)',
+        successMessage: 'Excellent! "An" is used before vowel sounds.'
+      },
+      {
+        id: 'art-ex-3',
+        type: 'fill-blank',
+        contextId: 'articles-story-1',
+        prompt: 'Complete: I saw _____ elephant at the zoo.',
+        interaction: 'short-answer',
+        correctAnswer: 'an',
+        acceptedAnswers: ['an'],
+        recastExamples: [
+          { commonWrong: 'a', recast: 'Almost! "Elephant" starts with a vowel sound, so use "an". Say: "an elephant"' },
+          { commonWrong: 'the', recast: 'Close! For first mention of any elephant, use "an". Say: "I saw an elephant."' }
+        ],
+        hint: 'Use "an" before words starting with vowel sounds',
+        successMessage: 'Perfect! "An" is used before "elephant" (vowel sound).'
+      },
+      {
+        id: 'art-ex-4',
+        type: 'fill-blank',
+        contextId: 'articles-story-1',
+        prompt: 'Complete: I bought a book. _____ book was interesting.',
+        interaction: 'short-answer',
+        correctAnswer: 'The',
+        acceptedAnswers: ['The', 'the'],
+        recastExamples: [
+          { commonWrong: 'A', recast: 'Almost! We already mentioned the book, so use "the". Say: "The book was interesting."' }
+        ],
+        hint: 'Use "the" when we already know which one',
+        successMessage: 'Correct! "The" is used for something already mentioned.'
+      },
+      {
+        id: 'art-ex-5',
+        type: 'mcq',
+        contextId: 'articles-story-1',
+        prompt: 'Which is correct?',
+        interaction: 'mcq',
+        options: ['I need a umbrella.', 'I need an umbrella.', 'I need the umbrella.', 'I need umbrella.'],
+        correctAnswer: 'I need an umbrella.',
+        hint: '"Umbrella" starts with a vowel sound',
+        successMessage: 'Right! "An umbrella" because "umbrella" starts with a vowel sound.'
+      }
+    ],
+    chunks: ['a lot of', 'the same', 'in the morning', 'at the end'],
+    quickRecap: 'Articles: "A/an" for first mention or non-specific (a book, an apple). "The" for specific or already mentioned (the book I bought). Use "an" before vowel sounds (an hour, an umbrella). No article for general plurals (I like dogs) or uncountable nouns (Water is important).'
+  },
+
+  // Lesson 12: Countable/Uncountable Nouns
+  {
+    id: 'natural-countable',
+    title: 'At the Supermarket',
+    slug: 'at-the-supermarket',
+    description: 'Learn countable and uncountable nouns naturally through shopping.',
+    level: 'beginner',
+    topic: 'Countable & Uncountable Nouns',
+    targetPattern: 'many/few (countable) vs much/little (uncountable)',
+    is_premium: false,
+    estimated_time: 14,
+    contexts: [
+      {
+        id: 'countable-story-1',
+        title: 'Shopping for Dinner',
+        text: 'Mom is making a shopping list for dinner. She needs some rice and a little oil for cooking. She also wants to buy some vegetables. "How many tomatoes do we need?" asks her son. "We need five tomatoes and some lettuce," she replies. "Do we have any milk?" "No, we don\'t have much milk left. Buy two bottles, please." At the store, they also get some bread, a few eggs, and a little butter. "How much sugar do we have at home?" Mom thinks. "We have enough sugar, but we need some flour." They don\'t buy many snacks because they want to eat healthy food.',
+        annotations: [
+          { start: 60, end: 64, kind: 'pattern', label: 'some (uncountable)', targetId: 'some-1', tooltip: 'some rice = uncountable noun' },
+          { start: 73, end: 81, kind: 'pattern', label: 'a little (uncountable)', targetId: 'a-little-1', tooltip: 'a little oil = small amount of uncountable' },
+          { start: 128, end: 132, kind: 'pattern', label: 'some (plural)', targetId: 'some-2', tooltip: 'some vegetables = countable plural' },
+          { start: 135, end: 143, kind: 'pattern', label: 'how many (countable)', targetId: 'how-many-1', tooltip: 'how many tomatoes = countable question' },
+          { start: 186, end: 190, kind: 'pattern', label: 'number (countable)', targetId: 'five-1', tooltip: 'five tomatoes = countable, can use numbers' },
+          { start: 205, end: 209, kind: 'pattern', label: 'some (uncountable)', targetId: 'some-3', tooltip: 'some lettuce = uncountable noun' },
+          { start: 237, end: 240, kind: 'pattern', label: 'any (question)', targetId: 'any-1', tooltip: 'any milk = question form' },
+          { start: 264, end: 268, kind: 'pattern', label: 'much (uncountable)', targetId: 'much-1', tooltip: 'much milk = uncountable in negative' },
+          { start: 285, end: 288, kind: 'pattern', label: 'number (countable)', targetId: 'two-1', tooltip: 'two bottles = countable, can use numbers' },
+          { start: 330, end: 334, kind: 'pattern', label: 'some (uncountable)', targetId: 'some-4', tooltip: 'some bread = uncountable noun' },
+          { start: 336, end: 341, kind: 'pattern', label: 'a few (countable)', targetId: 'a-few-1', tooltip: 'a few eggs = small number of countable' },
+          { start: 353, end: 361, kind: 'pattern', label: 'a little (uncountable)', targetId: 'a-little-2', tooltip: 'a little butter = small amount of uncountable' },
+          { start: 371, end: 379, kind: 'pattern', label: 'how much (uncountable)', targetId: 'how-much-1', tooltip: 'how much sugar = uncountable question' },
+          { start: 417, end: 423, kind: 'pattern', label: 'enough (both)', targetId: 'enough-1', tooltip: 'enough sugar = works with both types' },
+          { start: 445, end: 449, kind: 'pattern', label: 'some (uncountable)', targetId: 'some-5', tooltip: 'some flour = uncountable noun' },
+          { start: 467, end: 471, kind: 'pattern', label: 'many (countable)', targetId: 'many-1', tooltip: 'many snacks = countable in negative' }
+        ],
+        audioUrl: undefined
+      }
+    ],
+    exercises: [
+      {
+        id: 'count-ex-1',
+        type: 'pattern-recognition',
+        contextId: 'countable-story-1',
+        prompt: 'Find all uses of "much" and "how much" (for uncountable nouns).',
+        interaction: 'select-highlight',
+        correctTargets: ['much-1', 'how-much-1'],
+        hint: '"Much" is used with uncountable nouns',
+        successMessage: 'Great! "Much" is for uncountable nouns (milk, sugar, water).'
+      },
+      {
+        id: 'count-ex-2',
+        type: 'pattern-recognition',
+        contextId: 'countable-story-1',
+        prompt: 'Find all uses of "many" and "how many" (for countable nouns).',
+        interaction: 'select-highlight',
+        correctTargets: ['how-many-1', 'many-1'],
+        hint: '"Many" is used with countable nouns',
+        successMessage: 'Excellent! "Many" is for countable nouns (tomatoes, eggs, snacks).'
+      },
+      {
+        id: 'count-ex-3',
+        type: 'fill-blank',
+        contextId: 'countable-story-1',
+        prompt: 'Complete: How _____ water do you drink every day?',
+        interaction: 'short-answer',
+        correctAnswer: 'much',
+        acceptedAnswers: ['much'],
+        recastExamples: [
+          { commonWrong: 'many', recast: 'Almost! "Water" is uncountable, so use "much". Say: "How much water..."' }
+        ],
+        hint: 'Water is uncountable - use "much"',
+        successMessage: 'Perfect! "How much" is used for uncountable nouns.'
+      },
+      {
+        id: 'count-ex-4',
+        type: 'fill-blank',
+        contextId: 'countable-story-1',
+        prompt: 'Complete: I have _____ friends in this city. (small number)',
+        interaction: 'short-answer',
+        correctAnswer: 'a few',
+        acceptedAnswers: ['a few', 'few'],
+        recastExamples: [
+          { commonWrong: 'a little', recast: 'Almost! "Friends" is countable, so use "a few". Say: "I have a few friends."' },
+          { commonWrong: 'little', recast: 'Close! "Friends" is countable. Use "a few" for countable nouns.' }
+        ],
+        hint: 'Friends are countable - use "a few"',
+        successMessage: 'Correct! "A few" is used for countable nouns.'
+      },
+      {
+        id: 'count-ex-5',
+        type: 'mcq',
+        contextId: 'countable-story-1',
+        prompt: 'Which is UNCOUNTABLE?',
+        interaction: 'mcq',
+        options: ['apple', 'information', 'book', 'egg'],
+        correctAnswer: 'information',
+        hint: 'Uncountable nouns cannot be counted with numbers',
+        successMessage: 'Right! "Information" is uncountable - we say "some information", not "two informations".'
+      },
+      {
+        id: 'count-ex-6',
+        type: 'fill-blank',
+        contextId: 'countable-story-1',
+        prompt: 'Complete: There isn\'t _____ time left. (uncountable)',
+        interaction: 'short-answer',
+        correctAnswer: 'much',
+        acceptedAnswers: ['much', 'any'],
+        recastExamples: [
+          { commonWrong: 'many', recast: 'Almost! "Time" is uncountable, so use "much". Say: "There isn\'t much time."' }
+        ],
+        hint: 'Time is uncountable - use "much" in negatives',
+        successMessage: 'Perfect! "Much" is used with uncountable nouns in negatives.'
+      }
+    ],
+    chunks: ['a lot of', 'a little bit of', 'a few more', 'how much', 'how many'],
+    quickRecap: 'Countable nouns can be counted (one apple, two books). Uncountable nouns cannot (water, rice, information). Use "many/few/a few" with countable. Use "much/little/a little" with uncountable. "Some" and "a lot of" work with both!'
   }
 ];
 
