@@ -33,143 +33,509 @@ import {
 
 // Sample Natural Approach Lesson Data
 const SAMPLE_NATURAL_LESSONS: NaturalLesson[] = [
+  // Lesson 1: My Daily Routine - Present Simple Tense
   {
-    id: 'natural-past-tense',
-    title: 'Past Tense Through Stories',
-    slug: 'past-tense-stories',
-    description: 'Learn past tense naturally by reading and listening to stories about everyday experiences.',
+    id: 'natural-present-simple',
+    title: 'My Daily Routine',
+    slug: 'my-daily-routine',
+    description: 'Learn Present Simple tense naturally through everyday routines and habits.',
     level: 'beginner',
-    topic: 'Past Simple Tense',
-    targetPattern: 'Regular and irregular past tense verbs',
+    topic: 'Present Simple Tense',
+    targetPattern: 'Subject + V1 (base form / -s/-es for he/she/it)',
     is_premium: false,
-    estimated_time: 15,
+    estimated_time: 12,
     contexts: [
       {
-        id: 'story-1',
-        title: 'A Day at the Beach',
-        text: 'Last weekend, Sarah went to the beach with her family. They arrived early in the morning and found a perfect spot near the water. The children played in the sand while their parents watched them. Sarah built a beautiful sandcastle and decorated it with shells she collected. After lunch, they swam in the ocean and had a wonderful time. When the sun started to set, they packed their things and drove home. Everyone felt tired but happy.',
+        id: 'routine-story-1',
+        title: 'Maria\'s Morning',
+        text: 'Maria wakes up at 6:30 every morning. She brushes her teeth and takes a quick shower. Then she makes breakfast for her family. Her husband drinks coffee while she prefers tea. Their children eat cereal and fruit. Maria works at a hospital, so she leaves home at 7:45. She drives to work and arrives before 8:30. She loves her job because she helps people every day.',
         annotations: [
-          { start: 22, end: 26, kind: 'verb', label: 'past tense (go)', targetId: 'went-1', tooltip: 'went = past tense of "go"' },
-          { start: 68, end: 75, kind: 'verb', label: 'past tense (arrive)', targetId: 'arrived-1', tooltip: 'arrived = past tense of "arrive"' },
-          { start: 103, end: 108, kind: 'verb', label: 'past tense (find)', targetId: 'found-1', tooltip: 'found = past tense of "find"' },
-          { start: 147, end: 153, kind: 'verb', label: 'past tense (play)', targetId: 'played-1', tooltip: 'played = past tense of "play"' },
-          { start: 186, end: 193, kind: 'verb', label: 'past tense (watch)', targetId: 'watched-1', tooltip: 'watched = past tense of "watch"' },
-          { start: 207, end: 212, kind: 'verb', label: 'past tense (build)', targetId: 'built-1', tooltip: 'built = past tense of "build"' },
-          { start: 244, end: 253, kind: 'verb', label: 'past tense (decorate)', targetId: 'decorated-1', tooltip: 'decorated = past tense of "decorate"' },
-          { start: 278, end: 287, kind: 'verb', label: 'past tense (collect)', targetId: 'collected-1', tooltip: 'collected = past tense of "collect"' },
-          { start: 307, end: 311, kind: 'verb', label: 'past tense (swim)', targetId: 'swam-1', tooltip: 'swam = past tense of "swim"' },
-          { start: 331, end: 334, kind: 'verb', label: 'past tense (have)', targetId: 'had-1', tooltip: 'had = past tense of "have"' },
-          { start: 369, end: 376, kind: 'verb', label: 'past tense (start)', targetId: 'started-1', tooltip: 'started = past tense of "start"' },
-          { start: 393, end: 399, kind: 'verb', label: 'past tense (pack)', targetId: 'packed-1', tooltip: 'packed = past tense of "pack"' },
-          { start: 421, end: 426, kind: 'verb', label: 'past tense (drive)', targetId: 'drove-1', tooltip: 'drove = past tense of "drive"' },
-          { start: 447, end: 451, kind: 'verb', label: 'past tense (feel)', targetId: 'felt-1', tooltip: 'felt = past tense of "feel"' },
-          { start: 0, end: 12, kind: 'chunk', label: 'time expression', targetId: 'last-weekend', tooltip: 'Time expressions often signal past tense' }
-        ],
-        audioUrl: undefined
-      },
-      {
-        id: 'story-2',
-        title: 'The Job Interview',
-        text: 'Yesterday, Tom had an important job interview. He woke up early and prepared carefully. He put on his best suit and checked his appearance in the mirror. Tom arrived at the office fifteen minutes early. The interviewer asked him many questions about his experience. Tom answered confidently and gave good examples. After the interview, he felt relieved and hopeful. The company called him the next day with good news!',
-        annotations: [
-          { start: 0, end: 9, kind: 'chunk', label: 'time expression', targetId: 'yesterday', tooltip: 'Yesterday signals past tense' },
-          { start: 15, end: 18, kind: 'verb', label: 'past tense (have)', targetId: 'had-2', tooltip: 'had = past tense of "have"' },
-          { start: 52, end: 56, kind: 'verb', label: 'past tense (wake)', targetId: 'woke-1', tooltip: 'woke = past tense of "wake"' },
-          { start: 71, end: 79, kind: 'verb', label: 'past tense (prepare)', targetId: 'prepared-1', tooltip: 'prepared = past tense of "prepare"' },
-          { start: 95, end: 98, kind: 'verb', label: 'past tense (put)', targetId: 'put-1', tooltip: 'put = past tense of "put" (same form!)' },
-          { start: 120, end: 127, kind: 'verb', label: 'past tense (check)', targetId: 'checked-1', tooltip: 'checked = past tense of "check"' },
-          { start: 161, end: 168, kind: 'verb', label: 'past tense (arrive)', targetId: 'arrived-2', tooltip: 'arrived = past tense of "arrive"' },
-          { start: 217, end: 222, kind: 'verb', label: 'past tense (ask)', targetId: 'asked-1', tooltip: 'asked = past tense of "ask"' },
-          { start: 272, end: 280, kind: 'verb', label: 'past tense (answer)', targetId: 'answered-1', tooltip: 'answered = past tense of "answer"' },
-          { start: 299, end: 303, kind: 'verb', label: 'past tense (give)', targetId: 'gave-1', tooltip: 'gave = past tense of "give"' },
-          { start: 341, end: 345, kind: 'verb', label: 'past tense (feel)', targetId: 'felt-2', tooltip: 'felt = past tense of "feel"' },
-          { start: 381, end: 387, kind: 'verb', label: 'past tense (call)', targetId: 'called-1', tooltip: 'called = past tense of "call"' }
+          { start: 6, end: 11, kind: 'verb', label: 'present simple (wake)', targetId: 'wakes-1', tooltip: 'wakes = wake + s (for she)' },
+          { start: 44, end: 51, kind: 'verb', label: 'present simple (brush)', targetId: 'brushes-1', tooltip: 'brushes = brush + es (for she)' },
+          { start: 67, end: 72, kind: 'verb', label: 'present simple (take)', targetId: 'takes-1', tooltip: 'takes = take + s (for she)' },
+          { start: 96, end: 101, kind: 'verb', label: 'present simple (make)', targetId: 'makes-1', tooltip: 'makes = make + s (for she)' },
+          { start: 136, end: 142, kind: 'verb', label: 'present simple (drink)', targetId: 'drinks-1', tooltip: 'drinks = drink + s (for he)' },
+          { start: 159, end: 166, kind: 'verb', label: 'present simple (prefer)', targetId: 'prefers-1', tooltip: 'prefers = prefer + s (for she)' },
+          { start: 188, end: 191, kind: 'verb', label: 'present simple (eat)', targetId: 'eat-1', tooltip: 'eat = base form (for they)' },
+          { start: 218, end: 223, kind: 'verb', label: 'present simple (work)', targetId: 'works-1', tooltip: 'works = work + s (for she)' },
+          { start: 252, end: 258, kind: 'verb', label: 'present simple (leave)', targetId: 'leaves-1', tooltip: 'leaves = leave + s (for she)' },
+          { start: 278, end: 284, kind: 'verb', label: 'present simple (drive)', targetId: 'drives-1', tooltip: 'drives = drive + s (for she)' },
+          { start: 297, end: 304, kind: 'verb', label: 'present simple (arrive)', targetId: 'arrives-1', tooltip: 'arrives = arrive + s (for she)' },
+          { start: 320, end: 325, kind: 'verb', label: 'present simple (love)', targetId: 'loves-1', tooltip: 'loves = love + s (for she)' },
+          { start: 346, end: 351, kind: 'verb', label: 'present simple (help)', targetId: 'helps-1', tooltip: 'helps = help + s (for she)' },
+          { start: 17, end: 29, kind: 'chunk', label: 'time expression', targetId: 'every-morning', tooltip: 'Time expressions like "every morning" signal habits' }
         ],
         audioUrl: undefined
       }
     ],
     exercises: [
       {
-        id: 'ex-1',
+        id: 'ps-ex-1',
         type: 'pattern-recognition',
-        contextId: 'story-1',
-        prompt: 'Look at the story above. Find the word that tells us Sarah traveled to the beach.',
+        contextId: 'routine-story-1',
+        prompt: 'Find all the verbs that end with "-s" or "-es". These show actions for he/she/it.',
         interaction: 'select-highlight',
-        correctTargets: ['went-1'],
-        hint: 'Look for a word that means "traveled" or "moved to a place"',
-        successMessage: 'Great job! "Went" is the past tense of "go".'
+        correctTargets: ['wakes-1', 'brushes-1', 'takes-1', 'makes-1', 'drinks-1', 'prefers-1', 'works-1', 'leaves-1', 'drives-1', 'arrives-1', 'loves-1', 'helps-1'],
+        hint: 'Look for verbs that describe what Maria or her husband does',
+        successMessage: 'Excellent! In Present Simple, we add -s/-es for he/she/it!'
       },
       {
-        id: 'ex-2',
-        type: 'pattern-recognition',
-        contextId: 'story-1',
-        prompt: 'Which words in the story end with "-ed"? These are regular past tense verbs.',
-        interaction: 'select-highlight',
-        correctTargets: ['arrived-1', 'played-1', 'watched-1', 'decorated-1', 'collected-1', 'started-1', 'packed-1'],
-        hint: 'Regular past tense verbs add "-ed" to the base form',
-        successMessage: 'Excellent! You found the regular past tense verbs!'
-      },
-      {
-        id: 'ex-3',
+        id: 'ps-ex-2',
         type: 'fill-blank',
-        contextId: 'story-1',
-        prompt: 'Complete: Yesterday, I _____ to the park. (go)',
+        contextId: 'routine-story-1',
+        prompt: 'Complete: My brother _____ to school every day. (go)',
         interaction: 'short-answer',
-        correctAnswer: 'went',
-        acceptedAnswers: ['went'],
+        correctAnswer: 'goes',
+        acceptedAnswers: ['goes'],
         recastExamples: [
-          { commonWrong: 'goed', recast: 'Almost! Native speakers say: "I went to the park." The past tense of "go" is "went" - it\'s irregular!' },
-          { commonWrong: 'go', recast: 'Good try! But we need the past tense here. Native speakers say: "I went" for past actions.' },
-          { commonWrong: 'gone', recast: 'Close! "Gone" is the past participle. For simple past, we say: "I went to the park."' }
+          { commonWrong: 'go', recast: 'Almost! For he/she/it, we add -es to "go". Native speakers say: "My brother goes to school."' },
+          { commonWrong: 'gos', recast: 'Close! "Go" is special - we add -es, not just -s: "goes"' }
         ],
-        hint: 'Think about how Sarah traveled in the story...',
-        successMessage: 'Perfect! "Went" is the correct past tense of "go".'
+        hint: 'Remember: go + es = goes (for he/she/it)',
+        successMessage: 'Perfect! "Goes" is correct for he/she/it.'
       },
       {
-        id: 'ex-4',
-        type: 'fill-blank',
-        contextId: 'story-1',
-        prompt: 'Complete: The children _____ in the sand all afternoon. (play)',
-        interaction: 'short-answer',
-        correctAnswer: 'played',
-        acceptedAnswers: ['played'],
-        recastExamples: [
-          { commonWrong: 'plaied', recast: 'Almost there! For verbs ending in consonant + y, we change y to i and add -ed: "played"' },
-          { commonWrong: 'play', recast: 'Good try! We need the past tense. Just add "-ed": "played"' },
-          { commonWrong: 'plaid', recast: 'Close! The correct spelling is "played" (play + ed)' }
-        ],
-        hint: 'This is a regular verb - just add "-ed"',
-        successMessage: 'Correct! "Played" follows the regular pattern.'
-      },
-      {
-        id: 'ex-5',
+        id: 'ps-ex-3',
         type: 'mcq',
-        contextId: 'story-2',
-        prompt: 'In the job interview story, which verb is the same in present and past tense?',
+        contextId: 'routine-story-1',
+        prompt: 'Which sentence is correct?',
         interaction: 'mcq',
-        options: ['woke', 'put', 'felt', 'gave'],
-        correctAnswer: 'put',
-        hint: 'Look for a verb that doesn\'t change its form',
-        successMessage: 'Right! "Put" stays the same: I put (today), I put (yesterday).'
+        options: ['She drink coffee every morning.', 'She drinks coffee every morning.', 'She drinking coffee every morning.', 'She drinkes coffee every morning.'],
+        correctAnswer: 'She drinks coffee every morning.',
+        hint: 'For she/he/it, add -s to the verb',
+        successMessage: 'Right! "She drinks" is the correct Present Simple form.'
       },
       {
-        id: 'ex-6',
-        type: 'recast-practice',
-        contextId: 'story-2',
-        prompt: 'Rewrite this sentence correctly: "Yesterday, Tom waked up early."',
+        id: 'ps-ex-4',
+        type: 'fill-blank',
+        contextId: 'routine-story-1',
+        prompt: 'Complete: They _____ breakfast at 7 AM. (eat)',
         interaction: 'short-answer',
-        correctAnswer: 'Yesterday, Tom woke up early.',
-        acceptedAnswers: ['Yesterday, Tom woke up early.', 'Yesterday Tom woke up early', 'Tom woke up early yesterday'],
-        chunks: ['woke up'],
+        correctAnswer: 'eat',
+        acceptedAnswers: ['eat'],
         recastExamples: [
-          { commonWrong: 'waked', recast: 'Almost! "Wake" is irregular. Native speakers say: "Tom woke up early."' },
-          { commonWrong: 'woken', recast: 'Close! "Woken" is the past participle. For simple past: "Tom woke up early."' }
+          { commonWrong: 'eats', recast: 'Almost! "They" is plural, so we use the base form. Native speakers say: "They eat breakfast."' },
+          { commonWrong: 'eating', recast: 'Good try! But for habits, we use Present Simple (not -ing). Say: "They eat breakfast."' }
         ],
-        successMessage: 'Excellent! "Woke up" is the correct past tense chunk.'
+        hint: 'For I/you/we/they, use the base form (no -s)',
+        successMessage: 'Correct! "They eat" uses the base form.'
       }
     ],
-    chunks: ['woke up', 'put on', 'arrived at', 'went to'],
-    quickRecap: 'You learned past tense naturally! Regular verbs add "-ed" (played, watched). Irregular verbs change form (go→went, swim→swam, feel→felt). Time expressions like "yesterday" and "last weekend" signal past tense.'
+    chunks: ['every morning', 'every day', 'wakes up', 'goes to'],
+    quickRecap: 'Present Simple shows habits and routines. Add -s/-es for he/she/it (she works, he goes). Use base form for I/you/we/they (they work, I go). Time expressions like "every day" signal Present Simple.'
+  },
+
+  // Lesson 2: Last Weekend's Trip - Past Simple Tense
+  {
+    id: 'natural-past-simple',
+    title: 'Last Weekend\'s Trip',
+    slug: 'last-weekends-trip',
+    description: 'Learn Past Simple tense naturally through a story about a weekend adventure.',
+    level: 'beginner',
+    topic: 'Past Simple Tense',
+    targetPattern: 'V2 forms (went, saw, visited, etc.)',
+    is_premium: false,
+    estimated_time: 15,
+    contexts: [
+      {
+        id: 'past-story-1',
+        title: 'A Trip to the Mountains',
+        text: 'Last weekend, my family went to the mountains. We left home early and drove for three hours. The scenery was beautiful! We saw tall trees and a clear blue lake. My children played near the water while I took photos. We ate lunch at a small restaurant and tried local food. The owner was very friendly and told us about the area. We walked along a forest trail and discovered a hidden waterfall. Everyone felt amazed by its beauty. We returned home tired but happy.',
+        annotations: [
+          { start: 0, end: 12, kind: 'chunk', label: 'time expression', targetId: 'last-weekend-1', tooltip: 'Last weekend signals past tense' },
+          { start: 24, end: 28, kind: 'verb', label: 'past tense (go)', targetId: 'went-1', tooltip: 'went = past of "go" (irregular)' },
+          { start: 52, end: 56, kind: 'verb', label: 'past tense (leave)', targetId: 'left-1', tooltip: 'left = past of "leave" (irregular)' },
+          { start: 72, end: 77, kind: 'verb', label: 'past tense (drive)', targetId: 'drove-1', tooltip: 'drove = past of "drive" (irregular)' },
+          { start: 106, end: 109, kind: 'verb', label: 'past tense (be)', targetId: 'was-1', tooltip: 'was = past of "is" (irregular)' },
+          { start: 124, end: 127, kind: 'verb', label: 'past tense (see)', targetId: 'saw-1', tooltip: 'saw = past of "see" (irregular)' },
+          { start: 172, end: 178, kind: 'verb', label: 'past tense (play)', targetId: 'played-1', tooltip: 'played = past of "play" (regular: +ed)' },
+          { start: 204, end: 208, kind: 'verb', label: 'past tense (take)', targetId: 'took-1', tooltip: 'took = past of "take" (irregular)' },
+          { start: 220, end: 223, kind: 'verb', label: 'past tense (eat)', targetId: 'ate-1', tooltip: 'ate = past of "eat" (irregular)' },
+          { start: 260, end: 265, kind: 'verb', label: 'past tense (try)', targetId: 'tried-1', tooltip: 'tried = past of "try" (regular: y→ied)' },
+          { start: 288, end: 291, kind: 'verb', label: 'past tense (be)', targetId: 'was-2', tooltip: 'was = past of "is" (irregular)' },
+          { start: 313, end: 317, kind: 'verb', label: 'past tense (tell)', targetId: 'told-1', tooltip: 'told = past of "tell" (irregular)' },
+          { start: 347, end: 353, kind: 'verb', label: 'past tense (walk)', targetId: 'walked-1', tooltip: 'walked = past of "walk" (regular: +ed)' },
+          { start: 382, end: 392, kind: 'verb', label: 'past tense (discover)', targetId: 'discovered-1', tooltip: 'discovered = past of "discover" (regular: +ed)' },
+          { start: 427, end: 431, kind: 'verb', label: 'past tense (feel)', targetId: 'felt-1', tooltip: 'felt = past of "feel" (irregular)' },
+          { start: 462, end: 470, kind: 'verb', label: 'past tense (return)', targetId: 'returned-1', tooltip: 'returned = past of "return" (regular: +ed)' }
+        ],
+        audioUrl: undefined
+      }
+    ],
+    exercises: [
+      {
+        id: 'past-ex-1',
+        type: 'pattern-recognition',
+        contextId: 'past-story-1',
+        prompt: 'Find the irregular past tense verbs (verbs that DON\'T end in -ed).',
+        interaction: 'select-highlight',
+        correctTargets: ['went-1', 'left-1', 'drove-1', 'was-1', 'saw-1', 'took-1', 'ate-1', 'was-2', 'told-1', 'felt-1'],
+        hint: 'Irregular verbs change their form completely (go→went, see→saw)',
+        successMessage: 'Great! These irregular verbs don\'t follow the -ed pattern.'
+      },
+      {
+        id: 'past-ex-2',
+        type: 'pattern-recognition',
+        contextId: 'past-story-1',
+        prompt: 'Now find the regular past tense verbs (verbs that end in -ed).',
+        interaction: 'select-highlight',
+        correctTargets: ['played-1', 'tried-1', 'walked-1', 'discovered-1', 'returned-1'],
+        hint: 'Regular verbs add -ed to make past tense',
+        successMessage: 'Excellent! Regular verbs simply add -ed.'
+      },
+      {
+        id: 'past-ex-3',
+        type: 'fill-blank',
+        contextId: 'past-story-1',
+        prompt: 'Complete: Yesterday, I _____ a beautiful sunset. (see)',
+        interaction: 'short-answer',
+        correctAnswer: 'saw',
+        acceptedAnswers: ['saw'],
+        recastExamples: [
+          { commonWrong: 'seed', recast: 'Almost! "See" is irregular. Native speakers say: "I saw a sunset." (see→saw)' },
+          { commonWrong: 'seen', recast: 'Close! "Seen" is the past participle. For simple past: "I saw a sunset."' },
+          { commonWrong: 'see', recast: 'Good try! We need past tense. Native speakers say: "I saw" for yesterday.' }
+        ],
+        hint: 'Think about how the family "saw" things in the story...',
+        successMessage: 'Perfect! "Saw" is the past tense of "see".'
+      },
+      {
+        id: 'past-ex-4',
+        type: 'fill-blank',
+        contextId: 'past-story-1',
+        prompt: 'Complete: We _____ delicious food at the restaurant. (eat)',
+        interaction: 'short-answer',
+        correctAnswer: 'ate',
+        acceptedAnswers: ['ate'],
+        recastExamples: [
+          { commonWrong: 'eated', recast: 'Almost! "Eat" is irregular. Native speakers say: "We ate food." (eat→ate)' },
+          { commonWrong: 'eaten', recast: 'Close! "Eaten" is the past participle. For simple past: "We ate food."' }
+        ],
+        hint: 'This is an irregular verb - it changes completely',
+        successMessage: 'Correct! "Ate" is the past tense of "eat".'
+      },
+      {
+        id: 'past-ex-5',
+        type: 'mcq',
+        contextId: 'past-story-1',
+        prompt: 'Which sentence uses the correct past tense?',
+        interaction: 'mcq',
+        options: ['We goed to the beach.', 'We went to the beach.', 'We wented to the beach.', 'We go to the beach yesterday.'],
+        correctAnswer: 'We went to the beach.',
+        hint: '"Go" is an irregular verb',
+        successMessage: 'Right! "Went" is the correct past tense of "go".'
+      }
+    ],
+    chunks: ['last weekend', 'went to', 'drove for', 'walked along'],
+    quickRecap: 'Past Simple tells completed actions. Regular verbs add -ed (walked, played). Irregular verbs change form (go→went, see→saw, eat→ate). Time expressions like "last weekend" and "yesterday" signal past tense.'
+  },
+
+  // Lesson 3: Planning a Birthday - Future Tense
+  {
+    id: 'natural-future',
+    title: 'Planning a Birthday',
+    slug: 'planning-a-birthday',
+    description: 'Learn Future tense naturally through planning a birthday party.',
+    level: 'beginner',
+    topic: 'Future Tense',
+    targetPattern: 'will + V1 / be going to + V1',
+    is_premium: false,
+    estimated_time: 14,
+    contexts: [
+      {
+        id: 'future-story-1',
+        title: 'Sara\'s Birthday Plans',
+        text: 'Next Saturday is Sara\'s birthday. She is going to have a big party at her house. Her mother will bake a chocolate cake, and her father is going to decorate the garden. Sara will invite all her friends from school. They are going to play games and dance to music. Her grandmother will bring a special gift from abroad. Sara thinks it is going to be the best birthday ever! After the party, the family will watch fireworks together.',
+        annotations: [
+          { start: 0, end: 13, kind: 'chunk', label: 'future time', targetId: 'next-saturday', tooltip: 'Next Saturday signals future' },
+          { start: 40, end: 54, kind: 'verb', label: 'going to (plan)', targetId: 'going-to-have', tooltip: 'is going to have = planned future' },
+          { start: 98, end: 107, kind: 'verb', label: 'will (future)', targetId: 'will-bake', tooltip: 'will bake = future action' },
+          { start: 145, end: 162, kind: 'verb', label: 'going to (plan)', targetId: 'going-to-decorate', tooltip: 'is going to decorate = planned future' },
+          { start: 180, end: 191, kind: 'verb', label: 'will (future)', targetId: 'will-invite', tooltip: 'will invite = future action' },
+          { start: 228, end: 244, kind: 'verb', label: 'going to (plan)', targetId: 'going-to-play', tooltip: 'are going to play = planned future' },
+          { start: 283, end: 293, kind: 'verb', label: 'will (future)', targetId: 'will-bring', tooltip: 'will bring = future action' },
+          { start: 340, end: 353, kind: 'verb', label: 'going to (prediction)', targetId: 'going-to-be', tooltip: 'is going to be = prediction based on evidence' },
+          { start: 400, end: 410, kind: 'verb', label: 'will (future)', targetId: 'will-watch', tooltip: 'will watch = future action' }
+        ],
+        audioUrl: undefined
+      }
+    ],
+    exercises: [
+      {
+        id: 'fut-ex-1',
+        type: 'pattern-recognition',
+        contextId: 'future-story-1',
+        prompt: 'Find all the "will + verb" patterns in the story.',
+        interaction: 'select-highlight',
+        correctTargets: ['will-bake', 'will-invite', 'will-bring', 'will-watch'],
+        hint: 'Look for "will" followed by a verb',
+        successMessage: 'Great! "Will + verb" is used for future actions and promises.'
+      },
+      {
+        id: 'fut-ex-2',
+        type: 'pattern-recognition',
+        contextId: 'future-story-1',
+        prompt: 'Find all the "going to + verb" patterns.',
+        interaction: 'select-highlight',
+        correctTargets: ['going-to-have', 'going-to-decorate', 'going-to-play', 'going-to-be'],
+        hint: 'Look for "is/are going to" followed by a verb',
+        successMessage: 'Excellent! "Going to" is used for plans and predictions.'
+      },
+      {
+        id: 'fut-ex-3',
+        type: 'fill-blank',
+        contextId: 'future-story-1',
+        prompt: 'Complete: I _____ help you with the party tomorrow. (will)',
+        interaction: 'short-answer',
+        correctAnswer: 'will help',
+        acceptedAnswers: ['will help', "'ll help"],
+        recastExamples: [
+          { commonWrong: 'will helping', recast: 'Almost! After "will", use the base form. Native speakers say: "I will help you."' },
+          { commonWrong: 'will helps', recast: 'Close! After "will", no -s needed. Say: "I will help you."' }
+        ],
+        hint: 'Will + base form of the verb',
+        successMessage: 'Perfect! "Will help" is correct for future.'
+      },
+      {
+        id: 'fut-ex-4',
+        type: 'fill-blank',
+        contextId: 'future-story-1',
+        prompt: 'Complete: They _____ visit us next week. (going to)',
+        interaction: 'short-answer',
+        correctAnswer: 'are going to visit',
+        acceptedAnswers: ['are going to visit', "are gonna visit"],
+        recastExamples: [
+          { commonWrong: 'going to visit', recast: 'Almost! We need "are" before "going to". Say: "They are going to visit us."' },
+          { commonWrong: 'is going to visit', recast: 'Close! "They" needs "are", not "is". Say: "They are going to visit us."' }
+        ],
+        hint: 'They + are + going to + verb',
+        successMessage: 'Correct! "Are going to visit" shows a planned future action.'
+      },
+      {
+        id: 'fut-ex-5',
+        type: 'mcq',
+        contextId: 'future-story-1',
+        prompt: 'Which is correct for a sudden decision?',
+        interaction: 'mcq',
+        options: ['I am going to answer the phone.', 'I will answer the phone.', 'I going to answer the phone.', 'I am will answer the phone.'],
+        correctAnswer: 'I will answer the phone.',
+        hint: 'We use "will" for decisions made at the moment of speaking',
+        successMessage: 'Right! "Will" is used for spontaneous decisions.'
+      }
+    ],
+    chunks: ['next Saturday', 'is going to', 'are going to', 'will be'],
+    quickRecap: 'Future tense uses "will + verb" for promises, offers, and spontaneous decisions. Use "be going to + verb" for plans and predictions based on evidence. Both talk about future events!'
+  },
+
+  // Lesson 4: Ordering at a Café - Modals for Politeness
+  {
+    id: 'natural-modals-polite',
+    title: 'Ordering at a Café',
+    slug: 'ordering-at-a-cafe',
+    description: 'Learn polite expressions and modals naturally through café conversations.',
+    level: 'beginner',
+    topic: 'Modals for Politeness',
+    targetPattern: 'Could you / Would you / I would like / May I',
+    is_premium: false,
+    estimated_time: 12,
+    contexts: [
+      {
+        id: 'cafe-story-1',
+        title: 'At the Coffee Shop',
+        text: 'Customer: Good morning! Could I see the menu, please?\nWaiter: Of course! Here you are.\nCustomer: Thank you. I would like a cappuccino, please.\nWaiter: Would you like anything to eat?\nCustomer: Could you recommend something?\nWaiter: I would suggest our fresh croissants.\nCustomer: That sounds lovely. May I also have a glass of water?\nWaiter: Certainly! Would you prefer still or sparkling?\nCustomer: Still water would be fine, thank you.\nWaiter: I will bring your order shortly.',
+        annotations: [
+          { start: 26, end: 34, kind: 'pattern', label: 'polite request', targetId: 'could-i-1', tooltip: 'Could I = polite way to ask for something' },
+          { start: 105, end: 117, kind: 'pattern', label: 'polite want', targetId: 'would-like-1', tooltip: 'I would like = polite way to say "I want"' },
+          { start: 148, end: 162, kind: 'pattern', label: 'polite offer', targetId: 'would-you-like', tooltip: 'Would you like = polite offer' },
+          { start: 189, end: 198, kind: 'pattern', label: 'polite request', targetId: 'could-you-1', tooltip: 'Could you = polite way to ask someone to do something' },
+          { start: 226, end: 240, kind: 'pattern', label: 'polite suggestion', targetId: 'would-suggest', tooltip: 'I would suggest = polite recommendation' },
+          { start: 283, end: 288, kind: 'pattern', label: 'polite permission', targetId: 'may-i-1', tooltip: 'May I = very polite way to ask permission' },
+          { start: 338, end: 352, kind: 'pattern', label: 'polite question', targetId: 'would-you-prefer', tooltip: 'Would you prefer = polite way to offer choices' },
+          { start: 370, end: 383, kind: 'chunk', label: 'polite response', targetId: 'would-be-fine', tooltip: 'would be fine = polite acceptance' }
+        ],
+        audioUrl: undefined
+      }
+    ],
+    exercises: [
+      {
+        id: 'modal-ex-1',
+        type: 'pattern-recognition',
+        contextId: 'cafe-story-1',
+        prompt: 'Find all the polite request patterns using "Could".',
+        interaction: 'select-highlight',
+        correctTargets: ['could-i-1', 'could-you-1'],
+        hint: 'Look for "Could I" and "Could you"',
+        successMessage: 'Great! "Could" makes requests more polite than "Can".'
+      },
+      {
+        id: 'modal-ex-2',
+        type: 'pattern-recognition',
+        contextId: 'cafe-story-1',
+        prompt: 'Find all the patterns using "Would".',
+        interaction: 'select-highlight',
+        correctTargets: ['would-like-1', 'would-you-like', 'would-suggest', 'would-you-prefer', 'would-be-fine'],
+        hint: 'Look for "Would you", "I would like", etc.',
+        successMessage: 'Excellent! "Would" is very common in polite English.'
+      },
+      {
+        id: 'modal-ex-3',
+        type: 'fill-blank',
+        contextId: 'cafe-story-1',
+        prompt: 'Complete politely: _____ I have a coffee, please? (request)',
+        interaction: 'short-answer',
+        correctAnswer: 'Could',
+        acceptedAnswers: ['Could', 'May', 'Can'],
+        recastExamples: [
+          { commonWrong: 'Give me', recast: 'That sounds a bit direct! Native speakers say: "Could I have a coffee, please?" to be polite.' },
+          { commonWrong: 'I want', recast: 'That\'s quite direct. Try: "Could I have..." or "I would like..." for politeness.' }
+        ],
+        hint: 'Use "Could" or "May" for polite requests',
+        successMessage: 'Perfect! "Could I" is a polite way to make requests.'
+      },
+      {
+        id: 'modal-ex-4',
+        type: 'fill-blank',
+        contextId: 'cafe-story-1',
+        prompt: 'Complete politely: I _____ a sandwich, please. (want)',
+        interaction: 'short-answer',
+        correctAnswer: 'would like',
+        acceptedAnswers: ['would like', "'d like"],
+        recastExamples: [
+          { commonWrong: 'want', recast: 'That works, but it\'s more polite to say: "I would like a sandwich, please."' },
+          { commonWrong: 'would want', recast: 'Almost! We say "would like", not "would want". Try: "I would like a sandwich."' }
+        ],
+        hint: '"I would like" is more polite than "I want"',
+        successMessage: 'Correct! "I would like" is the polite way to express wants.'
+      },
+      {
+        id: 'modal-ex-5',
+        type: 'mcq',
+        contextId: 'cafe-story-1',
+        prompt: 'Which is the MOST polite way to ask for help?',
+        interaction: 'mcq',
+        options: ['Help me with this.', 'Can you help me?', 'Could you help me, please?', 'You help me.'],
+        correctAnswer: 'Could you help me, please?',
+        hint: '"Could" + "please" = very polite',
+        successMessage: 'Right! "Could you... please?" is very polite.'
+      }
+    ],
+    chunks: ['Could I', 'Could you', 'I would like', 'Would you like', 'May I'],
+    quickRecap: 'Polite English uses modals! "Could I/you" for requests, "I would like" instead of "I want", "May I" for formal permission, "Would you like" for offers. Always add "please" and "thank you"!'
+  },
+
+  // Lesson 5: Describing My Room - Prepositions of Place
+  {
+    id: 'natural-prepositions',
+    title: 'Describing My Room',
+    slug: 'describing-my-room',
+    description: 'Learn prepositions of place naturally by describing rooms and locations.',
+    level: 'beginner',
+    topic: 'Prepositions of Place',
+    targetPattern: 'in, on, under, next to, between, behind, in front of',
+    is_premium: false,
+    estimated_time: 13,
+    contexts: [
+      {
+        id: 'room-story-1',
+        title: 'My Cozy Bedroom',
+        text: 'My bedroom is my favorite place in the house. There is a large bed in the middle of the room. On the bed, there are two soft pillows and a warm blanket. Next to the bed, there is a small wooden table with a lamp on it. My books are on the shelf above the desk. Under the desk, I keep my school bag. The wardrobe is in the corner, between the window and the door. Behind the door, there is a mirror. In front of the window, I have a comfortable chair where I like to read.',
+        annotations: [
+          { start: 40, end: 42, kind: 'pattern', label: 'preposition', targetId: 'in-1', tooltip: 'in = inside something' },
+          { start: 72, end: 74, kind: 'pattern', label: 'preposition', targetId: 'in-2', tooltip: 'in = inside/within an area' },
+          { start: 96, end: 98, kind: 'pattern', label: 'preposition', targetId: 'on-1', tooltip: 'on = on the surface of' },
+          { start: 165, end: 172, kind: 'chunk', label: 'preposition phrase', targetId: 'next-to-1', tooltip: 'next to = beside, at the side of' },
+          { start: 224, end: 226, kind: 'pattern', label: 'preposition', targetId: 'on-2', tooltip: 'on = on the surface of' },
+          { start: 246, end: 248, kind: 'pattern', label: 'preposition', targetId: 'on-3', tooltip: 'on = on the surface of' },
+          { start: 264, end: 269, kind: 'pattern', label: 'preposition', targetId: 'above-1', tooltip: 'above = higher than, over' },
+          { start: 281, end: 286, kind: 'pattern', label: 'preposition', targetId: 'under-1', tooltip: 'under = below, beneath' },
+          { start: 330, end: 332, kind: 'pattern', label: 'preposition', targetId: 'in-3', tooltip: 'in = inside an area' },
+          { start: 345, end: 352, kind: 'chunk', label: 'preposition phrase', targetId: 'between-1', tooltip: 'between = in the middle of two things' },
+          { start: 380, end: 386, kind: 'chunk', label: 'preposition phrase', targetId: 'behind-1', tooltip: 'behind = at the back of' },
+          { start: 417, end: 428, kind: 'chunk', label: 'preposition phrase', targetId: 'in-front-of-1', tooltip: 'in front of = facing, before' }
+        ],
+        audioUrl: undefined
+      }
+    ],
+    exercises: [
+      {
+        id: 'prep-ex-1',
+        type: 'pattern-recognition',
+        contextId: 'room-story-1',
+        prompt: 'Find all uses of "in" in the story.',
+        interaction: 'select-highlight',
+        correctTargets: ['in-1', 'in-2', 'in-3'],
+        hint: '"In" is used for enclosed spaces or areas',
+        successMessage: 'Great! "In" shows something is inside or within an area.'
+      },
+      {
+        id: 'prep-ex-2',
+        type: 'pattern-recognition',
+        contextId: 'room-story-1',
+        prompt: 'Find all uses of "on" in the story.',
+        interaction: 'select-highlight',
+        correctTargets: ['on-1', 'on-2', 'on-3'],
+        hint: '"On" is used for surfaces',
+        successMessage: 'Excellent! "On" shows something is on a surface.'
+      },
+      {
+        id: 'prep-ex-3',
+        type: 'fill-blank',
+        contextId: 'room-story-1',
+        prompt: 'Complete: The cat is sleeping _____ the sofa. (surface)',
+        interaction: 'short-answer',
+        correctAnswer: 'on',
+        acceptedAnswers: ['on'],
+        recastExamples: [
+          { commonWrong: 'in', recast: 'Almost! For surfaces, we use "on". Native speakers say: "The cat is on the sofa."' },
+          { commonWrong: 'at', recast: 'Close! For surfaces like sofas, beds, tables, we use "on": "The cat is on the sofa."' }
+        ],
+        hint: 'The sofa is a surface - what preposition do we use?',
+        successMessage: 'Perfect! "On" is used for surfaces.'
+      },
+      {
+        id: 'prep-ex-4',
+        type: 'fill-blank',
+        contextId: 'room-story-1',
+        prompt: 'Complete: The shoes are _____ the bed. (below)',
+        interaction: 'short-answer',
+        correctAnswer: 'under',
+        acceptedAnswers: ['under', 'beneath', 'below'],
+        recastExamples: [
+          { commonWrong: 'down', recast: 'Almost! For position below something, we use "under". Say: "The shoes are under the bed."' },
+          { commonWrong: 'in', recast: 'Not quite! "Under" means below. Say: "The shoes are under the bed."' }
+        ],
+        hint: 'What preposition means "below"?',
+        successMessage: 'Correct! "Under" means below or beneath something.'
+      },
+      {
+        id: 'prep-ex-5',
+        type: 'mcq',
+        contextId: 'room-story-1',
+        prompt: 'The pharmacy is _____ the bank and the post office.',
+        interaction: 'mcq',
+        options: ['next to', 'between', 'behind', 'in front of'],
+        correctAnswer: 'between',
+        hint: 'It\'s in the middle of two places',
+        successMessage: 'Right! "Between" is used when something is in the middle of two things.'
+      },
+      {
+        id: 'prep-ex-6',
+        type: 'fill-blank',
+        contextId: 'room-story-1',
+        prompt: 'Complete: The lamp is _____ the table. (beside)',
+        interaction: 'short-answer',
+        correctAnswer: 'next to',
+        acceptedAnswers: ['next to', 'beside', 'by'],
+        recastExamples: [
+          { commonWrong: 'near to', recast: 'Almost! We say "next to" or "near" (without "to"). Try: "The lamp is next to the table."' },
+          { commonWrong: 'besides', recast: 'Close! "Besides" means "in addition to". For location, use "beside" or "next to".' }
+        ],
+        hint: 'What phrase means "at the side of"?',
+        successMessage: 'Perfect! "Next to" means beside or at the side of something.'
+      }
+    ],
+    chunks: ['next to', 'in front of', 'in the middle of', 'on the shelf', 'under the desk'],
+    quickRecap: 'Prepositions show location! "In" for enclosed spaces (in the room), "on" for surfaces (on the table), "under" for below, "next to" for beside, "between" for middle of two things, "behind" for back, "in front of" for facing.'
   }
 ];
 
