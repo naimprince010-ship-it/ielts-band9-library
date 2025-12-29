@@ -36,7 +36,8 @@ import {
   CheckCircle,
   AlertCircle,
   X,
-  GripVertical
+  GripVertical,
+  Sparkles
 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import {
@@ -695,6 +696,129 @@ function getDefaultSpeakingPart(partNumber: 1 | 2 | 3): SpeakingPart {
   };
 }
 
+interface AIGeneratorProps {
+  moduleType: 'reading' | 'listening' | 'writing' | 'speaking';
+  testType?: 'academic' | 'general';
+  onGenerated: (content: unknown) => void;
+}
+
+function AIContentGenerator({ moduleType, testType = 'academic', onGenerated }: AIGeneratorProps) {
+  const [generating, setGenerating] = useState(false);
+  const [topic, setTopic] = useState('');
+  const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('medium');
+  const [error, setError] = useState('');
+
+  const handleGenerate = async () => {
+    if (!topic.trim()) {
+      setError('Please enter a topic');
+      return;
+    }
+
+    setGenerating(true);
+    setError('');
+
+    try {
+      const response = await fetch('/api/generate-content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          moduleType,
+          topic: topic.trim(),
+          difficulty,
+          testType
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to generate content');
+      }
+
+      const data = await response.json();
+      if (data.success && data.content) {
+        onGenerated(data.content);
+        setTopic('');
+      } else {
+        throw new Error('Invalid response from AI');
+      }
+    } catch (err) {
+      console.error('AI Generation Error:', err);
+      setError(err instanceof Error ? err.message : 'Failed to generate content');
+    } finally {
+      setGenerating(false);
+    }
+  };
+
+  return (
+    <Card className="bg-gradient-to-r from-purple-50 to-indigo-50 border-purple-200">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-lg flex items-center gap-2">
+          <Sparkles className="h-5 w-5 text-purple-600" />
+          AI Content Generator
+        </CardTitle>
+        <CardDescription>
+          Generate {moduleType} test content using AI
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <Label>Topic</Label>
+            <Input
+              value={topic}
+              onChange={(e) => setTopic(e.target.value)}
+              placeholder="e.g., Climate change, Technology, Education..."
+              disabled={generating}
+            />
+          </div>
+          <div>
+            <Label>Difficulty</Label>
+            <Select
+              value={difficulty}
+              onValueChange={(v) => setDifficulty(v as 'easy' | 'medium' | 'hard')}
+              disabled={generating}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="easy">Easy</SelectItem>
+                <SelectItem value="medium">Medium</SelectItem>
+                <SelectItem value="hard">Hard</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {error && (
+          <Alert className="bg-red-50 border-red-200">
+            <AlertCircle className="h-4 w-4 text-red-600" />
+            <AlertDescription className="text-red-800">{error}</AlertDescription>
+          </Alert>
+        )}
+
+        <Button
+          onClick={handleGenerate}
+          disabled={generating || !topic.trim()}
+          className="w-full bg-purple-600 hover:bg-purple-700"
+        >
+          {generating ? (
+            <>
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              Generating with AI...
+            </>
+          ) : (
+            <>
+              <Sparkles className="h-4 w-4 mr-2" />
+              Generate Content
+            </>
+          )}
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
 function ReadingTestBuilder({ 
   data, 
   onChange 
@@ -703,6 +827,43 @@ function ReadingTestBuilder({
   onChange: (data: Partial<ReadingTest>) => void;
 }) {
   const [activePassage, setActivePassage] = useState(0);
+
+  const handleAIGenerated = (content: unknown) => {
+    const aiContent = content as { passage: { title: string; textContent: string; paragraphs?: Array<{ label: string; content: string }> }; questions: Array<{ type: string; questionText: string; options?: string[]; correctAnswer: string; acceptedAnswers?: string[]; explanation?: string; passageRef?: string }> };
+    
+    const newPassage: ReadingPassage = {
+      id: `passage-${Date.now()}`,
+      passageNumber: (data.passages?.length || 0) + 1,
+      title: aiContent.passage.title,
+      textContent: aiContent.passage.textContent,
+      paragraphs: aiContent.passage.paragraphs,
+      questions: aiContent.questions.map((q, i) => ({
+        id: `q-${Date.now()}-${i}`,
+        questionNumber: (data.passages?.flatMap(p => p.questions).length || 0) + i + 1,
+        type: q.type as ReadingQuestionType,
+        questionText: q.questionText,
+        options: q.options,
+        correctAnswer: q.correctAnswer,
+        acceptedAnswers: q.acceptedAnswers,
+        explanation: q.explanation,
+        passageRef: q.passageRef
+      })),
+      questionRange: { start: 1, end: aiContent.questions.length }
+    };
+
+    const passages = [...(data.passages || []), newPassage];
+    let qNum = 1;
+    passages.forEach(p => {
+      const startNum = qNum;
+      p.questions.forEach(q => {
+        q.questionNumber = qNum++;
+      });
+      p.questionRange = { start: startNum, end: qNum - 1 };
+    });
+
+    onChange({ ...data, passages });
+    setActivePassage(passages.length - 1);
+  };
 
   const addPassage = () => {
     const newPassage: ReadingPassage = {
@@ -788,6 +949,12 @@ function ReadingTestBuilder({
 
   return (
     <div className="space-y-4">
+      <AIContentGenerator
+        moduleType="reading"
+        testType={data.testType || 'academic'}
+        onGenerated={handleAIGenerated}
+      />
+
       <div className="grid grid-cols-2 gap-4">
         <div>
           <Label>Test Type</Label>
@@ -923,6 +1090,45 @@ function ListeningTestBuilder({
 }) {
   const [activeSection, setActiveSection] = useState(0);
 
+  const handleAIGenerated = (content: unknown) => {
+    const aiContent = content as { transcript: string; sections: Array<{ sectionNumber: number; title: string; questions: Array<{ type: string; questionText: string; options?: string[]; correctAnswer: string; acceptedAnswers?: string[] }> }> };
+    
+    const newSections: ListeningSection[] = aiContent.sections.map((s, sIndex) => {
+      const existingQCount = data.sections?.flatMap(sec => sec.questions).length || 0;
+      return {
+        id: `section-${Date.now()}-${sIndex}`,
+        sectionNumber: (data.sections?.length || 0) + sIndex + 1,
+        title: s.title,
+        audioStartTime: 0,
+        audioEndTime: 0,
+        transcript: aiContent.transcript,
+        questions: s.questions.map((q, qIndex) => ({
+          id: `q-${Date.now()}-${sIndex}-${qIndex}`,
+          questionNumber: existingQCount + qIndex + 1,
+          type: q.type as ListeningQuestionType,
+          questionText: q.questionText,
+          options: q.options,
+          correctAnswer: q.correctAnswer,
+          acceptedAnswers: q.acceptedAnswers
+        })),
+        questionRange: { start: 1, end: s.questions.length }
+      };
+    });
+
+    const sections = [...(data.sections || []), ...newSections];
+    let qNum = 1;
+    sections.forEach(s => {
+      const startNum = qNum;
+      s.questions.forEach(q => {
+        q.questionNumber = qNum++;
+      });
+      s.questionRange = { start: startNum, end: qNum - 1 };
+    });
+
+    onChange({ ...data, sections });
+    setActiveSection(sections.length - 1);
+  };
+
   const addSection = () => {
     const newSection: ListeningSection = {
       id: `section-${Date.now()}`,
@@ -1007,6 +1213,11 @@ function ListeningTestBuilder({
 
   return (
     <div className="space-y-4">
+      <AIContentGenerator
+        moduleType="listening"
+        onGenerated={handleAIGenerated}
+      />
+
       <div className="grid grid-cols-3 gap-4">
         <div>
           <Label>Audio URL</Label>
@@ -1160,6 +1371,35 @@ function WritingTestBuilder({
   data: Partial<WritingTest>; 
   onChange: (data: Partial<WritingTest>) => void;
 }) {
+  const handleAIGenerated = (content: unknown) => {
+    const aiContent = content as { task1: { title: string; prompt: string; sampleAnswer?: string }; task2: { title: string; prompt: string; sampleAnswer?: string } };
+    
+    const newTasks: [WritingTask, WritingTask] = [
+      {
+        id: `task-1-${Date.now()}`,
+        taskNumber: 1,
+        taskType: 'task1',
+        title: aiContent.task1.title || 'Task 1',
+        prompt: aiContent.task1.prompt,
+        minWords: 150,
+        recommendedTime: 20,
+        sampleAnswer: aiContent.task1.sampleAnswer
+      },
+      {
+        id: `task-2-${Date.now()}`,
+        taskNumber: 2,
+        taskType: 'task2',
+        title: aiContent.task2.title || 'Task 2',
+        prompt: aiContent.task2.prompt,
+        minWords: 250,
+        recommendedTime: 40,
+        sampleAnswer: aiContent.task2.sampleAnswer
+      }
+    ];
+
+    onChange({ ...data, tasks: newTasks });
+  };
+
   const updateTask = (taskIndex: number, updates: Partial<WritingTask>) => {
     const tasks = [...(data.tasks || [getDefaultWritingTask(1), getDefaultWritingTask(2)])];
     tasks[taskIndex] = { ...tasks[taskIndex], ...updates };
@@ -1168,6 +1408,12 @@ function WritingTestBuilder({
 
   return (
     <div className="space-y-4">
+      <AIContentGenerator
+        moduleType="writing"
+        testType={data.testType || 'academic'}
+        onGenerated={handleAIGenerated}
+      />
+
       <div className="grid grid-cols-2 gap-4">
         <div>
           <Label>Test Type</Label>
@@ -1297,6 +1543,61 @@ function SpeakingTestBuilder({
   data: Partial<SpeakingTest>; 
   onChange: (data: Partial<SpeakingTest>) => void;
 }) {
+  const handleAIGenerated = (content: unknown) => {
+    const aiContent = content as { 
+      part1: { questions: Array<{ text: string; thinkTime: number; recordTime: number }> };
+      part2: { topic: string; bulletPoints: string[]; prepTime: number; recordTime: number };
+      part3: { questions: Array<{ text: string; thinkTime: number; recordTime: number }> };
+    };
+    
+    const newParts: [SpeakingPart, SpeakingPart, SpeakingPart] = [
+      {
+        id: `part-1-${Date.now()}`,
+        partNumber: 1,
+        partType: 'part1',
+        title: 'Part 1: Introduction & Interview',
+        instructions: 'The examiner will ask you general questions about yourself and familiar topics.',
+        questions: aiContent.part1.questions.map((q, i) => ({
+          id: `sq-1-${Date.now()}-${i}`,
+          questionNumber: i + 1,
+          text: q.text,
+          thinkTime: q.thinkTime || 3,
+          recordTime: q.recordTime || 30
+        }))
+      },
+      {
+        id: `part-2-${Date.now()}`,
+        partNumber: 2,
+        partType: 'part2',
+        title: 'Part 2: Individual Long Turn',
+        instructions: 'You will be given a topic card. You have 1 minute to prepare and 2 minutes to speak.',
+        cueCard: {
+          id: `cue-${Date.now()}`,
+          topic: aiContent.part2.topic,
+          bulletPoints: aiContent.part2.bulletPoints,
+          prepTime: aiContent.part2.prepTime || 60,
+          recordTime: aiContent.part2.recordTime || 120
+        }
+      },
+      {
+        id: `part-3-${Date.now()}`,
+        partNumber: 3,
+        partType: 'part3',
+        title: 'Part 3: Two-way Discussion',
+        instructions: 'The examiner will ask you more abstract questions related to the Part 2 topic.',
+        questions: aiContent.part3.questions.map((q, i) => ({
+          id: `sq-3-${Date.now()}-${i}`,
+          questionNumber: i + 1,
+          text: q.text,
+          thinkTime: q.thinkTime || 5,
+          recordTime: q.recordTime || 45
+        }))
+      }
+    ];
+
+    onChange({ ...data, parts: newParts });
+  };
+
   const addQuestion = (partIndex: number) => {
     const parts = [...(data.parts || [])];
     const part = parts[partIndex];
@@ -1334,6 +1635,11 @@ function SpeakingTestBuilder({
 
   return (
     <div className="space-y-4">
+      <AIContentGenerator
+        moduleType="speaking"
+        onGenerated={handleAIGenerated}
+      />
+
       <div>
         <Label>Instructions</Label>
         <Textarea
