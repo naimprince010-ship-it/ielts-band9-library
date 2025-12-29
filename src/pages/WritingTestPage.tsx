@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { 
   Clock, 
   FileText,
@@ -117,7 +117,9 @@ const countWords = (text: string): number => {
 // Main Component
 // ============================================
 export default function WritingTestPage() {
-  const [test] = useState<WritingTest>(SAMPLE_WRITING_TEST);
+  const location = useLocation();
+  const stateData = location.state as { testData?: WritingTest; testId?: string; testTitle?: string } | null;
+  const [test] = useState<WritingTest>(stateData?.testData || SAMPLE_WRITING_TEST);
   const [currentTask, setCurrentTask] = useState<WritingTaskType>('task1');
   const [timeRemaining, setTimeRemaining] = useState(test.timeLimit);
   const [responses, setResponses] = useState<{
