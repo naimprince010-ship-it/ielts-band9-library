@@ -706,6 +706,7 @@ function AIContentGenerator({ moduleType, testType = 'academic', onGenerated }: 
   const [generating, setGenerating] = useState(false);
   const [topic, setTopic] = useState('');
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('medium');
+  const [provider, setProvider] = useState<'openai' | 'gemini'>('openai');
   const [error, setError] = useState('');
 
   const handleGenerate = async () => {
@@ -725,7 +726,8 @@ function AIContentGenerator({ moduleType, testType = 'academic', onGenerated }: 
           moduleType,
           topic: topic.trim(),
           difficulty,
-          testType
+          testType,
+          provider
         })
       });
 
@@ -761,13 +763,13 @@ function AIContentGenerator({ moduleType, testType = 'academic', onGenerated }: 
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-3 gap-4">
           <div>
             <Label>Topic</Label>
             <Input
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
-              placeholder="e.g., Climate change, Technology, Education..."
+              placeholder="e.g., Climate change, Technology..."
               disabled={generating}
             />
           </div>
@@ -785,6 +787,22 @@ function AIContentGenerator({ moduleType, testType = 'academic', onGenerated }: 
                 <SelectItem value="easy">Easy</SelectItem>
                 <SelectItem value="medium">Medium</SelectItem>
                 <SelectItem value="hard">Hard</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <Label>AI Provider</Label>
+            <Select
+              value={provider}
+              onValueChange={(v) => setProvider(v as 'openai' | 'gemini')}
+              disabled={generating}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="openai">OpenAI (GPT-4)</SelectItem>
+                <SelectItem value="gemini">Google Gemini</SelectItem>
               </SelectContent>
             </Select>
           </div>
