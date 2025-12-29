@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Settings, Plus, Edit, Trash2, Eye, EyeOff, BookOpen, GraduationCap,
   Sparkles, Save, X, AlertCircle, CheckCircle, ShieldCheck, Square, CheckSquare,
-  CreditCard, Clock, CheckCircle2, XCircle, Loader2, BarChart3, Tag
+  CreditCard, Clock, CheckCircle2, XCircle, Loader2, BarChart3, Tag, ExternalLink
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -361,19 +361,29 @@ export function AdminPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="bg-gray-900 text-white py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Settings className="h-8 w-8" />
-              <div>
-                <h1 className="text-2xl font-bold">Admin Panel</h1>
-                <p className="text-gray-400">Manage lessons and content</p>
-              </div>
-            </div>
-            <Button onClick={handleNewLesson} className="gap-2">
-              <Plus className="h-4 w-4" />
-              New Lesson
-            </Button>
-          </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <Settings className="h-8 w-8" />
+                        <div>
+                          <h1 className="text-2xl font-bold">Admin Panel</h1>
+                          <p className="text-gray-400">Manage lessons and content</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button 
+                          variant="outline" 
+                          onClick={() => window.open('/', '_blank')}
+                          className="gap-2 bg-white/10 border-white/20 hover:bg-white/20 text-white"
+                        >
+                          <ExternalLink className="h-4 w-4" />
+                          Visit Site
+                        </Button>
+                        <Button onClick={handleNewLesson} className="gap-2">
+                          <Plus className="h-4 w-4" />
+                          New Lesson
+                        </Button>
+                      </div>
+                    </div>
         </div>
       </div>
 
