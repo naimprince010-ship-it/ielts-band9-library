@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { 
   Volume2, 
   VolumeX,
@@ -267,7 +267,9 @@ const getStatusColor = (status: QuestionStatus): string => {
 // Main Component
 // ============================================
 export default function ListeningTestPage() {
-  const [test] = useState<ListeningTest>(SAMPLE_LISTENING_TEST);
+  const location = useLocation();
+  const stateData = location.state as { testData?: ListeningTest; testId?: string; testTitle?: string } | null;
+  const [test] = useState<ListeningTest>(stateData?.testData || SAMPLE_LISTENING_TEST);
   const [audioState, setAudioState] = useState<AudioState>('not-started');
   const [audioCurrentTime, setAudioCurrentTime] = useState(0);
   const [transferTimeRemaining, setTransferTimeRemaining] = useState(test.transferTime);

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { 
   Clock, 
   Flag, 
@@ -234,7 +234,9 @@ const getStatusColor = (status: QuestionStatus): string => {
 // Main Component
 // ============================================
 export default function ReadingTestPage() {
-  const [test] = useState<ReadingTest>(SAMPLE_READING_TEST);
+  const location = useLocation();
+  const stateData = location.state as { testData?: ReadingTest; testId?: string; testTitle?: string } | null;
+  const [test] = useState<ReadingTest>(stateData?.testData || SAMPLE_READING_TEST);
   const [currentPassageIndex, setCurrentPassageIndex] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(test.timeLimit);
   const [answers, setAnswers] = useState<Record<string, UserAnswer>>({});

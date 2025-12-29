@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { 
   Mic, 
   MicOff,
@@ -144,7 +144,9 @@ const uploadRecording = async (_blob: Blob, questionId: string): Promise<string>
 // Main Component
 // ============================================
 export default function SpeakingTestPage() {
-  const [test] = useState<SpeakingTest>(SAMPLE_SPEAKING_TEST);
+  const location = useLocation();
+  const stateData = location.state as { testData?: SpeakingTest; testId?: string; testTitle?: string } | null;
+  const [test] = useState<SpeakingTest>(stateData?.testData || SAMPLE_SPEAKING_TEST);
   const [phase, setPhase] = useState<SpeakingTestSession['phase']>('system-check');
   const [currentPartIndex, setCurrentPartIndex] = useState(0);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
