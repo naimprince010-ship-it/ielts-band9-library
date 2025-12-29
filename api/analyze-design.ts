@@ -104,12 +104,27 @@ async function callGeminiVision(imageData: string, mimeType: string): Promise<st
   );
 
   if (!response.ok) {
-    const errorData = await response.json();
-    console.error('Gemini Vision API Error:', errorData);
-    throw new Error(`Gemini API error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
+    let errorMessage = `Gemini API error: ${response.status}`;
+    try {
+      const errorData = await response.json();
+      console.error('Gemini Vision API Error:', errorData);
+      errorMessage = `Gemini API error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`;
+    } catch {
+      const errorText = await response.text();
+      console.error('Gemini Vision API Error (non-JSON):', errorText.substring(0, 200));
+      errorMessage = `Gemini API error: ${response.status} - ${errorText.substring(0, 100) || 'Unknown error'}`;
+    }
+    throw new Error(errorMessage);
   }
 
-  const data = await response.json();
+  let data;
+  try {
+    data = await response.json();
+  } catch {
+    const responseText = await response.text();
+    console.error('Gemini returned non-JSON response:', responseText.substring(0, 200));
+    throw new Error('Gemini API returned an invalid response');
+  }
   
   if (!data.candidates || !data.candidates[0]?.content?.parts?.[0]?.text) {
     console.error('Unexpected Gemini response structure:', data);
