@@ -77,7 +77,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSupabaseUser(session?.user ?? null);
         if (session?.user) {
           await fetchUserProfile(session.user.id, session.user);
-        } else {
+        } else if (!localStorage.getItem('demo_user')) {
           setUser(null);
         }
       });
