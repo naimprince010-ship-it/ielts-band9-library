@@ -70,7 +70,7 @@ interface PaymentRequest {
 }
 
 export function AdminPage() {
-  const { user, isAdmin, loading } = useAuth();
+  const { user, isAdmin, loading, supabaseUser } = useAuth();
   const { lessons, createLesson, updateLesson, deleteLesson } = useLessons();
   const navigate = useNavigate();
   
@@ -104,10 +104,18 @@ export function AdminPage() {
     const [processingPayment, setProcessingPayment] = useState<string | null>(null);
 
     useEffect(() => {
-      if (!loading && (!user || !isAdmin)) {
+      // Don't redirect while loading
+      if (loading) return;
+      
+      // If there's a Supabase session but user profile hasn't loaded yet, wait
+      // This prevents redirect during the brief moment between session load and profile fetch
+      if (supabaseUser && !user) return;
+      
+      // Only redirect if we're sure there's no valid admin user
+      if (!user || !isAdmin) {
         navigate('/');
       }
-    }, [user, isAdmin, loading, navigate]);
+    }, [user, isAdmin, loading, supabaseUser, navigate]);
 
     const fetchPayments = async () => {
       if (!isSupabaseConfigured() || !supabase) return;
@@ -207,7 +215,10 @@ export function AdminPage() {
     const pendingPayments = payments.filter(p => p.status === 'pending');
     const processedPayments = payments.filter(p => p.status !== 'pending');
 
-  if (loading) {
+  // Show loading spinner while:
+  // 1. Auth is still loading
+  // 2. There's a Supabase session but user profile hasn't loaded yet
+  if (loading || (supabaseUser && !user)) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
