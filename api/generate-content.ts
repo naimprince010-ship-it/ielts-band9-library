@@ -1,14 +1,17 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 type ModuleType = 'reading' | 'listening' | 'writing' | 'speaking';
+type AIProvider = 'openai' | 'gemini';
 
 interface GenerateRequest {
   moduleType: ModuleType;
   topic?: string;
   difficulty?: 'easy' | 'medium' | 'hard';
   testType?: 'academic' | 'general';
+  provider?: AIProvider;
 }
 
 const READING_PROMPT = (topic: string, difficulty: string, testType: string) => `
@@ -264,6 +267,49 @@ async function callOpenAI(prompt: string): Promise<string> {
   return data.choices[0].message.content;
 }
 
+async function callGemini(prompt: string): Promise<string> {
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [
+              {
+                text: `You are an expert IELTS exam content creator. Always respond with valid JSON only, no markdown formatting or explanations.\n\n${prompt}`
+              }
+            ]
+          }
+        ],
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 4000,
+          responseMimeType: 'application/json'
+        }
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    console.error('Gemini API Error:', errorData);
+    throw new Error(`Gemini API error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
+  }
+
+  const data = await response.json();
+  
+  if (!data.candidates || !data.candidates[0]?.content?.parts?.[0]?.text) {
+    console.error('Unexpected Gemini response structure:', data);
+    throw new Error('Invalid response structure from Gemini');
+  }
+  
+  return data.candidates[0].content.parts[0].text;
+}
+
 function cleanJsonResponse(response: string): string {
   let cleaned = response.trim();
   if (cleaned.startsWith('```json')) {
@@ -290,16 +336,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  if (!OPENAI_API_KEY) {
-    return res.status(500).json({ error: 'OpenAI API key not configured' });
-  }
-
   const { 
     moduleType, 
     topic = 'general knowledge', 
     difficulty = 'medium',
-    testType = 'academic'
+    testType = 'academic',
+    provider = 'openai'
   } = req.body as GenerateRequest;
+
+  if (provider === 'openai' && !OPENAI_API_KEY) {
+    return res.status(500).json({ error: 'OpenAI API key not configured. Please add OPENAI_API_KEY to your environment variables.' });
+  }
+
+  if (provider === 'gemini' && !GEMINI_API_KEY) {
+    return res.status(500).json({ error: 'Gemini API key not configured. Please add GEMINI_API_KEY to your environment variables.' });
+  }
 
   if (!moduleType || !['reading', 'listening', 'writing', 'speaking'].includes(moduleType)) {
     return res.status(400).json({ error: 'Invalid module type' });
@@ -325,7 +376,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(400).json({ error: 'Invalid module type' });
     }
 
-    const rawResponse = await callOpenAI(prompt);
+    const rawResponse = provider === 'gemini' 
+      ? await callGemini(prompt) 
+      : await callOpenAI(prompt);
     const cleanedResponse = cleanJsonResponse(rawResponse);
     
     let parsedContent;
