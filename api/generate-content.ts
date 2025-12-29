@@ -64,41 +64,54 @@ Return ONLY valid JSON, no markdown or explanation.
 `;
 
 const LISTENING_PROMPT = (topic: string, difficulty: string) => `
-You are an IELTS exam content creator. Generate a complete IELTS listening section with transcript and questions.
+You are an IELTS exam content creator. Generate a complete IELTS listening test with transcript and sections.
 
 Topic: ${topic}
 Difficulty: ${difficulty}
 
 Generate a JSON response with this exact structure:
 {
-  "section": {
-    "title": "Section title (e.g., 'Conversation about booking a hotel')",
-    "description": "Brief description of the audio content",
-    "transcript": "Full transcript of what would be spoken in the audio. Include speaker labels like 'Speaker 1:', 'Speaker 2:' for conversations."
-  },
-  "questions": [
+  "transcript": "Full transcript of what would be spoken in the audio. Include speaker labels like 'Speaker 1:', 'Speaker 2:' for conversations. This should be 400-500 words covering all sections.",
+  "sections": [
     {
-      "type": "fill-blank",
-      "questionText": "The guest wants to book for _____ nights.",
-      "correctAnswer": "three",
-      "acceptedAnswers": ["three", "3", "Three"],
-      "wordLimit": 1
+      "sectionNumber": 1,
+      "title": "Section 1: Conversation about booking a hotel",
+      "questions": [
+        {
+          "type": "fill-blank",
+          "questionText": "The guest wants to book for _____ nights.",
+          "correctAnswer": "three",
+          "acceptedAnswers": ["three", "3", "Three"]
+        },
+        {
+          "type": "mcq",
+          "questionText": "What type of room does the guest prefer?",
+          "options": ["Single room", "Double room", "Suite", "Family room"],
+          "correctAnswer": "Double room"
+        }
+      ]
     },
     {
-      "type": "mcq",
-      "questionText": "What type of room does the guest prefer?",
-      "options": ["Single room", "Double room", "Suite", "Family room"],
-      "correctAnswer": "Double room"
+      "sectionNumber": 2,
+      "title": "Section 2: Monologue about local attractions",
+      "questions": [
+        {
+          "type": "fill-blank",
+          "questionText": "The museum opens at _____ am.",
+          "correctAnswer": "nine",
+          "acceptedAnswers": ["nine", "9", "Nine"]
+        }
+      ]
     }
   ]
 }
 
-Generate 8-10 questions with a mix of:
+Generate 2 sections with a total of 8-10 questions with a mix of:
 - 4-5 Fill in the Blank questions
 - 3-4 Multiple Choice questions
 - 1-2 Matching questions
 
-The transcript should be 300-400 words, natural conversational style.
+The transcript should be 400-500 words, natural conversational style.
 Return ONLY valid JSON, no markdown or explanation.
 `;
 
