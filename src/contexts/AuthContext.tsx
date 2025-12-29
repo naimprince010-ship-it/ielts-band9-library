@@ -59,24 +59,46 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const storedUser = localStorage.getItem('demo_user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (e) {
+        console.error('Failed to parse stored user:', e);
+        localStorage.removeItem('demo_user');
+      }
     }
     
-    if (isSupabaseConfigured() && supabase) {
-      supabase.auth.getSession().then(async ({ data: { session } }) => {
-        setSession(session);
-        setSupabaseUser(session?.user ?? null);
-        if (session?.user) {
-          await fetchUserProfile(session.user.id, session.user);
+        if (isSupabaseConfigured() && supabase) {
+          const supabaseClient = supabase;
+          const initAuth = async () => {
+            try {
+              const { data: { session }, error } = await supabaseClient.auth.getSession();
+          if (error) {
+            console.error('Failed to get session:', error);
+          } else {
+            setSession(session);
+            setSupabaseUser(session?.user ?? null);
+            if (session?.user) {
+              fetchUserProfile(session.user.id, session.user).catch(err => {
+                console.error('Failed to fetch user profile:', err);
+              });
+            }
+          }
+        } catch (err) {
+          console.error('Auth initialization error:', err);
+        } finally {
+          setLoading(false);
         }
-        setLoading(false);
-      });
+      };
+      
+      initAuth();
 
       const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
         setSession(session);
         setSupabaseUser(session?.user ?? null);
         if (session?.user) {
-          await fetchUserProfile(session.user.id, session.user);
+          fetchUserProfile(session.user.id, session.user).catch(err => {
+            console.error('Failed to fetch user profile on auth change:', err);
+          });
         } else if (!localStorage.getItem('demo_user')) {
           setUser(null);
         }
