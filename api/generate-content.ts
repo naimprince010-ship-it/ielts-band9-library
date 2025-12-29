@@ -294,13 +294,28 @@ async function callGemini(prompt: string): Promise<string> {
     }
   );
 
+  const responseText = await response.text();
+
   if (!response.ok) {
-    const errorData = await response.json();
-    console.error('Gemini API Error:', errorData);
-    throw new Error(`Gemini API error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
+    let errorMessage = `Gemini API error: ${response.status}`;
+    try {
+      const errorData = JSON.parse(responseText);
+      console.error('Gemini API Error:', errorData);
+      errorMessage = `Gemini API error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`;
+    } catch {
+      console.error('Gemini API Error (non-JSON):', responseText.substring(0, 200));
+      errorMessage = `Gemini API error: ${response.status} - ${responseText.substring(0, 100) || 'Unknown error'}`;
+    }
+    throw new Error(errorMessage);
   }
 
-  const data = await response.json();
+  let data;
+  try {
+    data = JSON.parse(responseText);
+  } catch {
+    console.error('Gemini returned non-JSON response:', responseText.substring(0, 200));
+    throw new Error('Gemini API returned an invalid response');
+  }
   
   if (!data.candidates || !data.candidates[0]?.content?.parts?.[0]?.text) {
     console.error('Unexpected Gemini response structure:', data);
@@ -336,27 +351,34 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { 
-    moduleType, 
-    topic = 'general knowledge', 
-    difficulty = 'medium',
-    testType = 'academic',
-    provider = 'openai'
-  } = req.body as GenerateRequest;
-
-  if (provider === 'openai' && !OPENAI_API_KEY) {
-    return res.status(500).json({ error: 'OpenAI API key not configured. Please add OPENAI_API_KEY to your environment variables.' });
-  }
-
-  if (provider === 'gemini' && !GEMINI_API_KEY) {
-    return res.status(500).json({ error: 'Gemini API key not configured. Please add GEMINI_API_KEY to your environment variables.' });
-  }
-
-  if (!moduleType || !['reading', 'listening', 'writing', 'speaking'].includes(moduleType)) {
-    return res.status(400).json({ error: 'Invalid module type' });
-  }
-
   try {
+    if (!req.body) {
+      console.error('Request body is empty or undefined');
+      return res.status(400).json({ error: 'Request body is required' });
+    }
+
+    const body = req.body as Partial<GenerateRequest>;
+    const moduleType = body.moduleType;
+    const topic = body.topic || 'general knowledge';
+    const difficulty = body.difficulty || 'medium';
+    const testType = body.testType || 'academic';
+    const provider = body.provider || 'openai';
+
+    if (provider === 'openai' && !OPENAI_API_KEY) {
+      console.error('OPENAI_API_KEY is not configured');
+      return res.status(500).json({ error: 'OpenAI API key not configured. Please add OPENAI_API_KEY to your environment variables.' });
+    }
+
+    if (provider === 'gemini' && !GEMINI_API_KEY) {
+      console.error('GEMINI_API_KEY is not configured');
+      return res.status(500).json({ error: 'Gemini API key not configured. Please add GEMINI_API_KEY to your environment variables.' });
+    }
+
+    if (!moduleType || !['reading', 'listening', 'writing', 'speaking'].includes(moduleType)) {
+      return res.status(400).json({ error: 'Invalid module type' });
+    }
+
+    console.log(`Generating ${moduleType} content with ${provider}, topic: ${topic}, difficulty: ${difficulty}`);
     let prompt: string;
     
     switch (moduleType) {
