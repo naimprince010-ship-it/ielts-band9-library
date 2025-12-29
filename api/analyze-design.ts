@@ -160,35 +160,44 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  if (!GEMINI_API_KEY) {
-    return res.status(500).json({ 
-      error: 'Gemini API key not configured. Please add GEMINI_API_KEY to your environment variables.' 
-    });
-  }
-
-  const { image, pageName } = req.body as AnalyzeRequest;
-
-  if (!image || !image.data || !image.mimeType) {
-    return res.status(400).json({ error: 'Image data is required' });
-  }
-
-  const allowedMimeTypes = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'];
-  if (!allowedMimeTypes.includes(image.mimeType)) {
-    return res.status(400).json({ 
-      error: `Invalid image type. Allowed types: ${allowedMimeTypes.join(', ')}` 
-    });
-  }
-
-  const base64Size = (image.data.length * 3) / 4;
-  const maxSize = 4 * 1024 * 1024;
-  if (base64Size > maxSize) {
-    return res.status(400).json({ 
-      error: 'Image too large. Please upload an image smaller than 4MB.' 
-    });
-  }
-
   try {
-    console.log(`Analyzing design for page: ${pageName || 'Unknown'}`);
+    if (!GEMINI_API_KEY) {
+      console.error('GEMINI_API_KEY is not configured');
+      return res.status(500).json({ 
+        error: 'Gemini API key not configured. Please add GEMINI_API_KEY to your environment variables.' 
+      });
+    }
+
+    if (!req.body) {
+      console.error('Request body is empty or undefined');
+      return res.status(400).json({ error: 'Request body is required' });
+    }
+
+    const body = req.body as Partial<AnalyzeRequest>;
+    const image = body.image;
+    const pageName = body.pageName;
+
+    if (!image || !image.data || !image.mimeType) {
+      console.error('Missing image data in request:', { hasImage: !!image, hasData: !!image?.data, hasMimeType: !!image?.mimeType });
+      return res.status(400).json({ error: 'Image data is required' });
+    }
+
+    const allowedMimeTypes = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'];
+    if (!allowedMimeTypes.includes(image.mimeType)) {
+      return res.status(400).json({ 
+        error: `Invalid image type. Allowed types: ${allowedMimeTypes.join(', ')}` 
+      });
+    }
+
+    const base64Size = (image.data.length * 3) / 4;
+    const maxSize = 4 * 1024 * 1024;
+    if (base64Size > maxSize) {
+      return res.status(400).json({ 
+        error: 'Image too large. Please upload an image smaller than 4MB.' 
+      });
+    }
+
+    console.log(`Analyzing design for page: ${pageName || 'Unknown'}, image size: ${Math.round(base64Size / 1024)}KB`);
     
     const rawResponse = await callGeminiVision(image.data, image.mimeType);
     const cleanedResponse = cleanJsonResponse(rawResponse);
