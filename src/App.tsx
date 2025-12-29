@@ -128,14 +128,7 @@ function App() {
                 </Layout>
               }
             />
-                      <Route
-                        path="/admin"
-                        element={
-                          <Layout>
-                            <AdminPage />
-                          </Layout>
-                        }
-                      />
+                      <Route path="/admin" element={<AdminPage />} />
                                           <Route path="/profile" element={<ProfilePage />} />
                                           <Route
                                             path="/quiz"
