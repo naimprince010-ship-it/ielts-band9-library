@@ -69,7 +69,7 @@ interface PaymentRequest {
 }
 
 export function AdminPage() {
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, loading } = useAuth();
   const { lessons, createLesson, updateLesson, deleteLesson } = useLessons();
   const navigate = useNavigate();
   
@@ -103,10 +103,10 @@ export function AdminPage() {
     const [processingPayment, setProcessingPayment] = useState<string | null>(null);
 
     useEffect(() => {
-      if (!user || !isAdmin) {
+      if (!loading && (!user || !isAdmin)) {
         navigate('/');
       }
-    }, [user, isAdmin, navigate]);
+    }, [user, isAdmin, loading, navigate]);
 
     const fetchPayments = async () => {
       if (!isSupabaseConfigured() || !supabase) return;
@@ -205,6 +205,14 @@ export function AdminPage() {
 
     const pendingPayments = payments.filter(p => p.status === 'pending');
     const processedPayments = payments.filter(p => p.status !== 'pending');
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
+      </div>
+    );
+  }
 
   if (!user || !isAdmin) {
     return null;
