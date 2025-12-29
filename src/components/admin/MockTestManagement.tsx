@@ -568,33 +568,37 @@ export function MockTestManagement() {
               </div>
             </div>
 
-            {formData.module_type === 'reading' && (
-              <ReadingTestBuilder
-                data={formData.reading_data}
-                onChange={(data) => setFormData({ ...formData, reading_data: data })}
-              />
-            )}
+                        {formData.module_type === 'reading' && (
+                          <ReadingTestBuilder
+                            data={formData.reading_data}
+                            onChange={(data) => setFormData({ ...formData, reading_data: data })}
+                            onTitleSuggested={(title) => !formData.title && setFormData({ ...formData, title })}
+                          />
+                        )}
 
-            {formData.module_type === 'listening' && (
-              <ListeningTestBuilder
-                data={formData.listening_data}
-                onChange={(data) => setFormData({ ...formData, listening_data: data })}
-              />
-            )}
+                        {formData.module_type === 'listening' && (
+                          <ListeningTestBuilder
+                            data={formData.listening_data}
+                            onChange={(data) => setFormData({ ...formData, listening_data: data })}
+                            onTitleSuggested={(title) => !formData.title && setFormData({ ...formData, title })}
+                          />
+                        )}
 
-            {formData.module_type === 'writing' && (
-              <WritingTestBuilder
-                data={formData.writing_data}
-                onChange={(data) => setFormData({ ...formData, writing_data: data })}
-              />
-            )}
+                        {formData.module_type === 'writing' && (
+                          <WritingTestBuilder
+                            data={formData.writing_data}
+                            onChange={(data) => setFormData({ ...formData, writing_data: data })}
+                            onTitleSuggested={(title) => !formData.title && setFormData({ ...formData, title })}
+                          />
+                        )}
 
-            {formData.module_type === 'speaking' && (
-              <SpeakingTestBuilder
-                data={formData.speaking_data}
-                onChange={(data) => setFormData({ ...formData, speaking_data: data })}
-              />
-            )}
+                        {formData.module_type === 'speaking' && (
+                          <SpeakingTestBuilder
+                            data={formData.speaking_data}
+                            onChange={(data) => setFormData({ ...formData, speaking_data: data })}
+                            onTitleSuggested={(title) => !formData.title && setFormData({ ...formData, title })}
+                          />
+                        )}
 
             <div className="flex justify-end gap-2 pt-4 border-t">
               <Button variant="outline" onClick={() => setIsEditorOpen(false)}>
@@ -699,7 +703,7 @@ function getDefaultSpeakingPart(partNumber: 1 | 2 | 3): SpeakingPart {
 interface AIGeneratorProps {
   moduleType: 'reading' | 'listening' | 'writing' | 'speaking';
   testType?: 'academic' | 'general';
-  onGenerated: (content: unknown) => void;
+  onGenerated: (content: unknown, topic?: string) => void;
 }
 
 function AIContentGenerator({ moduleType, testType = 'academic', onGenerated }: AIGeneratorProps) {
@@ -731,14 +735,22 @@ function AIContentGenerator({ moduleType, testType = 'academic', onGenerated }: 
         })
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to generate content');
+      const rawText = await response.text();
+      
+      let data;
+      try {
+        data = JSON.parse(rawText);
+      } catch {
+        console.error('Failed to parse response:', rawText.substring(0, 200));
+        throw new Error(`Server returned invalid response. Please check if ${provider === 'gemini' ? 'GEMINI_API_KEY' : 'OPENAI_API_KEY'} is configured in Vercel.`);
       }
 
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to generate content');
+      }
+
       if (data.success && data.content) {
-        onGenerated(data.content);
+        onGenerated(data.content, topic.trim());
         setTopic('');
       } else {
         throw new Error('Invalid response from AI');
@@ -839,15 +851,21 @@ function AIContentGenerator({ moduleType, testType = 'academic', onGenerated }: 
 
 function ReadingTestBuilder({ 
   data, 
-  onChange 
+  onChange,
+  onTitleSuggested
 }: { 
   data: Partial<ReadingTest>; 
   onChange: (data: Partial<ReadingTest>) => void;
-}) {
+  onTitleSuggested?: (title: string) => void;
+}){
   const [activePassage, setActivePassage] = useState(0);
 
-  const handleAIGenerated = (content: unknown) => {
+  const handleAIGenerated = (content: unknown, topic?: string) => {
     const aiContent = content as { passage: { title: string; textContent: string; paragraphs?: Array<{ label: string; content: string }> }; questions: Array<{ type: string; questionText: string; options?: string[]; correctAnswer: string; acceptedAnswers?: string[]; explanation?: string; passageRef?: string }> };
+    
+    if (topic && onTitleSuggested && !data.passages?.length) {
+      onTitleSuggested(`Reading Test: ${topic}`);
+    }
     
     const newPassage: ReadingPassage = {
       id: `passage-${Date.now()}`,
@@ -1101,14 +1119,19 @@ function ReadingTestBuilder({
 
 function ListeningTestBuilder({ 
   data, 
-  onChange 
+  onChange,
+  onTitleSuggested
 }: { 
   data: Partial<ListeningTest>; 
   onChange: (data: Partial<ListeningTest>) => void;
+  onTitleSuggested?: (title: string) => void;
 }) {
   const [activeSection, setActiveSection] = useState(0);
 
-  const handleAIGenerated = (content: unknown) => {
+  const handleAIGenerated = (content: unknown, topic?: string) => {
+    if (topic && onTitleSuggested && !data.sections?.length) {
+      onTitleSuggested(`Listening Test: ${topic}`);
+    }
     const aiContent = content as { transcript: string; sections: Array<{ sectionNumber: number; title: string; questions: Array<{ type: string; questionText: string; options?: string[]; correctAnswer: string; acceptedAnswers?: string[] }> }> };
     
     const newSections: ListeningSection[] = aiContent.sections.map((s, sIndex) => {
@@ -1384,12 +1407,17 @@ function ListeningTestBuilder({
 
 function WritingTestBuilder({ 
   data, 
-  onChange 
+  onChange,
+  onTitleSuggested
 }: { 
   data: Partial<WritingTest>; 
   onChange: (data: Partial<WritingTest>) => void;
+  onTitleSuggested?: (title: string) => void;
 }) {
-  const handleAIGenerated = (content: unknown) => {
+  const handleAIGenerated = (content: unknown, topic?: string) => {
+    if (topic && onTitleSuggested && !data.tasks?.length) {
+      onTitleSuggested(`Writing Test: ${topic}`);
+    }
     const aiContent = content as { task1: { title: string; prompt: string; sampleAnswer?: string }; task2: { title: string; prompt: string; sampleAnswer?: string } };
     
     const newTasks: [WritingTask, WritingTask] = [
@@ -1556,12 +1584,17 @@ function WritingTestBuilder({
 
 function SpeakingTestBuilder({ 
   data, 
-  onChange 
+  onChange,
+  onTitleSuggested
 }: { 
   data: Partial<SpeakingTest>; 
   onChange: (data: Partial<SpeakingTest>) => void;
+  onTitleSuggested?: (title: string) => void;
 }) {
-  const handleAIGenerated = (content: unknown) => {
+  const handleAIGenerated = (content: unknown, topic?: string) => {
+    if (topic && onTitleSuggested && !data.parts?.length) {
+      onTitleSuggested(`Speaking Test: ${topic}`);
+    }
     const aiContent = content as { 
       part1: { questions: Array<{ text: string; thinkTime: number; recordTime: number }> };
       part2: { topic: string; bulletPoints: string[]; prepTime: number; recordTime: number };
