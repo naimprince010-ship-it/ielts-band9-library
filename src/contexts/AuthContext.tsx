@@ -63,20 +63,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     
     if (isSupabaseConfigured() && supabase) {
-      supabase.auth.getSession().then(({ data: { session } }) => {
+      supabase.auth.getSession().then(async ({ data: { session } }) => {
         setSession(session);
         setSupabaseUser(session?.user ?? null);
         if (session?.user) {
-          fetchUserProfile(session.user.id, session.user);
+          await fetchUserProfile(session.user.id, session.user);
         }
         setLoading(false);
       });
 
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
         setSession(session);
         setSupabaseUser(session?.user ?? null);
         if (session?.user) {
-          fetchUserProfile(session.user.id, session.user);
+          await fetchUserProfile(session.user.id, session.user);
         } else {
           setUser(null);
         }
