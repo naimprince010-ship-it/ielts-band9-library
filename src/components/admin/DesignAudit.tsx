@@ -116,16 +116,23 @@ export function DesignAudit() {
         })
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to analyze design');
+      const responseText = await response.text();
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        console.error('Non-JSON response:', responseText.substring(0, 200));
+        throw new Error(responseText.substring(0, 100) || 'Server returned an invalid response');
       }
 
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || data.details || 'Failed to analyze design');
+      }
+
       if (data.success) {
         setResult(data);
       } else {
-        throw new Error('Invalid response from AI');
+        throw new Error(data.error || 'Invalid response from AI');
       }
     } catch (err) {
       console.error('Design Analysis Error:', err);
