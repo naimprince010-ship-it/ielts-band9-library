@@ -148,22 +148,48 @@ export function MockTestManagement() {
     }
   };
 
+  const getNextTestNumber = (moduleType: ModuleType): number => {
+    const moduleTests = mockTests.filter(t => t.module_type === moduleType);
+    if (moduleTests.length === 0) return 1;
+    
+    const numbers = moduleTests
+      .map(t => {
+        const match = t.title.match(/(\d+)$/);
+        return match ? parseInt(match[1], 10) : 0;
+      })
+      .filter(n => !isNaN(n));
+    
+    return numbers.length > 0 ? Math.max(...numbers) + 1 : moduleTests.length + 1;
+  };
+
+  const getModuleDisplayName = (moduleType: ModuleType): string => {
+    switch (moduleType) {
+      case 'reading': return 'Reading Test';
+      case 'listening': return 'Listening Test';
+      case 'writing': return 'Writing Test';
+      case 'speaking': return 'Speaking Test';
+    }
+  };
+
   const handleNewTest = (moduleType: ModuleType) => {
     setEditingTest(null);
-      setFormData({
-        title: '',
-        module_type: moduleType,
-        is_published: false,
-        is_premium: false,
-        reading_data: getDefaultReadingData(),
-        listening_data: getDefaultListeningData(),
-        writing_data: getDefaultWritingData(),
-        speaking_data: getDefaultSpeakingData(),
-      });
-      setError('');
-      setSuccess('');
-      setIsEditorOpen(true);
-    };
+    const nextNumber = getNextTestNumber(moduleType);
+    const suggestedTitle = `${getModuleDisplayName(moduleType)} ${nextNumber}`;
+    
+    setFormData({
+      title: suggestedTitle,
+      module_type: moduleType,
+      is_published: false,
+      is_premium: false,
+      reading_data: getDefaultReadingData(),
+      listening_data: getDefaultListeningData(),
+      writing_data: getDefaultWritingData(),
+      speaking_data: getDefaultSpeakingData(),
+    });
+    setError('');
+    setSuccess('');
+    setIsEditorOpen(true);
+  };
 
     const handleEditTest = (test: MockTest) => {
       setEditingTest(test);
@@ -706,12 +732,59 @@ interface AIGeneratorProps {
   onGenerated: (content: unknown, topic?: string) => void;
 }
 
+interface TopicSuggestion {
+  topic: string;
+  category: string;
+  difficulty: string;
+}
+
 function AIContentGenerator({ moduleType, testType = 'academic', onGenerated }: AIGeneratorProps) {
   const [generating, setGenerating] = useState(false);
   const [topic, setTopic] = useState('');
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('medium');
   const [provider, setProvider] = useState<'openai' | 'gemini'>('openai');
   const [error, setError] = useState('');
+  const [suggestedTopics, setSuggestedTopics] = useState<TopicSuggestion[]>([]);
+  const [loadingTopics, setLoadingTopics] = useState(false);
+
+  const handleSuggestTopics = async () => {
+    setLoadingTopics(true);
+    setError('');
+
+    try {
+      const response = await fetch('/api/suggest-topics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          moduleType,
+          testType,
+          count: 8
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to suggest topics');
+      }
+
+      if (data.success && data.topics) {
+        setSuggestedTopics(data.topics);
+      }
+    } catch (err) {
+      console.error('Topic Suggestion Error:', err);
+      setError(err instanceof Error ? err.message : 'Failed to suggest topics');
+    } finally {
+      setLoadingTopics(false);
+    }
+  };
+
+  const handleSelectTopic = (selectedTopic: TopicSuggestion) => {
+    setTopic(selectedTopic.topic);
+    if (selectedTopic.difficulty === 'easy' || selectedTopic.difficulty === 'medium' || selectedTopic.difficulty === 'hard') {
+      setDifficulty(selectedTopic.difficulty);
+    }
+  };
 
   const handleGenerate = async () => {
     if (!topic.trim()) {
@@ -778,12 +851,29 @@ function AIContentGenerator({ moduleType, testType = 'academic', onGenerated }: 
         <div className="grid grid-cols-3 gap-4">
           <div>
             <Label>Topic</Label>
-            <Input
-              value={topic}
-              onChange={(e) => setTopic(e.target.value)}
-              placeholder="e.g., Climate change, Technology..."
-              disabled={generating}
-            />
+            <div className="flex gap-2">
+              <Input
+                value={topic}
+                onChange={(e) => setTopic(e.target.value)}
+                placeholder="e.g., Climate change, Technology..."
+                disabled={generating}
+                className="flex-1"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleSuggestTopics}
+                disabled={loadingTopics || generating}
+                className="shrink-0"
+              >
+                {loadingTopics ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Sparkles className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
           </div>
           <div>
             <Label>Difficulty</Label>
@@ -819,6 +909,27 @@ function AIContentGenerator({ moduleType, testType = 'academic', onGenerated }: 
             </Select>
           </div>
         </div>
+
+        {suggestedTopics.length > 0 && (
+          <div className="space-y-2">
+            <Label className="text-xs text-gray-500">Suggested Topics (click to select)</Label>
+            <div className="flex flex-wrap gap-2">
+              {suggestedTopics.map((suggestion, index) => (
+                <Badge
+                  key={index}
+                  variant="outline"
+                  className={`cursor-pointer hover:bg-purple-100 transition-colors ${
+                    topic === suggestion.topic ? 'bg-purple-100 border-purple-400' : ''
+                  }`}
+                  onClick={() => handleSelectTopic(suggestion)}
+                >
+                  <span className="mr-1">{suggestion.topic}</span>
+                  <span className="text-xs text-gray-400">({suggestion.category})</span>
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
 
         {error && (
           <Alert className="bg-red-50 border-red-200">
