@@ -762,18 +762,26 @@ function AIContentGenerator({ moduleType, testType = 'academic', onGenerated }: 
         })
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to suggest topics');
+        if (response.status === 404) {
+          throw new Error('API endpoint not found. Please redeploy the application.');
+        }
+        const data = await response.json().catch(() => ({}));
+        const errorMsg = data.error || data.details || `Server error: ${response.status}`;
+        throw new Error(errorMsg);
       }
+
+      const data = await response.json();
 
       if (data.success && data.topics) {
         setSuggestedTopics(data.topics);
+      } else if (data.error) {
+        throw new Error(data.error);
       }
     } catch (err) {
       console.error('Topic Suggestion Error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to suggest topics');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to suggest topics';
+      setError(errorMessage);
     } finally {
       setLoadingTopics(false);
     }

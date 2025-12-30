@@ -52,7 +52,9 @@ async function callGemini(prompt: string): Promise<string> {
   );
 
   if (!response.ok) {
-    throw new Error(`Gemini API error: ${response.status}`);
+    const errorData = await response.json().catch(() => ({}));
+    const errorMessage = errorData.error?.message || `Status ${response.status}`;
+    throw new Error(`Gemini API error: ${errorMessage}`);
   }
 
   const data = await response.json();
@@ -78,7 +80,9 @@ async function callOpenAI(prompt: string): Promise<string> {
   });
 
   if (!response.ok) {
-    throw new Error(`OpenAI API error: ${response.status}`);
+    const errorData = await response.json().catch(() => ({}));
+    const errorMessage = errorData.error?.message || `Status ${response.status}`;
+    throw new Error(`OpenAI API error: ${errorMessage}`);
   }
 
   const data = await response.json();
