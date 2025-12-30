@@ -40,6 +40,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { VocabularyQuestionGenerator } from './VocabularyQuestionGenerator';
 import {
   ReadingTest,
   ReadingPassage,
@@ -983,12 +984,80 @@ function ReadingTestBuilder({
     onChange({ ...data, passages });
   };
 
+  // Handler for vocabulary-generated questions
+  const handleVocabularyQuestions = (questions: Array<{
+    id: string;
+    type: string;
+    questionText: string;
+    correctAnswer: string;
+    acceptedAnswers: string[];
+    options?: string[];
+    hint?: string;
+    explanation?: string;
+  }>) => {
+    // Create a new passage for vocabulary questions or add to existing
+    const passages = [...(data.passages || [])];
+    const existingQCount = passages.flatMap(p => p.questions).length;
+    
+    const vocabQuestions: ReadingQuestion[] = questions.map((q, i) => ({
+      id: q.id,
+      questionNumber: existingQCount + i + 1,
+      type: (q.type === 'fill-blank' ? 'fill-blank' : 
+             q.type === 'definition-match' ? 'mcq' : 
+             q.type === 'synonym-match' ? 'mcq' : 'fill-blank') as ReadingQuestionType,
+      questionText: q.questionText,
+      correctAnswer: q.correctAnswer,
+      acceptedAnswers: q.acceptedAnswers,
+      options: q.options,
+      explanation: q.explanation
+    }));
+
+    // If no passages exist, create one for vocabulary questions
+    if (passages.length === 0) {
+      const newPassage: ReadingPassage = {
+        id: `passage-vocab-${Date.now()}`,
+        passageNumber: 1,
+        title: 'Vocabulary Practice',
+        textContent: '<p class="mb-4">Answer the following vocabulary questions based on your knowledge.</p>',
+        questions: vocabQuestions,
+        questionRange: { start: 1, end: vocabQuestions.length }
+      };
+      onChange({ ...data, passages: [newPassage] });
+    } else {
+      // Add questions to the last passage
+      const lastPassage = passages[passages.length - 1];
+      lastPassage.questions = [...lastPassage.questions, ...vocabQuestions];
+      
+      // Renumber all questions
+      let qNum = 1;
+      passages.forEach(p => {
+        p.questions.forEach(q => {
+          q.questionNumber = qNum++;
+        });
+        if (p.questions.length > 0) {
+          p.questionRange = {
+            start: p.questions[0].questionNumber,
+            end: p.questions[p.questions.length - 1].questionNumber
+          };
+        }
+      });
+      
+      onChange({ ...data, passages });
+    }
+    setActivePassage(Math.max(0, (data.passages?.length || 1) - 1));
+  };
+
   return (
     <div className="space-y-4">
       <AIContentGenerator
         moduleType="reading"
         testType={data.testType || 'academic'}
         onGenerated={handleAIGenerated}
+      />
+
+      <VocabularyQuestionGenerator
+        moduleType="reading"
+        onQuestionsGenerated={handleVocabularyQuestions}
       />
 
       <div className="grid grid-cols-2 gap-4">
@@ -1252,11 +1321,78 @@ function ListeningTestBuilder({
     onChange({ ...data, sections });
   };
 
+  // Handler for vocabulary-generated questions
+  const handleVocabularyQuestions = (questions: Array<{
+    id: string;
+    type: string;
+    questionText: string;
+    correctAnswer: string;
+    acceptedAnswers: string[];
+    options?: string[];
+    hint?: string;
+    explanation?: string;
+  }>) => {
+    const sections = [...(data.sections || [])];
+    const existingQCount = sections.flatMap(s => s.questions).length;
+    
+    const vocabQuestions: ListeningQuestion[] = questions.map((q, i) => ({
+      id: q.id,
+      questionNumber: existingQCount + i + 1,
+      type: (q.type === 'fill-blank' ? 'fill-blank' : 
+             q.type === 'definition-match' ? 'mcq' : 
+             q.type === 'synonym-match' ? 'mcq' : 'fill-blank') as ListeningQuestionType,
+      questionText: q.questionText,
+      correctAnswer: q.correctAnswer,
+      acceptedAnswers: q.acceptedAnswers,
+      options: q.options
+    }));
+
+    // If no sections exist, create one for vocabulary questions
+    if (sections.length === 0) {
+      const newSection: ListeningSection = {
+        id: `section-vocab-${Date.now()}`,
+        sectionNumber: 1,
+        title: 'Vocabulary Practice',
+        audioStartTime: 0,
+        audioEndTime: 0,
+        questions: vocabQuestions,
+        questionRange: { start: 1, end: vocabQuestions.length }
+      };
+      onChange({ ...data, sections: [newSection] });
+    } else {
+      // Add questions to the last section
+      const lastSection = sections[sections.length - 1];
+      lastSection.questions = [...lastSection.questions, ...vocabQuestions];
+      
+      // Renumber all questions
+      let qNum = 1;
+      sections.forEach(s => {
+        s.questions.forEach(q => {
+          q.questionNumber = qNum++;
+        });
+        if (s.questions.length > 0) {
+          s.questionRange = {
+            start: s.questions[0].questionNumber,
+            end: s.questions[s.questions.length - 1].questionNumber
+          };
+        }
+      });
+      
+      onChange({ ...data, sections });
+    }
+    setActiveSection(Math.max(0, (data.sections?.length || 1) - 1));
+  };
+
   return (
     <div className="space-y-4">
       <AIContentGenerator
         moduleType="listening"
         onGenerated={handleAIGenerated}
+      />
+
+      <VocabularyQuestionGenerator
+        moduleType="listening"
+        onQuestionsGenerated={handleVocabularyQuestions}
       />
 
       <div className="grid grid-cols-3 gap-4">
