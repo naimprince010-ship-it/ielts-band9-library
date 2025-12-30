@@ -43,6 +43,7 @@ import { PageContentManagement } from '@/components/admin/PageContentManagement'
 import { MockTestManagement } from '@/components/admin/MockTestManagement';
 import { DesignAudit } from '@/components/admin/DesignAudit';
 import { VocabularyGenerator } from '@/components/admin/VocabularyGenerator';
+import { VocabularyEnricher } from '@/components/admin/VocabularyEnricher';
 import { Lesson, LessonType, LessonLevel, LessonContent } from '@/types';
 import { GRAMMAR_TOPICS, VOCABULARY_TOPICS } from '@/data/sampleLessons';
 import { generateLessonWithAI } from '@/services/aiLessonGenerator';
@@ -450,10 +451,14 @@ export function AdminPage() {
                                                                                                                                                                   <BarChart3 className="h-4 w-4" />
                                                                                                                                                                   Vocab Coverage
                                                                                                                                                                 </TabsTrigger>
-                                                                                                                                                                <TabsTrigger value="vocab-generator" className="gap-2">
-                                                                                                                                                                  <Plus className="h-4 w-4" />
-                                                                                                                                                                  Add Vocabulary
-                                                                                                                                                                </TabsTrigger>
+                                                                                                                                                                                                                                                                                                                                <TabsTrigger value="vocab-generator" className="gap-2">
+                                                                                                                                                                                                                                                                                                                                  <Plus className="h-4 w-4" />
+                                                                                                                                                                                                                                                                                                                                  Add Vocabulary
+                                                                                                                                                                                                                                                                                                                                </TabsTrigger>
+                                                                                                                                                                                                                                                                                                                                <TabsTrigger value="vocab-enricher" className="gap-2">
+                                                                                                                                                                                                                                                                                                                                  <Sparkles className="h-4 w-4" />
+                                                                                                                                                                                                                                                                                                                                  Enrich Words
+                                                                                                                                                                                                                                                                                                                                </TabsTrigger>
                                                                                                                                                                                                                                                                                                                                 <TabsTrigger value="site-settings" className="gap-2">
                                                                                                                                                                                                                                                                                                                                   <Settings className="h-4 w-4" />
                                                                                                                                                                                                                                                                                                                                   Site Settings
@@ -604,11 +609,15 @@ export function AdminPage() {
                                                                                                   <VocabularyCoverageDashboard />
                                                                                                 </TabsContent>
 
-                                                                                                <TabsContent value="vocab-generator">
-                                                                                                  <VocabularyGenerator />
-                                                                                                </TabsContent>
+                                                                                                                                                                                                <TabsContent value="vocab-generator">
+                                                                                                                                                                                                  <VocabularyGenerator />
+                                                                                                                                                                                                </TabsContent>
 
-                                                                                                                                                                                <TabsContent value="site-settings">
+                                                                                                                                                                                                <TabsContent value="vocab-enricher">
+                                                                                                                                                                                                  <VocabularyEnricher />
+                                                                                                                                                                                                </TabsContent>
+
+                                                                                                                                                                                                                                                                                <TabsContent value="site-settings">
                                                                                                                                                                                   <SiteSettings />
                                                                                                                                                                                 </TabsContent>
 
