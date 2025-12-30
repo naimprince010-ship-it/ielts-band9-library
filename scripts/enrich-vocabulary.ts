@@ -53,24 +53,26 @@ async function enrichWordsWithOpenAI(
   const wordList = words.map((w) => w.word).join(', ');
 
   const prompt = `You are a vocabulary enrichment assistant for IELTS preparation. For each of the following English words, provide:
-1. bangla_meaning: The Bengali/Bangla translation and meaning
-2. synonyms: 3-5 English synonyms (as an array)
-3. antonyms: 2-3 English antonyms if applicable (as an array, empty if no clear antonyms)
-4. collocations: 3-5 common word combinations/collocations (as an array)
-5. word_family: Related words from the same family - noun, verb, adjective, adverb forms (as an array)
+1. bangla_meaning: The Bengali/Bangla translation and meaning (include multiple meanings if applicable)
+2. synonyms: ALL possible English synonyms - provide as many as you know (as an array). Include formal, informal, and academic synonyms.
+3. antonyms: ALL possible English antonyms - provide as many as you know (as an array, empty if no clear antonyms exist)
+4. collocations: ALL common word combinations/collocations you know (as an array)
+5. word_family: ALL related words from the same family - noun, verb, adjective, adverb forms (as an array)
 6. example_sentence: One clear example sentence using the word in an IELTS-appropriate context
 
 Words to enrich: ${wordList}
+
+IMPORTANT: For synonyms and antonyms, provide ALL that you know, not just a few. The more comprehensive, the better.
 
 Respond with a JSON object where keys are the words and values contain the enrichment data.
 Example format:
 {
   "word1": {
-    "bangla_meaning": "বাংলা অর্থ",
-    "synonyms": ["syn1", "syn2", "syn3"],
-    "antonyms": ["ant1", "ant2"],
-    "collocations": ["word1 + noun", "verb + word1"],
-    "word_family": ["word1 (noun)", "word1ly (adverb)"],
+    "bangla_meaning": "বাংলা অর্থ (একাধিক অর্থ থাকলে সব দিন)",
+    "synonyms": ["syn1", "syn2", "syn3", "syn4", "syn5", "...all synonyms"],
+    "antonyms": ["ant1", "ant2", "ant3", "...all antonyms"],
+    "collocations": ["word1 + noun", "verb + word1", "...all collocations"],
+    "word_family": ["word1 (noun)", "word1ly (adverb)", "...all forms"],
     "example_sentence": "Example sentence using word1."
   }
 }
@@ -91,7 +93,7 @@ Only respond with valid JSON, no additional text.`;
       },
     ],
     temperature: 0.3,
-    max_tokens: 4000,
+    max_tokens: 8000,
   });
 
   const content = response.choices[0]?.message?.content;
