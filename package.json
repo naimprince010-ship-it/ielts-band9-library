@@ -10,7 +10,12 @@
     "preview": "vite preview",
     "enrich-vocabulary": "ts-node --project scripts/tsconfig.json scripts/enrich-vocabulary.ts",
     "seed-vocabulary": "ts-node --project scripts/tsconfig.json scripts/seed-vocabulary.ts",
-    "generate-vocabulary": "ts-node --project scripts/tsconfig.json scripts/generate-vocabulary.ts"
+    "generate-vocabulary": "ts-node --project scripts/tsconfig.json scripts/generate-vocabulary.ts",
+    "expand-vocabulary": "ts-node --project scripts/tsconfig.json scripts/expanded-vocabulary.ts",
+    "vocabulary-batch2": "ts-node --project scripts/tsconfig.json scripts/vocabulary-batch2.ts",
+    "vocabulary-batch3": "ts-node --project scripts/tsconfig.json scripts/vocabulary-batch3.ts",
+    "vocabulary-batch4": "ts-node --project scripts/tsconfig.json scripts/vocabulary-batch4.ts",
+    "vocabulary-batch5": "ts-node --project scripts/tsconfig.json scripts/vocabulary-batch5.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
