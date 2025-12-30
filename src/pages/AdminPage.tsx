@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Settings, Plus, Edit, Trash2, Eye, EyeOff, BookOpen, GraduationCap,
   Sparkles, Save, X, AlertCircle, CheckCircle, ShieldCheck, Square, CheckSquare,
-  CreditCard, Clock, CheckCircle2, XCircle, Loader2, BarChart3, Tag, ExternalLink
+  CreditCard, Clock, CheckCircle2, XCircle, Loader2, BarChart3, Tag, ExternalLink,
+  LayoutDashboard, FileText, Users, MessageSquare, Phone, Palette, Menu, ChevronDown, ChevronRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,7 +12,6 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Select,
   SelectContent,
@@ -47,6 +47,7 @@ import { VocabularyEnricher } from '@/components/admin/VocabularyEnricher';
 import { Lesson, LessonType, LessonLevel, LessonContent } from '@/types';
 import { GRAMMAR_TOPICS, VOCABULARY_TOPICS } from '@/data/sampleLessons';
 import { generateLessonWithAI } from '@/services/aiLessonGenerator';
+import { cn } from '@/lib/utils';
 
 interface QualityChecklist {
   naturalCollocations: boolean;
@@ -71,11 +72,69 @@ interface PaymentRequest {
   verified_by: string | null;
 }
 
+interface MenuItem {
+  id: string;
+  label: string;
+  icon: React.ReactNode;
+}
+
+interface MenuGroup {
+  title: string;
+  items: MenuItem[];
+}
+
+const menuGroups: MenuGroup[] = [
+  {
+    title: 'Dashboard',
+    items: [
+      { id: 'dashboard', label: 'Overview', icon: <LayoutDashboard className="h-4 w-4" /> },
+    ],
+  },
+  {
+    title: 'Vocabulary',
+    items: [
+      { id: 'vocab-generator', label: 'Add Words', icon: <Plus className="h-4 w-4" /> },
+      { id: 'vocab-enricher', label: 'Enrich Words', icon: <Sparkles className="h-4 w-4" /> },
+      { id: 'vocab-coverage', label: 'Coverage', icon: <BarChart3 className="h-4 w-4" /> },
+    ],
+  },
+  {
+    title: 'Content',
+    items: [
+      { id: 'lessons', label: 'Lessons', icon: <BookOpen className="h-4 w-4" /> },
+      { id: 'reading', label: 'Reading', icon: <FileText className="h-4 w-4" /> },
+      { id: 'mock-tests', label: 'Mock Tests', icon: <GraduationCap className="h-4 w-4" /> },
+      { id: 'page-content', label: 'Pages', icon: <FileText className="h-4 w-4" /> },
+    ],
+  },
+  {
+    title: 'Users & Payments',
+    items: [
+      { id: 'payments', label: 'Payments', icon: <CreditCard className="h-4 w-4" /> },
+      { id: 'user-management', label: 'Users', icon: <Users className="h-4 w-4" /> },
+      { id: 'coupons', label: 'Coupons', icon: <Tag className="h-4 w-4" /> },
+    ],
+  },
+  {
+    title: 'Settings',
+    items: [
+      { id: 'site-settings', label: 'Site Settings', icon: <Settings className="h-4 w-4" /> },
+      { id: 'payment-settings', label: 'Payment', icon: <CreditCard className="h-4 w-4" /> },
+      { id: 'faq-management', label: 'FAQ', icon: <MessageSquare className="h-4 w-4" /> },
+      { id: 'contact-settings', label: 'Contact', icon: <Phone className="h-4 w-4" /> },
+      { id: 'design-audit', label: 'Design Audit', icon: <Palette className="h-4 w-4" /> },
+    ],
+  },
+];
+
 export function AdminPage() {
   const { user, isAdmin, loading, supabaseUser } = useAuth();
   const { lessons, createLesson, updateLesson, deleteLesson } = useLessons();
   const navigate = useNavigate();
   
+  const [activeSection, setActiveSection] = useState('dashboard');
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [expandedGroups, setExpandedGroups] = useState<string[]>(menuGroups.map(g => g.title));
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [editingLesson, setEditingLesson] = useState<Lesson | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -370,382 +429,435 @@ export function AdminPage() {
   const vocabularyLessons = lessons.filter(l => l.type === 'vocabulary');
   const grammarLessons = lessons.filter(l => l.type === 'grammar');
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-gray-900 text-white py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <Settings className="h-8 w-8" />
-                        <div>
-                          <h1 className="text-2xl font-bold">Admin Panel</h1>
-                          <p className="text-gray-400">Manage lessons and content</p>
+  const toggleGroup = (title: string) => {
+    setExpandedGroups(prev => 
+      prev.includes(title) 
+        ? prev.filter(g => g !== title)
+        : [...prev, title]
+    );
+  };
+
+  const getMenuItemBadge = (id: string): number | undefined => {
+    if (id === 'payments' && pendingPayments.length > 0) {
+      return pendingPayments.length;
+    }
+    return undefined;
+  };
+
+  const renderContent = () => {
+    switch (activeSection) {
+      case 'dashboard':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Dashboard Overview</h2>
+              <p className="text-gray-500 mt-1">Welcome to the admin panel</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg">Total Lessons</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-3xl font-bold">{allLessons.length}</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <BookOpen className="h-5 w-5 text-indigo-600" />
+                    Vocabulary
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-3xl font-bold">{vocabularyLessons.length}</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <GraduationCap className="h-5 w-5 text-purple-600" />
+                    Grammar
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-3xl font-bold">{grammarLessons.length}</p>
+                </CardContent>
+              </Card>
+            </div>
+            {pendingPayments.length > 0 && (
+              <Alert className="bg-amber-50 border-amber-200">
+                <Clock className="h-4 w-4 text-amber-600" />
+                <AlertDescription className="text-amber-800">
+                  You have {pendingPayments.length} pending payment(s) to review.
+                  <Button 
+                    variant="link" 
+                    className="text-amber-700 p-0 h-auto ml-2"
+                    onClick={() => setActiveSection('payments')}
+                  >
+                    View Payments
+                  </Button>
+                </AlertDescription>
+              </Alert>
+            )}
+          </div>
+        );
+
+      case 'vocab-generator':
+        return <VocabularyGenerator />;
+
+      case 'vocab-enricher':
+        return <VocabularyEnricher />;
+
+      case 'vocab-coverage':
+        return <VocabularyCoverageDashboard />;
+
+      case 'lessons':
+        return (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">Lessons</h2>
+                <p className="text-gray-500 mt-1">Manage vocabulary and grammar lessons</p>
+              </div>
+              <Button onClick={handleNewLesson} className="gap-2">
+                <Plus className="h-4 w-4" />
+                New Lesson
+              </Button>
+            </div>
+            <div className="grid gap-4">
+              {allLessons.length === 0 ? (
+                <Card>
+                  <CardContent className="py-8 text-center text-gray-500">
+                    No lessons yet. Create your first lesson!
+                  </CardContent>
+                </Card>
+              ) : (
+                allLessons.map((lesson) => (
+                  <Card key={lesson.id} className="hover:shadow-md transition-shadow">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          {lesson.type === 'vocabulary' ? (
+                            <BookOpen className="h-5 w-5 text-indigo-600" />
+                          ) : (
+                            <GraduationCap className="h-5 w-5 text-purple-600" />
+                          )}
+                          <div>
+                            <h3 className="font-medium">{lesson.title}</h3>
+                            <p className="text-sm text-gray-500">
+                              {lesson.type} - {lesson.level} - {lesson.topic}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {lesson.is_premium && (
+                            <Badge className="bg-amber-100 text-amber-800">Premium</Badge>
+                          )}
+                          <Badge className={lesson.is_published ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}>
+                            {lesson.is_published ? 'Published' : 'Draft'}
+                          </Badge>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleTogglePublish(lesson)}
+                          >
+                            {lesson.is_published ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleEditLesson(lesson)}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDeleteLesson(lesson.id)}
+                            className="text-red-600 hover:text-red-700"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Button 
-                          variant="outline" 
-                          onClick={() => window.open('/', '_blank')}
-                          className="gap-2 bg-white/10 border-white/20 hover:bg-white/20 text-white"
-                        >
-                          <ExternalLink className="h-4 w-4" />
-                          Visit Site
-                        </Button>
-                        <Button onClick={handleNewLesson} className="gap-2">
-                          <Plus className="h-4 w-4" />
-                          New Lesson
-                        </Button>
-                      </div>
-                    </div>
-        </div>
-      </div>
+                    </CardContent>
+                  </Card>
+                ))
+              )}
+            </div>
+          </div>
+        );
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {success && (
-          <Alert className="mb-6 bg-green-50 border-green-200">
-            <CheckCircle className="h-4 w-4 text-green-600" />
-            <AlertDescription className="text-green-800">{success}</AlertDescription>
-          </Alert>
-        )}
+      case 'reading':
+        return <ReadingPassageManagement />;
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Total Lessons</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold">{allLessons.length}</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <BookOpen className="h-5 w-5 text-indigo-600" />
-                Vocabulary
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold">{vocabularyLessons.length}</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <GraduationCap className="h-5 w-5 text-purple-600" />
-                Grammar
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold">{grammarLessons.length}</p>
-            </CardContent>
-          </Card>
-        </div>
+      case 'mock-tests':
+        return <MockTestManagement />;
 
-                <Tabs defaultValue="payments" className="space-y-4">
-                  <TabsList>
-                                        <TabsTrigger value="payments" className="gap-2">
-                                          <CreditCard className="h-4 w-4" />
-                                          Payments {pendingPayments.length > 0 && <Badge className="bg-red-500 text-white ml-1">{pendingPayments.length}</Badge>}
-                                        </TabsTrigger>
-                                                                                                                                                                <TabsTrigger value="vocab-coverage" className="gap-2">
-                                                                                                                                                                  <BarChart3 className="h-4 w-4" />
-                                                                                                                                                                  Vocab Coverage
-                                                                                                                                                                </TabsTrigger>
-                                                                                                                                                                                                                                                                                                                                <TabsTrigger value="vocab-generator" className="gap-2">
-                                                                                                                                                                                                                                                                                                                                  <Plus className="h-4 w-4" />
-                                                                                                                                                                                                                                                                                                                                  Add Vocabulary
-                                                                                                                                                                                                                                                                                                                                </TabsTrigger>
-                                                                                                                                                                                                                                                                                                                                <TabsTrigger value="vocab-enricher" className="gap-2">
-                                                                                                                                                                                                                                                                                                                                  <Sparkles className="h-4 w-4" />
-                                                                                                                                                                                                                                                                                                                                  Enrich Words
-                                                                                                                                                                                                                                                                                                                                </TabsTrigger>
-                                                                                                                                                                                                                                                                                                                                <TabsTrigger value="site-settings" className="gap-2">
-                                                                                                                                                                                                                                                                                                                                  <Settings className="h-4 w-4" />
-                                                                                                                                                                                                                                                                                                                                  Site Settings
-                                                                                                                                                                                                                                                                                                                                </TabsTrigger>
-                                                                                                                                                                                                                                                                                                                                <TabsTrigger value="payment-settings" className="gap-2">
-                                                                                                                                                                                                                                                                                                                                  <CreditCard className="h-4 w-4" />
-                                                                                                                                                                                                                                                                                                                                  Payment
-                                                                                                                                                                                                                                                                                                                                </TabsTrigger>
-                                                                                                                                                                                                                                                                                                                                <TabsTrigger value="user-management" className="gap-2">
-                                                                                                                                                                                                                                                                                                                                  <ShieldCheck className="h-4 w-4" />
-                                                                                                                                                                                                                                                                                                                                  Users
-                                                                                                                                                                                                                                                                                                                                </TabsTrigger>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <TabsTrigger value="coupons" className="gap-2">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <Tag className="h-4 w-4" />
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  Coupons
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </TabsTrigger>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <TabsTrigger value="faq-management" className="gap-2">FAQ</TabsTrigger>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <TabsTrigger value="contact-settings" className="gap-2">Contact</TabsTrigger>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <TabsTrigger value="page-content" className="gap-2">Pages</TabsTrigger>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <TabsTrigger value="reading" className="gap-2">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <BookOpen className="h-4 w-4" />
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  Reading
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </TabsTrigger>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <TabsTrigger value="mock-tests" className="gap-2">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <GraduationCap className="h-4 w-4" />
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  Mock Tests
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </TabsTrigger>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <TabsTrigger value="design-audit" className="gap-2">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <Sparkles className="h-4 w-4" />
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  Design Audit
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </TabsTrigger>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <TabsTrigger value="all">All Lessons ({allLessons.length})</TabsTrigger>
-                    <TabsTrigger value="vocabulary">Vocabulary ({vocabularyLessons.length})</TabsTrigger>
-                    <TabsTrigger value="grammar">Grammar ({grammarLessons.length})</TabsTrigger>
-                  </TabsList>
+      case 'page-content':
+        return <PageContentManagement />;
 
-                  <TabsContent value="payments">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                          <CreditCard className="h-5 w-5" />
-                          Payment Verification
-                        </CardTitle>
-                        <CardDescription>
-                          Review and approve bKash payment submissions
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        {loadingPayments ? (
-                          <div className="flex items-center justify-center py-8">
-                            <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
-                          </div>
-                        ) : payments.length === 0 ? (
-                          <div className="text-center py-8 text-gray-500">
-                            No payment requests yet
-                          </div>
-                        ) : (
-                          <div className="space-y-6">
-                            {pendingPayments.length > 0 && (
-                              <div>
-                                <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                                  <Clock className="h-5 w-5 text-amber-500" />
-                                  Pending Payments ({pendingPayments.length})
-                                </h3>
-                                <div className="space-y-4">
-                                  {pendingPayments.map((payment) => (
-                                    <div key={payment.id} className="border rounded-lg p-4 bg-amber-50 border-amber-200">
-                                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                                        <div className="space-y-1">
-                                          <p className="font-medium">{payment.user_email}</p>
-                                          <p className="text-sm text-gray-600">
-                                            <strong>Package:</strong> {payment.package_name} - ৳{payment.amount}
-                                          </p>
-                                          <p className="text-sm text-gray-600">
-                                            <strong>TrxID:</strong> <code className="bg-white px-2 py-0.5 rounded">{payment.transaction_id}</code>
-                                          </p>
-                                          <p className="text-sm text-gray-600">
-                                            <strong>bKash:</strong> {payment.sender_number}
-                                          </p>
-                                          <p className="text-xs text-gray-500">
-                                            Submitted: {new Date(payment.created_at).toLocaleString()}
-                                          </p>
-                                        </div>
-                                        <div className="flex gap-2">
-                                          <Button
-                                            onClick={() => handleApprovePayment(payment)}
-                                            disabled={processingPayment === payment.id}
-                                            className="bg-green-600 hover:bg-green-700"
-                                          >
-                                            {processingPayment === payment.id ? (
-                                              <Loader2 className="h-4 w-4 animate-spin" />
-                                            ) : (
-                                              <>
-                                                <CheckCircle2 className="h-4 w-4 mr-2" />
-                                                Approve
-                                              </>
-                                            )}
-                                          </Button>
-                                          <Button
-                                            variant="outline"
-                                            onClick={() => handleRejectPayment(payment)}
-                                            disabled={processingPayment === payment.id}
-                                            className="text-red-600 border-red-300 hover:bg-red-50"
-                                          >
-                                            <XCircle className="h-4 w-4 mr-2" />
-                                            Reject
-                                          </Button>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-
-                            {processedPayments.length > 0 && (
-                              <div>
-                                <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                                  <CheckCircle className="h-5 w-5 text-gray-400" />
-                                  Processed Payments ({processedPayments.length})
-                                </h3>
-                                <div className="space-y-2">
-                                  {processedPayments.slice(0, 10).map((payment) => (
-                                    <div key={payment.id} className={`border rounded-lg p-3 ${payment.status === 'approved' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
-                                      <div className="flex items-center justify-between">
-                                        <div>
-                                          <p className="font-medium text-sm">{payment.user_email}</p>
-                                          <p className="text-xs text-gray-600">
-                                            {payment.package_name} - ৳{payment.amount} | TrxID: {payment.transaction_id}
-                                          </p>
-                                        </div>
-                                        <Badge className={payment.status === 'approved' ? 'bg-green-600' : 'bg-red-600'}>
-                                          {payment.status}
-                                        </Badge>
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                                </CardContent>
-                              </Card>
-                            </TabsContent>
-
-                                                                                                <TabsContent value="vocab-coverage">
-                                                                                                  <VocabularyCoverageDashboard />
-                                                                                                </TabsContent>
-
-                                                                                                                                                                                                <TabsContent value="vocab-generator">
-                                                                                                                                                                                                  <VocabularyGenerator />
-                                                                                                                                                                                                </TabsContent>
-
-                                                                                                                                                                                                <TabsContent value="vocab-enricher">
-                                                                                                                                                                                                  <VocabularyEnricher />
-                                                                                                                                                                                                </TabsContent>
-
-                                                                                                                                                                                                                                                                                <TabsContent value="site-settings">
-                                                                                                                                                                                  <SiteSettings />
-                                                                                                                                                                                </TabsContent>
-
-                                                                                                                                                                                <TabsContent value="payment-settings">
-                                                                                                                                                                                  <PaymentSettings />
-                                                                                                                                                                                </TabsContent>
-
-                                                                                                                                                                                                                                                                <TabsContent value="user-management">
-                                                                                                                                                                          <UserManagement />
-                                                                                                                                                                        </TabsContent>
-
-                                                                                                                                                                                                                                                                                                                                        <TabsContent value="coupons">
-                                                                                                                                                                                                                                                                                                                                          <CouponManagement />
-                                                                                                                                                                                                                                                                                                                                        </TabsContent>
-
-                                                                                                                                                                                                                                                                                                                                        <TabsContent value="faq-management">
-                    <FAQManagement />
-                  </TabsContent>
-
-                  <TabsContent value="contact-settings">
-                    <ContactSettingsManagement />
-                  </TabsContent>
-
-                  <TabsContent value="page-content">
-                    <PageContentManagement />
-                  </TabsContent>
-
-                                    <TabsContent value="reading">
-                                                                                                                                                                                                                                                                                                                                                            <ReadingPassageManagement />
-                                                                                                                                                                                                                                                                                                                                                          </TabsContent>
-
-                                                                        <TabsContent value="mock-tests">
-                                                                          <MockTestManagement />
-                                                                        </TabsContent>
-
-                                                                        <TabsContent value="design-audit">
-                                                                          <DesignAudit />
-                                                                        </TabsContent>
-
-                                                                                                                                                                                                                                                                                                                                                                                      {['all', 'vocabulary', 'grammar'].map((tab) => (
-            <TabsContent key={tab} value={tab}>
+      case 'payments':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Payment Verification</h2>
+              <p className="text-gray-500 mt-1">Review and approve bKash payment submissions</p>
+            </div>
+            {loadingPayments ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+              </div>
+            ) : payments.length === 0 ? (
               <Card>
-                <CardContent className="p-0">
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead className="bg-gray-50 border-b">
-                        <tr>
-                          <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Title</th>
-                          <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Type</th>
-                          <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Level</th>
-                          <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Status</th>
-                          <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">Views</th>
-                          <th className="px-4 py-3 text-right text-sm font-medium text-gray-500">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y">
-                        {(tab === 'all' ? allLessons : tab === 'vocabulary' ? vocabularyLessons : grammarLessons).map((lesson) => (
-                          <tr key={lesson.id} className="hover:bg-gray-50">
-                            <td className="px-4 py-3">
-                              <div>
-                                <p className="font-medium text-gray-900">{lesson.title}</p>
-                                <p className="text-sm text-gray-500">{lesson.topic}</p>
+                <CardContent className="py-8 text-center text-gray-500">
+                  No payment requests yet
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="space-y-6">
+                {pendingPayments.length > 0 && (
+                  <div>
+                    <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                      <Clock className="h-5 w-5 text-amber-500" />
+                      Pending Payments ({pendingPayments.length})
+                    </h3>
+                    <div className="space-y-4">
+                      {pendingPayments.map((payment) => (
+                        <Card key={payment.id} className="border-amber-200 bg-amber-50">
+                          <CardContent className="p-4">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                              <div className="space-y-1">
+                                <p className="font-medium">{payment.user_email}</p>
+                                <p className="text-sm text-gray-600">
+                                  <strong>Package:</strong> {payment.package_name} - ৳{payment.amount}
+                                </p>
+                                <p className="text-sm text-gray-600">
+                                  <strong>TrxID:</strong> <code className="bg-white px-2 py-0.5 rounded">{payment.transaction_id}</code>
+                                </p>
+                                <p className="text-sm text-gray-600">
+                                  <strong>bKash:</strong> {payment.sender_number}
+                                </p>
+                                <p className="text-xs text-gray-500">
+                                  Submitted: {new Date(payment.created_at).toLocaleString()}
+                                </p>
                               </div>
-                            </td>
-                            <td className="px-4 py-3">
-                              <Badge variant={lesson.type === 'vocabulary' ? 'default' : 'secondary'}>
-                                {lesson.type}
-                              </Badge>
-                            </td>
-                            <td className="px-4 py-3">
-                              <Badge variant="outline" className="capitalize">{lesson.level}</Badge>
-                            </td>
-                            <td className="px-4 py-3">
-                              <div className="flex items-center gap-2">
-                                {lesson.is_published ? (
-                                  <Badge className="bg-green-100 text-green-800">Published</Badge>
-                                ) : (
-                                  <Badge variant="outline">Draft</Badge>
-                                )}
-                                {lesson.is_premium && (
-                                  <Badge className="bg-amber-100 text-amber-800">Premium</Badge>
-                                )}
-                              </div>
-                            </td>
-                            <td className="px-4 py-3 text-gray-500">
-                              {lesson.view_count.toLocaleString()}
-                            </td>
-                            <td className="px-4 py-3">
-                              <div className="flex items-center justify-end gap-2">
+                              <div className="flex gap-2">
                                 <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() => handleTogglePublish(lesson)}
-                                  title={lesson.is_published ? 'Unpublish' : 'Publish'}
+                                  onClick={() => handleApprovePayment(payment)}
+                                  disabled={processingPayment === payment.id}
+                                  className="bg-green-600 hover:bg-green-700"
                                 >
-                                  {lesson.is_published ? (
-                                    <EyeOff className="h-4 w-4" />
+                                  {processingPayment === payment.id ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
                                   ) : (
-                                    <Eye className="h-4 w-4" />
+                                    <>
+                                      <CheckCircle2 className="h-4 w-4 mr-2" />
+                                      Approve
+                                    </>
                                   )}
                                 </Button>
                                 <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() => handleEditLesson(lesson)}
+                                  variant="outline"
+                                  onClick={() => handleRejectPayment(payment)}
+                                  disabled={processingPayment === payment.id}
+                                  className="text-red-600 border-red-300 hover:bg-red-50"
                                 >
-                                  <Edit className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() => handleDeleteLesson(lesson.id)}
-                                  className="text-red-500 hover:text-red-700"
-                                >
-                                  <Trash2 className="h-4 w-4" />
+                                  <XCircle className="h-4 w-4 mr-2" />
+                                  Reject
                                 </Button>
                               </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          ))}
-        </Tabs>
+                )}
+
+                {processedPayments.length > 0 && (
+                  <div>
+                    <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                      <CheckCircle className="h-5 w-5 text-gray-400" />
+                      Processed Payments ({processedPayments.length})
+                    </h3>
+                    <div className="space-y-2">
+                      {processedPayments.slice(0, 10).map((payment) => (
+                        <Card key={payment.id} className={payment.status === 'approved' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}>
+                          <CardContent className="p-3">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className="font-medium text-sm">{payment.user_email}</p>
+                                <p className="text-xs text-gray-600">
+                                  {payment.package_name} - ৳{payment.amount} | TrxID: {payment.transaction_id}
+                                </p>
+                              </div>
+                              <Badge className={payment.status === 'approved' ? 'bg-green-600' : 'bg-red-600'}>
+                                {payment.status}
+                              </Badge>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        );
+
+      case 'user-management':
+        return <UserManagement />;
+
+      case 'coupons':
+        return <CouponManagement />;
+
+      case 'site-settings':
+        return <SiteSettings />;
+
+      case 'payment-settings':
+        return <PaymentSettings />;
+
+      case 'faq-management':
+        return <FAQManagement />;
+
+      case 'contact-settings':
+        return <ContactSettingsManagement />;
+
+      case 'design-audit':
+        return <DesignAudit />;
+
+      default:
+        return (
+          <div className="text-center py-8 text-gray-500">
+            Select a section from the sidebar
+          </div>
+        );
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100">
+      {/* Top Header */}
+      <div className="bg-gray-900 text-white py-4 px-4 lg:px-8">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="lg:hidden text-white hover:bg-white/10"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+            <Settings className="h-6 w-6" />
+            <div>
+              <h1 className="text-xl font-bold">Admin Panel</h1>
+              <p className="text-gray-400 text-sm hidden sm:block">IELTS Band 9 Library</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => window.open('/', '_blank')}
+              className="gap-2 bg-white/10 border-white/20 hover:bg-white/20 text-white"
+            >
+              <ExternalLink className="h-4 w-4" />
+              <span className="hidden sm:inline">Visit Site</span>
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex">
+        {/* Sidebar */}
+        <aside className={cn(
+          "fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform duration-200 ease-in-out lg:transform-none",
+          sidebarOpen ? "translate-x-0" : "-translate-x-full",
+          "top-[65px] lg:top-0 h-[calc(100vh-65px)] lg:h-[calc(100vh-65px)]"
+        )}>
+          <div className="h-full overflow-y-auto py-4">
+            <nav className="px-3 space-y-1">
+              {menuGroups.map((group) => (
+                <div key={group.title} className="mb-4">
+                  <button
+                    onClick={() => toggleGroup(group.title)}
+                    className="flex items-center justify-between w-full px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider hover:text-gray-700"
+                  >
+                    {group.title}
+                    {expandedGroups.includes(group.title) ? (
+                      <ChevronDown className="h-4 w-4" />
+                    ) : (
+                      <ChevronRight className="h-4 w-4" />
+                    )}
+                  </button>
+                  {expandedGroups.includes(group.title) && (
+                    <div className="mt-1 space-y-1">
+                      {group.items.map((item) => {
+                        const badge = getMenuItemBadge(item.id);
+                        return (
+                          <button
+                            key={item.id}
+                            onClick={() => {
+                              setActiveSection(item.id);
+                              if (window.innerWidth < 1024) {
+                                setSidebarOpen(false);
+                              }
+                            }}
+                            className={cn(
+                              "flex items-center justify-between w-full px-3 py-2 text-sm rounded-lg transition-colors",
+                              activeSection === item.id
+                                ? "bg-indigo-50 text-indigo-700 font-medium"
+                                : "text-gray-700 hover:bg-gray-100"
+                            )}
+                          >
+                            <div className="flex items-center gap-3">
+                              {item.icon}
+                              {item.label}
+                            </div>
+                            {badge && (
+                              <Badge className="bg-red-500 text-white text-xs px-2 py-0.5">
+                                {badge}
+                              </Badge>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </nav>
+          </div>
+        </aside>
+
+        {/* Overlay for mobile */}
+        {sidebarOpen && (
+          <div 
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden top-[65px]"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+
+        {/* Main Content */}
+        <main className="flex-1 p-4 lg:p-8 min-h-[calc(100vh-65px)] overflow-auto">
+          {success && (
+            <Alert className="mb-6 bg-green-50 border-green-200">
+              <CheckCircle className="h-4 w-4 text-green-600" />
+              <AlertDescription className="text-green-800">{success}</AlertDescription>
+            </Alert>
+          )}
+          {error && (
+            <Alert className="mb-6 bg-red-50 border-red-200" variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+          {renderContent()}
+        </main>
       </div>
 
       <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
