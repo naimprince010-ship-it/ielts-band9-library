@@ -44,6 +44,7 @@ import { MockTestManagement } from '@/components/admin/MockTestManagement';
 import { DesignAudit } from '@/components/admin/DesignAudit';
 import { VocabularyGenerator } from '@/components/admin/VocabularyGenerator';
 import { VocabularyEnricher } from '@/components/admin/VocabularyEnricher';
+import { VocabularyCategorizer } from '@/components/admin/VocabularyCategorizer';
 import { Lesson, LessonType, LessonLevel, LessonContent } from '@/types';
 import { GRAMMAR_TOPICS, VOCABULARY_TOPICS } from '@/data/sampleLessons';
 import { generateLessonWithAI } from '@/services/aiLessonGenerator';
@@ -95,6 +96,7 @@ const menuGroups: MenuGroup[] = [
     items: [
       { id: 'vocab-generator', label: 'Add Words', icon: <Plus className="h-4 w-4" /> },
       { id: 'vocab-enricher', label: 'Enrich Words', icon: <Sparkles className="h-4 w-4" /> },
+      { id: 'vocab-categorizer', label: 'Categorize', icon: <Tag className="h-4 w-4" /> },
       { id: 'vocab-coverage', label: 'Coverage', icon: <BarChart3 className="h-4 w-4" /> },
     ],
   },
@@ -508,6 +510,9 @@ export function AdminPage() {
 
       case 'vocab-enricher':
         return <VocabularyEnricher />;
+
+      case 'vocab-categorizer':
+        return <VocabularyCategorizer />;
 
       case 'vocab-coverage':
         return <VocabularyCoverageDashboard />;
