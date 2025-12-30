@@ -42,6 +42,7 @@ import { ContactSettingsManagement } from '@/components/admin/ContactSettingsMan
 import { PageContentManagement } from '@/components/admin/PageContentManagement';
 import { MockTestManagement } from '@/components/admin/MockTestManagement';
 import { DesignAudit } from '@/components/admin/DesignAudit';
+import { VocabularyGenerator } from '@/components/admin/VocabularyGenerator';
 import { Lesson, LessonType, LessonLevel, LessonContent } from '@/types';
 import { GRAMMAR_TOPICS, VOCABULARY_TOPICS } from '@/data/sampleLessons';
 import { generateLessonWithAI } from '@/services/aiLessonGenerator';
@@ -445,10 +446,14 @@ export function AdminPage() {
                                           <CreditCard className="h-4 w-4" />
                                           Payments {pendingPayments.length > 0 && <Badge className="bg-red-500 text-white ml-1">{pendingPayments.length}</Badge>}
                                         </TabsTrigger>
-                                                                                <TabsTrigger value="vocab-coverage" className="gap-2">
-                                                                                  <BarChart3 className="h-4 w-4" />
-                                                                                  Vocab Coverage
-                                                                                </TabsTrigger>
+                                                                                                                                                                <TabsTrigger value="vocab-coverage" className="gap-2">
+                                                                                                                                                                  <BarChart3 className="h-4 w-4" />
+                                                                                                                                                                  Vocab Coverage
+                                                                                                                                                                </TabsTrigger>
+                                                                                                                                                                <TabsTrigger value="vocab-generator" className="gap-2">
+                                                                                                                                                                  <Plus className="h-4 w-4" />
+                                                                                                                                                                  Add Vocabulary
+                                                                                                                                                                </TabsTrigger>
                                                                                                                                                                                                                                                                                                                                 <TabsTrigger value="site-settings" className="gap-2">
                                                                                                                                                                                                                                                                                                                                   <Settings className="h-4 w-4" />
                                                                                                                                                                                                                                                                                                                                   Site Settings
@@ -595,9 +600,13 @@ export function AdminPage() {
                               </Card>
                             </TabsContent>
 
-                                                <TabsContent value="vocab-coverage">
-                                                  <VocabularyCoverageDashboard />
-                                                </TabsContent>
+                                                                                                <TabsContent value="vocab-coverage">
+                                                                                                  <VocabularyCoverageDashboard />
+                                                                                                </TabsContent>
+
+                                                                                                <TabsContent value="vocab-generator">
+                                                                                                  <VocabularyGenerator />
+                                                                                                </TabsContent>
 
                                                                                                                                                                                 <TabsContent value="site-settings">
                                                                                                                                                                                   <SiteSettings />
