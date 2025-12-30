@@ -43,6 +43,7 @@ const WritingTestPage = lazy(() => import('@/pages/WritingTestPage'));
 const ListeningTestPage = lazy(() => import('@/pages/ListeningTestPage'));
 const SpeakingTestPage = lazy(() => import('@/pages/SpeakingTestPage'));
 const ResultDashboardPage = lazy(() => import('@/pages/ResultDashboardPage'));
+const TypingPracticePage = lazy(() => import('@/pages/TypingPracticePage'));
 
 function LoadingSpinner() {
   return (
@@ -196,18 +197,28 @@ function App() {
                                                                                       </Layout>
                                                                                     }
                                                                                   />
-                                                                                  <Route
-                                                                                    path="/reading-practice"
-                                                                                    element={
-                                                                                      <Layout>
-                                                                                        <Suspense fallback={<LoadingSpinner />}>
-                                                                                          <ReadingPracticePage />
-                                                                                        </Suspense>
-                                                                                      </Layout>
-                                                                                    }
-                                                                                  />
-                                                                                  <Route
-                                                                                    path="/progress"
+                                                                                                                                                                    <Route
+                                                                                                                                                                      path="/reading-practice"
+                                                                                                                                                                      element={
+                                                                                                                                                                        <Layout>
+                                                                                                                                                                          <Suspense fallback={<LoadingSpinner />}>
+                                                                                                                                                                            <ReadingPracticePage />
+                                                                                                                                                                          </Suspense>
+                                                                                                                                                                        </Layout>
+                                                                                                                                                                      }
+                                                                                                                                                                    />
+                                                                                                                                                                    <Route
+                                                                                                                                                                      path="/practice/typing"
+                                                                                                                                                                      element={
+                                                                                                                                                                        <Layout>
+                                                                                                                                                                          <Suspense fallback={<LoadingSpinner />}>
+                                                                                                                                                                            <TypingPracticePage />
+                                                                                                                                                                          </Suspense>
+                                                                                                                                                                        </Layout>
+                                                                                                                                                                      }
+                                                                                                                                                                    />
+                                                                                                                                                                    <Route
+                                                                                                                                                                      path="/progress"
                                                                                     element={
                                                                                       <Layout>
                                                                                         <Suspense fallback={<LoadingSpinner />}>
