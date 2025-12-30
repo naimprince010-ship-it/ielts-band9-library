@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { BookOpen, Menu, X, User, LogOut, Settings, Bookmark, Crown, Brain, Trophy, BarChart3, Target, Award, PenTool, FileText, Calendar, Sparkles } from 'lucide-react';
+import { BookOpen, Menu, X, User, LogOut, Settings, Bookmark, Crown, Brain, Trophy, BarChart3, Target, Award, PenTool, FileText, Calendar, Sparkles, Keyboard } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -82,11 +82,15 @@ export function Navbar() {
                                                                                                                                                                                                                                       <FileText className="h-4 w-4 mr-2" />
                                                                                                                                                                                                                                       Essay Bank
                                                                                                                                                                                                                                     </DropdownMenuItem>
-                                                                                                                                                                                                                                    <DropdownMenuItem onClick={() => navigate('/collections')}>
-                                                                                                                                                                                                                                      <Sparkles className="h-4 w-4 mr-2" />
-                                                                                                                                                                                                                                      Collections
-                                                                                                                                                                                                                                    </DropdownMenuItem>
-                                                                                                                                                                                                                                  </DropdownMenuContent>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <DropdownMenuItem onClick={() => navigate('/collections')}>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <Sparkles className="h-4 w-4 mr-2" />
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Collections
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </DropdownMenuItem>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <DropdownMenuItem onClick={() => navigate('/practice/typing')}>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <Keyboard className="h-4 w-4 mr-2" />
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Typing Practice
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </DropdownMenuItem>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </DropdownMenuContent>
                                                                                                                                                                                                                                 </DropdownMenu>
             
                         {user ? (
@@ -234,14 +238,21 @@ export function Navbar() {
                                                                         >
                                                                           Grammar Exercises
                                                                         </Link>
-                                                                        <Link
-                                                                          to="/essay-bank"
-                                                                          className={`block ${navLinkClass('/essay-bank')}`}
-                                                                          onClick={() => setMobileMenuOpen(false)}
-                                                                        >
-                                                                          Essay Bank
-                                                                        </Link>
-                                                {user ? (
+                                                                                                                        <Link
+                                                                                                                          to="/essay-bank"
+                                                                                                                          className={`block ${navLinkClass('/essay-bank')}`}
+                                                                                                                          onClick={() => setMobileMenuOpen(false)}
+                                                                                                                        >
+                                                                                                                          Essay Bank
+                                                                                                                        </Link>
+                                                                                                                        <Link
+                                                                                                                          to="/practice/typing"
+                                                                                                                          className={`block ${navLinkClass('/practice/typing')}`}
+                                                                                                                          onClick={() => setMobileMenuOpen(false)}
+                                                                                                                        >
+                                                                                                                          Typing Practice
+                                                                                                                        </Link>
+                                                                                                {user ? (
                           <>
                             <Link
                               to="/profile"
