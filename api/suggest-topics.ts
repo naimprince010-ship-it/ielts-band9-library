@@ -125,13 +125,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     
     let rawResponse: string;
     
-    if (GEMINI_API_KEY) {
-      rawResponse = await callGemini(prompt);
-    } else if (OPENAI_API_KEY) {
+    if (OPENAI_API_KEY) {
       rawResponse = await callOpenAI(prompt);
+    } else if (GEMINI_API_KEY) {
+      rawResponse = await callGemini(prompt);
     } else {
       return res.status(500).json({ 
-        error: 'No AI API key configured. Please add GEMINI_API_KEY or OPENAI_API_KEY to your environment variables.' 
+        error: 'No AI API key configured. Please add OPENAI_API_KEY to your Vercel environment variables.' 
       });
     }
 
