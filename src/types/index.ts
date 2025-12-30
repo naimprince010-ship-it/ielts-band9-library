@@ -379,6 +379,7 @@ export interface ListeningSection {
   sectionNumber: number;         // 1, 2, 3, or 4
   title: string;                 // Section title (e.g., "Section 1: Conversation")
   description?: string;          // Brief description of the audio context
+  transcript?: string;           // Transcript of the audio for this section (used for TTS generation)
   audioStartTime: number;        // When this section starts in the audio (seconds)
   audioEndTime: number;          // When this section ends in the audio (seconds)
   questions: ListeningQuestion[];
