@@ -37,7 +37,8 @@ import {
   AlertCircle,
   X,
   GripVertical,
-  Sparkles
+  Sparkles,
+  Volume2
 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import {
@@ -1246,6 +1247,58 @@ function ListeningTestBuilder({
   onTitleSuggested?: (title: string) => void;
 }) {
   const [activeSection, setActiveSection] = useState(0);
+  const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
+  const [audioError, setAudioError] = useState<string | null>(null);
+
+  const handleGenerateAudio = async () => {
+    const transcripts = data.sections?.map(s => s.transcript).filter(Boolean).join('\n\n');
+    if (!transcripts) {
+      setAudioError('No transcript available. Please add sections with transcripts first.');
+      return;
+    }
+
+    if (transcripts.length > 5000) {
+      setAudioError('Transcript is too long (max 5000 characters). Please shorten it.');
+      return;
+    }
+
+    setIsGeneratingAudio(true);
+    setAudioError(null);
+
+    try {
+      const response = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          text: transcripts,
+          voice: 'alloy',
+          provider: 'openai'
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || errorData.details || 'Failed to generate audio');
+      }
+
+      const result = await response.json();
+      if (result.audioUrl) {
+        onChange({ ...data, audioUrl: result.audioUrl, audioDuration: Math.ceil(transcripts.length / 15) });
+      } else if (result.audioContent) {
+        const audioBlob = new Blob(
+          [Uint8Array.from(atob(result.audioContent), c => c.charCodeAt(0))],
+          { type: 'audio/mpeg' }
+        );
+        const audioUrl = URL.createObjectURL(audioBlob);
+        onChange({ ...data, audioUrl, audioDuration: Math.ceil(transcripts.length / 15) });
+      }
+    } catch (err) {
+      console.error('TTS Error:', err);
+      setAudioError(err instanceof Error ? err.message : 'Failed to generate audio');
+    } finally {
+      setIsGeneratingAudio(false);
+    }
+  };
 
   const handleAIGenerated = (content: unknown, topic?: string) => {
     if (topic && onTitleSuggested && !data.sections?.length) {
@@ -1379,21 +1432,38 @@ function ListeningTestBuilder({
       />
 
       <div className="grid grid-cols-3 gap-4">
-        <div>
+        <div className="col-span-2">
           <Label>Audio URL</Label>
-          <Input
-            value={data.audioUrl || ''}
-            onChange={(e) => onChange({ ...data, audioUrl: e.target.value })}
-            placeholder="https://example.com/audio.mp3"
-          />
-        </div>
-        <div>
-          <Label>Audio Duration (seconds)</Label>
-          <Input
-            type="number"
-            value={data.audioDuration || 0}
-            onChange={(e) => onChange({ ...data, audioDuration: parseInt(e.target.value) || 0 })}
-          />
+          <div className="flex gap-2">
+            <Input
+              value={data.audioUrl || ''}
+              onChange={(e) => onChange({ ...data, audioUrl: e.target.value })}
+              placeholder="https://example.com/audio.mp3"
+              className="flex-1"
+            />
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleGenerateAudio}
+              disabled={isGeneratingAudio || !data.sections?.some(s => s.transcript)}
+              className="gap-1"
+            >
+              {isGeneratingAudio ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Volume2 className="h-4 w-4" />
+              )}
+              {isGeneratingAudio ? 'Generating...' : 'Generate Audio'}
+            </Button>
+          </div>
+          {audioError && (
+            <p className="text-red-500 text-sm mt-1">{audioError}</p>
+          )}
+          {data.audioUrl && (
+            <div className="mt-2">
+              <audio controls src={data.audioUrl} className="w-full h-8" />
+            </div>
+          )}
         </div>
         <div>
           <Label>Transfer Time (seconds)</Label>
@@ -1401,6 +1471,17 @@ function ListeningTestBuilder({
             type="number"
             value={data.transferTime || 600}
             onChange={(e) => onChange({ ...data, transferTime: parseInt(e.target.value) || 600 })}
+          />
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <Label>Audio Duration (seconds)</Label>
+          <Input
+            type="number"
+            value={data.audioDuration || 0}
+            onChange={(e) => onChange({ ...data, audioDuration: parseInt(e.target.value) || 0 })}
           />
         </div>
       </div>
