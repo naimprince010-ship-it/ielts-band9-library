@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "enrich-vocabulary": "ts-node --project scripts/tsconfig.json scripts/enrich-vocabulary.ts"
+    "enrich-vocabulary": "ts-node --project scripts/tsconfig.json scripts/enrich-vocabulary.ts",
+    "seed-vocabulary": "ts-node --project scripts/tsconfig.json scripts/seed-vocabulary.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
