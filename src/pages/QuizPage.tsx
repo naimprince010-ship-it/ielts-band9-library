@@ -29,6 +29,7 @@ import { useProgress, WrongQuestion } from '@/contexts/ProgressContext';
 import { useQuizKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useConfetti } from '@/hooks/useConfetti';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
+import { checkAnswerWithSynonyms } from '@/utils/scoring';
 
 interface QuizResult {
   questionId: string;
@@ -137,14 +138,27 @@ export function QuizPage() {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const checkAnswer = () => {
+  const checkAnswer = async () => {
     if (!quiz) return;
     
     const currentQuestion = quiz.questions[currentQuestionIndex];
     const normalizedUserAnswer = userAnswer.trim().toLowerCase();
     const normalizedCorrectAnswer = currentQuestion.answer.toLowerCase();
     
-    const correct = normalizedUserAnswer === normalizedCorrectAnswer;
+    // First, do a quick direct comparison
+    let correct = normalizedUserAnswer === normalizedCorrectAnswer;
+    
+    // If not a direct match, try synonym lookup from vocabulary database
+    if (!correct && normalizedUserAnswer) {
+      try {
+        const synonymResult = await checkAnswerWithSynonyms(normalizedUserAnswer, normalizedCorrectAnswer);
+        correct = synonymResult.isMatch;
+      } catch (error) {
+        console.error('Synonym check failed:', error);
+        // Keep correct as false if synonym check fails
+      }
+    }
+    
     setIsCorrect(correct);
     setShowFeedback(true);
     
