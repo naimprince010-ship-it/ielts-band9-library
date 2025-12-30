@@ -1569,6 +1569,19 @@ function ListeningTestBuilder({
                     />
                   </div>
 
+                  <div>
+                    <Label>Transcript (for TTS audio generation)</Label>
+                    <Textarea
+                      value={section.transcript || ''}
+                      onChange={(e) => updateSection(sIndex, { transcript: e.target.value })}
+                      placeholder="Enter the audio transcript for this section. This will be used to generate audio using Text-to-Speech..."
+                      rows={4}
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Add transcript text here, then use "Generate Audio" button above to create audio from all section transcripts.
+                    </p>
+                  </div>
+
                   <div className="border-t pt-4">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-medium">Questions ({section.questions.length})</h4>
