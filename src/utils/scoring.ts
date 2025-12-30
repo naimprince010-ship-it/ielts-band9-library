@@ -51,6 +51,115 @@ export const checkAnswer = (
 };
 
 // ============================================
+// Smart Answer Validation with Synonym Lookup
+// ============================================
+
+export interface SynonymCheckResult {
+  isMatch: boolean;
+  matchType: 'exact' | 'synonym' | 'none';
+  matchedWord?: string;
+}
+
+/**
+ * Checks if user answer matches correct answer via synonym lookup from vocabulary database.
+ * This is an async function that calls the /api/check-synonym endpoint.
+ * 
+ * Flow:
+ * 1. Direct check: userAnswer === correctAnswer (returns immediately if true)
+ * 2. Synonym lookup: Query vocabulary database for synonyms
+ * 
+ * @param userAnswer - The answer provided by the user
+ * @param correctAnswer - The expected correct answer
+ * @returns Promise with match result including match type
+ */
+export const checkAnswerWithSynonyms = async (
+  userAnswer: string,
+  correctAnswer: string
+): Promise<SynonymCheckResult> => {
+  const normalizedUser = normalizeAnswer(userAnswer);
+  const normalizedCorrect = normalizeAnswer(correctAnswer);
+  
+  // Quick return for exact match (no API call needed)
+  if (normalizedUser === normalizedCorrect) {
+    return {
+      isMatch: true,
+      matchType: 'exact',
+      matchedWord: correctAnswer
+    };
+  }
+  
+  // Empty answer check
+  if (!normalizedUser) {
+    return {
+      isMatch: false,
+      matchType: 'none'
+    };
+  }
+  
+  try {
+    const response = await fetch('/api/check-synonym', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        correctAnswer: normalizedCorrect,
+        userAnswer: normalizedUser
+      }),
+    });
+    
+    if (!response.ok) {
+      console.error('Synonym check API error:', response.status);
+      return {
+        isMatch: false,
+        matchType: 'none'
+      };
+    }
+    
+    const result = await response.json() as SynonymCheckResult;
+    return result;
+  } catch (error) {
+    console.error('Synonym check failed:', error);
+    // Fallback to no match on error
+    return {
+      isMatch: false,
+      matchType: 'none'
+    };
+  }
+};
+
+/**
+ * Synchronous check with optional async synonym validation.
+ * First does a quick synchronous check, then optionally validates via synonyms.
+ * 
+ * @param userAnswer - The answer provided by the user
+ * @param correctAnswer - The expected correct answer
+ * @param acceptedAnswers - Optional array of alternative accepted answers
+ * @param enableSynonymCheck - Whether to enable synonym lookup (default: true)
+ * @returns Promise with boolean result
+ */
+export const checkAnswerSmart = async (
+  userAnswer: string,
+  correctAnswer: string,
+  acceptedAnswers?: string[],
+  enableSynonymCheck: boolean = true
+): Promise<boolean> => {
+  // First, do the quick synchronous check
+  if (checkAnswer(userAnswer, correctAnswer, acceptedAnswers)) {
+    return true;
+  }
+  
+  // If synonym check is disabled, return false
+  if (!enableSynonymCheck) {
+    return false;
+  }
+  
+  // Try synonym lookup
+  const result = await checkAnswerWithSynonyms(userAnswer, correctAnswer);
+  return result.isMatch;
+};
+
+// ============================================
 // IELTS Band Score Conversion Tables
 // Based on official IELTS scoring guidelines
 // ============================================
