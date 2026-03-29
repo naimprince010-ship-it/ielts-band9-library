@@ -48,15 +48,9 @@ const TESTIMONIALS = [
 
 export function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

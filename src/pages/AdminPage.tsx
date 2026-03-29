@@ -4,7 +4,7 @@ import {
   Settings, Plus, Edit, Trash2, Eye, EyeOff, BookOpen, GraduationCap,
   Sparkles, Save, X, AlertCircle, CheckCircle, ShieldCheck, Square, CheckSquare,
   CreditCard, Clock, CheckCircle2, XCircle, Loader2, BarChart3, Tag, ExternalLink,
-  LayoutDashboard, FileText, Users, MessageSquare, Phone, Palette, Menu, ChevronDown, ChevronRight
+  LayoutDashboard, FileText, Users, Palette, Menu, ChevronDown, ChevronRight, Star
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -77,6 +77,7 @@ interface MenuItem {
   id: string;
   label: string;
   icon: React.ReactNode;
+  role?: string;
 }
 
 interface MenuGroup {
