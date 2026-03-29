@@ -227,11 +227,11 @@ export function QuizPage() {
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'vocabulary': return 'bg-indigo-100 text-indigo-700';
-      case 'grammar': return 'bg-purple-100 text-purple-700';
-      case 'writing': return 'bg-emerald-100 text-emerald-700';
+      case 'vocabulary': return 'bg-accent/10 text-accent';
+      case 'grammar': return 'bg-foreground/10 text-foreground';
+      case 'writing': return 'bg-green-100 text-green-700';
       case 'speaking': return 'bg-orange-100 text-orange-700';
-      default: return 'bg-gray-100 text-gray-700';
+      default: return 'bg-muted text-muted-foreground';
     }
   };
 
@@ -263,8 +263,8 @@ export function QuizPage() {
 
   if (!quizId) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-violet-50 to-white">
-        <div className="bg-gradient-to-r from-violet-600 to-purple-600 text-white py-12">
+      <div className="min-h-screen bg-gradient-to-b from-muted/50 to-background">
+        <div className="bg-gradient-to-r from-foreground to-foreground/90 text-white py-12">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between">
               <div>
@@ -272,7 +272,7 @@ export function QuizPage() {
                   <Target className="h-8 w-8" />
                   <h1 className="text-3xl font-bold">Interactive Quiz</h1>
                 </div>
-                <p className="text-violet-100 max-w-2xl">
+                <p className="text-muted-foreground max-w-2xl">
                   Test your IELTS knowledge with interactive fill-in-the-blank quizzes. 
                   Get instant feedback, track your score, and improve your Band score!
                 </p>
@@ -396,7 +396,7 @@ export function QuizPage() {
                     </Link>
                   ) : (
                     <Link to={`/quiz/${q.id}`}>
-                      <Button className="w-full bg-violet-600 hover:bg-violet-700">
+                      <Button className="w-full bg-accent hover:bg-accent/90">
                         Start Quiz
                         <ArrowRight className="h-4 w-4 ml-2" />
                       </Button>
@@ -426,16 +426,16 @@ export function QuizPage() {
 
   if (quiz.is_premium && !isPremium) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-violet-50 to-white">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-muted/50 to-background">
         <Card className="p-8 text-center max-w-md">
-          <Lock className="h-16 w-16 mx-auto text-violet-600 mb-4" />
+          <Lock className="h-16 w-16 mx-auto text-accent mb-4" />
           <h2 className="text-2xl font-bold mb-2">Premium Quiz</h2>
           <p className="text-gray-600 mb-6">
             This quiz is available for premium members only. Upgrade to access all quizzes and features!
           </p>
           <div className="space-y-3">
             <Link to="/pricing">
-              <Button className="w-full bg-violet-600 hover:bg-violet-700">
+              <Button className="w-full bg-accent hover:bg-accent/90">
                 Upgrade to Premium
               </Button>
             </Link>
@@ -455,10 +455,10 @@ export function QuizPage() {
     const correctCount = results.filter(r => r.isCorrect).length;
     
     return (
-      <div className="min-h-screen bg-gradient-to-b from-violet-50 to-white py-12">
+      <div className="min-h-screen bg-gradient-to-b from-muted/50 to-background py-12">
         <div className="container mx-auto px-4 max-w-2xl">
           <Card className="overflow-hidden">
-            <div className="bg-gradient-to-r from-violet-600 to-purple-600 text-white p-8 text-center">
+            <div className="bg-gradient-to-r from-foreground to-foreground/90 text-white p-8 text-center">
               <Trophy className="h-16 w-16 mx-auto mb-4" />
               <h2 className="text-3xl font-bold mb-2">Quiz Complete!</h2>
               <p className={`text-xl ${scoreMessage.color.replace('text-', 'text-white/')}`}>
@@ -468,7 +468,7 @@ export function QuizPage() {
             
             <CardContent className="p-8">
               <div className="text-center mb-8">
-                <div className="text-6xl font-bold text-violet-600 mb-2">
+                <div className="text-6xl font-bold text-accent mb-2">
                   {getScorePercentage()}%
                 </div>
                 <p className="text-gray-600">
@@ -529,7 +529,7 @@ export function QuizPage() {
                   Try Again
                 </Button>
                 <Link to="/quiz" className="flex-1">
-                  <Button className="w-full bg-violet-600 hover:bg-violet-700">
+                  <Button className="w-full bg-accent hover:bg-accent/90">
                     More Quizzes
                     <ArrowRight className="h-4 w-4 ml-2" />
                   </Button>
@@ -544,7 +544,7 @@ export function QuizPage() {
 
   if (!quizStarted) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-violet-50 to-white py-12">
+      <div className="min-h-screen bg-gradient-to-b from-muted/50 to-background py-12">
         <div className="container mx-auto px-4 max-w-2xl">
           <Card>
             <CardHeader className="text-center">
@@ -561,13 +561,13 @@ export function QuizPage() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-2 gap-4 text-center">
-                <div className="p-4 bg-violet-50 rounded-lg">
-                  <Target className="h-8 w-8 mx-auto text-violet-600 mb-2" />
+                <div className="p-4 bg-muted rounded-lg">
+                  <Target className="h-8 w-8 mx-auto text-accent mb-2" />
                   <p className="font-semibold text-lg">{quiz.questions.length}</p>
                   <p className="text-sm text-gray-600">Questions</p>
                 </div>
-                <div className="p-4 bg-violet-50 rounded-lg">
-                  <Clock className="h-8 w-8 mx-auto text-violet-600 mb-2" />
+                <div className="p-4 bg-muted rounded-lg">
+                  <Clock className="h-8 w-8 mx-auto text-accent mb-2" />
                   <p className="font-semibold text-lg">{Math.floor(quiz.timeLimit / 60)} min</p>
                   <p className="text-sm text-gray-600">Time Limit</p>
                 </div>
@@ -583,14 +583,14 @@ export function QuizPage() {
                               </ul>
                             </div>
 
-                            <div className="bg-violet-50 border border-violet-200 rounded-lg p-4">
+                            <div className="bg-muted border border-accent/20 rounded-lg p-4">
                               <div className="flex items-center gap-2 mb-2">
-                                <Keyboard className="h-4 w-4 text-violet-600" />
-                                <h4 className="font-semibold text-violet-800">Keyboard Shortcuts:</h4>
+                                <Keyboard className="h-4 w-4 text-accent" />
+                                <h4 className="font-semibold text-foreground">Keyboard Shortcuts:</h4>
                               </div>
-                              <ul className="text-sm text-violet-700 space-y-1">
-                                <li>• <kbd className="px-1.5 py-0.5 bg-violet-100 rounded text-xs font-mono">Enter</kbd> - Submit answer / Next question</li>
-                                <li>• <kbd className="px-1.5 py-0.5 bg-violet-100 rounded text-xs font-mono">H</kbd> - Toggle hint</li>
+                              <ul className="text-sm text-muted-foreground space-y-1">
+                                <li>• <kbd className="px-1.5 py-0.5 bg-muted rounded text-xs font-mono">Enter</kbd> - Submit answer / Next question</li>
+                                <li>• <kbd className="px-1.5 py-0.5 bg-muted rounded text-xs font-mono">H</kbd> - Toggle hint</li>
                               </ul>
                             </div>
 
@@ -603,7 +603,7 @@ export function QuizPage() {
                 </Link>
                 <Button 
                   onClick={startQuiz}
-                  className="flex-1 bg-violet-600 hover:bg-violet-700"
+                  className="flex-1 bg-accent hover:bg-accent/90"
                 >
                   Start Quiz
                   <ArrowRight className="h-4 w-4 ml-2" />
@@ -620,7 +620,7 @@ export function QuizPage() {
   const progress = ((currentQuestionIndex + 1) / quiz.questions.length) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-violet-50 to-white py-8">
+    <div className="min-h-screen bg-gradient-to-b from-muted/50 to-background py-8">
       <div className="container mx-auto px-4 max-w-2xl">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
@@ -632,7 +632,7 @@ export function QuizPage() {
             </span>
           </div>
           <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${
-            timeLeft < 60 ? 'bg-red-100 text-red-700' : 'bg-violet-100 text-violet-700'
+            timeLeft < 60 ? 'bg-red-100 text-red-700' : 'bg-accent/10 text-accent'
           }`}>
             <Clock className="h-4 w-4" />
             <span className="font-mono font-semibold">{formatTime(timeLeft)}</span>
@@ -649,7 +649,7 @@ export function QuizPage() {
                   <span key={index}>
                     {part}
                     {index < array.length - 1 && (
-                      <span className="inline-block min-w-[120px] border-b-2 border-violet-400 mx-1 text-center">
+                      <span className="inline-block min-w-[120px] border-b-2 border-accent mx-1 text-center">
                         {showFeedback ? (
                           <span className={isCorrect ? 'text-green-600' : 'text-red-600'}>
                             {userAnswer || '___'}
@@ -698,7 +698,7 @@ export function QuizPage() {
                 <Button
                   onClick={checkAnswer}
                   disabled={!userAnswer.trim()}
-                  className="w-full bg-violet-600 hover:bg-violet-700"
+                  className="w-full bg-accent hover:bg-accent/90"
                 >
                   Check Answer
                 </Button>
@@ -735,7 +735,7 @@ export function QuizPage() {
 
                 <Button
                   onClick={nextQuestion}
-                  className="w-full bg-violet-600 hover:bg-violet-700"
+                  className="w-full bg-accent hover:bg-accent/90"
                 >
                   {currentQuestionIndex < quiz.questions.length - 1 ? (
                     <>
@@ -762,7 +762,7 @@ export function QuizPage() {
                 key={index}
                 className={`w-3 h-3 rounded-full ${
                   index === currentQuestionIndex
-                    ? 'bg-violet-600'
+                    ? 'bg-accent'
                     : result
                     ? result.isCorrect
                       ? 'bg-green-500'
