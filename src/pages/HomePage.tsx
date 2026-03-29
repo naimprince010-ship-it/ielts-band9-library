@@ -12,7 +12,6 @@ import {
   Star,
   Mic,
   PenTool,
-  Play,
   Zap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
