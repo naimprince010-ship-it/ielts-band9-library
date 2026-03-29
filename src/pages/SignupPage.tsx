@@ -44,7 +44,7 @@ export function SignupPage() {
       setLoading(false);
     } else {
       setSuccess(true);
-      setTimeout(() => navigate('/'), 1500);
+      setTimeout(() => navigate('/login'), 4000);
     }
   };
 
@@ -153,7 +153,7 @@ export function SignupPage() {
             <Alert className="bg-accent/10 border-accent/20">
               <CheckCircle className="h-4 w-4 text-accent" />
               <AlertDescription className="text-foreground">
-                Account created successfully! Redirecting...
+                Account created successfully! If an email confirmation was sent, please verify it before logging in. Redirecting to login...
               </AlertDescription>
             </Alert>
           )}

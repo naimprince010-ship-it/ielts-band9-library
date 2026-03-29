@@ -67,12 +67,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.removeItem('demo_user');
       }
     }
-    
-        if (isSupabaseConfigured() && supabase) {
-          const supabaseClient = supabase;
-          const initAuth = async () => {
-            try {
-              const { data: { session }, error } = await supabaseClient.auth.getSession();
+
+    if (isSupabaseConfigured() && supabase) {
+      const supabaseClient = supabase;
+      const initAuth = async () => {
+        try {
+          const { data: { session }, error } = await supabaseClient.auth.getSession();
           if (error) {
             console.error('Failed to get session:', error);
           } else {
@@ -90,7 +90,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setLoading(false);
         }
       };
-      
+
       initAuth();
 
       const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
@@ -113,7 +113,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchUserProfile = async (userId: string, supabaseUserData?: SupabaseUser) => {
     if (!supabase) return;
-    
+
     const { data } = await supabase
       .from('users')
       .select('*')
@@ -123,11 +123,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (data) {
       setUser(data as User);
     } else if (supabaseUserData) {
-      const userName = supabaseUserData.user_metadata?.full_name || 
-                       supabaseUserData.user_metadata?.name || 
-                       supabaseUserData.email?.split('@')[0] || 
-                       'User';
-      
+      const userName = supabaseUserData.user_metadata?.full_name ||
+        supabaseUserData.user_metadata?.name ||
+        supabaseUserData.email?.split('@')[0] ||
+        'User';
+
       const { data: newUser, error: insertError } = await supabase
         .from('users')
         .insert({
@@ -174,7 +174,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     if (!supabase) return { error: new Error('Supabase not configured') };
-    
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -184,13 +184,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     if (!error && data.user) {
-      await supabase.from('users').insert({
+      const { error: insertError } = await supabase.from('users').insert({
         id: data.user.id,
         email,
         name,
         role: 'user',
         subscription_status: 'free',
       });
+      if (insertError) {
+        // Log the error but don't fail the signup outright, 
+        // as a Postgres trigger might have already inserted the user row.
+        console.warn('Profile insertion warning (might be handled by trigger):', insertError);
+      }
     }
 
     return { error: error as Error | null };

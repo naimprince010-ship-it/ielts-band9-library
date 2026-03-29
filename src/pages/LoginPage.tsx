@@ -26,7 +26,11 @@ export function LoginPage() {
     const { error } = await signIn(email, password);
 
     if (error) {
-      setError(error.message);
+      if (error.message.toLowerCase().includes('email not confirmed')) {
+        setError('Please check your email and confirm your address before signing in.');
+      } else {
+        setError(error.message);
+      }
       setLoading(false);
     } else {
       navigate('/');
