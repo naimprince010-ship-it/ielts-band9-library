@@ -306,7 +306,6 @@ export function LessonPage() {
                   <div className="prose prose-sm max-w-none">
                     {content.grammarUse.split('\n\n').map((section, sectionIndex) => {
                       const lines = section.split('\n');
-                      const isHeader = lines[0]?.startsWith('**');
                       
                       return (
                         <div key={sectionIndex} className={sectionIndex > 0 ? 'mt-4 pt-4 border-t border-border' : ''}>
