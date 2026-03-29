@@ -39,9 +39,9 @@ export function LessonPage() {
 
   if (!lesson) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Lesson not found</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-4">Lesson not found</h2>
           <Link to="/">
             <Button>Go Home</Button>
           </Link>
@@ -78,9 +78,9 @@ export function LessonPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <ReadingProgressBar estimatedMinutes={5} />
-      <div className={`py-8 ${lesson.type === 'vocabulary' ? 'bg-indigo-600' : 'bg-purple-600'} text-white mt-1`}>
+      <div className="py-8 bg-foreground text-background mt-1">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link 
             to={`/${lesson.type}`} 
@@ -153,7 +153,7 @@ export function LessonPage() {
         </div>
 
         <div className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="lg:hidden mb-4 sticky top-16 z-40 bg-gray-50 py-2">
+          <div className="lg:hidden mb-4 sticky top-16 z-40 bg-background py-2">
             <MobileTableOfContents
               items={[
                 { id: 'what-you-will-learn', title: 'What You Will Learn' },
@@ -199,7 +199,7 @@ export function LessonPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-2">Target Level: <strong>{content.targetLevel}</strong></p>
+              <p className="text-muted-foreground mb-2">Target Level: <strong>{content.targetLevel}</strong></p>
               <ul className="space-y-2">
                 {content.whatYouWillLearn.map((item, index) => (
                   <li key={index} className="flex items-start gap-2">
@@ -220,9 +220,9 @@ export function LessonPage() {
                 {slug === 'task1-pie-chart-description' ? (
                   <PieChartCoreExplanation />
                 ) : (
-                  <div className="prose prose-indigo max-w-none">
+                  <div className="prose max-w-none">
                     {content.coreExplanation.split('\n\n').map((paragraph, index) => (
-                      <p key={index} className="mb-4 text-gray-700 whitespace-pre-line">
+                      <p key={index} className="mb-4 text-muted-foreground whitespace-pre-line">
                         {paragraph}
                       </p>
                     ))}
@@ -232,10 +232,10 @@ export function LessonPage() {
             </Card>
 
                         {lesson.type === 'grammar' && content.grammarFormItems && content.grammarFormItems.length > 0 ? (
-                          <Card className="mb-6 border-indigo-200 bg-indigo-50" id="grammar-form">
+                          <Card className="mb-6 border-accent/30 bg-accent/5" id="grammar-form">
                             <CardHeader>
-                              <CardTitle className="text-indigo-900">Grammar Form</CardTitle>
-                              <p className="text-sm text-indigo-600 mt-1">Click each item to see details and examples</p>
+                              <CardTitle className="text-foreground">Grammar Form</CardTitle>
+                              <p className="text-sm text-accent mt-1">Click each item to see details and examples</p>
                             </CardHeader>
                             <CardContent>
                               <Accordion type="single" collapsible className="w-full space-y-2">
@@ -243,14 +243,14 @@ export function LessonPage() {
                                   <AccordionItem 
                                     key={index} 
                                     value={`grammar-form-${index}`}
-                                    className="border border-indigo-200 rounded-lg bg-white overflow-hidden"
+                                    className="border border-border rounded-lg bg-card overflow-hidden"
                                   >
-                                    <AccordionTrigger className="px-4 py-3 hover:bg-indigo-50 hover:no-underline">
+                                    <AccordionTrigger className="px-4 py-3 hover:bg-muted hover:no-underline">
                                       <div className="flex items-center gap-3 text-left">
-                                        <span className="font-semibold text-indigo-900">{item.name}</span>
+                                        <span className="font-semibold text-foreground">{item.name}</span>
                                         <div className="flex gap-1">
                                           {item.tags.map((tag, tagIndex) => (
-                                            <Badge key={tagIndex} variant="secondary" className="bg-indigo-100 text-indigo-700 text-xs">
+                                            <Badge key={tagIndex} variant="secondary" className="bg-accent/10 text-accent text-xs">
                                               {tag}
                                             </Badge>
                                           ))}
@@ -260,14 +260,14 @@ export function LessonPage() {
                                     <AccordionContent className="px-4 pb-4">
                                       <div className="space-y-4">
                                         <div>
-                                          <p className="text-sm font-medium text-gray-500 mb-1">Definition</p>
-                                          <p className="text-gray-700">{item.definition}</p>
+                                          <p className="text-sm font-medium text-muted-foreground mb-1">Definition</p>
+                                          <p className="text-foreground">{item.definition}</p>
                                         </div>
-                                        <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-                                          <p className="text-sm font-medium text-gray-500">Comparison</p>
+                                        <div className="bg-muted rounded-lg p-4 space-y-3">
+                                          <p className="text-sm font-medium text-muted-foreground">Comparison</p>
                                           <div className="flex items-start gap-2">
-                                            <XCircle className="h-4 w-4 text-gray-400 mt-1 flex-shrink-0" />
-                                            <p className="text-gray-500">{item.comparison.standard}</p>
+                                            <XCircle className="h-4 w-4 text-muted-foreground/70 mt-1 flex-shrink-0" />
+                                            <p className="text-muted-foreground">{item.comparison.standard}</p>
                                           </div>
                                           <div className="flex items-start gap-2">
                                             <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
@@ -282,12 +282,12 @@ export function LessonPage() {
                             </CardContent>
                           </Card>
                         ) : lesson.type === 'grammar' && content.grammarForm && (
-                          <Card className="mb-6 border-indigo-200 bg-indigo-50" id="grammar-form">
+                          <Card className="mb-6 border-accent/30 bg-accent/5" id="grammar-form">
                             <CardHeader>
-                              <CardTitle className="text-indigo-900">Grammar Form</CardTitle>
+                              <CardTitle className="text-foreground">Grammar Form</CardTitle>
                             </CardHeader>
                             <CardContent>
-                              <pre className="whitespace-pre-wrap text-indigo-800 font-mono text-sm">
+                              <pre className="whitespace-pre-wrap text-foreground font-mono text-sm">
                                 {content.grammarForm}
                               </pre>
                             </CardContent>
@@ -295,12 +295,12 @@ export function LessonPage() {
                         )}
 
             {lesson.type === 'grammar' && content.grammarUse && (
-              <Card className="mb-6 border-purple-200 bg-purple-50" id="grammar-use">
+              <Card className="mb-6 border-foreground/20 bg-foreground/5" id="grammar-use">
                 <CardHeader>
-                  <CardTitle className="text-purple-900">When to Use</CardTitle>
+                  <CardTitle className="text-foreground">When to Use</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <pre className="whitespace-pre-wrap text-purple-800 font-mono text-sm">
+                  <pre className="whitespace-pre-wrap text-foreground font-mono text-sm">
                     {content.grammarUse}
                   </pre>
                 </CardContent>
@@ -321,12 +321,12 @@ export function LessonPage() {
                       <AccordionTrigger className="text-left">
                         <div className="flex items-center gap-2 pr-4">
                           <SpeakButton text={example.sentence} size="sm" />
-                          <span className="font-medium text-gray-900">"{example.sentence}"</span>
+                          <span className="font-medium text-foreground">"{example.sentence}"</span>
                         </div>
                       </AccordionTrigger>
                       <AccordionContent>
-                        <div className="border-l-4 border-indigo-500 pl-4 py-2">
-                          <p className="text-gray-600">{example.explanation}</p>
+                        <div className="border-l-4 border-accent pl-4 py-2">
+                          <p className="text-muted-foreground">{example.explanation}</p>
                         </div>
                       </AccordionContent>
                     </AccordionItem>
@@ -341,7 +341,7 @@ export function LessonPage() {
                   <XCircle className="h-5 w-5" />
                   Common Mistakes ({content.commonMistakes.length})
                 </CardTitle>
-                <p className="text-sm text-gray-500 mt-1">Tap each card to reveal the correction</p>
+                <p className="text-sm text-muted-foreground mt-1">Tap each card to reveal the correction</p>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
@@ -361,7 +361,7 @@ export function LessonPage() {
               <Card className="mb-6" id="collocations">
                 <CardHeader>
                   <CardTitle>Collocations</CardTitle>
-                  <p className="text-sm text-gray-500 mt-1">Click to copy</p>
+                  <p className="text-sm text-muted-foreground mt-1">Click to copy</p>
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
@@ -383,8 +383,8 @@ export function LessonPage() {
                     {content.synonyms.map((item, index) => (
                       <div key={index} className="flex items-center gap-2">
                         <Badge variant="outline" className="font-semibold">{item.word}</Badge>
-                        <span className="text-gray-400">=</span>
-                        <span className="text-gray-700">{item.synonyms.join(', ')}</span>
+                        <span className="text-muted-foreground">=</span>
+                        <span className="text-foreground">{item.synonyms.join(', ')}</span>
                       </div>
                     ))}
                   </div>
@@ -393,17 +393,17 @@ export function LessonPage() {
             )}
 
             {lesson.type === 'vocabulary' && content.speakingLines && (
-              <Card className="mb-6 border-green-200 bg-green-50" id="speaking-phrases">
+              <Card className="mb-6 border-green-500/30 bg-green-500/5" id="speaking-phrases">
                 <CardHeader>
-                  <CardTitle className="text-green-900">Speaking Phrases</CardTitle>
-                  <p className="text-sm text-green-700 mt-1">Click speaker to listen, click text to copy</p>
+                  <CardTitle className="text-foreground">Speaking Phrases</CardTitle>
+                  <p className="text-sm text-green-600 mt-1">Click speaker to listen, click text to copy</p>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-3">
                     {content.speakingLines.map((line, index) => (
                       <li key={index} className="flex items-start gap-2">
                         <SpeakButton text={line} size="sm" className="flex-shrink-0 mt-0.5" />
-                        <CopyableBadge text={line} className="bg-green-100 hover:bg-green-200 text-green-800 text-left whitespace-normal" />
+                        <CopyableBadge text={line} className="bg-green-500/10 hover:bg-green-500/20 text-green-700 text-left whitespace-normal" />
                       </li>
                     ))}
                   </ul>
@@ -412,18 +412,18 @@ export function LessonPage() {
             )}
 
             {lesson.type === 'grammar' && content.sentenceUpgrade && (
-              <Card className="mb-6 border-green-200 bg-green-50" id="sentence-upgrades">
+              <Card className="mb-6 border-green-500/30 bg-green-500/5" id="sentence-upgrades">
                 <CardHeader>
-                  <CardTitle className="text-green-900">Sentence Upgrades</CardTitle>
+                  <CardTitle className="text-foreground">Sentence Upgrades</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     {content.sentenceUpgrade.map((upgrade, index) => (
                       <div key={index}>
-                        <p className="text-gray-600 mb-1">
+                        <p className="text-muted-foreground mb-1">
                           <span className="font-medium">Basic:</span> {upgrade.basic}
                         </p>
-                        <p className="text-green-800">
+                        <p className="text-green-700">
                           <span className="font-medium">Upgraded:</span> {upgrade.upgraded}
                         </p>
                       </div>
@@ -441,31 +441,31 @@ export function LessonPage() {
               title={`Mini Practice (${content.miniPractice.length} questions)`}
             />
 
-            <Card className="mb-6 bg-indigo-50 border-indigo-200" id="quick-recap">
+            <Card className="mb-6 bg-accent/5 border-accent/30" id="quick-recap">
               <CardHeader>
-                <CardTitle className="text-indigo-900">Quick Recap</CardTitle>
+                <CardTitle className="text-foreground">Quick Recap</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-indigo-800">{content.quickRecap}</p>
+                <p className="text-foreground">{content.quickRecap}</p>
               </CardContent>
             </Card>
           </div>
 
           {user && canAccessContent && (
-          <Card className={`mb-6 ${isCompleted ? 'border-green-500 bg-green-50' : 'border-gray-200'}`}>
+          <Card className={`mb-6 ${isCompleted ? 'border-green-500 bg-green-500/5' : 'border-border'}`}>
             <CardContent className="py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   {isCompleted ? (
                     <CheckCircle2 className="h-8 w-8 text-green-500" />
                   ) : (
-                    <Circle className="h-8 w-8 text-gray-300" />
+                    <Circle className="h-8 w-8 text-muted-foreground/50" />
                   )}
                   <div>
-                    <p className={`font-medium ${isCompleted ? 'text-green-700' : 'text-gray-700'}`}>
+                    <p className={`font-medium ${isCompleted ? 'text-green-700' : 'text-foreground'}`}>
                       {isCompleted ? 'Lesson Completed!' : 'Mark this lesson as complete'}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-muted-foreground">
                       {isCompleted ? 'Great job! You can mark it as incomplete if needed.' : 'Track your progress by marking lessons as complete.'}
                     </p>
                   </div>
