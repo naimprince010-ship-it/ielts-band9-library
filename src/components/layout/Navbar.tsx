@@ -52,7 +52,7 @@ export function Navbar() {
     return `relative px-1 py-2 text-sm font-medium transition-colors ${
       isActive(path)
         ? 'text-foreground'
-        : 'text-muted-foreground hover:text-foreground'
+        : 'text-foreground/70 hover:text-foreground'
     }`;
   };
 
@@ -83,7 +83,7 @@ export function Navbar() {
                 <DropdownMenuTrigger className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors rounded-lg hover:bg-muted ${
                   isActive('/vocabulary') || isActive('/grammar') || isActive('/writing') || isActive('/speaking')
                     ? 'text-foreground'
-                    : 'text-muted-foreground hover:text-foreground'
+                    : 'text-foreground/70 hover:text-foreground'
                 }`}>
                   Learn
                   <ChevronDown className="h-4 w-4" />
@@ -133,7 +133,7 @@ export function Navbar() {
                 <DropdownMenuTrigger className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors rounded-lg hover:bg-muted ${
                   isActive('/grammar-exercises') || isActive('/essay-bank') || isActive('/daily-plan') || isActive('/collections')
                     ? 'text-foreground'
-                    : 'text-muted-foreground hover:text-foreground'
+                    : 'text-foreground/70 hover:text-foreground'
                 }`}>
                   Practice
                   <ChevronDown className="h-4 w-4" />
