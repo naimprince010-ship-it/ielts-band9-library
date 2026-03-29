@@ -20,7 +20,7 @@ export function MobileNav() {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 safe-area-bottom">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50 safe-area-bottom">
       <div className="flex items-center justify-around h-16">
         {navItems.map(({ path, icon: Icon, label }) => (
           <Link
@@ -28,12 +28,19 @@ export function MobileNav() {
             to={path}
             className={`flex flex-col items-center justify-center flex-1 h-full min-w-[64px] py-2 transition-colors ${
               isActive(path)
-                ? 'text-indigo-600'
-                : 'text-gray-500 hover:text-gray-700'
+                ? 'text-foreground'
+                : 'text-muted-foreground'
             }`}
           >
-            <Icon className={`h-6 w-6 ${isActive(path) ? 'stroke-[2.5]' : ''}`} />
-            <span className="text-xs mt-1 font-medium">{label}</span>
+            <div className={`relative ${isActive(path) ? '' : ''}`}>
+              <Icon className={`h-5 w-5 ${isActive(path) ? 'stroke-[2.5]' : 'stroke-[1.5]'}`} />
+              {isActive(path) && (
+                <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-accent" />
+              )}
+            </div>
+            <span className={`text-[10px] mt-1.5 font-medium ${isActive(path) ? 'text-foreground' : 'text-muted-foreground'}`}>
+              {label}
+            </span>
           </Link>
         ))}
       </div>
