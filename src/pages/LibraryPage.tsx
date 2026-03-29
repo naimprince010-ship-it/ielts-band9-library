@@ -155,8 +155,8 @@ export function LibraryPage({ type }: LibraryPageProps) {
   }, [searchQuery, levelFilter, topicFilter, sortBy]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className={`py-12 ${type === 'vocabulary' ? 'bg-indigo-600' : type === 'writing' ? 'bg-emerald-600' : type === 'speaking' ? 'bg-orange-600' : 'bg-purple-600'} text-white`}>
+    <div className="min-h-screen bg-background">
+      <div className="py-12 bg-foreground text-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 mb-4">
             {type === 'vocabulary' ? (
@@ -198,13 +198,13 @@ export function LibraryPage({ type }: LibraryPageProps) {
                         <p className="text-sm opacity-80 mb-3">Choose your learning style:</p>
                         <div className="flex flex-wrap gap-3">
                           <Link to="/grammar-exercises">
-                            <Button className="bg-white text-purple-700 hover:bg-purple-50 gap-2">
+                            <Button className="bg-accent hover:bg-accent/90 text-white gap-2">
                               <ListChecks className="h-4 w-4" />
                               Traditional Exercises
                             </Button>
                           </Link>
                           <Link to="/grammar/natural">
-                            <Button className="bg-purple-800 hover:bg-purple-900 text-white gap-2 border border-white/30">
+                            <Button variant="outline" className="bg-white/10 hover:bg-white/20 text-white gap-2 border border-white/30">
                               <Sparkles className="h-4 w-4" />
                               Natural Approach
                             </Button>
@@ -218,11 +218,11 @@ export function LibraryPage({ type }: LibraryPageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div 
           ref={filterRef}
-          className={`bg-white rounded-lg shadow-sm p-4 mb-8 transition-all ${isFilterSticky ? 'sticky top-0 z-40 shadow-md' : ''}`}
+          className={`bg-card rounded-lg shadow-sm p-4 mb-8 transition-all ${isFilterSticky ? 'sticky top-0 z-40 shadow-md' : ''}`}
         >
           <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
               <Input
                 type="text"
                 placeholder={`Search ${type} lessons...`}
@@ -289,19 +289,19 @@ export function LibraryPage({ type }: LibraryPageProps) {
           <LessonGridSkeleton count={6} />
         ) : displayLessons.length === 0 ? (
           <div className="text-center py-12">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
               {type === 'vocabulary' ? (
-                <BookOpen className="h-8 w-8 text-gray-400" />
+                <BookOpen className="h-8 w-8 text-muted-foreground" />
               ) : (
-                <GraduationCap className="h-8 w-8 text-gray-400" />
+                <GraduationCap className="h-8 w-8 text-muted-foreground" />
               )}
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No lessons found</h3>
-            <p className="text-gray-500">Try adjusting your search or filters.</p>
+            <h3 className="text-lg font-medium text-foreground mb-2">No lessons found</h3>
+            <p className="text-muted-foreground">Try adjusting your search or filters.</p>
           </div>
         ) : (
           <>
-            <p className="text-gray-600 mb-4">{displayLessons.length} lessons found</p>
+            <p className="text-muted-foreground mb-4">{displayLessons.length} lessons found</p>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {displayLessons.map((lesson) => {
                 const estimatedTime = lesson.estimated_time || getEstimatedTime(lesson);
@@ -319,8 +319,8 @@ export function LibraryPage({ type }: LibraryPageProps) {
                               variant="outline" 
                               className={`capitalize ${
                                 lesson.level === 'beginner' ? 'text-green-600 border-green-600' :
-                                lesson.level === 'intermediate' ? 'text-blue-600 border-blue-600' :
-                                'text-purple-600 border-purple-600'
+                                lesson.level === 'intermediate' ? 'text-foreground border-foreground' :
+                                'text-accent border-accent'
                               }`}
                             >
                               {lesson.level}
@@ -344,12 +344,12 @@ export function LibraryPage({ type }: LibraryPageProps) {
                             {user && (
                               <button
                                 onClick={(e) => handleBookmarkToggle(lesson.id, e)}
-                                className="p-1 hover:bg-gray-100 rounded"
+                                className="p-1 hover:bg-muted rounded"
                               >
                                 {isBookmarked(lesson.id) ? (
-                                  <BookmarkCheck className="h-5 w-5 text-indigo-600" />
+                                  <BookmarkCheck className="h-5 w-5 text-accent" />
                                 ) : (
-                                  <Bookmark className="h-5 w-5 text-gray-400 group-hover:text-gray-600" />
+                                  <Bookmark className="h-5 w-5 text-muted-foreground group-hover:text-foreground" />
                                 )}
                               </button>
                             )}
@@ -360,10 +360,10 @@ export function LibraryPage({ type }: LibraryPageProps) {
                             isCompleted ? (
                               <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0" />
                             ) : (
-                              <Circle className="h-5 w-5 text-gray-300 flex-shrink-0" />
+                              <Circle className="h-5 w-5 text-muted-foreground/50 flex-shrink-0" />
                             )
                           )}
-                          <CardTitle className="text-lg group-hover:text-indigo-600 transition-colors">
+                          <CardTitle className="text-lg group-hover:text-accent transition-colors">
                             {lesson.title}
                           </CardTitle>
                         </div>
@@ -372,7 +372,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
-                        <div className="flex items-center justify-between text-sm text-gray-500">
+                        <div className="flex items-center justify-between text-sm text-muted-foreground">
                           <div className="flex items-center gap-2">
                             <Badge variant="secondary" className="capitalize">
                               {lesson.topic}
@@ -441,7 +441,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
       {showBackToTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 p-3 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 transition-colors z-50"
+          className="fixed bottom-6 right-6 p-3 bg-accent text-white rounded-full shadow-lg hover:bg-accent/90 transition-colors z-50"
           aria-label="Back to top"
         >
           <ArrowUp className="h-5 w-5" />
