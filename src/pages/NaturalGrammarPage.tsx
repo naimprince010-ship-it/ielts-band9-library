@@ -1324,8 +1324,8 @@ const HighlightedText: React.FC<{
             onClick={() => onAnnotationClick(ann.targetId)}
             className={`
               cursor-pointer rounded px-1 py-0.5 transition-all duration-200
-              ${shouldHighlight ? `${colors.bg} ${colors.text} border ${colors.border}` : 'hover:bg-gray-100'}
-              ${isSelected ? 'ring-2 ring-offset-1 ring-indigo-500 font-semibold' : ''}
+              ${shouldHighlight ? `${colors.bg} ${colors.text} border ${colors.border}` : 'hover:bg-muted'}
+              ${isSelected ? 'ring-2 ring-offset-1 ring-accent font-semibold' : ''}
             `}
             title={ann.tooltip || ann.label}
           >
@@ -1379,7 +1379,7 @@ const AudioPlayer: React.FC<{ audioUrl?: string; title: string }> = ({ audioUrl,
   
   if (!audioUrl) {
     return (
-      <div className="flex items-center gap-2 text-gray-400 text-sm">
+      <div className="flex items-center gap-2 text-muted-foreground/70 text-sm">
         <VolumeX className="h-4 w-4" />
         <span>Audio coming soon</span>
       </div>
@@ -1387,20 +1387,20 @@ const AudioPlayer: React.FC<{ audioUrl?: string; title: string }> = ({ audioUrl,
   }
   
   return (
-    <div className="flex items-center gap-3 bg-indigo-50 rounded-lg p-3">
+    <div className="flex items-center gap-3 bg-accent/10 rounded-lg p-3">
       <audio ref={audioRef} src={audioUrl} />
       <Button
         variant="ghost"
         size="sm"
         onClick={togglePlay}
-        className="h-10 w-10 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white"
+        className="h-10 w-10 rounded-full bg-accent hover:bg-accent/90 text-white"
       >
         {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 ml-0.5" />}
       </Button>
       <div className="flex-1">
         <div className="flex items-center gap-2 mb-1">
-          <Volume2 className="h-4 w-4 text-indigo-600" />
-          <span className="text-sm font-medium text-indigo-800">Listen to: {title}</span>
+          <Volume2 className="h-4 w-4 text-accent" />
+          <span className="text-sm font-medium text-foreground">Listen to: {title}</span>
         </div>
         <Progress value={progress} className="h-1.5" />
       </div>
@@ -1422,9 +1422,9 @@ const RecastFeedback: React.FC<{
       case 'hint':
         return 'bg-blue-50 border-blue-200 text-blue-800';
       case 'reveal':
-        return 'bg-purple-50 border-purple-200 text-purple-800';
+        return 'bg-muted border-border text-foreground';
       default:
-        return 'bg-gray-50 border-gray-200 text-gray-800';
+        return 'bg-muted border-border text-foreground';
     }
   };
   
@@ -1437,7 +1437,7 @@ const RecastFeedback: React.FC<{
       case 'hint':
         return <Lightbulb className="h-5 w-5 text-blue-600" />;
       case 'reveal':
-        return <Eye className="h-5 w-5 text-purple-600" />;
+        return <Eye className="h-5 w-5 text-accent" />;
       default:
         return null;
     }
@@ -1720,8 +1720,8 @@ export default function NaturalGrammarPage() {
   // Render lesson selection
   if (stage === 'select') {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
-        <div className="py-12 bg-indigo-600 text-white">
+      <div className="min-h-screen bg-gradient-to-b from-muted/50 to-background">
+        <div className="py-12 bg-foreground text-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-3 mb-4">
               <Sparkles className="h-10 w-10" />
@@ -1741,40 +1741,40 @@ export default function NaturalGrammarPage() {
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="mb-8">
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">How It Works</h2>
+            <h2 className="text-xl font-semibold text-foreground mb-2">How It Works</h2>
             <div className="grid md:grid-cols-4 gap-4">
               <div className="bg-white rounded-lg p-4 border shadow-sm">
-                <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mb-3">
-                  <BookOpen className="h-5 w-5 text-indigo-600" />
+                <div className="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center mb-3">
+                  <BookOpen className="h-5 w-5 text-accent" />
                 </div>
                 <h3 className="font-medium mb-1">1. Read & Listen</h3>
-                <p className="text-sm text-gray-600">Immerse yourself in a short story with highlighted patterns.</p>
+                <p className="text-sm text-muted-foreground">Immerse yourself in a short story with highlighted patterns.</p>
               </div>
               <div className="bg-white rounded-lg p-4 border shadow-sm">
                 <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mb-3">
                   <Target className="h-5 w-5 text-green-600" />
                 </div>
                 <h3 className="font-medium mb-1">2. Spot Patterns</h3>
-                <p className="text-sm text-gray-600">Identify grammar patterns naturally from the context.</p>
+                <p className="text-sm text-muted-foreground">Identify grammar patterns naturally from the context.</p>
               </div>
               <div className="bg-white rounded-lg p-4 border shadow-sm">
                 <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center mb-3">
                   <MessageCircle className="h-5 w-5 text-amber-600" />
                 </div>
                 <h3 className="font-medium mb-1">3. Gentle Feedback</h3>
-                <p className="text-sm text-gray-600">Get friendly corrections, not harsh "wrong" messages.</p>
+                <p className="text-sm text-muted-foreground">Get friendly corrections, not harsh "wrong" messages.</p>
               </div>
               <div className="bg-white rounded-lg p-4 border shadow-sm">
-                <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mb-3">
-                  <Award className="h-5 w-5 text-purple-600" />
+                <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center mb-3">
+                  <Award className="h-5 w-5 text-accent" />
                 </div>
                 <h3 className="font-medium mb-1">4. Natural Mastery</h3>
-                <p className="text-sm text-gray-600">Build intuition for correct grammar usage.</p>
+                <p className="text-sm text-muted-foreground">Build intuition for correct grammar usage.</p>
               </div>
             </div>
           </div>
           
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Available Lessons</h2>
+          <h2 className="text-xl font-semibold text-foreground mb-4">Available Lessons</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {SAMPLE_NATURAL_LESSONS.map(lesson => (
               <Card 
@@ -1787,7 +1787,7 @@ export default function NaturalGrammarPage() {
                     <Badge className={
                       lesson.level === 'beginner' ? 'bg-green-100 text-green-800' :
                       lesson.level === 'intermediate' ? 'bg-blue-100 text-blue-800' :
-                      'bg-purple-100 text-purple-800'
+                      'bg-muted text-foreground'
                     }>
                       {lesson.level}
                     </Badge>
@@ -1797,18 +1797,18 @@ export default function NaturalGrammarPage() {
                       </Badge>
                     )}
                   </div>
-                  <CardTitle className="text-lg group-hover:text-indigo-600 transition-colors">
+                  <CardTitle className="text-lg group-hover:text-accent transition-colors">
                     {lesson.title}
                   </CardTitle>
                   <CardDescription>{lesson.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex items-center justify-between text-sm text-gray-500">
+                  <div className="flex items-center justify-between text-sm text-muted-foreground">
                     <div className="flex items-center gap-4">
                       <span>{lesson.contexts.length} stories</span>
                       <span>{lesson.exercises.length} exercises</span>
                     </div>
-                    <span className="flex items-center gap-1 text-indigo-600 group-hover:translate-x-1 transition-transform">
+                    <span className="flex items-center gap-1 text-accent group-hover:translate-x-1 transition-transform">
                       Start
                       <ChevronRight className="h-4 w-4" />
                     </span>
@@ -1819,7 +1819,7 @@ export default function NaturalGrammarPage() {
           </div>
           
           <div className="mt-12 text-center">
-            <p className="text-gray-600 mb-4">Prefer traditional grammar exercises?</p>
+            <p className="text-muted-foreground mb-4">Prefer traditional grammar exercises?</p>
             <Link to="/grammar/exercises">
               <Button variant="outline">
                 <BookOpen className="h-4 w-4 mr-2" />
@@ -1835,7 +1835,7 @@ export default function NaturalGrammarPage() {
   // Render story view
   if (stage === 'story' && currentContext) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-muted py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="mb-6 flex items-center justify-between">
             <Button variant="ghost" onClick={resetToSelection}>
@@ -1851,7 +1851,7 @@ export default function NaturalGrammarPage() {
           
           <Card className="mb-6">
             <CardHeader>
-              <div className="flex items-center gap-2 text-indigo-600 mb-2">
+              <div className="flex items-center gap-2 text-accent mb-2">
                 <BookOpen className="h-5 w-5" />
                 <span className="text-sm font-medium">Read & Listen</span>
               </div>
@@ -1872,8 +1872,8 @@ export default function NaturalGrammarPage() {
                 />
               </div>
               
-              <div className="bg-indigo-50 rounded-lg p-4">
-                <h4 className="font-medium text-indigo-800 mb-2 flex items-center gap-2">
+              <div className="bg-accent/10 rounded-lg p-4">
+                <h4 className="font-medium text-foreground mb-2 flex items-center gap-2">
                   <Lightbulb className="h-4 w-4" />
                   Pattern Legend
                 </h4>
@@ -1907,7 +1907,7 @@ export default function NaturalGrammarPage() {
     const progressPercent = ((completedExercises.length) / (selectedLesson?.exercises.length || 1)) * 100;
     
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-muted py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="mb-6">
             <div className="flex items-center justify-between mb-2">
@@ -1923,9 +1923,9 @@ export default function NaturalGrammarPage() {
           </div>
           
           {/* Story Context Reference */}
-          <Card className="mb-4 bg-gray-50">
+          <Card className="mb-4 bg-muted">
             <CardContent className="pt-4">
-              <div className="flex items-center gap-2 text-gray-600 mb-2">
+              <div className="flex items-center gap-2 text-muted-foreground mb-2">
                 <BookOpen className="h-4 w-4" />
                 <span className="text-sm font-medium">{currentContext.title}</span>
               </div>
@@ -1943,7 +1943,7 @@ export default function NaturalGrammarPage() {
           {/* Exercise Card */}
           <Card>
             <CardHeader>
-              <div className="flex items-center gap-2 text-indigo-600 mb-2">
+              <div className="flex items-center gap-2 text-accent mb-2">
                 <Target className="h-5 w-5" />
                 <span className="text-sm font-medium capitalize">{currentExercise.type.replace('-', ' ')}</span>
               </div>
@@ -1953,12 +1953,12 @@ export default function NaturalGrammarPage() {
               {/* Pattern Recognition - Select Highlight */}
               {currentExercise.interaction === 'select-highlight' && (
                 <div className="space-y-4">
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-muted-foreground text-sm">
                     Click on the words in the story above that match the question.
                   </p>
                   {selectedTargets.length > 0 && (
                     <div className="flex flex-wrap gap-2">
-                      <span className="text-sm text-gray-500">Selected:</span>
+                      <span className="text-sm text-muted-foreground">Selected:</span>
                       {selectedTargets.map(targetId => {
                         const ann = currentContext.annotations.find(a => a.targetId === targetId);
                         return ann ? (
@@ -2008,8 +2008,8 @@ export default function NaturalGrammarPage() {
                         feedback?.status === 'correct' && option === currentExercise.correctAnswer
                           ? 'border-green-500 bg-green-50'
                           : feedback?.status === 'reveal' && option === currentExercise.correctAnswer
-                            ? 'border-purple-500 bg-purple-50'
-                            : 'border-gray-200 hover:border-indigo-300 hover:bg-indigo-50'
+                            ? 'border-accent bg-accent/10'
+                            : 'border-border hover:border-accent/50 hover:bg-accent/10'
                       }`}
                     >
                       {option}
@@ -2034,30 +2034,30 @@ export default function NaturalGrammarPage() {
     const percentage = Math.round((score / selectedLesson.exercises.length) * 100);
     
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-muted py-12">
         <div className="max-w-2xl mx-auto px-4">
           <Card className="text-center">
             <CardHeader>
-              <div className="mx-auto w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center mb-4">
+              <div className="mx-auto w-20 h-20 bg-gradient-to-br from-foreground to-foreground/80 rounded-full flex items-center justify-center mb-4">
                 <Award className="h-10 w-10 text-white" />
               </div>
               <CardTitle className="text-2xl">Lesson Complete!</CardTitle>
               <CardDescription>{selectedLesson.title}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="text-5xl font-bold text-indigo-600">{percentage}%</div>
-              <p className="text-gray-600">
+              <div className="text-5xl font-bold text-accent">{percentage}%</div>
+              <p className="text-muted-foreground">
                 You got {score} out of {selectedLesson.exercises.length} correct
               </p>
               <Progress value={percentage} className="h-3" />
               
               {selectedLesson.quickRecap && (
-                <div className="bg-indigo-50 rounded-lg p-4 text-left">
-                  <h4 className="font-semibold text-indigo-800 mb-2 flex items-center gap-2">
+                <div className="bg-accent/10 rounded-lg p-4 text-left">
+                  <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
                     <Sparkles className="h-4 w-4" />
                     What You Learned
                   </h4>
-                  <p className="text-sm text-indigo-700">{selectedLesson.quickRecap}</p>
+                  <p className="text-sm text-muted-foreground">{selectedLesson.quickRecap}</p>
                 </div>
               )}
               
