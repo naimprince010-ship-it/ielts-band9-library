@@ -297,12 +297,51 @@ export function LessonPage() {
             {lesson.type === 'grammar' && content.grammarUse && (
               <Card className="mb-6 border-foreground/20 bg-foreground/5" id="grammar-use">
                 <CardHeader>
-                  <CardTitle className="text-foreground">When to Use</CardTitle>
+                  <CardTitle className="text-foreground flex items-center gap-2">
+                    <Zap className="h-5 w-5 text-amber-500" />
+                    When to Use
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <pre className="whitespace-pre-wrap text-foreground font-mono text-sm">
-                    {content.grammarUse}
-                  </pre>
+                  <div className="prose prose-sm max-w-none">
+                    {content.grammarUse.split('\n\n').map((section, sectionIndex) => {
+                      const lines = section.split('\n');
+                      const isHeader = lines[0]?.startsWith('**');
+                      
+                      return (
+                        <div key={sectionIndex} className={sectionIndex > 0 ? 'mt-4 pt-4 border-t border-border' : ''}>
+                          {lines.map((line, lineIndex) => {
+                            if (line.startsWith('**') && line.endsWith('**')) {
+                              return (
+                                <h4 key={lineIndex} className="font-semibold text-foreground mb-2">
+                                  {line.replace(/\*\*/g, '')}
+                                </h4>
+                              );
+                            } else if (line.match(/^\d+\./)) {
+                              return (
+                                <div key={lineIndex} className="flex items-start gap-2 py-1">
+                                  <span className="w-6 h-6 rounded-full bg-accent/10 text-accent text-xs flex items-center justify-center flex-shrink-0 font-medium">
+                                    {line.match(/^\d+/)?.[0]}
+                                  </span>
+                                  <span className="text-muted-foreground">{line.replace(/^\d+\.\s*/, '')}</span>
+                                </div>
+                              );
+                            } else if (line.startsWith('-')) {
+                              return (
+                                <div key={lineIndex} className="flex items-start gap-2 py-1 pl-2">
+                                  <span className="text-accent">•</span>
+                                  <span className="text-muted-foreground">{line.replace(/^-\s*/, '')}</span>
+                                </div>
+                              );
+                            } else if (line.trim()) {
+                              return <p key={lineIndex} className="text-muted-foreground">{line}</p>;
+                            }
+                            return null;
+                          })}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </CardContent>
               </Card>
             )}
@@ -316,21 +355,48 @@ export function LessonPage() {
               </CardHeader>
               <CardContent>
                 <Accordion type="single" collapsible className="w-full" defaultValue="examples-0">
-                  {content.examples.map((example, index) => (
-                    <AccordionItem key={index} value={`examples-${index}`}>
-                      <AccordionTrigger className="text-left">
-                        <div className="flex items-center gap-2 pr-4">
-                          <SpeakButton text={example.sentence} size="sm" />
-                          <span className="font-medium text-foreground">"{example.sentence}"</span>
-                        </div>
-                      </AccordionTrigger>
-                      <AccordionContent>
-                        <div className="border-l-4 border-accent pl-4 py-2">
-                          <p className="text-muted-foreground">{example.explanation}</p>
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
+                  {content.examples.map((example, index) => {
+                    // Parse "Error: X → Correct: Y" format for better display
+                    const hasErrorFormat = example.sentence.includes('Error:') && example.sentence.includes('Correct:');
+                    let errorPart = '';
+                    let correctPart = '';
+                    
+                    if (hasErrorFormat) {
+                      const parts = example.sentence.split('→');
+                      errorPart = parts[0]?.replace('Error:', '').trim() || '';
+                      correctPart = parts[1]?.replace('Correct:', '').trim() || '';
+                    }
+                    
+                    return (
+                      <AccordionItem key={index} value={`examples-${index}`}>
+                        <AccordionTrigger className="text-left hover:no-underline">
+                          {hasErrorFormat ? (
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-2 pr-4 w-full">
+                              <div className="flex items-center gap-2 flex-1">
+                                <XCircle className="h-4 w-4 text-red-500 flex-shrink-0" />
+                                <span className="text-red-600 line-through text-sm">{errorPart}</span>
+                              </div>
+                              <span className="text-muted-foreground text-sm hidden sm:block">→</span>
+                              <div className="flex items-center gap-2 flex-1">
+                                <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                                <span className="text-green-700 font-medium text-sm">{correctPart}</span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-2 pr-4">
+                              <SpeakButton text={example.sentence} size="sm" />
+                              <span className="font-medium text-foreground">"{example.sentence}"</span>
+                            </div>
+                          )}
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <div className="border-l-4 border-accent pl-4 py-2 bg-muted/50 rounded-r-lg">
+                            <p className="text-muted-foreground">{example.explanation}</p>
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    );
+                  })}
                 </Accordion>
               </CardContent>
             </Card>
@@ -414,20 +480,40 @@ export function LessonPage() {
             {lesson.type === 'grammar' && content.sentenceUpgrade && (
               <Card className="mb-6 border-green-500/30 bg-green-500/5" id="sentence-upgrades">
                 <CardHeader>
-                  <CardTitle className="text-foreground">Sentence Upgrades</CardTitle>
+                  <CardTitle className="text-foreground flex items-center gap-2">
+                    <Zap className="h-5 w-5 text-green-500" />
+                    Sentence Upgrades
+                  </CardTitle>
+                  <p className="text-sm text-muted-foreground mt-1">See how error-filled sentences become Band 8+ quality</p>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {content.sentenceUpgrade.map((upgrade, index) => (
-                      <div key={index}>
-                        <p className="text-muted-foreground mb-1">
-                          <span className="font-medium">Basic:</span> {upgrade.basic}
-                        </p>
-                        <p className="text-green-700">
-                          <span className="font-medium">Upgraded:</span> {upgrade.upgraded}
-                        </p>
-                      </div>
-                    ))}
+                  <div className="space-y-6">
+                    {content.sentenceUpgrade.map((upgrade, index) => {
+                      // Clean up "Error-filled:" prefix
+                      const basicText = upgrade.basic.replace(/^Error-filled:\s*/i, '').replace(/^Basic:\s*/i, '');
+                      
+                      return (
+                        <div key={index} className="relative">
+                          <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-red-300 to-green-400" />
+                          <div className="space-y-3 pl-8">
+                            <div className="flex items-start gap-2">
+                              <XCircle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
+                              <div>
+                                <span className="text-xs font-medium text-red-600 uppercase tracking-wide">Before</span>
+                                <p className="text-red-700 line-through decoration-red-300">{basicText}</p>
+                              </div>
+                            </div>
+                            <div className="flex items-start gap-2">
+                              <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                              <div>
+                                <span className="text-xs font-medium text-green-600 uppercase tracking-wide">After (Band 8+)</span>
+                                <p className="text-green-700 font-medium">{upgrade.upgraded}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </CardContent>
               </Card>
