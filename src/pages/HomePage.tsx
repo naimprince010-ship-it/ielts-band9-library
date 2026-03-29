@@ -3,17 +3,15 @@ import {
   BookOpen, 
   GraduationCap, 
   Search, 
-  Star, 
   ArrowRight, 
   CheckCircle, 
   Trophy, 
   Target, 
   Users, 
-  Sparkles,
-  Zap,
-  Globe,
   Quote,
-  Crown
+  Star,
+  Mic,
+  PenTool
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -29,28 +27,34 @@ const TESTIMONIALS = [
   {
     name: "Rahat Ahmed",
     score: "Band 8.5",
-    text: "IELTS Tree changed my preparation strategy. The vocabulary lessons are world-class!",
+    text: "IELTS Tree changed my preparation strategy completely. The vocabulary lessons are world-class and helped me achieve my target score.",
     avatar: "RA"
   },
   {
     name: "Sumaiya Kabir",
     score: "Band 8.0",
-    text: "The grammar section is so clear and easy to follow. Highly recommended for Band 7+ aspirants.",
+    text: "The grammar section is remarkably clear and easy to follow. Highly recommended for anyone aiming for Band 7 or higher.",
     avatar: "SK"
   },
   {
     name: "Tanvir Hasan",
     score: "Band 7.5",
-    text: "Best resource for IELTS in Bangladesh. The AI-enhanced lessons are truly helpful.",
+    text: "Best resource for IELTS preparation I have found. The AI-enhanced lessons are genuinely helpful and saved me months of study time.",
     avatar: "TH"
   }
+];
+
+const STATS = [
+  { value: "5,000+", label: "Lessons Completed" },
+  { value: "2,000+", label: "Active Students" },
+  { value: "4.9/5", label: "Student Rating" },
+  { value: "150+", label: "Live Batches" }
 ];
 
 export function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const { user } = useAuth();
-
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,117 +66,153 @@ export function HomePage() {
   const featuredLessons = SAMPLE_LESSONS.filter(l => l.is_published).slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-white font-sans selection:bg-indigo-100 selection:text-indigo-900">
+    <div className="min-h-screen bg-background font-sans selection:bg-primary/10 selection:text-foreground">
       {user && <ContinueLearning />}
       
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-slate-950 pt-20 pb-32">
-        {/* Animated Background Orbs */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/20 blur-[120px] rounded-full animate-pulse" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/20 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-indigo-300 text-sm font-medium mb-8 backdrop-blur-md animate-fade-in">
-              <Sparkles className="h-4 w-4" />
-              <span>AI-Enhanced Learning for 2024</span>
-            </div>
-            
-            <h1 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight leading-[1.1] mb-8">
-              Grow Your Success <br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
-                with IELTS Tree
-              </span>
-            </h1>
-            
-            <p className="text-xl text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed">
-              Master premium vocabulary, advanced grammar, and proven strategies designed by experts to help you reach Band 7.0 to 9.0.
-            </p>
-            
-            {/* Glassmorphism Search Bar */}
-            <form onSubmit={handleSearch} className="max-w-2xl mx-auto mb-12 p-2 bg-white/5 backdrop-blur-2xl rounded-2xl border border-white/10 shadow-2xl transition-all hover:border-white/20">
-              <div className="flex flex-col sm:flex-row gap-2">
-                <div className="relative flex-1">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 h-5 w-5" />
-                  <Input
-                    type="text"
-                    placeholder="What do you want to learn today?"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-12 h-14 bg-transparent border-none text-white text-lg placeholder:text-slate-500 focus-visible:ring-0 focus-visible:ring-offset-0"
-                  />
-                </div>
-                <Button type="submit" size="lg" className="h-14 px-8 bg-indigo-600 hover:bg-indigo-500 text-lg font-bold rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg shadow-indigo-600/20">
-                  Find Lessons
-                </Button>
-              </div>
-            </form>
-
-            <div className="flex flex-wrap justify-center gap-6">
-              <div className="flex -space-x-3">
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="h-10 w-10 rounded-full border-2 border-slate-950 bg-slate-800 flex items-center justify-center text-xs font-bold text-white overflow-hidden">
-                    <img src={`https://i.pravatar.cc/150?u=${i}`} alt="user" />
-                  </div>
-                ))}
-                <div className="h-10 w-10 rounded-full border-2 border-slate-950 bg-indigo-600 flex items-center justify-center text-xs font-bold text-white">
-                  +2k
-                </div>
-              </div>
-              <p className="text-slate-400 flex items-center gap-2">
-                <Users className="h-5 w-5 text-indigo-400" />
+      <section className="relative pt-16 pb-24 md:pt-24 md:pb-32 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Left Content */}
+            <div className="max-w-xl">
+              <Badge 
+                variant="secondary" 
+                className="mb-6 px-4 py-1.5 text-sm font-medium bg-secondary text-secondary-foreground border-0"
+              >
                 Trusted by 2,000+ students worldwide
+              </Badge>
+              
+              <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold text-foreground tracking-tight leading-[1.1] mb-6 text-balance">
+                Master IELTS with expert-crafted lessons
+              </h1>
+              
+              <p className="text-lg text-muted-foreground mb-8 leading-relaxed text-pretty">
+                Premium vocabulary, advanced grammar, and proven strategies designed by experts to help you reach Band 7.0 to 9.0.
               </p>
+              
+              {/* Search Bar */}
+              <form onSubmit={handleSearch} className="mb-8">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground h-5 w-5" />
+                    <Input
+                      type="text"
+                      placeholder="What do you want to learn today?"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-12 h-14 bg-card border-border text-foreground text-base placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring rounded-lg"
+                    />
+                  </div>
+                  <Button 
+                    type="submit" 
+                    size="lg" 
+                    className="h-14 px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg transition-all"
+                  >
+                    Find Lessons
+                  </Button>
+                </div>
+              </form>
+
+              {/* Social Proof */}
+              <div className="flex items-center gap-4">
+                <div className="flex -space-x-3">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div 
+                      key={i} 
+                      className="h-10 w-10 rounded-full border-2 border-background bg-muted overflow-hidden"
+                    >
+                      <img 
+                        src={`https://i.pravatar.cc/150?u=${i}`} 
+                        alt="Student" 
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+                <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                  <Users className="h-4 w-4" />
+                  <span>Join our learning community</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Content - Stats Grid */}
+            <div className="hidden lg:grid grid-cols-2 gap-4">
+              {STATS.map((stat, index) => (
+                <Card 
+                  key={index}
+                  className={`border-border bg-card p-6 ${
+                    index === 0 ? 'bg-primary text-primary-foreground' : ''
+                  }`}
+                >
+                  <div className={`text-3xl font-bold mb-1 ${
+                    index === 0 ? 'text-primary-foreground' : 'text-foreground'
+                  }`}>
+                    {stat.value}
+                  </div>
+                  <div className={`text-sm ${
+                    index === 0 ? 'text-primary-foreground/80' : 'text-muted-foreground'
+                  }`}>
+                    {stat.label}
+                  </div>
+                </Card>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Categories Section - Glassmorphism Cards */}
-      <section className="py-24 bg-slate-50 relative">
+      {/* Categories Section */}
+      <section className="py-20 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-            <div className="max-w-2xl">
-              <Badge className="mb-4 bg-indigo-100 text-indigo-700 hover:bg-indigo-100 border-none font-bold uppercase tracking-wider px-3 py-1">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+            <div className="max-w-xl">
+              <p className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">
                 Explore Library
-              </Badge>
-              <h2 className="text-4xl font-bold text-slate-900 mb-4">Master Every Aspect of IELTS</h2>
-              <p className="text-lg text-slate-600">Choose from thousands of curated lessons and practice exercises.</p>
+              </p>
+              <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-3 text-balance">
+                Master every aspect of IELTS
+              </h2>
+              <p className="text-muted-foreground">
+                Choose from thousands of curated lessons and practice exercises.
+              </p>
             </div>
             <Link to="/vocabulary">
-              <Button variant="ghost" className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 font-bold group">
-                View All Resources <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <Button 
+                variant="ghost" 
+                className="text-foreground hover:text-foreground hover:bg-muted font-medium group"
+              >
+                View All Resources 
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Vocabulary Card */}
             <Link to="/vocabulary" className="group">
-              <Card className="h-full border-none bg-white shadow-xl shadow-slate-200/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-indigo-200/50 overflow-hidden relative">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-110" />
-                <CardHeader className="relative z-10">
-                  <div className="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-600/30">
-                    <BookOpen className="h-7 w-7 text-white" />
+              <Card className="h-full border-border bg-background transition-all duration-300 hover:shadow-lg hover:border-border/80">
+                <CardHeader className="pb-4">
+                  <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center mb-4">
+                    <BookOpen className="h-6 w-6 text-primary-foreground" />
                   </div>
-                  <CardTitle className="text-2xl font-bold text-slate-900">Vocabulary Library</CardTitle>
-                  <CardDescription className="text-slate-500 text-base">
-                    Master Band 8.0+ academic words, advanced collocations, and idiomatic expressions.
+                  <CardTitle className="text-xl font-semibold text-foreground">Vocabulary</CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    Band 8.0+ academic words, collocations, and idiomatic expressions.
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="relative z-10 flex flex-col h-[calc(100%-140px)]">
-                  <div className="space-y-4 mb-8">
+                <CardContent className="pt-0">
+                  <div className="space-y-2.5 mb-6">
                     {['Topic-based Lessons', 'Smart Flashcards', 'Speaking Phrases'].map((item) => (
-                      <div key={item} className="flex items-center gap-3 text-slate-600">
-                        <CheckCircle className="h-5 w-5 text-indigo-500" />
-                        <span className="font-medium">{item}</span>
+                      <div key={item} className="flex items-center gap-2.5 text-sm text-muted-foreground">
+                        <CheckCircle className="h-4 w-4 text-accent flex-shrink-0" />
+                        <span>{item}</span>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-auto flex items-center text-indigo-600 font-bold group-hover:gap-3 transition-all">
-                    Start Learning <ArrowRight className="h-5 w-5 ml-2" />
+                  <div className="flex items-center text-sm font-medium text-foreground group-hover:text-accent transition-colors">
+                    Start Learning 
+                    <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" />
                   </div>
                 </CardContent>
               </Card>
@@ -180,57 +220,86 @@ export function HomePage() {
 
             {/* Grammar Card */}
             <Link to="/grammar" className="group">
-              <Card className="h-full border-none bg-white shadow-xl shadow-slate-200/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-200/50 overflow-hidden relative">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-purple-50 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-110" />
-                <CardHeader className="relative z-10">
-                  <div className="w-14 h-14 bg-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-purple-600/30">
-                    <GraduationCap className="h-7 w-7 text-white" />
+              <Card className="h-full border-border bg-background transition-all duration-300 hover:shadow-lg hover:border-border/80">
+                <CardHeader className="pb-4">
+                  <div className="w-12 h-12 bg-foreground rounded-xl flex items-center justify-center mb-4">
+                    <GraduationCap className="h-6 w-6 text-background" />
                   </div>
-                  <CardTitle className="text-2xl font-bold text-slate-900">Grammar Mastery</CardTitle>
-                  <CardDescription className="text-slate-500 text-base">
-                    Unlock complex structures and master the grammar required for Band 7.5+.
+                  <CardTitle className="text-xl font-semibold text-foreground">Grammar</CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    Complex structures for Band 7.5+ with clear explanations.
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="relative z-10 flex flex-col h-[calc(100%-140px)]">
-                  <div className="space-y-4 mb-8">
-                    {['Sentence Upgrades', 'Common Mistake Fixes', 'Interactive Quizzes'].map((item) => (
-                      <div key={item} className="flex items-center gap-3 text-slate-600">
-                        <CheckCircle className="h-5 w-5 text-purple-500" />
-                        <span className="font-medium">{item}</span>
+                <CardContent className="pt-0">
+                  <div className="space-y-2.5 mb-6">
+                    {['Sentence Upgrades', 'Common Mistakes', 'Interactive Quizzes'].map((item) => (
+                      <div key={item} className="flex items-center gap-2.5 text-sm text-muted-foreground">
+                        <CheckCircle className="h-4 w-4 text-accent flex-shrink-0" />
+                        <span>{item}</span>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-auto flex items-center text-purple-600 font-bold group-hover:gap-3 transition-all">
-                    Start Learning <ArrowRight className="h-5 w-5 ml-2" />
+                  <div className="flex items-center text-sm font-medium text-foreground group-hover:text-accent transition-colors">
+                    Start Learning 
+                    <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" />
                   </div>
                 </CardContent>
               </Card>
             </Link>
 
-            {/* Practice Hub Card */}
-            <Link to="/courses" className="group">
-              <Card className="h-full border-none bg-white shadow-xl shadow-slate-200/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-200/50 overflow-hidden relative">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-pink-50 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-110" />
-                <CardHeader className="relative z-10">
-                  <div className="w-14 h-14 bg-pink-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-pink-600/30">
-                    <Target className="h-7 w-7 text-white" />
+            {/* Writing Card */}
+            <Link to="/writing" className="group">
+              <Card className="h-full border-border bg-background transition-all duration-300 hover:shadow-lg hover:border-border/80">
+                <CardHeader className="pb-4">
+                  <div className="w-12 h-12 bg-accent rounded-xl flex items-center justify-center mb-4">
+                    <PenTool className="h-6 w-6 text-accent-foreground" />
                   </div>
-                  <CardTitle className="text-2xl font-bold text-slate-900">Live Courses</CardTitle>
-                  <CardDescription className="text-slate-500 text-base">
-                    Join our expert-led sessions for intensive speaking and writing feedback.
+                  <CardTitle className="text-xl font-semibold text-foreground">Writing</CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    Task 1 & 2 strategies with model answers and feedback.
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="relative z-10 flex flex-col h-[calc(100%-140px)]">
-                  <div className="space-y-4 mb-8">
-                    {['Daily Live Classes', 'One-on-One Feedback', 'Mock Test Analysis'].map((item) => (
-                      <div key={item} className="flex items-center gap-3 text-slate-600">
-                        <CheckCircle className="h-5 w-5 text-pink-500" />
-                        <span className="font-medium">{item}</span>
+                <CardContent className="pt-0">
+                  <div className="space-y-2.5 mb-6">
+                    {['Essay Templates', 'Model Answers', 'Band Descriptors'].map((item) => (
+                      <div key={item} className="flex items-center gap-2.5 text-sm text-muted-foreground">
+                        <CheckCircle className="h-4 w-4 text-accent flex-shrink-0" />
+                        <span>{item}</span>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-auto flex items-center text-pink-600 font-bold group-hover:gap-3 transition-all">
-                    Explore Batches <ArrowRight className="h-5 w-5 ml-2" />
+                  <div className="flex items-center text-sm font-medium text-foreground group-hover:text-accent transition-colors">
+                    Start Learning 
+                    <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" />
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+
+            {/* Speaking Card */}
+            <Link to="/speaking" className="group">
+              <Card className="h-full border-border bg-background transition-all duration-300 hover:shadow-lg hover:border-border/80">
+                <CardHeader className="pb-4">
+                  <div className="w-12 h-12 bg-muted rounded-xl flex items-center justify-center mb-4">
+                    <Mic className="h-6 w-6 text-foreground" />
+                  </div>
+                  <CardTitle className="text-xl font-semibold text-foreground">Speaking</CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    Practice all parts with sample answers and tips.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="space-y-2.5 mb-6">
+                    {['Part 1-3 Topics', 'Cue Cards', 'Fluency Tips'].map((item) => (
+                      <div key={item} className="flex items-center gap-2.5 text-sm text-muted-foreground">
+                        <CheckCircle className="h-4 w-4 text-accent flex-shrink-0" />
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex items-center text-sm font-medium text-foreground group-hover:text-accent transition-colors">
+                    Start Learning 
+                    <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" />
                   </div>
                 </CardContent>
               </Card>
@@ -239,39 +308,53 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Featured Lessons section with better visuals */}
-      <section className="py-24 bg-white relative">
+      {/* Featured Lessons */}
+      <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">Start with the Best</h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">Explore our top-performing lessons that have helped hundreds of students reach their target scores.</p>
+          <div className="text-center mb-12">
+            <p className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">
+              Popular Content
+            </p>
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-3">
+              Start with the best
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Explore our top-performing lessons that have helped hundreds of students reach their target scores.
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-6">
             {featuredLessons.map((lesson) => (
               <Link key={lesson.id} to={`/lesson/${lesson.slug}`} className="group">
-                <Card className="h-full border-slate-100 hover:border-indigo-100 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-indigo-50">
-                  <CardHeader>
-                    <div className="flex items-center justify-between mb-4">
-                      <Badge variant="outline" className="bg-slate-50 text-slate-600 border-none font-bold">
-                        {lesson.type.toUpperCase()}
+                <Card className="h-full border-border bg-card transition-all duration-300 hover:shadow-lg">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between mb-3">
+                      <Badge 
+                        variant="secondary" 
+                        className="bg-muted text-muted-foreground border-0 text-xs font-medium uppercase tracking-wider"
+                      >
+                        {lesson.type}
                       </Badge>
                       {lesson.is_premium && (
-                        <div className="flex items-center gap-1 text-amber-500 font-bold text-xs uppercase tracking-wider">
-                          <Crown className="h-4 w-4" /> Premium
-                        </div>
+                        <Badge className="bg-accent text-accent-foreground border-0 text-xs">
+                          Premium
+                        </Badge>
                       )}
                     </div>
-                    <CardTitle className="text-xl group-hover:text-indigo-600 transition-colors">{lesson.title}</CardTitle>
-                    <CardDescription className="line-clamp-2 mt-2">{lesson.description}</CardDescription>
+                    <CardTitle className="text-lg font-semibold text-foreground group-hover:text-accent transition-colors line-clamp-2">
+                      {lesson.title}
+                    </CardTitle>
+                    <CardDescription className="line-clamp-2 mt-2 text-muted-foreground">
+                      {lesson.description}
+                    </CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center justify-between pt-4 border-t border-slate-50 mt-4 text-sm font-medium">
-                      <div className="flex items-center gap-2 text-slate-400">
+                  <CardContent className="pt-0">
+                    <div className="flex items-center justify-between pt-4 border-t border-border text-sm">
+                      <div className="flex items-center gap-2 text-muted-foreground">
                         <Trophy className="h-4 w-4" />
                         <span className="capitalize">{lesson.level}</span>
                       </div>
-                      <div className="text-slate-400">
+                      <div className="text-muted-foreground">
                         {lesson.view_count.toLocaleString()} views
                       </div>
                     </div>
@@ -281,107 +364,127 @@ export function HomePage() {
             ))}
           </div>
           
-          <div className="text-center mt-12">
-             <Link to="/vocabulary">
-               <Button variant="outline" size="lg" className="rounded-xl px-10 border-indigo-200 text-indigo-700 hover:bg-indigo-50 font-bold group">
-                 View Full Library <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-               </Button>
-             </Link>
+          <div className="text-center mt-10">
+            <Link to="/vocabulary">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="rounded-lg px-8 border-border text-foreground hover:bg-muted font-medium group"
+              >
+                View Full Library 
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Statistics / Impact Section */}
-      <section className="py-20 bg-indigo-600">
+      {/* Mobile Stats Section */}
+      <section className="py-16 bg-primary lg:hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
-            <div>
-              <div className="text-4xl font-extrabold mb-2">5,000+</div>
-              <div className="text-indigo-200 font-medium">Lessons Completed</div>
-            </div>
-            <div>
-              <div className="text-4xl font-extrabold mb-2">2,000+</div>
-              <div className="text-indigo-200 font-medium">Active Students</div>
-            </div>
-            <div>
-              <div className="text-4xl font-extrabold mb-2">4.9/5</div>
-              <div className="text-indigo-200 font-medium">Student Rating</div>
-            </div>
-            <div>
-              <div className="text-4xl font-extrabold mb-2">150+</div>
-              <div className="text-indigo-200 font-medium">Live Batches</div>
-            </div>
+          <div className="grid grid-cols-2 gap-6 text-center">
+            {STATS.map((stat, index) => (
+              <div key={index}>
+                <div className="text-2xl sm:text-3xl font-bold text-primary-foreground mb-1">
+                  {stat.value}
+                </div>
+                <div className="text-sm text-primary-foreground/80">
+                  {stat.label}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Testimonials */}
-      <section className="py-24 bg-slate-50 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-           <Quote className="absolute top-0 right-0 h-48 w-48 text-slate-200/50 -mr-24 -mt-12" />
-           <div className="text-center mb-16 relative z-10">
-             <h2 className="text-4xl font-bold text-slate-900 mb-4">Hearing from Our Best</h2>
-             <p className="text-lg text-slate-600">Success stories from students who reached their dreams with us.</p>
-           </div>
+      <section className="py-20 bg-muted">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <p className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">
+              Success Stories
+            </p>
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-3">
+              Hear from our students
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Real results from students who achieved their dreams with our platform.
+            </p>
+          </div>
 
-           <div className="grid md:grid-cols-3 gap-8 relative z-10">
-             {TESTIMONIALS.map((t, i) => (
-               <Card key={i} className="border-none shadow-lg bg-white p-6 hover:shadow-xl transition-shadow group">
-                 <CardContent className="p-0">
-                   <div className="flex gap-1 text-amber-500 mb-6">
-                     {[1,2,3,4,5].map(s => <Star key={s} className="h-4 w-4 fill-current" />)}
-                   </div>
-                   <p className="text-slate-700 italic mb-8 leading-relaxed">
-                     "{t.text}"
-                   </p>
-                   <div className="flex items-center gap-4 pt-6 border-t border-slate-100">
-                     <div className="h-12 w-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold shadow-md shadow-indigo-200">
-                       {t.avatar}
-                     </div>
-                     <div>
-                       <div className="font-bold text-slate-900">{t.name}</div>
-                       <div className="text-indigo-600 font-bold text-sm tracking-wide">{t.score} ACHIEVED</div>
-                     </div>
-                   </div>
-                 </CardContent>
-               </Card>
-             ))}
-           </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {TESTIMONIALS.map((testimonial, index) => (
+              <Card 
+                key={index} 
+                className="border-border bg-card p-6 transition-all duration-300 hover:shadow-lg"
+              >
+                <CardContent className="p-0">
+                  <div className="flex gap-1 text-accent mb-4">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star key={star} className="h-4 w-4 fill-current" />
+                    ))}
+                  </div>
+                  
+                  <Quote className="h-8 w-8 text-muted-foreground/30 mb-3" />
+                  
+                  <p className="text-foreground mb-6 leading-relaxed">
+                    {testimonial.text}
+                  </p>
+                  
+                  <div className="flex items-center gap-3 pt-4 border-t border-border">
+                    <div className="h-11 w-11 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-semibold text-sm">
+                      {testimonial.avatar}
+                    </div>
+                    <div>
+                      <div className="font-semibold text-foreground">
+                        {testimonial.name}
+                      </div>
+                      <div className="text-sm text-accent font-medium">
+                        {testimonial.score} Achieved
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* CTA Section - Final */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-slate-950" />
-        <div className="absolute top-0 right-0 w-[50%] h-[100%] bg-indigo-600/10 blur-[100px] rounded-full" />
-        <div className="absolute bottom-0 left-0 w-[30%] h-[50%] bg-purple-600/10 blur-[80px] rounded-full" />
-
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <div className="inline-flex h-16 w-16 items-center justify-center rounded-3xl bg-indigo-600/20 text-indigo-400 border border-indigo-600/30 mb-8 animate-bounce">
-            <Zap className="h-8 w-8" />
+      {/* CTA Section */}
+      <section className="py-20 bg-primary">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-primary-foreground/10 text-primary-foreground mb-6">
+            <Target className="h-7 w-7" />
           </div>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-8 tracking-tight">
-            Ready to change your future? <br />
-            <span className="text-indigo-400">Get your target score now.</span>
+          
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-primary-foreground mb-4 text-balance">
+            Ready to achieve your target score?
           </h2>
-          <p className="text-xl text-slate-400 mb-12 max-w-xl mx-auto">
+          
+          <p className="text-lg text-primary-foreground/80 mb-8 max-w-xl mx-auto">
             Join thousands of successful candidates who used our resources to ace the IELTS exam.
           </p>
+          
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link to="/signup">
-              <Button size="lg" className="h-16 px-12 bg-indigo-600 hover:bg-indigo-500 text-xl font-bold rounded-2xl shadow-xl shadow-indigo-600/30">
+              <Button 
+                size="lg" 
+                className="h-14 px-10 bg-primary-foreground hover:bg-primary-foreground/90 text-primary font-semibold rounded-lg"
+              >
                 Get Started Free
               </Button>
             </Link>
             <Link to="/pricing">
-              <Button size="lg" variant="outline" className="h-16 px-10 bg-transparent border-white/20 text-white hover:bg-white hover:text-indigo-900 text-xl font-bold rounded-2xl">
-                Check Pricing
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="h-14 px-10 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 font-semibold rounded-lg"
+              >
+                View Pricing
               </Button>
             </Link>
           </div>
-          <p className="mt-8 text-slate-500 flex items-center justify-center gap-2">
-            <Globe className="h-5 w-5" /> All lessons accessible from any device.
-          </p>
         </div>
       </section>
     </div>
