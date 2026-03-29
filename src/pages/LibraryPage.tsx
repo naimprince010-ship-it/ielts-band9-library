@@ -45,6 +45,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [isFilterSticky, setIsFilterSticky] = useState(false);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
   
   const { lessons, loading, fetchLessons, addBookmark, removeBookmark, isBookmarked, getLessonProgress, getCompletionPercentage, getCompletedCount } = useLessons();
@@ -218,9 +219,91 @@ export function LibraryPage({ type }: LibraryPageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div 
           ref={filterRef}
-          className={`bg-card rounded-lg shadow-sm p-4 mb-8 transition-all ${isFilterSticky ? 'sticky top-0 z-40 shadow-md' : ''}`}
+          className={`bg-card rounded-lg shadow-sm p-4 mb-6 transition-all ${isFilterSticky ? 'sticky top-0 z-40 shadow-md' : ''}`}
         >
-          <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-4">
+          {/* Mobile: Search + Filter Toggle */}
+          <div className="flex gap-2 md:hidden">
+            <form onSubmit={handleSearch} className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+              <Input
+                type="text"
+                placeholder={`Search...`}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 h-10"
+              />
+            </form>
+            <Button 
+              type="button" 
+              variant={showMobileFilters || hasActiveFilters ? "default" : "outline"}
+              size="sm"
+              onClick={() => setShowMobileFilters(!showMobileFilters)}
+              className="gap-1.5 h-10 px-3"
+            >
+              <Filter className="h-4 w-4" />
+              {hasActiveFilters && <span className="w-2 h-2 bg-white rounded-full" />}
+            </Button>
+          </div>
+
+          {/* Mobile: Collapsible Filters */}
+          {showMobileFilters && (
+            <div className="mt-3 pt-3 border-t border-border md:hidden space-y-3">
+              <div className="grid grid-cols-2 gap-2">
+                <Select value={levelFilter} onValueChange={(v) => setLevelFilter(v as LessonLevel | 'all')}>
+                  <SelectTrigger className="h-9 text-sm">
+                    <SelectValue placeholder="Level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Levels</SelectItem>
+                    <SelectItem value="beginner">Beginner</SelectItem>
+                    <SelectItem value="intermediate">Intermediate</SelectItem>
+                    <SelectItem value="advanced">Advanced</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
+                  <SelectTrigger className="h-9 text-sm">
+                    <SelectValue placeholder="Sort" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="newest">Newest</SelectItem>
+                    <SelectItem value="oldest">Oldest</SelectItem>
+                    <SelectItem value="popular">Popular</SelectItem>
+                    <SelectItem value="az">A-Z</SelectItem>
+                    <SelectItem value="za">Z-A</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <Select value={topicFilter} onValueChange={setTopicFilter}>
+                <SelectTrigger className="h-9 text-sm">
+                  <SelectValue placeholder="Topic" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Topics ({totalLessons})</SelectItem>
+                  {topics.map((topic) => (
+                    <SelectItem key={topic} value={topic.toLowerCase()}>
+                      {topic} ({topicCounts[topic.toLowerCase()] || 0})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <div className="flex gap-2">
+                <Button type="button" size="sm" onClick={() => setShowMobileFilters(false)} className="flex-1 h-9">
+                  Apply
+                </Button>
+                {hasActiveFilters && (
+                  <Button type="button" variant="outline" size="sm" onClick={resetFilters} className="h-9 px-3">
+                    <X className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Desktop: Full Filter Row */}
+          <form onSubmit={handleSearch} className="hidden md:flex md:flex-row gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
               <Input
@@ -233,7 +316,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
             </div>
             
             <Select value={levelFilter} onValueChange={(v) => setLevelFilter(v as LessonLevel | 'all')}>
-              <SelectTrigger className="w-full md:w-40">
+              <SelectTrigger className="w-40">
                 <SelectValue placeholder="Level" />
               </SelectTrigger>
               <SelectContent>
@@ -245,7 +328,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
             </Select>
 
             <Select value={topicFilter} onValueChange={setTopicFilter}>
-              <SelectTrigger className="w-full md:w-48">
+              <SelectTrigger className="w-48">
                 <SelectValue placeholder="Topic" />
               </SelectTrigger>
               <SelectContent>
@@ -259,7 +342,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
             </Select>
 
             <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
-              <SelectTrigger className="w-full md:w-40">
+              <SelectTrigger className="w-40">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
               <SelectContent>
