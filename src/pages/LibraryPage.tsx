@@ -18,6 +18,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useProgress } from '@/contexts/ProgressContext';
 import { LessonType, LessonLevel } from '@/types';
 import { GRAMMAR_TOPICS, VOCABULARY_TOPICS, WRITING_TOPICS, SPEAKING_TOPICS, SAMPLE_LESSONS } from '@/data/sampleLessons';
+import { LessonGridSkeleton } from '@/components/ui/PageSkeleton';
 
 interface LibraryPageProps {
   type: LessonType;
@@ -285,20 +286,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
         </div>
 
         {loading ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <Card key={i} className="animate-pulse">
-                <CardHeader>
-                  <div className="h-4 bg-gray-200 rounded w-20 mb-2"></div>
-                  <div className="h-6 bg-gray-200 rounded w-3/4"></div>
-                  <div className="h-4 bg-gray-200 rounded w-full mt-2"></div>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <LessonGridSkeleton count={6} />
         ) : displayLessons.length === 0 ? (
           <div className="text-center py-12">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">

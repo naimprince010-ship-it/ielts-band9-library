@@ -31,8 +31,8 @@ export function HomePage() {
       <section className="bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              IELTS Band 9 Materials Library
+            <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight mb-6">
+              Master Your Path to Success with <span className="text-indigo-200">IELTS Tree</span>
             </h1>
             <p className="text-xl text-indigo-100 mb-8">
               Master vocabulary and grammar with our curated, AI-enhanced lessons. 

@@ -4,20 +4,21 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { LessonProvider } from '@/contexts/LessonContext';
 import { ProgressProvider } from '@/contexts/ProgressContext';
 import { Layout } from '@/components/layout/Layout';
-import { HomePage } from '@/pages/HomePage';
-import { LibraryPage } from '@/pages/LibraryPage';
-import { LessonPage } from '@/pages/LessonPage';
-import { LoginPage } from '@/pages/LoginPage';
-import { SignupPage } from '@/pages/SignupPage';
-import { PricingPage } from '@/pages/PricingPage';
-import { BookmarksPage } from '@/pages/BookmarksPage';
-import { AdminPage } from '@/pages/AdminPage';
-import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage';
-import { ResetPasswordPage } from '@/pages/ResetPasswordPage';
-import { PaymentPage } from '@/pages/PaymentPage';
-import { ProfilePage } from '@/pages/ProfilePage';
-import { QuizPage } from '@/pages/QuizPage';
 import './App.css';
+
+const HomePage = lazy(() => import('@/pages/HomePage').then(module => ({ default: module.HomePage })));
+const LibraryPage = lazy(() => import('@/pages/LibraryPage').then(module => ({ default: module.LibraryPage })));
+const LessonPage = lazy(() => import('@/pages/LessonPage').then(module => ({ default: module.LessonPage })));
+const LoginPage = lazy(() => import('@/pages/LoginPage').then(module => ({ default: module.LoginPage })));
+const SignupPage = lazy(() => import('@/pages/SignupPage').then(module => ({ default: module.SignupPage })));
+const PricingPage = lazy(() => import('@/pages/PricingPage').then(module => ({ default: module.PricingPage })));
+const BookmarksPage = lazy(() => import('@/pages/BookmarksPage').then(module => ({ default: module.BookmarksPage })));
+const AdminPage = lazy(() => import('@/pages/AdminPage').then(module => ({ default: module.AdminPage })));
+const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPasswordPage').then(module => ({ default: module.ForgotPasswordPage })));
+const ResetPasswordPage = lazy(() => import('@/pages/ResetPasswordPage').then(module => ({ default: module.ResetPasswordPage })));
+const PaymentPage = lazy(() => import('@/pages/PaymentPage').then(module => ({ default: module.PaymentPage })));
+const ProfilePage = lazy(() => import('@/pages/ProfilePage').then(module => ({ default: module.ProfilePage })));
+const QuizPage = lazy(() => import('@/pages/QuizPage').then(module => ({ default: module.QuizPage })));
 
 const DiagnosticTestPage = lazy(() => import('@/pages/DiagnosticTestPage'));
 const FlashcardsPage = lazy(() => import('@/pages/FlashcardsPage'));
@@ -43,6 +44,7 @@ const WritingTestPage = lazy(() => import('@/pages/WritingTestPage'));
 const ListeningTestPage = lazy(() => import('@/pages/ListeningTestPage'));
 const SpeakingTestPage = lazy(() => import('@/pages/SpeakingTestPage'));
 const ResultDashboardPage = lazy(() => import('@/pages/ResultDashboardPage'));
+const CoursesPage = lazy(() => import('@/pages/CoursesPage').then(module => ({ default: module.CoursesPage })));
 const TypingPracticePage = lazy(() => import('@/pages/TypingPracticePage'));
 
 function LoadingSpinner() {
@@ -59,7 +61,8 @@ function App() {
       <AuthProvider>
         <ProgressProvider>
           <LessonProvider>
-            <Routes>
+            <Suspense fallback={<LoadingSpinner />}>
+              <Routes>
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/signup" element={<SignupPage />} />
                         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
@@ -131,6 +134,16 @@ function App() {
             />
                       <Route path="/admin" element={<AdminPage />} />
                                           <Route path="/profile" element={<ProfilePage />} />
+                                            <Route
+                                              path="/courses"
+                                              element={
+                                                <Layout>
+                                                  <Suspense fallback={<LoadingSpinner />}>
+                                                    <CoursesPage />
+                                                  </Suspense>
+                                                </Layout>
+                                              }
+                                            />
                                           <Route
                                             path="/quiz"
                                             element={
@@ -354,6 +367,7 @@ function App() {
                                                                                                                                                                                                 <Route path="/daily-study-plan" element={<Navigate to="/daily-plan" replace />} />
                         <Route path="*" element={<Navigate to="/" replace />} />
                         </Routes>
+            </Suspense>
           </LessonProvider>
         </ProgressProvider>
       </AuthProvider>

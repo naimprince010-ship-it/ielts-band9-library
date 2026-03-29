@@ -40,8 +40,8 @@ export function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
-              <BookOpen className="h-8 w-8 text-indigo-600" />
-              <span className="text-xl font-bold text-gray-900">IELTS Band 9</span>
+              <img src="/icon.png" alt="IELTS Tree Logo" className="h-9 w-9 object-contain" />
+              <span className="text-xl font-bold text-gray-900 tracking-tight">IELTS Tree</span>
             </Link>
           </div>
 
@@ -57,6 +57,9 @@ export function Navbar() {
                       </Link>
                                             <Link to="/speaking" className={navLinkClass('/speaking')}>
                                               Speaking
+                                            </Link>
+                                            <Link to="/courses" className={navLinkClass('/courses')}>
+                                              Courses
                                             </Link>
                                             <Link to="/quiz" className={navLinkClass('/quiz')}>
                                               Quiz
@@ -216,6 +219,13 @@ export function Navbar() {
                                                   onClick={() => setMobileMenuOpen(false)}
                                                 >
                                                   Speaking
+                                                </Link>
+                                                <Link
+                                                  to="/courses"
+                                                  className={`block ${navLinkClass('/courses')}`}
+                                                  onClick={() => setMobileMenuOpen(false)}
+                                                >
+                                                  Courses
                                                 </Link>
                                                 <Link
                                                   to="/quiz"
