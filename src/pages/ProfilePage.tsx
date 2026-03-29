@@ -36,30 +36,30 @@ export function ProfilePage() {
   return (
     <Layout>
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8">My Profile</h1>
+        <h1 className="text-3xl font-bold mb-8 text-foreground">My Profile</h1>
 
         <div className="space-y-6">
-          <Card>
+          <Card className="border-border">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <User className="h-5 w-5 text-indigo-600" />
+              <CardTitle className="flex items-center gap-2 text-foreground">
+                <User className="h-5 w-5 text-accent" />
                 Account Information
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-muted-foreground">
                 Your personal account details
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
-                    <span className="text-xl font-semibold text-indigo-600">
+                  <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center">
+                    <span className="text-xl font-semibold text-accent">
                       {user.name?.charAt(0).toUpperCase() || 'U'}
                     </span>
                   </div>
                   <div>
-                    <h3 className="font-semibold">{user.name}</h3>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <h3 className="font-semibold text-foreground">{user.name}</h3>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Mail className="h-4 w-4" />
                       {user.email}
                     </div>
@@ -67,28 +67,28 @@ export function ProfilePage() {
                 </div>
                 <div className="flex items-center gap-2">
                   {isAdmin && (
-                    <Badge className="bg-purple-600">Admin</Badge>
+                    <Badge className="bg-accent text-accent-foreground">Admin</Badge>
                   )}
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <div className="flex items-center gap-2 text-gray-600 mb-1">
+                <div className="p-4 bg-muted rounded-lg">
+                  <div className="flex items-center gap-2 text-muted-foreground mb-1">
                     <Calendar className="h-4 w-4" />
                     <span className="text-sm">Member Since</span>
                   </div>
-                  <p className="font-semibold">
+                  <p className="font-semibold text-foreground">
                     {user.created_at ? formatDate(user.created_at) : 'N/A'}
                   </p>
                 </div>
 
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <div className="flex items-center gap-2 text-gray-600 mb-1">
+                <div className="p-4 bg-muted rounded-lg">
+                  <div className="flex items-center gap-2 text-muted-foreground mb-1">
                     <Shield className="h-4 w-4" />
                     <span className="text-sm">Account Type</span>
                   </div>
-                  <p className="font-semibold">
+                  <p className="font-semibold text-foreground">
                     {isAdmin ? 'Administrator' : 'Member'}
                   </p>
                 </div>
@@ -98,14 +98,14 @@ export function ProfilePage() {
 
           <SubscriptionDashboard />
 
-          <Card>
+          <Card className="border-border">
             <CardHeader>
-              <CardTitle className="text-red-600">Account Actions</CardTitle>
+              <CardTitle className="text-destructive">Account Actions</CardTitle>
             </CardHeader>
             <CardContent>
               <Button 
                 variant="outline" 
-                className="text-red-600 border-red-200 hover:bg-red-50"
+                className="text-destructive border-destructive/20 hover:bg-destructive/10"
                 onClick={handleSignOut}
               >
                 <LogOut className="h-4 w-4 mr-2" />

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, Mail, AlertCircle, CheckCircle, ArrowLeft } from 'lucide-react';
+import { Mail, AlertCircle, CheckCircle, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -23,11 +23,11 @@ export function ForgotPasswordPage() {
 
     const { error } = await resetPassword(email);
     
-        if (error) {
-          setError(error.message || 'Error sending recovery email');
-          console.error('Password reset error:', error);
-          setLoading(false);
-        } else {
+    if (error) {
+      setError(error.message || 'Error sending recovery email');
+      console.error('Password reset error:', error);
+      setLoading(false);
+    } else {
       setSuccess(true);
       setLoading(false);
     }
@@ -35,20 +35,20 @@ export function ForgotPasswordPage() {
 
   if (!isSupabaseConfigured()) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <Card className="w-full max-w-md">
+      <div className="min-h-screen bg-background flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <Card className="w-full max-w-md border-border">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
-              <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
-                <BookOpen className="h-6 w-6 text-indigo-600" />
+              <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center">
+                <img src="/icon.png" alt="IELTS Tree" className="h-6 w-6" />
               </div>
             </div>
-            <CardTitle className="text-2xl">Password Reset</CardTitle>
+            <CardTitle className="text-2xl text-foreground">Password Reset</CardTitle>
           </CardHeader>
           <CardContent>
-            <Alert className="mb-4 bg-yellow-50 border-yellow-200">
-              <AlertCircle className="h-4 w-4 text-yellow-600" />
-              <AlertDescription className="text-yellow-800">
+            <Alert className="mb-4 bg-accent/10 border-accent/20">
+              <AlertCircle className="h-4 w-4 text-accent" />
+              <AlertDescription className="text-foreground/80">
                 Password reset is not available in demo mode. Please use the demo credentials to sign in.
               </AlertDescription>
             </Alert>
@@ -65,25 +65,26 @@ export function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen bg-background flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md border-border">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
-              <BookOpen className="h-6 w-6 text-indigo-600" />
-            </div>
+            <Link to="/" className="flex items-center gap-2">
+              <img src="/icon.png" alt="IELTS Tree" className="h-8 w-8" />
+              <span className="text-lg font-semibold text-foreground">IELTS Tree</span>
+            </Link>
           </div>
-          <CardTitle className="text-2xl">Forgot Password?</CardTitle>
-          <CardDescription>
-            Enter your email address and we'll send you a link to reset your password.
+          <CardTitle className="text-2xl text-foreground">Forgot Password?</CardTitle>
+          <CardDescription className="text-muted-foreground">
+            Enter your email address and we&apos;ll send you a link to reset your password.
           </CardDescription>
         </CardHeader>
         <CardContent>
           {success ? (
             <div className="space-y-4">
-              <Alert className="bg-green-50 border-green-200">
-                <CheckCircle className="h-4 w-4 text-green-600" />
-                <AlertDescription className="text-green-800">
+              <Alert className="bg-green-50 border-green-200 dark:bg-green-950/20 dark:border-green-900">
+                <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
+                <AlertDescription className="text-green-800 dark:text-green-300">
                   Password reset link sent! Check your email inbox (and spam folder) for the reset link.
                 </AlertDescription>
               </Alert>
@@ -105,9 +106,9 @@ export function ForgotPasswordPage() {
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email" className="text-foreground">Email</Label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
                     <Input
                       id="email"
                       type="email"
@@ -126,7 +127,7 @@ export function ForgotPasswordPage() {
               </form>
 
               <div className="mt-6 text-center text-sm">
-                <Link to="/login" className="text-indigo-600 hover:text-indigo-500 font-medium flex items-center justify-center">
+                <Link to="/login" className="text-accent hover:text-accent/80 font-medium flex items-center justify-center transition-colors">
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Back to Login
                 </Link>
