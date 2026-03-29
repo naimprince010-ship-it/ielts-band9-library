@@ -86,55 +86,47 @@ interface MenuGroup {
 
 const menuGroups: MenuGroup[] = [
   {
-    title: 'Dashboard',
+    title: 'Instructor Panel',
     items: [
-      { id: 'dashboard', label: 'Overview', icon: <LayoutDashboard className="h-4 w-4" /> },
+      { id: 'instructor-dashboard', label: 'My Courses', icon: <GraduationCap className="h-4 w-4" /> },
+      { id: 'lessons', label: 'Course Lessons', icon: <BookOpen className="h-4 w-4" /> },
+      { id: 'reading', label: 'Mock Test Content', icon: <FileText className="h-4 w-4" /> },
     ],
   },
   {
-    title: 'Vocabulary',
+    title: 'Admin Tools',
     items: [
-      { id: 'vocab-generator', label: 'Add Words', icon: <Plus className="h-4 w-4" /> },
-      { id: 'vocab-enricher', label: 'Enrich Words', icon: <Sparkles className="h-4 w-4" /> },
-      { id: 'vocab-categorizer', label: 'Categorize', icon: <Tag className="h-4 w-4" /> },
-      { id: 'vocab-coverage', label: 'Coverage', icon: <BarChart3 className="h-4 w-4" /> },
+      { id: 'dashboard', label: 'Admin Overview', icon: <LayoutDashboard className="h-4 w-4" />, role: 'admin' },
+      { id: 'payments', label: 'Payments', icon: <CreditCard className="h-4 w-4" />, role: 'admin' },
+      { id: 'user-management', label: 'Users', icon: <Users className="h-4 w-4" />, role: 'admin' },
+      { id: 'coupons', label: 'Coupons', icon: <Tag className="h-4 w-4" />, role: 'admin' },
     ],
   },
   {
-    title: 'Content',
+    title: 'Content Engine',
     items: [
-      { id: 'lessons', label: 'Lessons', icon: <BookOpen className="h-4 w-4" /> },
-      { id: 'reading', label: 'Reading', icon: <FileText className="h-4 w-4" /> },
-      { id: 'mock-tests', label: 'Mock Tests', icon: <GraduationCap className="h-4 w-4" /> },
-      { id: 'page-content', label: 'Pages', icon: <FileText className="h-4 w-4" /> },
+      { id: 'vocab-generator', label: 'AI Words Gen', icon: <Plus className="h-4 w-4" />, role: 'admin' },
+      { id: 'vocab-enricher', label: 'AI Enricher', icon: <Sparkles className="h-4 w-4" />, role: 'admin' },
+      { id: 'vocab-categorizer', label: 'Categorize', icon: <Tag className="h-4 w-4" />, role: 'admin' },
+      { id: 'vocab-coverage', label: 'Coverage', icon: <BarChart3 className="h-4 w-4" />, role: 'admin' },
     ],
   },
   {
-    title: 'Users & Payments',
+    title: 'System Settings',
     items: [
-      { id: 'payments', label: 'Payments', icon: <CreditCard className="h-4 w-4" /> },
-      { id: 'user-management', label: 'Users', icon: <Users className="h-4 w-4" /> },
-      { id: 'coupons', label: 'Coupons', icon: <Tag className="h-4 w-4" /> },
-    ],
-  },
-  {
-    title: 'Settings',
-    items: [
-      { id: 'site-settings', label: 'Site Settings', icon: <Settings className="h-4 w-4" /> },
-      { id: 'payment-settings', label: 'Payment', icon: <CreditCard className="h-4 w-4" /> },
-      { id: 'faq-management', label: 'FAQ', icon: <MessageSquare className="h-4 w-4" /> },
-      { id: 'contact-settings', label: 'Contact', icon: <Phone className="h-4 w-4" /> },
-      { id: 'design-audit', label: 'Design Audit', icon: <Palette className="h-4 w-4" /> },
+      { id: 'site-settings', label: 'Site Settings', icon: <Settings className="h-4 w-4" />, role: 'admin' },
+      { id: 'payment-settings', label: 'Payment API', icon: <CreditCard className="h-4 w-4" />, role: 'admin' },
+      { id: 'design-audit', label: 'Design Audit', icon: <Palette className="h-4 w-4" />, role: 'admin' },
     ],
   },
 ];
 
 export function AdminPage() {
-  const { user, isAdmin, loading, supabaseUser } = useAuth();
+  const { user, isAdmin, isInstructor, loading, supabaseUser } = useAuth();
   const { lessons, createLesson, updateLesson, deleteLesson } = useLessons();
   const navigate = useNavigate();
   
-  const [activeSection, setActiveSection] = useState('dashboard');
+  const [activeSection, setActiveSection] = useState(isInstructor ? 'instructor-dashboard' : 'dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [expandedGroups, setExpandedGroups] = useState<string[]>(menuGroups.map(g => g.title));
   const [isEditorOpen, setIsEditorOpen] = useState(false);
@@ -174,11 +166,11 @@ export function AdminPage() {
       // This prevents redirect during the brief moment between session load and profile fetch
       if (supabaseUser && !user) return;
       
-      // Only redirect if we're sure there's no valid admin user
-      if (!user || !isAdmin) {
+      // Only redirect if we're sure there's no valid admin or instructor user
+      if (!user || (!isAdmin && !isInstructor)) {
         navigate('/');
       }
-    }, [user, isAdmin, loading, supabaseUser, navigate]);
+    }, [user, isAdmin, isInstructor, loading, supabaseUser, navigate]);
 
     const fetchPayments = async () => {
       if (!isSupabaseConfigured() || !supabase) return;
@@ -200,10 +192,10 @@ export function AdminPage() {
     };
 
     useEffect(() => {
-      if (user && isAdmin) {
+      if (user && (isAdmin || isInstructor)) {
         fetchPayments();
       }
-    }, [user, isAdmin]);
+    }, [user, isAdmin, isInstructor]);
 
     const handleApprovePayment = async (payment: PaymentRequest) => {
       if (!isSupabaseConfigured() || !supabase) return;
@@ -289,7 +281,7 @@ export function AdminPage() {
     );
   }
 
-  if (!user || !isAdmin) {
+  if (!user || (!isAdmin && !isInstructor)) {
     return null;
   }
 
@@ -448,6 +440,132 @@ export function AdminPage() {
 
   const renderContent = () => {
     switch (activeSection) {
+      case 'instructor-dashboard':
+        return (
+          <div className="space-y-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-3xl font-black text-slate-900 tracking-tight">Instructor Dashboard</h2>
+                <p className="text-slate-500 font-medium">Manage your courses and student progress</p>
+              </div>
+              <Badge className="bg-indigo-600 text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-lg">
+                Instructor Mode
+              </Badge>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+               <Card className="border-none shadow-sm bg-indigo-50/50">
+                  <CardContent className="pt-6">
+                     <div className="flex items-center gap-4">
+                        <div className="h-12 w-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white">
+                           <Users className="h-6 w-6" />
+                        </div>
+                        <div>
+                           <p className="text-sm font-bold text-slate-500 uppercase">Total Students</p>
+                           <h3 className="text-2xl font-black text-slate-900">1,250</h3>
+                        </div>
+                     </div>
+                  </CardContent>
+               </Card>
+               <Card className="border-none shadow-sm bg-rose-50/50">
+                  <CardContent className="pt-6">
+                     <div className="flex items-center gap-4">
+                        <div className="h-12 w-12 bg-rose-600 rounded-2xl flex items-center justify-center text-white">
+                           <BookOpen className="h-6 w-6" />
+                        </div>
+                        <div>
+                           <p className="text-sm font-bold text-slate-500 uppercase">Courses</p>
+                           <h3 className="text-2xl font-black text-slate-900">4 Active</h3>
+                        </div>
+                     </div>
+                  </CardContent>
+               </Card>
+               <Card className="border-none shadow-sm bg-emerald-50/50">
+                  <CardContent className="pt-6">
+                     <div className="flex items-center gap-4">
+                        <div className="h-12 w-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white">
+                           <Star className="h-6 w-6" />
+                        </div>
+                        <div>
+                           <p className="text-sm font-bold text-slate-500 uppercase">Avg. Rating</p>
+                           <h3 className="text-2xl font-black text-slate-900">4.9/5</h3>
+                        </div>
+                     </div>
+                  </CardContent>
+               </Card>
+               <Card className="border-none shadow-sm bg-amber-50/50">
+                  <CardContent className="pt-6">
+                     <div className="flex items-center gap-4">
+                        <div className="h-12 w-12 bg-amber-600 rounded-2xl flex items-center justify-center text-white">
+                           <Clock className="h-6 w-6" />
+                        </div>
+                        <div>
+                           <p className="text-sm font-bold text-slate-500 uppercase">Live Classes</p>
+                           <h3 className="text-2xl font-black text-slate-900">24 Pending</h3>
+                        </div>
+                     </div>
+                  </CardContent>
+               </Card>
+            </div>
+
+            <div className="grid lg:grid-cols-3 gap-8">
+               <Card className="lg:col-span-2 shadow-sm border-slate-100 rounded-[2rem]">
+                  <CardHeader>
+                     <CardTitle className="text-xl font-bold flex items-center gap-2">
+                        <Sparkles className="h-5 w-5 text-indigo-500" /> My Flagship Courses
+                     </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                     <div className="space-y-4">
+                        {[
+                          { title: 'IELTS Band 8+ Masterclass', students: 450, income: '৳2,47,500' },
+                          { title: 'Speaking Confidence Club', students: 320, income: '৳48,000' }
+                        ].map((c, i) => (
+                          <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-md transition-all">
+                             <div className="flex items-center gap-4">
+                                <div className="h-10 w-10 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center font-bold text-indigo-600">
+                                   {c.title[0]}
+                                </div>
+                                <div>
+                                   <h4 className="font-bold text-slate-800">{c.title}</h4>
+                                   <p className="text-xs text-slate-500 font-medium">{c.students} Students Enrolled</p>
+                                </div>
+                             </div>
+                             <div className="text-right">
+                                <p className="font-black text-indigo-600">{c.income}</p>
+                                <Button variant="ghost" size="sm" className="h-7 text-[10px] uppercase font-black tracking-widest text-slate-400">Manage</Button>
+                             </div>
+                          </div>
+                        ))}
+                     </div>
+                  </CardContent>
+               </Card>
+
+               <Card className="shadow-sm border-slate-100 rounded-[2rem]">
+                  <CardHeader>
+                     <CardTitle className="text-xl font-bold">Upcoming Live Classes</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                     <div className="space-y-6">
+                        {[
+                          { time: 'Today, 8 PM', topic: 'Speaking Part 2 Secrets' },
+                          { time: 'Tomorrow, 9 PM', topic: 'Task 2 Essay Templates' }
+                        ].map((l, i) => (
+                           <div key={i} className="relative pl-6 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-1 before:bg-indigo-600 before:rounded-full">
+                              <p className="text-xs font-black text-indigo-600 uppercase mb-1">{l.time}</p>
+                              <h4 className="font-bold text-slate-800">{l.topic}</h4>
+                           </div>
+                        ))}
+                        <Button className="w-full h-12 rounded-xl bg-slate-900 hover:bg-indigo-600 font-bold">
+                           Schedule New Session
+                        </Button>
+                     </div>
+                  </CardContent>
+               </Card>
+            </div>
+          </div>
+        );
+
       case 'dashboard':
         return (
           <div className="space-y-6">
@@ -786,55 +904,63 @@ export function AdminPage() {
         )}>
           <div className="h-full overflow-y-auto py-4">
             <nav className="px-3 space-y-1">
-              {menuGroups.map((group) => (
-                <div key={group.title} className="mb-4">
-                  <button
-                    onClick={() => toggleGroup(group.title)}
-                    className="flex items-center justify-between w-full px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider hover:text-gray-700"
-                  >
-                    {group.title}
-                    {expandedGroups.includes(group.title) ? (
-                      <ChevronDown className="h-4 w-4" />
-                    ) : (
-                      <ChevronRight className="h-4 w-4" />
+              {menuGroups.map((group) => {
+                const visibleItems = group.items.filter(item => 
+                  !item.role || (item.role === 'admin' && isAdmin)
+                );
+
+                if (visibleItems.length === 0) return null;
+
+                return (
+                  <div key={group.title} className="mb-4">
+                    <button
+                      onClick={() => toggleGroup(group.title)}
+                      className="flex items-center justify-between w-full px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider hover:text-gray-700"
+                    >
+                      {group.title}
+                      {expandedGroups.includes(group.title) ? (
+                        <ChevronDown className="h-4 w-4" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4" />
+                      )}
+                    </button>
+                    {expandedGroups.includes(group.title) && (
+                      <div className="mt-1 space-y-1">
+                        {visibleItems.map((item) => {
+                          const badge = getMenuItemBadge(item.id);
+                          return (
+                            <button
+                              key={item.id}
+                              onClick={() => {
+                                setActiveSection(item.id);
+                                if (window.innerWidth < 1024) {
+                                  setSidebarOpen(false);
+                                }
+                              }}
+                              className={cn(
+                                "flex items-center justify-between w-full px-3 py-2 text-sm rounded-lg transition-colors",
+                                activeSection === item.id
+                                  ? "bg-indigo-50 text-indigo-700 font-medium"
+                                  : "text-gray-700 hover:bg-gray-100"
+                              )}
+                            >
+                              <div className="flex items-center gap-3">
+                                {item.icon}
+                                {item.label}
+                              </div>
+                              {badge && (
+                                <Badge className="bg-red-500 text-white text-xs px-2 py-0.5">
+                                  {badge}
+                                </Badge>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
                     )}
-                  </button>
-                  {expandedGroups.includes(group.title) && (
-                    <div className="mt-1 space-y-1">
-                      {group.items.map((item) => {
-                        const badge = getMenuItemBadge(item.id);
-                        return (
-                          <button
-                            key={item.id}
-                            onClick={() => {
-                              setActiveSection(item.id);
-                              if (window.innerWidth < 1024) {
-                                setSidebarOpen(false);
-                              }
-                            }}
-                            className={cn(
-                              "flex items-center justify-between w-full px-3 py-2 text-sm rounded-lg transition-colors",
-                              activeSection === item.id
-                                ? "bg-indigo-50 text-indigo-700 font-medium"
-                                : "text-gray-700 hover:bg-gray-100"
-                            )}
-                          >
-                            <div className="flex items-center gap-3">
-                              {item.icon}
-                              {item.label}
-                            </div>
-                            {badge && (
-                              <Badge className="bg-red-500 text-white text-xs px-2 py-0.5">
-                                {badge}
-                              </Badge>
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              ))}
+                  </div>
+                );
+              })}
             </nav>
           </div>
         </aside>

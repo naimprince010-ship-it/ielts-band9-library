@@ -15,6 +15,7 @@ interface AuthContextType {
   updatePassword: (newPassword: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
   isAdmin: boolean;
+  isInstructor: boolean;
   isPremium: boolean;
 }
 
@@ -39,11 +40,11 @@ const DEMO_USERS: Record<string, User> = {
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   },
-  'premium@ielts.com': {
-    id: 'demo-premium-1',
-    email: 'premium@ielts.com',
-    name: 'Premium User',
-    role: 'user',
+  'instructor@ielts.com': {
+    id: 'demo-instructor-1',
+    email: 'instructor@ielts.com',
+    name: 'Arefin Shovo',
+    role: 'instructor',
     subscription_status: 'premium',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
@@ -276,6 +277,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     updatePassword,
     signOut,
     isAdmin: user?.role === 'admin',
+    isInstructor: user?.role === 'instructor',
     isPremium: user?.subscription_status === 'premium',
   };
 

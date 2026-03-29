@@ -1,4 +1,4 @@
-// courses page
+import { Link } from 'react-router-dom';
 import { 
   Video, 
   Users, 
@@ -10,131 +10,30 @@ import {
   Sparkles,
   Zap,
   PlayCircle,
-  Gem
+  Gem,
+  LayoutList
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-
-interface Course {
-  id: string;
-  title: string;
-  description: string;
-  instructor: string;
-  nextBatch: string;
-  price: number;
-  originalPrice?: number;
-  duration: string;
-  level: string;
-  type: 'live' | 'recorded' | 'hybrid';
-  features: string[];
-  isPopular?: boolean;
-  accentColor: string;
-  bgGradient: string;
-}
-
-const COURSES: Course[] = [
-  {
-    id: 'ielts-masterclass',
-    title: 'IELTS Band 8+ Masterclass',
-    description: 'Our most comprehensive program covering all 4 modules (Reading, Writing, Listening, Speaking) with personal feedback.',
-    instructor: 'Arefin Shovo',
-    nextBatch: 'April 15, 2026',
-    price: 5500,
-    originalPrice: 8000,
-    duration: '3 Months',
-    level: 'Any',
-    type: 'live',
-    isPopular: true,
-    accentColor: 'indigo',
-    bgGradient: 'from-blue-500 to-indigo-600',
-    features: [
-      '24 Interactive Live Classes',
-      'Daily Practice Materials',
-      'Personalized Writing Feedback',
-      '1-on-1 Speaking Mock Tests',
-      'Life-time Access to Recorded Classes'
-    ]
-  },
-  {
-    id: 'writing-intensive',
-    title: 'Writing Task 1 & 2 Intensive',
-    description: 'Master Task 1 and Task 2 with advanced templates and weekly scoring. Focus on high-band grammar & vocabulary.',
-    instructor: 'Sharmin Alam',
-    nextBatch: 'April 10, 2026',
-    price: 2500,
-    originalPrice: 3500,
-    duration: '1 Month',
-    level: 'Intermediate+',
-    type: 'live',
-    accentColor: 'rose',
-    bgGradient: 'from-rose-500 to-pink-600',
-    features: [
-      '12 Special Writing Sessions',
-      'Band 8+ Grammar Templates',
-      'Daily Homework Tasks',
-      'Weekly Essay Feedback',
-      'IELTS Writing Handbook'
-    ]
-  },
-  {
-    id: 'speaking-club',
-    title: 'IELTS Speaking Confidence Club',
-    description: 'Overcome your speaking fear. Daily 30-minute practice sessions with peers and expert feedback.',
-    instructor: 'James Rodger',
-    nextBatch: 'Ongoing',
-    price: 1500,
-    originalPrice: 2000,
-    duration: '1 Month',
-    level: 'Any',
-    type: 'live',
-    accentColor: 'amber',
-    bgGradient: 'from-amber-400 to-orange-500',
-    features: [
-      'Daily 1-on-1 Practice',
-      'Cue-card Strategy Lessons',
-      'Pronunciation Workshops',
-      'Idioms and Phrasal Verbs',
-      'Weekly Speaking Mocks'
-    ]
-  },
-  {
-    id: 'reading-listening-suite',
-    title: 'Rapid Reading & Listening Suite',
-    description: 'Speed up your reading and sharpen your ears. Focused practice on tricky question types and keywords.',
-    instructor: 'Sifat Hasan',
-    nextBatch: 'Self-paced',
-    price: 1200,
-    originalPrice: 1800,
-    duration: 'Lifetime',
-    level: 'Any',
-    type: 'recorded',
-    accentColor: 'emerald',
-    bgGradient: 'from-emerald-400 to-teal-600',
-    features: [
-      '50+ High-quality Mock Tests',
-      'Strategy Video Explanations',
-      'Vocabulary for Reading',
-      'Keyword Mapping Techniques',
-      'Instant Result Tracking'
-    ]
-  }
-];
+import { COURSES } from '@/data/courses';
 
 export function CoursesPage() {
   return (
     <div className="min-h-screen bg-[#FDFEFE] pb-20 overflow-hidden">
       {/* Dynamic Animated Hero Section */}
-      <section className="relative h-[500px] flex items-center justify-center bg-transparent overflow-hidden">
+      <section className="relative h-[600px] flex items-center justify-center bg-transparent overflow-hidden">
         {/* Colorful Gradient Blobs */}
         <div className="absolute top-[-10%] left-[-5%] w-[40%] h-[60%] bg-indigo-500/20 blur-[120px] rounded-full animate-pulse"></div>
         <div className="absolute bottom-[-10%] right-[-5%] w-[40%] h-[60%] bg-pink-500/20 blur-[120px] rounded-full"></div>
         <div className="absolute top-[20%] right-[10%] w-[30%] h-[50%] bg-blue-500/10 blur-[100px] rounded-full animate-pulse"></div>
 
-        <div className="bg-gradient-to-br from-indigo-900 via-[#1e1b4b] to-violet-950 w-full h-full absolute top-0 left-0 z-0"></div>
+        <div className="bg-gradient-to-br from-indigo-900 via-[#1e1b4b] to-violet-950 w-full h-full absolute top-0 left-0 z-0 text-white">
+           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+        </div>
         
         {/* Hero Content */}
-        <div className="container mx-auto px-4 relative z-10 text-center">
+        <div className="container mx-auto px-4 relative z-10 text-center mt-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 mb-6 backdrop-blur-md animate-bounce">
               <Sparkles className="h-4 w-4" />
               <span className="text-sm font-semibold tracking-wide uppercase">New Enrollment Open</span>
@@ -143,13 +42,13 @@ export function CoursesPage() {
               Unlock Your <br/> Band 9 Future
             </h1>
             <p className="text-xl text-indigo-100/80 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
-              Join thousands of successful students who mastered IELTS with our premium, AI-powered colorful courses.
+              Join thousands of successful students who mastered IELTS with our premium courses at IELTS Tree.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-5">
               <Button size="lg" className="h-14 px-10 text-lg font-bold bg-gradient-to-r from-indigo-600 to-violet-600 hover:scale-105 transition-transform shadow-[0_10px_35px_-10px_rgba(79,70,229,0.5)] border-none">
                 Start Learning Now
               </Button>
-              <Button size="lg" className="h-14 px-10 text-lg font-bold border-2 border-white/20 bg-white/5 text-white hover:bg-white/10 transition-colors shadow-none rounded-xl font-bold">
+              <Button size="lg" className="h-14 px-10 text-lg font-bold border-2 border-white/20 bg-white/5 text-white hover:bg-white/10 transition-colors shadow-none rounded-xl">
                 View Batches
               </Button>
             </div>
@@ -157,10 +56,10 @@ export function CoursesPage() {
       </section>
 
       {/* Modern Colorful Course Grid */}
-      <div className="container mx-auto px-4 -mt-16 relative z-20">
+      <div className="container mx-auto px-4 -mt-32 relative z-20">
         <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-10">
           {COURSES.map((course) => (
-            <Card key={course.id} className="group overflow-hidden rounded-[2rem] border-none bg-white shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_40px_100px_-20px_rgba(79,70,229,0.15)] transition-all duration-500 relative">
+            <Card key={course.id} className="group overflow-hidden rounded-[2rem] border-none bg-white shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_40px_100px_-20px_rgba(79,70,229,0.15)] transition-all duration-500 relative flex flex-col">
               
               {/* Card Accent Glow */}
               <div className={`absolute top-0 right-0 w-32 h-32 bg-${course.accentColor}-400/10 blur-[50px] rounded-full group-hover:bg-${course.accentColor}-400/20 transition-all`}></div>
@@ -175,7 +74,7 @@ export function CoursesPage() {
                         {course.type.toUpperCase()}
                     </Badge>
                     {course.isPopular && (
-                      <div className="flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-black uppercase tracking-tighter shadow-sm border border-amber-200">
+                      <div className="flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-black uppercase tracking-tighter shadow-sm border border-amber-200 animate-pulse">
                         <Gem className="h-3 w-3" /> Trending
                       </div>
                     )}
@@ -188,7 +87,7 @@ export function CoursesPage() {
                 </CardDescription>
               </CardHeader>
 
-              <CardContent className="px-8 space-y-6">
+              <CardContent className="px-8 space-y-6 flex-grow">
                 <div className="flex flex-wrap gap-4">
                     <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-xl text-sm font-bold text-slate-600 border border-slate-100">
                         <Users className="h-4 w-4 text-indigo-500" /> {course.instructor}
@@ -199,7 +98,9 @@ export function CoursesPage() {
                 </div>
 
                 <div className="space-y-3">
-                    <p className="text-sm font-black text-slate-400 uppercase tracking-widest">Key Features</p>
+                    <p className="text-sm font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                      <LayoutList className="h-4 w-4" /> Key Features
+                    </p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
                         {course.features.map((feature, idx) => (
                             <div key={idx} className="flex items-center gap-2 text-sm font-semibold text-slate-600">
@@ -208,6 +109,18 @@ export function CoursesPage() {
                             </div>
                         ))}
                     </div>
+                </div>
+
+                <div className="mt-8 pt-4 border-t border-slate-50">
+                  <Link to={`/courses/${course.id}`}>
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-between font-bold text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 group px-0 h-10"
+                    >
+                      <span>View Full Curriculum</span>
+                      <ArrowRight className="h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  </Link>
                 </div>
               </CardContent>
 
@@ -223,10 +136,12 @@ export function CoursesPage() {
                       <Zap className="h-3 w-3 fill-current" /> LIMITED OFFER
                    </p>
                 </div>
-                <Button className={`h-14 px-8 rounded-2xl bg-slate-900 hover:bg-indigo-600 text-white font-bold transition-all shadow-xl group/btn`}>
-                    Enroll Now
-                    <ArrowRight className="ml-2 h-5 w-5 transform group-hover/btn:translate-x-1 transition-transform" />
-                </Button>
+                <Link to={`/courses/${course.id}`}>
+                  <Button className={`h-14 px-8 rounded-2xl bg-slate-900 hover:bg-indigo-600 text-white font-bold transition-all shadow-xl group/btn`}>
+                      Enroll Now
+                      <ArrowRight className="ml-2 h-5 w-5 transform group-hover/btn:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
               </CardFooter>
             </Card>
           ))}

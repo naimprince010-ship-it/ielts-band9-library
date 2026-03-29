@@ -1,6 +1,6 @@
 export type LessonType = 'vocabulary' | 'grammar' | 'writing' | 'speaking';
 export type LessonLevel = 'beginner' | 'intermediate' | 'advanced';
-export type UserRole = 'user' | 'admin';
+export type UserRole = 'user' | 'admin' | 'instructor';
 export type SubscriptionStatus = 'free' | 'premium';
 
 export type PackageType = 'monthly' | 'yearly';
