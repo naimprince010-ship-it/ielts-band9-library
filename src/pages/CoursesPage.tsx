@@ -32,7 +32,7 @@ export function CoursesPage() {
               Enrollment Open for April 2026
             </Badge>
             
-            <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl font-semibold text-foreground mb-6 leading-tight text-balance">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
               Master IELTS with expert guidance
             </h1>
             
@@ -61,7 +61,7 @@ export function CoursesPage() {
               <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-2">
                 Our Programs
               </p>
-              <h2 className="font-serif text-3xl md:text-4xl font-semibold text-foreground">
+              <h2 className="font-sans text-3xl md:text-4xl font-semibold text-foreground">
                 Courses designed for success
               </h2>
             </div>
@@ -105,7 +105,7 @@ export function CoursesPage() {
                     </div>
                   </div>
                   
-                  <h3 className="font-serif text-2xl md:text-3xl font-semibold text-foreground group-hover:text-accent transition-colors leading-tight">
+                  <h3 className="font-sans text-2xl md:text-3xl font-semibold text-foreground group-hover:text-accent transition-colors leading-tight">
                     {course.title}
                   </h3>
                   
@@ -190,7 +190,7 @@ export function CoursesPage() {
             <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-2">
               Why Choose Us
             </p>
-            <h2 className="font-serif text-3xl md:text-4xl font-semibold text-foreground">
+            <h2 className="font-sans text-3xl md:text-4xl font-semibold text-foreground">
               Learning experience designed for results
             </h2>
           </div>
@@ -200,7 +200,7 @@ export function CoursesPage() {
               <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-foreground text-background mb-6">
                 <Globe className="h-6 w-6" />
               </div>
-              <h3 className="font-serif text-xl font-semibold text-foreground mb-3">
+              <h3 className="font-sans text-xl font-semibold text-foreground mb-3">
                 Global Community
               </h3>
               <p className="text-muted-foreground leading-relaxed">
@@ -212,7 +212,7 @@ export function CoursesPage() {
               <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-foreground text-background mb-6">
                 <Video className="h-6 w-6" />
               </div>
-              <h3 className="font-serif text-xl font-semibold text-foreground mb-3">
+              <h3 className="font-sans text-xl font-semibold text-foreground mb-3">
                 HD Live Sessions
               </h3>
               <p className="text-muted-foreground leading-relaxed">
@@ -224,7 +224,7 @@ export function CoursesPage() {
               <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-foreground text-background mb-6">
                 <Star className="h-6 w-6" />
               </div>
-              <h3 className="font-serif text-xl font-semibold text-foreground mb-3">
+              <h3 className="font-sans text-xl font-semibold text-foreground mb-3">
                 Proven Results
               </h3>
               <p className="text-muted-foreground leading-relaxed">
@@ -246,7 +246,7 @@ export function CoursesPage() {
             <div className="relative">
               <BookOpen className="h-12 w-12 mx-auto mb-6 opacity-80" />
               
-              <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 text-balance">
+              <h2 className="font-sans text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 text-balance">
                 Ready to achieve your target band score?
               </h2>
               

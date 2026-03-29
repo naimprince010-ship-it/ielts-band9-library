@@ -147,68 +147,68 @@ export function PaymentPage() {
     }
   };
 
-    if (loadingSettings) {
-      return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-          <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
-        </div>
-      );
-    }
+  if (loadingSettings) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
-    if (!user) {
-      return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-          <Card className="w-full max-w-md">
-            <CardHeader className="text-center">
-              <CardTitle>Login Required</CardTitle>
-              <CardDescription>Please login to make a payment</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button onClick={() => navigate('/login')} className="w-full">
-                Go to Login
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      );
-    }
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Card className="w-full max-w-md border-border">
+          <CardHeader className="text-center">
+            <CardTitle className="text-foreground">Login Required</CardTitle>
+            <CardDescription className="text-muted-foreground">Please login to make a payment</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button onClick={() => navigate('/login')} className="w-full">
+              Go to Login
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Card className="w-full max-w-md border-border">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                <CheckCircle className="h-8 w-8 text-green-600" />
+              <div className="w-16 h-16 bg-green-100 dark:bg-green-950/30 rounded-full flex items-center justify-center">
+                <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
               </div>
             </div>
-            <CardTitle className="text-green-600">Payment Submitted!</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-green-600 dark:text-green-400">Payment Submitted!</CardTitle>
+            <CardDescription className="text-muted-foreground">
               Your payment is being verified
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Alert className="bg-blue-50 border-blue-200">
-              <Clock className="h-4 w-4 text-blue-600" />
-              <AlertDescription className="text-blue-800">
+            <Alert className="bg-accent/10 border-accent/20">
+              <Clock className="h-4 w-4 text-accent" />
+              <AlertDescription className="text-foreground/80">
                 Your payment will be verified within <strong>1-24 hours</strong>. 
                 Once verified, your premium access will be activated automatically.
               </AlertDescription>
             </Alert>
             
-            <div className="bg-gray-50 rounded-lg p-4 space-y-2">
+            <div className="bg-muted rounded-lg p-4 space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Package:</span>
-                <span className="font-medium">{selectedPackage.name}</span>
+                <span className="text-muted-foreground">Package:</span>
+                <span className="font-medium text-foreground">{selectedPackage.name}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Amount:</span>
-                <span className="font-medium">৳{selectedPackage.price}</span>
+                <span className="text-muted-foreground">Amount:</span>
+                <span className="font-medium text-foreground">৳{selectedPackage.price}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Transaction ID:</span>
-                <span className="font-medium">{transactionId}</span>
+                <span className="text-muted-foreground">Transaction ID:</span>
+                <span className="font-medium text-foreground">{transactionId}</span>
               </div>
             </div>
 
@@ -222,25 +222,25 @@ export function PaymentPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
+    <div className="min-h-screen bg-background py-12 px-4">
       <div className="max-w-2xl mx-auto">
         <Button 
           variant="ghost" 
           onClick={() => navigate('/pricing')}
-          className="mb-6"
+          className="mb-6 text-muted-foreground hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Pricing
         </Button>
 
         <div className="grid gap-6">
-          <Card>
+          <Card className="border-border">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-foreground">
                 <Smartphone className="h-6 w-6 text-pink-500" />
                 Pay with bKash
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-muted-foreground">
                 Complete your payment using bKash mobile banking
               </CardDescription>
             </CardHeader>
@@ -255,22 +255,22 @@ export function PaymentPage() {
               </div>
 
               <div className="space-y-4">
-                <h4 className="font-semibold text-lg">Payment Instructions:</h4>
-                <ol className="space-y-3 text-gray-700">
+                <h4 className="font-semibold text-lg text-foreground">Payment Instructions:</h4>
+                <ol className="space-y-3 text-muted-foreground">
                   <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-sm font-medium">1</span>
-                    <span>Open your <strong>bKash app</strong> or dial <strong>*247#</strong></span>
+                    <span className="flex-shrink-0 w-6 h-6 bg-pink-100 dark:bg-pink-950/30 text-pink-600 dark:text-pink-400 rounded-full flex items-center justify-center text-sm font-medium">1</span>
+                    <span>Open your <strong className="text-foreground">bKash app</strong> or dial <strong className="text-foreground">*247#</strong></span>
                   </li>
                   <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-sm font-medium">2</span>
-                    <span>Select <strong>"Send Money"</strong></span>
+                    <span className="flex-shrink-0 w-6 h-6 bg-pink-100 dark:bg-pink-950/30 text-pink-600 dark:text-pink-400 rounded-full flex items-center justify-center text-sm font-medium">2</span>
+                    <span>Select <strong className="text-foreground">&quot;Send Money&quot;</strong></span>
                   </li>
                   <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-sm font-medium">3</span>
+                    <span className="flex-shrink-0 w-6 h-6 bg-pink-100 dark:bg-pink-950/30 text-pink-600 dark:text-pink-400 rounded-full flex items-center justify-center text-sm font-medium">3</span>
                     <div>
                       <span>Enter this bKash number:</span>
                       <div className="flex items-center gap-2 mt-2">
-                        <code className="bg-gray-100 px-4 py-2 rounded-lg text-lg font-mono font-bold">
+                        <code className="bg-muted px-4 py-2 rounded-lg text-lg font-mono font-bold text-foreground">
                           {settings.bkash_number}
                         </code>
                         <Button 
@@ -284,30 +284,30 @@ export function PaymentPage() {
                     </div>
                   </li>
                   <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-sm font-medium">4</span>
-                    <span>Enter amount: <strong>৳{selectedPackage.price}</strong></span>
+                    <span className="flex-shrink-0 w-6 h-6 bg-pink-100 dark:bg-pink-950/30 text-pink-600 dark:text-pink-400 rounded-full flex items-center justify-center text-sm font-medium">4</span>
+                    <span>Enter amount: <strong className="text-foreground">৳{selectedPackage.price}</strong></span>
                   </li>
                   <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-sm font-medium">5</span>
-                    <span>Add reference: <strong>IELTS Premium</strong></span>
+                    <span className="flex-shrink-0 w-6 h-6 bg-pink-100 dark:bg-pink-950/30 text-pink-600 dark:text-pink-400 rounded-full flex items-center justify-center text-sm font-medium">5</span>
+                    <span>Add reference: <strong className="text-foreground">IELTS Premium</strong></span>
                   </li>
                   <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-sm font-medium">6</span>
+                    <span className="flex-shrink-0 w-6 h-6 bg-pink-100 dark:bg-pink-950/30 text-pink-600 dark:text-pink-400 rounded-full flex items-center justify-center text-sm font-medium">6</span>
                     <span>Enter your bKash PIN and confirm</span>
                   </li>
                   <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-sm font-medium">7</span>
-                    <span>Note down the <strong>Transaction ID (TrxID)</strong> from the confirmation message</span>
+                    <span className="flex-shrink-0 w-6 h-6 bg-pink-100 dark:bg-pink-950/30 text-pink-600 dark:text-pink-400 rounded-full flex items-center justify-center text-sm font-medium">7</span>
+                    <span>Note down the <strong className="text-foreground">Transaction ID (TrxID)</strong> from the confirmation message</span>
                   </li>
                 </ol>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="border-border">
             <CardHeader>
-              <CardTitle>Submit Payment Details</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-foreground">Submit Payment Details</CardTitle>
+              <CardDescription className="text-muted-foreground">
                 Enter your bKash transaction details for verification
               </CardDescription>
             </CardHeader>
@@ -321,7 +321,7 @@ export function PaymentPage() {
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="transactionId">bKash Transaction ID (TrxID)</Label>
+                  <Label htmlFor="transactionId" className="text-foreground">bKash Transaction ID (TrxID)</Label>
                   <Input
                     id="transactionId"
                     placeholder="e.g., 9K7F5H3D2A"
@@ -330,13 +330,13 @@ export function PaymentPage() {
                     className="font-mono"
                     required
                   />
-                  <p className="text-xs text-gray-500">
-                    You'll find this in your bKash confirmation SMS
+                  <p className="text-xs text-muted-foreground">
+                    You&apos;ll find this in your bKash confirmation SMS
                   </p>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="senderNumber">Your bKash Number</Label>
+                  <Label htmlFor="senderNumber" className="text-foreground">Your bKash Number</Label>
                   <Input
                     id="senderNumber"
                     placeholder="e.g., 01712345678"
@@ -344,7 +344,7 @@ export function PaymentPage() {
                     onChange={(e) => setSenderNumber(e.target.value)}
                     required
                   />
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-muted-foreground">
                     The bKash number you sent the payment from
                   </p>
                 </div>
@@ -354,7 +354,7 @@ export function PaymentPage() {
                 </Button>
               </form>
 
-              <div className="mt-6 flex items-start gap-2 text-sm text-gray-500">
+              <div className="mt-6 flex items-start gap-2 text-sm text-muted-foreground">
                 <Shield className="h-4 w-4 mt-0.5 flex-shrink-0" />
                 <p>
                   Your payment will be verified within 1-24 hours. 

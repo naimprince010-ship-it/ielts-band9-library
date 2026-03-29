@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Check, Star, Zap, Crown, Gift, Users, Copy, CheckCircle2, Tag } from 'lucide-react';
+import { Check, Star, Zap, Crown, Gift, Users, Copy, CheckCircle2, Tag, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -9,7 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 const COUPON_CODES: Record<string, { discount: number; type: 'percent' | 'fixed'; description: string }> = {
   'WELCOME20': { discount: 20, type: 'percent', description: '20% off your first purchase' },
-  'IELTS50': { discount: 50, type: 'fixed', description: '৳50 off any plan' },
+  'IELTS50': { discount: 50, type: 'fixed', description: '50 off any plan' },
   'STUDENT15': { discount: 15, type: 'percent', description: '15% student discount' },
   'NEWYEAR25': { discount: 25, type: 'percent', description: '25% New Year special' },
 };
@@ -165,33 +165,39 @@ export function PricingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-gradient-to-br from-indigo-600 to-purple-700 text-white py-16">
+    <div className="min-h-screen bg-background">
+      {/* Hero Section */}
+      <div className="bg-foreground text-background py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl font-bold mb-4">Simple, Transparent Pricing</h1>
-          <p className="text-xl text-indigo-100 max-w-2xl mx-auto">
-            Choose the plan that fits your IELTS preparation needs. 
-            Upgrade anytime to unlock all premium content.
+          <Badge variant="secondary" className="mb-6 bg-background/10 text-background border-0">
+            Simple & Transparent
+          </Badge>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+            Choose your plan
+          </h1>
+          <p className="text-lg lg:text-xl text-background/70 max-w-2xl mx-auto">
+            Unlock your IELTS potential with our comprehensive learning materials. 
+            Upgrade anytime to access all premium content.
           </p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         {/* Free Trial Banner */}
         {!isPremium && trialDaysLeft === null && (
-          <Card className="mb-8 border-2 border-green-200 bg-gradient-to-r from-green-50 to-emerald-50">
+          <Card className="mb-8 border-2 border-accent/20 bg-accent/5">
             <CardContent className="p-6">
               <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
-                  <div className="p-3 bg-green-100 rounded-full">
-                    <Gift className="h-8 w-8 text-green-600" />
+                  <div className="p-3 bg-accent/10 rounded-xl">
+                    <Gift className="h-7 w-7 text-accent" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-green-800">Try Premium Free for 7 Days!</h3>
-                    <p className="text-green-600">Full access to all content. No credit card required.</p>
+                    <h3 className="text-lg font-bold text-foreground">Try Premium Free for 7 Days!</h3>
+                    <p className="text-muted-foreground">Full access to all content. No credit card required.</p>
                   </div>
                 </div>
-                <Button onClick={startFreeTrial} className="bg-green-600 hover:bg-green-700">
+                <Button onClick={startFreeTrial} className="bg-accent hover:bg-accent/90 text-accent-foreground">
                   <Gift className="h-4 w-4 mr-2" />
                   Start Free Trial
                 </Button>
@@ -202,133 +208,148 @@ export function PricingPage() {
 
         {/* Active Trial Banner */}
         {trialDaysLeft !== null && trialDaysLeft > 0 && (
-          <Card className="mb-8 border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+          <Card className="mb-8 border-2 border-foreground/10 bg-muted">
             <CardContent className="p-6">
               <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
-                  <div className="p-3 bg-blue-100 rounded-full">
-                    <CheckCircle2 className="h-8 w-8 text-blue-600" />
+                  <div className="p-3 bg-foreground/10 rounded-xl">
+                    <CheckCircle2 className="h-7 w-7 text-foreground" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-blue-800">Your Free Trial is Active!</h3>
-                    <p className="text-blue-600">{trialDaysLeft} days remaining. Upgrade now to keep access.</p>
+                    <h3 className="text-lg font-bold text-foreground">Your Free Trial is Active!</h3>
+                    <p className="text-muted-foreground">{trialDaysLeft} days remaining. Upgrade now to keep access.</p>
                   </div>
                 </div>
-                <Badge className="bg-blue-600 text-lg px-4 py-2">{trialDaysLeft} Days Left</Badge>
+                <Badge className="bg-foreground text-background text-base px-4 py-2">{trialDaysLeft} Days Left</Badge>
               </div>
             </CardContent>
           </Card>
         )}
 
         {/* Coupon Code Section */}
-        <Card className="mb-8">
-          <CardContent className="p-6">
+        <Card className="mb-10 border-border">
+          <CardContent className="p-5">
             <div className="flex flex-col md:flex-row items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Tag className="h-5 w-5 text-indigo-600" />
-                <span className="font-medium">Have a coupon code?</span>
+              <div className="flex items-center gap-2 shrink-0">
+                <Tag className="h-5 w-5 text-muted-foreground" />
+                <span className="font-medium text-foreground">Have a coupon?</span>
               </div>
-              <div className="flex gap-2 flex-1 max-w-md">
+              <div className="flex gap-2 flex-1 w-full md:max-w-sm">
                 <Input
-                  placeholder="Enter coupon code"
+                  placeholder="Enter code"
                   value={couponCode}
                   onChange={(e) => setCouponCode(e.target.value)}
-                  className="flex-1"
+                  className="flex-1 h-11"
                 />
-                <Button onClick={applyCoupon} variant="outline">
+                <Button onClick={applyCoupon} variant="outline" className="h-11 px-6">
                   Apply
                 </Button>
               </div>
               {appliedCoupon && (
-                <Badge className="bg-green-100 text-green-700 border-green-300">
-                  <CheckCircle2 className="h-3 w-3 mr-1" />
+                <Badge className="bg-accent/10 text-accent border-accent/20">
+                  <CheckCircle2 className="h-3 w-3 mr-1.5" />
                   {COUPON_CODES[appliedCoupon].description}
                 </Badge>
               )}
               {couponError && (
-                <span className="text-red-500 text-sm">{couponError}</span>
+                <span className="text-destructive text-sm">{couponError}</span>
               )}
             </div>
           </CardContent>
         </Card>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        {/* Pricing Cards */}
+        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
           {plans.map((plan) => (
             <Card 
               key={plan.name} 
-              className={`relative ${plan.popular ? 'border-2 border-indigo-500 shadow-lg' : ''}`}
+              className={`relative transition-all duration-300 ${
+                plan.popular 
+                  ? 'border-2 border-foreground shadow-xl scale-[1.02]' 
+                  : 'border-border hover:border-foreground/20 hover:shadow-lg'
+              }`}
             >
               {plan.popular && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <Badge className="bg-indigo-500 text-white px-4 py-1">
-                    <Star className="h-3 w-3 mr-1" /> Most Popular
+                <div className="absolute -top-3.5 left-1/2 transform -translate-x-1/2">
+                  <Badge className="bg-foreground text-background px-4 py-1.5 shadow-md">
+                    <Star className="h-3 w-3 mr-1.5 fill-current" /> Most Popular
                   </Badge>
                 </div>
               )}
               {plan.badge && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <Badge className="bg-green-500 text-white px-4 py-1">
-                    <Zap className="h-3 w-3 mr-1" /> {plan.badge}
+                <div className="absolute -top-3.5 left-1/2 transform -translate-x-1/2">
+                  <Badge className="bg-accent text-accent-foreground px-4 py-1.5 shadow-md">
+                    <Zap className="h-3 w-3 mr-1.5" /> {plan.badge}
                   </Badge>
                 </div>
               )}
-              <CardHeader className="text-center pt-8">
-                <CardTitle className="text-2xl">{plan.name}</CardTitle>
-                <CardDescription>{plan.description}</CardDescription>
-                <div className="mt-4">
-                  <span className="text-4xl font-bold">{plan.currency}{plan.price}</span>
-                  <span className="text-gray-500">{plan.period}</span>
+              
+              <CardHeader className="text-center pt-10 pb-4">
+                <CardTitle className="text-xl font-bold text-foreground">{plan.name}</CardTitle>
+                <CardDescription className="text-muted-foreground">{plan.description}</CardDescription>
+                <div className="mt-6">
+                  <span className="text-5xl font-bold text-foreground">{plan.currency}{plan.price}</span>
+                  <span className="text-muted-foreground ml-1">{plan.period}</span>
                 </div>
               </CardHeader>
-              <CardContent>
-                <ul className="space-y-3 mb-6">
+              
+              <CardContent className="px-6 pb-8">
+                <ul className="space-y-3 mb-8">
                   {plan.features.map((feature, index) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <Check className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">{feature}</span>
+                    <li key={index} className="flex items-start gap-3">
+                      <div className="flex-shrink-0 mt-0.5">
+                        <Check className="h-5 w-5 text-accent" />
+                      </div>
+                      <span className="text-foreground text-sm">{feature}</span>
                     </li>
                   ))}
                   {plan.limitations.map((limitation, index) => (
-                    <li key={index} className="flex items-start gap-2 text-gray-400">
-                      <span className="h-5 w-5 flex items-center justify-center">-</span>
-                      <span>{limitation}</span>
+                    <li key={index} className="flex items-start gap-3 text-muted-foreground">
+                      <div className="flex-shrink-0 mt-0.5">
+                        <X className="h-5 w-5" />
+                      </div>
+                      <span className="text-sm">{limitation}</span>
                     </li>
                   ))}
                 </ul>
                 
-                                                                {plan.name === 'Free' ? (
-                                                                  plan.ctaLink === '#' ? (
-                                                                    <Button 
-                                                                      className="w-full" 
-                                                                      variant="outline"
-                                                                      disabled={plan.isCurrent}
-                                                                    >
-                                                                      {plan.cta}
-                                                                    </Button>
-                                                                  ) : (
-                                                                    <Link to={plan.ctaLink}>
-                                                                      <Button className="w-full" variant="outline">
-                                                                        {plan.cta}
-                                                                      </Button>
-                                                                    </Link>
-                                                                  )
-                                                                ) : (
-                                                                  <Button 
-                                                                    className="w-full" 
-                                                                    variant={plan.popular ? 'default' : 'outline'}
-                                                                    disabled={plan.isCurrent}
-                                                                    onClick={() => !plan.isCurrent && handleUpgrade(plan.name === 'Premium Monthly' ? 'monthly' : 'yearly')}
-                                                                  >
-                                                                    {plan.isCurrent ? (
-                                                                      <>
-                                                                        <Crown className="h-4 w-4 mr-2" />
-                                                                        Current Plan
-                                                                      </>
-                                                                    ) : (
-                                                                      plan.cta
-                                                                    )}
-                                                                  </Button>
-                                                                )}
+                {plan.name === 'Free' ? (
+                  plan.ctaLink === '#' ? (
+                    <Button 
+                      className="w-full h-12 font-medium" 
+                      variant="outline"
+                      disabled={plan.isCurrent}
+                    >
+                      {plan.cta}
+                    </Button>
+                  ) : (
+                    <Link to={plan.ctaLink}>
+                      <Button className="w-full h-12 font-medium" variant="outline">
+                        {plan.cta}
+                      </Button>
+                    </Link>
+                  )
+                ) : (
+                  <Button 
+                    className={`w-full h-12 font-medium ${
+                      plan.popular 
+                        ? 'bg-foreground hover:bg-foreground/90 text-background' 
+                        : ''
+                    }`}
+                    variant={plan.popular ? 'default' : 'outline'}
+                    disabled={plan.isCurrent}
+                    onClick={() => !plan.isCurrent && handleUpgrade(plan.name === 'Premium Monthly' ? 'monthly' : 'yearly')}
+                  >
+                    {plan.isCurrent ? (
+                      <>
+                        <Crown className="h-4 w-4 mr-2" />
+                        Current Plan
+                      </>
+                    ) : (
+                      plan.cta
+                    )}
+                  </Button>
+                )}
               </CardContent>
             </Card>
           ))}
@@ -336,29 +357,29 @@ export function PricingPage() {
 
         {/* Referral Program Section */}
         {user && (
-          <Card className="mt-8 border-2 border-purple-200 bg-gradient-to-r from-purple-50 to-indigo-50">
-            <CardContent className="p-6">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          <Card className="mt-12 border-2 border-muted bg-muted/30">
+            <CardContent className="p-6 lg:p-8">
+              <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
-                  <div className="p-3 bg-purple-100 rounded-full">
-                    <Users className="h-8 w-8 text-purple-600" />
+                  <div className="p-3 bg-foreground/5 rounded-xl">
+                    <Users className="h-7 w-7 text-foreground" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-purple-800">Refer Friends & Earn Rewards!</h3>
-                    <p className="text-purple-600">Get 1 month free for every friend who subscribes</p>
+                    <h3 className="text-lg font-bold text-foreground">Refer Friends & Earn Rewards!</h3>
+                    <p className="text-muted-foreground">Get 1 month free for every friend who subscribes</p>
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-2">
-                  <p className="text-sm text-gray-500">Your referral link:</p>
-                  <div className="flex items-center gap-2 bg-white rounded-lg border px-4 py-2">
-                    <code className="text-sm text-purple-700">ieltstree.com/pricing?ref={referralCode}</code>
+                  <p className="text-sm text-muted-foreground">Your referral link:</p>
+                  <div className="flex items-center gap-2 bg-background rounded-xl border border-border px-4 py-2.5">
+                    <code className="text-sm text-foreground font-mono">ieltstree.com/pricing?ref={referralCode}</code>
                     <Button 
                       variant="ghost" 
                       size="sm" 
                       onClick={copyReferralLink}
-                      className="h-8 w-8 p-0"
+                      className="h-8 w-8 p-0 hover:bg-muted"
                     >
-                      {copied ? <CheckCircle2 className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                      {copied ? <CheckCircle2 className="h-4 w-4 text-accent" /> : <Copy className="h-4 w-4" />}
                     </Button>
                   </div>
                 </div>
@@ -367,45 +388,62 @@ export function PricingPage() {
           </Card>
         )}
 
-        <div className="mt-16 bg-white rounded-lg shadow-sm p-8">
-          <h2 className="text-2xl font-bold text-center mb-8">Frequently Asked Questions</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div>
-                            <h3 className="font-semibold text-lg mb-2">What payment methods do you accept?</h3>
-                            <p className="text-gray-600">
-                              We currently accept bKash payments. Simply send money to our bKash merchant number 
-                              and submit your transaction ID for verification.
-                            </p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-lg mb-2">Can I cancel anytime?</h3>
-              <p className="text-gray-600">
-                Yes! You can cancel your subscription at any time. You'll continue to have 
-                access until the end of your billing period.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-lg mb-2">Is there a refund policy?</h3>
-              <p className="text-gray-600">
-                We offer a 7-day money-back guarantee. If you're not satisfied, 
-                contact us within 7 days for a full refund.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-lg mb-2">How often is content updated?</h3>
-              <p className="text-gray-600">
-                We add new lessons weekly and update existing content regularly 
-                to ensure accuracy and relevance.
-              </p>
-            </div>
+        {/* FAQ Section */}
+        <div className="mt-16 lg:mt-24">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-3">Frequently Asked Questions</h2>
+            <p className="text-muted-foreground">Everything you need to know about our plans</p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+            <Card className="border-border bg-muted/30">
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-lg text-foreground mb-2">What payment methods do you accept?</h3>
+                <p className="text-muted-foreground">
+                  We currently accept bKash payments. Simply send money to our bKash merchant number 
+                  and submit your transaction ID for verification.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border-border bg-muted/30">
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-lg text-foreground mb-2">Can I cancel anytime?</h3>
+                <p className="text-muted-foreground">
+                  {"Yes! You can cancel your subscription at any time. You'll continue to have"} 
+                  {" access until the end of your billing period."}
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border-border bg-muted/30">
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-lg text-foreground mb-2">Is there a refund policy?</h3>
+                <p className="text-muted-foreground">
+                  {"We offer a 7-day money-back guarantee. If you're not satisfied,"} 
+                  {" contact us within 7 days for a full refund."}
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="border-border bg-muted/30">
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-lg text-foreground mb-2">How often is content updated?</h3>
+                <p className="text-muted-foreground">
+                  We add new lessons weekly and update existing content regularly 
+                  to ensure accuracy and relevance.
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
-                <div className="mt-12 text-center">
-                  <p className="text-sm text-gray-400">
-                    Questions? Contact us at support@ieltstree.com
-                  </p>
-                </div>
+        {/* Support */}
+        <div className="mt-12 text-center">
+          <p className="text-sm text-muted-foreground">
+            Questions? Contact us at{' '}
+            <a href="mailto:support@ieltstree.com" className="text-foreground hover:text-accent transition-colors">
+              support@ieltstree.com
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );

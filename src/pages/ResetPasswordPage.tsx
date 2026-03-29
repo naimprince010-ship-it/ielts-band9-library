@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { BookOpen, Lock, AlertCircle, CheckCircle } from 'lucide-react';
+import { Lock, AlertCircle, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -48,25 +48,26 @@ export function ResetPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen bg-background flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md border-border">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
-              <BookOpen className="h-6 w-6 text-indigo-600" />
-            </div>
+            <Link to="/" className="flex items-center gap-2">
+              <img src="/icon.png" alt="IELTS Tree" className="h-8 w-8" />
+              <span className="text-lg font-semibold text-foreground">IELTS Tree</span>
+            </Link>
           </div>
-          <CardTitle className="text-2xl">Reset Password</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-2xl text-foreground">Reset Password</CardTitle>
+          <CardDescription className="text-muted-foreground">
             Enter your new password below.
           </CardDescription>
         </CardHeader>
         <CardContent>
           {success ? (
             <div className="space-y-4">
-              <Alert className="bg-green-50 border-green-200">
-                <CheckCircle className="h-4 w-4 text-green-600" />
-                <AlertDescription className="text-green-800">
+              <Alert className="bg-green-50 border-green-200 dark:bg-green-950/20 dark:border-green-900">
+                <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
+                <AlertDescription className="text-green-800 dark:text-green-300">
                   Password updated successfully! Redirecting to login page...
                 </AlertDescription>
               </Alert>
@@ -87,9 +88,9 @@ export function ResetPasswordPage() {
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="password">New Password</Label>
+                  <Label htmlFor="password" className="text-foreground">New Password</Label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
                     <Input
                       id="password"
                       type="password"
@@ -104,9 +105,9 @@ export function ResetPasswordPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">Confirm Password</Label>
+                  <Label htmlFor="confirmPassword" className="text-foreground">Confirm Password</Label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
                     <Input
                       id="confirmPassword"
                       type="password"
