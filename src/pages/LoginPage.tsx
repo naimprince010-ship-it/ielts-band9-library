@@ -47,46 +47,49 @@ export function LoginPage() {
 
   return (
     <div className="min-h-screen flex">
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-800 p-12 flex-col justify-between relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/10" />
-        <div className="absolute top-0 left-0 w-72 h-72 bg-white/10 rounded-full -translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/10 rounded-full translate-x-1/3 translate-y-1/3" />
-        <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-white/5 rounded-full" />
+      {/* Left Panel - Branding */}
+      <div className="hidden lg:flex lg:w-1/2 bg-foreground text-background p-12 flex-col justify-between relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-0 left-0 w-72 h-72 bg-background/5 rounded-full -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-background/5 rounded-full translate-x-1/3 translate-y-1/3" />
+        <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-accent/20 rounded-full" />
         
+        {/* Logo */}
         <div className="relative z-10">
-          <Link to="/" className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
-              <BookOpen className="h-7 w-7 text-white" />
+          <Link to="/" className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-background/10 backdrop-blur-sm rounded-xl flex items-center justify-center">
+              <img src="/icon.png" alt="IELTS Tree" className="h-7 w-7 brightness-0 invert" />
             </div>
-            <span className="text-2xl font-bold text-white">IELTS Tree</span>
+            <span className="text-2xl font-bold">IELTS Tree</span>
           </Link>
         </div>
 
+        {/* Main Content */}
         <div className="relative z-10 space-y-8">
           <div>
-            <h1 className="text-4xl font-bold text-white mb-4">
+            <h1 className="text-4xl font-bold mb-4 leading-tight">
               Master IELTS with<br />Band 9 Materials
             </h1>
-            <p className="text-indigo-100 text-lg">
+            <p className="text-background/70 text-lg">
               Access premium vocabulary and grammar lessons designed by IELTS experts to help you achieve your target score.
             </p>
           </div>
 
           <div className="space-y-4">
-            <div className="flex items-center space-x-3 text-white/90">
-              <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+            <div className="flex items-center gap-3 text-background/90">
+              <div className="w-10 h-10 bg-background/10 rounded-lg flex items-center justify-center">
                 <CheckCircle className="h-5 w-5" />
               </div>
               <span>280+ Expert-crafted lessons</span>
             </div>
-            <div className="flex items-center space-x-3 text-white/90">
-              <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+            <div className="flex items-center gap-3 text-background/90">
+              <div className="w-10 h-10 bg-background/10 rounded-lg flex items-center justify-center">
                 <Star className="h-5 w-5" />
               </div>
               <span>Band 9 vocabulary & grammar</span>
             </div>
-            <div className="flex items-center space-x-3 text-white/90">
-              <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+            <div className="flex items-center gap-3 text-background/90">
+              <div className="w-10 h-10 bg-background/10 rounded-lg flex items-center justify-center">
                 <Users className="h-5 w-5" />
               </div>
               <span>Join thousands of successful students</span>
@@ -94,48 +97,61 @@ export function LoginPage() {
           </div>
         </div>
 
+        {/* Social Proof */}
         <div className="relative z-10">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center gap-4">
             <div className="flex -space-x-3">
-              <div className="w-10 h-10 rounded-full bg-indigo-400 border-2 border-white flex items-center justify-center text-white text-sm font-medium">A</div>
-              <div className="w-10 h-10 rounded-full bg-purple-400 border-2 border-white flex items-center justify-center text-white text-sm font-medium">B</div>
-              <div className="w-10 h-10 rounded-full bg-pink-400 border-2 border-white flex items-center justify-center text-white text-sm font-medium">C</div>
-              <div className="w-10 h-10 rounded-full bg-indigo-300 border-2 border-white flex items-center justify-center text-white text-sm font-medium">+</div>
+              {[1, 2, 3, 4].map((i) => (
+                <div 
+                  key={i}
+                  className="w-10 h-10 rounded-full bg-background/20 border-2 border-foreground overflow-hidden"
+                >
+                  <img 
+                    src={`https://i.pravatar.cc/150?u=${i + 20}`} 
+                    alt="Student" 
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              ))}
             </div>
-            <div className="text-white/90">
-              <div className="flex items-center space-x-1">
-                <Award className="h-4 w-4 text-yellow-300" />
+            <div className="text-background/90">
+              <div className="flex items-center gap-1">
+                <Award className="h-4 w-4 text-accent" />
                 <span className="font-semibold">4.9/5</span>
               </div>
-              <p className="text-sm text-indigo-200">from 2,000+ reviews</p>
+              <p className="text-sm text-background/60">from 2,000+ reviews</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50">
+      {/* Right Panel - Form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8 bg-background">
         <div className="w-full max-w-md space-y-8">
+          {/* Mobile Logo */}
           <div className="lg:hidden flex justify-center mb-8">
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center">
-                <BookOpen className="h-6 w-6 text-white" />
+            <Link to="/" className="flex items-center gap-2">
+              <div className="w-10 h-10 bg-foreground rounded-xl flex items-center justify-center">
+                <img src="/icon.png" alt="IELTS Tree" className="h-6 w-6 brightness-0 invert" />
               </div>
-              <span className="text-xl font-bold text-gray-900">IELTS Tree</span>
+              <span className="text-xl font-bold text-foreground">IELTS Tree</span>
             </Link>
           </div>
 
           <div className="text-center lg:text-left">
-            <h2 className="text-3xl font-bold text-gray-900">Welcome back</h2>
-            <p className="mt-2 text-gray-600">Sign in to continue your IELTS journey</p>
+            <h2 className="text-3xl font-bold text-foreground">Welcome back</h2>
+            <p className="mt-2 text-muted-foreground">Sign in to continue your IELTS journey</p>
           </div>
 
           {!isSupabaseConfigured() && (
-            <Alert className="bg-indigo-50 border-indigo-200">
-              <AlertCircle className="h-4 w-4 text-indigo-600" />
-              <AlertDescription className="text-indigo-800">
+            <Alert className="bg-muted border-border">
+              <AlertCircle className="h-4 w-4 text-foreground" />
+              <AlertDescription className="text-foreground">
                 <strong>Demo Mode:</strong> Use these credentials:
                 <br />
-                <code className="text-xs bg-indigo-100 px-1 rounded">admin@ielts.com</code> / <code className="text-xs bg-indigo-100 px-1 rounded">password123</code>
+                <code className="text-xs bg-background px-1.5 py-0.5 rounded border border-border">admin@ielts.com</code>
+                {' / '}
+                <code className="text-xs bg-background px-1.5 py-0.5 rounded border border-border">password123</code>
               </AlertDescription>
             </Alert>
           )}
@@ -151,7 +167,7 @@ export function LoginPage() {
             <Button
               type="button"
               variant="outline"
-              className="w-full h-12 text-base border-2 hover:bg-gray-50 transition-all"
+              className="w-full h-12 text-base border-2 border-border hover:bg-muted transition-all"
               onClick={handleGoogleSignIn}
               disabled={googleLoading}
             >
@@ -168,26 +184,26 @@ export function LoginPage() {
           {isSupabaseConfigured() && (
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-gray-300" />
+                <span className="w-full border-t border-border" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-gray-50 text-gray-500">or continue with email</span>
+                <span className="px-4 bg-background text-muted-foreground">or continue with email</span>
               </div>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-gray-700 font-medium">Email address</Label>
+              <Label htmlFor="email" className="text-foreground font-medium">Email address</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
                 <Input
                   id="email"
                   type="email"
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 h-12 text-base border-2 focus:border-indigo-500 focus:ring-indigo-500"
+                  className="pl-10 h-12 text-base border-2 border-border focus:border-foreground"
                   required
                   autoFocus
                 />
@@ -196,26 +212,26 @@ export function LoginPage() {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="text-gray-700 font-medium">Password</Label>
-                <Link to="/forgot-password" className="text-sm text-indigo-600 hover:text-indigo-500 font-medium">
+                <Label htmlFor="password" className="text-foreground font-medium">Password</Label>
+                <Link to="/forgot-password" className="text-sm text-muted-foreground hover:text-foreground font-medium transition-colors">
                   Forgot password?
                 </Link>
               </div>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
                 <Input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 pr-10 h-12 text-base border-2 focus:border-indigo-500 focus:ring-indigo-500"
+                  className="pl-10 pr-10 h-12 text-base border-2 border-border focus:border-foreground"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
@@ -224,12 +240,12 @@ export function LoginPage() {
 
             <Button 
               type="submit" 
-              className="w-full h-12 text-base bg-indigo-600 hover:bg-indigo-700 transition-all" 
+              className="w-full h-12 text-base bg-foreground hover:bg-foreground/90 text-background font-medium" 
               disabled={loading}
             >
               {loading ? (
                 <span className="flex items-center">
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
@@ -239,18 +255,18 @@ export function LoginPage() {
             </Button>
           </form>
 
-          <p className="text-center text-gray-600">
-            Don't have an account?{' '}
-            <Link to="/signup" className="text-indigo-600 hover:text-indigo-500 font-semibold">
+          <p className="text-center text-muted-foreground">
+            {"Don't have an account?"}{' '}
+            <Link to="/signup" className="text-foreground hover:text-accent font-semibold transition-colors">
               Create account
             </Link>
           </p>
 
-          <p className="text-center text-xs text-gray-500">
+          <p className="text-center text-xs text-muted-foreground">
             By signing in, you agree to our{' '}
-            <a href="#" className="text-indigo-600 hover:underline">Terms of Service</a>
+            <Link to="/terms" className="text-foreground hover:text-accent transition-colors">Terms of Service</Link>
             {' '}and{' '}
-            <a href="#" className="text-indigo-600 hover:underline">Privacy Policy</a>
+            <Link to="/privacy" className="text-foreground hover:text-accent transition-colors">Privacy Policy</Link>
           </p>
         </div>
       </div>
