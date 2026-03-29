@@ -12,7 +12,6 @@ import {
   Star,
   Mic,
   PenTool,
-  Play,
   Zap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -470,7 +469,7 @@ export function HomePage() {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="h-14 px-10 border-background/20 text-background hover:bg-background/10 font-semibold rounded-xl w-full sm:w-auto"
+                className="h-14 px-10 border-2 border-white/30 text-white bg-white/10 hover:bg-white/20 font-semibold rounded-xl w-full sm:w-auto"
               >
                 View Pricing
               </Button>
