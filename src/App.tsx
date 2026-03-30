@@ -16,6 +16,7 @@ const BookmarksPage = lazy(() => import('@/pages/BookmarksPage').then(module => 
 const AdminPage = lazy(() => import('@/pages/AdminPage').then(module => ({ default: module.AdminPage })));
 const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPasswordPage').then(module => ({ default: module.ForgotPasswordPage })));
 const ResetPasswordPage = lazy(() => import('@/pages/ResetPasswordPage').then(module => ({ default: module.ResetPasswordPage })));
+const AuthCallbackPage = lazy(() => import('@/pages/AuthCallbackPage').then(module => ({ default: module.AuthCallbackPage })));
 const PaymentPage = lazy(() => import('@/pages/PaymentPage').then(module => ({ default: module.PaymentPage })));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage').then(module => ({ default: module.ProfilePage })));
 const QuizPage = lazy(() => import('@/pages/QuizPage').then(module => ({ default: module.QuizPage })));
@@ -68,6 +69,7 @@ function App() {
                         <Route path="/signup" element={<SignupPage />} />
                         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                                     <Route path="/reset-password" element={<ResetPasswordPage />} />
+                        <Route path="/auth/callback" element={<AuthCallbackPage />} />
                         <Route path="/payment" element={<PaymentPage />} />
                         <Route
               path="/"
