@@ -25,8 +25,8 @@ export function CourseDetailPage() {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-slate-900 mb-4">Course Not Found</h1>
-          <p className="text-slate-600 mb-8">The course you are looking for does not exist or has been moved.</p>
+          <h1 className="text-4xl font-bold text-foreground mb-4">Course Not Found</h1>
+          <p className="text-muted-foreground mb-8">The course you are looking for does not exist or has been moved.</p>
           <Link to="/courses">
             <Button>
               <ArrowLeft className="mr-2 h-4 w-4" /> Back to Courses
@@ -38,12 +38,12 @@ export function CourseDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-20">
+    <div className="min-h-screen bg-background pb-20">
       {/* Hero Section */}
-      <section className="relative h-[450px] flex items-center bg-[#1e1b4b] overflow-hidden text-white">
+      <section className="relative h-[450px] flex items-center bg-foreground overflow-hidden text-white">
         <div className={`absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l ${course.bgGradient} opacity-20 blur-[100px]`}></div>
         <div className="container mx-auto px-4 relative z-10">
-          <Link to="/courses" className="inline-flex items-center text-indigo-300 hover:text-white transition-colors mb-6 font-bold">
+          <Link to="/courses" className="inline-flex items-center text-white/70 hover:text-white transition-colors mb-6 font-bold">
             <ArrowLeft className="mr-2 h-4 w-4" /> All Courses
           </Link>
           <div className="max-w-3xl">
@@ -64,12 +64,12 @@ export function CourseDetailPage() {
             <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
               {course.title}
             </h1>
-            <p className="text-xl text-indigo-100/80 leading-relaxed font-medium mb-8">
+            <p className="text-xl text-white/80 leading-relaxed font-medium mb-8">
               {course.description}
             </p>
             <div className="flex flex-wrap gap-6">
               <div className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-indigo-400" />
+                <Users className="h-5 w-5 text-accent" />
                 <span className="font-bold text-lg">{course.instructor}</span>
               </div>
               <div className="flex items-center gap-2">
@@ -91,15 +91,15 @@ export function CourseDetailPage() {
           {/* Left Column: Curriculum & Features */}
           <div className="lg:col-span-8 space-y-10">
             {/* Features Card */}
-            <div className="bg-white rounded-[2rem] p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border-t-4 border-indigo-600">
-              <h2 className="text-2xl font-black text-slate-800 mb-8 flex items-center gap-3">
-                <Sparkles className="h-6 w-6 text-indigo-600" /> What you'll get
+            <div className="bg-card rounded-[2rem] p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border-t-4 border-accent">
+              <h2 className="text-2xl font-black text-foreground mb-8 flex items-center gap-3">
+                <Sparkles className="h-6 w-6 text-accent" /> What you'll get
               </h2>
               <div className="grid md:grid-cols-2 gap-6">
                 {course.features.map((feature, idx) => (
-                  <div key={idx} className="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 transition-all hover:bg-slate-100">
+                  <div key={idx} className="flex items-start gap-4 p-4 rounded-2xl bg-muted border border-border transition-all hover:bg-muted/80">
                     <CheckCircle2 className="h-6 w-6 text-emerald-500 flex-shrink-0 mt-0.5" />
-                    <span className="font-bold text-slate-700">{feature}</span>
+                    <span className="font-bold text-foreground">{feature}</span>
                   </div>
                 ))}
               </div>
@@ -107,31 +107,31 @@ export function CourseDetailPage() {
 
             {/* Curriculum Card */}
             {course.curriculum && (
-              <div className="bg-white rounded-[3rem] p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]">
-                <h2 className="text-3xl font-black text-slate-800 mb-10 flex items-center gap-4">
-                  <LayoutList className="h-8 w-8 text-indigo-600" /> Course Curriculum
+              <div className="bg-card rounded-[3rem] p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]">
+                <h2 className="text-3xl font-black text-foreground mb-10 flex items-center gap-4">
+                  <LayoutList className="h-8 w-8 text-accent" /> Course Curriculum
                 </h2>
                 <div className="space-y-6">
                   {course.curriculum.map((mod, i) => (
-                    <div key={i} className="group overflow-hidden rounded-[2rem] border border-slate-100 bg-slate-50/50 hover:bg-white hover:shadow-xl transition-all duration-300">
+                    <div key={i} className="group overflow-hidden rounded-[2rem] border border-border bg-muted/50 hover:bg-card hover:shadow-xl transition-all duration-300">
                       <div className="p-6 flex items-center justify-between">
                          <div className="flex items-center gap-4">
-                            <span className="h-10 w-10 bg-indigo-600 text-white rounded-xl flex items-center justify-center font-bold text-lg shadow-lg">
+                            <span className="h-10 w-10 bg-accent text-white rounded-xl flex items-center justify-center font-bold text-lg shadow-lg">
                                 {i+1}
                             </span>
-                            <h3 className="text-xl font-black text-slate-800 tracking-tight">
+                            <h3 className="text-xl font-black text-foreground tracking-tight">
                                 {mod.module}
                             </h3>
                          </div>
-                         <Badge variant="outline" className="border-indigo-200 text-indigo-600 font-bold uppercase tracking-wider px-3">
+                         <Badge variant="outline" className="border-accent/30 text-accent font-bold uppercase tracking-wider px-3">
                             {mod.lessons.length} Lessons
                          </Badge>
                       </div>
                       <div className="px-10 pb-8 pl-[4.5rem]">
                         <ul className="space-y-4">
                           {mod.lessons.map((lesson, j) => (
-                            <li key={j} className="flex items-center gap-3 text-slate-600 font-bold group/lesson">
-                              <span className="h-2 w-2 rounded-full bg-indigo-300 group-hover/lesson:bg-indigo-600 transition-colors"></span>
+                            <li key={j} className="flex items-center gap-3 text-muted-foreground font-bold group/lesson">
+                              <span className="h-2 w-2 rounded-full bg-accent/50 group-hover/lesson:bg-accent transition-colors"></span>
                               {lesson}
                             </li>
                           ))}
@@ -144,18 +144,18 @@ export function CourseDetailPage() {
             )}
             
             {/* About the Instructor */}
-            <div className="bg-gradient-to-br from-indigo-900 to-[#1e1b4b] rounded-[3rem] p-12 text-white overflow-hidden relative">
-               <div className="absolute top-[-20%] right-[-10%] w-[40%] h-[100%] bg-indigo-500/10 blur-[80px] rounded-full"></div>
+            <div className="bg-foreground rounded-[3rem] p-12 text-white overflow-hidden relative">
+               <div className="absolute top-[-20%] right-[-10%] w-[40%] h-[100%] bg-accent/10 blur-[80px] rounded-full"></div>
                <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
                   <div className="h-32 w-32 rounded-3xl bg-white/10 p-1 backdrop-blur-xl flex-shrink-0">
-                    <div className="w-full h-full rounded-2xl bg-indigo-500/20 flex items-center justify-center font-black text-3xl">
+                    <div className="w-full h-full rounded-2xl bg-accent/20 flex items-center justify-center font-black text-3xl">
                        {course.instructor.split(' ')[0][0]}{course.instructor.split(' ')[1]?.[0] || ''}
                     </div>
                   </div>
                   <div>
                      <h3 className="text-3xl font-black mb-2 uppercase tracking-wide">Meet Your Mentor</h3>
-                     <h4 className="text-xl font-bold text-indigo-300 mb-4">{course.instructor}</h4>
-                     <p className="text-indigo-100/70 font-medium leading-relaxed max-w-xl">
+                     <h4 className="text-xl font-bold text-accent mb-4">{course.instructor}</h4>
+                     <p className="text-white/70 font-medium leading-relaxed max-w-xl">
                         A highly experienced IELTS instructor with a proven track record of helping thousands of students achieve Band 8 or higher. Expert in simplified structures and psychological test-taking strategies.
                      </p>
                   </div>
@@ -165,14 +165,14 @@ export function CourseDetailPage() {
 
           {/* Right Column: Enrollment Sidebar (Sticky) */}
           <div className="lg:col-span-4 lg:sticky lg:top-24 h-fit space-y-6">
-            <div className="bg-white rounded-[2.5rem] p-8 shadow-[0_40px_100px_-20px_rgba(79,70,229,0.2)] border-none text-center relative overflow-hidden group">
+            <div className="bg-card rounded-[2.5rem] p-8 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.1)] border-none text-center relative overflow-hidden group">
                <div className={`absolute top-0 left-0 w-full h-2 bg-gradient-to-r ${course.bgGradient}`}></div>
                
                <div className="mb-6">
                  <div className="flex items-baseline justify-center gap-2 mb-1">
-                    <span className="text-5xl font-black text-slate-900 tracking-tighter">৳{course.price}</span>
+                    <span className="text-5xl font-black text-foreground tracking-tighter">৳{course.price}</span>
                     {course.originalPrice && (
-                      <span className="text-xl text-slate-400 line-through font-bold">৳{course.originalPrice}</span>
+                      <span className="text-xl text-muted-foreground line-through font-bold">৳{course.originalPrice}</span>
                     )}
                  </div>
                  <p className="text-emerald-600 font-extrabold flex items-center justify-center gap-1 uppercase tracking-tighter">
@@ -181,20 +181,20 @@ export function CourseDetailPage() {
                </div>
                
                <div className="space-y-4 mb-8">
-                 <Button className="w-full h-16 rounded-2xl bg-indigo-600 hover:bg-slate-900 text-white font-black text-lg transition-all shadow-[0_15px_30px_-5px_rgba(79,70,229,0.4)] transform hover:-translate-y-1">
+                 <Button className="w-full h-16 rounded-2xl bg-accent hover:bg-foreground text-white font-black text-lg transition-all shadow-[0_15px_30px_-5px_rgba(220,38,38,0.3)] transform hover:-translate-y-1">
                    Get Full Access Now
                  </Button>
-                 <Button variant="outline" className="w-full h-16 rounded-2xl border-2 border-slate-100 font-black text-lg text-slate-700 hover:bg-slate-50 transition-all">
+                 <Button variant="outline" className="w-full h-16 rounded-2xl border-2 border-border font-black text-lg text-foreground hover:bg-muted transition-all">
                    Contact Admissions
                  </Button>
                </div>
                
-               <div className="space-y-4 text-left border-t border-slate-100 pt-8">
-                  <div className="flex items-center gap-3 text-slate-600 font-bold text-sm uppercase tracking-widest leading-none">
-                     <Globe className="h-4 w-4 text-indigo-500" /> All Materials Included
+               <div className="space-y-4 text-left border-t border-border pt-8">
+                  <div className="flex items-center gap-3 text-muted-foreground font-bold text-sm uppercase tracking-widest leading-none">
+                     <Globe className="h-4 w-4 text-accent" /> All Materials Included
                   </div>
-                  <div className="flex items-center gap-3 text-slate-600 font-bold text-sm uppercase tracking-widest leading-none">
-                     <Zap className="h-4 w-4 text-rose-500" /> Certificate on Completion
+                  <div className="flex items-center gap-3 text-muted-foreground font-bold text-sm uppercase tracking-widest leading-none">
+                     <Zap className="h-4 w-4 text-accent" /> Certificate on Completion
                   </div>
                </div>
             </div>
