@@ -214,18 +214,88 @@ export function LessonPage() {
           <div className={!canAccessContent ? 'blur-sm pointer-events-none select-none' : ''}>
             <Card className="mb-6" id="core-explanation">
               <CardHeader>
-                <CardTitle>Core Explanation</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="h-5 w-5 text-accent" />
+                  Core Explanation
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 {slug === 'task1-pie-chart-description' ? (
                   <PieChartCoreExplanation />
                 ) : (
-                  <div className="prose max-w-none">
-                    {content.coreExplanation.split('\n\n').map((paragraph, index) => (
-                      <p key={index} className="mb-4 text-muted-foreground whitespace-pre-line">
-                        {paragraph}
-                      </p>
-                    ))}
+                  <div className="space-y-4">
+                    {content.coreExplanation.split('\n\n').map((paragraph, paragraphIndex) => {
+                      // Check if this is a numbered list section
+                      const lines = paragraph.split('\n');
+                      const hasNumberedList = lines.some(line => /^\d+\./.test(line.trim()));
+                      const isBoldHeader = paragraph.startsWith('**') && paragraph.includes('**');
+                      const isKeyPrinciple = paragraph.toLowerCase().includes('key principle');
+                      
+                      // Handle bold headers like **Top 10 error categories:**
+                      if (isBoldHeader && !hasNumberedList) {
+                        const cleanText = paragraph.replace(/\*\*/g, '');
+                        return (
+                          <div key={paragraphIndex} className="bg-accent/5 border-l-4 border-accent p-4 rounded-r-lg">
+                            <p className="font-semibold text-foreground">{cleanText}</p>
+                          </div>
+                        );
+                      }
+                      
+                      // Handle key principle callout
+                      if (isKeyPrinciple) {
+                        const cleanText = paragraph.replace(/\*\*/g, '');
+                        return (
+                          <div key={paragraphIndex} className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
+                            <Lightbulb className="h-5 w-5 text-amber-500 flex-shrink-0 mt-0.5" />
+                            <p className="text-amber-900 font-medium">{cleanText}</p>
+                          </div>
+                        );
+                      }
+                      
+                      // Handle numbered list with visual styling
+                      if (hasNumberedList) {
+                        return (
+                          <div key={paragraphIndex} className="space-y-2">
+                            {lines.map((line, lineIndex) => {
+                              const numberedMatch = line.trim().match(/^(\d+)\.\s*(.+)/);
+                              if (numberedMatch) {
+                                const [, num, text] = numberedMatch;
+                                return (
+                                  <div key={lineIndex} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
+                                    <span className="w-7 h-7 rounded-full bg-accent text-white text-sm flex items-center justify-center flex-shrink-0 font-bold">
+                                      {num}
+                                    </span>
+                                    <span className="text-foreground font-medium pt-0.5">{text}</span>
+                                  </div>
+                                );
+                              } else if (line.startsWith('**') && line.endsWith('**')) {
+                                return (
+                                  <p key={lineIndex} className="font-semibold text-foreground mb-2">
+                                    {line.replace(/\*\*/g, '')}
+                                  </p>
+                                );
+                              } else if (line.trim()) {
+                                return <p key={lineIndex} className="text-muted-foreground">{line}</p>;
+                              }
+                              return null;
+                            })}
+                          </div>
+                        );
+                      }
+                      
+                      // Regular paragraph with bold text parsing
+                      const parts = paragraph.split(/(\*\*[^*]+\*\*)/g);
+                      return (
+                        <p key={paragraphIndex} className="text-muted-foreground leading-relaxed">
+                          {parts.map((part, partIndex) => {
+                            if (part.startsWith('**') && part.endsWith('**')) {
+                              return <strong key={partIndex} className="text-foreground font-semibold">{part.slice(2, -2)}</strong>;
+                            }
+                            return part;
+                          })}
+                        </p>
+                      );
+                    })}
                   </div>
                 )}
               </CardContent>
