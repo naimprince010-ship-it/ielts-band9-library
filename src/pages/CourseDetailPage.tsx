@@ -38,12 +38,12 @@ export function CourseDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-20">
+    <div className="min-h-screen bg-background pb-20">
       {/* Hero Section */}
-      <section className="relative h-[450px] flex items-center bg-[#1e1b4b] overflow-hidden text-white">
+      <section className="relative h-[450px] flex items-center bg-foreground overflow-hidden text-white">
         <div className={`absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l ${course.bgGradient} opacity-20 blur-[100px]`}></div>
         <div className="container mx-auto px-4 relative z-10">
-          <Link to="/courses" className="inline-flex items-center text-indigo-300 hover:text-white transition-colors mb-6 font-bold">
+          <Link to="/courses" className="inline-flex items-center text-white/70 hover:text-white transition-colors mb-6 font-bold">
             <ArrowLeft className="mr-2 h-4 w-4" /> All Courses
           </Link>
           <div className="max-w-3xl">
@@ -64,12 +64,12 @@ export function CourseDetailPage() {
             <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
               {course.title}
             </h1>
-            <p className="text-xl text-indigo-100/80 leading-relaxed font-medium mb-8">
+            <p className="text-xl text-white/80 leading-relaxed font-medium mb-8">
               {course.description}
             </p>
             <div className="flex flex-wrap gap-6">
               <div className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-indigo-400" />
+                <Users className="h-5 w-5 text-accent" />
                 <span className="font-bold text-lg">{course.instructor}</span>
               </div>
               <div className="flex items-center gap-2">
