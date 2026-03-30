@@ -32,7 +32,9 @@ import {
   CheckCircle,
   AlertCircle,
   Users,
-  Target
+  Target,
+  Sparkles,
+  Wand2
 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
@@ -61,9 +63,11 @@ export function ReadingPassageManagement() {
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [editingPassage, setEditingPassage] = useState<ReadingPassage | null>(null);
   const [saving, setSaving] = useState(false);
+  const [generating, setGenerating] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [activeTab, setActiveTab] = useState<'passages' | 'progress'>('passages');
+  const [aiTopic, setAiTopic] = useState('');
 
   const [formData, setFormData] = useState({
     title: '',
@@ -156,7 +160,60 @@ export function ReadingPassageManagement() {
     });
     setError('');
     setSuccess('');
+    setAiTopic('');
     setIsEditorOpen(true);
+  };
+
+  const handleAIGenerate = async () => {
+    if (!aiTopic.trim()) {
+      setError('Please enter a topic for AI generation');
+      return;
+    }
+
+    setGenerating(true);
+    setError('');
+
+    try {
+      const response = await fetch('/api/generate-content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          moduleType: 'reading',
+          topic: aiTopic,
+          difficulty: formData.difficulty,
+          testType: 'academic',
+          provider: 'openai'
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to generate content');
+      }
+
+      const data = await response.json();
+      
+      if (data.success && data.content?.passage) {
+        const passage = data.content.passage;
+        // Clean HTML tags from textContent
+        const plainText = passage.textContent?.replace(/<[^>]*>/g, '\n').replace(/\n+/g, '\n\n').trim() || '';
+        
+        setFormData({
+          ...formData,
+          title: passage.title || `AI Generated: ${aiTopic}`,
+          content: plainText,
+          topic: aiTopic
+        });
+        setSuccess('Content generated successfully! Review and edit as needed.');
+      } else {
+        throw new Error('Invalid response format');
+      }
+    } catch (err) {
+      console.error('AI Generation Error:', err);
+      setError(err instanceof Error ? err.message : 'Failed to generate content. Make sure OPENAI_API_KEY is configured.');
+    } finally {
+      setGenerating(false);
+    }
   };
 
   const handleEditPassage = (passage: ReadingPassage) => {
@@ -479,7 +536,48 @@ export function ReadingPassageManagement() {
           </DialogHeader>
 
           <div className="space-y-4">
-            <div>
+            {/* AI Generation Section */}
+            {!editingPassage && (
+              <Card className="border-dashed border-2 border-accent/30 bg-accent/5">
+                <CardContent className="pt-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Sparkles className="h-5 w-5 text-accent" />
+                    <span className="font-semibold text-foreground">AI Generate Passage</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="Enter topic (e.g., Climate Change, Space Exploration)"
+                      value={aiTopic}
+                      onChange={(e) => setAiTopic(e.target.value)}
+                      className="flex-1"
+                    />
+                    <Button
+                      type="button"
+                      onClick={handleAIGenerate}
+                      disabled={generating || !aiTopic.trim()}
+                      className="gap-2"
+                    >
+                      {generating ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Generating...
+                        </>
+                      ) : (
+                        <>
+                          <Wand2 className="h-4 w-4" />
+                          Generate
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    AI will generate a reading passage based on your topic. You can edit the content after generation.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+
+            <div className="border-t pt-4">
               <Label htmlFor="title">Title *</Label>
               <Input
                 id="title"

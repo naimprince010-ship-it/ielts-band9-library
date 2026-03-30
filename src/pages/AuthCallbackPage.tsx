@@ -14,12 +14,10 @@ export function AuthCallbackPage() {
       }
 
       try {
-        // Get the auth code from URL
+        // Get error params from URL if any
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
         const queryParams = new URLSearchParams(window.location.search);
         
-        const accessToken = hashParams.get('access_token');
-        const refreshToken = hashParams.get('refresh_token');
         const errorParam = queryParams.get('error') || hashParams.get('error');
         const errorDescription = queryParams.get('error_description') || hashParams.get('error_description');
 
@@ -46,6 +44,7 @@ export function AuthCallbackPage() {
         } else {
           // No session yet, wait a bit and try again
           setTimeout(async () => {
+            if (!supabase) return;
             const { data: { session: retrySession } } = await supabase.auth.getSession();
             if (retrySession) {
               navigate('/', { replace: true });
