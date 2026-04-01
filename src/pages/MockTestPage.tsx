@@ -18,8 +18,7 @@ import {
   AlertCircle,
   CheckCircle,
   FileText,
-  BarChart3,
-  Sparkles
+  BarChart3
 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { 
