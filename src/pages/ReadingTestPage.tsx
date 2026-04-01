@@ -236,7 +236,8 @@ const getStatusColor = (status: QuestionStatus): string => {
 export default function ReadingTestPage() {
   const location = useLocation();
   const stateData = location.state as { testData?: ReadingTest; testId?: string; testTitle?: string } | null;
-  const [test] = useState<ReadingTest>(stateData?.testData || SAMPLE_READING_TEST);
+  const hasValidData = stateData?.testData && Array.isArray(stateData.testData.passages) && stateData.testData.passages.length > 0;
+  const [test] = useState<ReadingTest>(hasValidData ? (stateData!.testData as ReadingTest) : SAMPLE_READING_TEST);
   const [currentPassageIndex, setCurrentPassageIndex] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(test.timeLimit);
   const [answers, setAnswers] = useState<Record<string, UserAnswer>>({});
@@ -250,8 +251,8 @@ export default function ReadingTestPage() {
   const passagePaneRef = useRef<HTMLDivElement>(null);
   const questionPaneRef = useRef<HTMLDivElement>(null);
 
-  const currentPassage = test?.passages?.[currentPassageIndex] || test?.passages?.[0];
-  const allQuestions = test?.passages?.flatMap(p => p?.questions || []) || [];
+  const currentPassage = Array.isArray(test?.passages) ? (test!.passages[currentPassageIndex] || test!.passages[0]) : undefined;
+  const allQuestions = Array.isArray(test?.passages) ? test!.passages.flatMap(p => p?.questions || []) : [];
 
   // ============================================
   // Load session from localStorage on mount
@@ -488,10 +489,10 @@ export default function ReadingTestPage() {
                 <Label
                   htmlFor={`${question.id}-${idx}`}
                   className={`cursor-pointer ${isSubmitted && option === question.correctAnswer
-                      ? 'text-green-600 font-medium'
-                      : isSubmitted && currentAnswer === option && option !== question.correctAnswer
-                        ? 'text-red-600 line-through'
-                        : ''
+                    ? 'text-green-600 font-medium'
+                    : isSubmitted && currentAnswer === option && option !== question.correctAnswer
+                      ? 'text-red-600 line-through'
+                      : ''
                     }`}
                 >
                   {option}
@@ -512,10 +513,10 @@ export default function ReadingTestPage() {
               placeholder="Type your answer..."
               disabled={isSubmitted}
               className={`max-w-md ${isSubmitted
-                  ? (question.acceptedAnswers?.includes(currentAnswer) || currentAnswer.toLowerCase() === question.correctAnswer.toLowerCase())
-                    ? 'border-green-500 bg-green-50'
-                    : 'border-red-500 bg-red-50'
-                  : ''
+                ? (question.acceptedAnswers?.includes(currentAnswer) || currentAnswer.toLowerCase() === question.correctAnswer.toLowerCase())
+                  ? 'border-green-500 bg-green-50'
+                  : 'border-red-500 bg-red-50'
+                : ''
                 }`}
             />
             {isSubmitted && (
@@ -610,8 +611,8 @@ export default function ReadingTestPage() {
                   <div
                     key={answer.questionNumber}
                     className={`p-4 rounded-lg border ${answer.isCorrect
-                        ? 'bg-green-50 border-green-200'
-                        : 'bg-red-50 border-red-200'
+                      ? 'bg-green-50 border-green-200'
+                      : 'bg-red-50 border-red-200'
                       }`}
                   >
                     <div className="flex items-start gap-3">
