@@ -337,13 +337,15 @@ function App() {
                                                                                                     </Layout>
                                                                                                   }
                                                                                                 />
-                                                                                                                                                                                                <Route
-                                                                                                                                                                                                  path="/reading-test"
-                                                                                                                                                                                                  element={
-                                                                                                                                                                                                    <Suspense fallback={<LoadingSpinner />}>
-                                                                                                                                                                                                      <ReadingTestPage />
-                                                                                                                                                                                                    </Suspense>
-                                                                                                                                                                                                  }
+<Route
+  path="/reading-test"
+  element={
+    <Layout>
+      <Suspense fallback={<LoadingSpinner />}>
+        <ReadingTestPage />
+      </Suspense>
+    </Layout>
+  }
                                                                                                                                                                                                 />
                                                                                                                                                                                                 <Route
                                                                                                                                                                                                   path="/writing-test"
