@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Clock, 
   Target,
@@ -16,7 +15,11 @@ import {
   ArrowRight,
   Crown,
   Loader2,
-  AlertCircle
+  AlertCircle,
+  CheckCircle,
+  FileText,
+  BarChart3,
+  Sparkles
 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { 
@@ -45,36 +48,48 @@ const MODULE_INFO = {
     icon: BookOpen,
     duration: 60,
     description: 'Academic reading passages with various question types',
-    color: 'bg-blue-500',
-    lightColor: 'bg-blue-100',
-    textColor: 'text-blue-600'
+    gradient: 'from-blue-500 to-blue-600',
+    bgLight: 'bg-blue-50',
+    iconBg: 'bg-blue-500',
+    textColor: 'text-blue-600',
+    borderColor: 'border-blue-200',
+    hoverBorder: 'hover:border-blue-400'
   },
   listening: {
     name: 'Listening',
     icon: Headphones,
     duration: 30,
     description: 'Audio sections with comprehension questions',
-    color: 'bg-purple-500',
-    lightColor: 'bg-purple-100',
-    textColor: 'text-purple-600'
+    gradient: 'from-violet-500 to-violet-600',
+    bgLight: 'bg-violet-50',
+    iconBg: 'bg-violet-500',
+    textColor: 'text-violet-600',
+    borderColor: 'border-violet-200',
+    hoverBorder: 'hover:border-violet-400'
   },
   writing: {
     name: 'Writing',
     icon: PenTool,
     duration: 60,
-    description: 'Task 1 and Task 2 essay writing',
-    color: 'bg-green-500',
-    lightColor: 'bg-green-100',
-    textColor: 'text-green-600'
+    description: 'Task 1 and Task 2 essay writing practice',
+    gradient: 'from-emerald-500 to-emerald-600',
+    bgLight: 'bg-emerald-50',
+    iconBg: 'bg-emerald-500',
+    textColor: 'text-emerald-600',
+    borderColor: 'border-emerald-200',
+    hoverBorder: 'hover:border-emerald-400'
   },
   speaking: {
     name: 'Speaking',
     icon: Mic,
     duration: 15,
     description: 'Part 1, 2, and 3 interview simulation',
-    color: 'bg-orange-500',
-    lightColor: 'bg-orange-100',
-    textColor: 'text-orange-600'
+    gradient: 'from-orange-500 to-orange-600',
+    bgLight: 'bg-orange-50',
+    iconBg: 'bg-orange-500',
+    textColor: 'text-orange-600',
+    borderColor: 'border-orange-200',
+    hoverBorder: 'hover:border-orange-400'
   }
 };
 
@@ -83,7 +98,7 @@ export default function MockTestPage() {
   const [tests, setTests] = useState<MockTest[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [activeTab, setActiveTab] = useState<ModuleType>('reading');
+  const [activeModule, setActiveModule] = useState<ModuleType>('reading');
 
   useEffect(() => {
     fetchPublishedTests();
@@ -137,11 +152,11 @@ export default function MockTestPage() {
     switch (test.module_type) {
       case 'reading': {
         const readingTest = test.test_data as ReadingTest;
-        return readingTest.passages?.reduce((sum, p) => sum + (p.questions?.length || 0), 0) || 0;
+        return readingTest.passages?.reduce((sum, p) => sum + (p.questions?.length || 0), 0) || 40;
       }
       case 'listening': {
         const listeningTest = test.test_data as ListeningTest;
-        return listeningTest.sections?.reduce((sum, s) => sum + (s.questions?.length || 0), 0) || 0;
+        return listeningTest.sections?.reduce((sum, s) => sum + (s.questions?.length || 0), 0) || 40;
       }
       case 'writing': {
         const writingTest = test.test_data as WritingTest;
@@ -149,89 +164,25 @@ export default function MockTestPage() {
       }
       case 'speaking': {
         const speakingTest = test.test_data as SpeakingTest;
-        return speakingTest.parts?.reduce((sum, p) => sum + (p.questions?.length || 0), 0) || 0;
+        return speakingTest.parts?.reduce((sum, p) => sum + (p.questions?.length || 0), 0) || 12;
       }
       default:
         return 0;
     }
   };
 
-  const renderTestCard = (test: MockTest) => {
-    const moduleInfo = MODULE_INFO[test.module_type];
-    const Icon = moduleInfo.icon;
-    const questionCount = getQuestionCount(test);
-
-    return (
-      <Card key={test.id} className="hover:shadow-lg transition-shadow">
-        <CardHeader className="pb-3">
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-3">
-              <div className={`h-10 w-10 rounded-full ${moduleInfo.lightColor} flex items-center justify-center`}>
-                <Icon className={`h-5 w-5 ${moduleInfo.textColor}`} />
-              </div>
-              <div>
-                <CardTitle className="text-lg">{test.title}</CardTitle>
-                <CardDescription className="text-sm">
-                  {moduleInfo.name} Test
-                </CardDescription>
-              </div>
-            </div>
-            {test.is_premium && (
-              <Badge className="bg-amber-100 text-amber-800 gap-1">
-                <Crown className="h-3 w-3" />
-                Premium
-              </Badge>
-            )}
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
-            <span className="flex items-center gap-1">
-              <Clock className="h-4 w-4" />
-              {moduleInfo.duration} min
-            </span>
-            <span>{questionCount} questions</span>
-          </div>
-          <Button 
-            onClick={() => handleStartTest(test)}
-            className={`w-full ${moduleInfo.color} hover:opacity-90`}
-          >
-            <Play className="h-4 w-4 mr-2" />
-            Start Test
-          </Button>
-        </CardContent>
-      </Card>
-    );
-  };
-
-  const renderModuleTab = (moduleType: ModuleType) => {
-    const moduleTests = getTestsByModule(moduleType);
-    const moduleInfo = MODULE_INFO[moduleType];
-
-    if (moduleTests.length === 0) {
-      return (
-        <div className="text-center py-12">
-          <moduleInfo.icon className={`h-16 w-16 ${moduleInfo.textColor} mx-auto mb-4 opacity-50`} />
-          <h3 className="text-lg font-medium text-gray-600 mb-2">No {moduleInfo.name} Tests Available</h3>
-          <p className="text-gray-500">Check back later for new tests!</p>
-        </div>
-      );
-    }
-
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {moduleTests.map(renderTestCard)}
-      </div>
-    );
-  };
+  const moduleTests = getTestsByModule(activeModule);
+  const activeInfo = MODULE_INFO[activeModule];
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white py-8">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
-            <span className="ml-3 text-gray-600">Loading mock tests...</span>
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-20">
+          <div className="flex flex-col items-center justify-center gap-4">
+            <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center">
+              <Loader2 className="h-8 w-8 animate-spin text-accent" />
+            </div>
+            <p className="text-muted-foreground font-medium">Loading mock tests...</p>
           </div>
         </div>
       </div>
@@ -239,85 +190,258 @@ export default function MockTestPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white py-8">
-      <div className="container mx-auto px-4 max-w-6xl">
-        <Card className="border-2 border-purple-100 mb-8">
-          <CardHeader className="text-center">
-            <div className="mx-auto w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-4">
-              <Target className="h-8 w-8 text-purple-600" />
+    <div className="min-h-screen bg-background">
+      {/* Hero Section */}
+      <section className="relative bg-foreground text-white overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-foreground via-foreground to-accent/20" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/5 rounded-full blur-2xl" />
+        
+        <div className="container mx-auto px-4 py-16 relative z-10">
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+              <Target className="h-4 w-4 text-accent" />
+              <span className="text-sm font-medium">Exam Simulation</span>
             </div>
-            <CardTitle className="text-2xl">IELTS Mock Tests</CardTitle>
-            <CardDescription>
-              Practice with full-length timed tests to simulate the real exam experience
-            </CardDescription>
-          </CardHeader>
-        </Card>
+            
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
+              IELTS Mock Tests
+            </h1>
+            <p className="text-lg text-white/70 mb-8 max-w-xl mx-auto">
+              Practice with full-length timed tests to simulate the real exam experience and track your progress
+            </p>
+            
+            {/* Stats */}
+            <div className="flex flex-wrap justify-center gap-8 pt-4">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-accent">{tests.length}</div>
+                <div className="text-sm text-white/60">Available Tests</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-accent">4</div>
+                <div className="text-sm text-white/60">Test Modules</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-accent">Real</div>
+                <div className="text-sm text-white/60">Exam Format</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-12 max-w-6xl">
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center gap-3">
-            <AlertCircle className="h-5 w-5 text-red-500" />
+          <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-8 flex items-center gap-3">
+            <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
             <span className="text-red-700">{error}</span>
           </div>
         )}
 
-        {tests.length === 0 && !error ? (
-          <Card className="text-center py-12">
-            <CardContent>
-              <Award className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-xl font-medium text-gray-600 mb-2">No Mock Tests Available Yet</h3>
-              <p className="text-gray-500 mb-4">
-                Mock tests are being prepared. Check back soon!
+        {/* Module Selector */}
+        <div className="mb-10">
+          <h2 className="text-xl font-bold text-foreground mb-6">Select Module</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {(Object.keys(MODULE_INFO) as ModuleType[]).map((moduleType) => {
+              const info = MODULE_INFO[moduleType];
+              const Icon = info.icon;
+              const count = getTestsByModule(moduleType).length;
+              const isActive = activeModule === moduleType;
+              
+              return (
+                <button
+                  key={moduleType}
+                  onClick={() => setActiveModule(moduleType)}
+                  className={`relative p-5 rounded-2xl border-2 transition-all duration-300 text-left group ${
+                    isActive 
+                      ? `${info.bgLight} ${info.borderColor} shadow-lg` 
+                      : 'bg-card border-border hover:border-muted-foreground/30'
+                  }`}
+                >
+                  <div className={`w-12 h-12 rounded-xl ${isActive ? info.iconBg : 'bg-muted'} flex items-center justify-center mb-4 transition-all group-hover:scale-105`}>
+                    <Icon className={`h-6 w-6 ${isActive ? 'text-white' : 'text-muted-foreground'}`} />
+                  </div>
+                  <h3 className={`font-bold mb-1 ${isActive ? info.textColor : 'text-foreground'}`}>
+                    {info.name}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">{info.duration} min</p>
+                  
+                  {count > 0 && (
+                    <Badge className={`absolute top-4 right-4 ${isActive ? info.iconBg : 'bg-muted text-muted-foreground'} text-white`}>
+                      {count}
+                    </Badge>
+                  )}
+                  
+                  {isActive && (
+                    <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 ${info.iconBg} rounded-t-full`} />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Module Description */}
+        <div className={`${activeInfo.bgLight} rounded-2xl p-6 mb-8 border ${activeInfo.borderColor}`}>
+          <div className="flex items-start gap-4">
+            <div className={`w-12 h-12 rounded-xl ${activeInfo.iconBg} flex items-center justify-center flex-shrink-0`}>
+              <activeInfo.icon className="h-6 w-6 text-white" />
+            </div>
+            <div>
+              <h3 className={`text-lg font-bold ${activeInfo.textColor} mb-1`}>{activeInfo.name} Tests</h3>
+              <p className="text-muted-foreground">{activeInfo.description}</p>
+              <div className="flex items-center gap-4 mt-3 text-sm">
+                <span className="flex items-center gap-1.5">
+                  <Clock className="h-4 w-4" />
+                  {activeInfo.duration} minutes
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <FileText className="h-4 w-4" />
+                  {activeModule === 'writing' ? '2 tasks' : '40 questions'}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Tests Grid */}
+        {moduleTests.length === 0 ? (
+          <Card className="border-dashed border-2">
+            <CardContent className="py-16 text-center">
+              <div className={`w-20 h-20 ${activeInfo.bgLight} rounded-full flex items-center justify-center mx-auto mb-6`}>
+                <activeInfo.icon className={`h-10 w-10 ${activeInfo.textColor} opacity-50`} />
+              </div>
+              <h3 className="text-xl font-bold text-foreground mb-2">
+                No {activeInfo.name} Tests Available
+              </h3>
+              <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                We are preparing {activeInfo.name.toLowerCase()} mock tests. Check back soon for new content!
               </p>
+              <Button variant="outline" onClick={() => navigate('/library')}>
+                Explore Learning Materials
+                <ArrowRight className="h-4 w-4 ml-2" />
+              </Button>
             </CardContent>
           </Card>
         ) : (
-          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as ModuleType)}>
-            <TabsList className="grid w-full grid-cols-4 mb-6">
-              {(Object.keys(MODULE_INFO) as ModuleType[]).map((moduleType) => {
-                const info = MODULE_INFO[moduleType];
-                const Icon = info.icon;
-                const count = getTestsByModule(moduleType).length;
-                return (
-                  <TabsTrigger 
-                    key={moduleType} 
-                    value={moduleType}
-                    className="gap-2"
-                  >
-                    <Icon className="h-4 w-4" />
-                    <span className="hidden sm:inline">{info.name}</span>
-                    {count > 0 && (
-                      <Badge variant="secondary" className="ml-1 h-5 px-1.5">
-                        {count}
-                      </Badge>
-                    )}
-                  </TabsTrigger>
-                );
-              })}
-            </TabsList>
-
-            {(Object.keys(MODULE_INFO) as ModuleType[]).map((moduleType) => (
-              <TabsContent key={moduleType} value={moduleType}>
-                {renderModuleTab(moduleType)}
-              </TabsContent>
-            ))}
-          </Tabs>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {moduleTests.map((test) => {
+              const info = MODULE_INFO[test.module_type];
+              const Icon = info.icon;
+              const questionCount = getQuestionCount(test);
+              
+              return (
+                <Card 
+                  key={test.id} 
+                  className={`group overflow-hidden border-2 ${info.borderColor} ${info.hoverBorder} transition-all duration-300 hover:shadow-xl hover:-translate-y-1`}
+                >
+                  {/* Card Header with Gradient */}
+                  <div className={`h-2 bg-gradient-to-r ${info.gradient}`} />
+                  
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className={`w-12 h-12 rounded-xl ${info.bgLight} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                        <Icon className={`h-6 w-6 ${info.textColor}`} />
+                      </div>
+                      {test.is_premium && (
+                        <Badge className="bg-gradient-to-r from-amber-400 to-amber-500 text-white gap-1 shadow-sm">
+                          <Crown className="h-3 w-3" />
+                          Premium
+                        </Badge>
+                      )}
+                    </div>
+                    
+                    <h3 className="text-lg font-bold text-foreground mb-2 line-clamp-2">
+                      {test.title}
+                    </h3>
+                    
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
+                      <span className="flex items-center gap-1.5">
+                        <Clock className="h-4 w-4" />
+                        {info.duration} min
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <Target className="h-4 w-4" />
+                        {questionCount} {test.module_type === 'writing' ? 'tasks' : 'questions'}
+                      </span>
+                    </div>
+                    
+                    <Button 
+                      onClick={() => handleStartTest(test)}
+                      className={`w-full bg-gradient-to-r ${info.gradient} hover:opacity-90 text-white shadow-lg group-hover:shadow-xl transition-all`}
+                    >
+                      <Play className="h-4 w-4 mr-2" />
+                      Start Test
+                    </Button>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
         )}
 
-        <Card className="mt-8 bg-gradient-to-r from-purple-500 to-indigo-500 text-white">
-          <CardContent className="py-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold mb-1">Ready for the Real Test?</h3>
-                <p className="text-purple-100">
-                  Complete mock tests to track your progress and get your estimated band score
-                </p>
+        {/* Features Section */}
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card className="bg-muted/50 border-0">
+            <CardContent className="p-6 text-center">
+              <div className="w-14 h-14 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Clock className="h-7 w-7 text-accent" />
+              </div>
+              <h3 className="font-bold text-foreground mb-2">Timed Practice</h3>
+              <p className="text-sm text-muted-foreground">
+                Real exam timing to build your time management skills
+              </p>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-muted/50 border-0">
+            <CardContent className="p-6 text-center">
+              <div className="w-14 h-14 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <BarChart3 className="h-7 w-7 text-accent" />
+              </div>
+              <h3 className="font-bold text-foreground mb-2">Instant Results</h3>
+              <p className="text-sm text-muted-foreground">
+                Get detailed feedback and band score estimates
+              </p>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-muted/50 border-0">
+            <CardContent className="p-6 text-center">
+              <div className="w-14 h-14 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="h-7 w-7 text-accent" />
+              </div>
+              <h3 className="font-bold text-foreground mb-2">Track Progress</h3>
+              <p className="text-sm text-muted-foreground">
+                Monitor improvement across all test modules
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* CTA Section */}
+        <Card className="mt-12 bg-foreground text-white overflow-hidden">
+          <CardContent className="p-8 relative">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-accent/20 rounded-full blur-3xl" />
+            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 bg-accent rounded-2xl flex items-center justify-center">
+                  <Award className="h-7 w-7 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold mb-1">Ready for the Real Test?</h3>
+                  <p className="text-white/70">
+                    Complete mock tests to track your progress and get your estimated band score
+                  </p>
+                </div>
               </div>
               <Button 
                 variant="secondary" 
                 onClick={() => navigate('/results')}
-                className="whitespace-nowrap"
+                className="whitespace-nowrap bg-white text-foreground hover:bg-white/90"
               >
-                View Results
+                View Your Results
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
             </div>
