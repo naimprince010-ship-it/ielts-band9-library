@@ -369,7 +369,7 @@ export default function ReadingTestPage() {
 
     // Find which passage this question belongs to
     const passageIndex = test.passages.findIndex(p => 
-      questionNumber >= p.questionRange.start && questionNumber <= p.questionRange.end
+      p.questionRange && questionNumber >= p.questionRange.start && questionNumber <= p.questionRange.end
     );
     
     if (passageIndex !== currentPassageIndex) {
@@ -726,7 +726,7 @@ export default function ReadingTestPage() {
                 ))}
               </div>
               <Badge variant="secondary">
-                Questions {currentPassage.questionRange.start}-{currentPassage.questionRange.end}
+                Questions {currentPassage.questionRange?.start || 1}-{currentPassage.questionRange?.end || currentPassage.questions.length}
               </Badge>
             </div>
 
@@ -756,7 +756,7 @@ export default function ReadingTestPage() {
         >
           <div className="p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Questions {currentPassage.questionRange.start}-{currentPassage.questionRange.end}
+              Questions {currentPassage.questionRange?.start || 1}-{currentPassage.questionRange?.end || currentPassage.questions.length}
             </h3>
 
             <div className="space-y-6">
