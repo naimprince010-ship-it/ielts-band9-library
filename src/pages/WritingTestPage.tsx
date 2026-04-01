@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { 
-  Clock, 
+import {
+  Clock,
   FileText,
   Send,
   RotateCcw,
@@ -15,8 +15,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { 
-  WritingTest, 
+import {
+  WritingTest,
   WritingTestSession,
   WritingResponse,
   WritingTestResult,
@@ -119,7 +119,8 @@ const countWords = (text: string): number => {
 export default function WritingTestPage() {
   const location = useLocation();
   const stateData = location.state as { testData?: WritingTest; testId?: string; testTitle?: string } | null;
-  const [test] = useState<WritingTest>(stateData?.testData || SAMPLE_WRITING_TEST);
+  const hasValidData = stateData?.testData && Array.isArray(stateData.testData.tasks) && stateData.testData.tasks.length >= 2;
+  const [test] = useState<WritingTest>(hasValidData ? (stateData!.testData as WritingTest) : SAMPLE_WRITING_TEST);
   const [currentTask, setCurrentTask] = useState<WritingTaskType>('task1');
   const [timeRemaining, setTimeRemaining] = useState(test.timeLimit);
   const [responses, setResponses] = useState<{
@@ -146,7 +147,7 @@ export default function WritingTestPage() {
   const [showConfirmSubmit, setShowConfirmSubmit] = useState(false);
   const [startedAt] = useState<number>(Date.now());
   const [pasteAttempted, setPasteAttempted] = useState(false);
-  
+
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const currentTaskData = currentTask === 'task1' ? test.tasks[0] : test.tasks[1];
@@ -176,7 +177,7 @@ export default function WritingTestPage() {
   // ============================================
   const saveSession = useCallback(() => {
     if (isSubmitted) return;
-    
+
     const session: WritingTestSession = {
       testId: test.id,
       startedAt,
@@ -218,7 +219,7 @@ export default function WritingTestPage() {
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newContent = e.target.value;
     const wordCount = countWords(newContent);
-    
+
     setResponses(prev => ({
       ...prev,
       [currentTask]: {
@@ -244,7 +245,7 @@ export default function WritingTestPage() {
   // ============================================
   const handleSubmit = () => {
     const timeTaken = test.timeLimit - timeRemaining;
-    
+
     const testResult: WritingTestResult = {
       testId: test.id,
       timeTaken,
@@ -335,11 +336,10 @@ export default function WritingTestPage() {
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-8">
-                <div className={`rounded-lg p-4 text-center border ${
-                  result.responses[0].meetsMinWords 
-                    ? 'bg-green-50 border-green-200' 
+                <div className={`rounded-lg p-4 text-center border ${result.responses[0].meetsMinWords
+                    ? 'bg-green-50 border-green-200'
                     : 'bg-red-50 border-red-200'
-                }`}>
+                  }`}>
                   <div className="text-2xl font-bold">
                     {result.responses[0].wordCount} words
                   </div>
@@ -350,11 +350,10 @@ export default function WritingTestPage() {
                     <AlertTriangle className="h-5 w-5 text-red-600 mx-auto mt-2" />
                   )}
                 </div>
-                <div className={`rounded-lg p-4 text-center border ${
-                  result.responses[1].meetsMinWords 
-                    ? 'bg-green-50 border-green-200' 
+                <div className={`rounded-lg p-4 text-center border ${result.responses[1].meetsMinWords
+                    ? 'bg-green-50 border-green-200'
                     : 'bg-red-50 border-red-200'
-                }`}>
+                  }`}>
                   <div className="text-2xl font-bold">
                     {result.responses[1].wordCount} words
                   </div>
@@ -393,7 +392,7 @@ export default function WritingTestPage() {
             <Card key={task.id} className="mb-6">
               <CardContent className="p-6">
                 <h2 className="text-xl font-bold mb-4">{task.title}</h2>
-                
+
                 <div className="mb-6">
                   <h3 className="font-semibold text-gray-700 mb-2">Your Response:</h3>
                   <div className="bg-gray-50 rounded-lg p-4 whitespace-pre-wrap text-gray-800">
@@ -433,18 +432,17 @@ export default function WritingTestPage() {
           </Link>
           <h1 className="text-lg font-semibold text-gray-900">{test.title}</h1>
         </div>
-        
+
         <div className="flex items-center gap-4">
           {/* Timer */}
-          <div className={`flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-lg ${
-            timeRemaining < 600 ? 'bg-red-100 text-red-700' : 'bg-indigo-100 text-indigo-700'
-          }`}>
+          <div className={`flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-lg ${timeRemaining < 600 ? 'bg-red-100 text-red-700' : 'bg-indigo-100 text-indigo-700'
+            }`}>
             <Clock className="h-5 w-5" />
             <span>{formatTime(timeRemaining)}</span>
           </div>
-          
+
           {/* Submit Button */}
-          <Button 
+          <Button
             onClick={() => setShowConfirmSubmit(true)}
             className="bg-indigo-600 hover:bg-indigo-700 gap-2"
           >
@@ -484,7 +482,7 @@ export default function WritingTestPage() {
               <h2 className="text-xl font-bold mb-4">Submit Test?</h2>
               <div className="space-y-2 mb-4">
                 <p className="text-gray-600">
-                  Task 1: {responses.task1.wordCount} words 
+                  Task 1: {responses.task1.wordCount} words
                   {responses.task1.wordCount < 150 && (
                     <span className="text-red-600"> (below minimum)</span>
                   )}
@@ -536,7 +534,7 @@ export default function WritingTestPage() {
             </div>
 
             {/* Task Prompt */}
-            <div 
+            <div
               className="prose prose-lg max-w-none text-gray-700 mb-6"
               dangerouslySetInnerHTML={{ __html: currentTaskData.prompt }}
             />
@@ -544,8 +542,8 @@ export default function WritingTestPage() {
             {/* Task Image (for Task 1) */}
             {currentTaskData.imageUrl && (
               <div className="mb-6">
-                <img 
-                  src={currentTaskData.imageUrl} 
+                <img
+                  src={currentTaskData.imageUrl}
                   alt="Task visual"
                   className="max-w-full rounded-lg border shadow-sm"
                 />
@@ -592,9 +590,8 @@ export default function WritingTestPage() {
           {/* Word Counter Footer */}
           <div className="bg-white border-t px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className={`px-3 py-1.5 rounded-lg border font-medium ${
-                getWordCountColor(currentResponse.wordCount, currentTaskData.minWords)
-              }`}>
+              <div className={`px-3 py-1.5 rounded-lg border font-medium ${getWordCountColor(currentResponse.wordCount, currentTaskData.minWords)
+                }`}>
                 {currentResponse.wordCount} / {currentTaskData.minWords} words
               </div>
               {currentResponse.wordCount >= currentTaskData.minWords ? (
