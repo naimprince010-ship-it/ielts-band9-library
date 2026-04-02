@@ -250,7 +250,7 @@ async function callOpenAI(prompt: string): Promise<string> {
             }
           ],
           temperature: 0.7,
-          max_tokens: 4000,
+          max_tokens: 8000,
         }),
       });
 
@@ -301,7 +301,7 @@ async function callGemini(prompt: string): Promise<string> {
         ],
         generationConfig: {
           temperature: 0.7,
-          maxOutputTokens: 4000,
+          maxOutputTokens: 8000,
           responseMimeType: 'application/json'
         }
       }),

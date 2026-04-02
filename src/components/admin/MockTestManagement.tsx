@@ -2287,7 +2287,15 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
     });
     const rawText = await response.text();
     let data;
-    try { data = JSON.parse(rawText); } catch { throw new Error(`Invalid AI response for ${moduleType} `); }
+    try { 
+      data = JSON.parse(rawText); 
+    } catch (e) { 
+      console.error(`Raw response for ${moduleType}:`, rawText);
+      if (rawText.includes('<!DOCTYPE html>')) {
+        throw new Error(`Server error (504/500) during ${moduleType} generation. This usually means the AI took too long to respond. Try again or use a simpler topic.`);
+      }
+      throw new Error(`Invalid AI response for ${moduleType}. The AI output was not valid JSON.`); 
+    }
     if (!response.ok || !data.success || !data.content) throw new Error(data.error || `Failed to generate ${moduleType}`);
     return data.content;
   };
@@ -2307,22 +2315,28 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
         testType: 'academic', 
         timeLimit: 3600,
         instructions: 'Read the passages carefully and answer the questions.',
-        passages: readingData.passages.map((p, pIndex) => ({
-          id: `passage-${now}-${pIndex}`,
-          passageNumber: p.passageNumber || (pIndex + 1),
-          title: p.title || `Passage ${pIndex + 1}`,
-          content: p.textContent || '', // Map textContent to content for DB compatibility
-          questions: (p.questions || []).map((q: any, qIndex: number) => ({
-            id: `q-${now}-${pIndex}-${qIndex}`,
-            questionNumber: (pIndex === 0 ? 0 : readingData.passages.slice(0, pIndex).reduce((acc, prevP) => acc + (prevP.questions?.length || 0), 0)) + qIndex + 1,
-            type: q.type,
-            questionText: q.questionText,
-            options: q.options,
-            correctAnswer: q.correctAnswer,
-            acceptedAnswers: q.acceptedAnswers,
-            explanation: q.explanation
-          }))
-        })),
+        passages: readingData.passages.map((p, pIndex) => {
+          const startNum = (pIndex === 0 ? 0 : readingData.passages.slice(0, pIndex).reduce((acc, prevP) => acc + (prevP.questions?.length || 0), 0)) + 1;
+          const endNum = startNum + (p.questions?.length || 0) - 1;
+          
+          return {
+            id: `passage-${now}-${pIndex}`,
+            passageNumber: p.passageNumber || (pIndex + 1),
+            title: p.title || `Passage ${pIndex + 1}`,
+            textContent: p.textContent || p.content || '', 
+            questions: (p.questions || []).map((q: any, qIndex: number) => ({
+              id: `q-${now}-${pIndex}-${qIndex}`,
+              questionNumber: startNum + qIndex,
+              type: q.type,
+              questionText: q.questionText,
+              options: q.options,
+              correctAnswer: q.correctAnswer,
+              acceptedAnswers: q.acceptedAnswers,
+              explanation: q.explanation
+            })),
+            questionRange: { start: startNum, end: endNum }
+          };
+        }),
         totalQuestions: totalReadingQuestions
       };
 
