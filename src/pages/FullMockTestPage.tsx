@@ -107,7 +107,7 @@ function useTimer(initial: number, onExpire: () => void) {
   return { remaining, start, reset };
 }
 
-export default function FullMockTestPage() {
+export function FullMockTestPage() {
   const navigate = useNavigate();
   const [phase, setPhase] = useState<Phase>('intro');
   const [tests, setTests] = useState<Partial<Record<ModuleType, MockTest>>>({});
@@ -137,19 +137,24 @@ export default function FullMockTestPage() {
   useEffect(() => {
     if (!isSupabaseConfigured() || !supabase) { setLoading(false); return; }
     const fetch = async () => {
-      const result: Partial<Record<ModuleType, MockTest>> = {};
-      for (const s of SECTIONS) {
-        const { data } = await supabase!
-          .from('mock_tests')
-          .select('*')
-          .eq('module_type', s.module)
-          .eq('is_published', true)
-          .limit(1)
-          .single();
-        if (data) result[s.module] = data as MockTest;
+      try {
+        const result: Partial<Record<ModuleType, MockTest>> = {};
+        for (const s of SECTIONS) {
+          const { data } = await supabase!
+            .from('mock_tests')
+            .select('*')
+            .eq('module_type', s.module)
+            .eq('is_published', true)
+            .limit(1)
+            .maybeSingle();
+          if (data) result[s.module] = data as MockTest;
+        }
+        setTests(result);
+      } catch (err) {
+        console.error('FullMockTestPage fetch error:', err);
+      } finally {
+        setLoading(false);
       }
-      setTests(result);
-      setLoading(false);
     };
     fetch();
   }, []);
