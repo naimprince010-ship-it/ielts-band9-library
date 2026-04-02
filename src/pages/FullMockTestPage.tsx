@@ -3,13 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import {
   Clock, Headphones, BookOpen, PenTool, Mic, ChevronRight,
   CheckCircle, AlertCircle, Award, Play, RotateCcw,
-  Loader2, Target, Crown, Timer, Check, Volume2
+  Loader2, Target, Crown, Timer, Check, Volume2,
+  Shield, Zap, Wifi, Lock, ArrowRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
+import { useAuth } from '@/contexts/AuthContext';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 type Phase = 'intro' | 'listening' | 'reading' | 'writing' | 'speaking' | 'results';
@@ -17,7 +19,7 @@ type ModuleType = 'reading' | 'listening' | 'writing' | 'speaking';
 
 export interface TableCell {
   type: 'text' | 'input';
-  value?: string; // used if type='text'
+  value?: string;
 }
 
 interface Question {
@@ -47,8 +49,6 @@ interface SectionScores {
   speaking: number | null;
 }
 
-
-
 const SECTIONS: { phase: Phase; module: ModuleType; label: string; duration: number; icon: React.ReactNode; color: string; bg: string }[] = [
   { phase: 'listening', module: 'listening', label: 'Listening', duration: 30 * 60, icon: <Headphones className="h-5 w-5" />, color: 'text-violet-600', bg: 'bg-violet-500' },
   { phase: 'reading',   module: 'reading',   label: 'Reading',   duration: 60 * 60, icon: <BookOpen className="h-5 w-5" />,   color: 'text-blue-600',   bg: 'bg-blue-500'   },
@@ -56,8 +56,59 @@ const SECTIONS: { phase: Phase; module: ModuleType; label: string; duration: num
   { phase: 'speaking',  module: 'speaking',  label: 'Speaking',  duration: 15 * 60, icon: <Mic className="h-5 w-5" />,       color: 'text-orange-600', bg: 'bg-orange-500'  },
 ];
 
+const testModules = [
+  {
+    id: 'listening',
+    name: 'Listening',
+    icon: Headphones,
+    duration: '30 min',
+    questions: '40 questions',
+    description: 'Four recorded sections with native speakers',
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-500/10',
+  },
+  {
+    id: 'reading',
+    name: 'Reading',
+    icon: BookOpen,
+    duration: '60 min',
+    questions: '40 questions',
+    description: 'Three reading passages with various question types',
+    color: 'text-emerald-600',
+    bgColor: 'bg-emerald-500/10',
+  },
+  {
+    id: 'writing',
+    name: 'Writing',
+    icon: PenTool,
+    duration: '60 min',
+    questions: '2 tasks',
+    description: 'Task 1: Report/Letter, Task 2: Essay',
+    color: 'text-amber-600',
+    bgColor: 'bg-amber-500/10',
+  },
+  {
+    id: 'speaking',
+    name: 'Speaking',
+    icon: Mic,
+    duration: '11-14 min',
+    questions: '3 parts',
+    description: 'Face-to-face interview simulation',
+    color: 'text-purple-600',
+    bgColor: 'bg-purple-500/10',
+  }
+];
+
+const preTestChecklist = [
+  { id: 1, icon: Headphones, label: 'Headphones connected', description: 'Required for Listening section' },
+  { id: 2, icon: Volume2, label: 'Audio working properly', description: 'Test your speakers/headphones' },
+  { id: 3, icon: Wifi, label: 'Stable internet connection', description: 'Avoid interruptions during test' },
+  { id: 4, icon: Timer, label: '3+ hours available', description: 'Complete test without rushing' },
+];
+
 function bandFromScore(correct: number, total: number): number {
-  const pct = total > 0 ? correct / total : 0;
+  if (total === 0) return 4.0;
+  const pct = correct / total;
   if (pct >= 0.97) return 9.0;
   if (pct >= 0.93) return 8.5;
   if (pct >= 0.87) return 8.0;
@@ -84,15 +135,12 @@ function formatTime(secs: number): string {
   return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
 
-// ─── Timer hook ───
 function useTimer(initial: number, onExpire: () => void) {
   const [remaining, setRemaining] = useState(initial);
   const [running, setRunning] = useState(false);
   const ref = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const start = useCallback(() => {
-    setRunning(true);
-  }, []);
+  const start = useCallback(() => setRunning(true), []);
 
   useEffect(() => {
     if (!running) return;
@@ -116,116 +164,86 @@ function useTimer(initial: number, onExpire: () => void) {
 
 export function FullMockTestPage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [phase, setPhase] = useState<Phase>('intro');
   const [tests, setTests] = useState<Partial<Record<ModuleType, MockTest>>>({});
   const [loading, setLoading] = useState(true);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [playingAudioId, setPlayingAudioId] = useState<string | null>(null);
   const [playedAudios, setPlayedAudios] = useState<Set<string>>(new Set());
+  
+  // Landing page specific state
+  const [selectedMode, setSelectedMode] = useState<'practice' | 'exam'>('exam');
+  const [checkedItems, setCheckedItems] = useState<number[]>([]);
 
-  // Auto-save: load from local storage
+  const toggleCheckItem = (id: number) => {
+    setCheckedItems(prev => prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]);
+  };
+
+  const allChecked = checkedItems.length === preTestChecklist.length;
+
+  // Auto-save logic
   useEffect(() => {
     const saved = localStorage.getItem('mockTestAnswers_v1');
     if (saved) {
-      try {
-        setAnswers(JSON.parse(saved));
-      } catch (e) {
-        console.error('Failed to load saved answers');
-      }
+      try { setAnswers(JSON.parse(saved)); } catch (e) { console.error('Failed to load saved answers'); }
     }
   }, []);
 
-  // Auto-save: write to local storage
   useEffect(() => {
     if (Object.keys(answers).length > 0) {
       localStorage.setItem('mockTestAnswers_v1', JSON.stringify(answers));
     }
   }, [answers]);
 
-  // Stop audio when changing phases or unmounting
   useEffect(() => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     setPlayingAudioId(null);
   }, [phase]);
 
-  // Async helper: waits for voices to load if not yet available
   const getVoicesAsync = (): Promise<SpeechSynthesisVoice[]> => {
     return new Promise(resolve => {
       const voices = window.speechSynthesis.getVoices();
       if (voices.length > 0) { resolve(voices); return; }
       const handler = () => { resolve(window.speechSynthesis.getVoices()); };
       window.speechSynthesis.addEventListener('voiceschanged', handler, { once: true });
-      // Fallback timeout after 2s
       setTimeout(() => resolve(window.speechSynthesis.getVoices()), 2000);
     });
   };
 
   const toggleAudio = async (id: string, text: string) => {
-    if (!('speechSynthesis' in window)) {
-      alert('Your browser does not support text-to-speech.');
-      return;
-    }
-
-    if (playedAudios.has(id)) {
-      alert('Audio in the real exam can only be played once.');
-      return;
-    }
+    if (!('speechSynthesis' in window)) { alert('Your browser does not support text-to-speech.'); return; }
+    if (playedAudios.has(id)) { alert('Audio in the real exam can only be played once.'); return; }
 
     window.speechSynthesis.cancel();
-
-    if (playingAudioId === id) {
-      // Allow stopping (though normally not allowed, we keep it for accessibility if TTS runs amok)
-      // Actually strictly No-Stop for real exam feeling, so we don't allow toggle-off if it's playing.
-      // But we prevent playing AGAIN once it's ended.
-      return;
-    }
+    if (playingAudioId === id) return;
 
     setPlayingAudioId(id);
     const utterance = new SpeechSynthesisUtterance(text);
-
-    // Wait for voices to be ready, then pick a UK/US English voice
     const voices = await getVoicesAsync();
-    const preferred =
-      voices.find(v => v.lang === 'en-GB') ||
-      voices.find(v => v.lang.startsWith('en-GB')) ||
-      voices.find(v => v.lang.startsWith('en-US')) ||
-      voices.find(v => v.lang.startsWith('en'));
+    const preferred = voices.find(v => v.lang.startsWith('en-GB')) || voices.find(v => v.lang.startsWith('en-US')) || voices.find(v => v.lang.startsWith('en'));
     if (preferred) utterance.voice = preferred;
-    utterance.rate = 0.92;   // Slightly slower for comprehension
-    utterance.pitch = 1.0;
-    utterance.volume = 1.0;
-
-    // Mark as played so user can't play it again
+    utterance.rate = 0.92;
     setPlayedAudios(prev => new Set(prev).add(id));
-
     utterance.onend = () => setPlayingAudioId(null);
     utterance.onerror = () => setPlayingAudioId(null);
-
     window.speechSynthesis.speak(utterance);
   };
+
   const [scores, setScores] = useState<SectionScores>({ listening: null, reading: null, writing: null, speaking: null });
   const [sectionIndex, setSectionIndex] = useState(0);
 
   const currentSection = SECTIONS[sectionIndex];
-
-  // Use refs so handleTimeUp can always call the latest submitSection
   const submitSectionRef = useRef<() => void>(() => {});
   const startTimerRef = useRef<(() => void) | null>(null);
   const resetTimerRef = useRef<((val: number) => void) | null>(null);
 
   const handleTimeUp = useCallback(() => submitSectionRef.current(), []);
-  const { remaining, start: startTimer, reset: resetTimer } = useTimer(
-    currentSection?.duration ?? 1800,
-    handleTimeUp
-  );
+  const { remaining, start: startTimer, reset: resetTimer } = useTimer(currentSection?.duration ?? 1800, handleTimeUp);
 
-  // Keep refs up to date
   useEffect(() => { startTimerRef.current = startTimer; }, [startTimer]);
   useEffect(() => { resetTimerRef.current = resetTimer; }, [resetTimer]);
 
-  // fetch one test per module
   useEffect(() => {
     if (!isSupabaseConfigured() || !supabase) { setLoading(false); return; }
     const fetch = async () => {
@@ -243,11 +261,7 @@ export function FullMockTestPage() {
           if (data) result[s.module] = data as MockTest;
         }
         setTests(result);
-      } catch (err) {
-        console.error('FullMockTestPage fetch error:', err);
-      } finally {
-        setLoading(false);
-      }
+      } catch (err) { console.error('FullMockTestPage fetch error:', err); } finally { setLoading(false); }
     };
     fetch();
   }, []);
@@ -295,145 +309,241 @@ export function FullMockTestPage() {
           const task1 = (answers['w_task1'] ?? '').split(/\s+/).filter(Boolean).length;
           const task2 = (answers['w_task2'] ?? '').split(/\s+/).filter(Boolean).length;
           const total = task1 + task2;
-          console.log(`Scoring Writing: ${total} words total`);
           band = total >= 600 ? 7.5 : total >= 450 ? 7.0 : total >= 350 ? 6.5 : total >= 250 ? 6.0 : total >= 150 ? 5.5 : 5.0;
         } else if (sec.module === 'speaking') {
           const words = (answers['sp_answers'] ?? '').split(/\s+/).filter(Boolean).length;
-          console.log(`Scoring Speaking: ${words} words`);
           band = words >= 300 ? 7.0 : words >= 200 ? 6.5 : words >= 100 ? 6.0 : 5.5;
         }
       }
-    } catch (err) {
-      console.error('Error calculating score:', err);
-      // Fallback to a default band if scoring fails to prevent UI hang
-    }
+    } catch (err) { console.error('Error calculating score:', err); }
 
     setScores(prev => ({ ...prev, [sec.module]: band }));
 
     const next = sectionIndex + 1;
     if (next < SECTIONS.length) {
-      console.log('Moving to next section:', SECTIONS[next].module);
       setPhase('intro');
       setSectionIndex(next);
     } else {
-      console.log('Test complete, showing results');
       setPhase('results');
     }
-    
-    // Clear current answers for the next section
     setAnswers({});
-    
-    // Scroll to top for the next phase
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [sectionIndex, tests, answers]);
 
-  // Keep submitSectionRef in sync so handleTimeUp always calls latest version
   useEffect(() => { submitSectionRef.current = submitSection; }, [submitSection]);
 
-  // ─── INTRO SCREEN ───────────────────────────────────────────────
-  if (phase === 'intro' || loading) {
-    const isFirstSection = SECTIONS.every(s => scores[s.module] === null);
-    const nextSection = SECTIONS[sectionIndex];
-
+  if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white">
-        <div className="container mx-auto px-4 py-12 max-w-4xl">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <Badge className="bg-amber-400 text-amber-900 mb-4 px-4 py-1.5 text-sm font-bold">
-              <Crown className="h-4 w-4 mr-1" /> Full IELTS Mock Exam
-            </Badge>
-            <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tight">
-              Complete Mock Test
-            </h1>
-            <p className="text-indigo-300 text-lg max-w-xl mx-auto">
-              Simulate the real IELTS exam experience — all 4 sections, timed, in sequence.
-            </p>
-          </div>
+      <div className="min-h-screen flex items-center justify-center bg-background text-foreground">
+        <Loader2 className="h-10 w-10 animate-spin text-indigo-400" />
+      </div>
+    );
+  }
 
-          {loading ? (
-            <div className="flex justify-center py-20">
-              <Loader2 className="h-10 w-10 animate-spin text-indigo-400" />
-            </div>
-          ) : (
-            <>
-              {/* Section Cards */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-                {SECTIONS.map((s, idx) => {
-                  const done = scores[s.module] !== null;
-                  const next = idx === sectionIndex;
-                  return (
-                    <div key={s.phase} className={`rounded-2xl p-5 border transition-all ${done ? 'bg-green-500/20 border-green-400/40' : next ? 'bg-white/10 border-white/30 ring-2 ring-indigo-400' : 'bg-white/5 border-white/10'}`}>
-                      <div className={`w-10 h-10 rounded-xl ${done ? 'bg-green-500' : s.bg} flex items-center justify-center mb-3`}>
-                        {done ? <Check className="h-5 w-5 text-white" /> : <span className="text-white">{s.icon}</span>}
-                      </div>
-                      <h3 className="font-bold text-sm mb-1">{s.label}</h3>
-                      <p className="text-xs text-indigo-300">{Math.floor(s.duration / 60)} min</p>
-                      {done && <p className="text-xs text-green-400 font-bold mt-1">Band {scores[s.module]}</p>}
-                      {next && !done && <Badge className="mt-1 bg-indigo-500 text-white text-xs">Next</Badge>}
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Progress */}
-              {!isFirstSection && (
-                <div className="mb-8">
-                  <div className="flex justify-between text-sm text-indigo-300 mb-2">
-                    <span>Progress</span>
-                    <span>{SECTIONS.filter(s => scores[s.module] !== null).length} / 4 sections done</span>
-                  </div>
-                  <Progress value={(SECTIONS.filter(s => scores[s.module] !== null).length / 4) * 100} className="h-2" />
+  // ─── INTRO / LANDING SCREEN ───────────────────────────────────────────────
+  if (phase === 'intro') {
+    const isFirstSection = SECTIONS.every(s => scores[s.module] === null);
+    
+    if (!isFirstSection) { // Mid-test intro screen
+      const nextSection = SECTIONS[sectionIndex];
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white flex items-center justify-center">
+          <div className="container mx-auto px-4 py-12 max-w-lg">
+            <Card className="bg-white/10 border-white/20 text-white">
+              <CardHeader className="text-center">
+                <div className={`w-16 h-16 rounded-full ${nextSection.bg} flex items-center justify-center mx-auto mb-4`}>
+                   {nextSection.icon}
                 </div>
-              )}
+                <CardTitle className="text-2xl font-bold">Ready for {nextSection.label}?</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="flex justify-between items-center bg-white/5 p-4 rounded-xl">
+                  <span className="text-indigo-300">Section</span>
+                  <span className="font-bold">{sectionIndex + 1} of 4</span>
+                </div>
+                <div className="flex justify-between items-center bg-white/5 p-4 rounded-xl">
+                  <span className="text-indigo-300">Duration</span>
+                  <span className="font-bold">{Math.floor(nextSection.duration / 60)} minutes</span>
+                </div>
+                <Button 
+                  className="w-full bg-indigo-500 hover:bg-indigo-400 text-white py-6 rounded-xl font-bold text-lg"
+                  onClick={() => startSection(sectionIndex)}
+                >
+                  Start {nextSection.label} Section
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      );
+    }
 
-              {/* Info */}
-              <div className="grid md:grid-cols-3 gap-4 mb-10">
+    // Main landing page intro
+    return (
+      <div className="min-h-screen bg-background">
+        {/* Hero Section */}
+        <section className="relative bg-foreground text-background overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-foreground via-foreground to-accent/20" />
+          <div className="absolute inset-0 opacity-5">
+            <div className="absolute top-20 left-10 w-72 h-72 bg-accent rounded-full blur-3xl" />
+            <div className="absolute bottom-10 right-10 w-96 h-96 bg-accent rounded-full blur-3xl" />
+          </div>
+          
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+            <div className="text-center max-w-3xl mx-auto">
+              <Badge className="mb-6 bg-accent/20 text-accent border-accent/30 px-4 py-1.5 font-bold uppercase tracking-wider">
+                Complete IELTS Simulation
+              </Badge>
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight tracking-tight">
+                Full Mock Test
+              </h1>
+              <p className="text-lg md:text-xl text-background/70 mb-8 max-w-2xl mx-auto font-medium">
+                Experience a complete IELTS examination simulation with all four modules. 
+                Test yourself under real exam conditions and get your predicted band score.
+              </p>
+              
+              <div className="flex flex-wrap justify-center gap-6 md:gap-10 mt-10">
                 {[
-                  { icon: <Timer className="h-5 w-5 text-indigo-400" />, label: 'Total Time', value: '2 hrs 45 min' },
-                  { icon: <Target className="h-5 w-5 text-indigo-400" />, label: 'Sections', value: '4 modules' },
-                  { icon: <Award className="h-5 w-5 text-indigo-400" />, label: 'Result', value: 'Band Score' },
-                ].map((item, i) => (
-                  <div key={i} className="bg-white/5 rounded-xl p-4 flex items-center gap-3">
-                    {item.icon}
-                    <div>
-                      <p className="text-xs text-indigo-400">{item.label}</p>
-                      <p className="font-bold">{item.value}</p>
-                    </div>
+                  { label: 'Total Duration', value: '2h 45m', color: 'text-accent' },
+                  { label: 'Modules', value: '4', color: 'text-background' },
+                  { label: 'Questions', value: '120+', color: 'text-background' },
+                  { label: 'Band Scale', value: '9.0', color: 'text-background' },
+                ].map((stat, i) => (
+                  <div key={i} className="text-center group transition-transform hover:scale-105">
+                    <div className={`text-3xl md:text-4xl font-black ${stat.color}`}>{stat.value}</div>
+                    <div className="text-sm text-background/60 font-bold uppercase tracking-widest">{stat.label}</div>
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        </section>
 
-              {/* No tests warning */}
-              {!tests[nextSection.module] && (
-                <div className="bg-amber-500/20 border border-amber-400/40 rounded-xl p-4 mb-6 flex items-center gap-3">
-                  <AlertCircle className="h-5 w-5 text-amber-400 flex-shrink-0" />
-                  <div className="text-sm">
-                    <p className="font-bold text-amber-300">No {nextSection.label} test available</p>
-                    <p className="text-amber-400/80">Add tests from Admin → Mock Test Content first.</p>
+        {/* Test Modules Section */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-black text-foreground mb-4">Test Modules</h2>
+            <div className="w-20 h-1.5 bg-accent mx-auto rounded-full mb-4" />
+            <p className="text-muted-foreground text-lg font-medium">Complete all four modules in sequence just like the real exam</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {testModules.map((module, index) => (
+              <Card key={module.id} className="group relative overflow-hidden border-border/50 hover:border-accent/50 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
+                <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${
+                  module.id === 'listening' ? 'from-blue-500 to-blue-600' :
+                  module.id === 'reading' ? 'from-emerald-500 to-emerald-600' :
+                  module.id === 'writing' ? 'from-amber-500 to-amber-600' :
+                  'from-purple-500 to-purple-600'
+                }`} />
+                <CardContent className="p-8">
+                  <div className="flex items-start justify-between mb-6">
+                    <div className={`p-4 rounded-2xl ${module.bgColor} group-hover:scale-110 transition-transform`}>
+                      <module.icon className={`h-8 w-8 ${module.color}`} />
+                    </div>
+                    <Badge variant="outline" className="text-xs font-bold uppercase tracking-widest">Step {index + 1}</Badge>
+                  </div>
+                  <h3 className="text-xl font-black text-foreground mb-3">{module.name}</h3>
+                  <p className="text-sm text-muted-foreground mb-6 font-medium leading-relaxed">{module.description}</p>
+                  <div className="flex items-center gap-4 text-sm font-bold">
+                    <div className="flex items-center gap-1.5 text-muted-foreground"><Clock className="h-4 w-4" /><span>{module.duration}</span></div>
+                    <div className="flex items-center gap-1.5 text-muted-foreground"><Target className="h-4 w-4" /><span>{module.questions}</span></div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        {/* Test Mode & Checklist Sidebar Wrapper */}
+        <div className="bg-muted/30 py-20 px-4">
+           <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12">
+              {/* Left Column: Mode Selection */}
+              <div className="space-y-10">
+                <div>
+                  <h2 className="text-3xl font-black text-foreground mb-4">Choose Test Mode</h2>
+                  <p className="text-muted-foreground font-medium">Select a mode that fits your preparation stage</p>
+                </div>
+                <div className="space-y-6">
+                  {/* Exam Mode */}
+                  <div className={`relative p-6 rounded-3xl border-2 cursor-pointer transition-all ${selectedMode === 'exam' ? 'border-accent bg-accent/5 ring-4 ring-accent/10' : 'border-border bg-background'}`} onClick={() => setSelectedMode('exam')}>
+                    <div className="flex gap-4">
+                      <div className={`p-4 rounded-2xl ${selectedMode === 'exam' ? 'bg-accent/20' : 'bg-muted'}`}><Shield className={`h-8 w-8 ${selectedMode === 'exam' ? 'text-accent' : 'text-muted-foreground'}`} /></div>
+                      <div>
+                        <div className="flex items-center gap-2 mb-1"><h3 className="text-xl font-bold">Exam Mode</h3><Badge className="bg-accent text-accent-foreground text-[10px] font-black uppercase">Official</Badge></div>
+                        <p className="text-sm text-muted-foreground mb-4">Timed, uninterrupted simulation</p>
+                        <ul className="space-y-2 text-xs font-bold">
+                          <li className="flex items-center gap-2"><CheckCircle className="h-3.5 w-3.5 text-accent" /> Strict time limits</li>
+                          <li className="flex items-center gap-2"><CheckCircle className="h-3.5 w-3.5 text-accent" /> No pausing allowed</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Practice Mode */}
+                  <div className={`relative p-6 rounded-3xl border-2 cursor-pointer transition-all ${selectedMode === 'practice' ? 'border-emerald-500 bg-emerald-500/5 ring-4 ring-emerald-500/10' : 'border-border bg-background'}`} onClick={() => setSelectedMode('practice')}>
+                    <div className="flex gap-4">
+                      <div className={`p-4 rounded-2xl ${selectedMode === 'practice' ? 'bg-emerald-500/20' : 'bg-muted'}`}><Zap className={`h-8 w-8 ${selectedMode === 'practice' ? 'text-emerald-500' : 'text-muted-foreground'}`} /></div>
+                      <div>
+                        <h3 className="text-xl font-bold mb-1">Practice Mode</h3>
+                        <p className="text-sm text-muted-foreground mb-4">Flexible learning environment</p>
+                        <ul className="space-y-2 text-xs font-bold">
+                          <li className="flex items-center gap-2"><CheckCircle className="h-3.5 w-3.5 text-emerald-500" /> Pause anytime</li>
+                          <li className="flex items-center gap-2"><CheckCircle className="h-3.5 w-3.5 text-emerald-500" /> View hints & tips</li>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              )}
-
-              {/* CTA */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button
-                  size="lg"
-                  onClick={() => startSection(sectionIndex)}
-                  disabled={!tests[nextSection.module]}
-                  className="bg-indigo-500 hover:bg-indigo-400 text-white text-base font-bold px-8 py-6 rounded-2xl shadow-xl shadow-indigo-500/30 gap-2"
-                >
-                  <Play className="h-5 w-5" />
-                  {isFirstSection ? 'Start Full Mock Test' : `Continue: ${nextSection.label} Section`}
-                </Button>
-                <Button size="lg" variant="outline" onClick={() => navigate('/mock-test')}
-                  className="border-white/20 text-white hover:bg-white/10 px-8 py-6 rounded-2xl text-base font-bold">
-                  Module Practice Instead
-                </Button>
               </div>
-            </>
-          )}
+
+              {/* Right Column: Pre-Test Checklist */}
+              <div className="space-y-8">
+                 <div className="bg-background p-8 rounded-[40px] border-2 border-border shadow-xl">
+                   <h3 className="text-2xl font-black mb-6">Pre-Test Checklist</h3>
+                   <div className="space-y-4 mb-8">
+                     {preTestChecklist.map((item) => (
+                       <div key={item.id} className={`flex items-center gap-4 p-4 rounded-2xl cursor-pointer transition-all ${checkedItems.includes(item.id) ? 'bg-accent/10' : 'bg-muted/50 hover:bg-muted'}`} onClick={() => toggleCheckItem(item.id)}>
+                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${checkedItems.includes(item.id) ? 'bg-accent border-accent' : 'border-muted-foreground/30'}`}>
+                           {checkedItems.includes(item.id) && <Check className="h-4 w-4 text-white" />}
+                         </div>
+                         <div className="flex-1"><div className="font-bold text-sm">{item.label}</div><div className="text-[10px] text-muted-foreground">{item.description}</div></div>
+                       </div>
+                     ))}
+                   </div>
+                   <div className="space-y-3">
+                     <div className="flex justify-between text-xs font-black uppercase tracking-widest text-muted-foreground"><span>Ready Status</span><span>{checkedItems.length}/{preTestChecklist.length} Ready</span></div>
+                     <Progress value={(checkedItems.length / preTestChecklist.length) * 100} className="h-3 rounded-full" />
+                   </div>
+                 </div>
+              </div>
+           </div>
         </div>
+
+        {/* Final CTA */}
+        <section className="bg-foreground text-background py-24 text-center">
+          <div className="max-w-4xl mx-auto px-4">
+             <div className="bg-accent h-16 w-16 rounded-3xl flex items-center justify-center mx-auto mb-8 rotate-3 transition-transform hover:rotate-12"><Award className="h-8 w-8 text-white" /></div>
+             <h2 className="text-4xl md:text-5xl font-black mb-6">Ready to Conquer IELTS?</h2>
+             <p className="text-background/70 text-lg mb-12 font-medium max-w-2xl mx-auto leading-relaxed">
+               Your full mock test begins with the Listening module. Ensure you have 3 hours of uninterrupted time for a realistic prediction.
+             </p>
+             {user ? (
+               <Button 
+                size="lg" 
+                onClick={() => startSection(0)} 
+                disabled={!allChecked} 
+                className="bg-accent hover:bg-accent/90 text-white font-black text-xl px-12 py-8 rounded-[40px] shadow-2xl shadow-accent/40 group gap-4 scale-110"
+               >
+                 <Play className="h-6 w-6 fill-current" /> START FULL EXAM <ChevronRight className="h-6 w-6 group-hover:translate-x-2 transition-transform" />
+               </Button>
+             ) : (
+               <Button size="lg" onClick={() => navigate('/login')} className="bg-accent hover:bg-accent/90 text-white font-black text-xl px-12 py-8 rounded-[40px] gap-4">
+                 <Lock className="h-6 w-6" /> SIGN IN TO START
+               </Button>
+             )}
+             {!allChecked && user && <p className="mt-8 text-accent font-bold animate-pulse text-sm">Please complete the checklist to unlock the test</p>}
+          </div>
+        </section>
       </div>
     );
   }
@@ -445,46 +555,41 @@ export function FullMockTestPage() {
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white">
-        <div className="container mx-auto px-4 py-12 max-w-3xl">
-          <div className="text-center mb-12">
-            <div className="w-24 h-24 bg-amber-400 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-amber-400/40">
-              <Award className="h-12 w-12 text-amber-900" />
+        <div className="container mx-auto px-4 py-20 max-w-3xl">
+          <div className="text-center mb-16">
+            <div className="w-28 h-28 bg-amber-400 rounded-[40px] flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-amber-400/40 rotate-12">
+              <Award className="h-14 w-14 text-amber-900" />
             </div>
-            <h1 className="text-4xl font-black mb-2">Test Complete!</h1>
-            <p className="text-indigo-300">Here's your estimated IELTS band score</p>
+            <h1 className="text-5xl font-black mb-4 tracking-tight">Test Complete!</h1>
+            <p className="text-indigo-300 text-lg font-medium">Your global IELTS performance report</p>
           </div>
 
-          {/* Overall Band */}
-          <div className="bg-white/10 backdrop-blur rounded-3xl p-10 text-center mb-8 border border-white/20">
-            <p className="text-indigo-300 text-sm font-bold uppercase tracking-widest mb-2">Overall Band Score</p>
-            <p className={`text-8xl font-black ${bandColor} mb-4`}>{overall.toFixed(1)}</p>
-            <p className="text-indigo-300">
-              {overall >= 8 ? '🌟 Expert User — Excellent!' : overall >= 7 ? '✅ Good User — Great job!' : overall >= 6 ? '📚 Competent User — Keep practicing!' : '💪 Modest User — More practice needed'}
+          <div className="bg-white/10 backdrop-blur-2xl rounded-[50px] p-12 text-center mb-12 border border-white/20 shadow-3xl">
+            <p className="text-indigo-300 text-sm font-black uppercase tracking-[0.3em] mb-4">Overall Predicted Band</p>
+            <p className={`text-9xl font-black ${bandColor} mb-6 tracking-tighter`}>{overall.toFixed(1)}</p>
+            <div className="h-2 w-24 bg-white/20 mx-auto rounded-full mb-6" />
+            <p className="text-xl font-bold text-white/90">
+              {overall >= 8 ? 'Expert User — Phenomenal!' : overall >= 7 ? 'Good User — Great potential!' : overall >= 6 ? 'Competent User — Solid foundation!' : 'Modest User — Let\'s work on improvement'}
             </p>
           </div>
 
-          {/* Section Breakdown */}
-          <div className="grid grid-cols-2 gap-4 mb-10">
+          <div className="grid grid-cols-2 gap-6 mb-12">
             {SECTIONS.map(s => {
               const band = scores[s.module];
               const bc = band && band >= 7 ? 'text-green-400' : band && band >= 5.5 ? 'text-yellow-400' : 'text-red-400';
               return (
-                <div key={s.phase} className="bg-white/5 rounded-2xl p-5 border border-white/10">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className={`w-8 h-8 rounded-lg ${s.bg} flex items-center justify-center`}>
-                      <span className="text-white">{s.icon}</span>
-                    </div>
-                    <span className="font-bold text-sm">{s.label}</span>
+                <div key={s.phase} className="bg-white/5 rounded-3xl p-8 border border-white/10 transition-transform hover:scale-105">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center text-white`}>{s.icon}</div>
+                    <span className="font-black text-sm uppercase tracking-wider">{s.label}</span>
                   </div>
-                  <p className={`text-4xl font-black ${bc}`}>{band?.toFixed(1) ?? '—'}</p>
-                  <p className="text-xs text-indigo-400 mt-1">Band Score</p>
+                  <p className={`text-5xl font-black ${bc}`}>{band?.toFixed(1) ?? '—'}</p>
                 </div>
               );
             })}
           </div>
 
-          {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button size="lg" onClick={() => { 
                 setPhase('intro'); 
                 setSectionIndex(0); 
@@ -493,12 +598,14 @@ export function FullMockTestPage() {
                 setPlayedAudios(new Set());
                 localStorage.removeItem('mockTestAnswers_v1');
               }}
-              className="bg-indigo-500 hover:bg-indigo-400 text-white font-bold px-8 py-6 rounded-2xl gap-2">
-              <RotateCcw className="h-5 w-5" /> Retake Test
+              className="bg-indigo-500 hover:bg-indigo-400 text-white font-black px-12 py-8 rounded-[30px] shadow-2xl shadow-indigo-500/40 gap-4"
+            >
+              <RotateCcw className="h-6 w-6" /> RETAKE FULL EXAM
             </Button>
             <Button size="lg" variant="outline" onClick={() => navigate('/mock-test')}
-              className="border-white/20 text-white hover:bg-white/10 px-8 py-6 rounded-2xl font-bold">
-              Module Practice
+              className="border-white/20 text-white hover:bg-white/10 px-12 py-8 rounded-[30px] font-black"
+            >
+              MODULE PRACTICE
             </Button>
           </div>
         </div>
@@ -511,170 +618,110 @@ export function FullMockTestPage() {
   const td = test?.test_data as Record<string, unknown> | undefined;
   const timeColor = remaining < 300 ? 'text-red-400' : remaining < 600 ? 'text-yellow-400' : 'text-green-400';
 
-  // Extract question keys for bottom navigation
   let navKeys: string[] = [];
   const TOTAL_QUESTIONS_TARGET = 40;
 
   if (phase === 'listening') {
     const sections = (td?.sections as Array<{questions: any[]}>) ?? [];
     let i = 0;
-    sections.forEach(s => {
-      if (Array.isArray(s.questions)) s.questions.forEach(() => navKeys.push(`l_${i++}`));
-    });
+    sections.forEach(s => { if (Array.isArray(s.questions)) s.questions.forEach(() => navKeys.push(`l_${i++}`)); });
   } else if (phase === 'reading') {
-    const passages = (td?.passages as Array<{questions: any[]}>) ?? (td?.passage ? [td.passage] : []);
+    const passages = Array.isArray(td?.passages) ? td.passages : (td?.passage ? [td.passage] : []);
     let i = 0;
-    passages.forEach(p => {
-      if (Array.isArray(p.questions)) p.questions.forEach(() => navKeys.push(`r_${i++}`));
-    });
+    passages.forEach((p: any) => { if (Array.isArray(p.questions)) p.questions.forEach(() => navKeys.push(`r_${i++}`)); });
   }
 
   const scrollToQuestion = (key: string) => {
     const el = document.getElementById(key);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      el.classList.add('ring-2', 'ring-indigo-400', 'rounded-lg', 'transition-all', 'duration-500');
-      setTimeout(() => el.classList.remove('ring-2', 'ring-indigo-400'), 2000);
+      el.classList.add('ring-4', 'ring-indigo-400', 'rounded-2xl', 'transition-all', 'duration-500');
+      setTimeout(() => el.classList.remove('ring-4', 'ring-indigo-400'), 2000);
     }
   };
 
   return (
-    <div className="min-h-screen bg-background pb-32">
-      {/* Top bar */}
-      <div className="sticky top-0 z-40 bg-foreground text-white px-4 py-3 flex items-center justify-between shadow-xl">
-        <div className="flex items-center gap-3">
-          <div className={`w-8 h-8 ${currentSection.bg} rounded-lg flex items-center justify-center`}>
-            {currentSection.icon}
-          </div>
+    <div className="min-h-screen bg-background pb-40">
+      <div className="sticky top-0 z-50 bg-foreground/95 backdrop-blur-lg text-white px-6 py-4 flex items-center justify-between shadow-2xl border-b border-white/10">
+        <div className="flex items-center gap-4">
+          <div className={`w-10 h-10 ${currentSection.bg} rounded-xl flex items-center justify-center shadow-lg shadow-black/20`}>{currentSection.icon}</div>
           <div>
-            <p className="text-xs text-white/60 font-medium">Section {sectionIndex + 1} of 4</p>
-            <p className="font-bold text-sm">{currentSection.label} Test</p>
+            <p className="text-[10px] text-white/50 font-black uppercase tracking-[0.2em] mb-0.5">Section {sectionIndex + 1} of 4</p>
+            <p className="font-black text-lg leading-tight">{currentSection.label}</p>
           </div>
         </div>
-        <div className="flex items-center gap-4">
-          {/* Section steps */}
-          <div className="hidden md:flex items-center gap-1">
-            {SECTIONS.map((_s, i) => (
-              <div key={i} className={`flex items-center gap-1`}>
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${i < sectionIndex ? 'bg-green-500 text-white' : i === sectionIndex ? 'bg-white text-foreground' : 'bg-white/20 text-white/60'}`}>
-                  {i < sectionIndex ? <Check className="h-3 w-3" /> : i + 1}
-                </div>
-                {i < 3 && <div className={`w-8 h-0.5 ${i < sectionIndex ? 'bg-green-500' : 'bg-white/20'}`} />}
-              </div>
-            ))}
-          </div>
-          <div className={`flex items-center gap-2 font-mono font-bold text-lg ${timeColor}`}>
-            <Clock className="h-4 w-4" />
+        <div className="flex items-center gap-8">
+           <div className="hidden md:flex items-center gap-2">
+             {SECTIONS.map((_s, i) => (
+                <div key={i} className={`h-1.5 w-12 rounded-full transition-all ${i < sectionIndex ? 'bg-green-500' : i === sectionIndex ? 'bg-accent' : 'bg-white/10'}`} />
+             ))}
+           </div>
+           <div className={`flex items-center gap-3 font-mono font-black text-2xl py-2 px-6 rounded-2xl bg-white/5 border border-white/10 ${timeColor}`}>
+            <Clock className="h-6 w-6" />
             {formatTime(remaining)}
           </div>
         </div>
-        
-        {/* We moved the Submit button to the bottom nav or kept it here, but removing it from top right to rely on bottom nav */}
       </div>
 
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-4 py-12 max-w-4xl">
         {!test ? (
-          <Card className="border-dashed border-2 mt-8">
-            <CardContent className="py-16 text-center">
-              <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-xl font-bold mb-2">No {currentSection.label} Test Available</h3>
-              <p className="text-muted-foreground mb-6">Add a test from Admin → Mock Test Content first.</p>
-              <Button onClick={() => submitSection()}>Skip to Next Section</Button>
-            </CardContent>
+          <Card className="border-dashed border-4 border-muted py-32 text-center rounded-[40px]">
+            <div className="bg-muted w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6"><AlertCircle className="h-10 w-10 text-muted-foreground" /></div>
+            <h3 className="text-2xl font-black mb-3">No {currentSection.label} Test Available</h3>
+            <p className="text-muted-foreground mb-8 font-medium">Please contact admin to add mock test content.</p>
+            <Button onClick={() => submitSection()} size="lg" className="rounded-full px-12">SKIP SECTION <ArrowRight className="ml-2 h-4 w-4" /></Button>
           </Card>
         ) : (
-          <>
-            {/* ─── LISTENING ─── */}
+          <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
             {phase === 'listening' && (() => {
               const sections = (td?.sections as Array<{ sectionNumber: number; title: string; questions: Question[], transcript?: string }>) ?? [];
               const globalTranscript = typeof td?.transcript === 'string' ? td.transcript : '';
               let qIdx = 0;
               return (
-                <div className="space-y-6">
-                  <div className="bg-violet-50 border border-violet-200 rounded-xl p-4 flex items-center gap-3">
-                    <Volume2 className="h-5 w-5 text-violet-600" />
-                    <div>
-                      <p className="font-semibold text-violet-800">Listening Section</p>
-                      <p className="text-sm text-violet-600">In a real exam you'd hear audio. Read the transcript below and answer the questions.</p>
-                    </div>
-                  </div>
-                  {globalTranscript && (
-                    <Card className="border-violet-200 shadow-sm"><CardContent className="p-5">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="font-bold flex items-center gap-2"><Headphones className="h-5 w-5 text-violet-600" /> Audio Transcript</h3>
+                <div className="space-y-12">
+                   {globalTranscript && (
+                    <Card className="border-violet-100 shadow-xl rounded-[30px] overflow-hidden">
+                      <div className="bg-violet-600 p-6 flex items-center justify-between text-white">
+                        <div className="flex items-center gap-3"><Headphones className="h-6 w-6" /><h3 className="font-black uppercase tracking-wider">Audio Interface</h3></div>
                         <Button 
-                          size="sm" 
+                          size="lg" 
                           disabled={playedAudios.has('global') && playingAudioId !== 'global'}
-                          className={(playedAudios.has('global') && playingAudioId !== 'global') ? 'bg-gray-400 text-white cursor-not-allowed' : 'bg-violet-600 hover:bg-violet-700'}
+                          className={`rounded-full font-black px-8 ${playedAudios.has('global') && playingAudioId !== 'global' ? 'bg-white/20 text-white/40' : 'bg-white text-violet-700 hover:bg-white/90 shadow-xl'}`}
                           onClick={() => toggleAudio('global', globalTranscript)}
                         >
-                          {playingAudioId === 'global' ? <><Volume2 className="h-4 w-4 mr-2 animate-pulse" /> Playing Audio...</> : <><Play className="h-4 w-4 mr-2" /> Play Audio (Once)</>}
+                          {playingAudioId === 'global' ? <><Volume2 className="h-5 w-5 mr-2 animate-pulse" /> PLAYING...</> : <><Play className="h-5 w-5 mr-2" /> PLAY AUDIO</>}
                         </Button>
                       </div>
-                      {/* Transcript text strictly hidden during real test */}
-                      <div className="hidden">
-                         <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{globalTranscript}</p>
-                      </div>
-                    </CardContent></Card>
+                      <CardContent className="p-8 text-center bg-violet-50/50">
+                         <div className="max-w-md mx-auto">
+                           <div className="w-16 h-16 bg-violet-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce"><Volume2 className="h-8 w-8 text-violet-600" /></div>
+                           <p className="text-sm font-bold text-violet-800">Recording will play once only. Answer questions as you listen. Text transcript is hidden for exam integrity.</p>
+                         </div>
+                      </CardContent>
+                    </Card>
                   )}
-                  {Array.isArray(sections) && sections.map((sec) => (
-                    <div key={sec.sectionNumber} className="space-y-4">
-                      {sec.transcript && (
-                        <Card className="bg-violet-50/50 border-violet-200"><CardContent className="p-5">
-                          <div className="flex items-center justify-between mb-4">
-                            <h3 className="font-bold flex items-center gap-2 text-violet-800"><Volume2 className="h-5 w-5" /> Transcript for {sec.title || `Section ${sec.sectionNumber}`}</h3>
-                            <Button 
-                              size="sm" 
-                              disabled={playedAudios.has(`sec-${sec.sectionNumber}`) && playingAudioId !== `sec-${sec.sectionNumber}`}
-                              className={(playedAudios.has(`sec-${sec.sectionNumber}`) && playingAudioId !== `sec-${sec.sectionNumber}`) ? 'bg-gray-400 text-white cursor-not-allowed' : 'bg-violet-600 hover:bg-violet-700 text-white'}
-                              onClick={() => toggleAudio(`sec-${sec.sectionNumber}`, sec.transcript || '')}
-                            >
-                              {playingAudioId === `sec-${sec.sectionNumber}` ? <><Volume2 className="h-4 w-4 mr-2 animate-pulse" /> Playing Audio...</> : <><Play className="h-4 w-4 mr-2" /> Play Audio (Once)</>}
-                            </Button>
-                          </div>
-                          {/* Transcript text strictly hidden during real test */}
-                          <div className="hidden">
-                            <p className="text-sm text-violet-900/80 leading-relaxed whitespace-pre-line">{sec.transcript}</p>
-                          </div>
-                        </CardContent></Card>
-                      )}
-                      <Card>
-                      <CardHeader><CardTitle className="text-base">{sec.title}</CardTitle></CardHeader>
-                      <CardContent className="space-y-5">
+                  {sections.map((sec) => (
+                    <div key={sec.sectionNumber} className="space-y-6">
+                      <div className="flex items-center gap-3 px-4"><div className="h-1 w-12 bg-violet-500 rounded-full" /><h4 className="font-black text-violet-600 uppercase tracking-widest text-sm">{sec.title || `Part ${sec.sectionNumber}`}</h4></div>
+                      <Card className="rounded-[40px] shadow-2xl border-none shadow-black/5 overflow-hidden">
+                      <CardContent className="p-10 space-y-10">
                         {Array.isArray(sec.questions) && sec.questions.map((q) => {
                           const key = `l_${qIdx++}`;
                           return (
-                            <div key={key} id={key} className="p-2 -mx-2">
-                              <p className="font-medium mb-3 text-sm flex items-start gap-2">
-                                <span className="bg-foreground text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 text-xs">
-                                  {qIdx}
-                                </span>
-                                <span className="pt-0.5">{q.questionText}</span>
-                              </p>
-
+                            <div key={key} id={key} className="p-6 rounded-3xl bg-muted/30 hover:bg-muted transition-colors border-2 border-transparent hover:border-violet-100">
+                              <div className="flex items-start gap-4 mb-6"><span className="bg-foreground text-white rounded-2xl w-10 h-10 flex items-center justify-center flex-shrink-0 font-black text-lg">{qIdx}</span><p className="font-bold text-lg pt-1 leading-relaxed">{q.questionText}</p></div>
                               {q.tableData ? (
-                                <div className="overflow-x-auto border rounded-xl my-4 bg-white/50">
+                                <div className="overflow-x-auto border-2 border-border/50 rounded-[30px] my-6 bg-white overflow-hidden">
                                   <table className="w-full text-sm text-left">
-                                    {q.tableData.headers && (
-                                      <thead className="bg-muted/50 text-muted-foreground uppercase text-xs">
-                                        <tr>
-                                          {q.tableData.headers.map((h, i) => <th key={i} className="px-4 py-3 border-b">{h}</th>)}
-                                        </tr>
-                                      </thead>
-                                    )}
+                                    {q.tableData.headers && <thead className="bg-muted text-foreground font-black uppercase text-[10px] tracking-widest"><tr>{q.tableData.headers.map((h, i) => <th key={i} className="px-6 py-4 border-b">{h}</th>)}</tr></thead>}
                                     <tbody>
                                       {q.tableData.rows.map((row, ri) => (
-                                        <tr key={ri} className="border-b last:border-b-0 hover:bg-muted/30">
+                                        <tr key={ri} className="border-b last:border-b-0 hover:bg-muted/10 transition-colors">
                                           {row.map((cell, ci) => (
-                                            <td key={ci} className="px-4 py-3 align-middle font-medium">
-                                              {cell.type === 'text' ? (
-                                                <span>{cell.value}</span>
-                                              ) : (
-                                                <input type="text" placeholder="Your answer..."
-                                                  value={answers[key] ?? ''}
-                                                  onChange={e => setAnswers(prev => ({ ...prev, [key]: e.target.value }))}
-                                                  className="w-full min-w-[120px] bg-background border rounded-md px-3 py-1.5 focus:ring-2 focus:ring-violet-400 focus:border-transparent transition-all outline-none"
-                                                />
+                                            <td key={ci} className="px-6 py-5 align-middle font-bold text-muted-foreground transition-all">
+                                              {cell.type === 'text' ? (<span>{cell.value}</span>) : (
+                                                <input type="text" placeholder="Answer..." value={answers[key] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, [key]: e.target.value }))}
+                                                  className="w-full bg-muted/50 border-2 border-transparent rounded-xl px-4 py-2.5 focus:ring-4 focus:ring-violet-400/20 focus:border-violet-400 focus:bg-white transition-all outline-none font-black text-foreground" />
                                               )}
                                             </td>
                                           ))}
@@ -684,17 +731,18 @@ export function FullMockTestPage() {
                                   </table>
                                 </div>
                               ) : Array.isArray(q.options) && q.options.length > 0 ? (
-                                <div className="space-y-2">
+                                <div className="grid md:grid-cols-2 gap-4">
                                   {q.options.map((opt) => (
-                                    <label key={opt} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${answers[key] === opt ? 'border-violet-400 bg-violet-50' : 'border-border hover:border-violet-300'}`}>
-                                      <input type="radio" name={key} value={opt} checked={answers[key] === opt} onChange={() => setAnswers(prev => ({ ...prev, [key]: opt }))} className="accent-violet-600" />
-                                      <span className="text-sm">{opt}</span>
+                                    <label key={opt} className={`flex items-center gap-4 p-5 rounded-2xl border-2 cursor-pointer transition-all ${answers[key] === opt ? 'border-violet-500 bg-violet-600 text-white shadow-xl translate-y-[-2px]' : 'border-border bg-white hover:border-violet-300'}`}>
+                                      <input type="radio" name={key} value={opt} checked={answers[key] === opt} onChange={() => setAnswers(prev => ({ ...prev, [key]: opt }))} className="hidden" />
+                                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${answers[key] === opt ? 'bg-white border-white' : 'border-muted-foreground/30'}`}>{answers[key] === opt && <div className="w-2.5 h-2.5 bg-violet-600 rounded-full" />}</div>
+                                      <span className="font-bold">{opt}</span>
                                     </label>
                                   ))}
                                 </div>
                               ) : (
                                 <input type="text" placeholder="Type your answer..." value={answers[key] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, [key]: e.target.value }))}
-                                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400" />
+                                  className="w-full border-2 border-border/50 rounded-2xl px-6 py-4 font-black focus:outline-none focus:ring-8 focus:ring-violet-400/10 focus:border-violet-400 transition-all" />
                               )}
                             </div>
                           );
@@ -707,82 +755,63 @@ export function FullMockTestPage() {
               );
             })()}
 
-            {/* ─── READING ─── */}
             {phase === 'reading' && (() => {
-              const passages = (td?.passages as Array<{ title: string; textContent: string; questions: Question[] }>) ?? [];
+              const passages = Array.isArray(td?.passages) ? td.passages : (td?.passage ? [td.passage] : []);
               let qIdx = 0;
               return (
-                <div className="space-y-6">
-                  {Array.isArray(passages) && passages.map((passage, pi) => (
-                    <div key={pi} className="space-y-4">
-                      <Card><CardContent className="p-5">
-                        <h2 className="text-lg font-bold mb-3 flex items-center gap-2">
-                          <BookOpen className="h-4 w-4 text-blue-600" /> {passage.title}
-                        </h2>
-                        <div className="prose prose-sm max-w-none text-muted-foreground leading-relaxed whitespace-pre-line text-sm">
-                          {passage.textContent}
+                <div className="space-y-16">
+                  {passages.map((passage: any, pi: number) => (
+                    <div key={pi} className="space-y-8">
+                       <div className="flex items-center gap-4 px-4"><div className="h-1.5 w-16 bg-blue-500 rounded-full" /><h4 className="font-black text-blue-600 uppercase tracking-[0.2em] text-sm">Passage {pi + 1}</h4></div>
+                      <Card className="rounded-[50px] shadow-3xl border-none overflow-hidden bg-white">
+                        <div className="bg-slate-50 p-10 border-b border-slate-100">
+                           <h2 className="text-3xl font-black mb-6 flex items-center gap-4 text-slate-800"><BookOpen className="h-8 w-8 text-blue-500" /> {passage.title}</h2>
+                           <div className="prose prose-lg max-w-none text-slate-600 leading-[1.8] font-medium whitespace-pre-line text-lg" dangerouslySetInnerHTML={{ __html: passage.textContent }} />
                         </div>
-                      </CardContent></Card>
-                      <Card><CardHeader><CardTitle className="text-base">Questions</CardTitle></CardHeader>
-                        <CardContent className="space-y-5">
-                          {Array.isArray(passage.questions) && passage.questions.map((q) => {
-                            const key = `r_${qIdx++}`;
-                            return (
-                              <div key={key} id={key} className="p-2 -mx-2">
-                                <p className="font-medium mb-3 text-sm flex items-start gap-2">
-                                   <span className="bg-foreground text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 text-xs">
-                                     {qIdx}
-                                   </span> 
-                                   <span className="pt-0.5">{q.questionText}</span>
-                                </p>
-                                
-                                {q.tableData ? (
-                                  <div className="overflow-x-auto border rounded-xl my-4 bg-white/50">
-                                    <table className="w-full text-sm text-left">
-                                      {q.tableData.headers && (
-                                        <thead className="bg-muted/50 text-muted-foreground uppercase text-xs">
-                                          <tr>
-                                            {q.tableData.headers.map((h, i) => <th key={i} className="px-4 py-3 border-b">{h}</th>)}
-                                          </tr>
-                                        </thead>
-                                      )}
-                                      <tbody>
-                                        {q.tableData.rows.map((row, ri) => (
-                                          <tr key={ri} className="border-b last:border-b-0 hover:bg-muted/30">
-                                            {row.map((cell, ci) => (
-                                              <td key={ci} className="px-4 py-3 align-middle font-medium">
-                                                {cell.type === 'text' ? (
-                                                  <span>{cell.value}</span>
-                                                ) : (
-                                                  <input type="text" placeholder="Your answer..." 
-                                                    value={answers[key] ?? ''} 
-                                                    onChange={e => setAnswers(prev => ({ ...prev, [key]: e.target.value }))}
-                                                    className="w-full min-w-[120px] bg-background border rounded-md px-3 py-1.5 focus:ring-2 focus:ring-violet-400 focus:border-transparent transition-all outline-none" 
-                                                  />
-                                                )}
-                                              </td>
-                                            ))}
-                                          </tr>
-                                        ))}
-                                      </tbody>
-                                    </table>
-                                  </div>
-                                ) : Array.isArray(q.options) && q.options.length > 0 ? (
-                                  <div className="space-y-2">
-                                    {q.options.map((opt) => (
-                                      <label key={opt} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${answers[key] === opt ? 'border-blue-400 bg-blue-50' : 'border-border hover:border-blue-300'}`}>
-                                        <input type="radio" name={key} value={opt} checked={answers[key] === opt} onChange={() => setAnswers(prev => ({ ...prev, [key]: opt }))} className="accent-blue-600" />
-                                        <span className="text-sm">{opt}</span>
-                                      </label>
-                                    ))}
-                                  </div>
-                                ) : (
-                                  <input type="text" placeholder="Type your answer..." value={answers[key] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, [key]: e.target.value }))}
-                                    className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
-                                )}
-                              </div>
-                            );
-                          })}
+                        <CardContent className="p-12 space-y-12">
+                           <h3 className="text-2xl font-black uppercase tracking-widest text-slate-400">Questions</h3>
+                           {Array.isArray(passage.questions) && passage.questions.map((q: any) => {
+                             const key = `r_${qIdx++}`;
+                             return (
+                               <div key={key} id={key} className="p-8 rounded-[40px] bg-slate-50/50 hover:bg-white transition-all border-2 border-transparent hover:border-blue-100 hover:shadow-2xl">
+                                 <div className="flex items-start gap-4 mb-8"><span className="bg-slate-800 text-white rounded-3xl w-12 h-12 flex items-center justify-center flex-shrink-0 font-black text-xl shadow-xl">{qIdx}</span><p className="font-bold text-xl pt-1 leading-relaxed text-slate-800">{q.questionText}</p></div>
+                                 {q.tableData ? (
+                                   <div className="overflow-x-auto border-4 border-slate-100 rounded-[35px] my-8 bg-white overflow-hidden shadow-inner">
+                                     <table className="w-full text-sm text-left">
+                                       {q.tableData.headers && <thead className="bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest"><tr>{q.tableData.headers.map((h: any, i: number) => <th key={i} className="px-8 py-6">{h}</th>)}</tr></thead>}
+                                       <tbody>
+                                         {q.tableData.rows.map((row: any, ri: number) => (
+                                           <tr key={ri} className="border-b last:border-b-0 hover:bg-slate-50 transition-colors">
+                                             {row.map((cell: any, ci: number) => (
+                                               <td key={ci} className="px-8 py-6 align-middle font-bold text-slate-600">
+                                                 {cell.type === 'text' ? (<span>{cell.value}</span>) : (
+                                                   <input type="text" placeholder="..." value={answers[key] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, [key]: e.target.value }))}
+                                                     className="w-full bg-slate-100 border-2 border-transparent rounded-2xl px-6 py-4 focus:ring-8 focus:ring-blue-400/20 focus:border-blue-400 focus:bg-white transition-all outline-none font-black text-slate-800" />
+                                                 )}
+                                               </td>
+                                             ))}
+                                           </tr>
+                                         ))}
+                                       </tbody>
+                                     </table>
+                                   </div>
+                                 ) : Array.isArray(q.options) && q.options.length > 0 ? (
+                                   <div className="grid md:grid-cols-2 gap-6">
+                                     {q.options.map((opt: any) => (
+                                       <label key={opt} className={`flex items-center gap-5 p-7 rounded-[30px] border-2 cursor-pointer transition-all ${answers[key] === opt ? 'border-blue-500 bg-blue-600 text-white shadow-2xl scale-[1.02]' : 'border-slate-200 bg-white hover:border-blue-300'}`}>
+                                         <input type="radio" name={key} value={opt} checked={answers[key] === opt} onChange={() => setAnswers(prev => ({ ...prev, [key]: opt }))} className="hidden" />
+                                         <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${answers[key] === opt ? 'bg-white border-white shadow-inner' : 'border-slate-300'}`}>{answers[key] === opt && <div className="w-3 h-3 bg-blue-600 rounded-full" />}</div>
+                                         <span className="font-black text-lg">{opt}</span>
+                                       </label>
+                                     ))}
+                                   </div>
+                                 ) : (
+                                   <input type="text" placeholder="Type your answer here..." value={answers[key] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, [key]: e.target.value }))}
+                                     className="w-full border-2 border-slate-200 rounded-[30px] px-8 py-6 font-black text-xl focus:outline-none focus:ring-[15px] focus:ring-blue-400/10 focus:border-blue-400 transition-all shadow-sm" />
+                                 )}
+                               </div>
+                             );
+                           })}
                         </CardContent>
                       </Card>
                     </div>
@@ -791,35 +820,31 @@ export function FullMockTestPage() {
               );
             })()}
 
-            {/* ─── WRITING ─── */}
             {phase === 'writing' && (() => {
               const task1 = td?.task1 as { title: string; prompt: string } | undefined;
               const task2 = td?.task2 as { title: string; prompt: string } | undefined;
               return (
-                <div className="space-y-6">
+                <div className="space-y-12">
+                   <div className="bg-emerald-600 text-white p-10 rounded-[40px] shadow-2xl flex items-center gap-6"><div className="p-4 bg-white/20 rounded-3xl"><PenTool className="h-10 w-10" /></div><div><h2 className="text-3xl font-black mb-1">Writing Assessment</h2><p className="text-emerald-100 font-medium">Complete both tasks. Your word count is tracked automatically.</p></div></div>
                   {task1 && (
-                    <Card>
-                      <CardHeader><CardTitle className="text-base flex items-center gap-2"><PenTool className="h-4 w-4 text-emerald-600" />{task1.title}</CardTitle></CardHeader>
-                      <CardContent className="space-y-4">
-                        <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 text-sm text-emerald-800" dangerouslySetInnerHTML={{ __html: task1.prompt }} />
-                        <Textarea placeholder="Write your Task 1 response here... (minimum 150 words)" rows={10}
+                    <Card className="rounded-[40px] shadow-3xl overflow-hidden border-none">
+                      <CardHeader className="bg-emerald-50 p-10 border-b border-emerald-100"><CardTitle className="text-2xl font-black text-emerald-900 flex items-center gap-3">Task 1: {task1.title}</CardTitle></CardHeader>
+                      <CardContent className="p-10 space-y-8">
+                        <div className="bg-emerald-50/50 border-2 border-emerald-100 rounded-3xl p-8 text-lg font-medium text-emerald-900/80 leading-relaxed" dangerouslySetInnerHTML={{ __html: task1.prompt }} />
+                        <Textarea placeholder="Begin typing your response here..." className="min-h-[400px] rounded-[30px] border-2 border-emerald-100 p-8 text-lg font-bold focus:ring-[12px] focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
                           value={answers['w_task1'] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, w_task1: e.target.value }))} />
-                        <p className="text-xs text-muted-foreground">
-                          Words: <strong>{(answers['w_task1'] ?? '').split(/\s+/).filter(Boolean).length}</strong> / minimum 150
-                        </p>
+                        <div className="flex items-center justify-between px-4"><p className="text-sm font-black uppercase tracking-widest text-emerald-400">Current Progress</p><Badge className="bg-emerald-600 text-white px-6 py-2 rounded-full font-black">{(answers['w_task1'] ?? '').split(/\s+/).filter(Boolean).length} / 150 Words</Badge></div>
                       </CardContent>
                     </Card>
                   )}
                   {task2 && (
-                    <Card>
-                      <CardHeader><CardTitle className="text-base flex items-center gap-2"><PenTool className="h-4 w-4 text-emerald-600" />{task2.title}</CardTitle></CardHeader>
-                      <CardContent className="space-y-4">
-                        <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 text-sm text-emerald-800" dangerouslySetInnerHTML={{ __html: task2.prompt }} />
-                        <Textarea placeholder="Write your Task 2 essay here... (minimum 250 words)" rows={14}
+                    <Card className="rounded-[40px] shadow-3xl overflow-hidden border-none">
+                      <CardHeader className="bg-emerald-50 p-10 border-b border-emerald-100"><CardTitle className="text-2xl font-black text-emerald-900 flex items-center gap-3">Task 2: {task2.title}</CardTitle></CardHeader>
+                      <CardContent className="p-10 space-y-8">
+                        <div className="bg-emerald-50/50 border-2 border-emerald-100 rounded-3xl p-8 text-lg font-medium text-emerald-900/80 leading-relaxed" dangerouslySetInnerHTML={{ __html: task2.prompt }} />
+                        <Textarea placeholder="Begin typing your essay here..." className="min-h-[600px] rounded-[30px] border-2 border-emerald-100 p-8 text-lg font-bold focus:ring-[12px] focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
                           value={answers['w_task2'] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, w_task2: e.target.value }))} />
-                        <p className="text-xs text-muted-foreground">
-                          Words: <strong>{(answers['w_task2'] ?? '').split(/\s+/).filter(Boolean).length}</strong> / minimum 250
-                        </p>
+                        <div className="flex items-center justify-between px-4"><p className="text-sm font-black uppercase tracking-widest text-emerald-400">Current Progress</p><Badge className="bg-emerald-600 text-white px-6 py-2 rounded-full font-black">{(answers['w_task2'] ?? '').split(/\s+/).filter(Boolean).length} / 250 Words</Badge></div>
                       </CardContent>
                     </Card>
                   )}
@@ -827,87 +852,69 @@ export function FullMockTestPage() {
               );
             })()}
 
-            {/* ─── SPEAKING ─── */}
             {phase === 'speaking' && (() => {
-              const part1 = td?.part1 as { title: string; instructions: string; questions: Array<{ text: string }> } | undefined;
+              const part1 = td?.part1 as { title: string; questions: Array<{ text: string }> } | undefined;
               const part2 = td?.part2 as { title: string; cueCard: { topic: string; bulletPoints: string[] } } | undefined;
               const part3 = td?.part3 as { title: string; questions: Array<{ text: string }> } | undefined;
               return (
-                <div className="space-y-6">
-                  <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 flex items-center gap-3">
-                    <Mic className="h-5 w-5 text-orange-600" />
-                    <p className="text-sm text-orange-800">In a real exam you'd speak aloud. Write your answers below to practice and get an estimate.</p>
-                  </div>
-    {[part1, part2 ? { title: part2.title, questions: [{ text: `Cue Card: ${part2.cueCard.topic}\n• ${part2.cueCard.bulletPoints.join('\n• ')}` }] } : undefined, part3].filter(Boolean).map((part, pi) => (
-                    <Card key={pi}>
-                      <CardHeader><CardTitle className="text-base">{(part as { title: string }).title}</CardTitle></CardHeader>
-                      <CardContent className="space-y-3">
-                        {Array.isArray((part as { questions: Array<{ text: string }> }).questions) && (part as { questions: Array<{ text: string }> }).questions.map((q, qi) => (
-                          <div key={qi} className="bg-orange-50 border border-orange-100 rounded-lg p-3">
-                            <p className="text-sm font-medium text-orange-900 whitespace-pre-line">{q.text}</p>
-                          </div>
+                <div className="space-y-12">
+                   <div className="bg-orange-600 text-white p-12 rounded-[50px] shadow-3xl flex items-center gap-8"><div className="p-5 bg-white/20 rounded-[30px] animate-pulse"><Mic className="h-12 w-12" /></div><div><h2 className="text-4xl font-black mb-2">Speaking Simulation</h2><p className="text-orange-100 text-lg font-medium">Record or type your responses to the examiner's prompts.</p></div></div>
+                   {[part1, part2 ? { title: part2.title, questions: [{ text: `Cue Card: ${part2.cueCard.topic}\n• ${part2.cueCard.bulletPoints.join('\n• ')}` }] } : undefined, part3].filter(Boolean).map((part, pi) => (
+                    <Card key={pi} className="rounded-[40px] shadow-2xl border-none overflow-hidden">
+                      <CardHeader className="bg-orange-50 p-10"><CardTitle className="text-2xl font-black text-orange-900">{(part as { title: string }).title}</CardTitle></CardHeader>
+                      <CardContent className="p-10 space-y-6">
+                        {(part as { questions: Array<{ text: string }> }).questions.map((q, qi) => (
+                          <div key={qi} className="bg-orange-50/50 border-2 border-orange-100 rounded-[30px] p-8 text-xl font-bold text-orange-900 leading-relaxed shadow-sm whitespace-pre-line">{q.text}</div>
                         ))}
                       </CardContent>
                     </Card>
                   ))}
-                  <Card>
-                    <CardHeader><CardTitle className="text-base">Your Written Responses</CardTitle></CardHeader>
-                    <CardContent>
-                      <Textarea placeholder="Write your speaking responses here (answer all parts)..." rows={12}
+                  <Card className="rounded-[40px] shadow-3xl border-none">
+                    <CardHeader className="p-10 text-center"><CardTitle className="text-3xl font-black">Your Combined Response</CardTitle><p className="text-muted-foreground font-medium">Type the transcript of your interview here for automated grading.</p></CardHeader>
+                    <CardContent className="p-10">
+                      <Textarea placeholder="Type all your speaking responses here..." rows={15} className="rounded-[40px] border-4 border-orange-100 p-10 text-xl font-bold focus:ring-[20px] focus:ring-orange-500/10 focus:border-orange-500 transition-all bg-orange-50/10"
                         value={answers['sp_answers'] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, sp_answers: e.target.value }))} />
-                      <p className="text-xs text-muted-foreground mt-2">
-                        Words: <strong>{(answers['sp_answers'] ?? '').split(/\s+/).filter(Boolean).length}</strong>
-                      </p>
+                      <div className="flex justify-center mt-8"><Badge className="bg-orange-600 text-white px-10 py-4 rounded-full font-black text-xl">{(answers['sp_answers'] ?? '').split(/\s+/).filter(Boolean).length} Words Collected</Badge></div>
                     </CardContent>
                   </Card>
                 </div>
               );
             })()}
-          </>
+          </div>
         )}
-
-        {/* Navigation bottom pad to ensure content isn't hidden behind the sticky bar */}
       </div>
 
       {navKeys.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-3 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] z-50 flex items-center justify-between">
-          <div className="flex-1 overflow-x-auto">
-            <div className="flex gap-2 min-w-max px-2">
+        <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t-2 border-border p-6 shadow-[0_-10px_50px_rgba(0,0,0,0.1)] z-50 flex items-center justify-between">
+          <div className="flex-1 overflow-x-auto no-scrollbar">
+            <div className="flex gap-3 min-w-max px-4">
               {navKeys.map((key, i) => (
-                <button 
-                  key={key} 
-                  onClick={() => scrollToQuestion(key)}
-                  className={`w-10 h-10 rounded-md border flex items-center justify-center font-medium text-sm transition-colors ${
-                    answers[key] 
-                      ? 'bg-foreground text-white border-foreground' 
-                      : 'bg-white hover:bg-gray-100'
-                  }`}
-                >
+                <button key={key} onClick={() => scrollToQuestion(key)}
+                  className={`w-14 h-14 rounded-2xl border-2 flex items-center justify-center font-black text-lg transition-all active:scale-90 ${answers[key] ? 'bg-slate-800 text-white border-slate-800 shadow-xl' : 'bg-white text-slate-400 border-slate-100 hover:border-slate-300'}`}>
                   {i + 1}
                 </button>
               ))}
             </div>
           </div>
-          <div className="pl-4 flex-shrink-0 flex items-center gap-3">
-             <div className="text-sm text-muted-foreground mr-4 hidden md:block">
-               {navKeys.filter(k => !!answers[k]).length} of {TOTAL_QUESTIONS_TARGET} Answered
+          <div className="pl-8 flex-shrink-0 flex items-center gap-8">
+             <div className="text-sm font-black uppercase tracking-widest text-slate-400 hidden xl:block">
+               <span className="text-slate-800">{navKeys.filter(k => !!answers[k]).length}</span> / {navKeys.length} Completed
              </div>
-             <Button size="default" variant="outline" onClick={() => submitSection()} className="border-foreground text-foreground">
-               Review & Submit <ChevronRight className="h-4 w-4 ml-1" />
+             <Button size="lg" variant="outline" onClick={() => submitSection()} className="border-4 border-slate-800 text-slate-800 font-black rounded-2xl px-8 hover:bg-slate-800 hover:text-white transition-all shadow-xl">
+               SUBMIT SECTION <ChevronRight className="h-6 w-6 ml-2" />
              </Button>
           </div>
         </div>
       )}
 
-      {/* For writing/speaking where there's no grid, show a simpler submit bar */}
       {navKeys.length === 0 && test && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 shadow-lg z-50 flex justify-end">
+        <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t-2 border-border p-8 shadow-[0_-10px_50px_rgba(0,0,0,0.1)] z-50 flex justify-center">
           <Button size="lg" onClick={() => submitSection()}
-            className={`${currentSection.bg} text-white hover:opacity-90 font-bold px-8 rounded-xl shadow-lg`}>
+            className={`min-w-[320px] ${currentSection.bg} text-white hover:opacity-90 font-black text-2xl py-10 rounded-[40px] shadow-2xl shadow-indigo-500/30 scale-110 active:scale-100 transition-all`}>
             {sectionIndex < SECTIONS.length - 1 ? (
-              <><CheckCircle className="h-5 w-5 mr-2" /> Continue to Next Section</>
+              <><CheckCircle className="h-8 w-8 mr-4" /> CONTINUE TO NEXT SECTION</>
             ) : (
-              <><Award className="h-5 w-5 mr-2" /> Finish Test</>
+              <><Award className="h-8 w-8 mr-4" /> FINISH & SEE RESULTS</>
             )}
           </Button>
         </div>
