@@ -41,6 +41,7 @@ import {
   Volume2
 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { cn } from '@/lib/utils';
 import {
   ReadingTest,
   ReadingPassage,
