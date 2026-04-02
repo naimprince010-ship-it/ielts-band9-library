@@ -234,37 +234,61 @@ Return ONLY valid JSON, no markdown or explanation.
 `;
 
 async function callOpenAI(prompt: string): Promise<string> {
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${OPENAI_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: 'gpt-4o',
-      messages: [
-        {
-          role: 'system',
-          content: 'You are an expert IELTS exam content creator. Always respond with valid JSON only, no markdown formatting or explanations.'
-        },
-        {
-          role: 'user',
-          content: prompt
-        }
-      ],
-      temperature: 0.7,
-      max_tokens: 4000,
-    }),
-  });
+  // Try gpt-4o-mini first (faster and cheaper), fallback to gpt-3.5-turbo
+  const models = ['gpt-4o-mini', 'gpt-3.5-turbo'];
+  let lastError: Error | null = null;
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    console.error('OpenAI API Error:', errorData);
-    throw new Error(`OpenAI API error: ${response.status}`);
+  for (const model of models) {
+    try {
+      console.log(`Trying OpenAI model: ${model}`);
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model,
+          messages: [
+            {
+              role: 'system',
+              content: 'You are an expert IELTS exam content creator. Always respond with valid JSON only, no markdown formatting or explanations.'
+            },
+            {
+              role: 'user',
+              content: prompt
+            }
+          ],
+          temperature: 0.7,
+          max_tokens: 4000,
+        }),
+      });
+
+      const responseText = await response.text();
+
+      if (!response.ok) {
+        let errorMessage = `OpenAI API error: ${response.status}`;
+        try {
+          const errorData = JSON.parse(responseText);
+          console.error(`OpenAI API Error (${model}):`, errorData);
+          errorMessage = errorData.error?.message || errorMessage;
+        } catch {
+          console.error(`OpenAI API Error (${model}):`, responseText.substring(0, 200));
+        }
+        lastError = new Error(errorMessage);
+        continue; // Try next model
+      }
+
+      const data = JSON.parse(responseText);
+      console.log(`Successfully used model: ${model}`);
+      return data.choices[0].message.content;
+    } catch (err) {
+      lastError = err instanceof Error ? err : new Error('Unknown error');
+      console.error(`Error with model ${model}:`, lastError.message);
+    }
   }
 
-  const data = await response.json();
-  return data.choices[0].message.content;
+  throw lastError || new Error('All OpenAI models failed');
 }
 
 async function callGemini(prompt: string): Promise<string> {
