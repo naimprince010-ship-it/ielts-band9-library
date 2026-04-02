@@ -66,6 +66,7 @@ export function ReadingPassageManagement() {
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [aiGenerated, setAiGenerated] = useState(false);
   const [activeTab, setActiveTab] = useState<'passages' | 'progress'>('passages');
   const [aiTopic, setAiTopic] = useState('');
 
@@ -161,6 +162,7 @@ export function ReadingPassageManagement() {
     setError('');
     setSuccess('');
     setAiTopic('');
+    setAiGenerated(false);
     setIsEditorOpen(true);
   };
 
@@ -212,7 +214,8 @@ export function ReadingPassageManagement() {
           content: plainText,
           topic: aiTopic
         });
-        setSuccess('Content generated successfully! Review and edit as needed.');
+        setAiGenerated(true);
+        setSuccess('✅ Content generated! Review below and click "Save Passage" to save it.');
       } else {
         throw new Error('Invalid response format');
       }
@@ -652,18 +655,28 @@ export function ReadingPassageManagement() {
               <Label>Publish immediately</Label>
             </div>
 
+            {aiGenerated && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-center gap-2 text-blue-800 text-sm">
+                <CheckCircle className="h-4 w-4 text-blue-600 flex-shrink-0" />
+                <span>AI content is ready! Click <strong>Save Passage</strong> below to save it to the database.</span>
+              </div>
+            )}
             <div className="flex justify-end gap-2">
               <Button variant="outline" onClick={() => setIsEditorOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleSavePassage} disabled={saving}>
+              <Button
+                onClick={handleSavePassage}
+                disabled={saving}
+                className={aiGenerated ? 'bg-green-600 hover:bg-green-700 text-white animate-pulse' : ''}
+              >
                 {saving ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                     Saving...
                   </>
                 ) : (
-                  'Save Passage'
+                  aiGenerated ? '💾 Save Passage (Required)' : 'Save Passage'
                 )}
               </Button>
             </div>
