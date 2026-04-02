@@ -263,7 +263,7 @@ export function ReadingPassageManagement() {
           .update({
             title: formData.title,
             content: formData.content,
-            difficulty: formData.difficulty,
+            difficulty: formData.difficulty.toLowerCase(),
             topic: formData.topic,
             time_limit: formData.time_limit,
             is_published: formData.is_published,
@@ -279,7 +279,7 @@ export function ReadingPassageManagement() {
           .insert({
             title: formData.title,
             content: formData.content,
-            difficulty: formData.difficulty,
+            difficulty: formData.difficulty.toLowerCase(),
             topic: formData.topic,
             time_limit: formData.time_limit,
             is_published: formData.is_published
