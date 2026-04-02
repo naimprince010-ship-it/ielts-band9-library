@@ -98,6 +98,7 @@ export function MockTestManagement() {
   const [mockTests, setMockTests] = useState<MockTest[]>([]);
   const [loading, setLoading] = useState(true);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
+  const [isFullTestModalOpen, setIsFullTestModalOpen] = useState(false);
   const [editingTest, setEditingTest] = useState<MockTest | null>(null);
   const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
@@ -451,7 +452,12 @@ export function MockTestManagement() {
                 Create and manage IELTS mock tests for all modules
               </CardDescription>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
+              <Button onClick={() => setIsFullTestModalOpen(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2">
+                <Sparkles className="h-4 w-4" />
+                AI Generate Full Test
+              </Button>
+              <div className="w-px h-10 bg-slate-200 mx-2 hidden lg:block"></div>
               <Button onClick={() => handleNewTest('reading')} variant="outline" className="gap-2">
                 <FileText className="h-4 w-4" />
                 Reading
@@ -645,6 +651,8 @@ export function MockTestManagement() {
           </div>
         </DialogContent>
       </Dialog>
+      
+      <FullTestGeneratorDialog open={isFullTestModalOpen} onOpenChange={setIsFullTestModalOpen} onComplete={fetchMockTests} />
     </div>
   );
 }
@@ -2268,5 +2276,153 @@ function QuestionBuilder({
         />
       </div>
     </div>
+  );
+}
+
+function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boolean, onOpenChange: (open: boolean) => void, onComplete: () => void }) {
+  const [topic, setTopic] = useState('');
+  const [difficulty, setDifficulty] = useState<'easy'|'medium'|'hard'>('medium');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [progress, setProgress] = useState<string>('');
+  const [error, setError] = useState<string>('');
+
+  const generateModule = async (moduleType: string) => {
+    setProgress(`Generating ${moduleType} module... \n(This may take 15-30 seconds per module)`);
+    const response = await fetch('/api/generate-content', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ moduleType, topic: topic.trim(), difficulty, testType: 'academic', provider: 'openai' })
+    });
+    const rawText = await response.text();
+    let data;
+    try { data = JSON.parse(rawText); } catch { throw new Error(`Invalid AI response for ${moduleType} `); }
+    if (!response.ok || !data.success || !data.content) throw new Error(data.error || `Failed to generate ${moduleType}`);
+    return data.content;
+  };
+
+  const handleGenerate = async () => {
+    if (!topic.trim()) { setError('Please enter a topic'); return; }
+    setIsGenerating(true); setError('');
+    try {
+      const now = Date.now();
+      // 1. Reading
+      const readingData = await generateModule('reading') as { passages: any[] };
+      const readingTest = {
+        id: `reading-${now}`, title: `Mock Test: ${topic} - Reading`, testType: 'academic', timeLimit: 3600,
+        instructions: 'Read the passages carefully and answer the questions.',
+        passages: readingData.passages.map((p: any, pIndex: number) => ({
+          id: `passage-${now}-${pIndex}`, passageNumber: pIndex + 1, title: p.title, content: p.content,
+          questions: p.questions.map((q: any, qIndex: number) => ({
+            id: `q-${now}-${pIndex}-${qIndex}`, questionNumber: qIndex + 1, type: q.type, questionText: q.questionText,
+            options: q.options, correctAnswer: q.correctAnswer, acceptedAnswers: q.acceptedAnswers
+          }))
+        })),
+        totalQuestions: readingData.passages.reduce((sum: number, p: any) => sum + (p.questions?.length || 0), 0)
+      };
+
+      // 2. Listening
+      const listeningData = await generateModule('listening') as { transcript: string; sections: any[] };
+      let currentQNum = 1;
+      const listeningSections = listeningData.sections.map((s: any, sIndex: number) => {
+        const startNum = currentQNum;
+        const mappedQuestions = s.questions.map((q: any, qIndex: number) => {
+          const num = currentQNum++;
+          return {
+            id: `lq-${now}-${sIndex}-${qIndex}`, questionNumber: num, type: q.type, questionText: q.questionText,
+            options: q.options, correctAnswer: q.correctAnswer, acceptedAnswers: q.acceptedAnswers
+          };
+        });
+        return {
+          id: `section-${now}-${sIndex}`, sectionNumber: sIndex + 1, title: s.title, audioStartTime: 0, audioEndTime: 0,
+          transcript: listeningData.transcript, questions: mappedQuestions, questionRange: { start: startNum, end: currentQNum - 1 }
+        };
+      });
+      const listeningTest = {
+        id: `listening-${now}`, title: `Mock Test: ${topic} - Listening`, totalQuestions: currentQNum - 1,
+        audioUrl: '', audioDuration: 0, transferTime: 600, sections: listeningSections, instructions: 'Listen to the audio and answer.'
+      };
+
+      // 3. Writing
+      const writingData = await generateModule('writing') as { task1: any; task2: any };
+      const writingTest = {
+        id: `writing-${now}`, title: `Mock Test: ${topic} - Writing`, testType: 'academic', timeLimit: 3600,
+        instructions: 'Complete both writing tasks within the time limit.',
+        tasks: [
+          { id: `task-1-${now}`, taskNumber: 1, taskType: 'task1', title: writingData.task1.title || 'Task 1', prompt: writingData.task1.prompt, minWords: 150, recommendedTime: 20, sampleAnswer: writingData.task1.sampleAnswer },
+          { id: `task-2-${now}`, taskNumber: 2, taskType: 'task2', title: writingData.task2.title || 'Task 2', prompt: writingData.task2.prompt, minWords: 250, recommendedTime: 40, sampleAnswer: writingData.task2.sampleAnswer }
+        ]
+      };
+
+      // 4. Speaking
+      const speakingData = await generateModule('speaking') as any;
+      const speakingTest = {
+        id: `speaking-${now}`, title: `Mock Test: ${topic} - Speaking`, instructions: 'Answer the questions naturally.',
+        parts: [
+          { id: `part-1-${now}`, partNumber: 1, partType: 'part1', title: 'Part 1: Introduction', instructions: 'General questions.',
+            questions: speakingData.part1?.questions?.map((q: any, i: number) => ({ id: `sq-1-${i}`, questionNumber: i + 1, text: q.text, thinkTime: q.thinkTime || 5, recordTime: q.recordTime || 15 })) },
+          { id: `part-2-${now}`, partNumber: 2, partType: 'part2', title: 'Part 2: Cue Card', instructions: 'You have 1 minute to prepare.',
+            cueCard: { id: `cue-${now}`, topic: speakingData.part2?.topic, bulletPoints: speakingData.part2?.bulletPoints || [], prepTime: 60, recordTime: 120 } },
+          { id: `part-3-${now}`, partNumber: 3, partType: 'part3', title: 'Part 3: Discussion', instructions: 'Follow-up questions.',
+            questions: speakingData.part3?.questions?.map((q: any, i: number) => ({ id: `sq-3-${i}`, questionNumber: i + 1, text: q.text, thinkTime: q.thinkTime || 5, recordTime: q.recordTime || 30 })) }
+        ]
+      };
+
+      setProgress('Saving to database...');
+      if (!isSupabaseConfigured() || !supabase) throw new Error("Supabase is not configured");
+      const insertData = [
+        { title: readingTest.title, module_type: 'reading', test_data: readingTest, is_published: true, is_premium: false },
+        { title: listeningTest.title, module_type: 'listening', test_data: listeningTest, is_published: true, is_premium: false },
+        { title: writingTest.title, module_type: 'writing', test_data: writingTest, is_published: true, is_premium: false },
+        { title: speakingTest.title, module_type: 'speaking', test_data: speakingTest, is_published: true, is_premium: false }
+      ];
+      const { error: insertError } = await supabase.from('mock_tests').insert(insertData);
+      if (insertError) throw insertError;
+      
+      setProgress('Done! Refreshing list...');
+      setTimeout(() => { onComplete(); onOpenChange(false); setTopic(''); setProgress(''); }, 1500);
+    } catch (err: any) {
+      setError(err.message || 'An error occurred during generation');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md bg-white">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2 text-xl"><Sparkles className="h-5 w-5 text-indigo-500" /> AI Full Test Generator</DialogTitle>
+          <DialogDescription>Generates **Reading, Listening, Writing, and Speaking** completely from scratch on any topic, instantly publishing them together for a full mock test run.</DialogDescription>
+        </DialogHeader>
+        <div className="space-y-5 pt-2">
+          {error && <Alert className="bg-red-50 text-red-800 border-red-200"><AlertCircle className="h-4 w-4 text-red-600"/><AlertDescription>{error}</AlertDescription></Alert>}
+          <div>
+            <Label className="font-semibold text-slate-800">Test Topic / Theme</Label>
+            <Input value={topic} onChange={e => setTopic(e.target.value)} placeholder="e.g., Environment, Space Exploration, Architecture" disabled={isGenerating} className="mt-1.5 focus-visible:ring-indigo-600" />
+            <p className="text-[11px] text-slate-500 mt-1">All 4 modules will follow this theme</p>
+          </div>
+          <div>
+            <Label className="font-semibold text-slate-800">Target Difficulty</Label>
+            <Select value={difficulty} onValueChange={(val: any) => setDifficulty(val)} disabled={isGenerating}>
+              <SelectTrigger className="mt-1.5 focus-visible:ring-indigo-600"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="easy">Easy (Band 4.0 - 5.5)</SelectItem>
+                <SelectItem value="medium">Medium (Band 6.0 - 7.5)</SelectItem>
+                <SelectItem value="hard">Hard (Band 8.0 - 9.0)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          {progress && (
+            <div className="flex flex-col items-center justify-center p-4 bg-indigo-50/80 border border-indigo-100 text-indigo-700 rounded-xl mt-4">
+              {isGenerating && <Loader2 className="h-6 w-6 animate-spin mb-3 text-indigo-600" />}
+              <span className="text-sm font-bold text-center whitespace-pre-line leading-relaxed">{progress}</span>
+            </div>
+          )}
+          <Button onClick={handleGenerate} className="w-full h-12 text-base font-bold bg-indigo-600 hover:bg-indigo-700 mt-2" disabled={isGenerating || !topic.trim()}>
+            {isGenerating ? 'Please wait...' : 'Generate 4 Modules Instantly'}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
