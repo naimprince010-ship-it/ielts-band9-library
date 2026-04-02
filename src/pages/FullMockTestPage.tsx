@@ -145,6 +145,7 @@ export function FullMockTestPage() {
             .select('*')
             .eq('module_type', s.module)
             .eq('is_published', true)
+            .order('created_at', { ascending: false })
             .limit(1)
             .maybeSingle();
           if (data) result[s.module] = data as MockTest;
@@ -433,8 +434,8 @@ export function FullMockTestPage() {
           <>
             {/* ─── LISTENING ─── */}
             {phase === 'listening' && (() => {
-              const sections = (td?.sections as Array<{ sectionNumber: number; title: string; questions: Question[] }>) ?? [];
-              const transcript = typeof td?.transcript === 'string' ? td.transcript : '';
+              const sections = (td?.sections as Array<{ sectionNumber: number; title: string; questions: Question[], transcript?: string }>) ?? [];
+              const globalTranscript = typeof td?.transcript === 'string' ? td.transcript : '';
               let qIdx = 0;
               return (
                 <div className="space-y-6">
@@ -445,14 +446,21 @@ export function FullMockTestPage() {
                       <p className="text-sm text-violet-600">In a real exam you'd hear audio. Read the transcript below and answer the questions.</p>
                     </div>
                   </div>
-                  {transcript && (
+                  {globalTranscript && (
                     <Card><CardContent className="p-5">
                       <h3 className="font-bold mb-3 flex items-center gap-2"><Headphones className="h-4 w-4 text-violet-600" /> Audio Transcript</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{transcript}</p>
+                      <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{globalTranscript}</p>
                     </CardContent></Card>
                   )}
                   {Array.isArray(sections) && sections.map((sec) => (
-                    <Card key={sec.sectionNumber}>
+                    <div key={sec.sectionNumber} className="space-y-4">
+                      {sec.transcript && !globalTranscript && (
+                        <Card className="bg-violet-50/50 border-violet-100"><CardContent className="p-5">
+                          <h3 className="font-bold mb-3 flex items-center gap-2 text-violet-800"><Volume2 className="h-4 w-4" /> Transcript for {sec.title || `Section ${sec.sectionNumber}`}</h3>
+                          <p className="text-sm text-violet-900/80 leading-relaxed whitespace-pre-line">{sec.transcript}</p>
+                        </CardContent></Card>
+                      )}
+                      <Card>
                       <CardHeader><CardTitle className="text-base">{sec.title}</CardTitle></CardHeader>
                       <CardContent className="space-y-5">
                         {Array.isArray(sec.questions) && sec.questions.map((q) => {
@@ -478,6 +486,7 @@ export function FullMockTestPage() {
                         })}
                       </CardContent>
                     </Card>
+                    </div>
                   ))}
                 </div>
               );
