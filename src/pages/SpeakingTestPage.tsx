@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { 
-  Mic, 
+import {
+  Mic,
   MicOff,
-  Clock, 
+  Clock,
   Play,
   CheckCircle2,
   AlertTriangle,
@@ -17,8 +17,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { 
-  SpeakingTest, 
+import {
+  SpeakingTest,
   SpeakingTestSession,
   SpeakingRecording,
   SpeakingTestResult
@@ -146,7 +146,8 @@ const uploadRecording = async (_blob: Blob, questionId: string): Promise<string>
 export default function SpeakingTestPage() {
   const location = useLocation();
   const stateData = location.state as { testData?: SpeakingTest; testId?: string; testTitle?: string } | null;
-  const [test] = useState<SpeakingTest>(stateData?.testData || SAMPLE_SPEAKING_TEST);
+  const hasValidData = stateData?.testData && Array.isArray(stateData.testData.parts) && stateData.testData.parts.length > 0;
+  const [test] = useState<SpeakingTest>(hasValidData ? (stateData!.testData as SpeakingTest) : SAMPLE_SPEAKING_TEST);
   const [phase, setPhase] = useState<SpeakingTestSession['phase']>('system-check');
   const [currentPartIndex, setCurrentPartIndex] = useState(0);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -155,13 +156,13 @@ export default function SpeakingTestPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [result, setResult] = useState<SpeakingTestResult | null>(null);
   const [startedAt] = useState<number>(Date.now());
-  
+
   // Microphone state
   const [hasMicPermission, setHasMicPermission] = useState<boolean | null>(null);
   const [micStream, setMicStream] = useState<MediaStream | null>(null);
   const [volumeLevel, setVolumeLevel] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
-  
+
   // MediaRecorder refs
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
@@ -180,7 +181,7 @@ export default function SpeakingTestPage() {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       setMicStream(stream);
       setHasMicPermission(true);
-      
+
       // Setup audio analyser for volume meter
       const audioContext = new AudioContext();
       const source = audioContext.createMediaStreamSource(stream);
@@ -188,7 +189,7 @@ export default function SpeakingTestPage() {
       analyser.fftSize = 256;
       source.connect(analyser);
       analyserRef.current = analyser;
-      
+
       // Start volume monitoring
       const updateVolume = () => {
         if (analyserRef.current) {
@@ -200,7 +201,7 @@ export default function SpeakingTestPage() {
         animationFrameRef.current = requestAnimationFrame(updateVolume);
       };
       updateVolume();
-      
+
     } catch (error) {
       console.error('Microphone permission denied:', error);
       setHasMicPermission(false);
@@ -224,59 +225,59 @@ export default function SpeakingTestPage() {
   // ============================================
   const startRecording = useCallback(() => {
     if (!micStream) return;
-    
+
     audioChunksRef.current = [];
     const mediaRecorder = new MediaRecorder(micStream, {
       mimeType: 'audio/webm;codecs=opus'
     });
-    
+
     mediaRecorder.ondataavailable = (event) => {
       if (event.data.size > 0) {
         audioChunksRef.current.push(event.data);
       }
     };
-    
+
     mediaRecorder.onstop = async () => {
       const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
       const audioUrl = URL.createObjectURL(audioBlob);
-      
+
       // Get current question ID
-      const questionId = currentPart.partNumber === 2 
+      const questionId = currentPart.partNumber === 2
         ? currentCueCard?.id || 'unknown'
         : currentQuestion?.id || 'unknown';
-      
+
       // Create recording entry
       const newRecording: SpeakingRecording = {
         questionId,
         partNumber: currentPart.partNumber,
         audioBlob,
         audioUrl,
-        duration: currentPart.partNumber === 2 
+        duration: currentPart.partNumber === 2
           ? (currentCueCard?.recordTime || 120) - timeRemaining
           : (currentQuestion?.recordTime || 30) - timeRemaining,
         uploadStatus: 'uploading'
       };
-      
+
       setRecordings(prev => [...prev, newRecording]);
-      
+
       // Auto-upload
       try {
         const uploadedUrl = await uploadRecording(audioBlob, questionId);
-        setRecordings(prev => prev.map(r => 
-          r.questionId === questionId 
+        setRecordings(prev => prev.map(r =>
+          r.questionId === questionId
             ? { ...r, uploadStatus: 'uploaded', uploadedUrl }
             : r
         ));
       } catch (error) {
         console.error('Upload failed:', error);
-        setRecordings(prev => prev.map(r => 
-          r.questionId === questionId 
+        setRecordings(prev => prev.map(r =>
+          r.questionId === questionId
             ? { ...r, uploadStatus: 'failed' }
             : r
         ));
       }
     };
-    
+
     mediaRecorderRef.current = mediaRecorder;
     mediaRecorder.start(1000); // Collect data every second
     setIsRecording(true);
@@ -303,12 +304,12 @@ export default function SpeakingTestPage() {
       setTimeRemaining(prev => {
         if (prev <= 1) {
           clearInterval(timer);
-          
+
           // Handle phase transitions
           if (phase === 'think') {
             // After think time, start recording
             setPhase('recording');
-            const recordTime = currentPart.partNumber === 2 
+            const recordTime = currentPart.partNumber === 2
               ? currentCueCard?.recordTime || 120
               : currentQuestion?.recordTime || 30;
             setTimeRemaining(recordTime);
@@ -337,7 +338,7 @@ export default function SpeakingTestPage() {
   // ============================================
   const moveToNext = useCallback(() => {
     const currentPartData = test.parts[currentPartIndex];
-    
+
     if (currentPartData.partNumber === 2) {
       // Part 2 only has one cue card, move to Part 3
       if (currentPartIndex < 2) {
@@ -376,7 +377,7 @@ export default function SpeakingTestPage() {
   // ============================================
   const startPart = useCallback(() => {
     const part = test.parts[currentPartIndex];
-    
+
     if (part.partNumber === 2) {
       // Part 2: Start with prep time
       setPhase('prep');
@@ -393,7 +394,7 @@ export default function SpeakingTestPage() {
   // ============================================
   const handleSubmit = useCallback(() => {
     const timeTaken = Math.floor((Date.now() - startedAt) / 1000);
-    
+
     const testResult: SpeakingTestResult = {
       testId: test.id,
       timeTaken,
@@ -408,7 +409,7 @@ export default function SpeakingTestPage() {
     setResult(testResult);
     setIsSubmitted(true);
     setPhase('completed');
-    
+
     // Stop mic stream
     if (micStream) {
       micStream.getTracks().forEach(track => track.stop());
@@ -435,7 +436,7 @@ export default function SpeakingTestPage() {
 
             {hasMicPermission === null && (
               <div className="space-y-4">
-                <Button 
+                <Button
                   onClick={requestMicPermission}
                   className="w-full bg-indigo-600 hover:bg-indigo-700 gap-2"
                   size="lg"
@@ -466,7 +467,7 @@ export default function SpeakingTestPage() {
                     <CheckCircle2 className="h-5 w-5" />
                     <span className="font-medium">Microphone Connected</span>
                   </div>
-                  
+
                   {/* Volume Meter */}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm text-gray-600">
@@ -474,11 +475,10 @@ export default function SpeakingTestPage() {
                       <span>{Math.round(volumeLevel)}%</span>
                     </div>
                     <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
-                      <div 
-                        className={`h-full transition-all duration-100 ${
-                          volumeLevel > 60 ? 'bg-green-500' : 
-                          volumeLevel > 30 ? 'bg-yellow-500' : 'bg-red-500'
-                        }`}
+                      <div
+                        className={`h-full transition-all duration-100 ${volumeLevel > 60 ? 'bg-green-500' :
+                            volumeLevel > 30 ? 'bg-yellow-500' : 'bg-red-500'
+                          }`}
                         style={{ width: `${volumeLevel}%` }}
                       />
                     </div>
@@ -488,7 +488,7 @@ export default function SpeakingTestPage() {
                   </div>
                 </div>
 
-                <Button 
+                <Button
                   onClick={() => setPhase('instructions')}
                   className="w-full bg-indigo-600 hover:bg-indigo-700 gap-2"
                   size="lg"
@@ -614,7 +614,7 @@ export default function SpeakingTestPage() {
               </div>
             )}
 
-            <Button 
+            <Button
               onClick={startPart}
               className="w-full bg-indigo-600 hover:bg-indigo-700 gap-2"
               size="lg"
@@ -639,7 +639,7 @@ export default function SpeakingTestPage() {
           <Badge variant="outline">Part {currentPart.partNumber}</Badge>
           <span className="text-gray-600">{currentPart.title}</span>
         </div>
-        
+
         <div className="flex items-center gap-4">
           {/* Recording Indicator */}
           {isRecording && (
@@ -648,13 +648,12 @@ export default function SpeakingTestPage() {
               <span className="text-sm font-medium">Recording</span>
             </div>
           )}
-          
+
           {/* Timer */}
-          <div className={`flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-lg ${
-            phase === 'recording' ? 'bg-red-100 text-red-700' :
-            phase === 'prep' ? 'bg-amber-100 text-amber-700' :
-            'bg-indigo-100 text-indigo-700'
-          }`}>
+          <div className={`flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-lg ${phase === 'recording' ? 'bg-red-100 text-red-700' :
+              phase === 'prep' ? 'bg-amber-100 text-amber-700' :
+                'bg-indigo-100 text-indigo-700'
+            }`}>
             <Clock className="h-5 w-5" />
             <span>{formatTime(timeRemaining)}</span>
           </div>
@@ -740,15 +739,15 @@ export default function SpeakingTestPage() {
                 </span>
                 <span>{formatTime(timeRemaining)} remaining</span>
               </div>
-              <Progress 
+              <Progress
                 value={(() => {
-                  const totalTime = phase === 'prep' 
+                  const totalTime = phase === 'prep'
                     ? currentCueCard?.prepTime || 60
                     : phase === 'think'
-                    ? currentQuestion?.thinkTime || 3
-                    : currentPart.partNumber === 2
-                    ? currentCueCard?.recordTime || 120
-                    : currentQuestion?.recordTime || 30;
+                      ? currentQuestion?.thinkTime || 3
+                      : currentPart.partNumber === 2
+                        ? currentCueCard?.recordTime || 120
+                        : currentQuestion?.recordTime || 30;
                   return ((totalTime - timeRemaining) / totalTime) * 100;
                 })()}
                 className="h-2"

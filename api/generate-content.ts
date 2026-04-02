@@ -316,12 +316,12 @@ async function callGemini(prompt: string): Promise<string> {
     console.error('Gemini returned non-JSON response:', responseText.substring(0, 200));
     throw new Error('Gemini API returned an invalid response');
   }
-  
+
   if (!data.candidates || !data.candidates[0]?.content?.parts?.[0]?.text) {
     console.error('Unexpected Gemini response structure:', data);
     throw new Error('Invalid response structure from Gemini');
   }
-  
+
   return data.candidates[0].content.parts[0].text;
 }
 
@@ -382,7 +382,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     console.log(`Generating ${moduleType} content with ${provider}, topic: ${topic}, difficulty: ${difficulty}`);
     let prompt: string;
-    
+
     switch (moduleType) {
       case 'reading':
         prompt = READING_PROMPT(topic, difficulty, testType);
@@ -400,18 +400,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(400).json({ error: 'Invalid module type' });
     }
 
-    const rawResponse = provider === 'gemini' 
-      ? await callGemini(prompt) 
+    const rawResponse = provider === 'gemini'
+      ? await callGemini(prompt)
       : await callOpenAI(prompt);
     const cleanedResponse = cleanJsonResponse(rawResponse);
-    
+
     let parsedContent;
     try {
       parsedContent = JSON.parse(cleanedResponse);
     } catch (parseError) {
       console.error('JSON Parse Error:', parseError);
       console.error('Raw response:', rawResponse);
-      return res.status(500).json({ 
+      return res.status(500).json({
         error: 'Failed to parse AI response',
         rawResponse: cleanedResponse.substring(0, 500)
       });

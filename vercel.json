@@ -1,12 +1,21 @@
 {
   "functions": {
     "api/*.ts": {
-      "runtime": "@vercel/node@3.2.0"
+      "runtime": "@vercel/node@3.2.0",
+      "maxDuration": 60
     }
   },
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/index.html" }
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
   ]
 }

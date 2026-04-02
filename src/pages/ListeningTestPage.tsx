@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { 
-  Volume2, 
+import {
+  Volume2,
   VolumeX,
-  Flag, 
+  Flag,
   AlertCircle,
   CheckCircle2,
   Send,
@@ -21,8 +21,8 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { 
-  ListeningTest, 
+import {
+  ListeningTest,
   ListeningQuestion,
   ListeningTestSession,
   UserAnswer,
@@ -30,9 +30,9 @@ import {
   ListeningTestResult,
   AudioState
 } from '@/types';
-import { 
-  gradeObjectiveTest, 
-  formatBandScore, 
+import {
+  gradeObjectiveTest,
+  formatBandScore,
   getBandScoreColor,
   getBandScoreLevel
 } from '@/utils/scoring';
@@ -269,7 +269,8 @@ const getStatusColor = (status: QuestionStatus): string => {
 export default function ListeningTestPage() {
   const location = useLocation();
   const stateData = location.state as { testData?: ListeningTest; testId?: string; testTitle?: string } | null;
-  const [test] = useState<ListeningTest>(stateData?.testData || SAMPLE_LISTENING_TEST);
+  const hasValidData = stateData?.testData && Array.isArray(stateData.testData.sections) && stateData.testData.sections.length > 0;
+  const [test] = useState<ListeningTest>(hasValidData ? (stateData!.testData as ListeningTest) : SAMPLE_LISTENING_TEST);
   const [audioState, setAudioState] = useState<AudioState>('not-started');
   const [audioCurrentTime, setAudioCurrentTime] = useState(0);
   const [transferTimeRemaining, setTransferTimeRemaining] = useState(test.transferTime);
@@ -278,12 +279,14 @@ export default function ListeningTestPage() {
   const [result, setResult] = useState<ListeningTestResult | null>(null);
   const [showConfirmSubmit, setShowConfirmSubmit] = useState(false);
   const [startedAt, setStartedAt] = useState<number | null>(null);
-    const [isMuted, setIsMuted] = useState(false);
-  
+  const [isMuted, setIsMuted] = useState(false);
+  const [volume, setVolume] = useState(1);
+  const [showCheatingWarning, setShowCheatingWarning] = useState(false);
+
   const audioRef = useRef<HTMLAudioElement>(null);
   const questionRefs = useRef<Record<number, HTMLDivElement | null>>({});
 
-  const allQuestions = test.sections.flatMap(s => s.questions);
+  const allQuestions = Array.isArray(test?.sections) ? test.sections.flatMap(s => s?.questions || []) : [];
 
   // ============================================
   // Load session from localStorage on mount
@@ -298,7 +301,7 @@ export default function ListeningTestPage() {
           setAudioState(session.audioState);
           setTransferTimeRemaining(session.transferTimeRemaining);
           setStartedAt(session.startedAt);
-          
+
           // If audio was playing, we can't resume it (IELTS rule - no replay)
           // So we move to transfer time if audio was in progress
           if (session.audioState === 'playing') {
@@ -316,7 +319,7 @@ export default function ListeningTestPage() {
   // ============================================
   const saveSession = useCallback(() => {
     if (isSubmitted) return;
-    
+
     const session: ListeningTestSession = {
       testId: test.id,
       startedAt: startedAt || Date.now(),
@@ -353,6 +356,19 @@ export default function ListeningTestPage() {
 
     return () => clearInterval(timer);
   }, [audioState, isSubmitted]);
+
+  // ============================================
+  // Anti-cheating / Focus Tracking
+  // ============================================
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden && audioState === 'playing') {
+        setShowCheatingWarning(true);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [audioState]);
 
   // ============================================
   // Audio event handlers
@@ -418,10 +434,10 @@ export default function ListeningTestPage() {
   const toggleFlag = (questionId: string, questionNumber: number) => {
     setAnswers(prev => {
       const current = prev[questionId];
-      const newStatus: QuestionStatus = current?.status === 'flagged' 
+      const newStatus: QuestionStatus = current?.status === 'flagged'
         ? (current.answer ? 'answered' : 'seen')
         : 'flagged';
-      
+
       return {
         ...prev,
         [questionId]: {
@@ -541,12 +557,24 @@ export default function ListeningTestPage() {
   };
 
   // ============================================
-  // Toggle mute
+  // Toggle mute & Volume change
   // ============================================
   const toggleMute = () => {
     if (audioRef.current) {
       audioRef.current.muted = !isMuted;
       setIsMuted(!isMuted);
+    }
+  };
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseFloat(e.target.value);
+    setVolume(newVolume);
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume;
+      if (newVolume > 0 && isMuted) {
+        setIsMuted(false);
+        audioRef.current.muted = false;
+      }
     }
   };
 
@@ -568,15 +596,14 @@ export default function ListeningTestPage() {
             {question.options?.map((option, idx) => (
               <div key={idx} className="flex items-center space-x-2">
                 <RadioGroupItem value={option} id={`${question.id}-${idx}`} />
-                <Label 
+                <Label
                   htmlFor={`${question.id}-${idx}`}
-                  className={`cursor-pointer ${
-                    isSubmitted && option === question.correctAnswer 
-                      ? 'text-green-600 font-medium' 
-                      : isSubmitted && currentAnswer === option && option !== question.correctAnswer
-                        ? 'text-red-600 line-through'
-                        : ''
-                  }`}
+                  className={`cursor-pointer ${isSubmitted && option === question.correctAnswer
+                    ? 'text-green-600 font-medium'
+                    : isSubmitted && currentAnswer === option && option !== question.correctAnswer
+                      ? 'text-red-600 line-through'
+                      : ''
+                    }`}
                 >
                   {option}
                 </Label>
@@ -595,14 +622,13 @@ export default function ListeningTestPage() {
               onChange={(e) => handleAnswerChange(question.id, question.questionNumber, e.target.value)}
               placeholder={question.wordLimit ? `No more than ${question.wordLimit} word(s)` : 'Type your answer...'}
               disabled={isSubmitted}
-              className={`max-w-md ${
-                isSubmitted 
-                  ? (question.acceptedAnswers?.some(a => a.toLowerCase() === currentAnswer.toLowerCase()) || 
-                     currentAnswer.toLowerCase() === question.correctAnswer.toLowerCase())
-                    ? 'border-green-500 bg-green-50'
-                    : 'border-red-500 bg-red-50'
-                  : ''
-              }`}
+              className={`max-w-md ${isSubmitted
+                ? (question.acceptedAnswers?.some(a => a.toLowerCase() === currentAnswer.toLowerCase()) ||
+                  currentAnswer.toLowerCase() === question.correctAnswer.toLowerCase())
+                  ? 'border-green-500 bg-green-50'
+                  : 'border-red-500 bg-red-50'
+                : ''
+                }`}
             />
             {isSubmitted && (
               <p className="text-sm text-green-600">
@@ -693,13 +719,12 @@ export default function ListeningTestPage() {
               <h2 className="text-xl font-bold mb-4">Answer Review</h2>
               <div className="space-y-4">
                 {result.answers.map((answer) => (
-                  <div 
+                  <div
                     key={answer.questionNumber}
-                    className={`p-4 rounded-lg border ${
-                      answer.isCorrect 
-                        ? 'bg-green-50 border-green-200' 
-                        : 'bg-red-50 border-red-200'
-                    }`}
+                    className={`p-4 rounded-lg border ${answer.isCorrect
+                      ? 'bg-green-50 border-green-200'
+                      : 'bg-red-50 border-red-200'
+                      }`}
                   >
                     <div className="flex items-start gap-3">
                       {answer.isCorrect ? (
@@ -763,8 +788,8 @@ export default function ListeningTestPage() {
                   <Volume2 className="h-5 w-5 text-gray-600" />
                   <span className="text-gray-700">Test your sound</span>
                 </div>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   size="sm"
                   onClick={handleTestSound}
                   className="gap-2"
@@ -791,7 +816,7 @@ export default function ListeningTestPage() {
               </div>
             </div>
 
-            <Button 
+            <Button
               onClick={handleStartTest}
               className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 gap-2"
               size="lg"
@@ -831,7 +856,7 @@ export default function ListeningTestPage() {
           </Link>
           <h1 className="text-lg font-semibold text-gray-900">{test.title}</h1>
         </div>
-        
+
         <div className="flex items-center gap-4">
           {/* Audio Progress / Transfer Time */}
           {audioState === 'playing' && (
@@ -842,36 +867,46 @@ export default function ListeningTestPage() {
                   {formatTime(audioCurrentTime)} / {formatTime(test.audioDuration)}
                 </span>
               </div>
-              <Progress 
-                value={(audioCurrentTime / test.audioDuration) * 100} 
+              <Progress
+                value={(audioCurrentTime / test.audioDuration) * 100}
                 className="w-32 h-2"
               />
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={toggleMute}
-                className="p-2"
-              >
-                {isMuted ? (
-                  <VolumeX className="h-4 w-4 text-gray-500" />
-                ) : (
-                  <Volume2 className="h-4 w-4 text-indigo-600" />
-                )}
-              </Button>
+              <div className="flex items-center gap-2 bg-white rounded-lg border px-2 py-1 shadow-sm">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={toggleMute}
+                  className="p-1 h-auto"
+                >
+                  {isMuted || volume === 0 ? (
+                    <VolumeX className="h-4 w-4 text-gray-500" />
+                  ) : (
+                    <Volume2 className="h-4 w-4 text-indigo-600" />
+                  )}
+                </Button>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  value={isMuted ? 0 : volume}
+                  onChange={handleVolumeChange}
+                  className="w-20 cursor-pointer accent-indigo-600"
+                />
+              </div>
             </div>
           )}
 
           {audioState === 'transfer-time' && (
-            <div className={`flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-lg ${
-              transferTimeRemaining < 60 ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'
-            }`}>
+            <div className={`flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-lg ${transferTimeRemaining < 60 ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'
+              }`}>
               <Clock className="h-5 w-5" />
               <span>Transfer Time: {formatTime(transferTimeRemaining)}</span>
             </div>
           )}
-          
+
           {/* Submit Button */}
-          <Button 
+          <Button
             onClick={() => setShowConfirmSubmit(true)}
             className="bg-indigo-600 hover:bg-indigo-700 gap-2"
           >
@@ -917,66 +952,102 @@ export default function ListeningTestPage() {
         </div>
       )}
 
+      {/* Anti Cheating Warning */}
+      {showCheatingWarning && (
+        <div className="fixed inset-0 bg-red-900/90 flex items-center justify-center z-50">
+          <Card className="w-full max-w-md mx-4 border-red-200">
+            <CardContent className="p-8 text-center bg-white rounded-lg">
+              <AlertCircle className="h-16 w-16 text-red-600 mx-auto mb-4 animate-bounce" />
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Warning!</h2>
+              <p className="text-gray-600 mb-6 text-lg">
+                You have left the test window. In a real IELTS environment, leaving the test screen or tab may result in disqualification.
+                Please stay focused on the test.
+              </p>
+              <Button
+                onClick={() => setShowCheatingWarning(false)}
+                className="w-full bg-red-600 hover:bg-red-700 text-white text-lg py-6 shadow-lg"
+              >
+                I Understand, Return to Test
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
       {/* Questions - All Sections on One Scrollable Page */}
       <div className="flex-1 overflow-y-auto p-4 md:p-6">
         <div className="max-w-4xl mx-auto space-y-8">
-          {test.sections.map((section) => (
-            <div key={section.id} className="space-y-4">
-              {/* Section Header */}
-              <div className="bg-indigo-600 text-white rounded-lg p-4">
-                <h2 className="text-xl font-bold">{section.title}</h2>
-                {section.description && (
-                  <p className="text-indigo-100 text-sm mt-1">{section.description}</p>
-                )}
-                <Badge className="mt-2 bg-indigo-500">
-                  Questions {section.questionRange.start}-{section.questionRange.end}
-                </Badge>
-              </div>
+          {test.sections.map((section) => {
+            const isActive = audioCurrentTime >= section.audioStartTime && audioCurrentTime < section.audioEndTime;
+            return (
+              <div key={section.id} className="space-y-4">
+                {/* Section Header */}
+                <div className={`rounded-lg p-4 transition-all duration-300 ${isActive
+                    ? 'bg-emerald-600 text-white shadow-lg ring-2 ring-emerald-400 ring-offset-2 scale-[1.01]'
+                    : 'bg-indigo-600 text-white'
+                  }`}>
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-xl font-bold">{section.title}</h2>
+                    {isActive && (
+                      <span className="flex items-center gap-2 text-sm font-medium bg-emerald-500/50 px-3 py-1 rounded-full animate-pulse">
+                        <Play className="h-4 w-4" /> Now Playing
+                      </span>
+                    )}
+                  </div>
+                  {section.description && (
+                    <p className={isActive ? 'text-emerald-50 text-sm mt-1' : 'text-indigo-100 text-sm mt-1'}>
+                      {section.description}
+                    </p>
+                  )}
+                  <Badge className={`mt-2 ${isActive ? 'bg-emerald-500 hover:bg-emerald-500' : 'bg-indigo-500 hover:bg-indigo-500'}`}>
+                    Questions {section.questionRange.start}-{section.questionRange.end}
+                  </Badge>
+                </div>
 
-              {/* Section Questions */}
-              <div className="space-y-4">
-                {section.questions.map((question) => (
-                  <Card
-                    key={question.id}
-                    ref={(el) => { questionRefs.current[question.questionNumber] = el; }}
-                    className="shadow-sm"
-                  >
-                    <CardContent className="p-4">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center gap-2">
-                          <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                            getStatusColor(getQuestionStatus(question.id))
-                          }`}>
-                            {question.questionNumber}
-                          </span>
-                          <Badge variant="outline" className="text-xs">
-                            {question.type.replace(/-/g, ' ')}
-                          </Badge>
-                          {question.wordLimit && (
-                            <Badge variant="secondary" className="text-xs">
-                              Max {question.wordLimit} word(s)
+                {/* Section Questions */}
+                <div className="space-y-4">
+                  {section.questions.map((question) => (
+                    <Card
+                      key={question.id}
+                      ref={(el) => { questionRefs.current[question.questionNumber] = el; }}
+                      className="shadow-sm"
+                    >
+                      <CardContent className="p-4">
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-center gap-2">
+                            <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${getStatusColor(getQuestionStatus(question.id))
+                              }`}>
+                              {question.questionNumber}
+                            </span>
+                            <Badge variant="outline" className="text-xs">
+                              {question.type.replace(/-/g, ' ')}
                             </Badge>
-                          )}
+                            {question.wordLimit && (
+                              <Badge variant="secondary" className="text-xs">
+                                Max {question.wordLimit} word(s)
+                              </Badge>
+                            )}
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => toggleFlag(question.id, question.questionNumber)}
+                            className={getQuestionStatus(question.id) === 'flagged' ? 'text-amber-600' : 'text-gray-400'}
+                          >
+                            <Flag className="h-4 w-4" />
+                          </Button>
                         </div>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => toggleFlag(question.id, question.questionNumber)}
-                          className={getQuestionStatus(question.id) === 'flagged' ? 'text-amber-600' : 'text-gray-400'}
-                        >
-                          <Flag className="h-4 w-4" />
-                        </Button>
-                      </div>
 
-                      <p className="text-gray-800 mb-4">{question.questionText}</p>
+                        <p className="text-gray-800 mb-4">{question.questionText}</p>
 
-                      {renderQuestionInput(question)}
-                    </CardContent>
-                  </Card>
-                ))}
+                        {renderQuestionInput(question)}
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
 
@@ -994,15 +1065,14 @@ export default function ListeningTestPage() {
               <span className="w-4 h-4 rounded bg-amber-400"></span> Flagged
             </span>
           </div>
-          
+
           <div className="flex flex-wrap gap-1 justify-center max-w-2xl">
             {allQuestions.map((question) => (
               <button
                 key={question.questionNumber}
                 onClick={() => scrollToQuestion(question.questionNumber)}
-                className={`w-8 h-8 rounded text-sm font-medium transition-colors ${
-                  getStatusColor(getQuestionStatus(question.id))
-                }`}
+                className={`w-8 h-8 rounded text-sm font-medium transition-colors ${getStatusColor(getQuestionStatus(question.id))
+                  }`}
               >
                 {question.questionNumber}
               </button>

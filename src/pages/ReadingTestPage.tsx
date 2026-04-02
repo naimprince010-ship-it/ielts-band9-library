@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { 
-  Clock, 
-  Flag, 
-  ChevronLeft, 
+import {
+  Clock,
+  Flag,
+  ChevronLeft,
   ChevronRight,
   AlertCircle,
   CheckCircle2,
@@ -19,17 +19,17 @@ import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { 
-  ReadingTest, 
+import {
+  ReadingTest,
   ReadingQuestion,
   ReadingTestSession,
   UserAnswer,
   QuestionStatus,
   ReadingTestResult
 } from '@/types';
-import { 
-  gradeObjectiveTest, 
-  formatBandScore, 
+import {
+  gradeObjectiveTest,
+  formatBandScore,
   getBandScoreColor,
   getBandScoreLevel
 } from '@/utils/scoring';
@@ -236,7 +236,8 @@ const getStatusColor = (status: QuestionStatus): string => {
 export default function ReadingTestPage() {
   const location = useLocation();
   const stateData = location.state as { testData?: ReadingTest; testId?: string; testTitle?: string } | null;
-  const [test] = useState<ReadingTest>(stateData?.testData || SAMPLE_READING_TEST);
+  const hasValidData = stateData?.testData && Array.isArray(stateData.testData.passages) && stateData.testData.passages.length > 0;
+  const [test] = useState<ReadingTest>(hasValidData ? (stateData!.testData as ReadingTest) : SAMPLE_READING_TEST);
   const [currentPassageIndex, setCurrentPassageIndex] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(test.timeLimit);
   const [answers, setAnswers] = useState<Record<string, UserAnswer>>({});
@@ -245,13 +246,13 @@ export default function ReadingTestPage() {
   const [showConfirmSubmit, setShowConfirmSubmit] = useState(false);
   const [startedAt] = useState<number>(Date.now());
   const [showPassage, setShowPassage] = useState(true);
-  
+
   const questionRefs = useRef<Record<number, HTMLDivElement | null>>({});
   const passagePaneRef = useRef<HTMLDivElement>(null);
   const questionPaneRef = useRef<HTMLDivElement>(null);
 
-  const currentPassage = test.passages[currentPassageIndex];
-  const allQuestions = test.passages.flatMap(p => p.questions);
+  const currentPassage = Array.isArray(test?.passages) ? (test!.passages[currentPassageIndex] || test!.passages[0]) : undefined;
+  const allQuestions = Array.isArray(test?.passages) ? test!.passages.flatMap(p => p?.questions || []) : [];
 
   // ============================================
   // Load session from localStorage on mount
@@ -277,7 +278,7 @@ export default function ReadingTestPage() {
   // ============================================
   const saveSession = useCallback(() => {
     if (isSubmitted) return;
-    
+
     const session: ReadingTestSession = {
       testId: test.id,
       startedAt,
@@ -336,10 +337,10 @@ export default function ReadingTestPage() {
   const toggleFlag = (questionId: string, questionNumber: number) => {
     setAnswers(prev => {
       const current = prev[questionId];
-      const newStatus: QuestionStatus = current?.status === 'flagged' 
+      const newStatus: QuestionStatus = current?.status === 'flagged'
         ? (current.answer ? 'answered' : 'seen')
         : 'flagged';
-      
+
       return {
         ...prev,
         [questionId]: {
@@ -368,10 +369,10 @@ export default function ReadingTestPage() {
     if (!question) return;
 
     // Find which passage this question belongs to
-    const passageIndex = test.passages.findIndex(p => 
-      p.questionRange && questionNumber >= p.questionRange.start && questionNumber <= p.questionRange.end
+    const passageIndex = (test?.passages || []).findIndex(p =>
+      p?.questionRange && questionNumber >= p.questionRange.start && questionNumber <= p.questionRange.end
     );
-    
+
     if (passageIndex !== currentPassageIndex) {
       setCurrentPassageIndex(passageIndex);
     }
@@ -404,7 +405,7 @@ export default function ReadingTestPage() {
   // ============================================
   const handleSubmit = () => {
     const timeTaken = test.timeLimit - timeRemaining;
-    
+
     // Use the new grading utility for proper IELTS band score calculation
     const gradingResult = gradeObjectiveTest(
       answers,
@@ -485,15 +486,14 @@ export default function ReadingTestPage() {
             {question.options?.map((option, idx) => (
               <div key={idx} className="flex items-center space-x-2">
                 <RadioGroupItem value={option} id={`${question.id}-${idx}`} />
-                <Label 
+                <Label
                   htmlFor={`${question.id}-${idx}`}
-                  className={`cursor-pointer ${
-                    isSubmitted && option === question.correctAnswer 
-                      ? 'text-green-600 font-medium' 
-                      : isSubmitted && currentAnswer === option && option !== question.correctAnswer
-                        ? 'text-red-600 line-through'
-                        : ''
-                  }`}
+                  className={`cursor-pointer ${isSubmitted && option === question.correctAnswer
+                    ? 'text-green-600 font-medium'
+                    : isSubmitted && currentAnswer === option && option !== question.correctAnswer
+                      ? 'text-red-600 line-through'
+                      : ''
+                    }`}
                 >
                   {option}
                 </Label>
@@ -512,13 +512,12 @@ export default function ReadingTestPage() {
               onChange={(e) => handleAnswerChange(question.id, question.questionNumber, e.target.value)}
               placeholder="Type your answer..."
               disabled={isSubmitted}
-              className={`max-w-md ${
-                isSubmitted 
-                  ? (question.acceptedAnswers?.includes(currentAnswer) || currentAnswer.toLowerCase() === question.correctAnswer.toLowerCase())
-                    ? 'border-green-500 bg-green-50'
-                    : 'border-red-500 bg-red-50'
-                  : ''
-              }`}
+              className={`max-w-md ${isSubmitted
+                ? (question.acceptedAnswers?.includes(currentAnswer) || currentAnswer.toLowerCase() === question.correctAnswer.toLowerCase())
+                  ? 'border-green-500 bg-green-50'
+                  : 'border-red-500 bg-red-50'
+                : ''
+                }`}
             />
             {isSubmitted && (
               <p className="text-sm text-green-600">
@@ -609,13 +608,12 @@ export default function ReadingTestPage() {
               <h2 className="text-xl font-bold mb-4">Answer Review</h2>
               <div className="space-y-4">
                 {result.answers.map((answer) => (
-                  <div 
+                  <div
                     key={answer.questionNumber}
-                    className={`p-4 rounded-lg border ${
-                      answer.isCorrect 
-                        ? 'bg-green-50 border-green-200' 
-                        : 'bg-red-50 border-red-200'
-                    }`}
+                    className={`p-4 rounded-lg border ${answer.isCorrect
+                      ? 'bg-green-50 border-green-200'
+                      : 'bg-red-50 border-red-200'
+                      }`}
                   >
                     <div className="flex items-start gap-3">
                       {answer.isCorrect ? (
@@ -660,18 +658,17 @@ export default function ReadingTestPage() {
           </Link>
           <h1 className="text-lg font-semibold text-gray-900">{test.title}</h1>
         </div>
-        
+
         <div className="flex items-center gap-4">
           {/* Timer */}
-          <div className={`flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-lg ${
-            timeRemaining < 300 ? 'bg-red-100 text-red-700' : 'bg-indigo-100 text-indigo-700'
-          }`}>
+          <div className={`flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-lg ${timeRemaining < 300 ? 'bg-red-100 text-red-700' : 'bg-indigo-100 text-indigo-700'
+            }`}>
             <Clock className="h-5 w-5" />
             <span>{formatTime(timeRemaining)}</span>
           </div>
-          
+
           {/* Submit Button */}
-          <Button 
+          <Button
             onClick={() => setShowConfirmSubmit(true)}
             className="bg-indigo-600 hover:bg-indigo-700 gap-2"
           >
@@ -706,7 +703,7 @@ export default function ReadingTestPage() {
       {/* Split Screen Layout */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left Pane - Passage */}
-        <div 
+        <div
           ref={passagePaneRef}
           className={`${showPassage ? 'w-1/2' : 'w-0'} transition-all duration-300 border-r bg-white overflow-y-auto`}
         >
@@ -726,17 +723,17 @@ export default function ReadingTestPage() {
                 ))}
               </div>
               <Badge variant="secondary">
-                Questions {currentPassage.questionRange?.start || 1}-{currentPassage.questionRange?.end || currentPassage.questions.length}
+                Questions {currentPassage?.questionRange?.start || 1}-{currentPassage?.questionRange?.end || currentPassage?.questions?.length || 0}
               </Badge>
             </div>
 
             {/* Passage Title */}
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">{currentPassage.title}</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">{currentPassage?.title || 'Passage'}</h2>
 
             {/* Passage Content */}
-            <div 
+            <div
               className="prose prose-lg max-w-none text-gray-700 leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: currentPassage.textContent }}
+              dangerouslySetInnerHTML={{ __html: currentPassage?.textContent || '' }}
             />
           </div>
         </div>
@@ -750,17 +747,17 @@ export default function ReadingTestPage() {
         </button>
 
         {/* Right Pane - Questions */}
-        <div 
+        <div
           ref={questionPaneRef}
           className={`${showPassage ? 'w-1/2' : 'w-full'} transition-all duration-300 bg-gray-50 overflow-y-auto`}
         >
           <div className="p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Questions {currentPassage.questionRange?.start || 1}-{currentPassage.questionRange?.end || currentPassage.questions.length}
+              Questions {currentPassage?.questionRange?.start || 1}-{currentPassage?.questionRange?.end || currentPassage?.questions?.length || 0}
             </h3>
 
             <div className="space-y-6">
-              {currentPassage.questions.map((question) => (
+              {currentPassage?.questions?.map((question) => (
                 <div
                   key={question.id}
                   ref={(el) => { questionRefs.current[question.questionNumber] = el; }}
@@ -768,9 +765,8 @@ export default function ReadingTestPage() {
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-2">
-                      <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                        getStatusColor(getQuestionStatus(question.id))
-                      }`}>
+                      <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${getStatusColor(getQuestionStatus(question.id))
+                        }`}>
                         {question.questionNumber}
                       </span>
                       <Badge variant="outline" className="text-xs">
@@ -837,15 +833,14 @@ export default function ReadingTestPage() {
               <span className="w-4 h-4 rounded bg-amber-400"></span> Flagged
             </span>
           </div>
-          
+
           <div className="flex flex-wrap gap-1 justify-center max-w-2xl">
             {allQuestions.map((question) => (
               <button
                 key={question.questionNumber}
                 onClick={() => scrollToQuestion(question.questionNumber)}
-                className={`w-8 h-8 rounded text-sm font-medium transition-colors ${
-                  getStatusColor(getQuestionStatus(question.id))
-                }`}
+                className={`w-8 h-8 rounded text-sm font-medium transition-colors ${getStatusColor(getQuestionStatus(question.id))
+                  }`}
               >
                 {question.questionNumber}
               </button>

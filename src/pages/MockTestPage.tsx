@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Clock, 
+import {
+  Clock,
   Target,
   BookOpen,
   PenTool,
@@ -21,11 +21,11 @@ import {
   BarChart3
 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
-import { 
-  ReadingTest, 
-  ListeningTest, 
-  WritingTest, 
-  SpeakingTest 
+import {
+  ReadingTest,
+  ListeningTest,
+  WritingTest,
+  SpeakingTest
 } from '@/types';
 
 type ModuleType = 'reading' | 'listening' | 'writing' | 'speaking';
@@ -138,12 +138,12 @@ export default function MockTestPage() {
       speaking: '/speaking-test'
     };
 
-    navigate(routeMap[test.module_type], { 
-      state: { 
+    navigate(routeMap[test.module_type], {
+      state: {
         testData: test.test_data,
         testId: test.id,
         testTitle: test.title
-      } 
+      }
     });
   };
 
@@ -151,19 +151,19 @@ export default function MockTestPage() {
     switch (test.module_type) {
       case 'reading': {
         const readingTest = test.test_data as ReadingTest;
-        return readingTest.passages?.reduce((sum, p) => sum + (p.questions?.length || 0), 0) || 40;
+        return (Array.isArray(readingTest?.passages) ? readingTest.passages : []).reduce((sum, p) => sum + (p?.questions?.length || 0), 0) || 40;
       }
       case 'listening': {
         const listeningTest = test.test_data as ListeningTest;
-        return listeningTest.sections?.reduce((sum, s) => sum + (s.questions?.length || 0), 0) || 40;
+        return (Array.isArray(listeningTest?.sections) ? listeningTest.sections : []).reduce((sum, s) => sum + (s?.questions?.length || 0), 0) || 40;
       }
       case 'writing': {
         const writingTest = test.test_data as WritingTest;
-        return writingTest.tasks?.length || 2;
+        return Array.isArray(writingTest?.tasks) ? writingTest.tasks.length : 2;
       }
       case 'speaking': {
         const speakingTest = test.test_data as SpeakingTest;
-        return speakingTest.parts?.reduce((sum, p) => sum + (p.questions?.length || 0), 0) || 12;
+        return (Array.isArray(speakingTest?.parts) ? speakingTest.parts : []).reduce((sum, p) => sum + (p?.questions?.length || 0), 0) || 12;
       }
       default:
         return 0;
@@ -195,21 +195,21 @@ export default function MockTestPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-foreground via-foreground to-accent/20" />
         <div className="absolute top-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/5 rounded-full blur-2xl" />
-        
+
         <div className="container mx-auto px-4 py-16 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
               <Target className="h-4 w-4 text-accent" />
               <span className="text-sm font-medium">Exam Simulation</span>
             </div>
-            
+
             <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
               IELTS Mock Tests
             </h1>
             <p className="text-lg text-white/70 mb-8 max-w-xl mx-auto">
               Practice with full-length timed tests to simulate the real exam experience and track your progress
             </p>
-            
+
             {/* Stats */}
             <div className="flex flex-wrap justify-center gap-8 pt-4">
               <div className="text-center">
@@ -247,16 +247,15 @@ export default function MockTestPage() {
               const Icon = info.icon;
               const count = getTestsByModule(moduleType).length;
               const isActive = activeModule === moduleType;
-              
+
               return (
                 <button
                   key={moduleType}
                   onClick={() => setActiveModule(moduleType)}
-                  className={`relative p-5 rounded-2xl border-2 transition-all duration-300 text-left group ${
-                    isActive 
-                      ? `${info.bgLight} ${info.borderColor} shadow-lg` 
+                  className={`relative p-5 rounded-2xl border-2 transition-all duration-300 text-left group ${isActive
+                      ? `${info.bgLight} ${info.borderColor} shadow-lg`
                       : 'bg-card border-border hover:border-muted-foreground/30'
-                  }`}
+                    }`}
                 >
                   <div className={`w-12 h-12 rounded-xl ${isActive ? info.iconBg : 'bg-muted'} flex items-center justify-center mb-4 transition-all group-hover:scale-105`}>
                     <Icon className={`h-6 w-6 ${isActive ? 'text-white' : 'text-muted-foreground'}`} />
@@ -265,13 +264,13 @@ export default function MockTestPage() {
                     {info.name}
                   </h3>
                   <p className="text-sm text-muted-foreground">{info.duration} min</p>
-                  
+
                   {count > 0 && (
                     <Badge className={`absolute top-4 right-4 ${isActive ? info.iconBg : 'bg-muted text-muted-foreground'} text-white`}>
                       {count}
                     </Badge>
                   )}
-                  
+
                   {isActive && (
                     <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 ${info.iconBg} rounded-t-full`} />
                   )}
@@ -329,15 +328,15 @@ export default function MockTestPage() {
               const info = MODULE_INFO[test.module_type];
               const Icon = info.icon;
               const questionCount = getQuestionCount(test);
-              
+
               return (
-                <Card 
-                  key={test.id} 
+                <Card
+                  key={test.id}
                   className={`group overflow-hidden border-2 ${info.borderColor} ${info.hoverBorder} transition-all duration-300 hover:shadow-xl hover:-translate-y-1`}
                 >
                   {/* Card Header with Gradient */}
                   <div className={`h-2 bg-gradient-to-r ${info.gradient}`} />
-                  
+
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className={`w-12 h-12 rounded-xl ${info.bgLight} flex items-center justify-center group-hover:scale-110 transition-transform`}>
@@ -350,11 +349,11 @@ export default function MockTestPage() {
                         </Badge>
                       )}
                     </div>
-                    
+
                     <h3 className="text-lg font-bold text-foreground mb-2 line-clamp-2">
                       {test.title}
                     </h3>
-                    
+
                     <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
                       <span className="flex items-center gap-1.5">
                         <Clock className="h-4 w-4" />
@@ -365,8 +364,8 @@ export default function MockTestPage() {
                         {questionCount} {test.module_type === 'writing' ? 'tasks' : 'questions'}
                       </span>
                     </div>
-                    
-                    <Button 
+
+                    <Button
                       onClick={() => handleStartTest(test)}
                       className={`w-full bg-gradient-to-r ${info.gradient} hover:opacity-90 text-white shadow-lg group-hover:shadow-xl transition-all`}
                     >
@@ -393,7 +392,7 @@ export default function MockTestPage() {
               </p>
             </CardContent>
           </Card>
-          
+
           <Card className="bg-muted/50 border-0">
             <CardContent className="p-6 text-center">
               <div className="w-14 h-14 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -405,7 +404,7 @@ export default function MockTestPage() {
               </p>
             </CardContent>
           </Card>
-          
+
           <Card className="bg-muted/50 border-0">
             <CardContent className="p-6 text-center">
               <div className="w-14 h-14 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -435,8 +434,8 @@ export default function MockTestPage() {
                   </p>
                 </div>
               </div>
-              <Button 
-                variant="secondary" 
+              <Button
+                variant="secondary"
                 onClick={() => navigate('/results')}
                 className="whitespace-nowrap bg-white text-foreground hover:bg-white/90"
               >
