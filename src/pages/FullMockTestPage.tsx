@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Clock, Headphones, BookOpen, PenTool, Mic, ChevronRight,
   CheckCircle, AlertCircle, Award, ArrowRight, Play, RotateCcw,
-  Loader2, Target, Crown, Timer, Check, X, Volume2
+  Loader2, Target, Crown, Timer, Check, Volume2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -110,7 +110,6 @@ function useTimer(initial: number, onExpire: () => void) {
 
 export default function FullMockTestPage() {
   const navigate = useNavigate();
-  const { user } = useAuth();
   const [phase, setPhase] = useState<Phase>('intro');
   const [tests, setTests] = useState<Partial<Record<ModuleType, MockTest>>>({});
   const [loading, setLoading] = useState(true);
@@ -132,7 +131,7 @@ export default function FullMockTestPage() {
     const fetch = async () => {
       const result: Partial<Record<ModuleType, MockTest>> = {};
       for (const s of SECTIONS) {
-        const { data } = await supabase
+        const { data } = await supabase!
           .from('mock_tests')
           .select('*')
           .eq('module_type', s.module)
@@ -155,7 +154,7 @@ export default function FullMockTestPage() {
     setTimeout(() => startTimer(), 100);
   };
 
-  const submitSection = useCallback((timeUp = false) => {
+  const submitSection = useCallback((_timeUp = false) => {
     const sec = SECTIONS[sectionIndex];
     const test = tests[sec.module];
     let band = 5.0;
@@ -562,7 +561,7 @@ export default function FullMockTestPage() {
                     <Mic className="h-5 w-5 text-orange-600" />
                     <p className="text-sm text-orange-800">In a real exam you'd speak aloud. Write your answers below to practice and get an estimate.</p>
                   </div>
-                  {[part1, part2 ? { title: part2.title, questions: [{ text: `Cue Card: ${part2.cueCard.topic}\n• ${part2.cueCard.bulletPoints.join('\n• ')}` }] } : undefined, part3].filter(Boolean).map((part, pi) => (
+    {[part1, part2 ? { title: part2.title, questions: [{ text: `Cue Card: ${part2.cueCard.topic}\n• ${part2.cueCard.bulletPoints.join('\n• ')}` }] } : undefined, part3].filter(Boolean).map((part, pi) => (
                     <Card key={pi}>
                       <CardHeader><CardTitle className="text-base">{(part as { title: string }).title}</CardTitle></CardHeader>
                       <CardContent className="space-y-3">
