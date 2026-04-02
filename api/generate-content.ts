@@ -14,7 +14,78 @@ interface GenerateRequest {
   provider?: AIProvider;
   passageNumber?: number; // 1, 2, or 3 for reading
   sectionNumber?: number; // 1, 2, 3, or 4 for listening
+  taskNumber?: number;    // 1 or 2 for writing
+  partNumber?: number;    // 1, 2, or 3 for speaking
 }
+
+const WRITING_TASK_PROMPT = (topic: string, testType: string, taskNumber: number) => `
+You are an IELTS exam content creator. Generate Task ${taskNumber} for an IELTS ${testType} writing test.
+
+Topic theme: ${topic}
+
+Generate a JSON response with this exact structure:
+{
+  "taskNumber": ${taskNumber},
+  "title": "Task ${taskNumber}: ${taskNumber === 1 ? (testType === 'academic' ? 'Report Writing' : 'Letter Writing') : 'Essay Writing'}",
+  "prompt": "<p class='mb-4'>Task prompt here...</p><p class='mb-4'><strong>Instruction in bold.</strong></p><p class='text-gray-600'>Write at least ${taskNumber === 1 ? '150' : '250'} words.</p>",
+  "tips": [
+    "Tip 1",
+    "Tip 2",
+    "Tip 3"
+  ],
+  "sampleAnswer": "A complete sample answer demonstrating band 8-9 level writing."
+}
+
+Requirements:
+- Task 1 Academic: Chart, graph, table, or process.
+- Task 1 General: Formal/Informal letter.
+- Task 2: Opinion/Discussion essay.
+Return ONLY valid JSON.
+`;
+
+const SPEAKING_PART_PROMPT = (topic: string, difficulty: string, partNumber: number) => `
+You are an IELTS exam content creator. Generate Part ${partNumber} for an IELTS speaking test.
+
+Topic theme: ${topic}
+Difficulty: ${difficulty}
+
+Generate a JSON response with this exact structure:
+${partNumber === 1 ? `
+{
+  "partNumber": 1,
+  "title": "Part 1: Introduction & Interview",
+  "instructions": "Examiner asks general questions about familiar topics.",
+  "questions": [
+    { "text": "Question 1", "thinkTime": 3, "recordTime": 30 },
+    { "text": "Question 2", "thinkTime": 3, "recordTime": 30 },
+    { "text": "Question 3", "thinkTime": 3, "recordTime": 45 },
+    { "text": "Question 4", "thinkTime": 3, "recordTime": 45 }
+  ]
+}` : partNumber === 2 ? `
+{
+  "partNumber": 2,
+  "title": "Part 2: Individual Long Turn",
+  "instructions": "You have 1 minute to prepare, then speak for 1-2 minutes.",
+  "cueCard": {
+    "topic": "Describe [topic related task]",
+    "bulletPoints": ["Point 1", "Point 2", "Point 3", "Point 4"],
+    "prepTime": 60,
+    "recordTime": 120
+  }
+}` : `
+{
+  "partNumber": 3,
+  "title": "Part 3: Two-way Discussion",
+  "instructions": "Abstract questions related to Part 2.",
+  "questions": [
+    { "text": "Abstract Question 1", "thinkTime": 5, "recordTime": 60 },
+    { "text": "Abstract Question 2", "thinkTime": 5, "recordTime": 60 },
+    { "text": "Abstract Question 3", "thinkTime": 5, "recordTime": 60 }
+  ]
+}`}
+
+Return ONLY valid JSON.
+`;
 
 const LISTENING_SECTION_PROMPT = (topic: string, difficulty: string, testType: string, sectionNumber: number) => `
 You are an IELTS exam content creator. Generate Section ${sectionNumber} for an IELTS listening test.
@@ -442,6 +513,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const requestedProvider = body.provider || 'openai';
     const passageNumber = body.passageNumber;
     const sectionNumber = body.sectionNumber;
+    const taskNumber = body.taskNumber;
+    const partNumber = body.partNumber;
 
     // Auto-select available provider
     let provider = requestedProvider;
@@ -473,7 +546,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'Invalid module type' });
     }
 
-    console.log(`Generating ${moduleType} content with ${provider}, topic: ${topic}, difficulty: ${difficulty}${passageNumber ? `, passage: ${passageNumber}` : ''}${sectionNumber ? `, section: ${sectionNumber}` : ''}`);
+    console.log(`Generating ${moduleType} content with ${provider}, topic: ${topic}, difficulty: ${difficulty}${passageNumber ? `, passage: ${passageNumber}` : ''}${sectionNumber ? `, section: ${sectionNumber}` : ''}${taskNumber ? `, task: ${taskNumber}` : ''}${partNumber ? `, part: ${partNumber}` : ''}`);
     let prompt: string;
 
     switch (moduleType) {
@@ -488,10 +561,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           : LISTENING_PROMPT(topic, difficulty);
         break;
       case 'writing':
-        prompt = WRITING_PROMPT(topic, testType);
+        prompt = taskNumber
+          ? WRITING_TASK_PROMPT(topic, testType, taskNumber)
+          : WRITING_PROMPT(topic, testType);
         break;
       case 'speaking':
-        prompt = SPEAKING_PROMPT(topic, difficulty);
+        prompt = partNumber
+          ? SPEAKING_PART_PROMPT(topic, difficulty, partNumber)
+          : SPEAKING_PROMPT(topic, difficulty);
         break;
       default:
         return res.status(400).json({ error: 'Invalid module type' });

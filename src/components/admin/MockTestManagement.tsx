@@ -2280,7 +2280,14 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
   const [error, setError] = useState<string>('');
 
   const generateModule = async (moduleType: string, index?: number) => {
-    const label = index ? `${moduleType} (${moduleType === 'reading' ? 'Passage' : 'Section'} ${index})` : moduleType;
+    let label = moduleType;
+    if (index) {
+      if (moduleType === 'reading') label = `reading (Passage ${index})`;
+      else if (moduleType === 'listening') label = `listening (Section ${index})`;
+      else if (moduleType === 'writing') label = `writing (Task ${index})`;
+      else if (moduleType === 'speaking') label = `speaking (Part ${index})`;
+    }
+    
     setProgress(`Generating ${label} module... \n(This may take 15-30 seconds)`);
     const response = await fetch('/api/generate-content', {
       method: 'POST',
@@ -2292,7 +2299,9 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
         testType: 'academic', 
         provider: 'openai',
         passageNumber: moduleType === 'reading' ? index : undefined,
-        sectionNumber: moduleType === 'listening' ? index : undefined
+        sectionNumber: moduleType === 'listening' ? index : undefined,
+        taskNumber: moduleType === 'writing' ? index : undefined,
+        partNumber: moduleType === 'speaking' ? index : undefined
       })
     });
     const rawText = await response.text();
@@ -2394,36 +2403,86 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
         audioUrl: '', audioDuration: 0, transferTime: 600, sections: listeningSections, instructions: 'Listen to the audio and answer.'
       };
 
-      // 3. Writing
-      const writingData = await generateModule('writing') as { task1: any; task2: any };
+      // 3. Writing (Generate 2 tasks one by one)
+      const writingTasksData = [];
+      for (let i = 1; i <= 2; i++) {
+        const tData = await generateModule('writing', i);
+        writingTasksData.push(tData);
+      }
+      
       const writingTest = {
         id: `writing-${now}`, title: `Mock Test: ${topic} - Writing`, testType: 'academic', timeLimit: 3600,
         instructions: 'Complete both writing tasks within the time limit.',
-        tasks: [
-          { id: `task-1-${now}`, taskNumber: 1, taskType: 'task1', title: writingData.task1.title || 'Task 1', prompt: writingData.task1.prompt, minWords: 150, recommendedTime: 20, sampleAnswer: writingData.task1.sampleAnswer },
-          { id: `task-2-${now}`, taskNumber: 2, taskType: 'task2', title: writingData.task2.title || 'Task 2', prompt: writingData.task2.prompt, minWords: 250, recommendedTime: 40, sampleAnswer: writingData.task2.sampleAnswer }
-        ]
+        tasks: writingTasksData.map((t, tIndex) => ({
+          id: `task-${tIndex + 1}-${now}`, 
+          taskNumber: tIndex + 1, 
+          taskType: tIndex === 0 ? 'task1' : 'task2', 
+          title: t.title || `Task ${tIndex + 1}`, 
+          prompt: t.prompt, 
+          minWords: tIndex === 0 ? 150 : 250, 
+          recommendedTime: tIndex === 0 ? 20 : 40, 
+          sampleAnswer: t.sampleAnswer 
+        }))
       };
 
-      // 4. Speaking
-      const speakingData = await generateModule('speaking') as any;
+      // 4. Speaking (Generate 3 parts one by one)
+      const speakingPartsData = [];
+      for (let i = 1; i <= 3; i++) {
+        const spData = await generateModule('speaking', i);
+        speakingPartsData.push(spData);
+      }
+
       const speakingTest = {
         id: `speaking-${now}`, title: `Mock Test: ${topic} - Speaking`, instructions: 'Answer the questions naturally.',
-        parts: [
-          { id: `part-1-${now}`, partNumber: 1, partType: 'part1', title: speakingData.part1?.title || 'Part 1: Introduction', instructions: speakingData.part1?.instructions || 'General questions.',
-            questions: speakingData.part1?.questions?.map((q: any, i: number) => ({ id: `sq-1-${i}`, questionNumber: i + 1, text: q.text, thinkTime: q.thinkTime || 5, recordTime: q.recordTime || 30 })) },
-          { id: `part-2-${now}`, partNumber: 2, partType: 'part2', title: speakingData.part2?.title || 'Part 2: Individual Long Turn', instructions: speakingData.part2?.instructions || 'You have 1 minute to prepare.',
-            cueCard: { 
-              id: `cue-${now}`, 
-              topic: speakingData.part2?.cueCard?.topic || speakingData.part2?.topic, 
-              bulletPoints: speakingData.part2?.cueCard?.bulletPoints || speakingData.part2?.bulletPoints || [], 
-              prepTime: speakingData.part2?.cueCard?.prepTime || 60, 
-              recordTime: speakingData.part2?.cueCard?.recordTime || 120 
-            } 
-          },
-          { id: `part-3-${now}`, partNumber: 3, partType: 'part3', title: speakingData.part3?.title || 'Part 3: Discussion', instructions: speakingData.part3?.instructions || 'Follow-up questions.',
-            questions: speakingData.part3?.questions?.map((q: any, i: number) => ({ id: `sq-3-${i}`, questionNumber: i + 1, text: q.text, thinkTime: q.thinkTime || 5, recordTime: q.recordTime || 60 })) }
-        ]
+        parts: speakingPartsData.map((sp, spIndex) => {
+          const pNum = spIndex + 1;
+          if (pNum === 1) {
+            return {
+              id: `part-1-${now}`, 
+              partNumber: 1, 
+              partType: 'part1', 
+              title: sp.title || 'Part 1: Introduction', 
+              instructions: sp.instructions || 'General questions.',
+              questions: sp.questions?.map((q: any, i: number) => ({ 
+                id: `sq-1-${i}`, 
+                questionNumber: i + 1, 
+                text: q.text, 
+                thinkTime: q.thinkTime || 3, 
+                recordTime: q.recordTime || 30 
+              }))
+            };
+          } else if (pNum === 2) {
+            return {
+              id: `part-2-${now}`, 
+              partNumber: 2, 
+              partType: 'part2', 
+              title: sp.title || 'Part 2: Individual Long Turn', 
+              instructions: sp.instructions || 'You have 1 minute to prepare.',
+              cueCard: { 
+                id: `cue-${now}`, 
+                topic: sp.cueCard?.topic || sp.topic, 
+                bulletPoints: sp.cueCard?.bulletPoints || sp.bulletPoints || [], 
+                prepTime: sp.cueCard?.prepTime || 60, 
+                recordTime: sp.cueCard?.recordTime || 120 
+              } 
+            };
+          } else {
+            return {
+              id: `part-3-${now}`, 
+              partNumber: 3, 
+              partType: 'part3', 
+              title: sp.title || 'Part 3: Discussion', 
+              instructions: sp.instructions || 'Follow-up questions.',
+              questions: sp.questions?.map((q: any, i: number) => ({ 
+                id: `sq-3-${i}`, 
+                questionNumber: i + 1, 
+                text: q.text, 
+                thinkTime: q.thinkTime || 5, 
+                recordTime: q.recordTime || 60 
+              }))
+            };
+          }
+        })
       };
 
       setProgress('Saving to database...');
