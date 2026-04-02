@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Clock, Headphones, BookOpen, PenTool, Mic, ChevronRight,
   CheckCircle, AlertCircle, Award, ArrowRight, Play, RotateCcw,
-  CheckCircle, AlertCircle, Award, ArrowRight, Play, RotateCcw,
-  Loader2, Target, Crown, Timer, Check, Volume2, Square, Pause
+  Loader2, Target, Crown, Timer, Check, Volume2, Square
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -39,9 +38,7 @@ interface SectionScores {
   speaking: number | null;
 }
 
-interface UserAnswers {
-  [key: string]: string;
-}
+
 
 const SECTIONS: { phase: Phase; module: ModuleType; label: string; duration: number; icon: React.ReactNode; color: string; bg: string }[] = [
   { phase: 'listening', module: 'listening', label: 'Listening', duration: 30 * 60, icon: <Headphones className="h-5 w-5" />, color: 'text-violet-600', bg: 'bg-violet-500' },
@@ -124,31 +121,50 @@ export function FullMockTestPage() {
     setPlayingAudioId(null);
   }, [phase]);
 
-  const toggleAudio = (id: string, text: string) => {
+  // Async helper: waits for voices to load if not yet available
+  const getVoicesAsync = (): Promise<SpeechSynthesisVoice[]> => {
+    return new Promise(resolve => {
+      const voices = window.speechSynthesis.getVoices();
+      if (voices.length > 0) { resolve(voices); return; }
+      const handler = () => { resolve(window.speechSynthesis.getVoices()); };
+      window.speechSynthesis.addEventListener('voiceschanged', handler, { once: true });
+      // Fallback timeout after 2s
+      setTimeout(() => resolve(window.speechSynthesis.getVoices()), 2000);
+    });
+  };
+
+  const toggleAudio = async (id: string, text: string) => {
     if (!('speechSynthesis' in window)) {
-      alert("Your browser does not support text-to-speech.");
+      alert('Your browser does not support text-to-speech.');
       return;
     }
-    
+
     window.speechSynthesis.cancel();
-    
+
     if (playingAudioId === id) {
       setPlayingAudioId(null);
-    } else {
-      setPlayingAudioId(id);
-      const utterance = new SpeechSynthesisUtterance(text);
-      
-      // Try to find a UK voice
-      const voices = window.speechSynthesis.getVoices();
-      const ukVoice = voices.find(v => v.lang.includes('en-GB') || v.lang.includes('en-UK'));
-      if (ukVoice) utterance.voice = ukVoice;
-      utterance.rate = 0.95; // Slightly slower for comprehension
-      
-      utterance.onend = () => setPlayingAudioId(null);
-      utterance.onerror = () => setPlayingAudioId(null);
-      
-      window.speechSynthesis.speak(utterance);
+      return;
     }
+
+    setPlayingAudioId(id);
+    const utterance = new SpeechSynthesisUtterance(text);
+
+    // Wait for voices to be ready, then pick a UK/US English voice
+    const voices = await getVoicesAsync();
+    const preferred =
+      voices.find(v => v.lang === 'en-GB') ||
+      voices.find(v => v.lang.startsWith('en-GB')) ||
+      voices.find(v => v.lang.startsWith('en-US')) ||
+      voices.find(v => v.lang.startsWith('en'));
+    if (preferred) utterance.voice = preferred;
+    utterance.rate = 0.92;   // Slightly slower for comprehension
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+
+    utterance.onend = () => setPlayingAudioId(null);
+    utterance.onerror = () => setPlayingAudioId(null);
+
+    window.speechSynthesis.speak(utterance);
   };
   const [scores, setScores] = useState<SectionScores>({ listening: null, reading: null, writing: null, speaking: null });
   const [sectionIndex, setSectionIndex] = useState(0);
@@ -501,14 +517,14 @@ export function FullMockTestPage() {
                   )}
                   {Array.isArray(sections) && sections.map((sec) => (
                     <div key={sec.sectionNumber} className="space-y-4">
-                      {sec.transcript && !globalTranscript && (
+                      {sec.transcript && (
                         <Card className="bg-violet-50/50 border-violet-200"><CardContent className="p-5">
                           <div className="flex items-center justify-between mb-4">
                             <h3 className="font-bold flex items-center gap-2 text-violet-800"><Volume2 className="h-5 w-5" /> Transcript for {sec.title || `Section ${sec.sectionNumber}`}</h3>
                             <Button 
                               size="sm" 
                               variant={playingAudioId === `sec-${sec.sectionNumber}` ? 'destructive' : 'default'}
-                              className={playingAudioId === `sec-${sec.sectionNumber}` ? '' : 'bg-violet-600 hover:bg-violet-700'}
+                              className={playingAudioId === `sec-${sec.sectionNumber}` ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-violet-600 hover:bg-violet-700 text-white'}
                               onClick={() => toggleAudio(`sec-${sec.sectionNumber}`, sec.transcript || '')}
                             >
                               {playingAudioId === `sec-${sec.sectionNumber}` ? <><Square className="h-4 w-4 mr-2" /> Stop Audio</> : <><Play className="h-4 w-4 mr-2" /> Play Audio</>}
