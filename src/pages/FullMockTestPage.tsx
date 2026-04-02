@@ -118,11 +118,20 @@ export default function FullMockTestPage() {
 
   const currentSection = SECTIONS[sectionIndex];
 
-  const handleTimeUp = useCallback(() => submitSection(true), []);
+  // Use refs so handleTimeUp can always call the latest submitSection
+  const submitSectionRef = useRef<() => void>(() => {});
+  const startTimerRef = useRef<(() => void) | null>(null);
+  const resetTimerRef = useRef<((val: number) => void) | null>(null);
+
+  const handleTimeUp = useCallback(() => submitSectionRef.current(), []);
   const { remaining, start: startTimer, reset: resetTimer } = useTimer(
     currentSection?.duration ?? 1800,
     handleTimeUp
   );
+
+  // Keep refs up to date
+  useEffect(() => { startTimerRef.current = startTimer; }, [startTimer]);
+  useEffect(() => { resetTimerRef.current = resetTimer; }, [resetTimer]);
 
   // fetch one test per module
   useEffect(() => {
@@ -149,8 +158,8 @@ export default function FullMockTestPage() {
     setSectionIndex(idx);
     setAnswers({});
     setPhase(SECTIONS[idx].phase);
-    resetTimer(SECTIONS[idx].duration);
-    setTimeout(() => startTimer(), 100);
+    resetTimerRef.current?.(SECTIONS[idx].duration);
+    setTimeout(() => startTimerRef.current?.(), 100);
   };
 
   const submitSection = useCallback((_timeUp = false) => {
@@ -192,6 +201,9 @@ export default function FullMockTestPage() {
       setPhase('results');
     }
   }, [sectionIndex, tests, answers]);
+
+  // Keep submitSectionRef in sync so handleTimeUp always calls latest version
+  useEffect(() => { submitSectionRef.current = submitSection; }, [submitSection]);
 
   // ─── INTRO SCREEN ───────────────────────────────────────────────
   if (phase === 'intro' || loading) {
