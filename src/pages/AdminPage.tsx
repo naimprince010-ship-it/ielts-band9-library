@@ -92,6 +92,7 @@ const menuGroups: MenuGroup[] = [
       { id: 'instructor-dashboard', label: 'My Courses', icon: <GraduationCap className="h-4 w-4" /> },
       { id: 'lessons', label: 'Course Lessons', icon: <BookOpen className="h-4 w-4" /> },
       { id: 'reading', label: 'Mock Test Content', icon: <FileText className="h-4 w-4" /> },
+      { id: 'mock-tests', label: 'Manage Mock Tests', icon: <CheckCircle className="h-4 w-4" /> },
     ],
   },
   {
