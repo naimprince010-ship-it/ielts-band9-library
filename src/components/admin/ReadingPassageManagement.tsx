@@ -186,19 +186,20 @@ export function ReadingPassageManagement() {
         })
       });
 
+      const responseText = await response.text();
+      
       if (!response.ok) {
-        let errorMessage = 'Failed to generate content';
+        let errorMessage = `Server error: ${response.status}`;
         try {
-          const errorData = await response.json();
+          const errorData = JSON.parse(responseText);
           errorMessage = errorData.error || errorData.details || errorMessage;
         } catch {
-          const text = await response.text();
-          errorMessage = text || `Server error: ${response.status}`;
+          errorMessage = responseText || errorMessage;
         }
         throw new Error(errorMessage);
       }
 
-      const data = await response.json();
+      const data = JSON.parse(responseText);
       
       if (data.success && data.content?.passage) {
         const passage = data.content.passage;
