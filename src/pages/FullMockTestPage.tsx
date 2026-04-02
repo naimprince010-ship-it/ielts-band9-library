@@ -11,7 +11,6 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
-import { useAuth } from '@/contexts/AuthContext';
 
 type Phase = 'intro' | 'listening' | 'reading' | 'writing' | 'speaking' | 'results';
 type ModuleType = 'reading' | 'listening' | 'writing' | 'speaking';
@@ -384,7 +383,7 @@ export default function FullMockTestPage() {
         <div className="flex items-center gap-4">
           {/* Section steps */}
           <div className="hidden md:flex items-center gap-1">
-            {SECTIONS.map((s, i) => (
+            {SECTIONS.map((_s, i) => (
               <div key={i} className={`flex items-center gap-1`}>
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${i < sectionIndex ? 'bg-green-500 text-white' : i === sectionIndex ? 'bg-white text-foreground' : 'bg-white/20 text-white/60'}`}>
                   {i < sectionIndex ? <Check className="h-3 w-3" /> : i + 1}
