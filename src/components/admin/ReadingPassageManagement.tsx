@@ -67,6 +67,8 @@ export function ReadingPassageManagement() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [aiGenerated, setAiGenerated] = useState(false);
+  const [aiFullContent, setAiFullContent] = useState<Record<string, unknown> | null>(null);
+  const [savingMockTest, setSavingMockTest] = useState(false);
   const [activeTab, setActiveTab] = useState<'passages' | 'progress'>('passages');
   const [aiTopic, setAiTopic] = useState('');
 
@@ -214,8 +216,10 @@ export function ReadingPassageManagement() {
           content: plainText,
           topic: aiTopic
         });
+        // Store full content (passage + questions) for mock test saving
+        setAiFullContent(data.content);
         setAiGenerated(true);
-        setSuccess('✅ Content generated! Review below and click "Save Passage" to save it.');
+        setSuccess('✅ Content generated! Save as Practice Passage OR as Mock Test below.');
       } else {
         throw new Error('Invalid response format');
       }
@@ -224,6 +228,59 @@ export function ReadingPassageManagement() {
       setError(err instanceof Error ? err.message : 'Failed to generate content. Make sure OPENAI_API_KEY is configured.');
     } finally {
       setGenerating(false);
+    }
+  };
+
+  const handleSaveAsMockTest = async () => {
+    if (!aiFullContent || !isSupabaseConfigured() || !supabase) return;
+
+    setSavingMockTest(true);
+    setError('');
+
+    try {
+      const passage = aiFullContent.passage as Record<string, unknown>;
+      const questions = aiFullContent.questions as Array<Record<string, unknown>>;
+
+      // Format for mock_tests table (ReadingTest structure)
+      const testData = {
+        passages: [
+          {
+            title: formData.title || String(passage?.title || aiTopic),
+            textContent: String(passage?.textContent || formData.content || ''),
+            paragraphs: Array.isArray(passage?.paragraphs) ? passage.paragraphs : [],
+            questions: Array.isArray(questions) ? questions.map((q, i) => ({
+              id: `q${i + 1}`,
+              type: String(q.type || 'mcq'),
+              questionText: String(q.questionText || ''),
+              options: Array.isArray(q.options) ? q.options : [],
+              correctAnswer: String(q.correctAnswer || ''),
+              explanation: String(q.explanation || ''),
+              passageRef: String(q.passageRef || '')
+            })) : []
+          }
+        ]
+      };
+
+      const { error } = await supabase
+        .from('mock_tests')
+        .insert({
+          title: formData.title || `Reading: ${aiTopic}`,
+          module_type: 'reading',
+          test_data: testData,
+          is_published: true,
+          is_premium: false
+        });
+
+      if (error) throw error;
+      setSuccess('🎉 Saved as Mock Test! Students can now see it on the Mock Tests page.');
+      setIsEditorOpen(false);
+      setAiFullContent(null);
+      setAiGenerated(false);
+    } catch (err) {
+      console.error('Error saving mock test:', err);
+      setError(err instanceof Error ? err.message : 'Failed to save as mock test.');
+    } finally {
+      setSavingMockTest(false);
     }
   };
 
@@ -656,19 +713,32 @@ export function ReadingPassageManagement() {
             </div>
 
             {aiGenerated && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-center gap-2 text-blue-800 text-sm">
-                <CheckCircle className="h-4 w-4 text-blue-600 flex-shrink-0" />
-                <span>AI content is ready! Click <strong>Save Passage</strong> below to save it to the database.</span>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-blue-800 text-sm space-y-2">
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-blue-600 flex-shrink-0" />
+                  <span className="font-semibold">AI content is ready! Choose how to save:</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className="bg-white rounded p-2 border border-blue-200">
+                    <p className="font-bold text-blue-700">📖 Practice Passage</p>
+                    <p className="text-gray-600">Adds to Reading Practice section (no questions)</p>
+                  </div>
+                  <div className="bg-white rounded p-2 border border-green-200">
+                    <p className="font-bold text-green-700">🎯 Mock Test</p>
+                    <p className="text-gray-600">Adds to Mock Tests page WITH questions</p>
+                  </div>
+                </div>
               </div>
             )}
-            <div className="flex justify-end gap-2">
+            <div className="flex justify-end gap-2 flex-wrap">
               <Button variant="outline" onClick={() => setIsEditorOpen(false)}>
                 Cancel
               </Button>
               <Button
                 onClick={handleSavePassage}
                 disabled={saving}
-                className={aiGenerated ? 'bg-green-600 hover:bg-green-700 text-white animate-pulse' : ''}
+                variant="outline"
+                className="border-blue-400 text-blue-700 hover:bg-blue-50"
               >
                 {saving ? (
                   <>
@@ -676,9 +746,25 @@ export function ReadingPassageManagement() {
                     Saving...
                   </>
                 ) : (
-                  aiGenerated ? '💾 Save Passage (Required)' : 'Save Passage'
+                  '📖 Save as Practice Passage'
                 )}
               </Button>
+              {aiGenerated && (
+                <Button
+                  onClick={handleSaveAsMockTest}
+                  disabled={savingMockTest}
+                  className="bg-green-600 hover:bg-green-700 text-white"
+                >
+                  {savingMockTest ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Saving Mock Test...
+                    </>
+                  ) : (
+                    '🎯 Save as Mock Test'
+                  )}
+                </Button>
+              )}
             </div>
           </div>
         </DialogContent>
