@@ -15,107 +15,97 @@ interface GenerateRequest {
 }
 
 const READING_PROMPT = (topic: string, difficulty: string, testType: string) => `
-You are an IELTS exam content creator. Generate a complete IELTS ${testType} reading passage with questions.
+You are an IELTS exam content creator. Generate a full IELTS ${testType} reading test including 3 passages and exactly 40 questions.
 
 Topic: ${topic}
 Difficulty: ${difficulty}
 
 Generate a JSON response with this exact structure:
 {
-  "passage": {
-    "title": "Passage title",
-    "textContent": "Full passage text with multiple paragraphs. Use <p class='mb-4'><strong>A</strong> ... </p> format for paragraphs with labels A, B, C, etc.",
-    "paragraphs": [
-      { "label": "A", "content": "Brief summary of paragraph A" },
-      { "label": "B", "content": "Brief summary of paragraph B" }
-    ]
-  },
-  "questions": [
+  "passages": [
     {
-      "type": "true-false-not-given",
-      "questionText": "Question text here",
-      "options": ["TRUE", "FALSE", "NOT GIVEN"],
-      "correctAnswer": "TRUE",
-      "explanation": "Brief explanation",
-      "passageRef": "Paragraph A"
+      "passageNumber": 1,
+      "title": "Passage 1 Title",
+      "textContent": "Full passage text (700-900 words) with multiple paragraphs. Use <p class='mb-4'><strong>A</strong> ... </p> format.",
+      "questions": [
+        {
+          "type": "true-false-not-given",
+          "questionText": "Question text here",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "correctAnswer": "TRUE",
+          "explanation": "Brief explanation"
+        }
+      ]
     },
-    {
-      "type": "mcq",
-      "questionText": "Question text here",
-      "options": ["Option A", "Option B", "Option C", "Option D"],
-      "correctAnswer": "Option A",
-      "passageRef": "Paragraph B"
-    },
-    {
-      "type": "fill-blank",
-      "questionText": "The answer is _____.",
-      "correctAnswer": "answer",
-      "acceptedAnswers": ["answer", "Answer", "ANSWER"],
-      "passageRef": "Paragraph C"
-    }
+    { "passageNumber": 2, "title": "...", "textContent": "...", "questions": [...] },
+    { "passageNumber": 3, "title": "...", "textContent": "...", "questions": [...] }
   ]
 }
 
-Generate 10-13 questions with a mix of:
-- 3-4 True/False/Not Given questions
-- 3-4 Multiple Choice questions
-- 3-4 Fill in the Blank questions
-- 1-2 Matching Headings or Short Answer questions
+Distribution:
+- Passage 1: 13 questions
+- Passage 2: 13 questions
+- Passage 3: 14 questions
+Total: 40 questions.
 
-The passage should be 600-800 words, academic in style, and factually accurate.
-Return ONLY valid JSON, no markdown or explanation.
+Mix question types: Multiple choice, True/False/Not Given, Matching headings, Sentence completion, Summary completion.
+Return ONLY valid JSON.
 `;
 
 const LISTENING_PROMPT = (topic: string, difficulty: string) => `
-You are an IELTS exam content creator. Generate a complete IELTS listening test with transcript and sections.
+You are an IELTS exam content creator. Generate a full IELTS listening test with exactly 4 sections and 40 questions total (10 per section).
 
 Topic: ${topic}
 Difficulty: ${difficulty}
 
+CRITICAL: Use REAL NAMES for speakers (e.g., 'Alice:', 'John:') instead of 'Speaker 1:', 'Speaker 2:'.
+
 Generate a JSON response with this exact structure:
 {
-  "transcript": "Full transcript of what would be spoken in the audio. Include speaker labels like 'Speaker 1:', 'Speaker 2:' for conversations. This should be 400-500 words covering all sections.",
+  "transcript": "Full transcript of all 4 sections combined. ~1500-2000 words total.",
   "sections": [
     {
       "sectionNumber": 1,
-      "title": "Section 1: Conversation about booking a hotel",
+      "title": "Part 1: Social Conversation",
+      "transcript": "Transcript for this part...",
       "questions": [
         {
           "type": "fill-blank",
-          "questionText": "The guest wants to book for _____ nights.",
-          "correctAnswer": "three",
-          "acceptedAnswers": ["three", "3", "Three"]
-        },
-        {
-          "type": "mcq",
-          "questionText": "What type of room does the guest prefer?",
-          "options": ["Single room", "Double room", "Suite", "Family room"],
-          "correctAnswer": "Double room"
+          "questionText": "Q1 text...",
+          "correctAnswer": "word",
+          "acceptedAnswers": ["word", "WORD"]
         }
+        // ... total 10 questions for this section
       ]
     },
     {
-      "sectionNumber": 2,
-      "title": "Section 2: Monologue about local attractions",
-      "questions": [
-        {
-          "type": "fill-blank",
-          "questionText": "The museum opens at _____ am.",
-          "correctAnswer": "nine",
-          "acceptedAnswers": ["nine", "9", "Nine"]
-        }
-      ]
+      "sectionNumber": 2, 
+      "title": "Part 2: Monologue (Social)", 
+      "transcript": "...",
+      "questions": [...] 
+    },
+    {
+      "sectionNumber": 3, 
+      "title": "Part 3: Academic Discussion", 
+      "transcript": "...",
+      "questions": [...] 
+    },
+    {
+      "sectionNumber": 4, 
+      "title": "Part 4: Academic Lecture", 
+      "transcript": "...",
+      "questions": [...] 
     }
   ]
 }
 
-Generate 2 sections with a total of 8-10 questions with a mix of:
-- 4-5 Fill in the Blank questions
-- 3-4 Multiple Choice questions
-- 1-2 Matching questions
-
-The transcript should be 400-500 words, natural conversational style.
-Return ONLY valid JSON, no markdown or explanation.
+Requirements:
+- Part 1: Conversation between two people (e.g., booking, inquiry).
+- Part 2: Monologue about a service, place, or facility.
+- Part 3: Conversation between up to 4 people in an academic setting.
+- Part 4: A formal lecture or talk on an academic subject.
+- Exactly 10 questions per part. Total = 40.
+Return ONLY valid JSON.
 `;
 
 const WRITING_PROMPT = (topic: string, testType: string) => `

@@ -486,6 +486,8 @@ export function FullMockTestPage() {
 
   // Extract question keys for bottom navigation
   let navKeys: string[] = [];
+  const TOTAL_QUESTIONS_TARGET = 40;
+
   if (phase === 'listening') {
     const sections = (td?.sections as Array<{questions: any[]}>) ?? [];
     let i = 0;
@@ -493,7 +495,7 @@ export function FullMockTestPage() {
       if (Array.isArray(s.questions)) s.questions.forEach(() => navKeys.push(`l_${i++}`));
     });
   } else if (phase === 'reading') {
-    const passages = (td?.passages as Array<{questions: any[]}>) ?? [];
+    const passages = (td?.passages as Array<{questions: any[]}>) ?? (td?.passage ? [td.passage] : []);
     let i = 0;
     passages.forEach(p => {
       if (Array.isArray(p.questions)) p.questions.forEach(() => navKeys.push(`r_${i++}`));
@@ -861,7 +863,7 @@ export function FullMockTestPage() {
           </div>
           <div className="pl-4 flex-shrink-0 flex items-center gap-3">
              <div className="text-sm text-muted-foreground mr-4 hidden md:block">
-               {navKeys.filter(k => !!answers[k]).length} of {navKeys.length} Answered
+               {navKeys.filter(k => !!answers[k]).length} of {TOTAL_QUESTIONS_TARGET} Answered
              </div>
              <Button size="default" variant="outline" onClick={() => submitSection()} className="border-foreground text-foreground">
                Review & Submit <ChevronRight className="h-4 w-4 ml-1" />
