@@ -389,30 +389,30 @@ export function MockTestManagement() {
 
   const getModuleColor = (type: ModuleType) => {
     switch (type) {
-      case 'reading': return 'bg-blue-100 text-blue-800';
-      case 'listening': return 'bg-purple-100 text-purple-800';
-      case 'writing': return 'bg-green-100 text-green-800';
-      case 'speaking': return 'bg-orange-100 text-orange-800';
+      case 'reading': return 'bg-blue-50 text-blue-700 border-blue-100';
+      case 'listening': return 'bg-purple-50 text-purple-700 border-purple-100';
+      case 'writing': return 'bg-emerald-50 text-emerald-700 border-emerald-100';
+      case 'speaking': return 'bg-orange-50 text-orange-700 border-orange-100';
     }
   };
 
   if (!isSupabaseConfigured()) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5" />
+      <Card className="border-none shadow-sm rounded-[2rem] overflow-hidden">
+        <CardHeader className="p-8 pb-4">
+          <CardTitle className="text-xl font-bold flex items-center gap-2">
+            <FileText className="h-5 w-5 text-indigo-600" />
             Mock Test Management
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <Alert>
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
+        <CardContent className="p-8 pt-0">
+          <Alert className="bg-amber-50 border-amber-200 rounded-2xl">
+            <AlertCircle className="h-4 w-4 text-amber-600" />
+            <AlertDescription className="text-amber-900 font-medium">
               Supabase is not configured. Please run the SQL setup script in your Supabase dashboard to enable this feature.
               <br /><br />
               <strong>Steps:</strong>
-              <ol className="list-decimal ml-4 mt-2">
+              <ol className="list-decimal ml-4 mt-2 space-y-1">
                 <li>Go to Supabase Dashboard → SQL Editor</li>
                 <li>Run the mock_tests table creation SQL</li>
                 <li>Refresh this page</li>
@@ -425,121 +425,113 @@ export function MockTestManagement() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {success && (
-        <Alert className="bg-green-50 border-green-200">
-          <CheckCircle className="h-4 w-4 text-green-600" />
-          <AlertDescription className="text-green-800">{success}</AlertDescription>
+        <Alert className="bg-emerald-50 border-emerald-200 text-emerald-900 rounded-2xl animate-in fade-in slide-in-from-top-4">
+          <CheckCircle className="h-4 w-4 text-emerald-600" />
+          <AlertDescription className="font-bold">{success}</AlertDescription>
         </Alert>
       )}
 
       {error && (
-        <Alert className="bg-red-50 border-red-200">
-          <AlertCircle className="h-4 w-4 text-red-600" />
-          <AlertDescription className="text-red-800">{error}</AlertDescription>
+        <Alert className="bg-rose-50 border-rose-200 text-rose-900 rounded-2xl animate-in fade-in slide-in-from-top-4" variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription className="font-bold">{error}</AlertDescription>
         </Alert>
       )}
 
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
+      <Card className="border-none shadow-sm rounded-[2rem] overflow-hidden">
+        <CardHeader className="p-8">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5" />
+              <CardTitle className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+                <FileText className="h-6 w-6 text-indigo-600" />
                 Mock Test Management
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="font-medium mt-1">
                 Create and manage IELTS mock tests for all modules
               </CardDescription>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Button onClick={() => setIsFullTestModalOpen(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2">
+              <Button onClick={() => setIsFullTestModalOpen(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2 h-11 rounded-xl font-bold">
                 <Sparkles className="h-4 w-4" />
                 AI Generate Full Test
               </Button>
               <div className="w-px h-10 bg-slate-200 mx-2 hidden lg:block"></div>
-              <Button onClick={() => handleNewTest('reading')} variant="outline" className="gap-2">
-                <FileText className="h-4 w-4" />
-                Reading
+              <Button onClick={() => handleNewTest('reading')} variant="outline" className="h-11 rounded-xl font-bold border-slate-200 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition-all">
+                <FileText className="h-4 w-4 mr-2" /> Reading
               </Button>
-              <Button onClick={() => handleNewTest('listening')} variant="outline" className="gap-2">
-                <Headphones className="h-4 w-4" />
-                Listening
+              <Button onClick={() => handleNewTest('listening')} variant="outline" className="h-11 rounded-xl font-bold border-slate-200 hover:bg-purple-50 hover:text-purple-700 hover:border-purple-200 transition-all">
+                <Headphones className="h-4 w-4 mr-2" /> Listening
               </Button>
-              <Button onClick={() => handleNewTest('writing')} variant="outline" className="gap-2">
-                <PenTool className="h-4 w-4" />
-                Writing
+              <Button onClick={() => handleNewTest('writing')} variant="outline" className="h-11 rounded-xl font-bold border-slate-200 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 transition-all">
+                <PenTool className="h-4 w-4 mr-2" /> Writing
               </Button>
-              <Button onClick={() => handleNewTest('speaking')} variant="outline" className="gap-2">
-                <Mic className="h-4 w-4" />
-                Speaking
+              <Button onClick={() => handleNewTest('speaking')} variant="outline" className="h-11 rounded-xl font-bold border-slate-200 hover:bg-orange-50 hover:text-orange-700 hover:border-orange-200 transition-all">
+                <Mic className="h-4 w-4 mr-2" /> Speaking
               </Button>
             </div>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-8 pb-8">
           {loading ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+            <div className="flex items-center justify-center py-16">
+              <Loader2 className="h-10 w-10 animate-spin text-indigo-600" />
             </div>
           ) : mockTests.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              No mock tests yet. Click one of the buttons above to create your first test.
+            <div className="text-center py-16 text-slate-400 font-bold uppercase tracking-widest border-2 border-dashed rounded-[2rem]">
+              No mock tests found
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="grid gap-4">
               {mockTests.map((test) => (
-                <div
-                  key={test.id}
-                  className="border rounded-lg p-4 flex items-center justify-between"
-                >
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      {getModuleIcon(test.module_type)}
-                      <h4 className="font-medium">{test.title}</h4>
-                      <Badge className={getModuleColor(test.module_type)}>
-                        {test.module_type}
-                      </Badge>
-                      <Badge variant={test.is_published ? 'default' : 'secondary'}>
-                        {test.is_published ? 'Published' : 'Draft'}
-                      </Badge>
-                      {test.is_premium && (
-                        <Badge className="bg-amber-100 text-amber-800">Premium</Badge>
-                      )}
+                <Card key={test.id} className="hover:shadow-xl hover:shadow-slate-100 transition-all duration-300 border-slate-100 rounded-2xl overflow-hidden group">
+                  <CardContent className="p-5">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className={cn(
+                          "h-12 w-12 rounded-2xl flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300",
+                          test.module_type === 'reading' ? 'bg-blue-50 text-blue-600' :
+                          test.module_type === 'listening' ? 'bg-purple-50 text-purple-600' :
+                          test.module_type === 'writing' ? 'bg-emerald-50 text-emerald-600' :
+                          'bg-orange-50 text-orange-600'
+                        )}>
+                          {getModuleIcon(test.module_type)}
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">{test.title}</h3>
+                          <div className="flex items-center gap-2 mt-1">
+                            <Badge variant="outline" className={cn("text-[10px] uppercase font-bold rounded-lg", getModuleColor(test.module_type))}>
+                              {test.module_type}
+                            </Badge>
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                              Created: {new Date(test.created_at).toLocaleDateString()}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {test.is_premium && (
+                          <Badge className="bg-amber-100 text-amber-800 rounded-lg font-bold">Premium</Badge>
+                        )}
+                        <Badge className={cn("rounded-lg font-bold px-3 py-1", test.is_published ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-800')}>
+                          {test.is_published ? 'Published' : 'Draft'}
+                        </Badge>
+                        <div className="flex items-center gap-1 ml-2">
+                          <Button variant="ghost" size="icon" className="rounded-xl hover:bg-slate-50 text-slate-400 hover:text-indigo-600" onClick={() => handleTogglePublish(test)}>
+                            {test.is_published ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                          </Button>
+                          <Button variant="ghost" size="icon" className="rounded-xl hover:bg-slate-50 text-slate-400 hover:text-indigo-600" onClick={() => handleEditTest(test)}>
+                            <Edit className="h-5 w-5" />
+                          </Button>
+                          <Button variant="ghost" size="icon" className="rounded-xl hover:bg-rose-50 text-slate-400 hover:text-rose-600" onClick={() => handleDeleteTest(test.id)}>
+                            <Trash2 className="h-5 w-5" />
+                          </Button>
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-sm text-gray-500">
-                      Created: {new Date(test.created_at).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleTogglePublish(test)}
-                    >
-                      {test.is_published ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleEditTest(test)}
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleDeleteTest(test.id)}
-                      className="text-red-600 hover:text-red-700"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
           )}
