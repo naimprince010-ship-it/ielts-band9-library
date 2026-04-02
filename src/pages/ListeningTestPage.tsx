@@ -42,13 +42,13 @@ import {
 // ============================================
 const SAMPLE_LISTENING_TEST: ListeningTest = {
   id: 'listening-test-1',
-  title: 'Listening Test 1',
-  totalQuestions: 16,
+  title: 'IELTS Listening Test 1',
+  totalQuestions: 40,
   audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', // Demo audio
-  audioDuration: 120, // 2 minutes for demo (normally ~30 min)
+  audioDuration: 1800, // 30 minutes for real IELTS
   transferTime: 120, // 2 minutes for computer-delivered test
   is_premium: false,
-  instructions: 'Listen to the audio and answer questions 1-16. You will hear the recording ONCE only.',
+  instructions: 'Listen to the audio and answer questions 1-40. You will hear the recording ONCE only.',
   sections: [
     {
       id: 'section-1',
@@ -56,43 +56,19 @@ const SAMPLE_LISTENING_TEST: ListeningTest = {
       title: 'Section 1: Conversation',
       description: 'A conversation between two people about booking a hotel room.',
       audioStartTime: 0,
-      audioEndTime: 30,
-      questionRange: { start: 1, end: 4 },
+      audioEndTime: 450,
+      questionRange: { start: 1, end: 10 },
       questions: [
-        {
-          id: 'lq1',
-          questionNumber: 1,
-          type: 'fill-blank',
-          questionText: 'The guest wants to book a room for _____ nights.',
-          correctAnswer: 'three',
-          acceptedAnswers: ['three', '3', 'Three'],
-          wordLimit: 1
-        },
-        {
-          id: 'lq2',
-          questionNumber: 2,
-          type: 'mcq',
-          questionText: 'What type of room does the guest prefer?',
-          options: ['Single room', 'Double room', 'Suite', 'Family room'],
-          correctAnswer: 'Double room'
-        },
-        {
-          id: 'lq3',
-          questionNumber: 3,
-          type: 'fill-blank',
-          questionText: 'The total cost of the stay is $_____ .',
-          correctAnswer: '450',
-          acceptedAnswers: ['450', '450.00'],
-          wordLimit: 1
-        },
-        {
-          id: 'lq4',
-          questionNumber: 4,
-          type: 'mcq',
-          questionText: 'What is included in the room rate?',
-          options: ['Breakfast only', 'Dinner only', 'Breakfast and dinner', 'No meals'],
-          correctAnswer: 'Breakfast only'
-        }
+        { id: 'lq1', questionNumber: 1, type: 'fill-blank', questionText: 'The guest wants to book a room for _____ nights.', correctAnswer: 'three', acceptedAnswers: ['three', '3', 'Three'], wordLimit: 1 },
+        { id: 'lq2', questionNumber: 2, type: 'mcq', questionText: 'What type of room does the guest prefer?', options: ['Single room', 'Double room', 'Suite', 'Family room'], correctAnswer: 'Double room' },
+        { id: 'lq3', questionNumber: 3, type: 'fill-blank', questionText: 'The total cost of the stay is $_____ .', correctAnswer: '450', acceptedAnswers: ['450', '450.00'], wordLimit: 1 },
+        { id: 'lq4', questionNumber: 4, type: 'mcq', questionText: 'What is included in the room rate?', options: ['Breakfast only', 'Dinner only', 'Breakfast and dinner', 'No meals'], correctAnswer: 'Breakfast only' },
+        { id: 'lq5', questionNumber: 5, type: 'fill-blank', questionText: 'Check-in time is at _____ pm.', correctAnswer: '2', acceptedAnswers: ['2', 'two', '2:00'], wordLimit: 1 },
+        { id: 'lq6', questionNumber: 6, type: 'mcq', questionText: 'Where is the hotel located?', options: ['City center', 'Near airport', 'Beach area', 'Mountain resort'], correctAnswer: 'City center' },
+        { id: 'lq7', questionNumber: 7, type: 'fill-blank', questionText: 'The guest\'s surname is _____ .', correctAnswer: 'Johnson', acceptedAnswers: ['Johnson', 'JOHNSON', 'johnson'], wordLimit: 1 },
+        { id: 'lq8', questionNumber: 8, type: 'mcq', questionText: 'How will the guest pay?', options: ['Cash', 'Credit card', 'Debit card', 'Bank transfer'], correctAnswer: 'Credit card' },
+        { id: 'lq9', questionNumber: 9, type: 'fill-blank', questionText: 'The booking reference number is _____ .', correctAnswer: 'HB2847', acceptedAnswers: ['HB2847', 'hb2847'], wordLimit: 1 },
+        { id: 'lq10', questionNumber: 10, type: 'mcq', questionText: 'What extra service does the guest request?', options: ['Airport pickup', 'Room service', 'Spa access', 'Late checkout'], correctAnswer: 'Airport pickup' }
       ]
     },
     {
@@ -100,44 +76,20 @@ const SAMPLE_LISTENING_TEST: ListeningTest = {
       sectionNumber: 2,
       title: 'Section 2: Monologue',
       description: 'A tour guide giving information about a museum.',
-      audioStartTime: 30,
-      audioEndTime: 60,
-      questionRange: { start: 5, end: 8 },
+      audioStartTime: 450,
+      audioEndTime: 900,
+      questionRange: { start: 11, end: 20 },
       questions: [
-        {
-          id: 'lq5',
-          questionNumber: 5,
-          type: 'mcq',
-          questionText: 'When was the museum established?',
-          options: ['1850', '1920', '1965', '2001'],
-          correctAnswer: '1920'
-        },
-        {
-          id: 'lq6',
-          questionNumber: 6,
-          type: 'fill-blank',
-          questionText: 'The museum has _____ permanent exhibitions.',
-          correctAnswer: 'five',
-          acceptedAnswers: ['five', '5', 'Five'],
-          wordLimit: 1
-        },
-        {
-          id: 'lq7',
-          questionNumber: 7,
-          type: 'mcq',
-          questionText: 'What is the most popular exhibit?',
-          options: ['Ancient artifacts', 'Modern art', 'Natural history', 'Space exploration'],
-          correctAnswer: 'Ancient artifacts'
-        },
-        {
-          id: 'lq8',
-          questionNumber: 8,
-          type: 'fill-blank',
-          questionText: 'The museum is open from _____ am to 6 pm.',
-          correctAnswer: '9',
-          acceptedAnswers: ['9', 'nine', 'Nine'],
-          wordLimit: 1
-        }
+        { id: 'lq11', questionNumber: 11, type: 'mcq', questionText: 'When was the museum established?', options: ['1850', '1920', '1965', '2001'], correctAnswer: '1920' },
+        { id: 'lq12', questionNumber: 12, type: 'fill-blank', questionText: 'The museum has _____ permanent exhibitions.', correctAnswer: 'five', acceptedAnswers: ['five', '5', 'Five'], wordLimit: 1 },
+        { id: 'lq13', questionNumber: 13, type: 'mcq', questionText: 'What is the most popular exhibit?', options: ['Ancient artifacts', 'Modern art', 'Natural history', 'Space exploration'], correctAnswer: 'Ancient artifacts' },
+        { id: 'lq14', questionNumber: 14, type: 'fill-blank', questionText: 'The museum is open from _____ am to 6 pm.', correctAnswer: '9', acceptedAnswers: ['9', 'nine', 'Nine'], wordLimit: 1 },
+        { id: 'lq15', questionNumber: 15, type: 'mcq', questionText: 'How many visitors does the museum receive annually?', options: ['50,000', '100,000', '250,000', '500,000'], correctAnswer: '250,000' },
+        { id: 'lq16', questionNumber: 16, type: 'fill-blank', questionText: 'The guided tour lasts _____ minutes.', correctAnswer: '45', acceptedAnswers: ['45', 'forty-five', 'forty five'], wordLimit: 2 },
+        { id: 'lq17', questionNumber: 17, type: 'mcq', questionText: 'What is free for children under 12?', options: ['Entry only', 'Entry and guide', 'Entry and audio guide', 'Everything'], correctAnswer: 'Entry only' },
+        { id: 'lq18', questionNumber: 18, type: 'fill-blank', questionText: 'The gift shop is located on the _____ floor.', correctAnswer: 'ground', acceptedAnswers: ['ground', 'first', 'Ground'], wordLimit: 1 },
+        { id: 'lq19', questionNumber: 19, type: 'mcq', questionText: 'When is the museum closed?', options: ['Mondays', 'Tuesdays', 'Sundays', 'Never'], correctAnswer: 'Mondays' },
+        { id: 'lq20', questionNumber: 20, type: 'fill-blank', questionText: 'Photography is allowed except in the _____ gallery.', correctAnswer: 'Egyptian', acceptedAnswers: ['Egyptian', 'egyptian', 'EGYPTIAN'], wordLimit: 1 }
       ]
     },
     {
@@ -145,44 +97,20 @@ const SAMPLE_LISTENING_TEST: ListeningTest = {
       sectionNumber: 3,
       title: 'Section 3: Discussion',
       description: 'A discussion between students about a research project.',
-      audioStartTime: 60,
-      audioEndTime: 90,
-      questionRange: { start: 9, end: 12 },
+      audioStartTime: 900,
+      audioEndTime: 1350,
+      questionRange: { start: 21, end: 30 },
       questions: [
-        {
-          id: 'lq9',
-          questionNumber: 9,
-          type: 'mcq',
-          questionText: 'What is the main topic of the research project?',
-          options: ['Climate change', 'Urban development', 'Education reform', 'Healthcare systems'],
-          correctAnswer: 'Climate change'
-        },
-        {
-          id: 'lq10',
-          questionNumber: 10,
-          type: 'fill-blank',
-          questionText: 'The deadline for the project is _____ .',
-          correctAnswer: 'Friday',
-          acceptedAnswers: ['Friday', 'friday', 'FRIDAY'],
-          wordLimit: 1
-        },
-        {
-          id: 'lq11',
-          questionNumber: 11,
-          type: 'mcq',
-          questionText: 'How many sources do they need to cite?',
-          options: ['At least 5', 'At least 10', 'At least 15', 'At least 20'],
-          correctAnswer: 'At least 10'
-        },
-        {
-          id: 'lq12',
-          questionNumber: 12,
-          type: 'fill-blank',
-          questionText: 'They will meet in the _____ to work together.',
-          correctAnswer: 'library',
-          acceptedAnswers: ['library', 'Library', 'LIBRARY'],
-          wordLimit: 1
-        }
+        { id: 'lq21', questionNumber: 21, type: 'mcq', questionText: 'What is the main topic of the research project?', options: ['Climate change', 'Urban development', 'Education reform', 'Healthcare systems'], correctAnswer: 'Climate change' },
+        { id: 'lq22', questionNumber: 22, type: 'fill-blank', questionText: 'The deadline for the project is _____ .', correctAnswer: 'Friday', acceptedAnswers: ['Friday', 'friday', 'FRIDAY'], wordLimit: 1 },
+        { id: 'lq23', questionNumber: 23, type: 'mcq', questionText: 'How many sources do they need to cite?', options: ['At least 5', 'At least 10', 'At least 15', 'At least 20'], correctAnswer: 'At least 15' },
+        { id: 'lq24', questionNumber: 24, type: 'fill-blank', questionText: 'They will meet in the _____ to work together.', correctAnswer: 'library', acceptedAnswers: ['library', 'Library', 'LIBRARY'], wordLimit: 1 },
+        { id: 'lq25', questionNumber: 25, type: 'mcq', questionText: 'Who is their research supervisor?', options: ['Dr. Smith', 'Professor Wilson', 'Dr. Brown', 'Professor Taylor'], correctAnswer: 'Professor Wilson' },
+        { id: 'lq26', questionNumber: 26, type: 'fill-blank', questionText: 'The presentation should be _____ minutes long.', correctAnswer: '20', acceptedAnswers: ['20', 'twenty', 'Twenty'], wordLimit: 1 },
+        { id: 'lq27', questionNumber: 27, type: 'mcq', questionText: 'What software will they use for data analysis?', options: ['Excel', 'SPSS', 'Python', 'R'], correctAnswer: 'SPSS' },
+        { id: 'lq28', questionNumber: 28, type: 'fill-blank', questionText: 'The word count limit is _____ words.', correctAnswer: '3000', acceptedAnswers: ['3000', 'three thousand', '3,000'], wordLimit: 2 },
+        { id: 'lq29', questionNumber: 29, type: 'mcq', questionText: 'When will they submit the first draft?', options: ['Monday', 'Wednesday', 'Thursday', 'Saturday'], correctAnswer: 'Wednesday' },
+        { id: 'lq30', questionNumber: 30, type: 'fill-blank', questionText: 'The project is worth _____ percent of their final grade.', correctAnswer: '40', acceptedAnswers: ['40', 'forty', 'Forty'], wordLimit: 1 }
       ]
     },
     {
@@ -190,44 +118,20 @@ const SAMPLE_LISTENING_TEST: ListeningTest = {
       sectionNumber: 4,
       title: 'Section 4: Lecture',
       description: 'A university lecture on renewable energy.',
-      audioStartTime: 90,
-      audioEndTime: 120,
-      questionRange: { start: 13, end: 16 },
+      audioStartTime: 1350,
+      audioEndTime: 1800,
+      questionRange: { start: 31, end: 40 },
       questions: [
-        {
-          id: 'lq13',
-          questionNumber: 13,
-          type: 'mcq',
-          questionText: 'What percentage of global energy comes from renewable sources?',
-          options: ['10%', '20%', '30%', '40%'],
-          correctAnswer: '20%'
-        },
-        {
-          id: 'lq14',
-          questionNumber: 14,
-          type: 'fill-blank',
-          questionText: 'Solar energy has grown by _____ percent in the last decade.',
-          correctAnswer: '300',
-          acceptedAnswers: ['300', 'three hundred'],
-          wordLimit: 2
-        },
-        {
-          id: 'lq15',
-          questionNumber: 15,
-          type: 'mcq',
-          questionText: 'Which country leads in wind energy production?',
-          options: ['USA', 'China', 'Germany', 'India'],
-          correctAnswer: 'China'
-        },
-        {
-          id: 'lq16',
-          questionNumber: 16,
-          type: 'fill-blank',
-          questionText: 'The lecturer predicts renewable energy will dominate by _____ .',
-          correctAnswer: '2050',
-          acceptedAnswers: ['2050', 'twenty fifty'],
-          wordLimit: 2
-        }
+        { id: 'lq31', questionNumber: 31, type: 'mcq', questionText: 'What percentage of global energy comes from renewable sources?', options: ['10%', '20%', '30%', '40%'], correctAnswer: '20%' },
+        { id: 'lq32', questionNumber: 32, type: 'fill-blank', questionText: 'Solar energy has grown by _____ percent in the last decade.', correctAnswer: '300', acceptedAnswers: ['300', 'three hundred'], wordLimit: 2 },
+        { id: 'lq33', questionNumber: 33, type: 'mcq', questionText: 'Which country leads in wind energy production?', options: ['USA', 'China', 'Germany', 'India'], correctAnswer: 'China' },
+        { id: 'lq34', questionNumber: 34, type: 'fill-blank', questionText: 'The lecturer predicts renewable energy will dominate by _____ .', correctAnswer: '2050', acceptedAnswers: ['2050', 'twenty fifty'], wordLimit: 2 },
+        { id: 'lq35', questionNumber: 35, type: 'mcq', questionText: 'What is the main barrier to solar adoption?', options: ['Cost', 'Technology', 'Politics', 'Weather'], correctAnswer: 'Cost' },
+        { id: 'lq36', questionNumber: 36, type: 'fill-blank', questionText: 'Wind turbines can generate up to _____ megawatts each.', correctAnswer: '15', acceptedAnswers: ['15', 'fifteen', 'Fifteen'], wordLimit: 1 },
+        { id: 'lq37', questionNumber: 37, type: 'mcq', questionText: 'Which renewable source has the highest growth potential?', options: ['Solar', 'Wind', 'Hydro', 'Geothermal'], correctAnswer: 'Solar' },
+        { id: 'lq38', questionNumber: 38, type: 'fill-blank', questionText: 'Battery storage technology has improved by _____ percent.', correctAnswer: '80', acceptedAnswers: ['80', 'eighty', 'Eighty'], wordLimit: 1 },
+        { id: 'lq39', questionNumber: 39, type: 'mcq', questionText: 'What sector uses the most renewable energy?', options: ['Transportation', 'Industry', 'Residential', 'Agriculture'], correctAnswer: 'Industry' },
+        { id: 'lq40', questionNumber: 40, type: 'fill-blank', questionText: 'Global investment in renewables reached _____ billion dollars last year.', correctAnswer: '500', acceptedAnswers: ['500', 'five hundred', '500 billion'], wordLimit: 2 }
       ]
     }
   ]
