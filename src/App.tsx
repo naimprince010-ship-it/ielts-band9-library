@@ -29,6 +29,7 @@ const AchievementsPage = lazy(() => import('@/pages/AchievementsPage'));
 const ReadingPracticePage = lazy(() => import('@/pages/ReadingPracticePage'));
 const ProgressDashboardPage = lazy(() => import('@/pages/ProgressDashboardPage'));
 const MockTestPage = lazy(() => import('@/pages/MockTestPage'));
+const FullMockTestPage = lazy(() => import('@/pages/FullMockTestPage'));
 const CertificatePage = lazy(() => import('@/pages/CertificatePage'));
 const GrammarExercisesPage = lazy(() => import('@/pages/GrammarExercisesPage'));
 const EssayBankPage = lazy(() => import('@/pages/EssayBankPage'));
@@ -97,6 +98,7 @@ function App() {
                 <Route path="/practice/typing" element={<Layout><TypingPracticePage /></Layout>} />
                 <Route path="/progress" element={<Layout><ProgressDashboardPage /></Layout>} />
                 <Route path="/mock-test" element={<Layout><MockTestPage /></Layout>} />
+                <Route path="/full-mock-test" element={<Layout><FullMockTestPage /></Layout>} />
                 <Route path="/certificate" element={<Layout><CertificatePage /></Layout>} />
                 <Route path="/grammar-exercises" element={<Layout><GrammarExercisesPage /></Layout>} />
                 <Route path="/essay-bank" element={<Layout><EssayBankPage /></Layout>} />

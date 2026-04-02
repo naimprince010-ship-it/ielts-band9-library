@@ -206,9 +206,17 @@ export default function MockTestPage() {
             <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
               IELTS Mock Tests
             </h1>
-            <p className="text-lg text-white/70 mb-8 max-w-xl mx-auto">
+            <p className="text-lg text-white/70 mb-6 max-w-xl mx-auto">
               Practice with full-length timed tests to simulate the real exam experience and track your progress
             </p>
+            <button
+              onClick={() => navigate('/full-mock-test')}
+              className="inline-flex items-center gap-2 bg-accent hover:bg-accent/90 text-white font-bold px-8 py-3 rounded-full shadow-lg shadow-accent/30 transition-all hover:scale-105 mb-4"
+            >
+              <Target className="h-5 w-5" />
+              🎯 Take Full Mock Test (All 4 Sections)
+            </button>
+            <p className="text-white/50 text-sm">or choose a module below for targeted practice</p>
 
             {/* Stats */}
             <div className="flex flex-wrap justify-center gap-8 pt-4">
