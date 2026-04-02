@@ -2306,18 +2306,18 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
     try {
       const now = Date.now();
       // 1. Reading
-      const readingData = await generateModule('reading') as { passages: any[] };
+      const readingData = await generateModule('reading') as any;
       const readingTest = {
         id: `reading-${now}`, title: `Mock Test: ${topic} - Reading`, testType: 'academic', timeLimit: 3600,
         instructions: 'Read the passages carefully and answer the questions.',
-        passages: readingData.passages.map((p: any, pIndex: number) => ({
-          id: `passage-${now}-${pIndex}`, passageNumber: pIndex + 1, title: p.title, content: p.content,
-          questions: p.questions.map((q: any, qIndex: number) => ({
-            id: `q-${now}-${pIndex}-${qIndex}`, questionNumber: qIndex + 1, type: q.type, questionText: q.questionText,
+        passages: [{
+          id: `passage-${now}-0`, passageNumber: 1, title: readingData.passage?.title || topic, content: readingData.passage?.textContent || '',
+          questions: (readingData.questions || []).map((q: any, qIndex: number) => ({
+            id: `q-${now}-0-${qIndex}`, questionNumber: qIndex + 1, type: q.type, questionText: q.questionText,
             options: q.options, correctAnswer: q.correctAnswer, acceptedAnswers: q.acceptedAnswers
           }))
-        })),
-        totalQuestions: readingData.passages.reduce((sum: number, p: any) => sum + (p.questions?.length || 0), 0)
+        }],
+        totalQuestions: readingData.questions?.length || 0
       };
 
       // 2. Listening
