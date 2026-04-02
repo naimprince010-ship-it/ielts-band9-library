@@ -2279,25 +2279,33 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
   const [progress, setProgress] = useState<string>('');
   const [error, setError] = useState<string>('');
 
-  const generateModule = async (moduleType: string) => {
-    setProgress(`Generating ${moduleType} module... \n(This may take 15-30 seconds per module)`);
+  const generateModule = async (moduleType: string, passageNumber?: number) => {
+    const label = passageNumber ? `${moduleType} (Passage ${passageNumber})` : moduleType;
+    setProgress(`Generating ${label} module... \n(This may take 15-30 seconds)`);
     const response = await fetch('/api/generate-content', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ moduleType, topic: topic.trim(), difficulty, testType: 'academic', provider: 'openai' })
+      body: JSON.stringify({ 
+        moduleType, 
+        topic: topic.trim(), 
+        difficulty, 
+        testType: 'academic', 
+        provider: 'openai',
+        passageNumber 
+      })
     });
     const rawText = await response.text();
     let data;
     try { 
       data = JSON.parse(rawText); 
     } catch (e) { 
-      console.error(`Raw response for ${moduleType}:`, rawText);
+      console.error(`Raw response for ${label}:`, rawText);
       if (rawText.includes('<!DOCTYPE html>')) {
-        throw new Error(`Server error (504/500) during ${moduleType} generation. This usually means the AI took too long to respond. Try again or use a simpler topic.`);
+        throw new Error(`Server error (504/500) during ${label} generation. This usually means the AI took too long to respond. Try again or use a simpler topic.`);
       }
-      throw new Error(`Invalid AI response for ${moduleType}. The AI output was not valid JSON.`); 
+      throw new Error(`Invalid AI response for ${label}. The AI output was not valid JSON.`); 
     }
-    if (!response.ok || !data.success || !data.content) throw new Error(data.error || `Failed to generate ${moduleType}`);
+    if (!response.ok || !data.success || !data.content) throw new Error(data.error || `Failed to generate ${label}`);
     return data.content;
   };
 
@@ -2306,9 +2314,14 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
     setIsGenerating(true); setError('');
     try {
       const now = Date.now();
-      // 1. Reading
-      const readingData = await generateModule('reading') as { passages: any[] };
-      const totalReadingQuestions = readingData.passages.reduce((acc, p) => acc + (p.questions?.length || 0), 0);
+      // 1. Reading (Generate 3 passages one by one)
+      const readingPassagesData = [];
+      for (let i = 1; i <= 3; i++) {
+        const pData = await generateModule('reading', i);
+        readingPassagesData.push(pData);
+      }
+      
+      const totalReadingQuestions = readingPassagesData.reduce((acc, p) => acc + (p.questions?.length || 0), 0);
       
       const readingTest = {
         id: `reading-${now}`, 
@@ -2316,8 +2329,8 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
         testType: 'academic', 
         timeLimit: 3600,
         instructions: 'Read the passages carefully and answer the questions.',
-        passages: readingData.passages.map((p, pIndex) => {
-          const startNum = (pIndex === 0 ? 0 : readingData.passages.slice(0, pIndex).reduce((acc, prevP) => acc + (prevP.questions?.length || 0), 0)) + 1;
+        passages: readingPassagesData.map((p, pIndex) => {
+          const startNum = (pIndex === 0 ? 0 : readingPassagesData.slice(0, pIndex).reduce((acc, prevP) => acc + (prevP.questions?.length || 0), 0)) + 1;
           const endNum = startNum + (p.questions?.length || 0) - 1;
           
           return {

@@ -12,7 +12,38 @@ interface GenerateRequest {
   difficulty?: 'easy' | 'medium' | 'hard';
   testType?: 'academic' | 'general';
   provider?: AIProvider;
+  passageNumber?: number; // 1, 2, or 3
 }
+
+const READING_PASSAGE_PROMPT = (topic: string, difficulty: string, testType: string, passageNumber: number) => `
+You are an IELTS exam content creator. Generate Passage ${passageNumber} for an IELTS ${testType} reading test.
+
+Topic Theme: ${topic}
+Difficulty: ${difficulty}
+
+Generate a JSON response with this exact structure:
+{
+  "passageNumber": ${passageNumber},
+  "title": "Title for Passage ${passageNumber}",
+  "textContent": "Full passage text (700-800 words) with multiple paragraphs. Use <p class='mb-4'><strong>A</strong> ... </p> format.",
+  "questions": [
+    {
+      "type": "true-false-not-given",
+      "questionText": "Question text here",
+      "options": ["TRUE", "FALSE", "NOT GIVEN"],
+      "correctAnswer": "TRUE",
+      "explanation": "Brief explanation"
+    }
+  ]
+}
+
+Question Count Requirements:
+- If Passage 1 or 2: Generate exactly 13 questions.
+- If Passage 3: Generate exactly 14 questions.
+
+Mix question types: Multiple choice, True/False/Not Given, Matching headings, Sentence completion, Summary completion.
+Return ONLY valid JSON.
+`;
 
 const READING_PROMPT = (topic: string, difficulty: string, testType: string) => `
 You are an IELTS exam content creator. Generate a full IELTS ${testType} reading test including 3 passages and exactly 40 questions.
@@ -381,6 +412,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const difficulty = body.difficulty || 'medium';
     const testType = body.testType || 'academic';
     const requestedProvider = body.provider || 'openai';
+    const passageNumber = body.passageNumber;
 
     // Auto-select available provider
     let provider = requestedProvider;
@@ -412,12 +444,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'Invalid module type' });
     }
 
-    console.log(`Generating ${moduleType} content with ${provider}, topic: ${topic}, difficulty: ${difficulty}`);
+    console.log(`Generating ${moduleType} content with ${provider}, topic: ${topic}, difficulty: ${difficulty}${passageNumber ? `, passage: ${passageNumber}` : ''}`);
     let prompt: string;
 
     switch (moduleType) {
       case 'reading':
-        prompt = READING_PROMPT(topic, difficulty, testType);
+        prompt = passageNumber 
+          ? READING_PASSAGE_PROMPT(topic, difficulty, testType, passageNumber)
+          : READING_PROMPT(topic, difficulty, testType);
         break;
       case 'listening':
         prompt = LISTENING_PROMPT(topic, difficulty);
