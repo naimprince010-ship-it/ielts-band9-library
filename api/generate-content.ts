@@ -12,8 +12,36 @@ interface GenerateRequest {
   difficulty?: 'easy' | 'medium' | 'hard';
   testType?: 'academic' | 'general';
   provider?: AIProvider;
-  passageNumber?: number; // 1, 2, or 3
+  passageNumber?: number; // 1, 2, or 3 for reading
+  sectionNumber?: number; // 1, 2, 3, or 4 for listening
 }
+
+const LISTENING_SECTION_PROMPT = (topic: string, difficulty: string, testType: string, sectionNumber: number) => `
+You are an IELTS exam content creator. Generate Section ${sectionNumber} for an IELTS listening test.
+
+Topic Theme: ${topic}
+Difficulty: ${difficulty}
+
+Generate a JSON response with this exact structure:
+{
+  "sectionNumber": ${sectionNumber},
+  "title": "Section ${sectionNumber} Title",
+  "transcript": "Full audio transcript for Section ${sectionNumber}. Use <p class='mb-4'> format.",
+  "questions": [
+    {
+      "questionNumber": ${((sectionNumber - 1) * 10) + 1},
+      "type": "multiple-choice",
+      "questionText": "Question text here",
+      "options": ["A", "B", "C"],
+      "correctAnswer": "A",
+      "explanation": "Brief explanation"
+    }
+  ]
+}
+
+Question Count: Generate exactly 10 questions for this section (Questions ${((sectionNumber - 1) * 10) + 1} to ${sectionNumber * 10}).
+Return ONLY valid JSON.
+`;
 
 const READING_PASSAGE_PROMPT = (topic: string, difficulty: string, testType: string, passageNumber: number) => `
 You are an IELTS exam content creator. Generate Passage ${passageNumber} for an IELTS ${testType} reading test.
@@ -413,6 +441,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const testType = body.testType || 'academic';
     const requestedProvider = body.provider || 'openai';
     const passageNumber = body.passageNumber;
+    const sectionNumber = body.sectionNumber;
 
     // Auto-select available provider
     let provider = requestedProvider;
@@ -444,7 +473,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'Invalid module type' });
     }
 
-    console.log(`Generating ${moduleType} content with ${provider}, topic: ${topic}, difficulty: ${difficulty}${passageNumber ? `, passage: ${passageNumber}` : ''}`);
+    console.log(`Generating ${moduleType} content with ${provider}, topic: ${topic}, difficulty: ${difficulty}${passageNumber ? `, passage: ${passageNumber}` : ''}${sectionNumber ? `, section: ${sectionNumber}` : ''}`);
     let prompt: string;
 
     switch (moduleType) {
@@ -454,7 +483,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           : READING_PROMPT(topic, difficulty, testType);
         break;
       case 'listening':
-        prompt = LISTENING_PROMPT(topic, difficulty);
+        prompt = sectionNumber 
+          ? LISTENING_SECTION_PROMPT(topic, difficulty, testType, sectionNumber)
+          : LISTENING_PROMPT(topic, difficulty);
         break;
       case 'writing':
         prompt = WRITING_PROMPT(topic, testType);

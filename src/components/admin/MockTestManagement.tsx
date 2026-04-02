@@ -2279,8 +2279,8 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
   const [progress, setProgress] = useState<string>('');
   const [error, setError] = useState<string>('');
 
-  const generateModule = async (moduleType: string, passageNumber?: number) => {
-    const label = passageNumber ? `${moduleType} (Passage ${passageNumber})` : moduleType;
+  const generateModule = async (moduleType: string, index?: number) => {
+    const label = index ? `${moduleType} (${moduleType === 'reading' ? 'Passage' : 'Section'} ${index})` : moduleType;
     setProgress(`Generating ${label} module... \n(This may take 15-30 seconds)`);
     const response = await fetch('/api/generate-content', {
       method: 'POST',
@@ -2291,7 +2291,8 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
         difficulty, 
         testType: 'academic', 
         provider: 'openai',
-        passageNumber 
+        passageNumber: moduleType === 'reading' ? index : undefined,
+        sectionNumber: moduleType === 'listening' ? index : undefined
       })
     });
     const rawText = await response.text();
@@ -2354,10 +2355,15 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
         totalQuestions: totalReadingQuestions
       };
 
-      // 2. Listening
-      const listeningData = await generateModule('listening') as { transcript: string; sections: any[] };
+      // 2. Listening (Generate 4 sections one by one)
+      const listeningSectionsData = [];
+      for (let i = 1; i <= 4; i++) {
+        const sData = await generateModule('listening', i);
+        listeningSectionsData.push(sData);
+      }
+      
       let currentQNum = 1;
-      const listeningSections = listeningData.sections.map((s: any, sIndex: number) => {
+      const listeningSections = listeningSectionsData.map((s, sIndex) => {
         const startNum = currentQNum;
         const mappedQuestions = s.questions.map((q: any, qIndex: number) => {
           const num = currentQNum++;
@@ -2375,10 +2381,10 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
         return {
           id: `section-${now}-${sIndex}`, 
           sectionNumber: s.sectionNumber || (sIndex + 1), 
-          title: s.title, 
+          title: s.title || `Section ${sIndex + 1}`, 
           audioStartTime: 0, 
           audioEndTime: 0,
-          transcript: s.transcript || listeningData.transcript, 
+          transcript: s.transcript || '', 
           questions: mappedQuestions, 
           questionRange: { start: startNum, end: currentQNum - 1 }
         };
