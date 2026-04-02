@@ -4,7 +4,8 @@ import {
   Settings, Plus, Edit, Trash2, Eye, EyeOff, BookOpen, GraduationCap,
   Sparkles, Save, X, AlertCircle, CheckCircle, ShieldCheck, Square, CheckSquare,
   CreditCard, Clock, CheckCircle2, XCircle, Loader2, BarChart3, Tag, ExternalLink,
-  LayoutDashboard, FileText, Users, Palette, Menu, ChevronDown, ChevronRight, Star
+  LayoutDashboard, FileText, Users, Palette, Menu, ChevronDown, ChevronRight, Star,
+  Search, Bell, User as UserIcon, LogOut, Home
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,6 +27,21 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Switch } from '@/components/ui/switch';
 import { useAuth } from '@/contexts/AuthContext';
@@ -92,6 +108,7 @@ const menuGroups: MenuGroup[] = [
       { id: 'instructor-dashboard', label: 'My Courses', icon: <GraduationCap className="h-4 w-4" /> },
       { id: 'lessons', label: 'Course Lessons', icon: <BookOpen className="h-4 w-4" /> },
       { id: 'reading', label: 'Mock Test Content', icon: <FileText className="h-4 w-4" /> },
+      { id: 'mock-tests', label: 'Manage Mock Tests', icon: <CheckCircle className="h-4 w-4" /> },
     ],
   },
   {
@@ -123,12 +140,12 @@ const menuGroups: MenuGroup[] = [
 ];
 
 export function AdminPage() {
-  const { user, isAdmin, isInstructor, loading, supabaseUser } = useAuth();
+  const { user, isAdmin, isInstructor, loading, supabaseUser, signOut } = useAuth();
   const { lessons, createLesson, updateLesson, deleteLesson } = useLessons();
   const navigate = useNavigate();
   
   const [activeSection, setActiveSection] = useState(isInstructor ? 'instructor-dashboard' : 'dashboard');
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<string[]>(menuGroups.map(g => g.title));
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [editingLesson, setEditingLesson] = useState<Lesson | null>(null);
@@ -144,136 +161,116 @@ export function AdminPage() {
     mistakesAccurate: false,
   });
 
-    const [formData, setFormData] = useState({
-      title: '',
-      type: 'vocabulary' as LessonType,
-      level: 'intermediate' as LessonLevel,
-      topic: '',
-      description: '',
-      is_premium: false,
-      is_published: false,
-      content: null as LessonContent | null,
-    });
+  const [formData, setFormData] = useState({
+    title: '',
+    type: 'vocabulary' as LessonType,
+    level: 'intermediate' as LessonLevel,
+    topic: '',
+    description: '',
+    is_premium: false,
+    is_published: false,
+    content: null as LessonContent | null,
+  });
 
-    const [payments, setPayments] = useState<PaymentRequest[]>([]);
-    const [loadingPayments, setLoadingPayments] = useState(false);
-    const [processingPayment, setProcessingPayment] = useState<string | null>(null);
+  const [payments, setPayments] = useState<PaymentRequest[]>([]);
+  const [loadingPayments, setLoadingPayments] = useState(false);
+  const [processingPayment, setProcessingPayment] = useState<string | null>(null);
 
-    useEffect(() => {
-      // Don't redirect while loading
-      if (loading) return;
-      
-      // If there's a Supabase session but user profile hasn't loaded yet, wait
-      // This prevents redirect during the brief moment between session load and profile fetch
-      if (supabaseUser && !user) return;
-      
-      // Only redirect if we're sure there's no valid admin or instructor user
-      if (!user || (!isAdmin && !isInstructor)) {
-        navigate('/');
-      }
-    }, [user, isAdmin, isInstructor, loading, supabaseUser, navigate]);
+  useEffect(() => {
+    if (loading) return;
+    if (supabaseUser && !user) return;
+    if (!user || (!isAdmin && !isInstructor)) {
+      navigate('/');
+    }
+  }, [user, isAdmin, isInstructor, loading, supabaseUser, navigate]);
 
-    const fetchPayments = async () => {
-      if (!isSupabaseConfigured() || !supabase) return;
-    
-      setLoadingPayments(true);
-      try {
-        const { data, error } = await supabase
-          .from('payment_requests')
-          .select('*')
-          .order('created_at', { ascending: false });
-      
-        if (error) throw error;
-        setPayments(data || []);
-      } catch (err) {
-        console.error('Failed to fetch payments:', err);
-      } finally {
-        setLoadingPayments(false);
-      }
-    };
+  const fetchPayments = async () => {
+    if (!isSupabaseConfigured() || !supabase) return;
+    setLoadingPayments(true);
+    try {
+      const { data, error } = await supabase
+        .from('payment_requests')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      setPayments(data || []);
+    } catch (err) {
+      console.error('Failed to fetch payments:', err);
+    } finally {
+      setLoadingPayments(false);
+    }
+  };
 
-    useEffect(() => {
-      if (user && (isAdmin || isInstructor)) {
-        fetchPayments();
-      }
-    }, [user, isAdmin, isInstructor]);
+  useEffect(() => {
+    if (user && (isAdmin || isInstructor)) {
+      fetchPayments();
+    }
+  }, [user, isAdmin, isInstructor]);
 
-    const handleApprovePayment = async (payment: PaymentRequest) => {
-      if (!isSupabaseConfigured() || !supabase) return;
-    
-      setProcessingPayment(payment.id);
-      try {
-        const { error: updateError } = await supabase
-          .from('payment_requests')
-          .update({
-            status: 'approved',
-            verified_at: new Date().toISOString(),
-            verified_by: user?.email || 'admin',
-          })
-          .eq('id', payment.id);
+  const handleApprovePayment = async (payment: PaymentRequest) => {
+    if (!isSupabaseConfigured() || !supabase) return;
+    setProcessingPayment(payment.id);
+    try {
+      const { error: updateError } = await supabase
+        .from('payment_requests')
+        .update({
+          status: 'approved',
+          verified_at: new Date().toISOString(),
+          verified_by: user?.email || 'admin',
+        })
+        .eq('id', payment.id);
+      if (updateError) throw updateError;
 
-        if (updateError) throw updateError;
+      const { error: userError } = await supabase
+        .from('users')
+        .update({
+          subscription_status: 'premium',
+          premium_until: payment.package_type === 'yearly' 
+            ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
+            : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        })
+        .eq('id', payment.user_id);
 
-                const { error: userError } = await supabase
-                  .from('users')
-                  .update({
-                    subscription_status: 'premium',
-                    premium_until: payment.package_type === 'yearly' 
-                      ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
-                      : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-                  })
-                  .eq('id', payment.user_id);
+      if (userError) console.error('Failed to update user premium status:', userError);
+      setSuccess('Payment approved successfully!');
+      fetchPayments();
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (err) {
+      console.error('Failed to approve payment:', err);
+      setError('Failed to approve payment. Please try again.');
+    } finally {
+      setProcessingPayment(null);
+    }
+  };
 
-        if (userError) {
-          console.error('Failed to update user premium status:', userError);
-        }
+  const handleRejectPayment = async (payment: PaymentRequest) => {
+    if (!isSupabaseConfigured() || !supabase) return;
+    if (!confirm('Are you sure you want to reject this payment?')) return;
+    setProcessingPayment(payment.id);
+    try {
+      const { error } = await supabase
+        .from('payment_requests')
+        .update({
+          status: 'rejected',
+          verified_at: new Date().toISOString(),
+          verified_by: user?.email || 'admin',
+        })
+        .eq('id', payment.id);
+      if (error) throw error;
+      setSuccess('Payment rejected.');
+      fetchPayments();
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (err) {
+      console.error('Failed to reject payment:', err);
+      setError('Failed to reject payment. Please try again.');
+    } finally {
+      setProcessingPayment(null);
+    }
+  };
 
-        setSuccess('Payment approved successfully!');
-        fetchPayments();
-        setTimeout(() => setSuccess(''), 3000);
-      } catch (err) {
-        console.error('Failed to approve payment:', err);
-        setError('Failed to approve payment. Please try again.');
-      } finally {
-        setProcessingPayment(null);
-      }
-    };
+  const pendingPayments = payments.filter(p => p.status === 'pending');
+  const processedPayments = payments.filter(p => p.status !== 'pending');
 
-    const handleRejectPayment = async (payment: PaymentRequest) => {
-      if (!isSupabaseConfigured() || !supabase) return;
-    
-      if (!confirm('Are you sure you want to reject this payment?')) return;
-    
-      setProcessingPayment(payment.id);
-      try {
-        const { error } = await supabase
-          .from('payment_requests')
-          .update({
-            status: 'rejected',
-            verified_at: new Date().toISOString(),
-            verified_by: user?.email || 'admin',
-          })
-          .eq('id', payment.id);
-
-        if (error) throw error;
-
-        setSuccess('Payment rejected.');
-        fetchPayments();
-        setTimeout(() => setSuccess(''), 3000);
-      } catch (err) {
-        console.error('Failed to reject payment:', err);
-        setError('Failed to reject payment. Please try again.');
-      } finally {
-        setProcessingPayment(null);
-      }
-    };
-
-    const pendingPayments = payments.filter(p => p.status === 'pending');
-    const processedPayments = payments.filter(p => p.status !== 'pending');
-
-  // Show loading spinner while:
-  // 1. Auth is still loading
-  // 2. There's a Supabase session but user profile hasn't loaded yet
   if (loading || (supabaseUser && !user)) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -282,9 +279,7 @@ export function AdminPage() {
     );
   }
 
-  if (!user || (!isAdmin && !isInstructor)) {
-    return null;
-  }
+  if (!user || (!isAdmin && !isInstructor)) return null;
 
   const topics = formData.type === 'vocabulary' ? VOCABULARY_TOPICS : GRAMMAR_TOPICS;
 
@@ -346,24 +341,16 @@ export function AdminPage() {
       setError('Please select a topic first');
       return;
     }
-
     setIsGenerating(true);
     setError('');
-
     try {
-      const generatedContent = await generateLessonWithAI(
-        formData.type,
-        formData.level,
-        formData.topic
-      );
-
+      const generatedContent = await generateLessonWithAI(formData.type, formData.level, formData.topic);
       setFormData(prev => ({
         ...prev,
         title: generatedContent.title,
         description: `Master ${formData.topic.toLowerCase()} ${formData.type} for IELTS Band ${formData.level === 'beginner' ? '5-6' : formData.level === 'intermediate' ? '6.5-7.5' : '7.5-9'}.`,
         content: generatedContent,
       }));
-
       setSuccess('Lesson generated successfully! Review and edit before publishing.');
     } catch (err) {
       setError('Failed to generate lesson. Please try again.');
@@ -378,16 +365,10 @@ export function AdminPage() {
       setError('Please fill in all required fields and generate content');
       return;
     }
-
     setIsSaving(true);
     setError('');
-
     try {
-      const slug = formData.title
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/(^-|-$)/g, '');
-
+      const slug = formData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
       const lessonData = {
         title: formData.title,
         slug: editingLesson ? editingLesson.slug : `${slug}-${Date.now()}`,
@@ -399,7 +380,6 @@ export function AdminPage() {
         is_premium: formData.is_premium,
         is_published: formData.is_published,
       };
-
       if (editingLesson) {
         await updateLesson(editingLesson.id, lessonData);
         setSuccess('Lesson updated successfully!');
@@ -407,7 +387,6 @@ export function AdminPage() {
         await createLesson(lessonData);
         setSuccess('Lesson created successfully!');
       }
-
       setTimeout(() => {
         setIsEditorOpen(false);
         setSuccess('');
@@ -425,18 +404,73 @@ export function AdminPage() {
   const grammarLessons = lessons.filter(l => l.type === 'grammar');
 
   const toggleGroup = (title: string) => {
-    setExpandedGroups(prev => 
-      prev.includes(title) 
-        ? prev.filter(g => g !== title)
-        : [...prev, title]
-    );
+    setExpandedGroups(prev => prev.includes(title) ? prev.filter(g => g !== title) : [...prev, title]);
   };
 
   const getMenuItemBadge = (id: string): number | undefined => {
-    if (id === 'payments' && pendingPayments.length > 0) {
-      return pendingPayments.length;
-    }
+    if (id === 'payments' && pendingPayments.length > 0) return pendingPayments.length;
     return undefined;
+  };
+
+  const NavItems = ({ isMobile = false }: { isMobile?: boolean }) => (
+    <nav className={cn("space-y-1", isMobile ? "px-2" : "px-3")}>
+      {menuGroups.map((group) => {
+        const visibleItems = group.items.filter(item => !item.role || (item.role === 'admin' && isAdmin));
+        if (visibleItems.length === 0) return null;
+        return (
+          <div key={group.title} className="mb-4">
+            <button
+              onClick={() => toggleGroup(group.title)}
+              className="flex items-center justify-between w-full px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider hover:text-gray-700"
+            >
+              {group.title}
+              {expandedGroups.includes(group.title) ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+            </button>
+            {expandedGroups.includes(group.title) && (
+              <div className="mt-1 space-y-1">
+                {visibleItems.map((item) => {
+                  const badge = getMenuItemBadge(item.id);
+                  const active = activeSection === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        setActiveSection(item.id);
+                        if (isMobile) setSidebarOpen(false);
+                      }}
+                      className={cn(
+                        "flex items-center justify-between w-full px-3 py-2.5 text-sm rounded-xl transition-all duration-200 group",
+                        active ? "bg-indigo-600 text-white shadow-md shadow-indigo-200" : "text-slate-600 hover:bg-slate-50 hover:text-indigo-600"
+                      )}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className={cn("transition-colors", active ? "text-white" : "text-slate-400 group-hover:text-indigo-600")}>
+                          {item.icon}
+                        </span>
+                        <span className="font-medium">{item.label}</span>
+                      </div>
+                      {badge && (
+                        <Badge className={cn("text-[10px] px-1.5 py-0 h-4 min-w-4 flex items-center justify-center rounded-full", active ? "bg-white text-indigo-600" : "bg-red-500 text-white")}>
+                          {badge}
+                        </Badge>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </nav>
+  );
+
+  const getActiveItemLabel = () => {
+    for (const group of menuGroups) {
+      const item = group.items.find(i => i.id === activeSection);
+      if (item) return item.label;
+    }
+    return 'Dashboard';
   };
 
   const renderContent = () => {
@@ -444,64 +478,64 @@ export function AdminPage() {
       case 'instructor-dashboard':
         return (
           <div className="space-y-8">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h2 className="text-3xl font-black text-slate-900 tracking-tight">Instructor Dashboard</h2>
                 <p className="text-slate-500 font-medium">Manage your courses and student progress</p>
               </div>
-              <Badge className="bg-indigo-600 text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-lg">
+              <Badge className="bg-indigo-600 text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-lg w-fit">
                 Instructor Mode
               </Badge>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-               <Card className="border-none shadow-sm bg-indigo-50/50">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+               <Card className="border-none shadow-sm bg-indigo-50/50 rounded-[2rem]">
                   <CardContent className="pt-6">
                      <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white">
+                        <div className="h-12 w-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-indigo-100">
                            <Users className="h-6 w-6" />
                         </div>
                         <div>
-                           <p className="text-sm font-bold text-slate-500 uppercase">Total Students</p>
+                           <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Students</p>
                            <h3 className="text-2xl font-black text-slate-900">1,250</h3>
                         </div>
                      </div>
                   </CardContent>
                </Card>
-               <Card className="border-none shadow-sm bg-rose-50/50">
+               <Card className="border-none shadow-sm bg-rose-50/50 rounded-[2rem]">
                   <CardContent className="pt-6">
                      <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 bg-rose-600 rounded-2xl flex items-center justify-center text-white">
+                        <div className="h-12 w-12 bg-rose-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-rose-100">
                            <BookOpen className="h-6 w-6" />
                         </div>
                         <div>
-                           <p className="text-sm font-bold text-slate-500 uppercase">Courses</p>
+                           <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Courses</p>
                            <h3 className="text-2xl font-black text-slate-900">4 Active</h3>
                         </div>
                      </div>
                   </CardContent>
                </Card>
-               <Card className="border-none shadow-sm bg-emerald-50/50">
+               <Card className="border-none shadow-sm bg-emerald-50/50 rounded-[2rem]">
                   <CardContent className="pt-6">
                      <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white">
+                        <div className="h-12 w-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-emerald-100">
                            <Star className="h-6 w-6" />
                         </div>
                         <div>
-                           <p className="text-sm font-bold text-slate-500 uppercase">Avg. Rating</p>
+                           <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Avg. Rating</p>
                            <h3 className="text-2xl font-black text-slate-900">4.9/5</h3>
                         </div>
                      </div>
                   </CardContent>
                </Card>
-               <Card className="border-none shadow-sm bg-amber-50/50">
+               <Card className="border-none shadow-sm bg-amber-50/50 rounded-[2rem]">
                   <CardContent className="pt-6">
                      <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 bg-amber-600 rounded-2xl flex items-center justify-center text-white">
+                        <div className="h-12 w-12 bg-amber-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-amber-100">
                            <Clock className="h-6 w-6" />
                         </div>
                         <div>
-                           <p className="text-sm font-bold text-slate-500 uppercase">Live Classes</p>
+                           <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Live Classes</p>
                            <h3 className="text-2xl font-black text-slate-900">24 Pending</h3>
                         </div>
                      </div>
@@ -510,31 +544,31 @@ export function AdminPage() {
             </div>
 
             <div className="grid lg:grid-cols-3 gap-8">
-               <Card className="lg:col-span-2 shadow-sm border-slate-100 rounded-[2rem]">
-                  <CardHeader>
-                     <CardTitle className="text-xl font-bold flex items-center gap-2">
+               <Card className="lg:col-span-2 shadow-sm border-slate-100 rounded-[2.5rem] overflow-hidden">
+                  <CardHeader className="p-8">
+                     <CardTitle className="text-xl font-bold flex items-center gap-2 text-slate-900">
                         <Sparkles className="h-5 w-5 text-indigo-500" /> My Flagship Courses
                      </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="px-8 pb-8">
                      <div className="space-y-4">
                         {[
                           { title: 'IELTS Band 8+ Masterclass', students: 450, income: '৳2,47,500' },
                           { title: 'Speaking Confidence Club', students: 320, income: '৳48,000' }
                         ].map((c, i) => (
-                          <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-md transition-all">
+                          <div key={i} className="flex items-center justify-between p-5 rounded-[1.5rem] bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-xl hover:shadow-slate-100 transition-all duration-300">
                              <div className="flex items-center gap-4">
-                                <div className="h-10 w-10 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center font-bold text-indigo-600">
+                                <div className="h-12 w-12 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center font-black text-indigo-600 text-lg">
                                    {c.title[0]}
                                 </div>
                                 <div>
                                    <h4 className="font-bold text-slate-800">{c.title}</h4>
-                                   <p className="text-xs text-slate-500 font-medium">{c.students} Students Enrolled</p>
+                                   <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">{c.students} Students Enrolled</p>
                                 </div>
                              </div>
                              <div className="text-right">
                                 <p className="font-black text-indigo-600">{c.income}</p>
-                                <Button variant="ghost" size="sm" className="h-7 text-[10px] uppercase font-black tracking-widest text-slate-400">Manage</Button>
+                                <Button variant="ghost" size="sm" className="h-8 text-[10px] uppercase font-black tracking-widest text-slate-400 hover:text-indigo-600 hover:bg-indigo-50">Manage</Button>
                              </div>
                           </div>
                         ))}
@@ -542,22 +576,22 @@ export function AdminPage() {
                   </CardContent>
                </Card>
 
-               <Card className="shadow-sm border-slate-100 rounded-[2rem]">
-                  <CardHeader>
-                     <CardTitle className="text-xl font-bold">Upcoming Live Classes</CardTitle>
+               <Card className="shadow-sm border-slate-100 rounded-[2.5rem] overflow-hidden">
+                  <CardHeader className="p-8">
+                     <CardTitle className="text-xl font-bold text-slate-900">Upcoming Live Classes</CardTitle>
                   </CardHeader>
-                  <CardContent>
-                     <div className="space-y-6">
+                  <CardContent className="px-8 pb-8">
+                     <div className="space-y-8">
                         {[
                           { time: 'Today, 8 PM', topic: 'Speaking Part 2 Secrets' },
                           { time: 'Tomorrow, 9 PM', topic: 'Task 2 Essay Templates' }
                         ].map((l, i) => (
-                           <div key={i} className="relative pl-6 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-1 before:bg-indigo-600 before:rounded-full">
-                              <p className="text-xs font-black text-indigo-600 uppercase mb-1">{l.time}</p>
-                              <h4 className="font-bold text-slate-800">{l.topic}</h4>
+                           <div key={i} className="relative pl-6 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-1.5 before:bg-indigo-600 before:rounded-full group">
+                              <p className="text-xs font-black text-indigo-600 uppercase mb-1 tracking-widest">{l.time}</p>
+                              <h4 className="font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">{l.topic}</h4>
                            </div>
                         ))}
-                        <Button className="w-full h-12 rounded-xl bg-slate-900 hover:bg-indigo-600 font-bold">
+                        <Button className="w-full h-14 rounded-2xl bg-slate-900 hover:bg-indigo-600 font-bold text-white shadow-xl shadow-slate-200 transition-all duration-300">
                            Schedule New Session
                         </Button>
                      </div>
@@ -569,140 +603,122 @@ export function AdminPage() {
 
       case 'dashboard':
         return (
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">Dashboard Overview</h2>
-              <p className="text-gray-500 mt-1">Welcome to the admin panel</p>
+              <h2 className="text-3xl font-black text-slate-900 tracking-tight">Admin Overview</h2>
+              <p className="text-slate-500 font-medium">Welcome to the central management hub</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <Card className="rounded-[2rem] border-none shadow-sm hover:shadow-xl transition-all duration-300">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">Total Lessons</CardTitle>
+                  <CardTitle className="text-sm font-bold text-slate-400 uppercase tracking-widest">Total Lessons</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-3xl font-bold">{allLessons.length}</p>
+                  <p className="text-4xl font-black text-slate-900">{allLessons.length}</p>
                 </CardContent>
               </Card>
-              <Card>
+              <Card className="rounded-[2rem] border-none shadow-sm hover:shadow-xl transition-all duration-300">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <BookOpen className="h-5 w-5 text-indigo-600" />
-                    Vocabulary
+                  <CardTitle className="text-sm font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                    <BookOpen className="h-4 w-4 text-indigo-600" /> Vocabulary
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-3xl font-bold">{vocabularyLessons.length}</p>
+                  <p className="text-4xl font-black text-slate-900">{vocabularyLessons.length}</p>
                 </CardContent>
               </Card>
-              <Card>
+              <Card className="rounded-[2rem] border-none shadow-sm hover:shadow-xl transition-all duration-300">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <GraduationCap className="h-5 w-5 text-purple-600" />
-                    Grammar
+                  <CardTitle className="text-sm font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                    <GraduationCap className="h-4 w-4 text-purple-600" /> Grammar
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-3xl font-bold">{grammarLessons.length}</p>
+                  <p className="text-4xl font-black text-slate-900">{grammarLessons.length}</p>
                 </CardContent>
               </Card>
             </div>
             {pendingPayments.length > 0 && (
-              <Alert className="bg-amber-50 border-amber-200">
-                <Clock className="h-4 w-4 text-amber-600" />
-                <AlertDescription className="text-amber-800">
-                  You have {pendingPayments.length} pending payment(s) to review.
+              <Alert className="bg-amber-50 border-amber-200 rounded-2xl p-6">
+                <Clock className="h-5 w-5 text-amber-600" />
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full">
+                  <AlertDescription className="text-amber-900 font-bold">
+                    You have {pendingPayments.length} pending payment(s) that need your attention.
+                  </AlertDescription>
                   <Button 
-                    variant="link" 
-                    className="text-amber-700 p-0 h-auto ml-2"
+                    variant="outline" 
+                    className="bg-white border-amber-200 text-amber-700 hover:bg-amber-100 font-bold rounded-xl"
                     onClick={() => setActiveSection('payments')}
                   >
-                    View Payments
+                    Verify Now
                   </Button>
-                </AlertDescription>
+                </div>
               </Alert>
             )}
           </div>
         );
 
-      case 'vocab-generator':
-        return <VocabularyGenerator />;
-
-      case 'vocab-enricher':
-        return <VocabularyEnricher />;
-
-      case 'vocab-categorizer':
-        return <VocabularyCategorizer />;
-
-      case 'vocab-coverage':
-        return <VocabularyCoverageDashboard />;
-
+      case 'vocab-generator': return <VocabularyGenerator />;
+      case 'vocab-enricher': return <VocabularyEnricher />;
+      case 'vocab-categorizer': return <VocabularyCategorizer />;
+      case 'vocab-coverage': return <VocabularyCoverageDashboard />;
       case 'lessons':
         return (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
+          <div className="space-y-8">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Lessons</h2>
-                <p className="text-gray-500 mt-1">Manage vocabulary and grammar lessons</p>
+                <h2 className="text-3xl font-black text-slate-900 tracking-tight">Lessons Library</h2>
+                <p className="text-slate-500 font-medium mt-1">Manage and publish learning content</p>
               </div>
-              <Button onClick={handleNewLesson} className="gap-2">
-                <Plus className="h-4 w-4" />
-                New Lesson
+              <Button onClick={handleNewLesson} className="gap-2 bg-indigo-600 hover:bg-indigo-700 h-12 px-6 rounded-2xl shadow-lg shadow-indigo-100 font-bold text-white">
+                <Plus className="h-5 w-5" /> New Lesson
               </Button>
             </div>
             <div className="grid gap-4">
               {allLessons.length === 0 ? (
-                <Card>
-                  <CardContent className="py-8 text-center text-gray-500">
-                    No lessons yet. Create your first lesson!
+                <Card className="rounded-[2rem] border-dashed border-2">
+                  <CardContent className="py-16 text-center text-slate-400 font-bold uppercase tracking-widest">
+                    No lessons found. Start by creating one!
                   </CardContent>
                 </Card>
               ) : (
                 allLessons.map((lesson) => (
-                  <Card key={lesson.id} className="hover:shadow-md transition-shadow">
-                    <CardContent className="p-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          {lesson.type === 'vocabulary' ? (
-                            <BookOpen className="h-5 w-5 text-indigo-600" />
-                          ) : (
-                            <GraduationCap className="h-5 w-5 text-purple-600" />
-                          )}
+                  <Card key={lesson.id} className="hover:shadow-xl hover:shadow-slate-100 transition-all duration-300 border-slate-100 rounded-2xl overflow-hidden group">
+                    <CardContent className="p-5">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div className="flex items-center gap-4">
+                          <div className={cn(
+                            "h-12 w-12 rounded-2xl flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300",
+                            lesson.type === 'vocabulary' ? "bg-indigo-50 text-indigo-600" : "bg-purple-50 text-purple-600"
+                          )}>
+                            {lesson.type === 'vocabulary' ? <BookOpen className="h-6 w-6" /> : <GraduationCap className="h-6 w-6" />}
+                          </div>
                           <div>
-                            <h3 className="font-medium">{lesson.title}</h3>
-                            <p className="text-sm text-gray-500">
-                              {lesson.type} - {lesson.level} - {lesson.topic}
-                            </p>
+                            <h3 className="font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">{lesson.title}</h3>
+                            <div className="flex items-center gap-2 mt-1">
+                              <Badge variant="outline" className="text-[10px] uppercase font-bold text-slate-400 rounded-lg">{lesson.type}</Badge>
+                              <Badge variant="outline" className="text-[10px] uppercase font-bold text-slate-400 rounded-lg">{lesson.level}</Badge>
+                            </div>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
                           {lesson.is_premium && (
-                            <Badge className="bg-amber-100 text-amber-800">Premium</Badge>
+                            <Badge className="bg-amber-100 text-amber-800 rounded-lg font-bold">Premium</Badge>
                           )}
-                          <Badge className={lesson.is_published ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}>
+                          <Badge className={cn("rounded-lg font-bold", lesson.is_published ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-800')}>
                             {lesson.is_published ? 'Published' : 'Draft'}
                           </Badge>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleTogglePublish(lesson)}
-                          >
-                            {lesson.is_published ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleEditLesson(lesson)}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDeleteLesson(lesson.id)}
-                            className="text-red-600 hover:text-red-700"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                          <div className="flex items-center gap-1 ml-2">
+                            <Button variant="ghost" size="icon" className="rounded-xl hover:bg-slate-50 text-slate-400 hover:text-indigo-600" onClick={() => handleTogglePublish(lesson)}>
+                              {lesson.is_published ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                            </Button>
+                            <Button variant="ghost" size="icon" className="rounded-xl hover:bg-slate-50 text-slate-400 hover:text-indigo-600" onClick={() => handleEditLesson(lesson)}>
+                              <Edit className="h-5 w-5" />
+                            </Button>
+                            <Button variant="ghost" size="icon" className="rounded-xl hover:bg-rose-50 text-slate-400 hover:text-rose-600" onClick={() => handleDeleteLesson(lesson.id)}>
+                              <Trash2 className="h-5 w-5" />
+                            </Button>
+                          </div>
                         </div>
                       </div>
                     </CardContent>
@@ -713,83 +729,70 @@ export function AdminPage() {
           </div>
         );
 
-      case 'reading':
-        return <ReadingPassageManagement />;
-
-      case 'mock-tests':
-        return <MockTestManagement />;
-
-      case 'page-content':
-        return <PageContentManagement />;
-
+      case 'reading': return <ReadingPassageManagement />;
+      case 'mock-tests': return <MockTestManagement />;
+      case 'page-content': return <PageContentManagement />;
       case 'payments':
         return (
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">Payment Verification</h2>
-              <p className="text-gray-500 mt-1">Review and approve bKash payment submissions</p>
+              <h2 className="text-3xl font-black text-slate-900 tracking-tight">Payment Verification</h2>
+              <p className="text-slate-500 font-medium">Verify bKash transactions and activate premium access</p>
             </div>
             {loadingPayments ? (
-              <div className="flex items-center justify-center py-8">
-                <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+              <div className="flex items-center justify-center py-16">
+                <Loader2 className="h-10 w-10 animate-spin text-indigo-600" />
               </div>
             ) : payments.length === 0 ? (
-              <Card>
-                <CardContent className="py-8 text-center text-gray-500">
-                  No payment requests yet
-                </CardContent>
+              <Card className="rounded-[2rem] border-dashed border-2 p-16 text-center text-slate-400 font-bold uppercase tracking-widest">
+                No payment history found
               </Card>
             ) : (
-              <div className="space-y-6">
+              <div className="space-y-10">
                 {pendingPayments.length > 0 && (
                   <div>
-                    <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                      <Clock className="h-5 w-5 text-amber-500" />
-                      Pending Payments ({pendingPayments.length})
+                    <h3 className="font-bold text-xl mb-6 flex items-center gap-3 text-slate-800">
+                      <div className="h-2 w-2 bg-amber-500 rounded-full animate-pulse" />
+                      Awaiting Action ({pendingPayments.length})
                     </h3>
-                    <div className="space-y-4">
+                    <div className="grid gap-4">
                       {pendingPayments.map((payment) => (
-                        <Card key={payment.id} className="border-amber-200 bg-amber-50">
-                          <CardContent className="p-4">
-                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                              <div className="space-y-1">
-                                <p className="font-medium">{payment.user_email}</p>
-                                <p className="text-sm text-gray-600">
-                                  <strong>Package:</strong> {payment.package_name} - ৳{payment.amount}
-                                </p>
-                                <p className="text-sm text-gray-600">
-                                  <strong>TrxID:</strong> <code className="bg-white px-2 py-0.5 rounded">{payment.transaction_id}</code>
-                                </p>
-                                <p className="text-sm text-gray-600">
-                                  <strong>bKash:</strong> {payment.sender_number}
-                                </p>
-                                <p className="text-xs text-gray-500">
-                                  Submitted: {new Date(payment.created_at).toLocaleString()}
-                                </p>
+                        <Card key={payment.id} className="border-amber-200 bg-amber-50/50 rounded-2xl overflow-hidden">
+                          <CardContent className="p-6">
+                            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-4">
+                                <div>
+                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">User Email</p>
+                                  <p className="font-bold text-slate-800">{payment.user_email}</p>
+                                </div>
+                                <div>
+                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Package & Amount</p>
+                                  <p className="font-bold text-slate-800">{payment.package_name} - <span className="text-indigo-600">৳{payment.amount}</span></p>
+                                </div>
+                                <div>
+                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Transaction ID</p>
+                                  <code className="bg-white border border-amber-200 px-3 py-1 rounded-lg font-mono text-sm font-bold text-amber-700">{payment.transaction_id}</code>
+                                </div>
+                                <div>
+                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Sender Number</p>
+                                  <p className="font-bold text-slate-800">{payment.sender_number}</p>
+                                </div>
                               </div>
-                              <div className="flex gap-2">
+                              <div className="flex gap-3">
                                 <Button
                                   onClick={() => handleApprovePayment(payment)}
                                   disabled={processingPayment === payment.id}
-                                  className="bg-green-600 hover:bg-green-700"
+                                  className="bg-emerald-600 hover:bg-emerald-700 h-12 px-6 rounded-xl font-bold shadow-lg shadow-emerald-100 flex-1 sm:flex-none"
                                 >
-                                  {processingPayment === payment.id ? (
-                                    <Loader2 className="h-4 w-4 animate-spin" />
-                                  ) : (
-                                    <>
-                                      <CheckCircle2 className="h-4 w-4 mr-2" />
-                                      Approve
-                                    </>
-                                  )}
+                                  {processingPayment === payment.id ? <Loader2 className="h-5 w-5 animate-spin" /> : <><CheckCircle2 className="h-5 w-5 mr-2" /> Approve</>}
                                 </Button>
                                 <Button
                                   variant="outline"
                                   onClick={() => handleRejectPayment(payment)}
                                   disabled={processingPayment === payment.id}
-                                  className="text-red-600 border-red-300 hover:bg-red-50"
+                                  className="text-rose-600 border-rose-200 hover:bg-rose-50 h-12 px-6 rounded-xl font-bold flex-1 sm:flex-none"
                                 >
-                                  <XCircle className="h-4 w-4 mr-2" />
-                                  Reject
+                                  <XCircle className="h-5 w-5 mr-2" /> Reject
                                 </Button>
                               </div>
                             </div>
@@ -802,23 +805,23 @@ export function AdminPage() {
 
                 {processedPayments.length > 0 && (
                   <div>
-                    <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-                      <CheckCircle className="h-5 w-5 text-gray-400" />
-                      Processed Payments ({processedPayments.length})
-                    </h3>
-                    <div className="space-y-2">
+                    <h3 className="font-bold text-xl mb-6 text-slate-800">Recent Transactions</h3>
+                    <div className="grid gap-3">
                       {processedPayments.slice(0, 10).map((payment) => (
-                        <Card key={payment.id} className={payment.status === 'approved' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}>
-                          <CardContent className="p-3">
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <p className="font-medium text-sm">{payment.user_email}</p>
-                                <p className="text-xs text-gray-600">
-                                  {payment.package_name} - ৳{payment.amount} | TrxID: {payment.transaction_id}
-                                </p>
+                        <Card key={payment.id} className="border-slate-100 rounded-xl hover:shadow-md transition-shadow">
+                          <CardContent className="p-4">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                              <div className="flex items-center gap-4">
+                                <div className={cn("h-10 w-10 rounded-full flex items-center justify-center shadow-sm", payment.status === 'approved' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600')}>
+                                  {payment.status === 'approved' ? <CheckCircle2 className="h-5 w-5" /> : <XCircle className="h-5 w-5" />}
+                                </div>
+                                <div>
+                                  <p className="font-bold text-slate-800 text-sm">{payment.user_email}</p>
+                                  <p className="text-xs text-slate-400 font-medium">{payment.package_name} • ৳{payment.amount} • TrxID: {payment.transaction_id}</p>
+                                </div>
                               </div>
-                              <Badge className={payment.status === 'approved' ? 'bg-green-600' : 'bg-red-600'}>
-                                {payment.status}
+                              <Badge className={cn("rounded-lg font-bold px-3 py-1", payment.status === 'approved' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800')}>
+                                {payment.status.toUpperCase()}
                               </Badge>
                             </div>
                           </CardContent>
@@ -832,211 +835,178 @@ export function AdminPage() {
           </div>
         );
 
-      case 'user-management':
-        return <UserManagement />;
-
-      case 'coupons':
-        return <CouponManagement />;
-
-      case 'site-settings':
-        return <SiteSettings />;
-
-      case 'payment-settings':
-        return <PaymentSettings />;
-
-      case 'faq-management':
-        return <FAQManagement />;
-
-      case 'contact-settings':
-        return <ContactSettingsManagement />;
-
-      case 'design-audit':
-        return <DesignAudit />;
-
-      default:
-        return (
-          <div className="text-center py-8 text-gray-500">
-            Select a section from the sidebar
-          </div>
-        );
+      case 'user-management': return <UserManagement />;
+      case 'coupons': return <CouponManagement />;
+      case 'site-settings': return <SiteSettings />;
+      case 'payment-settings': return <PaymentSettings />;
+      case 'faq-management': return <FAQManagement />;
+      case 'contact-settings': return <ContactSettingsManagement />;
+      case 'design-audit': return <DesignAudit />;
+      default: return <div className="text-center py-16 text-slate-400 font-bold uppercase tracking-widest">Select a section from the sidebar</div>;
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Top Header */}
-      <div className="bg-gray-900 text-white py-4 px-4 lg:px-8">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="lg:hidden text-white hover:bg-white/10"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-            >
-              <Menu className="h-5 w-5" />
+    <div className="min-h-screen bg-slate-50/50">
+      <header className="sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur-md">
+        <div className="flex h-16 items-center justify-between px-4 lg:px-8">
+          <div className="flex items-center gap-4">
+            <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="lg:hidden">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="p-0 w-72">
+                <SheetHeader className="p-6 border-b">
+                  <div className="flex items-center gap-3">
+                    <div className="h-9 w-9 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-indigo-200 shadow-lg">
+                      <Settings className="h-5 w-5" />
+                    </div>
+                    <SheetTitle className="text-xl font-black tracking-tight">Admin <span className="text-indigo-600">Panel</span></SheetTitle>
+                  </div>
+                </SheetHeader>
+                <div className="py-6 overflow-y-auto h-[calc(100vh-80px)]">
+                  <NavItems isMobile />
+                </div>
+              </SheetContent>
+            </Sheet>
+
+            <div className="hidden lg:flex items-center gap-3">
+              <div className="h-9 w-9 bg-slate-900 rounded-xl flex items-center justify-center text-white shadow-slate-200 shadow-lg">
+                <Settings className="h-5 w-5" />
+              </div>
+              <div>
+                <h1 className="text-lg font-black tracking-tight text-slate-900 leading-none">Admin Panel</h1>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">IELTS Band 9 Library</p>
+              </div>
+            </div>
+
+            <div className="hidden md:block h-8 w-px bg-slate-200 mx-2" />
+
+            <Breadcrumb className="hidden md:flex">
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="#" onClick={(e) => { e.preventDefault(); setActiveSection('dashboard'); }} className="flex items-center gap-1">
+                    <Home className="h-3.5 w-3.5" /> Admin
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage className="font-bold text-indigo-600 uppercase text-[11px] tracking-widest">{getActiveItemLabel()}</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
+
+          <div className="flex items-center gap-2 sm:gap-4">
+            <div className="relative hidden sm:block">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <Input placeholder="Quick search..." className="pl-9 h-9 w-64 bg-slate-100 border-none rounded-full text-xs focus-visible:ring-indigo-500 focus-visible:bg-white transition-all" />
+            </div>
+            <Button variant="ghost" size="icon" className="relative text-slate-500 hover:text-indigo-600">
+              <Bell className="h-5 w-5" />
+              <span className="absolute top-2 right-2 h-2 w-2 bg-rose-500 rounded-full border-2 border-white" />
             </Button>
-            <Settings className="h-6 w-6" />
-            <div>
-              <h1 className="text-xl font-bold">Admin Panel</h1>
-              <p className="text-gray-400 text-sm hidden sm:block">IELTS Band 9 Library</p>
+            <div className="h-8 w-px bg-slate-200 mx-1" />
+            <div className="flex items-center gap-3 pl-2">
+              <div className="hidden sm:block text-right">
+                <p className="text-xs font-bold text-slate-900 leading-none truncate max-w-[120px]">{user?.email?.split('@')[0]}</p>
+                <p className="text-[10px] font-medium text-slate-500 mt-1 uppercase tracking-tighter">{isAdmin ? 'System Admin' : 'Instructor'}</p>
+              </div>
+              <div className="h-9 w-9 bg-indigo-50 rounded-full border border-indigo-100 flex items-center justify-center text-indigo-600 font-black shadow-sm overflow-hidden">
+                {user?.email?.[0].toUpperCase() || <UserIcon className="h-5 w-5" />}
+              </div>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => window.open('/', '_blank')}
-              className="gap-2 bg-white/10 border-white/20 hover:bg-white/20 text-white"
-            >
-              <ExternalLink className="h-4 w-4" />
-              <span className="hidden sm:inline">Visit Site</span>
-            </Button>
-          </div>
         </div>
-      </div>
+      </header>
 
       <div className="flex">
-        {/* Sidebar */}
-        <aside className={cn(
-          "fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform duration-200 ease-in-out lg:transform-none",
-          sidebarOpen ? "translate-x-0" : "-translate-x-full",
-          "top-[65px] lg:top-0 h-[calc(100vh-65px)] lg:h-[calc(100vh-65px)]"
-        )}>
-          <div className="h-full overflow-y-auto py-4">
-            <nav className="px-3 space-y-1">
-              {menuGroups.map((group) => {
-                const visibleItems = group.items.filter(item => 
-                  !item.role || (item.role === 'admin' && isAdmin)
-                );
-
-                if (visibleItems.length === 0) return null;
-
-                return (
-                  <div key={group.title} className="mb-4">
-                    <button
-                      onClick={() => toggleGroup(group.title)}
-                      className="flex items-center justify-between w-full px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider hover:text-gray-700"
-                    >
-                      {group.title}
-                      {expandedGroups.includes(group.title) ? (
-                        <ChevronDown className="h-4 w-4" />
-                      ) : (
-                        <ChevronRight className="h-4 w-4" />
-                      )}
-                    </button>
-                    {expandedGroups.includes(group.title) && (
-                      <div className="mt-1 space-y-1">
-                        {visibleItems.map((item) => {
-                          const badge = getMenuItemBadge(item.id);
-                          return (
-                            <button
-                              key={item.id}
-                              onClick={() => {
-                                setActiveSection(item.id);
-                                if (window.innerWidth < 1024) {
-                                  setSidebarOpen(false);
-                                }
-                              }}
-                              className={cn(
-                                "flex items-center justify-between w-full px-3 py-2 text-sm rounded-lg transition-colors",
-                                activeSection === item.id
-                                  ? "bg-indigo-50 text-indigo-700 font-medium"
-                                  : "text-gray-700 hover:bg-gray-100"
-                              )}
-                            >
-                              <div className="flex items-center gap-3">
-                                {item.icon}
-                                {item.label}
-                              </div>
-                              {badge && (
-                                <Badge className="bg-red-500 text-white text-xs px-2 py-0.5">
-                                  {badge}
-                                </Badge>
-                              )}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </nav>
+        <aside className="hidden lg:block w-72 h-[calc(100vh-64px)] sticky top-16 border-r bg-white/50 overflow-y-auto">
+          <div className="py-8">
+            <NavItems />
+          </div>
+          <div className="p-6 mt-auto">
+            <Card className="bg-indigo-600 text-white border-none shadow-xl shadow-indigo-200 rounded-[1.5rem] overflow-hidden relative">
+              <div className="absolute -right-4 -top-4 h-24 w-24 bg-white/10 rounded-full blur-2xl" />
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">Quick Action</CardTitle>
+                <CardDescription className="text-indigo-100 text-xs font-medium">Create a new lesson with AI in seconds.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button onClick={handleNewLesson} variant="secondary" className="w-full bg-white text-indigo-600 hover:bg-indigo-50 font-bold h-10 rounded-xl">
+                  <Plus className="h-4 w-4 mr-2" /> New Lesson
+                </Button>
+              </CardContent>
+            </Card>
+            <Button 
+              variant="ghost" 
+              className="w-full mt-6 justify-start gap-3 text-slate-500 hover:text-rose-600 hover:bg-rose-50 h-11 rounded-xl transition-all font-bold"
+              onClick={signOut}
+            >
+              <LogOut className="h-4 w-4" /> Sign Out
+            </Button>
           </div>
         </aside>
 
-        {/* Overlay for mobile */}
-        {sidebarOpen && (
-          <div 
-            className="fixed inset-0 bg-black/50 z-40 lg:hidden top-[65px]"
-            onClick={() => setSidebarOpen(false)}
-          />
-        )}
+        <main className="flex-1 min-w-0">
+          <div className="p-4 lg:p-10 max-w-[1600px] mx-auto">
+            <div className="flex lg:hidden items-center justify-between mb-8">
+              <div>
+                <h2 className="text-2xl font-black text-slate-900 tracking-tight">{getActiveItemLabel()}</h2>
+                <p className="text-slate-500 text-xs font-medium mt-1">Admin Management Dashboard</p>
+              </div>
+              <Button onClick={handleNewLesson} size="icon" className="h-11 w-11 rounded-2xl bg-indigo-600 shadow-lg shadow-indigo-200">
+                <Plus className="h-6 w-6" />
+              </Button>
+            </div>
 
-        {/* Main Content */}
-        <main className="flex-1 p-4 lg:p-8 min-h-[calc(100vh-65px)] overflow-auto">
-          {success && (
-            <Alert className="mb-6 bg-green-50 border-green-200">
-              <CheckCircle className="h-4 w-4 text-green-600" />
-              <AlertDescription className="text-green-800">{success}</AlertDescription>
-            </Alert>
-          )}
-          {error && (
-            <Alert className="mb-6 bg-red-50 border-red-200" variant="destructive">
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-          {renderContent()}
+            {success && (
+              <Alert className="mb-8 bg-emerald-50 border-emerald-200 text-emerald-900 rounded-2xl animate-in fade-in slide-in-from-top-4">
+                <CheckCircle className="h-4 w-4 text-emerald-600" />
+                <AlertDescription className="font-medium">{success}</AlertDescription>
+              </Alert>
+            )}
+            {error && (
+              <Alert className="mb-8 bg-rose-50 border-rose-200 text-rose-900 rounded-2xl animate-in fade-in slide-in-from-top-4" variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription className="font-medium">{error}</AlertDescription>
+              </Alert>
+            )}
+
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+              {renderContent()}
+            </div>
+          </div>
         </main>
       </div>
 
       <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 border-none rounded-[2rem]">
+          <DialogHeader className="p-8 pb-4">
+            <DialogTitle className="text-2xl font-black text-slate-900">
               {editingLesson ? 'Edit Lesson' : 'Create New Lesson'}
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="font-medium">
               Use AI to generate lesson content or create manually
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-6">
-            {error && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
-            {success && (
-              <Alert className="bg-green-50 border-green-200">
-                <CheckCircle className="h-4 w-4 text-green-600" />
-                <AlertDescription className="text-green-800">{success}</AlertDescription>
-              </Alert>
-            )}
-
-            <Card className="border-indigo-200 bg-indigo-50">
+          <div className="px-8 pb-8 space-y-8">
+            <Card className="border-indigo-100 bg-indigo-50/30 rounded-[1.5rem] overflow-hidden">
               <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-indigo-600" />
-                  AI Lesson Generator
+                <CardTitle className="text-lg font-bold flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-indigo-600" /> AI Lesson Generator
                 </CardTitle>
-                <CardDescription>
-                  Select type, level, and topic, then click generate
-                </CardDescription>
+                <CardDescription className="font-medium">Select type, level, and topic, then click generate</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                   <div className="space-y-2">
-                    <Label>Lesson Type</Label>
-                    <Select
-                      value={formData.type}
-                      onValueChange={(v) => setFormData(prev => ({ ...prev, type: v as LessonType, topic: '' }))}
-                    >
-                      <SelectTrigger>
+                    <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Lesson Type</Label>
+                    <Select value={formData.type} onValueChange={(v) => setFormData(prev => ({ ...prev, type: v as LessonType, topic: '' }))}>
+                      <SelectTrigger className="rounded-xl border-slate-200 bg-white">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -1045,14 +1015,10 @@ export function AdminPage() {
                       </SelectContent>
                     </Select>
                   </div>
-
                   <div className="space-y-2">
-                    <Label>Level</Label>
-                    <Select
-                      value={formData.level}
-                      onValueChange={(v) => setFormData(prev => ({ ...prev, level: v as LessonLevel }))}
-                    >
-                      <SelectTrigger>
+                    <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Level</Label>
+                    <Select value={formData.level} onValueChange={(v) => setFormData(prev => ({ ...prev, level: v as LessonLevel }))}>
+                      <SelectTrigger className="rounded-xl border-slate-200 bg-white">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -1062,201 +1028,105 @@ export function AdminPage() {
                       </SelectContent>
                     </Select>
                   </div>
-
                   <div className="space-y-2">
-                    <Label>Topic</Label>
-                    <Select
-                      value={formData.topic}
-                      onValueChange={(v) => setFormData(prev => ({ ...prev, topic: v }))}
-                    >
-                      <SelectTrigger>
+                    <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Topic</Label>
+                    <Select value={formData.topic} onValueChange={(v) => setFormData(prev => ({ ...prev, topic: v }))}>
+                      <SelectTrigger className="rounded-xl border-slate-200 bg-white">
                         <SelectValue placeholder="Select topic" />
                       </SelectTrigger>
                       <SelectContent>
-                        {topics.map((topic) => (
-                          <SelectItem key={topic} value={topic}>{topic}</SelectItem>
-                        ))}
+                        {topics.map((topic) => <SelectItem key={topic} value={topic}>{topic}</SelectItem>)}
                       </SelectContent>
                     </Select>
                   </div>
                 </div>
-
-                <Button
-                  onClick={handleGenerateWithAI}
-                  disabled={isGenerating || !formData.topic}
-                  className="w-full gap-2"
-                >
-                  <Sparkles className="h-4 w-4" />
-                  {isGenerating ? 'Generating...' : 'Generate Draft with AI'}
+                <Button onClick={handleGenerateWithAI} disabled={isGenerating || !formData.topic} className="w-full h-12 rounded-xl bg-indigo-600 hover:bg-indigo-700 font-bold shadow-lg shadow-indigo-100">
+                  {isGenerating ? <><Loader2 className="h-5 w-5 mr-2 animate-spin" /> Generating...</> : <><Sparkles className="h-5 w-5 mr-2" /> Generate Draft with AI</>}
                 </Button>
               </CardContent>
             </Card>
 
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="title">Title</Label>
-                <Input
-                  id="title"
-                  value={formData.title}
-                  onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                  placeholder="Lesson title"
-                />
+                <Label htmlFor="title" className="text-xs font-black uppercase tracking-widest text-slate-400">Title</Label>
+                <Input id="title" value={formData.title} onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))} placeholder="Lesson title" className="h-12 rounded-xl border-slate-200" />
               </div>
-
               <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
-                <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                  placeholder="Brief description of the lesson"
-                  rows={2}
-                />
+                <Label htmlFor="description" className="text-xs font-black uppercase tracking-widest text-slate-400">Description</Label>
+                <Textarea id="description" value={formData.description} onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))} placeholder="Brief description of the lesson" rows={2} className="rounded-xl border-slate-200" />
               </div>
 
               {formData.content && (
-                <Card>
+                <Card className="rounded-[1.5rem] border-slate-100 shadow-sm">
                   <CardHeader>
-                    <CardTitle className="text-lg">Generated Content Preview</CardTitle>
+                    <CardTitle className="text-lg font-bold">Generated Content Preview</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4 text-sm">
-                    <div>
-                      <strong>Target Level:</strong> {formData.content.targetLevel}
+                  <CardContent className="space-y-4 text-sm font-medium text-slate-600">
+                    <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
+                      <span className="text-slate-400">Target Level</span>
+                      <span className="font-bold text-slate-900">{formData.content.targetLevel}</span>
                     </div>
                     <div>
-                      <strong>What You Will Learn:</strong>
-                      <ul className="list-disc list-inside ml-2">
+                      <span className="text-slate-400 block mb-2 uppercase text-[10px] font-black tracking-widest">What You Will Learn</span>
+                      <ul className="space-y-2">
                         {formData.content.whatYouWillLearn.map((item, i) => (
-                          <li key={i}>{item}</li>
+                          <li key={i} className="flex items-start gap-2">
+                            <CheckCircle2 className="h-4 w-4 text-emerald-500 mt-0.5 shrink-0" /> {item}
+                          </li>
                         ))}
                       </ul>
                     </div>
-                    <div>
-                      <strong>Examples:</strong> {formData.content.examples.length} examples
-                    </div>
-                    <div>
-                      <strong>Common Mistakes:</strong> {formData.content.commonMistakes.length} mistakes
-                    </div>
-                    <div>
-                      <strong>Practice Questions:</strong> {formData.content.miniPractice.length} questions
-                    </div>
                   </CardContent>
                 </Card>
               )}
 
               {formData.content && (
-                <Card className="border-amber-200 bg-amber-50">
+                <Card className="border-amber-200 bg-amber-50/50 rounded-[1.5rem]">
                   <CardHeader>
-                    <CardTitle className="text-lg flex items-center gap-2 text-amber-800">
-                      <ShieldCheck className="h-5 w-5" />
-                      Content Quality Guard
+                    <CardTitle className="text-lg font-bold flex items-center gap-2 text-amber-800">
+                      <ShieldCheck className="h-5 w-5" /> Content Quality Guard
                     </CardTitle>
-                    <CardDescription className="text-amber-700">
-                      Review and confirm before publishing. This prevents AI over-generation issues.
-                    </CardDescription>
+                    <CardDescription className="text-amber-700 font-medium">Review and confirm before publishing.</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    <div 
-                      className="flex items-center gap-3 cursor-pointer hover:bg-amber-100 p-2 rounded"
-                      onClick={() => setQualityChecklist(prev => ({ ...prev, naturalCollocations: !prev.naturalCollocations }))}
-                    >
-                      {qualityChecklist.naturalCollocations ? (
-                        <CheckSquare className="h-5 w-5 text-green-600" />
-                      ) : (
-                        <Square className="h-5 w-5 text-gray-400" />
-                      )}
-                      <span className="text-sm">Collocations are natural and commonly used</span>
-                    </div>
-                    <div 
-                      className="flex items-center gap-3 cursor-pointer hover:bg-amber-100 p-2 rounded"
-                      onClick={() => setQualityChecklist(prev => ({ ...prev, ieltsSafeUsage: !prev.ieltsSafeUsage }))}
-                    >
-                      {qualityChecklist.ieltsSafeUsage ? (
-                        <CheckSquare className="h-5 w-5 text-green-600" />
-                      ) : (
-                        <Square className="h-5 w-5 text-gray-400" />
-                      )}
-                      <span className="text-sm">Vocabulary is IELTS-safe and appropriate for the target band</span>
-                    </div>
-                    <div 
-                      className="flex items-center gap-3 cursor-pointer hover:bg-amber-100 p-2 rounded"
-                      onClick={() => setQualityChecklist(prev => ({ ...prev, noRareWords: !prev.noRareWords }))}
-                    >
-                      {qualityChecklist.noRareWords ? (
-                        <CheckSquare className="h-5 w-5 text-green-600" />
-                      ) : (
-                        <Square className="h-5 w-5 text-gray-400" />
-                      )}
-                      <span className="text-sm">No over-advanced or rare words that sound unnatural</span>
-                    </div>
-                    <div 
-                      className="flex items-center gap-3 cursor-pointer hover:bg-amber-100 p-2 rounded"
-                      onClick={() => setQualityChecklist(prev => ({ ...prev, examplesReviewed: !prev.examplesReviewed }))}
-                    >
-                      {qualityChecklist.examplesReviewed ? (
-                        <CheckSquare className="h-5 w-5 text-green-600" />
-                      ) : (
-                        <Square className="h-5 w-5 text-gray-400" />
-                      )}
-                      <span className="text-sm">Example sentences are natural and IELTS-style</span>
-                    </div>
-                    <div 
-                      className="flex items-center gap-3 cursor-pointer hover:bg-amber-100 p-2 rounded"
-                      onClick={() => setQualityChecklist(prev => ({ ...prev, mistakesAccurate: !prev.mistakesAccurate }))}
-                    >
-                      {qualityChecklist.mistakesAccurate ? (
-                        <CheckSquare className="h-5 w-5 text-green-600" />
-                      ) : (
-                        <Square className="h-5 w-5 text-gray-400" />
-                      )}
-                      <span className="text-sm">Common mistakes and corrections are accurate</span>
-                    </div>
-                    
-                    {Object.values(qualityChecklist).every(v => v) ? (
-                      <div className="mt-4 p-3 bg-green-100 rounded-lg flex items-center gap-2 text-green-800">
-                        <CheckCircle className="h-5 w-5" />
-                        <span className="text-sm font-medium">All quality checks passed - ready to publish!</span>
+                    {[
+                      { id: 'naturalCollocations', label: 'Collocations are natural and commonly used' },
+                      { id: 'ieltsSafeUsage', label: 'Vocabulary is IELTS-safe and appropriate' },
+                      { id: 'noRareWords', label: 'No over-advanced or rare words' },
+                      { id: 'examplesReviewed', label: 'Example sentences are natural' },
+                      { id: 'mistakesAccurate', label: 'Mistakes and corrections are accurate' }
+                    ].map((check) => (
+                      <div 
+                        key={check.id}
+                        className="flex items-center gap-3 cursor-pointer hover:bg-amber-100/50 p-3 rounded-xl transition-colors"
+                        onClick={() => setQualityChecklist(prev => ({ ...prev, [check.id]: !prev[check.id as keyof QualityChecklist] }))}
+                      >
+                        {qualityChecklist[check.id as keyof QualityChecklist] ? <CheckSquare className="h-5 w-5 text-emerald-600" /> : <Square className="h-5 w-5 text-slate-300" />}
+                        <span className="text-sm font-bold text-amber-900">{check.label}</span>
                       </div>
-                    ) : (
-                      <div className="mt-4 p-3 bg-amber-100 rounded-lg flex items-center gap-2 text-amber-800">
-                        <AlertCircle className="h-5 w-5" />
-                        <span className="text-sm">Complete all checks before publishing</span>
-                      </div>
-                    )}
+                    ))}
                   </CardContent>
                 </Card>
               )}
 
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
                 <div className="flex items-center gap-6">
                   <div className="flex items-center gap-2">
-                    <Switch
-                      id="is_premium"
-                      checked={formData.is_premium}
-                      onCheckedChange={(checked) => setFormData(prev => ({ ...prev, is_premium: checked }))}
-                    />
-                    <Label htmlFor="is_premium">Premium Content</Label>
+                    <Switch id="is_premium" checked={formData.is_premium} onCheckedChange={(checked) => setFormData(prev => ({ ...prev, is_premium: checked }))} />
+                    <Label htmlFor="is_premium" className="font-bold text-slate-700">Premium</Label>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Switch
-                      id="is_published"
-                      checked={formData.is_published}
-                      onCheckedChange={(checked) => setFormData(prev => ({ ...prev, is_published: checked }))}
-                    />
-                    <Label htmlFor="is_published">Published</Label>
+                    <Switch id="is_published" checked={formData.is_published} onCheckedChange={(checked) => setFormData(prev => ({ ...prev, is_published: checked }))} />
+                    <Label htmlFor="is_published" className="font-bold text-slate-700">Published</Label>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setIsEditorOpen(false)}>
-                <X className="h-4 w-4 mr-2" />
-                Cancel
-              </Button>
-              <Button onClick={handleSaveLesson} disabled={isSaving || !formData.content}>
-                <Save className="h-4 w-4 mr-2" />
-                {isSaving ? 'Saving...' : 'Save Lesson'}
+            <div className="flex justify-end gap-3 pt-4 border-t">
+              <Button variant="outline" onClick={() => setIsEditorOpen(false)} className="h-12 px-6 rounded-xl font-bold">Cancel</Button>
+              <Button onClick={handleSaveLesson} disabled={isSaving || !formData.content} className="h-12 px-8 rounded-xl bg-slate-900 hover:bg-slate-800 font-bold text-white shadow-xl shadow-slate-200">
+                {isSaving ? <><Loader2 className="h-5 w-5 mr-2 animate-spin" /> Saving...</> : <><Save className="h-5 w-5 mr-2" /> Save Lesson</>}
               </Button>
             </div>
           </div>

@@ -37,6 +37,7 @@ import {
   Wand2
 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { cn } from '@/lib/utils';
 
 interface ReadingPassage {
   id: string;
@@ -66,6 +67,9 @@ export function ReadingPassageManagement() {
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [aiGenerated, setAiGenerated] = useState(false);
+  const [aiFullContent, setAiFullContent] = useState<Record<string, unknown> | null>(null);
+  const [savingMockTest, setSavingMockTest] = useState(false);
   const [activeTab, setActiveTab] = useState<'passages' | 'progress'>('passages');
   const [aiTopic, setAiTopic] = useState('');
 
@@ -161,6 +165,7 @@ export function ReadingPassageManagement() {
     setError('');
     setSuccess('');
     setAiTopic('');
+    setAiGenerated(false);
     setIsEditorOpen(true);
   };
 
@@ -212,7 +217,10 @@ export function ReadingPassageManagement() {
           content: plainText,
           topic: aiTopic
         });
-        setSuccess('Content generated successfully! Review and edit as needed.');
+        // Store full content (passage + questions) for mock test saving
+        setAiFullContent(data.content);
+        setAiGenerated(true);
+        setSuccess('✅ Content generated! Save as Practice Passage OR as Mock Test below.');
       } else {
         throw new Error('Invalid response format');
       }
@@ -221,6 +229,59 @@ export function ReadingPassageManagement() {
       setError(err instanceof Error ? err.message : 'Failed to generate content. Make sure OPENAI_API_KEY is configured.');
     } finally {
       setGenerating(false);
+    }
+  };
+
+  const handleSaveAsMockTest = async () => {
+    if (!aiFullContent || !isSupabaseConfigured() || !supabase) return;
+
+    setSavingMockTest(true);
+    setError('');
+
+    try {
+      const passage = aiFullContent.passage as Record<string, unknown>;
+      const questions = aiFullContent.questions as Array<Record<string, unknown>>;
+
+      // Format for mock_tests table (ReadingTest structure)
+      const testData = {
+        passages: [
+          {
+            title: formData.title || String(passage?.title || aiTopic),
+            textContent: String(passage?.textContent || formData.content || ''),
+            paragraphs: Array.isArray(passage?.paragraphs) ? passage.paragraphs : [],
+            questions: Array.isArray(questions) ? questions.map((q, i) => ({
+              id: `q${i + 1}`,
+              type: String(q.type || 'mcq'),
+              questionText: String(q.questionText || ''),
+              options: Array.isArray(q.options) ? q.options : [],
+              correctAnswer: String(q.correctAnswer || ''),
+              explanation: String(q.explanation || ''),
+              passageRef: String(q.passageRef || '')
+            })) : []
+          }
+        ]
+      };
+
+      const { error } = await supabase
+        .from('mock_tests')
+        .insert({
+          title: formData.title || `Reading: ${aiTopic}`,
+          module_type: 'reading',
+          test_data: testData,
+          is_published: true,
+          is_premium: false
+        });
+
+      if (error) throw error;
+      setSuccess('🎉 Saved as Mock Test! Students can now see it on the Mock Tests page.');
+      setIsEditorOpen(false);
+      setAiFullContent(null);
+      setAiGenerated(false);
+    } catch (err) {
+      console.error('Error saving mock test:', err);
+      setError(err instanceof Error ? err.message : 'Failed to save as mock test.');
+    } finally {
+      setSavingMockTest(false);
     }
   };
 
@@ -260,7 +321,7 @@ export function ReadingPassageManagement() {
           .update({
             title: formData.title,
             content: formData.content,
-            difficulty: formData.difficulty,
+            difficulty: formData.difficulty.toLowerCase(),
             topic: formData.topic,
             time_limit: formData.time_limit,
             is_published: formData.is_published,
@@ -276,7 +337,7 @@ export function ReadingPassageManagement() {
           .insert({
             title: formData.title,
             content: formData.content,
-            difficulty: formData.difficulty,
+            difficulty: formData.difficulty.toLowerCase(),
             topic: formData.topic,
             time_limit: formData.time_limit,
             is_published: formData.is_published
@@ -400,81 +461,69 @@ export function ReadingPassageManagement() {
       )}
 
       {activeTab === 'passages' && (
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
+        <Card className="border-none shadow-sm rounded-[2rem] overflow-hidden">
+          <CardHeader className="p-8">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <CardTitle className="flex items-center gap-2">
-                  <BookOpen className="h-5 w-5" />
+                <CardTitle className="text-xl font-bold flex items-center gap-2">
+                  <BookOpen className="h-5 w-5 text-indigo-600" />
                   Reading Passages
                 </CardTitle>
-                <CardDescription>
-                  Manage IELTS reading practice passages
-                </CardDescription>
+                <CardDescription className="font-medium mt-1">Manage reading practice content</CardDescription>
               </div>
-              <Button onClick={handleNewPassage} className="gap-2">
+              <Button onClick={handleNewPassage} className="gap-2 bg-indigo-600 hover:bg-indigo-700 h-11 px-6 rounded-xl font-bold text-white shadow-lg shadow-indigo-100">
                 <Plus className="h-4 w-4" />
-                Add Passage
+                Add New Passage
               </Button>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-8 pb-8">
             {loading ? (
-              <div className="flex items-center justify-center py-8">
-                <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
               </div>
             ) : passages.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                No passages yet. Click "Add Passage" to create one.
+              <div className="text-center py-12 text-slate-400 font-bold uppercase tracking-widest border-2 border-dashed rounded-2xl">
+                No passages found
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="grid gap-4">
                 {passages.map((passage) => (
-                  <div
-                    key={passage.id}
-                    className="border rounded-lg p-4 flex items-center justify-between"
-                  >
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h4 className="font-medium">{passage.title}</h4>
-                        <Badge variant={passage.is_published ? 'default' : 'secondary'}>
-                          {passage.is_published ? 'Published' : 'Draft'}
-                        </Badge>
-                        <Badge variant="outline">{passage.difficulty}</Badge>
+                  <Card key={passage.id} className="hover:shadow-xl hover:shadow-slate-100 transition-all duration-300 border-slate-100 rounded-2xl overflow-hidden group">
+                    <CardContent className="p-5">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div className="flex items-center gap-4">
+                          <div className="h-12 w-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm group-hover:scale-110 transition-transform duration-300">
+                            <BookOpen className="h-6 w-6" />
+                          </div>
+                          <div>
+                            <h3 className="font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">{passage.title}</h3>
+                            <div className="flex items-center gap-2 mt-1">
+                              <Badge variant="outline" className="text-[10px] uppercase font-bold text-slate-400 rounded-lg">{passage.topic}</Badge>
+                              <Badge variant="outline" className="text-[10px] uppercase font-bold text-slate-400 rounded-lg">{passage.difficulty}</Badge>
+                              <Badge variant="outline" className="text-[10px] uppercase font-bold text-slate-400 rounded-lg">{passage.time_limit}m</Badge>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Badge className={cn("rounded-lg font-bold px-3 py-1", passage.is_published ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-800')}>
+                            {passage.is_published ? 'Published' : 'Draft'}
+                          </Badge>
+                          <div className="flex items-center gap-1 ml-2">
+                            <Button variant="ghost" size="icon" className="rounded-xl hover:bg-slate-50 text-slate-400 hover:text-indigo-600" onClick={() => handleTogglePublish(passage)}>
+                              {passage.is_published ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                            </Button>
+                            <Button variant="ghost" size="icon" className="rounded-xl hover:bg-slate-50 text-slate-400 hover:text-indigo-600" onClick={() => handleEditPassage(passage)}>
+                              <Edit className="h-5 w-5" />
+                            </Button>
+                            <Button variant="ghost" size="icon" className="rounded-xl hover:bg-rose-50 text-slate-400 hover:text-rose-600" onClick={() => handleDeletePassage(passage.id)}>
+                              <Trash2 className="h-5 w-5" />
+                            </Button>
+                          </div>
+                        </div>
                       </div>
-                      <p className="text-sm text-gray-500">
-                        Topic: {passage.topic} • Time: {passage.time_limit} min
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleTogglePublish(passage)}
-                      >
-                        {passage.is_published ? (
-                          <EyeOff className="h-4 w-4" />
-                        ) : (
-                          <Eye className="h-4 w-4" />
-                        )}
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleEditPassage(passage)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleDeletePassage(passage.id)}
-                        className="text-red-600 hover:text-red-700"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
                 ))}
               </div>
             )}
@@ -483,50 +532,79 @@ export function ReadingPassageManagement() {
       )}
 
       {activeTab === 'progress' && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Target className="h-5 w-5" />
-              User Reading Progress
+        <Card className="border-none shadow-sm rounded-[2rem] overflow-hidden">
+          <CardHeader className="p-8">
+            <CardTitle className="text-xl font-bold flex items-center gap-2">
+              <Users className="h-5 w-5 text-indigo-600" />
+              User Progress Overview
             </CardTitle>
-            <CardDescription>
-              View user performance on reading practice
-            </CardDescription>
+            <CardDescription className="font-medium mt-1">Track student performance on reading passages</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-8 pb-8">
             {userProgress.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                No user activity yet. Users will appear here after completing reading practice.
+              <div className="text-center py-12 text-slate-400 font-bold uppercase tracking-widest border-2 border-dashed rounded-2xl">
+                No user activity recorded yet
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b">
-                      <th className="text-left py-2 px-4">User</th>
-                      <th className="text-left py-2 px-4">Attempts</th>
-                      <th className="text-left py-2 px-4">Avg Score</th>
-                      <th className="text-left py-2 px-4">Last Activity</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {userProgress.map((user, idx) => (
-                      <tr key={idx} className="border-b">
-                        <td className="py-2 px-4">{user.user_email}</td>
-                        <td className="py-2 px-4">{user.total_attempts}</td>
-                        <td className="py-2 px-4">
-                          <Badge variant={user.avg_score >= 70 ? 'default' : 'secondary'}>
+              <>
+                {/* Desktop View */}
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="text-slate-400 font-black uppercase tracking-widest text-[10px] border-b border-slate-100">
+                        <th className="text-left py-4 px-4">Student</th>
+                        <th className="text-left py-4 px-4">Attempts</th>
+                        <th className="text-left py-4 px-4">Avg Score</th>
+                        <th className="text-left py-4 px-4">Last Activity</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {userProgress.map((user, idx) => (
+                        <tr key={idx} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
+                          <td className="py-4 px-4 font-bold text-slate-800">{user.user_email}</td>
+                          <td className="py-4 px-4 font-bold text-slate-600">{user.total_attempts}</td>
+                          <td className="py-4 px-4">
+                            <Badge className={cn("rounded-lg font-bold px-3 py-1", user.avg_score >= 70 ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800')}>
+                              {user.avg_score}%
+                            </Badge>
+                          </td>
+                          <td className="py-4 px-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                            {new Date(user.last_activity).toLocaleDateString()}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Mobile View */}
+                <div className="grid gap-4 md:hidden">
+                  {userProgress.map((user, idx) => (
+                    <Card key={idx} className="border-slate-100 rounded-2xl shadow-sm">
+                      <CardContent className="p-5">
+                        <div className="flex justify-between items-start mb-4">
+                          <div className="flex items-center gap-3">
+                            <div className="h-10 w-10 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 font-black">
+                              {user.user_email[0].toUpperCase()}
+                            </div>
+                            <div>
+                              <p className="font-bold text-slate-800">{user.user_email}</p>
+                              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Last: {new Date(user.last_activity).toLocaleDateString()}</p>
+                            </div>
+                          </div>
+                          <Badge className={cn("rounded-lg font-bold px-3 py-1", user.avg_score >= 70 ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800')}>
                             {user.avg_score}%
                           </Badge>
-                        </td>
-                        <td className="py-2 px-4 text-sm text-gray-500">
-                          {new Date(user.last_activity).toLocaleDateString()}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                        </div>
+                        <div className="flex items-center justify-between pt-4 border-t border-slate-50">
+                          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Attempts</span>
+                          <span className="font-black text-slate-900">{user.total_attempts}</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </>
             )}
           </CardContent>
         </Card>
@@ -652,20 +730,59 @@ export function ReadingPassageManagement() {
               <Label>Publish immediately</Label>
             </div>
 
-            <div className="flex justify-end gap-2">
+            {aiGenerated && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-blue-800 text-sm space-y-2">
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-blue-600 flex-shrink-0" />
+                  <span className="font-semibold">AI content is ready! Choose how to save:</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className="bg-white rounded p-2 border border-blue-200">
+                    <p className="font-bold text-blue-700">📖 Practice Passage</p>
+                    <p className="text-gray-600">Adds to Reading Practice section (no questions)</p>
+                  </div>
+                  <div className="bg-white rounded p-2 border border-green-200">
+                    <p className="font-bold text-green-700">🎯 Mock Test</p>
+                    <p className="text-gray-600">Adds to Mock Tests page WITH questions</p>
+                  </div>
+                </div>
+              </div>
+            )}
+            <div className="flex justify-end gap-2 flex-wrap">
               <Button variant="outline" onClick={() => setIsEditorOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleSavePassage} disabled={saving}>
+              <Button
+                onClick={handleSavePassage}
+                disabled={saving}
+                variant="outline"
+                className="border-blue-400 text-blue-700 hover:bg-blue-50"
+              >
                 {saving ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                     Saving...
                   </>
                 ) : (
-                  'Save Passage'
+                  '📖 Save as Practice Passage'
                 )}
               </Button>
+              {aiGenerated && (
+                <Button
+                  onClick={handleSaveAsMockTest}
+                  disabled={savingMockTest}
+                  className="bg-green-600 hover:bg-green-700 text-white"
+                >
+                  {savingMockTest ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Saving Mock Test...
+                    </>
+                  ) : (
+                    '🎯 Save as Mock Test'
+                  )}
+                </Button>
+              )}
             </div>
           </div>
         </DialogContent>

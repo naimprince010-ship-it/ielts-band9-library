@@ -12,110 +12,230 @@ interface GenerateRequest {
   difficulty?: 'easy' | 'medium' | 'hard';
   testType?: 'academic' | 'general';
   provider?: AIProvider;
+  passageNumber?: number; // 1, 2, or 3 for reading
+  sectionNumber?: number; // 1, 2, 3, or 4 for listening
+  taskNumber?: number;    // 1 or 2 for writing
+  partNumber?: number;    // 1, 2, or 3 for speaking
 }
 
-const READING_PROMPT = (topic: string, difficulty: string, testType: string) => `
-You are an IELTS exam content creator. Generate a complete IELTS ${testType} reading passage with questions.
+const WRITING_TASK_PROMPT = (topic: string, testType: string, taskNumber: number) => `
+You are an IELTS exam content creator. Generate Task ${taskNumber} for an IELTS ${testType} writing test.
 
-Topic: ${topic}
+Topic theme: ${topic}
+
+Generate a JSON response with this exact structure:
+{
+  "taskNumber": ${taskNumber},
+  "title": "Task ${taskNumber}: ${taskNumber === 1 ? (testType === 'academic' ? 'Report Writing' : 'Letter Writing') : 'Essay Writing'}",
+  "prompt": "<p class='mb-4'>Task prompt here...</p><p class='mb-4'><strong>Instruction in bold.</strong></p><p class='text-gray-600'>Write at least ${taskNumber === 1 ? '150' : '250'} words.</p>",
+  "tips": [
+    "Tip 1",
+    "Tip 2",
+    "Tip 3"
+  ],
+  "sampleAnswer": "A complete sample answer demonstrating band 8-9 level writing."
+}
+
+Requirements:
+- Task 1 Academic: Chart, graph, table, or process.
+- Task 1 General: Formal/Informal letter.
+- Task 2: Opinion/Discussion essay.
+Return ONLY valid JSON.
+`;
+
+const SPEAKING_PART_PROMPT = (topic: string, difficulty: string, partNumber: number) => `
+You are an IELTS exam content creator. Generate Part ${partNumber} for an IELTS speaking test.
+
+Topic theme: ${topic}
+Difficulty: ${difficulty}
+
+Generate a JSON response with this exact structure:
+${partNumber === 1 ? `
+{
+  "partNumber": 1,
+  "title": "Part 1: Introduction & Interview",
+  "instructions": "Examiner asks general questions about familiar topics.",
+  "questions": [
+    { "text": "Question 1", "thinkTime": 3, "recordTime": 30 },
+    { "text": "Question 2", "thinkTime": 3, "recordTime": 30 },
+    { "text": "Question 3", "thinkTime": 3, "recordTime": 45 },
+    { "text": "Question 4", "thinkTime": 3, "recordTime": 45 }
+  ]
+}` : partNumber === 2 ? `
+{
+  "partNumber": 2,
+  "title": "Part 2: Individual Long Turn",
+  "instructions": "You have 1 minute to prepare, then speak for 1-2 minutes.",
+  "cueCard": {
+    "topic": "Describe [topic related task]",
+    "bulletPoints": ["Point 1", "Point 2", "Point 3", "Point 4"],
+    "prepTime": 60,
+    "recordTime": 120
+  }
+}` : `
+{
+  "partNumber": 3,
+  "title": "Part 3: Two-way Discussion",
+  "instructions": "Abstract questions related to Part 2.",
+  "questions": [
+    { "text": "Abstract Question 1", "thinkTime": 5, "recordTime": 60 },
+    { "text": "Abstract Question 2", "thinkTime": 5, "recordTime": 60 },
+    { "text": "Abstract Question 3", "thinkTime": 5, "recordTime": 60 }
+  ]
+}`}
+
+Return ONLY valid JSON.
+`;
+
+const LISTENING_SECTION_PROMPT = (topic: string, difficulty: string, testType: string, sectionNumber: number) => `
+You are an IELTS exam content creator. Generate Section ${sectionNumber} for an IELTS listening test.
+
+Topic Theme: ${topic}
 Difficulty: ${difficulty}
 
 Generate a JSON response with this exact structure:
 {
-  "passage": {
-    "title": "Passage title",
-    "textContent": "Full passage text with multiple paragraphs. Use <p class='mb-4'><strong>A</strong> ... </p> format for paragraphs with labels A, B, C, etc.",
-    "paragraphs": [
-      { "label": "A", "content": "Brief summary of paragraph A" },
-      { "label": "B", "content": "Brief summary of paragraph B" }
-    ]
-  },
+  "sectionNumber": ${sectionNumber},
+  "title": "Section ${sectionNumber} Title",
+  "transcript": "Full audio transcript for Section ${sectionNumber}. Use <p class='mb-4'> format.",
+  "questions": [
+    {
+      "questionNumber": ${((sectionNumber - 1) * 10) + 1},
+      "type": "multiple-choice",
+      "questionText": "Question text here",
+      "options": ["A", "B", "C"],
+      "correctAnswer": "A",
+      "explanation": "Brief explanation"
+    }
+  ]
+}
+
+Question Count: Generate exactly 10 questions for this section (Questions ${((sectionNumber - 1) * 10) + 1} to ${sectionNumber * 10}).
+Return ONLY valid JSON.
+`;
+
+const READING_PASSAGE_PROMPT = (topic: string, difficulty: string, testType: string, passageNumber: number) => `
+You are an IELTS exam content creator. Generate Passage ${passageNumber} for an IELTS ${testType} reading test.
+
+Topic Theme: ${topic}
+Difficulty: ${difficulty}
+
+Generate a JSON response with this exact structure:
+{
+  "passageNumber": ${passageNumber},
+  "title": "Title for Passage ${passageNumber}",
+  "textContent": "Full passage text (700-800 words) with multiple paragraphs. Use <p class='mb-4'><strong>A</strong> ... </p> format.",
   "questions": [
     {
       "type": "true-false-not-given",
       "questionText": "Question text here",
       "options": ["TRUE", "FALSE", "NOT GIVEN"],
       "correctAnswer": "TRUE",
-      "explanation": "Brief explanation",
-      "passageRef": "Paragraph A"
-    },
-    {
-      "type": "mcq",
-      "questionText": "Question text here",
-      "options": ["Option A", "Option B", "Option C", "Option D"],
-      "correctAnswer": "Option A",
-      "passageRef": "Paragraph B"
-    },
-    {
-      "type": "fill-blank",
-      "questionText": "The answer is _____.",
-      "correctAnswer": "answer",
-      "acceptedAnswers": ["answer", "Answer", "ANSWER"],
-      "passageRef": "Paragraph C"
+      "explanation": "Brief explanation"
     }
   ]
 }
 
-Generate 10-13 questions with a mix of:
-- 3-4 True/False/Not Given questions
-- 3-4 Multiple Choice questions
-- 3-4 Fill in the Blank questions
-- 1-2 Matching Headings or Short Answer questions
+Question Count Requirements:
+- If Passage 1 or 2: Generate exactly 13 questions.
+- If Passage 3: Generate exactly 14 questions.
 
-The passage should be 600-800 words, academic in style, and factually accurate.
-Return ONLY valid JSON, no markdown or explanation.
+Mix question types: Multiple choice, True/False/Not Given, Matching headings, Sentence completion, Summary completion.
+Return ONLY valid JSON.
 `;
 
-const LISTENING_PROMPT = (topic: string, difficulty: string) => `
-You are an IELTS exam content creator. Generate a complete IELTS listening test with transcript and sections.
+const READING_PROMPT = (topic: string, difficulty: string, testType: string) => `
+You are an IELTS exam content creator. Generate a full IELTS ${testType} reading test including 3 passages and exactly 40 questions.
 
 Topic: ${topic}
 Difficulty: ${difficulty}
 
 Generate a JSON response with this exact structure:
 {
-  "transcript": "Full transcript of what would be spoken in the audio. Include speaker labels like 'Speaker 1:', 'Speaker 2:' for conversations. This should be 400-500 words covering all sections.",
-  "sections": [
+  "passages": [
     {
-      "sectionNumber": 1,
-      "title": "Section 1: Conversation about booking a hotel",
+      "passageNumber": 1,
+      "title": "Passage 1 Title",
+      "textContent": "Full passage text (700-900 words) with multiple paragraphs. Use <p class='mb-4'><strong>A</strong> ... </p> format.",
       "questions": [
         {
-          "type": "fill-blank",
-          "questionText": "The guest wants to book for _____ nights.",
-          "correctAnswer": "three",
-          "acceptedAnswers": ["three", "3", "Three"]
-        },
-        {
-          "type": "mcq",
-          "questionText": "What type of room does the guest prefer?",
-          "options": ["Single room", "Double room", "Suite", "Family room"],
-          "correctAnswer": "Double room"
+          "type": "true-false-not-given",
+          "questionText": "Question text here",
+          "options": ["TRUE", "FALSE", "NOT GIVEN"],
+          "correctAnswer": "TRUE",
+          "explanation": "Brief explanation"
         }
       ]
     },
+    { "passageNumber": 2, "title": "...", "textContent": "...", "questions": [...] },
+    { "passageNumber": 3, "title": "...", "textContent": "...", "questions": [...] }
+  ]
+}
+
+Distribution:
+- Passage 1: 13 questions
+- Passage 2: 13 questions
+- Passage 3: 14 questions
+Total: 40 questions.
+
+Mix question types: Multiple choice, True/False/Not Given, Matching headings, Sentence completion, Summary completion.
+Return ONLY valid JSON.
+`;
+
+const LISTENING_PROMPT = (topic: string, difficulty: string) => `
+You are an IELTS exam content creator. Generate a full IELTS listening test with exactly 4 sections and 40 questions total (10 per section).
+
+Topic: ${topic}
+Difficulty: ${difficulty}
+
+CRITICAL: Use REAL NAMES for speakers (e.g., 'Alice:', 'John:') instead of 'Speaker 1:', 'Speaker 2:'.
+
+Generate a JSON response with this exact structure:
+{
+  "transcript": "Full transcript of all 4 sections combined. ~1500-2000 words total.",
+  "sections": [
     {
-      "sectionNumber": 2,
-      "title": "Section 2: Monologue about local attractions",
+      "sectionNumber": 1,
+      "title": "Part 1: Social Conversation",
+      "transcript": "Transcript for this part...",
       "questions": [
         {
           "type": "fill-blank",
-          "questionText": "The museum opens at _____ am.",
-          "correctAnswer": "nine",
-          "acceptedAnswers": ["nine", "9", "Nine"]
+          "questionText": "Q1 text...",
+          "correctAnswer": "word",
+          "acceptedAnswers": ["word", "WORD"]
         }
+        // ... total 10 questions for this section
       ]
+    },
+    {
+      "sectionNumber": 2, 
+      "title": "Part 2: Monologue (Social)", 
+      "transcript": "...",
+      "questions": [...] 
+    },
+    {
+      "sectionNumber": 3, 
+      "title": "Part 3: Academic Discussion", 
+      "transcript": "...",
+      "questions": [...] 
+    },
+    {
+      "sectionNumber": 4, 
+      "title": "Part 4: Academic Lecture", 
+      "transcript": "...",
+      "questions": [...] 
     }
   ]
 }
 
-Generate 2 sections with a total of 8-10 questions with a mix of:
-- 4-5 Fill in the Blank questions
-- 3-4 Multiple Choice questions
-- 1-2 Matching questions
-
-The transcript should be 400-500 words, natural conversational style.
-Return ONLY valid JSON, no markdown or explanation.
+Requirements:
+- Part 1: Conversation between two people (e.g., booking, inquiry).
+- Part 2: Monologue about a service, place, or facility.
+- Part 3: Conversation between up to 4 people in an academic setting.
+- Part 4: A formal lecture or talk on an academic subject.
+- Exactly 10 questions per part. Total = 40.
+Return ONLY valid JSON.
 `;
 
 const WRITING_PROMPT = (topic: string, testType: string) => `
@@ -260,7 +380,7 @@ async function callOpenAI(prompt: string): Promise<string> {
             }
           ],
           temperature: 0.7,
-          max_tokens: 4000,
+          max_tokens: 8000,
         }),
       });
 
@@ -311,7 +431,7 @@ async function callGemini(prompt: string): Promise<string> {
         ],
         generationConfig: {
           temperature: 0.7,
-          maxOutputTokens: 4000,
+          maxOutputTokens: 8000,
           responseMimeType: 'application/json'
         }
       }),
@@ -378,47 +498,77 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    if (!req.body) {
-      console.error('Request body is empty or undefined');
-      return res.status(400).json({ error: 'Request body is required' });
+    // Explicit body parsing fallback
+    let body: Partial<GenerateRequest> = {};
+    if (req.body && typeof req.body === 'object') {
+      body = req.body as Partial<GenerateRequest>;
+    } else if (req.body && typeof req.body === 'string') {
+      try { body = JSON.parse(req.body); } catch { body = {}; }
     }
 
-    const body = req.body as Partial<GenerateRequest>;
     const moduleType = body.moduleType;
     const topic = body.topic || 'general knowledge';
     const difficulty = body.difficulty || 'medium';
     const testType = body.testType || 'academic';
-    const provider = body.provider || 'openai';
+    const requestedProvider = body.provider || 'openai';
+    const passageNumber = body.passageNumber;
+    const sectionNumber = body.sectionNumber;
+    const taskNumber = body.taskNumber;
+    const partNumber = body.partNumber;
 
-    if (provider === 'openai' && !OPENAI_API_KEY) {
-      console.error('OPENAI_API_KEY is not configured');
-      return res.status(500).json({ error: 'OpenAI API key not configured. Please add OPENAI_API_KEY to your environment variables.' });
+    // Auto-select available provider
+    let provider = requestedProvider;
+    if (requestedProvider === 'openai' && !OPENAI_API_KEY) {
+      if (GEMINI_API_KEY) {
+        console.log('OPENAI_API_KEY not found, falling back to Gemini');
+        provider = 'gemini';
+      } else {
+        return res.status(500).json({ 
+          error: 'No AI API key configured. Please add OPENAI_API_KEY or GEMINI_API_KEY to Vercel environment variables.',
+          hint: 'Go to Vercel Dashboard → Settings → Environment Variables'
+        });
+      }
     }
 
-    if (provider === 'gemini' && !GEMINI_API_KEY) {
-      console.error('GEMINI_API_KEY is not configured');
-      return res.status(500).json({ error: 'Gemini API key not configured. Please add GEMINI_API_KEY to your environment variables.' });
+    if (requestedProvider === 'gemini' && !GEMINI_API_KEY) {
+      if (OPENAI_API_KEY) {
+        console.log('GEMINI_API_KEY not found, falling back to OpenAI');
+        provider = 'openai';
+      } else {
+        return res.status(500).json({ 
+          error: 'No AI API key configured. Please add OPENAI_API_KEY or GEMINI_API_KEY to Vercel environment variables.',
+          hint: 'Go to Vercel Dashboard → Settings → Environment Variables'
+        });
+      }
     }
 
     if (!moduleType || !['reading', 'listening', 'writing', 'speaking'].includes(moduleType)) {
       return res.status(400).json({ error: 'Invalid module type' });
     }
 
-    console.log(`Generating ${moduleType} content with ${provider}, topic: ${topic}, difficulty: ${difficulty}`);
+    console.log(`Generating ${moduleType} content with ${provider}, topic: ${topic}, difficulty: ${difficulty}${passageNumber ? `, passage: ${passageNumber}` : ''}${sectionNumber ? `, section: ${sectionNumber}` : ''}${taskNumber ? `, task: ${taskNumber}` : ''}${partNumber ? `, part: ${partNumber}` : ''}`);
     let prompt: string;
 
     switch (moduleType) {
       case 'reading':
-        prompt = READING_PROMPT(topic, difficulty, testType);
+        prompt = passageNumber 
+          ? READING_PASSAGE_PROMPT(topic, difficulty, testType, passageNumber)
+          : READING_PROMPT(topic, difficulty, testType);
         break;
       case 'listening':
-        prompt = LISTENING_PROMPT(topic, difficulty);
+        prompt = sectionNumber 
+          ? LISTENING_SECTION_PROMPT(topic, difficulty, testType, sectionNumber)
+          : LISTENING_PROMPT(topic, difficulty);
         break;
       case 'writing':
-        prompt = WRITING_PROMPT(topic, testType);
+        prompt = taskNumber
+          ? WRITING_TASK_PROMPT(topic, testType, taskNumber)
+          : WRITING_PROMPT(topic, testType);
         break;
       case 'speaking':
-        prompt = SPEAKING_PROMPT(topic, difficulty);
+        prompt = partNumber
+          ? SPEAKING_PART_PROMPT(topic, difficulty, partNumber)
+          : SPEAKING_PROMPT(topic, difficulty);
         break;
       default:
         return res.status(400).json({ error: 'Invalid module type' });

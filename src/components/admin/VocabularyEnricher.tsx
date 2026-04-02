@@ -72,11 +72,22 @@ export function VocabularyEnricher() {
         }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to enrich vocabulary');
+        const text = await response.text();
+        let errorMessage = `Server error: ${response.status}`;
+        try {
+          const data = JSON.parse(text);
+          errorMessage = data.error || errorMessage;
+        } catch (e) {
+          // If not JSON, use the status text or a snippet of the response
+          if (text.includes('<!DOCTYPE html>')) {
+            errorMessage = "API endpoint not found or server misconfigured (returned HTML instead of JSON). If running locally, make sure you're using 'vercel dev'.";
+          }
+        }
+        throw new Error(errorMessage);
       }
+
+      const data = await response.json();
 
       setResult(data);
       setTotalWords(data.totalWords);
