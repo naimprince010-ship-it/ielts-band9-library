@@ -339,6 +339,8 @@ function cleanJsonResponse(response: string): string {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // Always return JSON
+  res.setHeader('Content-Type', 'application/json');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -423,7 +425,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   } catch (error) {
     console.error('Content Generation Error:', error);
-    return res.status(500).json({
+    // Ensure we always return valid JSON even on errors
+    return res.status(500).json({ 
+      success: false,
       error: 'Failed to generate content',
       details: error instanceof Error ? error.message : 'Unknown error'
     });
