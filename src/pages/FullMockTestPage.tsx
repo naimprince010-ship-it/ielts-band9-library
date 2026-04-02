@@ -451,16 +451,16 @@ export function FullMockTestPage() {
                       <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{transcript}</p>
                     </CardContent></Card>
                   )}
-                  {sections.map((sec) => (
+                  {Array.isArray(sections) && sections.map((sec) => (
                     <Card key={sec.sectionNumber}>
                       <CardHeader><CardTitle className="text-base">{sec.title}</CardTitle></CardHeader>
                       <CardContent className="space-y-5">
-                        {sec.questions.map((q) => {
+                        {Array.isArray(sec.questions) && sec.questions.map((q) => {
                           const key = `l_${qIdx++}`;
                           return (
                             <div key={key}>
                               <p className="font-medium mb-2 text-sm">{q.questionText}</p>
-                              {q.options?.length ? (
+                              {Array.isArray(q.options) && q.options.length > 0 ? (
                                 <div className="space-y-2">
                                   {q.options.map((opt) => (
                                     <label key={opt} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${answers[key] === opt ? 'border-violet-400 bg-violet-50' : 'border-border hover:border-violet-300'}`}>
@@ -489,7 +489,7 @@ export function FullMockTestPage() {
               let qIdx = 0;
               return (
                 <div className="space-y-6">
-                  {passages.map((passage, pi) => (
+                  {Array.isArray(passages) && passages.map((passage, pi) => (
                     <div key={pi} className="space-y-4">
                       <Card><CardContent className="p-5">
                         <h2 className="text-lg font-bold mb-3 flex items-center gap-2">
@@ -501,12 +501,12 @@ export function FullMockTestPage() {
                       </CardContent></Card>
                       <Card><CardHeader><CardTitle className="text-base">Questions</CardTitle></CardHeader>
                         <CardContent className="space-y-5">
-                          {passage.questions?.map((q) => {
+                          {Array.isArray(passage.questions) && passage.questions.map((q) => {
                             const key = `r_${qIdx++}`;
                             return (
                               <div key={key}>
                                 <p className="font-medium mb-2 text-sm">{q.questionText}</p>
-                                {q.options?.length ? (
+                                {Array.isArray(q.options) && q.options.length > 0 ? (
                                   <div className="space-y-2">
                                     {q.options.map((opt) => (
                                       <label key={opt} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${answers[key] === opt ? 'border-blue-400 bg-blue-50' : 'border-border hover:border-blue-300'}`}>
@@ -581,7 +581,7 @@ export function FullMockTestPage() {
                     <Card key={pi}>
                       <CardHeader><CardTitle className="text-base">{(part as { title: string }).title}</CardTitle></CardHeader>
                       <CardContent className="space-y-3">
-                        {(part as { questions: Array<{ text: string }> }).questions?.map((q, qi) => (
+                        {Array.isArray((part as { questions: Array<{ text: string }> }).questions) && (part as { questions: Array<{ text: string }> }).questions.map((q, qi) => (
                           <div key={qi} className="bg-orange-50 border border-orange-100 rounded-lg p-3">
                             <p className="text-sm font-medium text-orange-900 whitespace-pre-line">{q.text}</p>
                           </div>
