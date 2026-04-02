@@ -46,6 +46,7 @@ const WritingTestPage = lazy(() => import('@/pages/WritingTestPage'));
 const ListeningTestPage = lazy(() => import('@/pages/ListeningTestPage'));
 const SpeakingTestPage = lazy(() => import('@/pages/SpeakingTestPage'));
 const ResultDashboardPage = lazy(() => import('@/pages/ResultDashboardPage'));
+const FullMockTestPage = lazy(() => import('@/pages/FullMockTestPage'));
 const CoursesPage = lazy(() => import('@/pages/CoursesPage').then(module => ({ default: module.CoursesPage })));
 const CourseDetailPage = lazy(() => import('@/pages/CourseDetailPage').then(module => ({ default: module.CourseDetailPage })));
 const TypingPracticePage = lazy(() => import('@/pages/TypingPracticePage'));
