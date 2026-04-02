@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import {
   Clock, Headphones, BookOpen, PenTool, Mic, ChevronRight,
   CheckCircle, AlertCircle, Award, ArrowRight, Play, RotateCcw,
-  Loader2, Target, Crown, Timer, Check, Volume2
+  CheckCircle, AlertCircle, Award, ArrowRight, Play, RotateCcw,
+  Loader2, Target, Crown, Timer, Check, Volume2, Square, Pause
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -112,7 +113,43 @@ export function FullMockTestPage() {
   const [phase, setPhase] = useState<Phase>('intro');
   const [tests, setTests] = useState<Partial<Record<ModuleType, MockTest>>>({});
   const [loading, setLoading] = useState(true);
-  const [answers, setAnswers] = useState<UserAnswers>({});
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [playingAudioId, setPlayingAudioId] = useState<string | null>(null);
+
+  // Stop audio when changing phases or unmounting
+  useEffect(() => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    setPlayingAudioId(null);
+  }, [phase]);
+
+  const toggleAudio = (id: string, text: string) => {
+    if (!('speechSynthesis' in window)) {
+      alert("Your browser does not support text-to-speech.");
+      return;
+    }
+    
+    window.speechSynthesis.cancel();
+    
+    if (playingAudioId === id) {
+      setPlayingAudioId(null);
+    } else {
+      setPlayingAudioId(id);
+      const utterance = new SpeechSynthesisUtterance(text);
+      
+      // Try to find a UK voice
+      const voices = window.speechSynthesis.getVoices();
+      const ukVoice = voices.find(v => v.lang.includes('en-GB') || v.lang.includes('en-UK'));
+      if (ukVoice) utterance.voice = ukVoice;
+      utterance.rate = 0.95; // Slightly slower for comprehension
+      
+      utterance.onend = () => setPlayingAudioId(null);
+      utterance.onerror = () => setPlayingAudioId(null);
+      
+      window.speechSynthesis.speak(utterance);
+    }
+  };
   const [scores, setScores] = useState<SectionScores>({ listening: null, reading: null, writing: null, speaking: null });
   const [sectionIndex, setSectionIndex] = useState(0);
 
@@ -447,16 +484,36 @@ export function FullMockTestPage() {
                     </div>
                   </div>
                   {globalTranscript && (
-                    <Card><CardContent className="p-5">
-                      <h3 className="font-bold mb-3 flex items-center gap-2"><Headphones className="h-4 w-4 text-violet-600" /> Audio Transcript</h3>
+                    <Card className="border-violet-200 shadow-sm"><CardContent className="p-5">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="font-bold flex items-center gap-2"><Headphones className="h-5 w-5 text-violet-600" /> Audio Transcript</h3>
+                        <Button 
+                          size="sm" 
+                          variant={playingAudioId === 'global' ? 'destructive' : 'default'}
+                          className={playingAudioId === 'global' ? '' : 'bg-violet-600 hover:bg-violet-700'}
+                          onClick={() => toggleAudio('global', globalTranscript)}
+                        >
+                          {playingAudioId === 'global' ? <><Square className="h-4 w-4 mr-2" /> Stop Audio</> : <><Play className="h-4 w-4 mr-2" /> Play Audio</>}
+                        </Button>
+                      </div>
                       <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{globalTranscript}</p>
                     </CardContent></Card>
                   )}
                   {Array.isArray(sections) && sections.map((sec) => (
                     <div key={sec.sectionNumber} className="space-y-4">
                       {sec.transcript && !globalTranscript && (
-                        <Card className="bg-violet-50/50 border-violet-100"><CardContent className="p-5">
-                          <h3 className="font-bold mb-3 flex items-center gap-2 text-violet-800"><Volume2 className="h-4 w-4" /> Transcript for {sec.title || `Section ${sec.sectionNumber}`}</h3>
+                        <Card className="bg-violet-50/50 border-violet-200"><CardContent className="p-5">
+                          <div className="flex items-center justify-between mb-4">
+                            <h3 className="font-bold flex items-center gap-2 text-violet-800"><Volume2 className="h-5 w-5" /> Transcript for {sec.title || `Section ${sec.sectionNumber}`}</h3>
+                            <Button 
+                              size="sm" 
+                              variant={playingAudioId === `sec-${sec.sectionNumber}` ? 'destructive' : 'default'}
+                              className={playingAudioId === `sec-${sec.sectionNumber}` ? '' : 'bg-violet-600 hover:bg-violet-700'}
+                              onClick={() => toggleAudio(`sec-${sec.sectionNumber}`, sec.transcript || '')}
+                            >
+                              {playingAudioId === `sec-${sec.sectionNumber}` ? <><Square className="h-4 w-4 mr-2" /> Stop Audio</> : <><Play className="h-4 w-4 mr-2" /> Play Audio</>}
+                            </Button>
+                          </div>
                           <p className="text-sm text-violet-900/80 leading-relaxed whitespace-pre-line">{sec.transcript}</p>
                         </CardContent></Card>
                       )}
