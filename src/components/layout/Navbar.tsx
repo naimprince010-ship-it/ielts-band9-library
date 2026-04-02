@@ -159,6 +159,11 @@ export function Navbar() {
                     <Keyboard className="h-4 w-4 text-muted-foreground" />
                     Typing Practice
                   </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate('/full-mock-test')} className="gap-2.5 py-2 font-semibold text-indigo-600">
+                    <Target className="h-4 w-4 text-indigo-500" />
+                    🎯 Full Mock Test
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
               
@@ -204,7 +209,11 @@ export function Navbar() {
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate('/mock-test')} className="gap-2.5 py-2">
                       <Target className="h-4 w-4 text-muted-foreground" />
-                      Mock Test
+                      Mock Test (Modules)
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/full-mock-test')} className="gap-2.5 py-2 font-semibold text-indigo-600">
+                      <Target className="h-4 w-4 text-indigo-500" />
+                      🎯 Full Mock Test
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate('/certificate')} className="gap-2.5 py-2">
                       <Award className="h-4 w-4 text-muted-foreground" />
@@ -394,6 +403,20 @@ export function Navbar() {
               >
                 <Sparkles className="h-5 w-5" />
                 Collections
+              </Link>
+              <Link
+                to="/mock-test"
+                className="flex items-center gap-3 px-3 py-3 rounded-lg text-base font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors touch-target"
+              >
+                <Target className="h-5 w-5" />
+                Mock Test (Modules)
+              </Link>
+              <Link
+                to="/full-mock-test"
+                className="flex items-center gap-3 px-3 py-3 rounded-lg text-base font-bold text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700 transition-colors touch-target"
+              >
+                <Target className="h-5 w-5" />
+                🎯 Full Mock Test
               </Link>
             </div>
 
