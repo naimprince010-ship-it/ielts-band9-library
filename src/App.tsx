@@ -45,6 +45,7 @@ const WritingTestPage = lazy(() => import('@/pages/WritingTestPage'));
 const ListeningTestPage = lazy(() => import('@/pages/ListeningTestPage'));
 const SpeakingTestPage = lazy(() => import('@/pages/SpeakingTestPage'));
 const ResultDashboardPage = lazy(() => import('@/pages/ResultDashboardPage'));
+const FullMockTestPage = lazy(() => import('@/pages/FullMockTestPage'));
 const CoursesPage = lazy(() => import('@/pages/CoursesPage').then(module => ({ default: module.CoursesPage })));
 const CourseDetailPage = lazy(() => import('@/pages/CourseDetailPage').then(module => ({ default: module.CourseDetailPage })));
 const TypingPracticePage = lazy(() => import('@/pages/TypingPracticePage'));
@@ -97,6 +98,7 @@ function App() {
                 <Route path="/practice/typing" element={<Layout><TypingPracticePage /></Layout>} />
                 <Route path="/progress" element={<Layout><ProgressDashboardPage /></Layout>} />
                 <Route path="/mock-test" element={<Layout><MockTestPage /></Layout>} />
+                <Route path="/full-mock-test" element={<Layout><FullMockTestPage /></Layout>} />
                 <Route path="/certificate" element={<Layout><CertificatePage /></Layout>} />
                 <Route path="/grammar-exercises" element={<Layout><GrammarExercisesPage /></Layout>} />
                 <Route path="/essay-bank" element={<Layout><EssayBankPage /></Layout>} />
