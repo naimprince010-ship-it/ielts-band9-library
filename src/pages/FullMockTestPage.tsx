@@ -2,8 +2,8 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Clock, Headphones, BookOpen, PenTool, Mic, ChevronRight,
-  CheckCircle, AlertCircle, Award, ArrowRight, Play, RotateCcw,
-  Loader2, Target, Crown, Timer, Check, Volume2, Square
+  CheckCircle, AlertCircle, Award, Play, RotateCcw,
+  Loader2, Target, Crown, Timer, Check, Volume2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,6 +15,11 @@ import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 type Phase = 'intro' | 'listening' | 'reading' | 'writing' | 'speaking' | 'results';
 type ModuleType = 'reading' | 'listening' | 'writing' | 'speaking';
 
+export interface TableCell {
+  type: 'text' | 'input';
+  value?: string; // used if type='text'
+}
+
 interface Question {
   id?: string;
   type: string;
@@ -22,6 +27,10 @@ interface Question {
   options?: string[];
   correctAnswer: string;
   explanation?: string;
+  tableData?: {
+    headers?: string[];
+    rows: TableCell[][];
+  };
 }
 
 interface MockTest {
@@ -112,6 +121,26 @@ export function FullMockTestPage() {
   const [loading, setLoading] = useState(true);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [playingAudioId, setPlayingAudioId] = useState<string | null>(null);
+  const [playedAudios, setPlayedAudios] = useState<Set<string>>(new Set());
+
+  // Auto-save: load from local storage
+  useEffect(() => {
+    const saved = localStorage.getItem('mockTestAnswers_v1');
+    if (saved) {
+      try {
+        setAnswers(JSON.parse(saved));
+      } catch (e) {
+        console.error('Failed to load saved answers');
+      }
+    }
+  }, []);
+
+  // Auto-save: write to local storage
+  useEffect(() => {
+    if (Object.keys(answers).length > 0) {
+      localStorage.setItem('mockTestAnswers_v1', JSON.stringify(answers));
+    }
+  }, [answers]);
 
   // Stop audio when changing phases or unmounting
   useEffect(() => {
@@ -139,10 +168,17 @@ export function FullMockTestPage() {
       return;
     }
 
+    if (playedAudios.has(id)) {
+      alert('Audio in the real exam can only be played once.');
+      return;
+    }
+
     window.speechSynthesis.cancel();
 
     if (playingAudioId === id) {
-      setPlayingAudioId(null);
+      // Allow stopping (though normally not allowed, we keep it for accessibility if TTS runs amok)
+      // Actually strictly No-Stop for real exam feeling, so we don't allow toggle-off if it's playing.
+      // But we prevent playing AGAIN once it's ended.
       return;
     }
 
@@ -160,6 +196,9 @@ export function FullMockTestPage() {
     utterance.rate = 0.92;   // Slightly slower for comprehension
     utterance.pitch = 1.0;
     utterance.volume = 1.0;
+
+    // Mark as played so user can't play it again
+    setPlayedAudios(prev => new Set(prev).add(id));
 
     utterance.onend = () => setPlayingAudioId(null);
     utterance.onerror = () => setPlayingAudioId(null);
@@ -419,7 +458,14 @@ export function FullMockTestPage() {
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" onClick={() => { setPhase('intro'); setSectionIndex(0); setScores({ listening: null, reading: null, writing: null, speaking: null }); setAnswers({}); }}
+            <Button size="lg" onClick={() => { 
+                setPhase('intro'); 
+                setSectionIndex(0); 
+                setScores({ listening: null, reading: null, writing: null, speaking: null }); 
+                setAnswers({}); 
+                setPlayedAudios(new Set());
+                localStorage.removeItem('mockTestAnswers_v1');
+              }}
               className="bg-indigo-500 hover:bg-indigo-400 text-white font-bold px-8 py-6 rounded-2xl gap-2">
               <RotateCcw className="h-5 w-5" /> Retake Test
             </Button>
@@ -438,8 +484,33 @@ export function FullMockTestPage() {
   const td = test?.test_data as Record<string, unknown> | undefined;
   const timeColor = remaining < 300 ? 'text-red-400' : remaining < 600 ? 'text-yellow-400' : 'text-green-400';
 
+  // Extract question keys for bottom navigation
+  let navKeys: string[] = [];
+  if (phase === 'listening') {
+    const sections = (td?.sections as Array<{questions: any[]}>) ?? [];
+    let i = 0;
+    sections.forEach(s => {
+      if (Array.isArray(s.questions)) s.questions.forEach(() => navKeys.push(`l_${i++}`));
+    });
+  } else if (phase === 'reading') {
+    const passages = (td?.passages as Array<{questions: any[]}>) ?? [];
+    let i = 0;
+    passages.forEach(p => {
+      if (Array.isArray(p.questions)) p.questions.forEach(() => navKeys.push(`r_${i++}`));
+    });
+  }
+
+  const scrollToQuestion = (key: string) => {
+    const el = document.getElementById(key);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.classList.add('ring-2', 'ring-indigo-400', 'rounded-lg', 'transition-all', 'duration-500');
+      setTimeout(() => el.classList.remove('ring-2', 'ring-indigo-400'), 2000);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-32">
       {/* Top bar */}
       <div className="sticky top-0 z-40 bg-foreground text-white px-4 py-3 flex items-center justify-between shadow-xl">
         <div className="flex items-center gap-3">
@@ -468,9 +539,8 @@ export function FullMockTestPage() {
             {formatTime(remaining)}
           </div>
         </div>
-        <Button size="sm" onClick={() => submitSection()} className="bg-white text-foreground hover:bg-white/90 font-bold px-4">
-          Submit <ChevronRight className="h-4 w-4 ml-1" />
-        </Button>
+        
+        {/* We moved the Submit button to the bottom nav or kept it here, but removing it from top right to rely on bottom nav */}
       </div>
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -505,14 +575,17 @@ export function FullMockTestPage() {
                         <h3 className="font-bold flex items-center gap-2"><Headphones className="h-5 w-5 text-violet-600" /> Audio Transcript</h3>
                         <Button 
                           size="sm" 
-                          variant={playingAudioId === 'global' ? 'destructive' : 'default'}
-                          className={playingAudioId === 'global' ? '' : 'bg-violet-600 hover:bg-violet-700'}
+                          disabled={playedAudios.has('global') && playingAudioId !== 'global'}
+                          className={(playedAudios.has('global') && playingAudioId !== 'global') ? 'bg-gray-400 text-white cursor-not-allowed' : 'bg-violet-600 hover:bg-violet-700'}
                           onClick={() => toggleAudio('global', globalTranscript)}
                         >
-                          {playingAudioId === 'global' ? <><Square className="h-4 w-4 mr-2" /> Stop Audio</> : <><Play className="h-4 w-4 mr-2" /> Play Audio</>}
+                          {playingAudioId === 'global' ? <><Volume2 className="h-4 w-4 mr-2 animate-pulse" /> Playing Audio...</> : <><Play className="h-4 w-4 mr-2" /> Play Audio (Once)</>}
                         </Button>
                       </div>
-                      <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{globalTranscript}</p>
+                      {/* Transcript text strictly hidden during real test */}
+                      <div className="hidden">
+                         <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{globalTranscript}</p>
+                      </div>
                     </CardContent></Card>
                   )}
                   {Array.isArray(sections) && sections.map((sec) => (
@@ -523,14 +596,17 @@ export function FullMockTestPage() {
                             <h3 className="font-bold flex items-center gap-2 text-violet-800"><Volume2 className="h-5 w-5" /> Transcript for {sec.title || `Section ${sec.sectionNumber}`}</h3>
                             <Button 
                               size="sm" 
-                              variant={playingAudioId === `sec-${sec.sectionNumber}` ? 'destructive' : 'default'}
-                              className={playingAudioId === `sec-${sec.sectionNumber}` ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-violet-600 hover:bg-violet-700 text-white'}
+                              disabled={playedAudios.has(`sec-${sec.sectionNumber}`) && playingAudioId !== `sec-${sec.sectionNumber}`}
+                              className={(playedAudios.has(`sec-${sec.sectionNumber}`) && playingAudioId !== `sec-${sec.sectionNumber}`) ? 'bg-gray-400 text-white cursor-not-allowed' : 'bg-violet-600 hover:bg-violet-700 text-white'}
                               onClick={() => toggleAudio(`sec-${sec.sectionNumber}`, sec.transcript || '')}
                             >
-                              {playingAudioId === `sec-${sec.sectionNumber}` ? <><Square className="h-4 w-4 mr-2" /> Stop Audio</> : <><Play className="h-4 w-4 mr-2" /> Play Audio</>}
+                              {playingAudioId === `sec-${sec.sectionNumber}` ? <><Volume2 className="h-4 w-4 mr-2 animate-pulse" /> Playing Audio...</> : <><Play className="h-4 w-4 mr-2" /> Play Audio (Once)</>}
                             </Button>
                           </div>
-                          <p className="text-sm text-violet-900/80 leading-relaxed whitespace-pre-line">{sec.transcript}</p>
+                          {/* Transcript text strictly hidden during real test */}
+                          <div className="hidden">
+                            <p className="text-sm text-violet-900/80 leading-relaxed whitespace-pre-line">{sec.transcript}</p>
+                          </div>
                         </CardContent></Card>
                       )}
                       <Card>
@@ -539,9 +615,46 @@ export function FullMockTestPage() {
                         {Array.isArray(sec.questions) && sec.questions.map((q) => {
                           const key = `l_${qIdx++}`;
                           return (
-                            <div key={key}>
-                              <p className="font-medium mb-2 text-sm">{q.questionText}</p>
-                              {Array.isArray(q.options) && q.options.length > 0 ? (
+                            <div key={key} id={key} className="p-2 -mx-2">
+                              <p className="font-medium mb-3 text-sm flex items-start gap-2">
+                                <span className="bg-foreground text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 text-xs">
+                                  {qIdx}
+                                </span>
+                                <span className="pt-0.5">{q.questionText}</span>
+                              </p>
+
+                              {q.tableData ? (
+                                <div className="overflow-x-auto border rounded-xl my-4 bg-white/50">
+                                  <table className="w-full text-sm text-left">
+                                    {q.tableData.headers && (
+                                      <thead className="bg-muted/50 text-muted-foreground uppercase text-xs">
+                                        <tr>
+                                          {q.tableData.headers.map((h, i) => <th key={i} className="px-4 py-3 border-b">{h}</th>)}
+                                        </tr>
+                                      </thead>
+                                    )}
+                                    <tbody>
+                                      {q.tableData.rows.map((row, ri) => (
+                                        <tr key={ri} className="border-b last:border-b-0 hover:bg-muted/30">
+                                          {row.map((cell, ci) => (
+                                            <td key={ci} className="px-4 py-3 align-middle font-medium">
+                                              {cell.type === 'text' ? (
+                                                <span>{cell.value}</span>
+                                              ) : (
+                                                <input type="text" placeholder="Your answer..."
+                                                  value={answers[key] ?? ''}
+                                                  onChange={e => setAnswers(prev => ({ ...prev, [key]: e.target.value }))}
+                                                  className="w-full min-w-[120px] bg-background border rounded-md px-3 py-1.5 focus:ring-2 focus:ring-violet-400 focus:border-transparent transition-all outline-none"
+                                                />
+                                              )}
+                                            </td>
+                                          ))}
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                </div>
+                              ) : Array.isArray(q.options) && q.options.length > 0 ? (
                                 <div className="space-y-2">
                                   {q.options.map((opt) => (
                                     <label key={opt} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${answers[key] === opt ? 'border-violet-400 bg-violet-50' : 'border-border hover:border-violet-300'}`}>
@@ -586,9 +699,46 @@ export function FullMockTestPage() {
                           {Array.isArray(passage.questions) && passage.questions.map((q) => {
                             const key = `r_${qIdx++}`;
                             return (
-                              <div key={key}>
-                                <p className="font-medium mb-2 text-sm">{q.questionText}</p>
-                                {Array.isArray(q.options) && q.options.length > 0 ? (
+                              <div key={key} id={key} className="p-2 -mx-2">
+                                <p className="font-medium mb-3 text-sm flex items-start gap-2">
+                                   <span className="bg-foreground text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 text-xs">
+                                     {qIdx}
+                                   </span> 
+                                   <span className="pt-0.5">{q.questionText}</span>
+                                </p>
+                                
+                                {q.tableData ? (
+                                  <div className="overflow-x-auto border rounded-xl my-4 bg-white/50">
+                                    <table className="w-full text-sm text-left">
+                                      {q.tableData.headers && (
+                                        <thead className="bg-muted/50 text-muted-foreground uppercase text-xs">
+                                          <tr>
+                                            {q.tableData.headers.map((h, i) => <th key={i} className="px-4 py-3 border-b">{h}</th>)}
+                                          </tr>
+                                        </thead>
+                                      )}
+                                      <tbody>
+                                        {q.tableData.rows.map((row, ri) => (
+                                          <tr key={ri} className="border-b last:border-b-0 hover:bg-muted/30">
+                                            {row.map((cell, ci) => (
+                                              <td key={ci} className="px-4 py-3 align-middle font-medium">
+                                                {cell.type === 'text' ? (
+                                                  <span>{cell.value}</span>
+                                                ) : (
+                                                  <input type="text" placeholder="Your answer..." 
+                                                    value={answers[key] ?? ''} 
+                                                    onChange={e => setAnswers(prev => ({ ...prev, [key]: e.target.value }))}
+                                                    className="w-full min-w-[120px] bg-background border rounded-md px-3 py-1.5 focus:ring-2 focus:ring-violet-400 focus:border-transparent transition-all outline-none" 
+                                                  />
+                                                )}
+                                              </td>
+                                            ))}
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                ) : Array.isArray(q.options) && q.options.length > 0 ? (
                                   <div className="space-y-2">
                                     {q.options.map((opt) => (
                                       <label key={opt} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${answers[key] === opt ? 'border-blue-400 bg-blue-50' : 'border-border hover:border-blue-300'}`}>
@@ -687,18 +837,52 @@ export function FullMockTestPage() {
           </>
         )}
 
-        {/* Submit button bottom */}
-        <div className="mt-8 flex justify-end">
+        {/* Navigation bottom pad to ensure content isn't hidden behind the sticky bar */}
+      </div>
+
+      {navKeys.length > 0 && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-3 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] z-50 flex items-center justify-between">
+          <div className="flex-1 overflow-x-auto">
+            <div className="flex gap-2 min-w-max px-2">
+              {navKeys.map((key, i) => (
+                <button 
+                  key={key} 
+                  onClick={() => scrollToQuestion(key)}
+                  className={`w-10 h-10 rounded-md border flex items-center justify-center font-medium text-sm transition-colors ${
+                    answers[key] 
+                      ? 'bg-foreground text-white border-foreground' 
+                      : 'bg-white hover:bg-gray-100'
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="pl-4 flex-shrink-0 flex items-center gap-3">
+             <div className="text-sm text-muted-foreground mr-4 hidden md:block">
+               {navKeys.filter(k => !!answers[k]).length} of {navKeys.length} Answered
+             </div>
+             <Button size="default" variant="outline" onClick={() => submitSection()} className="border-foreground text-foreground">
+               Review & Submit <ChevronRight className="h-4 w-4 ml-1" />
+             </Button>
+          </div>
+        </div>
+      )}
+
+      {/* For writing/speaking where there's no grid, show a simpler submit bar */}
+      {navKeys.length === 0 && test && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 shadow-lg z-50 flex justify-end">
           <Button size="lg" onClick={() => submitSection()}
-            className={`${currentSection.bg} text-white hover:opacity-90 font-bold px-8 py-6 rounded-2xl gap-2 shadow-lg`}>
+            className={`${currentSection.bg} text-white hover:opacity-90 font-bold px-8 rounded-xl shadow-lg`}>
             {sectionIndex < SECTIONS.length - 1 ? (
-              <><CheckCircle className="h-5 w-5" /> Submit & Next Section <ArrowRight className="h-5 w-5" /></>
+              <><CheckCircle className="h-5 w-5 mr-2" /> Continue to Next Section</>
             ) : (
-              <><Award className="h-5 w-5" /> Submit & See Results</>
+              <><Award className="h-5 w-5 mr-2" /> Finish Test</>
             )}
           </Button>
         </div>
-      </div>
+      )}
     </div>
   );
 }
