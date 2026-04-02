@@ -378,26 +378,44 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    if (!req.body) {
-      console.error('Request body is empty or undefined');
-      return res.status(400).json({ error: 'Request body is required' });
+    // Explicit body parsing fallback
+    let body: Partial<GenerateRequest> = {};
+    if (req.body && typeof req.body === 'object') {
+      body = req.body as Partial<GenerateRequest>;
+    } else if (req.body && typeof req.body === 'string') {
+      try { body = JSON.parse(req.body); } catch { body = {}; }
     }
 
-    const body = req.body as Partial<GenerateRequest>;
     const moduleType = body.moduleType;
     const topic = body.topic || 'general knowledge';
     const difficulty = body.difficulty || 'medium';
     const testType = body.testType || 'academic';
-    const provider = body.provider || 'openai';
+    const requestedProvider = body.provider || 'openai';
 
-    if (provider === 'openai' && !OPENAI_API_KEY) {
-      console.error('OPENAI_API_KEY is not configured');
-      return res.status(500).json({ error: 'OpenAI API key not configured. Please add OPENAI_API_KEY to your environment variables.' });
+    // Auto-select available provider
+    let provider = requestedProvider;
+    if (requestedProvider === 'openai' && !OPENAI_API_KEY) {
+      if (GEMINI_API_KEY) {
+        console.log('OPENAI_API_KEY not found, falling back to Gemini');
+        provider = 'gemini';
+      } else {
+        return res.status(500).json({ 
+          error: 'No AI API key configured. Please add OPENAI_API_KEY or GEMINI_API_KEY to Vercel environment variables.',
+          hint: 'Go to Vercel Dashboard → Settings → Environment Variables'
+        });
+      }
     }
 
-    if (provider === 'gemini' && !GEMINI_API_KEY) {
-      console.error('GEMINI_API_KEY is not configured');
-      return res.status(500).json({ error: 'Gemini API key not configured. Please add GEMINI_API_KEY to your environment variables.' });
+    if (requestedProvider === 'gemini' && !GEMINI_API_KEY) {
+      if (OPENAI_API_KEY) {
+        console.log('GEMINI_API_KEY not found, falling back to OpenAI');
+        provider = 'openai';
+      } else {
+        return res.status(500).json({ 
+          error: 'No AI API key configured. Please add OPENAI_API_KEY or GEMINI_API_KEY to Vercel environment variables.',
+          hint: 'Go to Vercel Dashboard → Settings → Environment Variables'
+        });
+      }
     }
 
     if (!moduleType || !['reading', 'listening', 'writing', 'speaking'].includes(moduleType)) {
