@@ -2306,18 +2306,32 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
     try {
       const now = Date.now();
       // 1. Reading
-      const readingData = await generateModule('reading') as any;
+      const readingData = await generateModule('reading') as { passages: any[] };
+      const totalReadingQuestions = readingData.passages.reduce((acc, p) => acc + (p.questions?.length || 0), 0);
+      
       const readingTest = {
-        id: `reading-${now}`, title: `Mock Test: ${topic} - Reading`, testType: 'academic', timeLimit: 3600,
+        id: `reading-${now}`, 
+        title: `Mock Test: ${topic} - Reading`, 
+        testType: 'academic', 
+        timeLimit: 3600,
         instructions: 'Read the passages carefully and answer the questions.',
-        passages: [{
-          id: `passage-${now}-0`, passageNumber: 1, title: readingData.passage?.title || topic, content: readingData.passage?.textContent || '',
-          questions: (readingData.questions || []).map((q: any, qIndex: number) => ({
-            id: `q-${now}-0-${qIndex}`, questionNumber: qIndex + 1, type: q.type, questionText: q.questionText,
-            options: q.options, correctAnswer: q.correctAnswer, acceptedAnswers: q.acceptedAnswers
+        passages: readingData.passages.map((p, pIndex) => ({
+          id: `passage-${now}-${pIndex}`,
+          passageNumber: p.passageNumber || (pIndex + 1),
+          title: p.title || `Passage ${pIndex + 1}`,
+          content: p.textContent || '', // Map textContent to content for DB compatibility
+          questions: (p.questions || []).map((q: any, qIndex: number) => ({
+            id: `q-${now}-${pIndex}-${qIndex}`,
+            questionNumber: (pIndex === 0 ? 0 : readingData.passages.slice(0, pIndex).reduce((acc, prevP) => acc + (prevP.questions?.length || 0), 0)) + qIndex + 1,
+            type: q.type,
+            questionText: q.questionText,
+            options: q.options,
+            correctAnswer: q.correctAnswer,
+            acceptedAnswers: q.acceptedAnswers,
+            explanation: q.explanation
           }))
-        }],
-        totalQuestions: readingData.questions?.length || 0
+        })),
+        totalQuestions: totalReadingQuestions
       };
 
       // 2. Listening
@@ -2328,13 +2342,25 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
         const mappedQuestions = s.questions.map((q: any, qIndex: number) => {
           const num = currentQNum++;
           return {
-            id: `lq-${now}-${sIndex}-${qIndex}`, questionNumber: num, type: q.type, questionText: q.questionText,
-            options: q.options, correctAnswer: q.correctAnswer, acceptedAnswers: q.acceptedAnswers
+            id: `lq-${now}-${sIndex}-${qIndex}`, 
+            questionNumber: num, 
+            type: q.type, 
+            questionText: q.questionText,
+            options: q.options, 
+            correctAnswer: q.correctAnswer, 
+            acceptedAnswers: q.acceptedAnswers,
+            explanation: q.explanation
           };
         });
         return {
-          id: `section-${now}-${sIndex}`, sectionNumber: sIndex + 1, title: s.title, audioStartTime: 0, audioEndTime: 0,
-          transcript: listeningData.transcript, questions: mappedQuestions, questionRange: { start: startNum, end: currentQNum - 1 }
+          id: `section-${now}-${sIndex}`, 
+          sectionNumber: s.sectionNumber || (sIndex + 1), 
+          title: s.title, 
+          audioStartTime: 0, 
+          audioEndTime: 0,
+          transcript: s.transcript || listeningData.transcript, 
+          questions: mappedQuestions, 
+          questionRange: { start: startNum, end: currentQNum - 1 }
         };
       });
       const listeningTest = {
@@ -2358,12 +2384,19 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
       const speakingTest = {
         id: `speaking-${now}`, title: `Mock Test: ${topic} - Speaking`, instructions: 'Answer the questions naturally.',
         parts: [
-          { id: `part-1-${now}`, partNumber: 1, partType: 'part1', title: 'Part 1: Introduction', instructions: 'General questions.',
-            questions: speakingData.part1?.questions?.map((q: any, i: number) => ({ id: `sq-1-${i}`, questionNumber: i + 1, text: q.text, thinkTime: q.thinkTime || 5, recordTime: q.recordTime || 15 })) },
-          { id: `part-2-${now}`, partNumber: 2, partType: 'part2', title: 'Part 2: Cue Card', instructions: 'You have 1 minute to prepare.',
-            cueCard: { id: `cue-${now}`, topic: speakingData.part2?.topic, bulletPoints: speakingData.part2?.bulletPoints || [], prepTime: 60, recordTime: 120 } },
-          { id: `part-3-${now}`, partNumber: 3, partType: 'part3', title: 'Part 3: Discussion', instructions: 'Follow-up questions.',
-            questions: speakingData.part3?.questions?.map((q: any, i: number) => ({ id: `sq-3-${i}`, questionNumber: i + 1, text: q.text, thinkTime: q.thinkTime || 5, recordTime: q.recordTime || 30 })) }
+          { id: `part-1-${now}`, partNumber: 1, partType: 'part1', title: speakingData.part1?.title || 'Part 1: Introduction', instructions: speakingData.part1?.instructions || 'General questions.',
+            questions: speakingData.part1?.questions?.map((q: any, i: number) => ({ id: `sq-1-${i}`, questionNumber: i + 1, text: q.text, thinkTime: q.thinkTime || 5, recordTime: q.recordTime || 30 })) },
+          { id: `part-2-${now}`, partNumber: 2, partType: 'part2', title: speakingData.part2?.title || 'Part 2: Individual Long Turn', instructions: speakingData.part2?.instructions || 'You have 1 minute to prepare.',
+            cueCard: { 
+              id: `cue-${now}`, 
+              topic: speakingData.part2?.cueCard?.topic || speakingData.part2?.topic, 
+              bulletPoints: speakingData.part2?.cueCard?.bulletPoints || speakingData.part2?.bulletPoints || [], 
+              prepTime: speakingData.part2?.cueCard?.prepTime || 60, 
+              recordTime: speakingData.part2?.cueCard?.recordTime || 120 
+            } 
+          },
+          { id: `part-3-${now}`, partNumber: 3, partType: 'part3', title: speakingData.part3?.title || 'Part 3: Discussion', instructions: speakingData.part3?.instructions || 'Follow-up questions.',
+            questions: speakingData.part3?.questions?.map((q: any, i: number) => ({ id: `sq-3-${i}`, questionNumber: i + 1, text: q.text, thinkTime: q.thinkTime || 5, recordTime: q.recordTime || 60 })) }
         ]
       };
 
