@@ -263,41 +263,68 @@ export function FullMockTestPage() {
   const submitSection = useCallback((_timeUp = false) => {
     const sec = SECTIONS[sectionIndex];
     const test = tests[sec.module];
+    console.log('Submitting section:', sec.module, 'Test data available:', !!test);
+    
     let band = 5.0;
 
-    if (test) {
-      const td = test.test_data as Record<string, unknown>;
+    try {
+      if (test && test.test_data) {
+        const td = test.test_data as any;
 
-      if (sec.module === 'reading') {
-        const passages = td.passages as Array<{ questions: Question[] }>;
-        const qs = passages?.flatMap(p => p.questions) ?? [];
-        const correct = qs.filter((q, i) => (answers[`r_${i}`] ?? '').trim().toLowerCase() === q.correctAnswer.toLowerCase()).length;
-        band = bandFromScore(correct, qs.length);
-      } else if (sec.module === 'listening') {
-        const sections = td.sections as Array<{ questions: Question[] }>;
-        const qs = sections?.flatMap(s => s.questions) ?? [];
-        const correct = qs.filter((q, i) => (answers[`l_${i}`] ?? '').trim().toLowerCase() === q.correctAnswer.toLowerCase()).length;
-        band = bandFromScore(correct, qs.length);
-      } else if (sec.module === 'writing') {
-        const task1 = (answers['w_task1'] ?? '').split(/\s+/).filter(Boolean).length;
-        const task2 = (answers['w_task2'] ?? '').split(/\s+/).filter(Boolean).length;
-        const total = task1 + task2;
-        band = total >= 600 ? 7.5 : total >= 450 ? 7.0 : total >= 350 ? 6.5 : total >= 250 ? 6.0 : total >= 150 ? 5.5 : 5.0;
-      } else if (sec.module === 'speaking') {
-        const words = (answers['sp_answers'] ?? '').split(/\s+/).filter(Boolean).length;
-        band = words >= 300 ? 7.0 : words >= 200 ? 6.5 : words >= 100 ? 6.0 : 5.5;
+        if (sec.module === 'reading') {
+          const passages = Array.isArray(td.passages) ? td.passages : (td.passage ? [td.passage] : []);
+          const qs = passages.flatMap((p: any) => p.questions || []);
+          console.log(`Scoring Reading: ${qs.length} questions found`);
+          const correct = qs.filter((q: any, i: number) => {
+            const userAnswer = (answers[`r_${i}`] ?? '').trim().toLowerCase();
+            const correctAnswer = (q.correctAnswer || '').trim().toLowerCase();
+            return userAnswer && correctAnswer && userAnswer === correctAnswer;
+          }).length;
+          band = bandFromScore(correct, qs.length);
+        } else if (sec.module === 'listening') {
+          const sections = Array.isArray(td.sections) ? td.sections : [];
+          const qs = sections.flatMap((s: any) => s.questions || []);
+          console.log(`Scoring Listening: ${qs.length} questions found`);
+          const correct = qs.filter((q: any, i: number) => {
+            const userAnswer = (answers[`l_${i}`] ?? '').trim().toLowerCase();
+            const correctAnswer = (q.correctAnswer || '').trim().toLowerCase();
+            return userAnswer && correctAnswer && userAnswer === correctAnswer;
+          }).length;
+          band = bandFromScore(correct, qs.length);
+        } else if (sec.module === 'writing') {
+          const task1 = (answers['w_task1'] ?? '').split(/\s+/).filter(Boolean).length;
+          const task2 = (answers['w_task2'] ?? '').split(/\s+/).filter(Boolean).length;
+          const total = task1 + task2;
+          console.log(`Scoring Writing: ${total} words total`);
+          band = total >= 600 ? 7.5 : total >= 450 ? 7.0 : total >= 350 ? 6.5 : total >= 250 ? 6.0 : total >= 150 ? 5.5 : 5.0;
+        } else if (sec.module === 'speaking') {
+          const words = (answers['sp_answers'] ?? '').split(/\s+/).filter(Boolean).length;
+          console.log(`Scoring Speaking: ${words} words`);
+          band = words >= 300 ? 7.0 : words >= 200 ? 6.5 : words >= 100 ? 6.0 : 5.5;
+        }
       }
+    } catch (err) {
+      console.error('Error calculating score:', err);
+      // Fallback to a default band if scoring fails to prevent UI hang
     }
 
     setScores(prev => ({ ...prev, [sec.module]: band }));
 
     const next = sectionIndex + 1;
     if (next < SECTIONS.length) {
+      console.log('Moving to next section:', SECTIONS[next].module);
       setPhase('intro');
       setSectionIndex(next);
     } else {
+      console.log('Test complete, showing results');
       setPhase('results');
     }
+    
+    // Clear current answers for the next section
+    setAnswers({});
+    
+    // Scroll to top for the next phase
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [sectionIndex, tests, answers]);
 
   // Keep submitSectionRef in sync so handleTimeUp always calls latest version

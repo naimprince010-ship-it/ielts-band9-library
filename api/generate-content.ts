@@ -15,97 +15,105 @@ interface GenerateRequest {
 }
 
 const READING_PROMPT = (topic: string, difficulty: string, testType: string) => `
-You are an IELTS exam content creator. Generate a full IELTS ${testType} reading test including 3 passages and exactly 40 questions.
+You are an IELTS exam content creator. Generate a full IELTS ${testType} reading test.
 
 Topic: ${topic}
 Difficulty: ${difficulty}
 
-Generate a JSON response with this exact structure:
+Return ONLY raw valid JSON (no markdown, no code fences, no extra text).
+The JSON must match this schema precisely:
+
 {
   "passages": [
     {
       "passageNumber": 1,
-      "title": "Passage 1 Title",
-      "textContent": "Full passage text (700-900 words) with multiple paragraphs. Use <p class='mb-4'><strong>A</strong> ... </p> format.",
+      "title": "<title of passage 1>",
+      "textContent": "<full passage 1 text in HTML, 700-900 words, each paragraph in <p class='mb-4'>...</p> tags>",
       "questions": [
-        {
-          "type": "true-false-not-given",
-          "questionText": "Question text here",
-          "options": ["TRUE", "FALSE", "NOT GIVEN"],
-          "correctAnswer": "TRUE",
-          "explanation": "Brief explanation"
-        }
-      ]
-    },
-    { "passageNumber": 2, "title": "...", "textContent": "...", "questions": [...] },
-    { "passageNumber": 3, "title": "...", "textContent": "...", "questions": [...] }
-  ]
-}
-
-Distribution:
-- Passage 1: 13 questions
-- Passage 2: 13 questions
-- Passage 3: 14 questions
-Total: 40 questions.
-
-Mix question types: Multiple choice, True/False/Not Given, Matching headings, Sentence completion, Summary completion.
-Return ONLY valid JSON.
-`;
-
-const LISTENING_PROMPT = (topic: string, difficulty: string) => `
-You are an IELTS exam content creator. Generate a full IELTS listening test with exactly 4 sections and 40 questions total (10 per section).
-
-Topic: ${topic}
-Difficulty: ${difficulty}
-
-CRITICAL: Use REAL NAMES for speakers (e.g., 'Alice:', 'John:') instead of 'Speaker 1:', 'Speaker 2:'.
-
-Generate a JSON response with this exact structure:
-{
-  "transcript": "Full transcript of all 4 sections combined. ~1500-2000 words total.",
-  "sections": [
-    {
-      "sectionNumber": 1,
-      "title": "Part 1: Social Conversation",
-      "transcript": "Transcript for this part...",
-      "questions": [
-        {
-          "type": "fill-blank",
-          "questionText": "Q1 text...",
-          "correctAnswer": "word",
-          "acceptedAnswers": ["word", "WORD"]
-        }
-        // ... total 10 questions for this section
+        { "type": "true-false-not-given", "questionText": "<statement>", "options": ["TRUE", "FALSE", "NOT GIVEN"], "correctAnswer": "TRUE", "explanation": "<reason>" },
+        { "type": "mcq", "questionText": "<question>?", "options": ["A", "B", "C", "D"], "correctAnswer": "A", "explanation": "<reason>" },
+        { "type": "fill-blank", "questionText": "The _____ is important.", "correctAnswer": "word", "acceptedAnswers": ["word"] }
       ]
     },
     {
-      "sectionNumber": 2, 
-      "title": "Part 2: Monologue (Social)", 
-      "transcript": "...",
-      "questions": [...] 
+      "passageNumber": 2,
+      "title": "<title of passage 2>",
+      "textContent": "<full passage 2 text in HTML, 700-900 words>",
+      "questions": []
     },
     {
-      "sectionNumber": 3, 
-      "title": "Part 3: Academic Discussion", 
-      "transcript": "...",
-      "questions": [...] 
-    },
-    {
-      "sectionNumber": 4, 
-      "title": "Part 4: Academic Lecture", 
-      "transcript": "...",
-      "questions": [...] 
+      "passageNumber": 3,
+      "title": "<title of passage 3>",
+      "textContent": "<full passage 3 text in HTML, 700-900 words>",
+      "questions": []
     }
   ]
 }
 
-Requirements:
-- Part 1: Conversation between two people (e.g., booking, inquiry).
-- Part 2: Monologue about a service, place, or facility.
-- Part 3: Conversation between up to 4 people in an academic setting.
-- Part 4: A formal lecture or talk on an academic subject.
-- Exactly 10 questions per part. Total = 40.
-Return ONLY valid JSON.
+RULES:
+- Replace ALL angle-bracket placeholders above with real, generated content
+- Passage 1: exactly 13 questions
+- Passage 2: exactly 13 questions  
+- Passage 3: exactly 14 questions
+- Total: exactly 40 questions
+- Mix types: true-false-not-given, mcq, fill-blank, sentence-completion
+- Questions must be based on the actual passage content
+- Output ONLY the JSON object, nothing else
+`;
+
+const LISTENING_PROMPT = (topic: string, difficulty: string) => `
+You are an IELTS exam content creator. Generate a full IELTS listening test with exactly 4 sections and exactly 40 questions total (10 per section).
+
+Topic: ${topic}
+Difficulty: ${difficulty}
+
+Return ONLY raw valid JSON (no markdown, no code fences, no extra text).
+Use REAL NAMES for speakers (e.g. 'Alice:', 'John:', 'Professor Smith:') - NEVER use 'Speaker 1:' or 'Speaker 2:'.
+
+The JSON must match this schema precisely:
+
+{
+  "transcript": "<combined transcript of all 4 parts, 1500-2000 words>",
+  "sections": [
+    {
+      "sectionNumber": 1,
+      "title": "Part 1: <actual title>",
+      "transcript": "<transcript text for Part 1 only>",
+      "questions": [
+        { "type": "fill-blank", "questionText": "<question with blank>", "correctAnswer": "<answer>", "acceptedAnswers": ["<answer>"] },
+        { "type": "mcq", "questionText": "<question>?", "options": ["A", "B", "C", "D"], "correctAnswer": "A" }
+      ]
+    },
+    {
+      "sectionNumber": 2,
+      "title": "Part 2: <actual title>",
+      "transcript": "<transcript text for Part 2 only>",
+      "questions": []
+    },
+    {
+      "sectionNumber": 3,
+      "title": "Part 3: <actual title>",
+      "transcript": "<transcript text for Part 3 only>",
+      "questions": []
+    },
+    {
+      "sectionNumber": 4,
+      "title": "Part 4: <actual title>",
+      "transcript": "<transcript text for Part 4 only>",
+      "questions": []
+    }
+  ]
+}
+
+RULES:
+- Replace ALL angle-bracket placeholders with real generated content
+- Part 1: Conversation (social context, e.g. booking, registration) — exactly 10 questions
+- Part 2: Monologue (local facility or service) — exactly 10 questions
+- Part 3: Academic conversation (students discussing assignment) — exactly 10 questions
+- Part 4: Academic lecture — exactly 10 questions
+- Total: exactly 40 questions
+- Mix types: fill-blank, mcq, matching, sentence-completion
+- Output ONLY the JSON object, nothing else
 `;
 
 const WRITING_PROMPT = (topic: string, testType: string) => `
