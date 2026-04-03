@@ -255,22 +255,26 @@ export function CoursesPage() {
               </p>
               
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Button 
-                  size="lg" 
-                  variant="secondary"
-                  className="h-12 px-8 bg-background text-foreground hover:bg-background/90"
-                >
-                  <MessageCircle className="mr-2 h-4 w-4" />
-                  Message on WhatsApp
-                </Button>
-                <Button 
-                  size="lg" 
-                  variant="outline"
-                  className="h-12 px-8 border-background/20 text-background hover:bg-background/10"
-                >
-                  <Phone className="mr-2 h-4 w-4" />
-                  Schedule a Call
-                </Button>
+                <Link to="/contact">
+                  <Button 
+                    size="lg" 
+                    variant="secondary"
+                    className="h-12 px-8 bg-background text-foreground hover:bg-background/90 w-full sm:w-auto"
+                  >
+                    <MessageCircle className="mr-2 h-4 w-4" />
+                    Message on WhatsApp
+                  </Button>
+                </Link>
+                <Link to="/contact">
+                  <Button 
+                    size="lg" 
+                    variant="outline"
+                    className="h-12 px-8 bg-transparent border-background/20 text-background hover:bg-background/10 hover:text-background w-full sm:w-auto"
+                  >
+                    <Phone className="mr-2 h-4 w-4" />
+                    Schedule a Call
+                  </Button>
+                </Link>
               </div>
             </div>
           </Card>
