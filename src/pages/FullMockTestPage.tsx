@@ -826,28 +826,47 @@ export default function FullMockTestPage() {
               return (
                 <div className="space-y-12">
                    <div className="bg-emerald-600 text-white p-10 rounded-[40px] shadow-2xl flex items-center gap-6"><div className="p-4 bg-white/20 rounded-3xl"><PenTool className="h-10 w-10" /></div><div><h2 className="text-3xl font-black mb-1">Writing Assessment</h2><p className="text-emerald-100 font-medium">Complete both tasks. Your word count is tracked automatically.</p></div></div>
-                  {task1 && (
-                    <Card className="rounded-[40px] shadow-3xl overflow-hidden border-none">
-                      <CardHeader className="bg-emerald-50 p-10 border-b border-emerald-100"><CardTitle className="text-2xl font-black text-emerald-900 flex items-center gap-3">Task 1: {task1.title}</CardTitle></CardHeader>
-                      <CardContent className="p-10 space-y-8">
-                        <div className="bg-emerald-50/50 border-2 border-emerald-100 rounded-3xl p-8 text-lg font-medium text-emerald-900/80 leading-relaxed" dangerouslySetInnerHTML={{ __html: task1.prompt }} />
-                        <Textarea placeholder="Begin typing your response here..." className="min-h-[400px] rounded-[30px] border-2 border-emerald-100 p-8 text-lg font-bold focus:ring-[12px] focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
-                          value={answers['w_task1'] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, w_task1: e.target.value }))} />
-                        <div className="flex items-center justify-between px-4"><p className="text-sm font-black uppercase tracking-widest text-emerald-400">Current Progress</p><Badge className="bg-emerald-600 text-white px-6 py-2 rounded-full font-black">{(answers['w_task1'] ?? '').split(/\s+/).filter(Boolean).length} / 150 Words</Badge></div>
-                      </CardContent>
-                    </Card>
-                  )}
-                  {task2 && (
-                    <Card className="rounded-[40px] shadow-3xl overflow-hidden border-none">
-                      <CardHeader className="bg-emerald-50 p-10 border-b border-emerald-100"><CardTitle className="text-2xl font-black text-emerald-900 flex items-center gap-3">Task 2: {task2.title}</CardTitle></CardHeader>
-                      <CardContent className="p-10 space-y-8">
-                        <div className="bg-emerald-50/50 border-2 border-emerald-100 rounded-3xl p-8 text-lg font-medium text-emerald-900/80 leading-relaxed" dangerouslySetInnerHTML={{ __html: task2.prompt }} />
-                        <Textarea placeholder="Begin typing your essay here..." className="min-h-[600px] rounded-[30px] border-2 border-emerald-100 p-8 text-lg font-bold focus:ring-[12px] focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
-                          value={answers['w_task2'] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, w_task2: e.target.value }))} />
-                        <div className="flex items-center justify-between px-4"><p className="text-sm font-black uppercase tracking-widest text-emerald-400">Current Progress</p><Badge className="bg-emerald-600 text-white px-6 py-2 rounded-full font-black">{(answers['w_task2'] ?? '').split(/\s+/).filter(Boolean).length} / 250 Words</Badge></div>
-                      </CardContent>
-                    </Card>
-                  )}
+                  {/* Task 1 */}
+                  <Card className="rounded-[40px] shadow-3xl overflow-hidden border-none">
+                    <CardHeader className="bg-emerald-50 p-10 border-b border-emerald-100">
+                      <CardTitle className="text-2xl font-black text-emerald-900">Task 1 — {task1?.title ?? 'Report / Letter (min. 150 words)'}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-10 space-y-8">
+                      <div className="bg-emerald-50/50 border-2 border-emerald-100 rounded-3xl p-8 text-lg font-medium text-emerald-900/80 leading-relaxed">
+                        {task1?.prompt
+                          ? <span dangerouslySetInnerHTML={{ __html: task1.prompt }} />
+                          : <><p className="font-black mb-2">Describe the visual information below:</p><p>The chart below shows the percentage of households in owned and rented accommodation in England and Wales between 1918 and 2011. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p><p className="mt-3 text-sm text-emerald-700 font-bold">Write at least 150 words. Spend about 20 minutes on this task.</p></>
+                        }
+                      </div>
+                      <Textarea placeholder="Begin typing your Task 1 response here... (min. 150 words)" className="min-h-[400px] rounded-[30px] border-2 border-emerald-100 p-8 text-lg font-bold focus:ring-[12px] focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
+                        value={answers['w_task1'] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, w_task1: e.target.value }))} />
+                      <div className="flex items-center justify-between px-4">
+                        <p className="text-sm font-black uppercase tracking-widest text-emerald-400">Word Count</p>
+                        <Badge className={`px-6 py-2 rounded-full font-black text-white ${(answers['w_task1'] ?? '').split(/\s+/).filter(Boolean).length >= 150 ? 'bg-emerald-600' : 'bg-amber-500'}`}>{(answers['w_task1'] ?? '').split(/\s+/).filter(Boolean).length} / 150 Words</Badge>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Task 2 */}
+                  <Card className="rounded-[40px] shadow-3xl overflow-hidden border-none">
+                    <CardHeader className="bg-emerald-50 p-10 border-b border-emerald-100">
+                      <CardTitle className="text-2xl font-black text-emerald-900">Task 2 — {task2?.title ?? 'Essay (min. 250 words)'}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-10 space-y-8">
+                      <div className="bg-emerald-50/50 border-2 border-emerald-100 rounded-3xl p-8 text-lg font-medium text-emerald-900/80 leading-relaxed">
+                        {task2?.prompt
+                          ? <span dangerouslySetInnerHTML={{ __html: task2.prompt }} />
+                          : <><p className="font-black mb-2">Write an essay in response to the argument below:</p><p>Some people believe that university education should be free for all students, while others argue that students should pay for their own tuition. Discuss both views and give your own opinion.</p><p className="mt-3 text-sm text-emerald-700 font-bold">Write at least 250 words. Spend about 40 minutes on this task.</p></>
+                        }
+                      </div>
+                      <Textarea placeholder="Begin typing your Task 2 essay here... (min. 250 words)" className="min-h-[600px] rounded-[30px] border-2 border-emerald-100 p-8 text-lg font-bold focus:ring-[12px] focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
+                        value={answers['w_task2'] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, w_task2: e.target.value }))} />
+                      <div className="flex items-center justify-between px-4">
+                        <p className="text-sm font-black uppercase tracking-widest text-emerald-400">Word Count</p>
+                        <Badge className={`px-6 py-2 rounded-full font-black text-white ${(answers['w_task2'] ?? '').split(/\s+/).filter(Boolean).length >= 250 ? 'bg-emerald-600' : 'bg-amber-500'}`}>{(answers['w_task2'] ?? '').split(/\s+/).filter(Boolean).length} / 250 Words</Badge>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
               );
             })()}
