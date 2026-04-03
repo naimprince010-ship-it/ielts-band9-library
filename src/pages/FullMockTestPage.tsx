@@ -619,7 +619,6 @@ export default function FullMockTestPage() {
   const timeColor = remaining < 300 ? 'text-red-400' : remaining < 600 ? 'text-yellow-400' : 'text-green-400';
 
   let navKeys: string[] = [];
-  const TOTAL_QUESTIONS_TARGET = 40;
 
   if (phase === 'listening') {
     const sections = (td?.sections as Array<{questions: any[]}>) ?? [];
@@ -641,8 +640,8 @@ export default function FullMockTestPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-40">
-      <div className="sticky top-0 z-50 bg-foreground/95 backdrop-blur-lg text-white px-6 py-4 flex items-center justify-between shadow-2xl border-b border-white/10">
+    <div className="min-h-screen bg-background pt-[88px] pb-40">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-foreground/95 backdrop-blur-lg text-white px-6 py-4 flex items-center justify-between shadow-2xl border-b border-white/10">
         <div className="flex items-center gap-4">
           <div className={`w-10 h-10 ${currentSection.bg} rounded-xl flex items-center justify-center shadow-lg shadow-black/20`}>{currentSection.icon}</div>
           <div>
