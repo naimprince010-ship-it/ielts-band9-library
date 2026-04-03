@@ -162,7 +162,7 @@ function useTimer(initial: number, onExpire: () => void) {
   return { remaining, start, reset };
 }
 
-export function FullMockTestPage() {
+export default function FullMockTestPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [phase, setPhase] = useState<Phase>('intro');
