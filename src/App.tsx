@@ -98,7 +98,7 @@ function App() {
                 <Route path="/practice/typing" element={<Layout><TypingPracticePage /></Layout>} />
                 <Route path="/progress" element={<Layout><ProgressDashboardPage /></Layout>} />
                 <Route path="/mock-test" element={<Layout><MockTestPage /></Layout>} />
-                <Route path="/full-mock-test" element={<Layout><FullMockTestPage /></Layout>} />
+                <Route path="/full-mock-test" element={<Layout hideNavFooter={true}><FullMockTestPage /></Layout>} />
                 <Route path="/certificate" element={<Layout><CertificatePage /></Layout>} />
                 <Route path="/grammar-exercises" element={<Layout><GrammarExercisesPage /></Layout>} />
                 <Route path="/essay-bank" element={<Layout><EssayBankPage /></Layout>} />
@@ -113,10 +113,10 @@ function App() {
                 <Route path="/results" element={<Layout><ResultDashboardPage /></Layout>} />
 
                 {/* Test pages with Layout */}
-                <Route path="/reading-test" element={<Layout><ReadingTestPage /></Layout>} />
-                <Route path="/writing-test" element={<Layout><WritingTestPage /></Layout>} />
-                <Route path="/listening-test" element={<Layout><ListeningTestPage /></Layout>} />
-                <Route path="/speaking-test" element={<Layout><SpeakingTestPage /></Layout>} />
+                <Route path="/reading-test" element={<Layout hideNavFooter={true}><ReadingTestPage /></Layout>} />
+                <Route path="/writing-test" element={<Layout hideNavFooter={true}><WritingTestPage /></Layout>} />
+                <Route path="/listening-test" element={<Layout hideNavFooter={true}><ListeningTestPage /></Layout>} />
+                <Route path="/speaking-test" element={<Layout hideNavFooter={true}><SpeakingTestPage /></Layout>} />
 
                 {/* Catch all - redirect to home */}
                 <Route path="*" element={<Navigate to="/" replace />} />

@@ -5,15 +5,18 @@ import { MobileNav } from './MobileNav';
 
 interface LayoutProps {
   children: ReactNode;
+  hideNavFooter?: boolean;
 }
 
-export function Layout({ children }: LayoutProps) {
+export function Layout({ children, hideNavFooter = false }: LayoutProps) {
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <Navbar />
-      <main className="flex-1 pt-16 pb-16 md:pb-0">{children}</main>
-      <Footer />
-      <MobileNav />
+      {!hideNavFooter && <Navbar />}
+      <main className={`flex-1 ${!hideNavFooter ? 'pt-16 pb-16 md:pb-0' : 'h-screen overflow-y-auto'}`}>
+        {children}
+      </main>
+      {!hideNavFooter && <Footer />}
+      {!hideNavFooter && <MobileNav />}
     </div>
   );
 }
