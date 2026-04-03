@@ -201,17 +201,7 @@ export default function FullMockTestPage() {
     setPlayingAudioId(null);
   }, [phase]);
 
-  const getVoicesAsync = (): Promise<SpeechSynthesisVoice[]> => {
-    return new Promise(resolve => {
-      const voices = window.speechSynthesis.getVoices();
-      if (voices.length > 0) { resolve(voices); return; }
-      const handler = () => { resolve(window.speechSynthesis.getVoices()); };
-      window.speechSynthesis.addEventListener('voiceschanged', handler, { once: true });
-      setTimeout(() => resolve(window.speechSynthesis.getVoices()), 2000);
-    });
-  };
-
-  const toggleAudio = async (id: string, text: string) => {
+  const toggleAudio = (id: string, text: string) => {
     if (!('speechSynthesis' in window)) { alert('Your browser does not support text-to-speech.'); return; }
     if (playedAudios.has(id)) { alert('Audio in the real exam can only be played once.'); return; }
 
@@ -220,9 +210,12 @@ export default function FullMockTestPage() {
 
     setPlayingAudioId(id);
     const utterance = new SpeechSynthesisUtterance(text);
-    const voices = await getVoicesAsync();
+    
+    // Fetch voices synchronously to ensure we don't lose the user interaction context required by mobile browsers
+    const voices = window.speechSynthesis.getVoices();
     const preferred = voices.find(v => v.lang.startsWith('en-GB')) || voices.find(v => v.lang.startsWith('en-US')) || voices.find(v => v.lang.startsWith('en'));
     if (preferred) utterance.voice = preferred;
+    
     utterance.rate = 0.92;
     setPlayedAudios(prev => new Set(prev).add(id));
     utterance.onend = () => setPlayingAudioId(null);

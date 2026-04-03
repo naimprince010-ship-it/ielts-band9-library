@@ -21,7 +21,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const DEMO_USERS: Record<string, User> = {
+const DEMO_USERS: Record<string, User & { password?: string }> = {
   'admin@ielts.com': {
     id: 'demo-admin-1',
     email: 'admin@ielts.com',
@@ -30,6 +30,7 @@ const DEMO_USERS: Record<string, User> = {
     subscription_status: 'premium',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
+    password: 'password123',
   },
   'user@ielts.com': {
     id: 'demo-user-1',
@@ -39,6 +40,7 @@ const DEMO_USERS: Record<string, User> = {
     subscription_status: 'free',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
+    password: 'password123',
   },
   'instructor@ielts.com': {
     id: 'demo-instructor-1',
@@ -48,6 +50,17 @@ const DEMO_USERS: Record<string, User> = {
     subscription_status: 'premium',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
+    password: 'password123',
+  },
+  'naimprince010@gmail.com': {
+    id: 'demo-naim-1',
+    email: 'naimprince010@gmail.com',
+    name: 'Naim Prince',
+    role: 'admin',
+    subscription_status: 'premium',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    password: 'Naim18005@',
   },
 };
 
@@ -204,9 +217,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signIn = async (email: string, password: string) => {
     if (!isSupabaseConfigured() || !supabase) {
       const demoUser = DEMO_USERS[email];
-      if (demoUser && password === 'password123') {
-        setUser(demoUser);
-        localStorage.setItem('demo_user', JSON.stringify(demoUser));
+      if (demoUser && password === (demoUser.password || 'password123')) {
+        const { password: _, ...userWithoutPassword } = demoUser;
+        setUser(userWithoutPassword as User);
+        localStorage.setItem('demo_user', JSON.stringify(userWithoutPassword));
         return { error: null };
       }
       return { error: new Error('Invalid credentials. Try admin@ielts.com or user@ielts.com with password123') };
