@@ -111,8 +111,19 @@ export default function ProgressDashboardPage() {
 
   const loadLocalActivity = () => {
     const stored = localStorage.getItem(ACTIVITY_KEY);
-    if (stored) {
-      const data = JSON.parse(stored);
+    let isArray = false;
+    let data = null;
+    
+    try {
+      if (stored) {
+        data = JSON.parse(stored);
+        isArray = Array.isArray(data);
+      }
+    } catch (e) {
+      console.error('Error parsing local activity', e);
+    }
+
+    if (isArray && data) {
       setActivityHistory(data);
       calculateStats(data);
     } else {
@@ -388,7 +399,7 @@ export default function ProgressDashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-10 gap-1">
-                {activityHistory.slice(-30).map((day, idx) => (
+                {(Array.isArray(activityHistory) ? activityHistory : []).slice(-30).map((day, idx) => (
                   <div
                     key={idx}
                     className={`w-full aspect-square rounded-sm ${getActivityLevel(day)} cursor-pointer`}
@@ -443,7 +454,7 @@ export default function ProgressDashboardPage() {
               <CardDescription>Your recent quiz scores</CardDescription>
             </CardHeader>
             <CardContent>
-              {quizAttempts && quizAttempts.length > 0 ? (
+              {Array.isArray(quizAttempts) && quizAttempts.length > 0 ? (
                 <div className="h-32 flex items-end gap-1">
                   {quizAttempts.slice(-20).map((attempt, idx) => {
                     const percentage = (attempt.score / attempt.total) * 100;
