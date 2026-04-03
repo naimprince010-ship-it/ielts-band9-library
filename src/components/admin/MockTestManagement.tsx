@@ -41,6 +41,7 @@ import {
   Volume2
 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { cn } from '@/lib/utils';
 import {
   ReadingTest,
   ReadingPassage,
@@ -389,30 +390,30 @@ export function MockTestManagement() {
 
   const getModuleColor = (type: ModuleType) => {
     switch (type) {
-      case 'reading': return 'bg-blue-100 text-blue-800';
-      case 'listening': return 'bg-purple-100 text-purple-800';
-      case 'writing': return 'bg-green-100 text-green-800';
-      case 'speaking': return 'bg-orange-100 text-orange-800';
+      case 'reading': return 'bg-blue-50 text-blue-700 border-blue-100';
+      case 'listening': return 'bg-purple-50 text-purple-700 border-purple-100';
+      case 'writing': return 'bg-emerald-50 text-emerald-700 border-emerald-100';
+      case 'speaking': return 'bg-orange-50 text-orange-700 border-orange-100';
     }
   };
 
   if (!isSupabaseConfigured()) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5" />
+      <Card className="border-none shadow-sm rounded-[2rem] overflow-hidden">
+        <CardHeader className="p-8 pb-4">
+          <CardTitle className="text-xl font-bold flex items-center gap-2">
+            <FileText className="h-5 w-5 text-indigo-600" />
             Mock Test Management
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <Alert>
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
+        <CardContent className="p-8 pt-0">
+          <Alert className="bg-amber-50 border-amber-200 rounded-2xl">
+            <AlertCircle className="h-4 w-4 text-amber-600" />
+            <AlertDescription className="text-amber-900 font-medium">
               Supabase is not configured. Please run the SQL setup script in your Supabase dashboard to enable this feature.
               <br /><br />
               <strong>Steps:</strong>
-              <ol className="list-decimal ml-4 mt-2">
+              <ol className="list-decimal ml-4 mt-2 space-y-1">
                 <li>Go to Supabase Dashboard → SQL Editor</li>
                 <li>Run the mock_tests table creation SQL</li>
                 <li>Refresh this page</li>
@@ -425,121 +426,113 @@ export function MockTestManagement() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {success && (
-        <Alert className="bg-green-50 border-green-200">
-          <CheckCircle className="h-4 w-4 text-green-600" />
-          <AlertDescription className="text-green-800">{success}</AlertDescription>
+        <Alert className="bg-emerald-50 border-emerald-200 text-emerald-900 rounded-2xl animate-in fade-in slide-in-from-top-4">
+          <CheckCircle className="h-4 w-4 text-emerald-600" />
+          <AlertDescription className="font-bold">{success}</AlertDescription>
         </Alert>
       )}
 
       {error && (
-        <Alert className="bg-red-50 border-red-200">
-          <AlertCircle className="h-4 w-4 text-red-600" />
-          <AlertDescription className="text-red-800">{error}</AlertDescription>
+        <Alert className="bg-rose-50 border-rose-200 text-rose-900 rounded-2xl animate-in fade-in slide-in-from-top-4" variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription className="font-bold">{error}</AlertDescription>
         </Alert>
       )}
 
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
+      <Card className="border-none shadow-sm rounded-[2rem] overflow-hidden">
+        <CardHeader className="p-8">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5" />
+              <CardTitle className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+                <FileText className="h-6 w-6 text-indigo-600" />
                 Mock Test Management
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="font-medium mt-1">
                 Create and manage IELTS mock tests for all modules
               </CardDescription>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Button onClick={() => setIsFullTestModalOpen(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2">
+              <Button onClick={() => setIsFullTestModalOpen(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2 h-11 rounded-xl font-bold">
                 <Sparkles className="h-4 w-4" />
                 AI Generate Full Test
               </Button>
               <div className="w-px h-10 bg-slate-200 mx-2 hidden lg:block"></div>
-              <Button onClick={() => handleNewTest('reading')} variant="outline" className="gap-2">
-                <FileText className="h-4 w-4" />
-                Reading
+              <Button onClick={() => handleNewTest('reading')} variant="outline" className="h-11 rounded-xl font-bold border-slate-200 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition-all">
+                <FileText className="h-4 w-4 mr-2" /> Reading
               </Button>
-              <Button onClick={() => handleNewTest('listening')} variant="outline" className="gap-2">
-                <Headphones className="h-4 w-4" />
-                Listening
+              <Button onClick={() => handleNewTest('listening')} variant="outline" className="h-11 rounded-xl font-bold border-slate-200 hover:bg-purple-50 hover:text-purple-700 hover:border-purple-200 transition-all">
+                <Headphones className="h-4 w-4 mr-2" /> Listening
               </Button>
-              <Button onClick={() => handleNewTest('writing')} variant="outline" className="gap-2">
-                <PenTool className="h-4 w-4" />
-                Writing
+              <Button onClick={() => handleNewTest('writing')} variant="outline" className="h-11 rounded-xl font-bold border-slate-200 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 transition-all">
+                <PenTool className="h-4 w-4 mr-2" /> Writing
               </Button>
-              <Button onClick={() => handleNewTest('speaking')} variant="outline" className="gap-2">
-                <Mic className="h-4 w-4" />
-                Speaking
+              <Button onClick={() => handleNewTest('speaking')} variant="outline" className="h-11 rounded-xl font-bold border-slate-200 hover:bg-orange-50 hover:text-orange-700 hover:border-orange-200 transition-all">
+                <Mic className="h-4 w-4 mr-2" /> Speaking
               </Button>
             </div>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-8 pb-8">
           {loading ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+            <div className="flex items-center justify-center py-16">
+              <Loader2 className="h-10 w-10 animate-spin text-indigo-600" />
             </div>
           ) : mockTests.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              No mock tests yet. Click one of the buttons above to create your first test.
+            <div className="text-center py-16 text-slate-400 font-bold uppercase tracking-widest border-2 border-dashed rounded-[2rem]">
+              No mock tests found
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="grid gap-4">
               {mockTests.map((test) => (
-                <div
-                  key={test.id}
-                  className="border rounded-lg p-4 flex items-center justify-between"
-                >
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      {getModuleIcon(test.module_type)}
-                      <h4 className="font-medium">{test.title}</h4>
-                      <Badge className={getModuleColor(test.module_type)}>
-                        {test.module_type}
-                      </Badge>
-                      <Badge variant={test.is_published ? 'default' : 'secondary'}>
-                        {test.is_published ? 'Published' : 'Draft'}
-                      </Badge>
-                      {test.is_premium && (
-                        <Badge className="bg-amber-100 text-amber-800">Premium</Badge>
-                      )}
+                <Card key={test.id} className="hover:shadow-xl hover:shadow-slate-100 transition-all duration-300 border-slate-100 rounded-2xl overflow-hidden group">
+                  <CardContent className="p-5">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className={cn(
+                          "h-12 w-12 rounded-2xl flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300",
+                          test.module_type === 'reading' ? 'bg-blue-50 text-blue-600' :
+                          test.module_type === 'listening' ? 'bg-purple-50 text-purple-600' :
+                          test.module_type === 'writing' ? 'bg-emerald-50 text-emerald-600' :
+                          'bg-orange-50 text-orange-600'
+                        )}>
+                          {getModuleIcon(test.module_type)}
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">{test.title}</h3>
+                          <div className="flex items-center gap-2 mt-1">
+                            <Badge variant="outline" className={cn("text-[10px] uppercase font-bold rounded-lg", getModuleColor(test.module_type))}>
+                              {test.module_type}
+                            </Badge>
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                              Created: {new Date(test.created_at).toLocaleDateString()}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {test.is_premium && (
+                          <Badge className="bg-amber-100 text-amber-800 rounded-lg font-bold">Premium</Badge>
+                        )}
+                        <Badge className={cn("rounded-lg font-bold px-3 py-1", test.is_published ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-800')}>
+                          {test.is_published ? 'Published' : 'Draft'}
+                        </Badge>
+                        <div className="flex items-center gap-1 ml-2">
+                          <Button variant="ghost" size="icon" className="rounded-xl hover:bg-slate-50 text-slate-400 hover:text-indigo-600" onClick={() => handleTogglePublish(test)}>
+                            {test.is_published ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                          </Button>
+                          <Button variant="ghost" size="icon" className="rounded-xl hover:bg-slate-50 text-slate-400 hover:text-indigo-600" onClick={() => handleEditTest(test)}>
+                            <Edit className="h-5 w-5" />
+                          </Button>
+                          <Button variant="ghost" size="icon" className="rounded-xl hover:bg-rose-50 text-slate-400 hover:text-rose-600" onClick={() => handleDeleteTest(test.id)}>
+                            <Trash2 className="h-5 w-5" />
+                          </Button>
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-sm text-gray-500">
-                      Created: {new Date(test.created_at).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleTogglePublish(test)}
-                    >
-                      {test.is_published ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleEditTest(test)}
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleDeleteTest(test.id)}
-                      className="text-red-600 hover:text-red-700"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
           )}
@@ -2286,17 +2279,43 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
   const [progress, setProgress] = useState<string>('');
   const [error, setError] = useState<string>('');
 
-  const generateModule = async (moduleType: string) => {
-    setProgress(`Generating ${moduleType} module... \n(This may take 15-30 seconds per module)`);
+  const generateModule = async (moduleType: string, index?: number) => {
+    let label = moduleType;
+    if (index) {
+      if (moduleType === 'reading') label = `reading (Passage ${index})`;
+      else if (moduleType === 'listening') label = `listening (Section ${index})`;
+      else if (moduleType === 'writing') label = `writing (Task ${index})`;
+      else if (moduleType === 'speaking') label = `speaking (Part ${index})`;
+    }
+    
+    setProgress(`Generating ${label} module... \n(This may take 15-30 seconds)`);
     const response = await fetch('/api/generate-content', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ moduleType, topic: topic.trim(), difficulty, testType: 'academic', provider: 'openai' })
+      body: JSON.stringify({ 
+        moduleType, 
+        topic: topic.trim(), 
+        difficulty, 
+        testType: 'academic', 
+        provider: 'openai',
+        passageNumber: moduleType === 'reading' ? index : undefined,
+        sectionNumber: moduleType === 'listening' ? index : undefined,
+        taskNumber: moduleType === 'writing' ? index : undefined,
+        partNumber: moduleType === 'speaking' ? index : undefined
+      })
     });
     const rawText = await response.text();
     let data;
-    try { data = JSON.parse(rawText); } catch { throw new Error(`Invalid AI response for ${moduleType} `); }
-    if (!response.ok || !data.success || !data.content) throw new Error(data.error || `Failed to generate ${moduleType}`);
+    try { 
+      data = JSON.parse(rawText); 
+    } catch (e) { 
+      console.error(`Raw response for ${label}:`, rawText);
+      if (rawText.includes('<!DOCTYPE html>')) {
+        throw new Error(`Server error (504/500) during ${label} generation. This usually means the AI took too long to respond. Try again or use a simpler topic.`);
+      }
+      throw new Error(`Invalid AI response for ${label}. The AI output was not valid JSON.`); 
+    }
+    if (!response.ok || !data.success || !data.content) throw new Error(data.error || `Failed to generate ${label}`);
     return data.content;
   };
 
@@ -2305,9 +2324,14 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
     setIsGenerating(true); setError('');
     try {
       const now = Date.now();
-      // 1. Reading
-      const readingData = await generateModule('reading') as { passages: any[] };
-      const totalReadingQuestions = readingData.passages.reduce((acc, p) => acc + (p.questions?.length || 0), 0);
+      // 1. Reading (Generate 3 passages one by one)
+      const readingPassagesData = [];
+      for (let i = 1; i <= 3; i++) {
+        const pData = await generateModule('reading', i);
+        readingPassagesData.push(pData);
+      }
+      
+      const totalReadingQuestions = readingPassagesData.reduce((acc, p) => acc + (p.questions?.length || 0), 0);
       
       const readingTest = {
         id: `reading-${now}`, 
@@ -2315,29 +2339,40 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
         testType: 'academic', 
         timeLimit: 3600,
         instructions: 'Read the passages carefully and answer the questions.',
-        passages: readingData.passages.map((p, pIndex) => ({
-          id: `passage-${now}-${pIndex}`,
-          passageNumber: p.passageNumber || (pIndex + 1),
-          title: p.title || `Passage ${pIndex + 1}`,
-          content: p.textContent || '', // Map textContent to content for DB compatibility
-          questions: (p.questions || []).map((q: any, qIndex: number) => ({
-            id: `q-${now}-${pIndex}-${qIndex}`,
-            questionNumber: (pIndex === 0 ? 0 : readingData.passages.slice(0, pIndex).reduce((acc, prevP) => acc + (prevP.questions?.length || 0), 0)) + qIndex + 1,
-            type: q.type,
-            questionText: q.questionText,
-            options: q.options,
-            correctAnswer: q.correctAnswer,
-            acceptedAnswers: q.acceptedAnswers,
-            explanation: q.explanation
-          }))
-        })),
+        passages: readingPassagesData.map((p, pIndex) => {
+          const startNum = (pIndex === 0 ? 0 : readingPassagesData.slice(0, pIndex).reduce((acc, prevP) => acc + (prevP.questions?.length || 0), 0)) + 1;
+          const endNum = startNum + (p.questions?.length || 0) - 1;
+          
+          return {
+            id: `passage-${now}-${pIndex}`,
+            passageNumber: p.passageNumber || (pIndex + 1),
+            title: p.title || `Passage ${pIndex + 1}`,
+            textContent: p.textContent || p.content || '', 
+            questions: (p.questions || []).map((q: any, qIndex: number) => ({
+              id: `q-${now}-${pIndex}-${qIndex}`,
+              questionNumber: startNum + qIndex,
+              type: q.type,
+              questionText: q.questionText,
+              options: q.options,
+              correctAnswer: q.correctAnswer,
+              acceptedAnswers: q.acceptedAnswers,
+              explanation: q.explanation
+            })),
+            questionRange: { start: startNum, end: endNum }
+          };
+        }),
         totalQuestions: totalReadingQuestions
       };
 
-      // 2. Listening
-      const listeningData = await generateModule('listening') as { transcript: string; sections: any[] };
+      // 2. Listening (Generate 4 sections one by one)
+      const listeningSectionsData = [];
+      for (let i = 1; i <= 4; i++) {
+        const sData = await generateModule('listening', i);
+        listeningSectionsData.push(sData);
+      }
+      
       let currentQNum = 1;
-      const listeningSections = listeningData.sections.map((s: any, sIndex: number) => {
+      const listeningSections = listeningSectionsData.map((s, sIndex) => {
         const startNum = currentQNum;
         const mappedQuestions = s.questions.map((q: any, qIndex: number) => {
           const num = currentQNum++;
@@ -2355,10 +2390,10 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
         return {
           id: `section-${now}-${sIndex}`, 
           sectionNumber: s.sectionNumber || (sIndex + 1), 
-          title: s.title, 
+          title: s.title || `Section ${sIndex + 1}`, 
           audioStartTime: 0, 
           audioEndTime: 0,
-          transcript: s.transcript || listeningData.transcript, 
+          transcript: s.transcript || '', 
           questions: mappedQuestions, 
           questionRange: { start: startNum, end: currentQNum - 1 }
         };
@@ -2368,36 +2403,86 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
         audioUrl: '', audioDuration: 0, transferTime: 600, sections: listeningSections, instructions: 'Listen to the audio and answer.'
       };
 
-      // 3. Writing
-      const writingData = await generateModule('writing') as { task1: any; task2: any };
+      // 3. Writing (Generate 2 tasks one by one)
+      const writingTasksData = [];
+      for (let i = 1; i <= 2; i++) {
+        const tData = await generateModule('writing', i);
+        writingTasksData.push(tData);
+      }
+      
       const writingTest = {
         id: `writing-${now}`, title: `Mock Test: ${topic} - Writing`, testType: 'academic', timeLimit: 3600,
         instructions: 'Complete both writing tasks within the time limit.',
-        tasks: [
-          { id: `task-1-${now}`, taskNumber: 1, taskType: 'task1', title: writingData.task1.title || 'Task 1', prompt: writingData.task1.prompt, minWords: 150, recommendedTime: 20, sampleAnswer: writingData.task1.sampleAnswer },
-          { id: `task-2-${now}`, taskNumber: 2, taskType: 'task2', title: writingData.task2.title || 'Task 2', prompt: writingData.task2.prompt, minWords: 250, recommendedTime: 40, sampleAnswer: writingData.task2.sampleAnswer }
-        ]
+        tasks: writingTasksData.map((t, tIndex) => ({
+          id: `task-${tIndex + 1}-${now}`, 
+          taskNumber: tIndex + 1, 
+          taskType: tIndex === 0 ? 'task1' : 'task2', 
+          title: t.title || `Task ${tIndex + 1}`, 
+          prompt: t.prompt, 
+          minWords: tIndex === 0 ? 150 : 250, 
+          recommendedTime: tIndex === 0 ? 20 : 40, 
+          sampleAnswer: t.sampleAnswer 
+        }))
       };
 
-      // 4. Speaking
-      const speakingData = await generateModule('speaking') as any;
+      // 4. Speaking (Generate 3 parts one by one)
+      const speakingPartsData = [];
+      for (let i = 1; i <= 3; i++) {
+        const spData = await generateModule('speaking', i);
+        speakingPartsData.push(spData);
+      }
+
       const speakingTest = {
         id: `speaking-${now}`, title: `Mock Test: ${topic} - Speaking`, instructions: 'Answer the questions naturally.',
-        parts: [
-          { id: `part-1-${now}`, partNumber: 1, partType: 'part1', title: speakingData.part1?.title || 'Part 1: Introduction', instructions: speakingData.part1?.instructions || 'General questions.',
-            questions: speakingData.part1?.questions?.map((q: any, i: number) => ({ id: `sq-1-${i}`, questionNumber: i + 1, text: q.text, thinkTime: q.thinkTime || 5, recordTime: q.recordTime || 30 })) },
-          { id: `part-2-${now}`, partNumber: 2, partType: 'part2', title: speakingData.part2?.title || 'Part 2: Individual Long Turn', instructions: speakingData.part2?.instructions || 'You have 1 minute to prepare.',
-            cueCard: { 
-              id: `cue-${now}`, 
-              topic: speakingData.part2?.cueCard?.topic || speakingData.part2?.topic, 
-              bulletPoints: speakingData.part2?.cueCard?.bulletPoints || speakingData.part2?.bulletPoints || [], 
-              prepTime: speakingData.part2?.cueCard?.prepTime || 60, 
-              recordTime: speakingData.part2?.cueCard?.recordTime || 120 
-            } 
-          },
-          { id: `part-3-${now}`, partNumber: 3, partType: 'part3', title: speakingData.part3?.title || 'Part 3: Discussion', instructions: speakingData.part3?.instructions || 'Follow-up questions.',
-            questions: speakingData.part3?.questions?.map((q: any, i: number) => ({ id: `sq-3-${i}`, questionNumber: i + 1, text: q.text, thinkTime: q.thinkTime || 5, recordTime: q.recordTime || 60 })) }
-        ]
+        parts: speakingPartsData.map((sp, spIndex) => {
+          const pNum = spIndex + 1;
+          if (pNum === 1) {
+            return {
+              id: `part-1-${now}`, 
+              partNumber: 1, 
+              partType: 'part1', 
+              title: sp.title || 'Part 1: Introduction', 
+              instructions: sp.instructions || 'General questions.',
+              questions: sp.questions?.map((q: any, i: number) => ({ 
+                id: `sq-1-${i}`, 
+                questionNumber: i + 1, 
+                text: q.text, 
+                thinkTime: q.thinkTime || 3, 
+                recordTime: q.recordTime || 30 
+              }))
+            };
+          } else if (pNum === 2) {
+            return {
+              id: `part-2-${now}`, 
+              partNumber: 2, 
+              partType: 'part2', 
+              title: sp.title || 'Part 2: Individual Long Turn', 
+              instructions: sp.instructions || 'You have 1 minute to prepare.',
+              cueCard: { 
+                id: `cue-${now}`, 
+                topic: sp.cueCard?.topic || sp.topic, 
+                bulletPoints: sp.cueCard?.bulletPoints || sp.bulletPoints || [], 
+                prepTime: sp.cueCard?.prepTime || 60, 
+                recordTime: sp.cueCard?.recordTime || 120 
+              } 
+            };
+          } else {
+            return {
+              id: `part-3-${now}`, 
+              partNumber: 3, 
+              partType: 'part3', 
+              title: sp.title || 'Part 3: Discussion', 
+              instructions: sp.instructions || 'Follow-up questions.',
+              questions: sp.questions?.map((q: any, i: number) => ({ 
+                id: `sq-3-${i}`, 
+                questionNumber: i + 1, 
+                text: q.text, 
+                thinkTime: q.thinkTime || 5, 
+                recordTime: q.recordTime || 60 
+              }))
+            };
+          }
+        })
       };
 
       setProgress('Saving to database...');

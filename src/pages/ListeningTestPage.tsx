@@ -12,7 +12,12 @@ import {
   Headphones,
   Play,
   Clock,
-  FileText
+  FileText,
+  Zap,
+  Award,
+  ArrowRight,
+  Settings,
+  Settings2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -42,57 +47,33 @@ import {
 // ============================================
 const SAMPLE_LISTENING_TEST: ListeningTest = {
   id: 'listening-test-1',
-  title: 'Listening Test 1',
-  totalQuestions: 16,
+  title: 'IELTS Listening Test 1',
+  totalQuestions: 40,
   audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', // Demo audio
-  audioDuration: 120, // 2 minutes for demo (normally ~30 min)
+  audioDuration: 1800, // 30 minutes for real IELTS
   transferTime: 120, // 2 minutes for computer-delivered test
   is_premium: false,
-  instructions: 'Listen to the audio and answer questions 1-16. You will hear the recording ONCE only.',
+  instructions: 'Listen to the audio and answer questions 1-40. You will hear the recording ONCE only.',
   sections: [
     {
       id: 'section-1',
       sectionNumber: 1,
-      title: 'Section 1: Conversation',
-      description: 'A conversation between two people about booking a hotel room.',
+      title: 'Part 1: Social Needs',
+      description: 'A conversation between two people in an everyday social context.',
       audioStartTime: 0,
-      audioEndTime: 30,
-      questionRange: { start: 1, end: 4 },
+      audioEndTime: 450,
+      questionRange: { start: 1, end: 10 },
       questions: [
-        {
-          id: 'lq1',
-          questionNumber: 1,
-          type: 'fill-blank',
-          questionText: 'The guest wants to book a room for _____ nights.',
-          correctAnswer: 'three',
-          acceptedAnswers: ['three', '3', 'Three'],
-          wordLimit: 1
-        },
-        {
-          id: 'lq2',
-          questionNumber: 2,
-          type: 'mcq',
-          questionText: 'What type of room does the guest prefer?',
-          options: ['Single room', 'Double room', 'Suite', 'Family room'],
-          correctAnswer: 'Double room'
-        },
-        {
-          id: 'lq3',
-          questionNumber: 3,
-          type: 'fill-blank',
-          questionText: 'The total cost of the stay is $_____ .',
-          correctAnswer: '450',
-          acceptedAnswers: ['450', '450.00'],
-          wordLimit: 1
-        },
-        {
-          id: 'lq4',
-          questionNumber: 4,
-          type: 'mcq',
-          questionText: 'What is included in the room rate?',
-          options: ['Breakfast only', 'Dinner only', 'Breakfast and dinner', 'No meals'],
-          correctAnswer: 'Breakfast only'
-        }
+        { id: 'lq1', questionNumber: 1, type: 'fill-blank', questionText: 'The guest wants to book a room for _____ nights.', correctAnswer: 'three', acceptedAnswers: ['three', '3', 'Three'], wordLimit: 1 },
+        { id: 'lq2', questionNumber: 2, type: 'mcq', questionText: 'What type of room does the guest prefer?', options: ['Single room', 'Double room', 'Suite', 'Family room'], correctAnswer: 'Double room' },
+        { id: 'lq3', questionNumber: 3, type: 'fill-blank', questionText: 'The total cost of the stay is $_____ .', correctAnswer: '450', acceptedAnswers: ['450', '450.00'], wordLimit: 1 },
+        { id: 'lq4', questionNumber: 4, type: 'mcq', questionText: 'What is included in the room rate?', options: ['Breakfast only', 'Dinner only', 'Breakfast and dinner', 'No meals'], correctAnswer: 'Breakfast only' },
+        { id: 'lq5', questionNumber: 5, type: 'fill-blank', questionText: 'Check-in time is at _____ pm.', correctAnswer: '2', acceptedAnswers: ['2', 'two', '2:00'], wordLimit: 1 },
+        { id: 'lq6', questionNumber: 6, type: 'mcq', questionText: 'Where is the hotel located?', options: ['City center', 'Near airport', 'Beach area', 'Mountain resort'], correctAnswer: 'City center' },
+        { id: 'lq7', questionNumber: 7, type: 'fill-blank', questionText: 'The guest\'s surname is _____ .', correctAnswer: 'Johnson', acceptedAnswers: ['Johnson', 'JOHNSON', 'johnson'], wordLimit: 1 },
+        { id: 'lq8', questionNumber: 8, type: 'mcq', questionText: 'How will the guest pay?', options: ['Cash', 'Credit card', 'Debit card', 'Bank transfer'], correctAnswer: 'Credit card' },
+        { id: 'lq9', questionNumber: 9, type: 'fill-blank', questionText: 'The booking reference number is _____ .', correctAnswer: 'HB2847', acceptedAnswers: ['HB2847', 'hb2847'], wordLimit: 1 },
+        { id: 'lq10', questionNumber: 10, type: 'mcq', questionText: 'What extra service does the guest request?', options: ['Airport pickup', 'Room service', 'Spa access', 'Late checkout'], correctAnswer: 'Airport pickup' }
       ]
     },
     {
@@ -100,44 +81,20 @@ const SAMPLE_LISTENING_TEST: ListeningTest = {
       sectionNumber: 2,
       title: 'Section 2: Monologue',
       description: 'A tour guide giving information about a museum.',
-      audioStartTime: 30,
-      audioEndTime: 60,
-      questionRange: { start: 5, end: 8 },
+      audioStartTime: 450,
+      audioEndTime: 900,
+      questionRange: { start: 11, end: 20 },
       questions: [
-        {
-          id: 'lq5',
-          questionNumber: 5,
-          type: 'mcq',
-          questionText: 'When was the museum established?',
-          options: ['1850', '1920', '1965', '2001'],
-          correctAnswer: '1920'
-        },
-        {
-          id: 'lq6',
-          questionNumber: 6,
-          type: 'fill-blank',
-          questionText: 'The museum has _____ permanent exhibitions.',
-          correctAnswer: 'five',
-          acceptedAnswers: ['five', '5', 'Five'],
-          wordLimit: 1
-        },
-        {
-          id: 'lq7',
-          questionNumber: 7,
-          type: 'mcq',
-          questionText: 'What is the most popular exhibit?',
-          options: ['Ancient artifacts', 'Modern art', 'Natural history', 'Space exploration'],
-          correctAnswer: 'Ancient artifacts'
-        },
-        {
-          id: 'lq8',
-          questionNumber: 8,
-          type: 'fill-blank',
-          questionText: 'The museum is open from _____ am to 6 pm.',
-          correctAnswer: '9',
-          acceptedAnswers: ['9', 'nine', 'Nine'],
-          wordLimit: 1
-        }
+        { id: 'lq11', questionNumber: 11, type: 'mcq', questionText: 'When was the museum established?', options: ['1850', '1920', '1965', '2001'], correctAnswer: '1920' },
+        { id: 'lq12', questionNumber: 12, type: 'fill-blank', questionText: 'The museum has _____ permanent exhibitions.', correctAnswer: 'five', acceptedAnswers: ['five', '5', 'Five'], wordLimit: 1 },
+        { id: 'lq13', questionNumber: 13, type: 'mcq', questionText: 'What is the most popular exhibit?', options: ['Ancient artifacts', 'Modern art', 'Natural history', 'Space exploration'], correctAnswer: 'Ancient artifacts' },
+        { id: 'lq14', questionNumber: 14, type: 'fill-blank', questionText: 'The museum is open from _____ am to 6 pm.', correctAnswer: '9', acceptedAnswers: ['9', 'nine', 'Nine'], wordLimit: 1 },
+        { id: 'lq15', questionNumber: 15, type: 'mcq', questionText: 'How many visitors does the museum receive annually?', options: ['50,000', '100,000', '250,000', '500,000'], correctAnswer: '250,000' },
+        { id: 'lq16', questionNumber: 16, type: 'fill-blank', questionText: 'The guided tour lasts _____ minutes.', correctAnswer: '45', acceptedAnswers: ['45', 'forty-five', 'forty five'], wordLimit: 2 },
+        { id: 'lq17', questionNumber: 17, type: 'mcq', questionText: 'What is free for children under 12?', options: ['Entry only', 'Entry and guide', 'Entry and audio guide', 'Everything'], correctAnswer: 'Entry only' },
+        { id: 'lq18', questionNumber: 18, type: 'fill-blank', questionText: 'The gift shop is located on the _____ floor.', correctAnswer: 'ground', acceptedAnswers: ['ground', 'first', 'Ground'], wordLimit: 1 },
+        { id: 'lq19', questionNumber: 19, type: 'mcq', questionText: 'When is the museum closed?', options: ['Mondays', 'Tuesdays', 'Sundays', 'Never'], correctAnswer: 'Mondays' },
+        { id: 'lq20', questionNumber: 20, type: 'fill-blank', questionText: 'Photography is allowed except in the _____ gallery.', correctAnswer: 'Egyptian', acceptedAnswers: ['Egyptian', 'egyptian', 'EGYPTIAN'], wordLimit: 1 }
       ]
     },
     {
@@ -145,44 +102,20 @@ const SAMPLE_LISTENING_TEST: ListeningTest = {
       sectionNumber: 3,
       title: 'Section 3: Discussion',
       description: 'A discussion between students about a research project.',
-      audioStartTime: 60,
-      audioEndTime: 90,
-      questionRange: { start: 9, end: 12 },
+      audioStartTime: 900,
+      audioEndTime: 1350,
+      questionRange: { start: 21, end: 30 },
       questions: [
-        {
-          id: 'lq9',
-          questionNumber: 9,
-          type: 'mcq',
-          questionText: 'What is the main topic of the research project?',
-          options: ['Climate change', 'Urban development', 'Education reform', 'Healthcare systems'],
-          correctAnswer: 'Climate change'
-        },
-        {
-          id: 'lq10',
-          questionNumber: 10,
-          type: 'fill-blank',
-          questionText: 'The deadline for the project is _____ .',
-          correctAnswer: 'Friday',
-          acceptedAnswers: ['Friday', 'friday', 'FRIDAY'],
-          wordLimit: 1
-        },
-        {
-          id: 'lq11',
-          questionNumber: 11,
-          type: 'mcq',
-          questionText: 'How many sources do they need to cite?',
-          options: ['At least 5', 'At least 10', 'At least 15', 'At least 20'],
-          correctAnswer: 'At least 10'
-        },
-        {
-          id: 'lq12',
-          questionNumber: 12,
-          type: 'fill-blank',
-          questionText: 'They will meet in the _____ to work together.',
-          correctAnswer: 'library',
-          acceptedAnswers: ['library', 'Library', 'LIBRARY'],
-          wordLimit: 1
-        }
+        { id: 'lq21', questionNumber: 21, type: 'mcq', questionText: 'What is the main topic of the research project?', options: ['Climate change', 'Urban development', 'Education reform', 'Healthcare systems'], correctAnswer: 'Climate change' },
+        { id: 'lq22', questionNumber: 22, type: 'fill-blank', questionText: 'The deadline for the project is _____ .', correctAnswer: 'Friday', acceptedAnswers: ['Friday', 'friday', 'FRIDAY'], wordLimit: 1 },
+        { id: 'lq23', questionNumber: 23, type: 'mcq', questionText: 'How many sources do they need to cite?', options: ['At least 5', 'At least 10', 'At least 15', 'At least 20'], correctAnswer: 'At least 15' },
+        { id: 'lq24', questionNumber: 24, type: 'fill-blank', questionText: 'They will meet in the _____ to work together.', correctAnswer: 'library', acceptedAnswers: ['library', 'Library', 'LIBRARY'], wordLimit: 1 },
+        { id: 'lq25', questionNumber: 25, type: 'mcq', questionText: 'Who is their research supervisor?', options: ['Dr. Smith', 'Professor Wilson', 'Dr. Brown', 'Professor Taylor'], correctAnswer: 'Professor Wilson' },
+        { id: 'lq26', questionNumber: 26, type: 'fill-blank', questionText: 'The presentation should be _____ minutes long.', correctAnswer: '20', acceptedAnswers: ['20', 'twenty', 'Twenty'], wordLimit: 1 },
+        { id: 'lq27', questionNumber: 27, type: 'mcq', questionText: 'What software will they use for data analysis?', options: ['Excel', 'SPSS', 'Python', 'R'], correctAnswer: 'SPSS' },
+        { id: 'lq28', questionNumber: 28, type: 'fill-blank', questionText: 'The word count limit is _____ words.', correctAnswer: '3000', acceptedAnswers: ['3000', 'three thousand', '3,000'], wordLimit: 2 },
+        { id: 'lq29', questionNumber: 29, type: 'mcq', questionText: 'When will they submit the first draft?', options: ['Monday', 'Wednesday', 'Thursday', 'Saturday'], correctAnswer: 'Wednesday' },
+        { id: 'lq30', questionNumber: 30, type: 'fill-blank', questionText: 'The project is worth _____ percent of their final grade.', correctAnswer: '40', acceptedAnswers: ['40', 'forty', 'Forty'], wordLimit: 1 }
       ]
     },
     {
@@ -190,44 +123,20 @@ const SAMPLE_LISTENING_TEST: ListeningTest = {
       sectionNumber: 4,
       title: 'Section 4: Lecture',
       description: 'A university lecture on renewable energy.',
-      audioStartTime: 90,
-      audioEndTime: 120,
-      questionRange: { start: 13, end: 16 },
+      audioStartTime: 1350,
+      audioEndTime: 1800,
+      questionRange: { start: 31, end: 40 },
       questions: [
-        {
-          id: 'lq13',
-          questionNumber: 13,
-          type: 'mcq',
-          questionText: 'What percentage of global energy comes from renewable sources?',
-          options: ['10%', '20%', '30%', '40%'],
-          correctAnswer: '20%'
-        },
-        {
-          id: 'lq14',
-          questionNumber: 14,
-          type: 'fill-blank',
-          questionText: 'Solar energy has grown by _____ percent in the last decade.',
-          correctAnswer: '300',
-          acceptedAnswers: ['300', 'three hundred'],
-          wordLimit: 2
-        },
-        {
-          id: 'lq15',
-          questionNumber: 15,
-          type: 'mcq',
-          questionText: 'Which country leads in wind energy production?',
-          options: ['USA', 'China', 'Germany', 'India'],
-          correctAnswer: 'China'
-        },
-        {
-          id: 'lq16',
-          questionNumber: 16,
-          type: 'fill-blank',
-          questionText: 'The lecturer predicts renewable energy will dominate by _____ .',
-          correctAnswer: '2050',
-          acceptedAnswers: ['2050', 'twenty fifty'],
-          wordLimit: 2
-        }
+        { id: 'lq31', questionNumber: 31, type: 'mcq', questionText: 'What percentage of global energy comes from renewable sources?', options: ['10%', '20%', '30%', '40%'], correctAnswer: '20%' },
+        { id: 'lq32', questionNumber: 32, type: 'fill-blank', questionText: 'Solar energy has grown by _____ percent in the last decade.', correctAnswer: '300', acceptedAnswers: ['300', 'three hundred'], wordLimit: 2 },
+        { id: 'lq33', questionNumber: 33, type: 'mcq', questionText: 'Which country leads in wind energy production?', options: ['USA', 'China', 'Germany', 'India'], correctAnswer: 'China' },
+        { id: 'lq34', questionNumber: 34, type: 'fill-blank', questionText: 'The lecturer predicts renewable energy will dominate by _____ .', correctAnswer: '2050', acceptedAnswers: ['2050', 'twenty fifty'], wordLimit: 2 },
+        { id: 'lq35', questionNumber: 35, type: 'mcq', questionText: 'What is the main barrier to solar adoption?', options: ['Cost', 'Technology', 'Politics', 'Weather'], correctAnswer: 'Cost' },
+        { id: 'lq36', questionNumber: 36, type: 'fill-blank', questionText: 'Wind turbines can generate up to _____ megawatts each.', correctAnswer: '15', acceptedAnswers: ['15', 'fifteen', 'Fifteen'], wordLimit: 1 },
+        { id: 'lq37', questionNumber: 37, type: 'mcq', questionText: 'Which renewable source has the highest growth potential?', options: ['Solar', 'Wind', 'Hydro', 'Geothermal'], correctAnswer: 'Solar' },
+        { id: 'lq38', questionNumber: 38, type: 'fill-blank', questionText: 'Battery storage technology has improved by _____ percent.', correctAnswer: '80', acceptedAnswers: ['80', 'eighty', 'Eighty'], wordLimit: 1 },
+        { id: 'lq39', questionNumber: 39, type: 'mcq', questionText: 'What sector uses the most renewable energy?', options: ['Transportation', 'Industry', 'Residential', 'Agriculture'], correctAnswer: 'Industry' },
+        { id: 'lq40', questionNumber: 40, type: 'fill-blank', questionText: 'Global investment in renewables reached _____ billion dollars last year.', correctAnswer: '500', acceptedAnswers: ['500', 'five hundred', '500 billion'], wordLimit: 2 }
       ]
     }
   ]
@@ -761,75 +670,130 @@ export default function ListeningTestPage() {
   // ============================================
   if (audioState === 'not-started' || audioState === 'test-sound') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 flex items-center justify-center p-4">
-        <Card className="w-full max-w-lg">
-          <CardContent className="p-8">
-            <div className="text-center mb-8">
-              <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Headphones className="h-10 w-10 text-indigo-600" />
-              </div>
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">{test.title}</h1>
-              <p className="text-gray-600">IELTS Listening Practice</p>
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 md:p-8">
+        <div className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          {/* Left Side: Info & Visual */}
+          <div className="lg:col-span-5 space-y-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-bold uppercase tracking-wider">
+              <Zap className="h-3 w-3" /> Full Simulation
             </div>
-
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
-              <h3 className="font-semibold text-amber-800 mb-2">Important Instructions:</h3>
-              <ul className="text-sm text-amber-700 space-y-1">
-                <li>- You will hear the recording ONCE only</li>
-                <li>- You cannot pause or replay the audio</li>
-                <li>- Answer questions while listening</li>
-                <li>- You will have {test.transferTime / 60} minutes to review after audio ends</li>
-              </ul>
-            </div>
-
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center gap-3">
-                  <Volume2 className="h-5 w-5 text-gray-600" />
-                  <span className="text-gray-700">Test your sound</span>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleTestSound}
-                  className="gap-2"
-                >
-                  <Play className="h-4 w-4" />
-                  Play Sample
-                </Button>
-              </div>
-
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center gap-3">
-                  <Clock className="h-5 w-5 text-gray-600" />
-                  <span className="text-gray-700">Audio Duration</span>
-                </div>
-                <Badge variant="secondary">{formatTime(test.audioDuration)}</Badge>
-              </div>
-
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center gap-3">
-                  <FileText className="h-5 w-5 text-gray-600" />
-                  <span className="text-gray-700">Questions</span>
-                </div>
-                <Badge variant="secondary">{test.totalQuestions} questions</Badge>
-              </div>
-            </div>
-
-            <Button
-              onClick={handleStartTest}
-              className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 gap-2"
-              size="lg"
-            >
-              <Play className="h-5 w-5" />
-              Start Listening Test
-            </Button>
-
-            <p className="text-xs text-center text-gray-500 mt-4">
-              Make sure your headphones are connected and volume is set properly.
+            <h1 className="text-4xl md:text-5xl font-black text-slate-900 leading-tight">
+              IELTS Listening <br />
+              <span className="text-indigo-600">Full Mock Test</span>
+            </h1>
+            <p className="text-lg text-slate-600 font-medium leading-relaxed">
+              Experience the real exam environment. 40 questions, 4 parts, and 30 minutes of focused listening.
             </p>
-          </CardContent>
-        </Card>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
+                <Clock className="h-6 w-6 text-indigo-500 mb-2" />
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Duration</p>
+                <p className="text-xl font-black text-slate-800">30 Mins</p>
+              </div>
+              <div className="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
+                <FileText className="h-6 w-6 text-emerald-500 mb-2" />
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Questions</p>
+                <p className="text-xl font-black text-slate-800">40 Qs</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4 p-4 bg-indigo-600 rounded-2xl text-white shadow-xl shadow-indigo-100">
+              <div className="h-12 w-12 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
+                <Award className="h-6 w-6" />
+              </div>
+              <div>
+                <p className="font-bold">Real-time Band Scoring</p>
+                <p className="text-xs text-indigo-100">Get an instant predicted band score after submission.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Side: Setup Card */}
+          <Card className="lg:col-span-7 border-none shadow-2xl shadow-indigo-100 rounded-[2.5rem] overflow-hidden">
+            <CardContent className="p-8 md:p-12">
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <Settings className="h-5 w-5 text-indigo-600" /> Pre-test Setup
+                  </h3>
+                  
+                  <div className="space-y-4">
+                    <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className="h-10 w-10 bg-white rounded-xl flex items-center justify-center shadow-sm text-slate-600">
+                            <Volume2 className="h-5 w-5" />
+                          </div>
+                          <div>
+                            <p className="font-bold text-slate-800">Audio Check</p>
+                            <p className="text-xs text-slate-500 font-medium">Ensure you can hear clearly</p>
+                          </div>
+                        </div>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={handleTestSound}
+                          className="rounded-xl font-bold bg-white"
+                        >
+                          <Play className="h-4 w-4 mr-2" /> Play Sample
+                        </Button>
+                      </div>
+                      
+                      <div className="flex items-center gap-4">
+                        <VolumeX className="h-4 w-4 text-slate-400" />
+                        <input
+                          type="range"
+                          min="0"
+                          max="1"
+                          step="0.01"
+                          value={volume}
+                          onChange={handleVolumeChange}
+                          className="flex-1 cursor-pointer accent-indigo-600"
+                        />
+                        <Volume2 className="h-4 w-4 text-indigo-600" />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="flex items-start gap-3 p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100">
+                        <div className="h-8 w-8 bg-emerald-500 rounded-lg flex items-center justify-center text-white shrink-0">
+                          <CheckCircle2 className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-emerald-900">Headphones</p>
+                          <p className="text-[10px] text-emerald-700 font-medium">Recommended for focus</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3 p-4 bg-amber-50/50 rounded-2xl border border-amber-100">
+                        <div className="h-8 w-8 bg-amber-500 rounded-lg flex items-center justify-center text-white shrink-0">
+                          <AlertCircle className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-amber-900">No Replay</p>
+                          <p className="text-[10px] text-amber-700 font-medium">Audio plays only ONCE</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-slate-100">
+                  <Button 
+                    onClick={handleStartTest}
+                    className="w-full h-16 rounded-2xl bg-slate-900 hover:bg-indigo-600 text-lg font-bold transition-all duration-300 shadow-xl shadow-slate-200"
+                  >
+                    Start Full Mock Test <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                  <p className="text-center text-[11px] text-slate-400 font-bold uppercase tracking-widest mt-4">
+                    By starting, you agree to follow IELTS exam rules
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Hidden Audio Element */}
         <audio

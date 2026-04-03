@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Users, Shield, ShieldCheck, Crown, Copy, Check, Loader2, RefreshCw } from 'lucide-react';
+import { Users, Shield, ShieldCheck, Crown, Copy, Check, Loader2, RefreshCw, XCircle } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -13,6 +13,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { cn } from '@/lib/utils';
 
 interface UserData {
   id: string;
@@ -186,94 +187,184 @@ export function UserManagement() {
               No users found. Users will appear here after they sign up.
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>User</TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead>Subscription</TableHead>
-                    <TableHead>Joined</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {users.map((user) => (
-                    <TableRow key={user.id}>
-                      <TableCell>
-                        <div>
-                          <p className="font-medium">{user.name}</p>
-                          <p className="text-sm text-gray-500">{user.email}</p>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge className={user.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'}>
-                          {user.role === 'admin' ? (
-                            <><ShieldCheck className="h-3 w-3 mr-1" /> Admin</>
-                          ) : (
-                            <><Shield className="h-3 w-3 mr-1" /> User</>
-                          )}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge className={user.subscription_status === 'premium' ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-800'}>
-                          {user.subscription_status === 'premium' ? (
-                            <><Crown className="h-3 w-3 mr-1" /> Premium</>
-                          ) : (
-                            'Free'
-                          )}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-sm text-gray-500">
-                        {new Date(user.created_at).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell className="text-right space-x-2">
-                        {user.role === 'admin' ? (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => updateUserRole(user.id, 'user')}
-                            disabled={updating === user.id}
-                          >
-                            {updating === user.id ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Remove Admin'}
-                          </Button>
-                        ) : (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => updateUserRole(user.id, 'admin')}
-                            disabled={updating === user.id}
-                            className="text-purple-600 border-purple-300 hover:bg-purple-50"
-                          >
-                            {updating === user.id ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Make Admin'}
-                          </Button>
-                        )}
-                        {user.subscription_status === 'premium' ? (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => updateSubscription(user.id, 'free')}
-                            disabled={updating === user.id}
-                          >
-                            {updating === user.id ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Remove Premium'}
-                          </Button>
-                        ) : (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => updateSubscription(user.id, 'premium')}
-                            disabled={updating === user.id}
-                            className="text-amber-600 border-amber-300 hover:bg-amber-50"
-                          >
-                            {updating === user.id ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Make Premium'}
-                          </Button>
-                        )}
-                      </TableCell>
+            <>
+              {/* Desktop Table View */}
+              <div className="hidden md:block overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>User</TableHead>
+                      <TableHead>Role</TableHead>
+                      <TableHead>Subscription</TableHead>
+                      <TableHead>Joined</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+                  </TableHeader>
+                  <TableBody>
+                    {users.map((userData) => (
+                      <TableRow key={userData.id}>
+                        <TableCell>
+                          <div>
+                            <p className="font-medium">{userData.name || 'No Name'}</p>
+                            <p className="text-xs text-gray-500">{userData.email}</p>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant={userData.role === 'admin' ? 'default' : 'secondary'} className="capitalize">
+                            {userData.role}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <Badge 
+                            variant={userData.subscription_status === 'premium' ? 'default' : 'outline'}
+                            className={cn(
+                              "capitalize",
+                              userData.subscription_status === 'premium' ? "bg-amber-100 text-amber-800 hover:bg-amber-100 border-none" : ""
+                            )}
+                          >
+                            {userData.subscription_status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-xs text-gray-500">
+                          {new Date(userData.created_at).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex justify-end gap-2">
+                            {userData.role === 'user' ? (
+                              <Button 
+                                size="sm" 
+                                variant="outline" 
+                                onClick={() => updateUserRole(userData.id, 'admin')}
+                                disabled={updating === userData.id}
+                              >
+                                <Shield className="h-4 w-4 mr-1" />
+                                Make Admin
+                              </Button>
+                            ) : (
+                              <Button 
+                                size="sm" 
+                                variant="outline" 
+                                onClick={() => updateUserRole(userData.id, 'user')}
+                                disabled={updating === userData.id}
+                              >
+                                <ShieldCheck className="h-4 w-4 mr-1" />
+                                Remove Admin
+                              </Button>
+                            )}
+                            {userData.subscription_status === 'free' ? (
+                              <Button 
+                                size="sm" 
+                                variant="outline" 
+                                onClick={() => updateSubscription(userData.id, 'premium')}
+                                disabled={updating === userData.id}
+                              >
+                                <Crown className="h-4 w-4 mr-1" />
+                                Make Premium
+                              </Button>
+                            ) : (
+                              <Button 
+                                size="sm" 
+                                variant="outline" 
+                                onClick={() => updateSubscription(userData.id, 'free')}
+                                disabled={updating === userData.id}
+                              >
+                                <XCircle className="h-4 w-4 mr-1" />
+                                Remove Premium
+                              </Button>
+                            )}
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+
+              {/* Mobile Card View */}
+              <div className="grid grid-cols-1 gap-4 md:hidden">
+                {users.map((userData) => (
+                  <Card key={userData.id} className="border-slate-100 shadow-sm overflow-hidden">
+                    <CardContent className="p-4">
+                      <div className="flex justify-between items-start mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className="h-10 w-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold">
+                            {(userData.name || userData.email)[0].toUpperCase()}
+                          </div>
+                          <div>
+                            <p className="font-bold text-slate-900">{userData.name || 'No Name'}</p>
+                            <p className="text-xs text-slate-500">{userData.email}</p>
+                          </div>
+                        </div>
+                        <div className="flex flex-col gap-1 items-end">
+                          <Badge variant={userData.role === 'admin' ? 'default' : 'secondary'} className="text-[10px] uppercase font-bold tracking-wider">
+                            {userData.role}
+                          </Badge>
+                          <Badge 
+                            variant={userData.subscription_status === 'premium' ? 'default' : 'outline'}
+                            className={cn(
+                              "text-[10px] uppercase font-bold tracking-wider",
+                              userData.subscription_status === 'premium' ? "bg-amber-100 text-amber-800 hover:bg-amber-100 border-none" : ""
+                            )}
+                          >
+                            {userData.subscription_status}
+                          </Badge>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between text-xs text-slate-400 mb-4 pb-4 border-b border-slate-50">
+                        <span>Joined {new Date(userData.created_at).toLocaleDateString()}</span>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2">
+                        {userData.role === 'user' ? (
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            className="text-xs h-9 rounded-xl"
+                            onClick={() => updateUserRole(userData.id, 'admin')}
+                            disabled={updating === userData.id}
+                          >
+                            <Shield className="h-3.5 w-3.5 mr-1.5" /> Make Admin
+                          </Button>
+                        ) : (
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            className="text-xs h-9 rounded-xl"
+                            onClick={() => updateUserRole(userData.id, 'user')}
+                            disabled={updating === userData.id}
+                          >
+                            <ShieldCheck className="h-3.5 w-3.5 mr-1.5" /> Revoke Admin
+                          </Button>
+                        )}
+                        
+                        {userData.subscription_status === 'free' ? (
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            className="text-xs h-9 rounded-xl"
+                            onClick={() => updateSubscription(userData.id, 'premium')}
+                            disabled={updating === userData.id}
+                          >
+                            <Crown className="h-3.5 w-3.5 mr-1.5" /> Make Premium
+                          </Button>
+                        ) : (
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            className="text-xs h-9 rounded-xl"
+                            onClick={() => updateSubscription(userData.id, 'free')}
+                            disabled={updating === userData.id}
+                          >
+                            <XCircle className="h-3.5 w-3.5 mr-1.5" /> Revoke Premium
+                          </Button>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </>
           )}
         </CardContent>
       </Card>

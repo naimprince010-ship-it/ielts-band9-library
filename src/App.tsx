@@ -29,7 +29,7 @@ const AchievementsPage = lazy(() => import('@/pages/AchievementsPage'));
 const ReadingPracticePage = lazy(() => import('@/pages/ReadingPracticePage'));
 const ProgressDashboardPage = lazy(() => import('@/pages/ProgressDashboardPage'));
 const MockTestPage = lazy(() => import('@/pages/MockTestPage'));
-const FullMockTestPage = lazy(() => import('@/pages/FullMockTestPage').then(module => ({ default: module.FullMockTestPage })));
+const FullMockTestPage = lazy(() => import('@/pages/FullMockTestPage'));
 const CertificatePage = lazy(() => import('@/pages/CertificatePage'));
 const GrammarExercisesPage = lazy(() => import('@/pages/GrammarExercisesPage'));
 const EssayBankPage = lazy(() => import('@/pages/EssayBankPage'));
