@@ -603,7 +603,7 @@ export default function FullMockTestPage() {
               <RotateCcw className="h-6 w-6" /> RETAKE FULL EXAM
             </Button>
             <Button size="lg" variant="outline" onClick={() => navigate('/mock-test')}
-              className="border-white/20 text-white hover:bg-white/10 px-12 py-8 rounded-[30px] font-black"
+              className="bg-transparent border-white/20 text-white hover:bg-white/10 hover:text-white px-12 py-8 rounded-[30px] font-black"
             >
               MODULE PRACTICE
             </Button>
