@@ -181,12 +181,16 @@ export function CourseDetailPage() {
                </div>
                
                <div className="space-y-4 mb-8">
-                 <Button className="w-full h-16 rounded-2xl bg-accent hover:bg-foreground text-white font-black text-lg transition-all shadow-[0_15px_30px_-5px_rgba(220,38,38,0.3)] transform hover:-translate-y-1">
-                   Get Full Access Now
-                 </Button>
-                 <Button variant="outline" className="w-full h-16 rounded-2xl border-2 border-border font-black text-lg text-foreground hover:bg-muted transition-all">
-                   Contact Admissions
-                 </Button>
+                 <Link to="/pricing" className="block w-full">
+                   <Button className="w-full h-16 rounded-2xl bg-accent hover:bg-foreground text-white font-black text-lg transition-all shadow-[0_15px_30px_-5px_rgba(220,38,38,0.3)] transform hover:-translate-y-1">
+                     Get Full Access Now
+                   </Button>
+                 </Link>
+                 <Link to="/contact" className="block w-full">
+                   <Button variant="outline" className="w-full h-16 rounded-2xl border-2 border-border font-black text-lg text-foreground hover:bg-muted transition-all">
+                     Contact Admissions
+                   </Button>
+                 </Link>
                </div>
                
                <div className="space-y-4 text-left border-t border-border pt-8">
