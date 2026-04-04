@@ -167,9 +167,11 @@ export function Navbar() {
                 </DropdownMenuContent>
               </DropdownMenu>
               
-              <Link to="/pricing" className={navLinkClass('/pricing')}>
-                <span className="px-3 py-2 rounded-lg hover:bg-muted transition-colors inline-block">Pricing</span>
-              </Link>
+              {!user && (
+                <Link to="/pricing" className={navLinkClass('/pricing')}>
+                  <span className="px-3 py-2 rounded-lg hover:bg-muted transition-colors inline-block">Pricing</span>
+                </Link>
+              )}
             </div>
 
             {/* Right Side - Auth */}
@@ -360,15 +362,17 @@ export function Navbar() {
                 <Target className="h-5 w-5" />
                 Quiz
               </Link>
-              <Link
-                to="/pricing"
-                className={`flex items-center gap-3 px-3 py-3 rounded-lg text-base font-medium transition-colors touch-target ${
-                  isActive('/pricing') ? 'bg-muted text-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                }`}
-              >
-                <Crown className="h-5 w-5" />
-                Pricing
-              </Link>
+              {!user && (
+                <Link
+                  to="/pricing"
+                  className={`flex items-center gap-3 px-3 py-3 rounded-lg text-base font-medium transition-colors touch-target ${
+                    isActive('/pricing') ? 'bg-muted text-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                  }`}
+                >
+                  <Crown className="h-5 w-5" />
+                  Pricing
+                </Link>
+              )}
             </div>
             
             {/* Practice Section */}
