@@ -33,6 +33,7 @@ import {
   getBandScoreColor,
   getBandScoreLevel
 } from '@/utils/scoring';
+import { GroupedQuestionRenderer } from '@/components/test/GroupedQuestionRenderer';
 
 // ============================================
 // Sample Reading Test Data
@@ -757,41 +758,68 @@ export default function ReadingTestPage() {
             </h3>
 
             <div className="space-y-6">
-              {currentPassage?.questions?.map((question) => (
-                <div
-                  key={question.id}
-                  ref={(el) => { questionRefs.current[question.questionNumber] = el; }}
-                  className="bg-white rounded-lg border p-4 shadow-sm"
-                >
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${getStatusColor(getQuestionStatus(question.id))
-                        }`}>
-                        {question.questionNumber}
-                      </span>
-                      <Badge variant="outline" className="text-xs">
-                        {question.type.replace(/-/g, ' ')}
-                      </Badge>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => toggleFlag(question.id, question.questionNumber)}
-                      className={getQuestionStatus(question.id) === 'flagged' ? 'text-amber-600' : 'text-gray-400'}
-                    >
-                      <Flag className="h-4 w-4" />
-                    </Button>
-                  </div>
+              {(() => {
+                if (!currentPassage?.questions) return null;
+                const questions = currentPassage.questions;
+                const elements = [];
+                const processedGroups = new Set<string>();
 
-                  <p className="text-gray-800 mb-4">{question.questionText}</p>
+                for (let i = 0; i < questions.length; i++) {
+                  const q = questions[i];
+                  if (q.groupId) {
+                    if (processedGroups.has(q.groupId)) continue;
+                    processedGroups.add(q.groupId);
+                    const groupQuestions = questions.filter((x) => x.groupId === q.groupId);
+                    elements.push(
+                      <GroupedQuestionRenderer
+                        key={q.groupId}
+                        firstQuestion={q}
+                        groupQuestions={groupQuestions}
+                        answers={answers}
+                        isSubmitted={isSubmitted}
+                        onAnswerChange={handleAnswerChange}
+                        questionRefs={questionRefs}
+                      />
+                    );
+                  } else {
+                    elements.push(
+                      <div
+                        key={q.id}
+                        ref={(el) => { questionRefs.current[q.questionNumber] = el; }}
+                        className="bg-white rounded-lg border p-4 shadow-sm"
+                      >
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-center gap-2">
+                            <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${getStatusColor(getQuestionStatus(q.id))}`}>
+                              {q.questionNumber}
+                            </span>
+                            <Badge variant="outline" className="text-xs">
+                              {q.type.replace(/-/g, ' ')}
+                            </Badge>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => toggleFlag(q.id, q.questionNumber)}
+                            className={getQuestionStatus(q.id) === 'flagged' ? 'text-amber-600' : 'text-gray-400'}
+                          >
+                            <Flag className="h-4 w-4" />
+                          </Button>
+                        </div>
 
-                  {question.passageRef && (
-                    <p className="text-sm text-indigo-600 mb-3">Reference: {question.passageRef}</p>
-                  )}
+                        <p className="text-gray-800 mb-4">{q.questionText}</p>
 
-                  {renderQuestionInput(question)}
-                </div>
-              ))}
+                        {q.passageRef && (
+                          <p className="text-sm text-indigo-600 mb-3">Reference: {q.passageRef}</p>
+                        )}
+
+                        {renderQuestionInput(q)}
+                      </div>
+                    );
+                  }
+                }
+                return elements;
+              })()}
             </div>
 
             {/* Passage Navigation at Bottom */}

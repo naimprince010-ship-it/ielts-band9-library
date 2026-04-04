@@ -199,9 +199,20 @@ export type ReadingQuestionType =
   | 'matching-information'   // Match information to paragraphs
   | 'matching-features'      // Match features/names to statements
   | 'sentence-completion'    // Complete sentences
-  | 'summary-completion'     // Complete a summary
+  | 'summary-completion'     // Complete a summary (grouped blank)
+  | 'table-completion'       // Complete a table
   | 'diagram-labeling'       // Label a diagram
   | 'short-answer';          // Short answer questions
+
+// Table structure for table-completion questions
+export interface TableRow {
+  cells: string[];
+}
+
+export interface TableData {
+  headers: string[];
+  rows: TableRow[];
+}
 
 // Question status for palette display
 export type QuestionStatus = 'unseen' | 'seen' | 'answered' | 'flagged';
@@ -218,6 +229,10 @@ export interface ReadingQuestion {
   passageRef?: string;           // Reference to specific paragraph (e.g., "Paragraph A")
   hint?: string;                 // Optional hint
   explanation?: string;          // Explanation for the answer
+  // Fields for structured grouped questions (Table/Summary completion)
+  groupId?: string;              // Identifier to group related questions together
+  tableData?: TableData;         // Structured table data (usually included only in the first question of a group)
+  summaryData?: string;          // Structured summary text with placeholders (usually included only in the first question of a group)
 }
 
 // Reading Passage
@@ -370,6 +385,8 @@ export type ListeningQuestionType =
   | 'fill-blank'             // Fill in the blank (form/note completion)
   | 'matching'               // Match items
   | 'map-labeling'           // Label a map/plan
+  | 'table-completion'       // Complete a table
+  | 'summary-completion'     // Complete a summary block
   | 'sentence-completion'    // Complete sentences
   | 'short-answer';          // Short answer questions
 
@@ -401,6 +418,10 @@ export interface ListeningQuestion {
   hint?: string;                 // Optional hint
   explanation?: string;          // Explanation for the answer
   wordLimit?: number;            // Max words for fill-blank (e.g., "NO MORE THAN TWO WORDS")
+  // Fields for structured grouped questions (Table/Summary completion)
+  groupId?: string;              // Identifier to group related questions together
+  tableData?: TableData;         // Structured table data (usually included only in the first question of a group)
+  summaryData?: string;          // Structured summary text with placeholders (usually included only in the first question of a group)
 }
 
 // Complete Listening Test

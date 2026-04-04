@@ -106,11 +106,27 @@ Generate a JSON response with this exact structure:
       "options": ["A", "B", "C"],
       "correctAnswer": "A",
       "explanation": "Brief explanation"
+    },
+    {
+      "questionNumber": ${((sectionNumber - 1) * 10) + 2},
+      "type": "table-completion",
+      "groupId": "table-1",
+      "questionText": "Complete the table below.",
+      "tableData": { "headers": ["Name", "Date"], "rows": [{ "cells": ["John", "[Q${((sectionNumber - 1) * 10) + 2}]"] }] },
+      "correctAnswer": "12th May"
+    },
+    {
+      "questionNumber": ${((sectionNumber - 1) * 10) + 3},
+      "type": "table-completion",
+      "groupId": "table-1",
+      "questionText": "Complete the table below.",
+      "correctAnswer": "Concert"
     }
   ]
 }
 
 Question Count: Generate exactly 10 questions for this section (Questions ${((sectionNumber - 1) * 10) + 1} to ${sectionNumber * 10}).
+IMPORTANT: If using table-completion or summary-completion, use the "groupId" field to group them. The first question MUST include "tableData" (having structured headers and rows with cells containing [Q<number>] placeholders) or "summaryData" (a string with [Q<number>] placeholders). Subsequent questions in the group only need their questionNumber and correctAnswer.
 Return ONLY valid JSON.
 `;
 
@@ -132,6 +148,19 @@ Generate a JSON response with this exact structure:
       "options": ["TRUE", "FALSE", "NOT GIVEN"],
       "correctAnswer": "TRUE",
       "explanation": "Brief explanation"
+    },
+    {
+      "type": "summary-completion",
+      "groupId": "summary-1",
+      "questionText": "Complete the summary below.",
+      "summaryData": "The coffee was first discovered in [Q2] by a goat herder. He took it to a [Q3] where they made a drink.",
+      "correctAnswer": "Ethiopia"
+    },
+    {
+      "type": "summary-completion",
+      "groupId": "summary-1",
+      "questionText": "Complete the summary below.",
+      "correctAnswer": "monastery"
     }
   ]
 }
@@ -140,7 +169,8 @@ Question Count Requirements:
 - If Passage 1 or 2: Generate exactly 13 questions.
 - If Passage 3: Generate exactly 14 questions.
 
-Mix question types: Multiple choice, True/False/Not Given, Matching headings, Sentence completion, Summary completion.
+Mix question types: Multiple choice, True/False/Not Given, Matching headings, Sentence completion, table-completion, summary-completion.
+IMPORTANT: If using table-completion or summary-completion, use the "groupId" field to group them. The first question MUST include "tableData" (structured headers and rows with [Q<number>] placeholders) or "summaryData" (a string with [Q<number>] placeholders). Subsequent questions in the group only need their type, groupId, questionNumber, and correctAnswer.
 Return ONLY valid JSON.
 `;
 
@@ -162,7 +192,8 @@ The JSON must match this schema precisely:
       "questions": [
         { "type": "true-false-not-given", "questionText": "<statement>", "options": ["TRUE", "FALSE", "NOT GIVEN"], "correctAnswer": "TRUE", "explanation": "<reason>" },
         { "type": "mcq", "questionText": "<question>?", "options": ["A", "B", "C", "D"], "correctAnswer": "A", "explanation": "<reason>" },
-        { "type": "fill-blank", "questionText": "The _____ is important.", "correctAnswer": "word", "acceptedAnswers": ["word"] }
+        { "type": "summary-completion", "groupId": "summary-1", "questionText": "Complete the summary below.", "summaryData": "The process begins with [Q3]. Then it moves to [Q4].", "correctAnswer": "washing" },
+        { "type": "summary-completion", "groupId": "summary-1", "questionText": "Complete the summary below.", "correctAnswer": "drying" }
       ]
     },
     {
@@ -186,9 +217,9 @@ RULES:
 - Passage 2: exactly 13 questions  
 - Passage 3: exactly 14 questions
 - Total: exactly 40 questions
-- Mix types: true-false-not-given, mcq, fill-blank, sentence-completion
-- Questions must be based on the actual passage content
-- Output ONLY the JSON object, nothing else
+- Mix types: true-false-not-given, mcq, fill-blank, summary-completion, table-completion
+- For table-completion or summary-completion, use "groupId" to group them. The first question MUST include "tableData" (headers and rows with cells containing [Q<number>] placeholders) or "summaryData" (a string with [Q<number>] placeholders). Subsequent questions in the group only need their type, groupId, questionText and correctAnswer.
+- Questions must be based on the actual passage content. Output ONLY the JSON object, nothing else.
 `;
 
 const LISTENING_PROMPT = (topic: string, difficulty: string) => `
@@ -210,7 +241,7 @@ The JSON must match this schema precisely:
       "title": "Part 1: <actual title>",
       "transcript": "<transcript text for Part 1 only>",
       "questions": [
-        { "type": "fill-blank", "questionText": "<question with blank>", "correctAnswer": "<answer>", "acceptedAnswers": ["<answer>"] },
+        { "type": "table-completion", "groupId": "table-1", "questionText": "Complete the table below.", "tableData": { "headers": ["Name"], "rows": [{ "cells": ["[Q1]"] }] }, "correctAnswer": "John" },
         { "type": "mcq", "questionText": "<question>?", "options": ["A", "B", "C", "D"], "correctAnswer": "A" }
       ]
     },
@@ -242,7 +273,8 @@ RULES:
 - Part 3: Academic conversation (students discussing assignment) — exactly 10 questions
 - Part 4: Academic lecture — exactly 10 questions
 - Total: exactly 40 questions
-- Mix types: fill-blank, mcq, matching, sentence-completion
+- Mix types: table-completion, summary-completion, mcq, matching
+- For table-completion or summary-completion, use "groupId" to group them. The first question MUST include "tableData" (headers and rows with cells containing [Q<number>] placeholders) or "summaryData" (a string with [Q<number>] placeholders). Subsequent questions in the group only need their type, groupId, questionText and correctAnswer.
 - Output ONLY the JSON object, nothing else
 `;
 

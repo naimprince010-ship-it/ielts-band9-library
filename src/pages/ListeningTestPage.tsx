@@ -41,6 +41,7 @@ import {
   getBandScoreColor,
   getBandScoreLevel
 } from '@/utils/scoring';
+import { GroupedQuestionRenderer } from '@/components/test/GroupedQuestionRenderer';
 
 // ============================================
 // Sample Listening Test Data
@@ -969,45 +970,71 @@ export default function ListeningTestPage() {
                 </div>
 
                 {/* Section Questions */}
+                {/* Section Questions */}
                 <div className="space-y-4">
-                  {section.questions.map((question) => (
-                    <Card
-                      key={question.id}
-                      ref={(el) => { questionRefs.current[question.questionNumber] = el; }}
-                      className="shadow-sm"
-                    >
-                      <CardContent className="p-4">
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex items-center gap-2">
-                            <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${getStatusColor(getQuestionStatus(question.id))
-                              }`}>
-                              {question.questionNumber}
-                            </span>
-                            <Badge variant="outline" className="text-xs">
-                              {question.type.replace(/-/g, ' ')}
-                            </Badge>
-                            {question.wordLimit && (
-                              <Badge variant="secondary" className="text-xs">
-                                Max {question.wordLimit} word(s)
-                              </Badge>
-                            )}
-                          </div>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => toggleFlag(question.id, question.questionNumber)}
-                            className={getQuestionStatus(question.id) === 'flagged' ? 'text-amber-600' : 'text-gray-400'}
+                  {(() => {
+                    const elements = [];
+                    const processedGroups = new Set<string>();
+
+                    for (let i = 0; i < section.questions.length; i++) {
+                      const question = section.questions[i];
+                      if (question.groupId) {
+                        if (processedGroups.has(question.groupId)) continue;
+                        processedGroups.add(question.groupId);
+                        const groupQuestions = section.questions.filter((x) => x.groupId === question.groupId);
+                        elements.push(
+                          <GroupedQuestionRenderer
+                            key={question.groupId}
+                            firstQuestion={question}
+                            groupQuestions={groupQuestions}
+                            answers={answers}
+                            isSubmitted={isSubmitted}
+                            onAnswerChange={handleAnswerChange}
+                            questionRefs={questionRefs}
+                          />
+                        );
+                      } else {
+                        elements.push(
+                          <Card
+                            key={question.id}
+                            ref={(el) => { questionRefs.current[question.questionNumber] = el; }}
+                            className="shadow-sm"
                           >
-                            <Flag className="h-4 w-4" />
-                          </Button>
-                        </div>
+                            <CardContent className="p-4">
+                              <div className="flex items-start justify-between mb-3">
+                                <div className="flex items-center gap-2">
+                                  <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${getStatusColor(getQuestionStatus(question.id))}`}>
+                                    {question.questionNumber}
+                                  </span>
+                                  <Badge variant="outline" className="text-xs">
+                                    {question.type.replace(/-/g, ' ')}
+                                  </Badge>
+                                  {question.wordLimit && (
+                                    <Badge variant="secondary" className="text-xs">
+                                      Max {question.wordLimit} word(s)
+                                    </Badge>
+                                  )}
+                                </div>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => toggleFlag(question.id, question.questionNumber)}
+                                  className={getQuestionStatus(question.id) === 'flagged' ? 'text-amber-600' : 'text-gray-400'}
+                                >
+                                  <Flag className="h-4 w-4" />
+                                </Button>
+                              </div>
 
-                        <p className="text-gray-800 mb-4">{question.questionText}</p>
+                              <p className="text-gray-800 mb-4">{question.questionText}</p>
 
-                        {renderQuestionInput(question)}
-                      </CardContent>
-                    </Card>
-                  ))}
+                              {renderQuestionInput(question)}
+                            </CardContent>
+                          </Card>
+                        );
+                      }
+                    }
+                    return elements;
+                  })()}
                 </div>
               </div>
             )
