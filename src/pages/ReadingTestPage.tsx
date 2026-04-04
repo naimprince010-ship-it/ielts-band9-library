@@ -234,11 +234,92 @@ const getStatusColor = (status: QuestionStatus): string => {
 // ============================================
 // Main Component
 // ============================================
+// Normalize DB data → ReadingTest shape
+function normalizeReadingTest(
+  rawData: Record<string, unknown>,
+  testId?: string,
+  testTitle?: string
+): ReadingTest {
+  // rawData may come from mock_tests.test_data (has passages[])
+  // or may already be a full ReadingTest object
+  const passages: ReadingTest['passages'] = [];
+
+  const rawPassages = Array.isArray(rawData?.passages)
+    ? (rawData.passages as Record<string, unknown>[])
+    : [];
+
+  let questionCounter = 1;
+
+  rawPassages.forEach((p, passageIdx) => {
+    const rawQuestions: Record<string, unknown>[] = Array.isArray(p?.questions)
+      ? (p.questions as Record<string, unknown>[])
+      : [];
+
+    const normalizedQuestions: ReadingQuestion[] = rawQuestions.map((q) => {
+      const qid = (q.id as string) || `p${passageIdx + 1}_q${questionCounter}`;
+      const qNum = (q.questionNumber as number) || questionCounter;
+      questionCounter++;
+      return {
+        id: qid,
+        questionNumber: qNum,
+        type: (q.type as ReadingQuestion['type']) || 'mcq',
+        questionText: (q.questionText as string) || '',
+        options: Array.isArray(q.options) ? (q.options as string[]) : undefined,
+        correctAnswer: (q.correctAnswer as string) || '',
+        acceptedAnswers: Array.isArray(q.acceptedAnswers)
+          ? (q.acceptedAnswers as string[])
+          : undefined,
+        explanation: (q.explanation as string) || undefined,
+        passageRef: (q.passageRef as string) || undefined,
+      };
+    });
+
+    const qStart = normalizedQuestions[0]?.questionNumber || 1;
+    const qEnd = normalizedQuestions[normalizedQuestions.length - 1]?.questionNumber || qStart;
+
+    passages.push({
+      id: (p.id as string) || `passage-${passageIdx + 1}`,
+      passageNumber: passageIdx + 1,
+      title: (p.title as string) || `Passage ${passageIdx + 1}`,
+      textContent: (p.textContent as string) || (p.content as string) || '',
+      paragraphs: Array.isArray(p.paragraphs)
+        ? (p.paragraphs as { label: string; content: string }[])
+        : [],
+      questionRange: { start: qStart, end: qEnd },
+      questions: normalizedQuestions,
+    });
+  });
+
+  const totalQuestions = passages.reduce((s, p) => s + p.questions.length, 0);
+
+  return {
+    id: testId || (rawData?.id as string) || 'db-reading-test',
+    title: testTitle || (rawData?.title as string) || 'IELTS Reading Test',
+    testType: ((rawData?.testType as string) || 'academic') as 'academic' | 'general',
+    totalQuestions: totalQuestions || 40,
+    timeLimit: (rawData?.timeLimit as number) || 3600,
+    is_premium: (rawData?.is_premium as boolean) || false,
+    instructions: (rawData?.instructions as string) || 'Read the passage carefully and answer all questions.',
+    passages,
+  };
+}
+
 export default function ReadingTestPage() {
   const location = useLocation();
-  const stateData = location.state as { testData?: ReadingTest; testId?: string; testTitle?: string } | null;
-  const hasValidData = stateData?.testData && Array.isArray(stateData.testData.passages) && stateData.testData.passages.length > 0;
-  const [test] = useState<ReadingTest>(hasValidData ? (stateData!.testData as ReadingTest) : SAMPLE_READING_TEST);
+  const stateData = location.state as { testData?: Record<string, unknown>; testId?: string; testTitle?: string } | null;
+
+  // Build the test object — normalize DB format or fall back to sample
+  const hasDbData =
+    stateData?.testData &&
+    typeof stateData.testData === 'object' &&
+    Array.isArray((stateData.testData as Record<string, unknown>).passages) &&
+    ((stateData.testData as Record<string, unknown>).passages as unknown[]).length > 0;
+
+  const [test] = useState<ReadingTest>(
+    hasDbData
+      ? normalizeReadingTest(stateData!.testData as Record<string, unknown>, stateData?.testId, stateData?.testTitle)
+      : SAMPLE_READING_TEST
+  );
   const [currentPassageIndex, setCurrentPassageIndex] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(test.timeLimit);
   const [answers, setAnswers] = useState<Record<string, UserAnswer>>({});

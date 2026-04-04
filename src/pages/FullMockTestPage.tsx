@@ -204,6 +204,34 @@ export default function FullMockTestPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
 
+  const [resultSaved, setResultSaved] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+
+  const saveResultToDb = async (finalScores: SectionScores) => {
+    if (!user || !supabase || !isSupabaseConfigured()) return;
+    setResultSaved('saving');
+    try {
+      const overall = overallBand(finalScores);
+      const { error } = await supabase.from('mock_test_results').insert({
+        user_id: user.id,
+        overall_band: overall,
+        listening_band: finalScores.listening,
+        reading_band: finalScores.reading,
+        writing_band: finalScores.writing,
+        speaking_band: finalScores.speaking,
+        completed_at: new Date().toISOString(),
+      });
+      if (error) {
+        console.error('Failed to save result:', error);
+        setResultSaved('error');
+      } else {
+        setResultSaved('saved');
+      }
+    } catch (err) {
+      console.error('Error saving result:', err);
+      setResultSaved('error');
+    }
+  };
+
   // Restore from session on first render
   const savedSession = loadSession();
 
@@ -370,40 +398,107 @@ export default function FullMockTestPage() {
     }
   }, [answers]);
 
-  // Pre-load voices on mount so speak() can be called synchronously on user gesture
+  // ─── AUDIO SYSTEM (Mobile-resilient) ────────────────────────────────────────
+  // Strategy: split long transcripts into ≤40-word chunks played sequentially
+  // via onend callbacks. This avoids iOS Safari's ~15s TTS cutoff bug and the
+  // cancel()+speak() race condition on Android Chrome.
+
+  // Chunk queue stored in a ref so sequential callbacks don't close over stale state.
+  const chunkQueueRef = useRef<string[]>([]);
+  const activeAudioIdRef = useRef<string | null>(null);
+
+  // Split text into sentence-aware chunks of ≤MAX_WORDS words
+  const chunkText = (text: string, maxWords = 40): string[] => {
+    // Split on sentence boundaries first
+    const sentences = text
+      .replace(/\s+/g, ' ')
+      .trim()
+      .split(/(?<=[.!?])\s+/);
+    const chunks: string[] = [];
+    let current = '';
+    for (const sentence of sentences) {
+      const combined = current ? `${current} ${sentence}` : sentence;
+      if (combined.split(' ').length > maxWords && current) {
+        chunks.push(current.trim());
+        current = sentence;
+      } else {
+        current = combined;
+      }
+    }
+    if (current.trim()) chunks.push(current.trim());
+    return chunks.length > 0 ? chunks : [text];
+  };
+
+  // Build and play one utterance; on end, play the next chunk
+  const speakChunk = (chunk: string, voiceObj: SpeechSynthesisVoice | null) => {
+    if (!chunk || activeAudioIdRef.current === null) return;
+    const utt = new SpeechSynthesisUtterance(chunk);
+    utt.rate  = 0.9;
+    utt.pitch = 1.0;
+    utt.volume = 1.0;
+    utt.lang  = 'en-GB'; // fallback lang — saves Android Chrome when voices[] is empty
+    if (voiceObj) utt.voice = voiceObj;
+
+    utt.onend = () => {
+      const next = chunkQueueRef.current.shift();
+      if (next && activeAudioIdRef.current !== null) {
+        speakChunk(next, voiceObj);
+      } else {
+        // All chunks done
+        activeAudioIdRef.current = null;
+        setPlayingAudioId(null);
+        stopIosResumePing();
+      }
+    };
+    utt.onerror = (e) => {
+      // 'interrupted' means we cancelled intentionally — ignore
+      if (e.error === 'interrupted' || e.error === 'canceled') return;
+      console.error('SpeechSynthesis chunk error:', e.error);
+      activeAudioIdRef.current = null;
+      chunkQueueRef.current = [];
+      setPlayingAudioId(null);
+      stopIosResumePing();
+    };
+
+    window.speechSynthesis.speak(utt);
+  };
+
+  // Pre-load voices on mount (ensures voices are cached before first user tap)
   useEffect(() => {
     if (!('speechSynthesis' in window)) {
       setAudioSupported(false);
       return;
     }
     const loadVoices = () => {
-      const voices = window.speechSynthesis.getVoices();
-      if (voices.length > 0) {
-        cachedVoicesRef.current = voices;
-      }
+      const v = window.speechSynthesis.getVoices();
+      if (v.length > 0) cachedVoicesRef.current = v;
     };
     loadVoices();
     window.speechSynthesis.addEventListener('voiceschanged', loadVoices);
-    // Retry after a short delay for browsers that load voices lazily
-    const timer = setTimeout(loadVoices, 500);
+    const t1 = setTimeout(loadVoices, 300);
+    const t2 = setTimeout(loadVoices, 1000); // extra retry for slow mobile browsers
     return () => {
       window.speechSynthesis.removeEventListener('voiceschanged', loadVoices);
-      clearTimeout(timer);
+      clearTimeout(t1);
+      clearTimeout(t2);
     };
   }, []);
 
+  // Cancel audio when navigating between phases
   useEffect(() => {
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-    if (iosResumeIntervalRef.current) clearInterval(iosResumeIntervalRef.current);
+    stopIosResumePing();
+    activeAudioIdRef.current = null;
+    chunkQueueRef.current = [];
     setPlayingAudioId(null);
-  }, [phase]);
+  }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // iOS Safari pauses speechSynthesis after ~15s — periodic resume keeps it alive
   const startIosResumePing = () => {
     if (iosResumeIntervalRef.current) clearInterval(iosResumeIntervalRef.current);
     iosResumeIntervalRef.current = setInterval(() => {
       if (window.speechSynthesis.paused) window.speechSynthesis.resume();
-    }, 10000);
+    }, 5000); // 5s ping (tighter than before to be safe on iOS)
   };
 
   const stopIosResumePing = () => {
@@ -413,35 +508,32 @@ export default function FullMockTestPage() {
     }
   };
 
-  // IMPORTANT: This function must be called synchronously from a click handler
-  // (no await before speak()) to satisfy mobile browser user-gesture requirements.
+  // ── toggleAudio ────────────────────────────────────────────────────────────
+  // MUST be called synchronously from an onClick to satisfy mobile user-gesture
+  // requirements. No await, no setTimeout before the first speak().
   const toggleAudio = (id: string, text: string) => {
     if (!('speechSynthesis' in window)) {
-      alert('Your browser does not support audio playback. Please try a modern browser like Chrome or Safari.');
+      alert('Your browser does not support audio playback. Please use Chrome, Safari, or Edge.');
       return;
     }
     if (playedAudios.has(id) && playingAudioId !== id) {
-      alert('In the real IELTS exam, audio is played only once. This section has already been played.');
+      alert('In the real IELTS exam, audio plays only once. This section has already been played.');
       return;
     }
 
-    // Stop currently playing audio
-    window.speechSynthesis.cancel();
+    // ── Stop whatever is currently playing ──────────────────────────────────
+    window.speechSynthesis.cancel(); // clears the browser's internal queue
     stopIosResumePing();
+    chunkQueueRef.current = [];
 
     if (playingAudioId === id) {
-      // Toggle off
+      // User tapped the same button again → stop
+      activeAudioIdRef.current = null;
       setPlayingAudioId(null);
       return;
     }
 
-    // Build utterance synchronously BEFORE any async work
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.9;
-    utterance.pitch = 1.0;
-    utterance.volume = 1.0;
-
-    // Use cached voices — must NOT await here (breaks mobile user-gesture)
+    // ── Resolve voice (synchronous — no await allowed) ───────────────────────
     const voices = cachedVoicesRef.current;
     const preferred =
       voices.find(v => v.lang === 'en-GB') ||
@@ -449,22 +541,21 @@ export default function FullMockTestPage() {
       voices.find(v => v.lang === 'en-US') ||
       voices.find(v => v.lang.startsWith('en-US')) ||
       voices.find(v => v.lang.startsWith('en')) ||
-      voices[0];
-    if (preferred) utterance.voice = preferred;
+      voices[0] ||
+      null;
 
+    // ── Split into chunks and enqueue all but the first ─────────────────────
+    const chunks = chunkText(text);
+    const [firstChunk, ...rest] = chunks;
+    chunkQueueRef.current = rest;
+
+    activeAudioIdRef.current = id;
     setPlayingAudioId(id);
     setPlayedAudios(prev => new Set(prev).add(id));
     startIosResumePing();
 
-    utterance.onend = () => { setPlayingAudioId(null); stopIosResumePing(); };
-    utterance.onerror = (e) => {
-      console.error('SpeechSynthesis error:', e);
-      setPlayingAudioId(null);
-      stopIosResumePing();
-    };
-
-    // speak() called synchronously within click handler — satisfies user-gesture requirement
-    window.speechSynthesis.speak(utterance);
+    // ── speak() called synchronously in click handler — user-gesture OK ──────
+    speakChunk(firstChunk, preferred);
   };
 
   const [scores, setScoresRaw] = useState<SectionScores>(
@@ -604,7 +695,8 @@ export default function FullMockTestPage() {
       }
     } catch (err) { console.error('Error calculating score:', err); }
 
-    setScores(prev => ({ ...prev, [sec.module]: band }));
+    const finalScores = { ...scores, [sec.module]: band };
+    setScores(finalScores);
 
     const next = sectionIndex + 1;
     if (next < SECTIONS.length) {
@@ -613,6 +705,7 @@ export default function FullMockTestPage() {
     } else {
       setPhase('results');
       clearSession(); // Test complete — wipe session
+      saveResultToDb(finalScores); // 💾 Save to Supabase
     }
     setAnswers({});
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -850,6 +943,25 @@ export default function FullMockTestPage() {
             </div>
             <h1 className="text-5xl font-black mb-4 tracking-tight">Test Complete!</h1>
             <p className="text-indigo-300 text-lg font-medium">Your global IELTS performance report</p>
+            {/* Save status indicator */}
+            {resultSaved === 'saving' && (
+              <div className="mt-4 inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-sm font-semibold">
+                <Loader2 className="h-4 w-4 animate-spin text-indigo-300" />
+                <span className="text-indigo-300">Saving your result...</span>
+              </div>
+            )}
+            {resultSaved === 'saved' && (
+              <div className="mt-4 inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-500/30 rounded-full px-4 py-1.5 text-sm font-semibold">
+                <CheckCircle className="h-4 w-4 text-emerald-400" />
+                <span className="text-emerald-400">Result saved to your profile</span>
+              </div>
+            )}
+            {resultSaved === 'error' && (
+              <div className="mt-4 inline-flex items-center gap-2 bg-red-500/20 border border-red-500/30 rounded-full px-4 py-1.5 text-sm font-semibold">
+                <AlertCircle className="h-4 w-4 text-red-400" />
+                <span className="text-red-400">Could not save — please screenshot your score</span>
+              </div>
+            )}
           </div>
 
           <div className="bg-white/10 backdrop-blur-2xl rounded-[50px] p-12 text-center mb-12 border border-white/20 shadow-3xl">
