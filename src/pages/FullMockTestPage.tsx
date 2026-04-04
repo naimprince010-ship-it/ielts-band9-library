@@ -398,40 +398,107 @@ export default function FullMockTestPage() {
     }
   }, [answers]);
 
-  // Pre-load voices on mount so speak() can be called synchronously on user gesture
+  // ─── AUDIO SYSTEM (Mobile-resilient) ────────────────────────────────────────
+  // Strategy: split long transcripts into ≤40-word chunks played sequentially
+  // via onend callbacks. This avoids iOS Safari's ~15s TTS cutoff bug and the
+  // cancel()+speak() race condition on Android Chrome.
+
+  // Chunk queue stored in a ref so sequential callbacks don't close over stale state.
+  const chunkQueueRef = useRef<string[]>([]);
+  const activeAudioIdRef = useRef<string | null>(null);
+
+  // Split text into sentence-aware chunks of ≤MAX_WORDS words
+  const chunkText = (text: string, maxWords = 40): string[] => {
+    // Split on sentence boundaries first
+    const sentences = text
+      .replace(/\s+/g, ' ')
+      .trim()
+      .split(/(?<=[.!?])\s+/);
+    const chunks: string[] = [];
+    let current = '';
+    for (const sentence of sentences) {
+      const combined = current ? `${current} ${sentence}` : sentence;
+      if (combined.split(' ').length > maxWords && current) {
+        chunks.push(current.trim());
+        current = sentence;
+      } else {
+        current = combined;
+      }
+    }
+    if (current.trim()) chunks.push(current.trim());
+    return chunks.length > 0 ? chunks : [text];
+  };
+
+  // Build and play one utterance; on end, play the next chunk
+  const speakChunk = (chunk: string, voiceObj: SpeechSynthesisVoice | null) => {
+    if (!chunk || activeAudioIdRef.current === null) return;
+    const utt = new SpeechSynthesisUtterance(chunk);
+    utt.rate  = 0.9;
+    utt.pitch = 1.0;
+    utt.volume = 1.0;
+    utt.lang  = 'en-GB'; // fallback lang — saves Android Chrome when voices[] is empty
+    if (voiceObj) utt.voice = voiceObj;
+
+    utt.onend = () => {
+      const next = chunkQueueRef.current.shift();
+      if (next && activeAudioIdRef.current !== null) {
+        speakChunk(next, voiceObj);
+      } else {
+        // All chunks done
+        activeAudioIdRef.current = null;
+        setPlayingAudioId(null);
+        stopIosResumePing();
+      }
+    };
+    utt.onerror = (e) => {
+      // 'interrupted' means we cancelled intentionally — ignore
+      if (e.error === 'interrupted' || e.error === 'canceled') return;
+      console.error('SpeechSynthesis chunk error:', e.error);
+      activeAudioIdRef.current = null;
+      chunkQueueRef.current = [];
+      setPlayingAudioId(null);
+      stopIosResumePing();
+    };
+
+    window.speechSynthesis.speak(utt);
+  };
+
+  // Pre-load voices on mount (ensures voices are cached before first user tap)
   useEffect(() => {
     if (!('speechSynthesis' in window)) {
       setAudioSupported(false);
       return;
     }
     const loadVoices = () => {
-      const voices = window.speechSynthesis.getVoices();
-      if (voices.length > 0) {
-        cachedVoicesRef.current = voices;
-      }
+      const v = window.speechSynthesis.getVoices();
+      if (v.length > 0) cachedVoicesRef.current = v;
     };
     loadVoices();
     window.speechSynthesis.addEventListener('voiceschanged', loadVoices);
-    // Retry after a short delay for browsers that load voices lazily
-    const timer = setTimeout(loadVoices, 500);
+    const t1 = setTimeout(loadVoices, 300);
+    const t2 = setTimeout(loadVoices, 1000); // extra retry for slow mobile browsers
     return () => {
       window.speechSynthesis.removeEventListener('voiceschanged', loadVoices);
-      clearTimeout(timer);
+      clearTimeout(t1);
+      clearTimeout(t2);
     };
   }, []);
 
+  // Cancel audio when navigating between phases
   useEffect(() => {
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-    if (iosResumeIntervalRef.current) clearInterval(iosResumeIntervalRef.current);
+    stopIosResumePing();
+    activeAudioIdRef.current = null;
+    chunkQueueRef.current = [];
     setPlayingAudioId(null);
-  }, [phase]);
+  }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // iOS Safari pauses speechSynthesis after ~15s — periodic resume keeps it alive
   const startIosResumePing = () => {
     if (iosResumeIntervalRef.current) clearInterval(iosResumeIntervalRef.current);
     iosResumeIntervalRef.current = setInterval(() => {
       if (window.speechSynthesis.paused) window.speechSynthesis.resume();
-    }, 10000);
+    }, 5000); // 5s ping (tighter than before to be safe on iOS)
   };
 
   const stopIosResumePing = () => {
@@ -441,35 +508,32 @@ export default function FullMockTestPage() {
     }
   };
 
-  // IMPORTANT: This function must be called synchronously from a click handler
-  // (no await before speak()) to satisfy mobile browser user-gesture requirements.
+  // ── toggleAudio ────────────────────────────────────────────────────────────
+  // MUST be called synchronously from an onClick to satisfy mobile user-gesture
+  // requirements. No await, no setTimeout before the first speak().
   const toggleAudio = (id: string, text: string) => {
     if (!('speechSynthesis' in window)) {
-      alert('Your browser does not support audio playback. Please try a modern browser like Chrome or Safari.');
+      alert('Your browser does not support audio playback. Please use Chrome, Safari, or Edge.');
       return;
     }
     if (playedAudios.has(id) && playingAudioId !== id) {
-      alert('In the real IELTS exam, audio is played only once. This section has already been played.');
+      alert('In the real IELTS exam, audio plays only once. This section has already been played.');
       return;
     }
 
-    // Stop currently playing audio
-    window.speechSynthesis.cancel();
+    // ── Stop whatever is currently playing ──────────────────────────────────
+    window.speechSynthesis.cancel(); // clears the browser's internal queue
     stopIosResumePing();
+    chunkQueueRef.current = [];
 
     if (playingAudioId === id) {
-      // Toggle off
+      // User tapped the same button again → stop
+      activeAudioIdRef.current = null;
       setPlayingAudioId(null);
       return;
     }
 
-    // Build utterance synchronously BEFORE any async work
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.9;
-    utterance.pitch = 1.0;
-    utterance.volume = 1.0;
-
-    // Use cached voices — must NOT await here (breaks mobile user-gesture)
+    // ── Resolve voice (synchronous — no await allowed) ───────────────────────
     const voices = cachedVoicesRef.current;
     const preferred =
       voices.find(v => v.lang === 'en-GB') ||
@@ -477,22 +541,21 @@ export default function FullMockTestPage() {
       voices.find(v => v.lang === 'en-US') ||
       voices.find(v => v.lang.startsWith('en-US')) ||
       voices.find(v => v.lang.startsWith('en')) ||
-      voices[0];
-    if (preferred) utterance.voice = preferred;
+      voices[0] ||
+      null;
 
+    // ── Split into chunks and enqueue all but the first ─────────────────────
+    const chunks = chunkText(text);
+    const [firstChunk, ...rest] = chunks;
+    chunkQueueRef.current = rest;
+
+    activeAudioIdRef.current = id;
     setPlayingAudioId(id);
     setPlayedAudios(prev => new Set(prev).add(id));
     startIosResumePing();
 
-    utterance.onend = () => { setPlayingAudioId(null); stopIosResumePing(); };
-    utterance.onerror = (e) => {
-      console.error('SpeechSynthesis error:', e);
-      setPlayingAudioId(null);
-      stopIosResumePing();
-    };
-
-    // speak() called synchronously within click handler — satisfies user-gesture requirement
-    window.speechSynthesis.speak(utterance);
+    // ── speak() called synchronously in click handler — user-gesture OK ──────
+    speakChunk(firstChunk, preferred);
   };
 
   const [scores, setScoresRaw] = useState<SectionScores>(
