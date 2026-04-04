@@ -171,6 +171,9 @@ export default function FullMockTestPage() {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [playingAudioId, setPlayingAudioId] = useState<string | null>(null);
   const [playedAudios, setPlayedAudios] = useState<Set<string>>(new Set());
+  const [audioSupported, setAudioSupported] = useState(true);
+  const cachedVoicesRef = useRef<SpeechSynthesisVoice[]>([]);
+  const iosResumeIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   
   // Landing page specific state
   const [selectedMode, setSelectedMode] = useState<'practice' | 'exam'>('exam');
@@ -196,30 +199,100 @@ export default function FullMockTestPage() {
     }
   }, [answers]);
 
+  // Pre-load voices on mount so speak() can be called synchronously on user gesture
+  useEffect(() => {
+    if (!('speechSynthesis' in window)) {
+      setAudioSupported(false);
+      return;
+    }
+    const loadVoices = () => {
+      const voices = window.speechSynthesis.getVoices();
+      if (voices.length > 0) {
+        cachedVoicesRef.current = voices;
+      }
+    };
+    loadVoices();
+    window.speechSynthesis.addEventListener('voiceschanged', loadVoices);
+    // Retry after a short delay for browsers that load voices lazily
+    const timer = setTimeout(loadVoices, 500);
+    return () => {
+      window.speechSynthesis.removeEventListener('voiceschanged', loadVoices);
+      clearTimeout(timer);
+    };
+  }, []);
+
   useEffect(() => {
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    if (iosResumeIntervalRef.current) clearInterval(iosResumeIntervalRef.current);
     setPlayingAudioId(null);
   }, [phase]);
 
-  const toggleAudio = (id: string, text: string) => {
-    if (!('speechSynthesis' in window)) { alert('Your browser does not support text-to-speech.'); return; }
-    if (playedAudios.has(id)) { alert('Audio in the real exam can only be played once.'); return; }
+  // iOS Safari pauses speechSynthesis after ~15s — periodic resume keeps it alive
+  const startIosResumePing = () => {
+    if (iosResumeIntervalRef.current) clearInterval(iosResumeIntervalRef.current);
+    iosResumeIntervalRef.current = setInterval(() => {
+      if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+    }, 10000);
+  };
 
+  const stopIosResumePing = () => {
+    if (iosResumeIntervalRef.current) {
+      clearInterval(iosResumeIntervalRef.current);
+      iosResumeIntervalRef.current = null;
+    }
+  };
+
+  // IMPORTANT: This function must be called synchronously from a click handler
+  // (no await before speak()) to satisfy mobile browser user-gesture requirements.
+  const toggleAudio = (id: string, text: string) => {
+    if (!('speechSynthesis' in window)) {
+      alert('Your browser does not support audio playback. Please try a modern browser like Chrome or Safari.');
+      return;
+    }
+    if (playedAudios.has(id) && playingAudioId !== id) {
+      alert('In the real IELTS exam, audio is played only once. This section has already been played.');
+      return;
+    }
+
+    // Stop currently playing audio
     window.speechSynthesis.cancel();
-    if (playingAudioId === id) return;
+    stopIosResumePing();
+
+    if (playingAudioId === id) {
+      // Toggle off
+      setPlayingAudioId(null);
+      return;
+    }
+
+    // Build utterance synchronously BEFORE any async work
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.9;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+
+    // Use cached voices — must NOT await here (breaks mobile user-gesture)
+    const voices = cachedVoicesRef.current;
+    const preferred =
+      voices.find(v => v.lang === 'en-GB') ||
+      voices.find(v => v.lang.startsWith('en-GB')) ||
+      voices.find(v => v.lang === 'en-US') ||
+      voices.find(v => v.lang.startsWith('en-US')) ||
+      voices.find(v => v.lang.startsWith('en')) ||
+      voices[0];
+    if (preferred) utterance.voice = preferred;
 
     setPlayingAudioId(id);
-    const utterance = new SpeechSynthesisUtterance(text);
-    
-    // Fetch voices synchronously to ensure we don't lose the user interaction context required by mobile browsers
-    const voices = window.speechSynthesis.getVoices();
-    const preferred = voices.find(v => v.lang.startsWith('en-GB')) || voices.find(v => v.lang.startsWith('en-US')) || voices.find(v => v.lang.startsWith('en'));
-    if (preferred) utterance.voice = preferred;
-    
-    utterance.rate = 0.92;
     setPlayedAudios(prev => new Set(prev).add(id));
-    utterance.onend = () => setPlayingAudioId(null);
-    utterance.onerror = () => setPlayingAudioId(null);
+    startIosResumePing();
+
+    utterance.onend = () => { setPlayingAudioId(null); stopIosResumePing(); };
+    utterance.onerror = (e) => {
+      console.error('SpeechSynthesis error:', e);
+      setPlayingAudioId(null);
+      stopIosResumePing();
+    };
+
+    // speak() called synchronously within click handler — satisfies user-gesture requirement
     window.speechSynthesis.speak(utterance);
   };
 
@@ -671,30 +744,78 @@ export default function FullMockTestPage() {
               let qIdx = 0;
               return (
                 <div className="space-y-12">
+                  {/* Audio availability notice for unsupported browsers */}
+                  {!audioSupported && (
+                    <div className="flex items-center gap-3 bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 text-amber-800">
+                      <AlertCircle className="h-5 w-5 flex-shrink-0" />
+                      <p className="text-sm font-bold">Text-to-speech is not supported in this browser. Please use Chrome, Safari, or Edge for audio playback.</p>
+                    </div>
+                  )}
+                  {/* Global transcript audio player */}
                    {globalTranscript && (
                     <Card className="border-violet-100 shadow-xl rounded-[30px] overflow-hidden">
                       <div className="bg-violet-600 p-6 flex items-center justify-between text-white">
                         <div className="flex items-center gap-3"><Headphones className="h-6 w-6" /><h3 className="font-black uppercase tracking-wider">Audio Interface</h3></div>
                         <Button 
+                          type="button"
                           size="lg" 
-                          disabled={playedAudios.has('global') && playingAudioId !== 'global'}
-                          className={`rounded-full font-black px-8 ${playedAudios.has('global') && playingAudioId !== 'global' ? 'bg-white/20 text-white/40' : 'bg-white text-violet-700 hover:bg-white/90 shadow-xl'}`}
+                          disabled={!audioSupported || (playedAudios.has('global') && playingAudioId !== 'global')}
+                          className={`rounded-full font-black px-8 ${
+                            !audioSupported ? 'bg-white/20 text-white/40 cursor-not-allowed' :
+                            playedAudios.has('global') && playingAudioId !== 'global' ? 'bg-white/20 text-white/40' :
+                            playingAudioId === 'global' ? 'bg-amber-400 text-amber-900 hover:bg-amber-300' :
+                            'bg-white text-violet-700 hover:bg-white/90 shadow-xl'
+                          }`}
                           onClick={() => toggleAudio('global', globalTranscript)}
                         >
-                          {playingAudioId === 'global' ? <><Volume2 className="h-5 w-5 mr-2 animate-pulse" /> PLAYING...</> : <><Play className="h-5 w-5 mr-2" /> PLAY AUDIO</>}
+                          {playingAudioId === 'global'
+                            ? <><Volume2 className="h-5 w-5 mr-2 animate-pulse" /> PLAYING — CLICK TO STOP</>
+                            : playedAudios.has('global')
+                            ? <><Volume2 className="h-5 w-5 mr-2 opacity-40" /> PLAYED (EXAM: ONCE ONLY)</>
+                            : <><Play className="h-5 w-5 mr-2" /> PLAY AUDIO</>
+                          }
                         </Button>
                       </div>
                       <CardContent className="p-8 text-center bg-violet-50/50">
                          <div className="max-w-md mx-auto">
-                           <div className="w-16 h-16 bg-violet-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce"><Volume2 className="h-8 w-8 text-violet-600" /></div>
-                           <p className="text-sm font-bold text-violet-800">Recording will play once only. Answer questions as you listen. Text transcript is hidden for exam integrity.</p>
+                           <div className={`w-16 h-16 bg-violet-100 rounded-full flex items-center justify-center mx-auto mb-4 ${playingAudioId === 'global' ? 'animate-pulse' : ''}`}><Volume2 className="h-8 w-8 text-violet-600" /></div>
+                           <p className="text-sm font-bold text-violet-800">
+                             {playingAudioId === 'global'
+                               ? 'Audio is playing. Answer questions as you listen.'
+                               : 'Recording will play once only. Answer questions as you listen. Text transcript is hidden for exam integrity.'}
+                           </p>
                          </div>
                       </CardContent>
                     </Card>
                   )}
-                  {sections.map((sec) => (
+                  {sections.map((sec) => {
+                    const sectionAudioId = `section_${sec.sectionNumber}`;
+                    const sectionTranscript = typeof sec.transcript === 'string' ? sec.transcript : '';
+                    return (
                     <div key={sec.sectionNumber} className="space-y-6">
-                      <div className="flex items-center gap-3 px-4"><div className="h-1 w-12 bg-violet-500 rounded-full" /><h4 className="font-black text-violet-600 uppercase tracking-widest text-sm">{sec.title || `Part ${sec.sectionNumber}`}</h4></div>
+                      <div className="flex items-center justify-between gap-3 px-4">
+                        <div className="flex items-center gap-3"><div className="h-1 w-12 bg-violet-500 rounded-full" /><h4 className="font-black text-violet-600 uppercase tracking-widest text-sm">{sec.title || `Part ${sec.sectionNumber}`}</h4></div>
+                        {/* Per-section audio button (when no global transcript) */}
+                        {sectionTranscript && !globalTranscript && (
+                          <Button
+                            type="button"
+                            size="sm"
+                            disabled={!audioSupported || (playedAudios.has(sectionAudioId) && playingAudioId !== sectionAudioId)}
+                            className={`rounded-full font-black px-6 ${
+                              !audioSupported ? 'bg-violet-200 text-violet-400 cursor-not-allowed' :
+                              playedAudios.has(sectionAudioId) && playingAudioId !== sectionAudioId ? 'bg-violet-200 text-violet-400' :
+                              playingAudioId === sectionAudioId ? 'bg-amber-500 text-white' :
+                              'bg-violet-600 text-white hover:bg-violet-700 shadow-lg'
+                            }`}
+                            onClick={() => toggleAudio(sectionAudioId, sectionTranscript)}
+                          >
+                            {playingAudioId === sectionAudioId
+                              ? <><Volume2 className="h-4 w-4 mr-1.5 animate-pulse" /> PLAYING</>
+                              : <><Play className="h-4 w-4 mr-1.5" /> PLAY SECTION AUDIO</>
+                            }
+                          </Button>
+                        )}
+                      </div>
                       <Card className="rounded-[40px] shadow-2xl border-none shadow-black/5 overflow-hidden">
                       <CardContent className="p-10 space-y-10">
                         {Array.isArray(sec.questions) && sec.questions.map((q) => {
@@ -742,7 +863,8 @@ export default function FullMockTestPage() {
                       </CardContent>
                     </Card>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               );
             })()}
