@@ -1037,8 +1037,11 @@ export default function FullMockTestPage() {
             })()}
 
             {phase === 'writing' && (() => {
-              const task1 = td?.task1 as { title: string; prompt: string } | undefined;
-              const task2 = td?.task2 as { title: string; prompt: string } | undefined;
+              // Writing test_data is stored as { tasks: [WritingTask, WritingTask] }
+              // Each WritingTask has: { title, prompt, imageUrl, minWords, recommendedTime }
+              const tasks = (td?.tasks as Array<{ title: string; prompt: string; imageUrl?: string; minWords?: number; recommendedTime?: number }>) ?? [];
+              const task1 = tasks[0];
+              const task2 = tasks[1];
               return (
                 <div className="space-y-12">
                    <div className="bg-emerald-600 text-white p-10 rounded-[40px] shadow-2xl flex items-center gap-6"><div className="p-4 bg-white/20 rounded-3xl"><PenTool className="h-10 w-10" /></div><div><h2 className="text-3xl font-black mb-1">Writing Assessment</h2><p className="text-emerald-100 font-medium">Complete both tasks. Your word count is tracked automatically.</p></div></div>
@@ -1048,12 +1051,50 @@ export default function FullMockTestPage() {
                       <CardTitle className="text-2xl font-black text-emerald-900">Task 1 — {task1?.title ?? 'Report / Letter (min. 150 words)'}</CardTitle>
                     </CardHeader>
                     <CardContent className="p-10 space-y-8">
+                      {/* Task prompt */}
                       <div className="bg-emerald-50/50 border-2 border-emerald-100 rounded-3xl p-8 text-lg font-medium text-emerald-900/80 leading-relaxed">
                         {task1?.prompt
                           ? <span dangerouslySetInnerHTML={{ __html: task1.prompt }} />
                           : <><p className="font-black mb-2">Describe the visual information below:</p><p>The chart below shows the percentage of households in owned and rented accommodation in England and Wales between 1918 and 2011. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p><p className="mt-3 text-sm text-emerald-700 font-bold">Write at least 150 words. Spend about 20 minutes on this task.</p></>
                         }
                       </div>
+
+                      {/* Chart / Graph image — REQUIRED for IELTS Academic Task 1 */}
+                      {task1?.imageUrl ? (
+                        <div className="rounded-3xl overflow-hidden border-2 border-emerald-200 bg-white shadow-xl">
+                          <div className="bg-emerald-700 text-white px-6 py-3 flex items-center gap-2">
+                            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                            <span className="font-black uppercase tracking-widest text-sm">Chart / Graph</span>
+                          </div>
+                          <div className="p-4 bg-slate-50">
+                            <img
+                              src={task1.imageUrl}
+                              alt="Writing Task 1 Chart"
+                              className="w-full max-h-[500px] object-contain rounded-2xl mx-auto"
+                              onError={(e) => {
+                                const target = e.currentTarget;
+                                target.style.display = 'none';
+                                const fallback = target.nextElementSibling as HTMLElement;
+                                if (fallback) fallback.style.display = 'flex';
+                              }}
+                            />
+                            <div className="hidden flex-col items-center justify-center p-12 text-center gap-3 text-amber-700">
+                              <AlertCircle className="h-10 w-10 text-amber-500" />
+                              <p className="font-bold">Chart image could not be loaded.</p>
+                              <p className="text-sm text-muted-foreground">URL: {task1.imageUrl}</p>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-3 bg-amber-50 border-2 border-amber-200 rounded-2xl p-5 text-amber-800">
+                          <AlertCircle className="h-6 w-6 flex-shrink-0 text-amber-500" />
+                          <div>
+                            <p className="font-black text-sm">No chart image provided</p>
+                            <p className="text-xs text-amber-700 mt-0.5">An admin needs to add a chart/graph image URL for this Task 1 in the Admin Panel → Mock Test Management.</p>
+                          </div>
+                        </div>
+                      )}
+
                       <Textarea placeholder="Begin typing your Task 1 response here... (min. 150 words)" className="min-h-[400px] rounded-[30px] border-2 border-emerald-100 p-8 text-lg font-bold focus:ring-[12px] focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
                         value={answers['w_task1'] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, w_task1: e.target.value }))} />
                       <div className="flex items-center justify-between px-4">
@@ -1086,6 +1127,7 @@ export default function FullMockTestPage() {
                 </div>
               );
             })()}
+
 
             {phase === 'speaking' && (() => {
               const part1 = td?.part1 as { title: string; questions: Array<{ text: string }> } | undefined;
