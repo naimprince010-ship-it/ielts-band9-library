@@ -162,19 +162,69 @@ function useTimer(initial: number, onExpire: () => void) {
   return { remaining, start, reset };
 }
 
+// ─── Session persistence helpers ──────────────────────────────────────────
+const SESSION_KEY = 'mockTestSession_v1';
+
+interface TestSession {
+  phase: Phase;
+  sectionIndex: number;
+  scores: SectionScores;
+  playedAudios: string[];
+  timerRemaining: number;
+  savedAt: number;
+}
+
+function loadSession(): TestSession | null {
+  try {
+    const raw = sessionStorage.getItem(SESSION_KEY);
+    if (!raw) return null;
+    const session = JSON.parse(raw) as TestSession;
+    // Discard stale sessions older than 4 hours
+    if (Date.now() - session.savedAt > 4 * 60 * 60 * 1000) {
+      sessionStorage.removeItem(SESSION_KEY);
+      return null;
+    }
+    return session;
+  } catch { return null; }
+}
+
+function saveSession(session: Partial<TestSession>) {
+  try {
+    const existing = loadSession() ?? {} as TestSession;
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ ...existing, ...session, savedAt: Date.now() }));
+  } catch { /* sessionStorage might be blocked in private mode */ }
+}
+
+function clearSession() {
+  sessionStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem('mockTestAnswers_v1');
+}
+
 export default function FullMockTestPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [phase, setPhase] = useState<Phase>('intro');
+
+  // Restore from session on first render
+  const savedSession = loadSession();
+
+  const [phase, setPhaseRaw] = useState<Phase>(savedSession?.phase ?? 'intro');
   const [tests, setTests] = useState<Partial<Record<ModuleType, MockTest>>>({});
   const [loading, setLoading] = useState(true);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [playingAudioId, setPlayingAudioId] = useState<string | null>(null);
-  const [playedAudios, setPlayedAudios] = useState<Set<string>>(new Set());
+  const [playedAudios, setPlayedAudios] = useState<Set<string>>(
+    new Set(savedSession?.playedAudios ?? [])
+  );
   const [audioSupported, setAudioSupported] = useState(true);
   const cachedVoicesRef = useRef<SpeechSynthesisVoice[]>([]);
   const iosResumeIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  
+
+  // Wrap setPhase to auto-persist
+  const setPhase = (p: Phase) => {
+    setPhaseRaw(p);
+    saveSession({ phase: p });
+  };
+
   // Landing page specific state
   const [selectedMode, setSelectedMode] = useState<'practice' | 'exam'>('exam');
   const [checkedItems, setCheckedItems] = useState<number[]>([]);
@@ -185,7 +235,7 @@ export default function FullMockTestPage() {
 
   const allChecked = checkedItems.length === preTestChecklist.length;
 
-  // Auto-save logic
+  // Restore answers from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem('mockTestAnswers_v1');
     if (saved) {
@@ -193,6 +243,7 @@ export default function FullMockTestPage() {
     }
   }, []);
 
+  // Persist answers whenever they change
   useEffect(() => {
     if (Object.keys(answers).length > 0) {
       localStorage.setItem('mockTestAnswers_v1', JSON.stringify(answers));
@@ -296,8 +347,33 @@ export default function FullMockTestPage() {
     window.speechSynthesis.speak(utterance);
   };
 
-  const [scores, setScores] = useState<SectionScores>({ listening: null, reading: null, writing: null, speaking: null });
-  const [sectionIndex, setSectionIndex] = useState(0);
+  const [scores, setScoresRaw] = useState<SectionScores>(
+    savedSession?.scores ?? { listening: null, reading: null, writing: null, speaking: null }
+  );
+  const [sectionIndex, setSectionIndexRaw] = useState(
+    savedSession?.sectionIndex ?? 0
+  );
+  // Saved timer value — used once on mount to restore remaining time
+  const restoredTimerRef = useRef<number | null>(savedSession?.timerRemaining ?? null);
+
+  // Wrap setters to auto-persist session
+  const setScores = (updater: SectionScores | ((prev: SectionScores) => SectionScores)) => {
+    setScoresRaw(prev => {
+      const next = typeof updater === 'function' ? updater(prev) : updater;
+      saveSession({ scores: next });
+      return next;
+    });
+  };
+
+  const setSectionIndex = (idx: number) => {
+    setSectionIndexRaw(idx);
+    saveSession({ sectionIndex: idx });
+  };
+
+  // Persist playedAudios whenever it changes
+  useEffect(() => {
+    saveSession({ playedAudios: Array.from(playedAudios) });
+  }, [playedAudios]);
 
   const currentSection = SECTIONS[sectionIndex];
   const submitSectionRef = useRef<() => void>(() => {});
@@ -305,7 +381,30 @@ export default function FullMockTestPage() {
   const resetTimerRef = useRef<((val: number) => void) | null>(null);
 
   const handleTimeUp = useCallback(() => submitSectionRef.current(), []);
-  const { remaining, start: startTimer, reset: resetTimer } = useTimer(currentSection?.duration ?? 1800, handleTimeUp);
+
+  // Restore timer from session if available, otherwise use section default
+  const initialTimerValue = restoredTimerRef.current ?? (currentSection?.duration ?? 1800);
+  const { remaining, start: startTimer, reset: resetTimer } = useTimer(initialTimerValue, handleTimeUp);
+
+  // Persist remaining time every 10 seconds to avoid excessive writes
+  const lastTimerSaveRef = useRef(0);
+  useEffect(() => {
+    const now = Date.now();
+    if (now - lastTimerSaveRef.current > 10000) {
+      lastTimerSaveRef.current = now;
+      saveSession({ timerRemaining: remaining });
+    }
+  }, [remaining]);
+
+  // On mount: if we restored an in-progress session, auto-start the timer
+  const sessionRestoredRef = useRef(false);
+  useEffect(() => {
+    if (!sessionRestoredRef.current && savedSession && savedSession.phase !== 'intro' && savedSession.phase !== 'results') {
+      sessionRestoredRef.current = true;
+      // Small delay to let useTimer initialize
+      setTimeout(() => startTimerRef.current?.(), 200);
+    }
+  }, []);
 
   useEffect(() => { startTimerRef.current = startTimer; }, [startTimer]);
   useEffect(() => { resetTimerRef.current = resetTimer; }, [resetTimer]);
@@ -336,7 +435,9 @@ export default function FullMockTestPage() {
     setSectionIndex(idx);
     setAnswers({});
     setPhase(SECTIONS[idx].phase);
+    restoredTimerRef.current = null; // Clear restored timer — use fresh duration
     resetTimerRef.current?.(SECTIONS[idx].duration);
+    saveSession({ timerRemaining: SECTIONS[idx].duration, sectionIndex: idx, phase: SECTIONS[idx].phase });
     setTimeout(() => startTimerRef.current?.(), 100);
   };
 
@@ -391,6 +492,7 @@ export default function FullMockTestPage() {
       setSectionIndex(next);
     } else {
       setPhase('results');
+      clearSession(); // Test complete — wipe session
     }
     setAnswers({});
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -657,12 +759,12 @@ export default function FullMockTestPage() {
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button size="lg" onClick={() => { 
+                clearSession(); // Wipe persisted session for a clean retake
                 setPhase('intro'); 
                 setSectionIndex(0); 
                 setScores({ listening: null, reading: null, writing: null, speaking: null }); 
                 setAnswers({}); 
                 setPlayedAudios(new Set());
-                localStorage.removeItem('mockTestAnswers_v1');
               }}
               className="bg-indigo-500 hover:bg-indigo-400 text-white font-black px-12 py-8 rounded-[30px] shadow-2xl shadow-indigo-500/40 gap-4"
             >
