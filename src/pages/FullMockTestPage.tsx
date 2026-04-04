@@ -204,6 +204,34 @@ export default function FullMockTestPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
 
+  const [resultSaved, setResultSaved] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+
+  const saveResultToDb = async (finalScores: SectionScores) => {
+    if (!user || !supabase || !isSupabaseConfigured()) return;
+    setResultSaved('saving');
+    try {
+      const overall = overallBand(finalScores);
+      const { error } = await supabase.from('mock_test_results').insert({
+        user_id: user.id,
+        overall_band: overall,
+        listening_band: finalScores.listening,
+        reading_band: finalScores.reading,
+        writing_band: finalScores.writing,
+        speaking_band: finalScores.speaking,
+        completed_at: new Date().toISOString(),
+      });
+      if (error) {
+        console.error('Failed to save result:', error);
+        setResultSaved('error');
+      } else {
+        setResultSaved('saved');
+      }
+    } catch (err) {
+      console.error('Error saving result:', err);
+      setResultSaved('error');
+    }
+  };
+
   // Restore from session on first render
   const savedSession = loadSession();
 
@@ -604,7 +632,8 @@ export default function FullMockTestPage() {
       }
     } catch (err) { console.error('Error calculating score:', err); }
 
-    setScores(prev => ({ ...prev, [sec.module]: band }));
+    const finalScores = { ...scores, [sec.module]: band };
+    setScores(finalScores);
 
     const next = sectionIndex + 1;
     if (next < SECTIONS.length) {
@@ -613,6 +642,7 @@ export default function FullMockTestPage() {
     } else {
       setPhase('results');
       clearSession(); // Test complete — wipe session
+      saveResultToDb(finalScores); // 💾 Save to Supabase
     }
     setAnswers({});
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -850,6 +880,25 @@ export default function FullMockTestPage() {
             </div>
             <h1 className="text-5xl font-black mb-4 tracking-tight">Test Complete!</h1>
             <p className="text-indigo-300 text-lg font-medium">Your global IELTS performance report</p>
+            {/* Save status indicator */}
+            {resultSaved === 'saving' && (
+              <div className="mt-4 inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-sm font-semibold">
+                <Loader2 className="h-4 w-4 animate-spin text-indigo-300" />
+                <span className="text-indigo-300">Saving your result...</span>
+              </div>
+            )}
+            {resultSaved === 'saved' && (
+              <div className="mt-4 inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-500/30 rounded-full px-4 py-1.5 text-sm font-semibold">
+                <CheckCircle className="h-4 w-4 text-emerald-400" />
+                <span className="text-emerald-400">Result saved to your profile</span>
+              </div>
+            )}
+            {resultSaved === 'error' && (
+              <div className="mt-4 inline-flex items-center gap-2 bg-red-500/20 border border-red-500/30 rounded-full px-4 py-1.5 text-sm font-semibold">
+                <AlertCircle className="h-4 w-4 text-red-400" />
+                <span className="text-red-400">Could not save — please screenshot your score</span>
+              </div>
+            )}
           </div>
 
           <div className="bg-white/10 backdrop-blur-2xl rounded-[50px] p-12 text-center mb-12 border border-white/20 shadow-3xl">
