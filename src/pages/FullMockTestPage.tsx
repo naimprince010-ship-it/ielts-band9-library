@@ -4,7 +4,7 @@ import {
   Clock, Headphones, BookOpen, PenTool, Mic, ChevronRight,
   CheckCircle, AlertCircle, Award, Play, RotateCcw,
   Loader2, Target, Crown, Timer, Check, Volume2,
-  Shield, Zap, Wifi, Lock, ArrowRight
+  Shield, Zap, Wifi, Lock, ArrowRight, Square, MicOff, Trash2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -218,6 +218,126 @@ export default function FullMockTestPage() {
   const [audioSupported, setAudioSupported] = useState(true);
   const cachedVoicesRef = useRef<SpeechSynthesisVoice[]>([]);
   const iosResumeIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // ─── Voice Recording state (Speaking section) ───────────────────────────
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordingSeconds, setRecordingSeconds] = useState(0);
+  const [recordingLabel, setRecordingLabel] = useState('');
+  const [recordingError, setRecordingError] = useState<string | null>(null);
+  const [recordedClips, setRecordedClips] = useState<Array<{
+    id: string; url: string; duration: number; label: string; size: number;
+  }>>([]);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const recordingTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+
+  // Cleanup recording resources when phase changes
+  useEffect(() => {
+    return () => {
+      if (mediaRecorderRef.current?.state === 'recording') {
+        mediaRecorderRef.current.stop();
+      }
+      if (recordingTimerRef.current) clearInterval(recordingTimerRef.current);
+      if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
+      recordedClips.forEach(clip => URL.revokeObjectURL(clip.url));
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase]);
+
+  const startRecording = async (label: string) => {
+    setRecordingError(null);
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setRecordingError('Microphone access is not supported in this browser. Please use Chrome, Firefox, or Edge.');
+      return;
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      streamRef.current = stream;
+      audioChunksRef.current = [];
+
+      // Pick best supported MIME type
+      const mimeType = [
+        'audio/webm;codecs=opus',
+        'audio/webm',
+        'audio/ogg;codecs=opus',
+        'audio/mp4',
+        ''
+      ].find(t => !t || MediaRecorder.isTypeSupported(t)) ?? '';
+
+      const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : {});
+      mediaRecorderRef.current = recorder;
+
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) audioChunksRef.current.push(e.data);
+      };
+
+      recorder.onstop = () => {
+        const blob = new Blob(audioChunksRef.current, { type: mimeType || 'audio/webm' });
+        const url = URL.createObjectURL(blob);
+        const duration = recordingSeconds;
+        setRecordedClips(prev => [...prev, {
+          id: `clip-${Date.now()}`,
+          url,
+          duration,
+          label,
+          size: blob.size
+        }]);
+        setIsRecording(false);
+        setRecordingSeconds(0);
+        stream.getTracks().forEach(t => t.stop());
+      };
+
+      recorder.onerror = () => {
+        setRecordingError('Recording failed. Please try again.');
+        setIsRecording(false);
+        setRecordingSeconds(0);
+        stream.getTracks().forEach(t => t.stop());
+      };
+
+      setRecordingLabel(label);
+      setIsRecording(true);
+      setRecordingSeconds(0);
+      recorder.start(100);
+
+      // Timer
+      let secs = 0;
+      recordingTimerRef.current = setInterval(() => {
+        secs++;
+        setRecordingSeconds(secs);
+        // Auto-stop after 3 minutes per clip
+        if (secs >= 180) stopRecording();
+      }, 1000);
+
+    } catch (err: any) {
+      if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+        setRecordingError('Microphone permission denied. Please allow microphone access in your browser settings and try again.');
+      } else {
+        setRecordingError(`Could not access microphone: ${err.message}`);
+      }
+    }
+  };
+
+  const stopRecording = () => {
+    if (recordingTimerRef.current) { clearInterval(recordingTimerRef.current); recordingTimerRef.current = null; }
+    if (mediaRecorderRef.current?.state === 'recording') {
+      mediaRecorderRef.current.stop();
+    }
+  };
+
+  const deleteClip = (id: string) => {
+    setRecordedClips(prev => {
+      const clip = prev.find(c => c.id === id);
+      if (clip) URL.revokeObjectURL(clip.url);
+      return prev.filter(c => c.id !== id);
+    });
+  };
+
+  const formatRecordingTime = (secs: number) => {
+    const m = Math.floor(secs / 60).toString().padStart(2, '0');
+    const s = (secs % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+  };
 
   // Wrap setPhase to auto-persist
   const setPhase = (p: Phase) => {
@@ -1130,28 +1250,184 @@ export default function FullMockTestPage() {
 
 
             {phase === 'speaking' && (() => {
-              const part1 = td?.part1 as { title: string; questions: Array<{ text: string }> } | undefined;
-              const part2 = td?.part2 as { title: string; cueCard: { topic: string; bulletPoints: string[] } } | undefined;
-              const part3 = td?.part3 as { title: string; questions: Array<{ text: string }> } | undefined;
+              // Speaking data may be stored as parts[] or part1/part2/part3 directly
+              const parts = (td?.parts as Array<{ title: string; partType?: string;
+                questions?: Array<{ text: string }>;
+                cueCard?: { topic: string; bulletPoints: string[] };
+              }>) ?? [];
+
+              // Build display parts — handle both formats
+              const displayParts: Array<{ label: string; questions: string[] }> = parts.length > 0
+                ? parts.map(p => ({
+                    label: p.title,
+                    questions: p.cueCard
+                      ? [`Cue Card: ${p.cueCard.topic}\n\u2022 ${p.cueCard.bulletPoints.join('\n\u2022 ')}`]
+                      : (p.questions ?? []).map(q => q.text)
+                  }))
+                : [
+                    { label: 'Part 1 — Introduction & Interview', questions: ['Tell me about yourself.', 'What do you do in your free time?'] },
+                    { label: 'Part 2 — Individual Long Turn', questions: ['You will be given a cue card with a topic. Speak for 1–2 minutes.'] },
+                    { label: 'Part 3 — Two-way Discussion', questions: ['Follow-up questions related to your Part 2 topic will be asked.'] }
+                  ];
+
               return (
-                <div className="space-y-12">
-                   <div className="bg-orange-600 text-white p-12 rounded-[50px] shadow-3xl flex items-center gap-8"><div className="p-5 bg-white/20 rounded-[30px] animate-pulse"><Mic className="h-12 w-12" /></div><div><h2 className="text-4xl font-black mb-2">Speaking Simulation</h2><p className="text-orange-100 text-lg font-medium">Record or type your responses to the examiner's prompts.</p></div></div>
-                   {[part1, part2 ? { title: part2.title, questions: [{ text: `Cue Card: ${part2.cueCard.topic}\n• ${part2.cueCard.bulletPoints.join('\n• ')}` }] } : undefined, part3].filter(Boolean).map((part, pi) => (
-                    <Card key={pi} className="rounded-[40px] shadow-2xl border-none overflow-hidden">
-                      <CardHeader className="bg-orange-50 p-10"><CardTitle className="text-2xl font-black text-orange-900">{(part as { title: string }).title}</CardTitle></CardHeader>
-                      <CardContent className="p-10 space-y-6">
-                        {(part as { questions: Array<{ text: string }> }).questions.map((q, qi) => (
-                          <div key={qi} className="bg-orange-50/50 border-2 border-orange-100 rounded-[30px] p-8 text-xl font-bold text-orange-900 leading-relaxed shadow-sm whitespace-pre-line">{q.text}</div>
+                <div className="space-y-10">
+                  {/* Header */}
+                  <div className="bg-gradient-to-r from-orange-600 to-orange-500 text-white p-10 rounded-[40px] shadow-2xl flex items-center gap-6">
+                    <div className={`p-4 bg-white/20 rounded-[25px] ${isRecording ? 'animate-pulse' : ''}`}><Mic className="h-10 w-10" /></div>
+                    <div>
+                      <h2 className="text-3xl font-black mb-1">Speaking Simulation</h2>
+                      <p className="text-orange-100 font-medium">Read each question aloud, then record your response. Multiple clips allowed.</p>
+                    </div>
+                    {recordedClips.length > 0 && (
+                      <div className="ml-auto bg-white/20 rounded-2xl px-5 py-3 text-center">
+                        <p className="text-2xl font-black">{recordedClips.length}</p>
+                        <p className="text-xs text-orange-200 font-bold uppercase tracking-widest">Clips</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Microphone permission error */}
+                  {recordingError && (
+                    <div className="flex items-start gap-3 bg-red-50 border-2 border-red-200 rounded-2xl p-5 text-red-800">
+                      <MicOff className="h-6 w-6 flex-shrink-0 mt-0.5 text-red-500" />
+                      <div>
+                        <p className="font-black text-sm">Recording Error</p>
+                        <p className="text-xs mt-0.5">{recordingError}</p>
+                      </div>
+                      <button onClick={() => setRecordingError(null)} className="ml-auto text-red-400 hover:text-red-600 font-black text-lg leading-none">×</button>
+                    </div>
+                  )}
+
+                  {/* Active Recording Banner */}
+                  {isRecording && (
+                    <div className="bg-red-600 text-white rounded-[30px] p-6 flex items-center justify-between shadow-2xl shadow-red-500/40 animate-in slide-in-from-top-4 duration-300">
+                      <div className="flex items-center gap-4">
+                        <div className="relative">
+                          <div className="w-4 h-4 bg-white rounded-full animate-pulse" />
+                          <div className="absolute inset-0 w-4 h-4 bg-white rounded-full animate-ping opacity-50" />
+                        </div>
+                        <div>
+                          <p className="font-black text-lg">REC — {recordingLabel}</p>
+                          <p className="text-red-200 text-sm font-bold">Max 3 minutes per clip</p>
+                        </div>
+                        {/* Waveform animation */}
+                        <div className="hidden sm:flex items-end gap-0.5 h-8">
+                          {Array.from({length: 12}).map((_, i) => (
+                            <div key={i}
+                              className="w-1.5 bg-white/70 rounded-full animate-pulse"
+                              style={{ height: `${20 + Math.sin(i * 0.8) * 12}px`, animationDelay: `${i * 80}ms` }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <span className="font-mono font-black text-3xl">{formatRecordingTime(recordingSeconds)}</span>
+                        <Button
+                          type="button"
+                          onClick={stopRecording}
+                          className="bg-white text-red-600 hover:bg-red-50 font-black rounded-2xl px-6 py-3 gap-2 shadow-xl"
+                        >
+                          <Square className="h-5 w-5 fill-current" /> STOP
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Part Questions + Record per part */}
+                  {displayParts.map((part, pi) => (
+                    <Card key={pi} className="rounded-[35px] shadow-xl border-none overflow-hidden">
+                      <CardHeader className="bg-orange-50 px-10 py-7 border-b border-orange-100 flex flex-row items-center justify-between gap-4">
+                        <CardTitle className="text-xl font-black text-orange-900">{part.label}</CardTitle>
+                        <Button
+                          type="button"
+                          disabled={isRecording}
+                          onClick={() => !isRecording && startRecording(part.label)}
+                          className={`rounded-2xl font-black px-6 gap-2 flex-shrink-0 ${
+                            isRecording
+                              ? 'bg-orange-200 text-orange-400 cursor-not-allowed'
+                              : 'bg-orange-600 hover:bg-orange-700 text-white shadow-lg shadow-orange-500/30'
+                          }`}
+                        >
+                          <Mic className="h-4 w-4" />
+                          {isRecording ? 'Recording...' : 'Record Response'}
+                        </Button>
+                      </CardHeader>
+                      <CardContent className="p-10 space-y-5">
+                        {part.questions.map((q, qi) => (
+                          <div key={qi} className="bg-orange-50/50 border-2 border-orange-100 rounded-[25px] p-7 text-lg font-bold text-orange-900 leading-relaxed whitespace-pre-line">
+                            {q}
+                          </div>
                         ))}
                       </CardContent>
                     </Card>
                   ))}
-                  <Card className="rounded-[40px] shadow-3xl border-none">
-                    <CardHeader className="p-10 text-center"><CardTitle className="text-3xl font-black">Your Combined Response</CardTitle><p className="text-muted-foreground font-medium">Type the transcript of your interview here for automated grading.</p></CardHeader>
-                    <CardContent className="p-10">
-                      <Textarea placeholder="Type all your speaking responses here..." rows={15} className="rounded-[40px] border-4 border-orange-100 p-10 text-xl font-bold focus:ring-[20px] focus:ring-orange-500/10 focus:border-orange-500 transition-all bg-orange-50/10"
-                        value={answers['sp_answers'] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, sp_answers: e.target.value }))} />
-                      <div className="flex justify-center mt-8"><Badge className="bg-orange-600 text-white px-10 py-4 rounded-full font-black text-xl">{(answers['sp_answers'] ?? '').split(/\s+/).filter(Boolean).length} Words Collected</Badge></div>
+
+                  {/* Recorded Clips Playback */}
+                  {recordedClips.length > 0 && (
+                    <Card className="rounded-[35px] shadow-xl border-none overflow-hidden">
+                      <CardHeader className="bg-slate-800 text-white px-10 py-7">
+                        <div className="flex items-center justify-between">
+                          <CardTitle className="text-xl font-black flex items-center gap-3">
+                            <Volume2 className="h-6 w-6 text-orange-400" />
+                            Your Recordings ({recordedClips.length} clip{recordedClips.length > 1 ? 's' : ''})
+                          </CardTitle>
+                          <Badge className="bg-green-500 text-white font-black px-4 py-1.5 rounded-full">
+                            <CheckCircle className="h-4 w-4 mr-1.5 inline" />{recordedClips.length} Saved
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="p-8 space-y-4">
+                        {recordedClips.map((clip, ci) => (
+                          <div key={clip.id} className="flex items-center gap-4 p-5 bg-slate-50 rounded-3xl border-2 border-slate-100 hover:border-orange-200 transition-colors">
+                            <div className="w-10 h-10 bg-orange-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                              <span className="font-black text-orange-600 text-sm">{ci + 1}</span>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="font-black text-sm text-slate-800 truncate">{clip.label}</p>
+                              <p className="text-xs text-slate-400 font-bold">{formatRecordingTime(clip.duration)} &bull; {(clip.size / 1024).toFixed(0)} KB</p>
+                              <audio
+                                src={clip.url}
+                                controls
+                                className="w-full h-9 mt-2"
+                                style={{ minWidth: '180px' }}
+                              />
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => deleteClip(clip.id)}
+                              className="p-2.5 rounded-2xl text-red-400 hover:bg-red-50 hover:text-red-600 transition-colors flex-shrink-0"
+                              title="Delete clip"
+                            >
+                              <Trash2 className="h-5 w-5" />
+                            </button>
+                          </div>
+                        ))}
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Fallback text area */}
+                  <Card className="rounded-[35px] shadow-xl border-none overflow-hidden">
+                    <CardHeader className="p-8 border-b border-slate-100">
+                      <CardTitle className="text-xl font-black text-slate-700">Optional: Type Your Responses</CardTitle>
+                      <p className="text-muted-foreground text-sm font-medium mt-1">No mic available? Type your answers here for automated grading instead.</p>
+                    </CardHeader>
+                    <CardContent className="p-8">
+                      <Textarea
+                        placeholder="Type all your speaking responses here..."
+                        rows={10}
+                        className="rounded-[25px] border-2 border-slate-200 p-7 text-lg font-bold focus:ring-[10px] focus:ring-orange-500/10 focus:border-orange-400 transition-all"
+                        value={answers['sp_answers'] ?? ''}
+                        onChange={e => setAnswers(prev => ({ ...prev, sp_answers: e.target.value }))}
+                      />
+                      {(answers['sp_answers'] ?? '').length > 0 && (
+                        <div className="flex justify-end mt-4">
+                          <Badge className="bg-orange-600 text-white px-6 py-2 rounded-full font-black">
+                            {(answers['sp_answers'] ?? '').split(/\s+/).filter(Boolean).length} Words
+                          </Badge>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 </div>
