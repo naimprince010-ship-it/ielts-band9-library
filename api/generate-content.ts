@@ -283,36 +283,131 @@ You are an IELTS exam content creator. Generate IELTS ${testType} writing prompt
 
 Topic theme: ${topic}
 
-Generate a JSON response with this exact structure:
+${testType === 'academic' ? `For Academic Task 1, choose the MOST APPROPRIATE visual type for "${topic}" from these 5 options:
+1. "line" chart (chartData) — for trends over time (years/decades)
+2. "bar" chart (chartData) — for comparing quantities across categories
+3. "pie" chart (chartData) — for proportions/percentages of a whole
+4. "table" (tableData) — for detailed multi-row/column data comparisons
+5. "process" (processData) — for stages of production, manufacturing, or natural cycles
+6. "map" (mapData) — for how a location changes over time (before/after town/building plans)
+
+Return task1 with EXACTLY ONE visual field (chartData, tableData, processData, OR mapData).
+
+JSON schema for each visual type:
+
+chartData (line/bar/pie):
+{
+  "type": "line",
+  "title": "Internet Usage in 5 Countries (2000–2020)",
+  "description": "Percentage (%) of population",
+  "labels": ["2000", "2005", "2010", "2015", "2020"],
+  "unit": "%", "yMin": 0, "yMax": 100,
+  "datasets": [
+    { "label": "UK", "data": [30, 52, 70, 84, 92] },
+    { "label": "India", "data": [2, 5, 18, 38, 65] }
+  ]
+}
+For pie: datasets has ONE entry, data[] = values for each label[], labels[] = slice names.
+
+tableData:
+{
+  "type": "table",
+  "title": "Average Household Expenditure by Category (2000–2020)",
+  "unit": "%",
+  "headers": ["Category", "2000", "2010", "2020"],
+  "rows": [
+    ["Food", "35", "28", "22"],
+    ["Housing", "20", "25", "30"],
+    ["Transport", "15", "17", "19"]
+  ]
+}
+
+processData:
+{
+  "type": "process",
+  "title": "The Process of Coffee Production",
+  "isCircular": false,
+  "steps": [
+    { "label": "Cherries Harvested", "shape": "oval", "description": "Ripe cherries picked by hand" },
+    { "label": "Pulping", "shape": "rect", "description": "Skin and pulp removed" },
+    { "label": "Fermentation", "shape": "rect", "description": "48–72 hours in water" },
+    { "label": "Drying", "shape": "rect" },
+    { "label": "Roasting", "shape": "rect" },
+    { "label": "Packaging & Export", "shape": "oval" }
+  ]
+}
+shape: "oval"=Start/End, "rect"=Process step, "diamond"=Decision. Use "isCircular": true for cyclic processes (e.g. water cycle).
+
+mapData:
+{
+  "type": "map",
+  "title": "Changes to Greenfield Town (1990 and 2020)",
+  "description": "The maps show how the town developed over 30 years.",
+  "plans": [
+    {
+      "label": "1990 (Before)",
+      "zones": [
+        { "label": "Park", "row": 1, "col": 1, "color": "#86efac" },
+        { "label": "Farm", "row": 1, "col": 2, "color": "#fde68a" },
+        { "label": "Houses", "row": 2, "col": 1, "color": "#fda4af" },
+        { "label": "River", "row": 3, "col": 1, "colSpan": 2, "color": "#93c5fd" }
+      ]
+    },
+    {
+      "label": "2020 (After)",
+      "zones": [
+        { "label": "Car Park", "row": 1, "col": 1, "color": "#e2e8f0" },
+        { "label": "Mall", "row": 1, "col": 2, "color": "#fdba74" },
+        { "label": "Hotel", "row": 2, "col": 1, "color": "#fbbf24" },
+        { "label": "Office", "row": 2, "col": 2, "color": "#93c5fd" },
+        { "label": "River", "row": 3, "col": 1, "colSpan": 2, "color": "#93c5fd" }
+      ]
+    }
+  ]
+}
+Map zones: row/col are 1-indexed grid positions. Use rowSpan/colSpan for zones spanning multiple cells.
+
+Now generate a JSON response with this EXACT structure:
 {
   "task1": {
-    "title": "Task 1: ${testType === 'academic' ? 'Report Writing' : 'Letter Writing'}",
-    "prompt": "<p class='mb-4'>Description of the task...</p><p class='mb-4'><strong>Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</strong></p><p class='text-gray-600'>Write at least 150 words.</p>",
-    "tips": [
-      "Tip 1 for this task",
-      "Tip 2 for this task",
-      "Tip 3 for this task"
-    ],
-    "sampleAnswer": "A complete sample answer of 150-180 words demonstrating band 8-9 level writing."
+    "title": "Task 1: Report Writing",
+    "prompt": "<p class='mb-4'>The [chart/table/diagram/map] below shows [description].</p><p class='mb-4'><strong>Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</strong></p><p class='text-gray-600'>Write at least 150 words.</p>",
+    "<chartData OR tableData OR processData OR mapData>": { ... },
+    "tips": ["Tip 1","Tip 2","Tip 3"],
+    "sampleAnswer": "A complete sample answer of 160-200 words at band 8-9 level."
   },
   "task2": {
     "title": "Task 2: Essay Writing",
-    "prompt": "<p class='mb-4'><strong>Essay question statement here.</strong></p><p class='mb-4'><strong>Discuss both views and give your own opinion.</strong></p><p class='text-gray-600'>Write at least 250 words.</p>",
-    "tips": [
-      "Tip 1 for essay writing",
-      "Tip 2 for essay writing",
-      "Tip 3 for essay writing"
-    ],
-    "sampleAnswer": "A complete sample answer of 280-320 words demonstrating band 8-9 level writing with clear structure: introduction, body paragraphs, and conclusion."
+    "prompt": "<p class='mb-4'><strong>Essay question statement.</strong></p><p class='mb-4'><strong>Discuss both views and give your own opinion.</strong></p><p class='text-gray-600'>Write at least 250 words.</p>",
+    "tips": ["Tip 1","Tip 2","Tip 3"],
+    "sampleAnswer": "A complete sample answer of 280-320 words."
   }
 }
 
-For Academic Task 1: Create a data description task (chart, graph, table, or process diagram description).
-For General Task 1: Create a letter writing task (formal, semi-formal, or informal).
-For Task 2: Create a discussion/opinion essay on a relevant topic.
+RULES:
+- Include ONLY ONE of: chartData, tableData, processData, mapData in task1
+- Do NOT include chartData in task2
+- For the prompt text, describe the visual accurately
+- Return ONLY valid JSON, no markdown or explanation.` : `For General Training Task 1, create a letter writing task (no chart needed).
 
-Return ONLY valid JSON, no markdown or explanation.
+Generate a JSON response with this EXACT structure:
+{
+  "task1": {
+    "title": "Task 1: Letter Writing",
+    "prompt": "<p class='mb-4'>[Letter scenario]</p><p class='mb-4'><strong>In your letter:</strong></p><ul class='list-disc pl-5 mb-4 text-gray-700'><li>[Point 1]</li><li>[Point 2]</li><li>[Point 3]</li></ul><p class='text-gray-600'>Write at least 150 words.</p>",
+    "tips": ["Tip 1","Tip 2","Tip 3"],
+    "sampleAnswer": "A complete sample answer of 160-200 words."
+  },
+  "task2": {
+    "title": "Task 2: Essay Writing",
+    "prompt": "<p class='mb-4'><strong>Essay question.</strong></p><p class='mb-4'><strong>Discuss both views and give your own opinion.</strong></p><p class='text-gray-600'>Write at least 250 words.</p>",
+    "tips": ["Tip 1","Tip 2","Tip 3"],
+    "sampleAnswer": "A complete sample answer of 280-320 words."
+  }
+}
+Return ONLY valid JSON, no markdown or explanation.`}
 `;
+
 
 const SPEAKING_PROMPT = (topic: string, difficulty: string) => `
 You are an IELTS exam content creator. Generate a complete IELTS speaking test with all 3 parts.

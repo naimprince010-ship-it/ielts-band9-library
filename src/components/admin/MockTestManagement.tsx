@@ -42,6 +42,7 @@ import {
 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { cn } from '@/lib/utils';
+import { WritingTask1Renderer } from '@/components/test/WritingTask1Renderer';
 import {
   ReadingTest,
   ReadingPassage,
@@ -1632,8 +1633,20 @@ function WritingTestBuilder({
     if (topic && onTitleSuggested && !data.tasks?.length) {
       onTitleSuggested(`Writing Test: ${topic}`);
     }
-    const aiContent = content as { task1: { title: string; prompt: string; sampleAnswer?: string }; task2: { title: string; prompt: string; sampleAnswer?: string } };
-    
+    const aiContent = content as {
+      task1: {
+        title: string;
+        prompt: string;
+        chartData?: import('@/types').WritingChartData;
+        tableData?: import('@/types').WritingTableData;
+        processData?: import('@/types').WritingProcessData;
+        mapData?: import('@/types').WritingMapData;
+        sampleAnswer?: string;
+        tips?: string[];
+      };
+      task2: { title: string; prompt: string; sampleAnswer?: string; tips?: string[] };
+    };
+
     const newTasks: [WritingTask, WritingTask] = [
       {
         id: `task-1-${Date.now()}`,
@@ -1641,8 +1654,13 @@ function WritingTestBuilder({
         taskType: 'task1',
         title: aiContent.task1.title || 'Task 1',
         prompt: aiContent.task1.prompt,
+        chartData: aiContent.task1.chartData,
+        tableData: aiContent.task1.tableData,
+        processData: aiContent.task1.processData,
+        mapData: aiContent.task1.mapData,
         minWords: 150,
         recommendedTime: 20,
+        tips: aiContent.task1.tips,
         sampleAnswer: aiContent.task1.sampleAnswer
       },
       {
@@ -1653,6 +1671,7 @@ function WritingTestBuilder({
         prompt: aiContent.task2.prompt,
         minWords: 250,
         recommendedTime: 40,
+        tips: aiContent.task2.tips,
         sampleAnswer: aiContent.task2.sampleAnswer
       }
     ];
@@ -1747,14 +1766,78 @@ function WritingTestBuilder({
                     />
                   </div>
 
+                  {/* Task 1 Visual section */}
                   {taskIndex === 0 && (
-                    <div>
-                      <Label>Image URL (for charts/graphs)</Label>
-                      <Input
-                        value={task.imageUrl || ''}
-                        onChange={(e) => updateTask(taskIndex, { imageUrl: e.target.value })}
-                        placeholder="https://example.com/chart.png"
-                      />
+                    <div className="space-y-3">
+                      <Label className="font-semibold">Task 1 Visual</Label>
+
+                      {(task.chartData || task.tableData || task.processData || task.mapData) ? (
+                        <div className="space-y-3">
+                          <WritingTask1Renderer task={task} compact />
+                          <div className="flex items-center gap-2">
+                            <Badge className="bg-emerald-100 text-emerald-700 font-bold">
+                              ✓ Visual Generated
+                            </Badge>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="text-rose-500 hover:text-rose-700 text-xs"
+                              onClick={() => updateTask(taskIndex, {
+                                chartData: undefined,
+                                tableData: undefined,
+                                processData: undefined,
+                                mapData: undefined,
+                              })}
+                            >
+                              Remove Visual
+                            </Button>
+                          </div>
+                          <details>
+                            <summary className="text-xs text-slate-400 cursor-pointer hover:text-slate-600 select-none">
+                              Edit visual data (JSON)
+                            </summary>
+                            <Textarea
+                              className="mt-2 font-mono text-xs"
+                              rows={10}
+                              value={JSON.stringify(
+                                task.chartData || task.tableData || task.processData || task.mapData,
+                                null, 2
+                              )}
+                              onChange={(e) => {
+                                try {
+                                  const parsed = JSON.parse(e.target.value);
+                                  const t = parsed?.type;
+                                  if (t === 'line' || t === 'bar' || t === 'pie') {
+                                    updateTask(taskIndex, { chartData: parsed, tableData: undefined, processData: undefined, mapData: undefined });
+                                  } else if (t === 'table') {
+                                    updateTask(taskIndex, { tableData: parsed, chartData: undefined, processData: undefined, mapData: undefined });
+                                  } else if (t === 'process') {
+                                    updateTask(taskIndex, { processData: parsed, chartData: undefined, tableData: undefined, mapData: undefined });
+                                  } else if (t === 'map') {
+                                    updateTask(taskIndex, { mapData: parsed, chartData: undefined, tableData: undefined, processData: undefined });
+                                  }
+                                } catch {
+                                  // ignore parse errors while typing
+                                }
+                              }}
+                            />
+                          </details>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 text-center text-slate-400 text-sm">
+                            <p className="font-medium">No visual yet</p>
+                            <p className="text-xs mt-1">Use AI Generate (Academic Task 1) to auto-create a chart, table, process diagram, or map.</p>
+                          </div>
+                          <Label className="text-xs text-slate-500">Legacy Image URL (optional fallback)</Label>
+                          <Input
+                            value={task.imageUrl || ''}
+                            onChange={(e) => updateTask(taskIndex, { imageUrl: e.target.value })}
+                            placeholder="https://example.com/chart.png"
+                          />
+                        </div>
+                      )}
                     </div>
                   )}
 
@@ -2325,7 +2408,8 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
     try {
       const now = Date.now();
       // 1. Reading (Generate 3 passages one by one)
-      const readingPassagesData = [];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const readingPassagesData: any[] = [];
       for (let i = 1; i <= 3; i++) {
         const pData = await generateModule('reading', i);
         readingPassagesData.push(pData);

@@ -314,6 +314,78 @@ export type WritingTaskType = 'task1' | 'task2';
 // Writing test type (Academic vs General)
 export type WritingTestType = 'academic' | 'general';
 
+// Chart dataset for Writing Task 1 programmatic charts
+export interface WritingChartDataset {
+  label: string;
+  data: number[];
+  borderColor?: string;
+  backgroundColor?: string;
+}
+
+// Structured chart data for Writing Task 1 Academic (rendered via Chart.js)
+export interface WritingChartData {
+  type: 'line' | 'bar' | 'pie';   // pie: datasets[0].data = values, labels = slice names
+  title: string;                 // Chart title shown above the chart
+  description?: string;          // Axis/chart description
+  labels: string[];              // X-axis labels (line/bar) OR slice names (pie)
+  unit?: string;                 // Y-axis unit, e.g. "%", "million tonnes"
+  yMin?: number;                 // Optional Y-axis minimum (line/bar only)
+  yMax?: number;                 // Optional Y-axis maximum (line/bar only)
+  datasets: WritingChartDataset[];
+}
+
+// Structured table data for Writing Task 1
+export interface WritingTableData {
+  type: 'table';
+  title: string;
+  description?: string;
+  unit?: string;                 // e.g. "million tonnes", "%"
+  source?: string;               // Optional data source
+  headers: string[];             // Column headers
+  rows: string[][];              // Data rows (string for flexibility)
+}
+
+// Single step in a process diagram
+export interface WritingProcessStep {
+  label: string;                 // Short step name
+  description?: string;          // Optional longer description
+  shape?: 'oval' | 'rect' | 'diamond'; // Start/End=oval, Process=rect, Decision=diamond
+}
+
+// Process / flowchart diagram for Writing Task 1
+export interface WritingProcessData {
+  type: 'process';
+  title: string;
+  description?: string;
+  isCircular?: boolean;          // True for cyclic processes (e.g. water cycle)
+  steps: WritingProcessStep[];
+}
+
+// A single zone/area in a map plan
+export interface WritingMapZone {
+  label: string;                 // Zone name (e.g. "Park", "School")
+  row: number;                   // 1-indexed grid row
+  col: number;                   // 1-indexed grid col
+  rowSpan?: number;              // Number of rows to span (default 1)
+  colSpan?: number;              // Number of cols to span (default 1)
+  color?: string;                // Background colour (hex or tailwind-compatible)
+  description?: string;          // Optional detail
+}
+
+// A single plan (before OR after) in a map visual
+export interface WritingMapPlan {
+  label?: string;                // e.g. "1990 (Before)" / "2024 (After)"
+  zones: WritingMapZone[];
+}
+
+// Map / town plan for Writing Task 1
+export interface WritingMapData {
+  type: 'map';
+  title: string;
+  description?: string;
+  plans: WritingMapPlan[];       // 1 plan = single map; 2 plans = before/after
+}
+
 // Individual Writing Task
 export interface WritingTask {
   id: string;
@@ -321,7 +393,12 @@ export interface WritingTask {
   taskType: WritingTaskType;
   title: string;                 // Task title (e.g., "Task 1: Report Writing")
   prompt: string;                // The question/prompt text (can include HTML)
-  imageUrl?: string;             // Optional image (chart, graph, diagram for Task 1)
+  imageUrl?: string;             // Optional image URL (legacy / fallback)
+  // Task 1 visual — only ONE of these should be set at a time:
+  chartData?: WritingChartData;   // Line / Bar / Pie chart
+  tableData?: WritingTableData;   // Data table
+  processData?: WritingProcessData; // Process / flowchart diagram
+  mapData?: WritingMapData;       // Map / town plan
   minWords: number;              // Minimum word count (150 for Task 1, 250 for Task 2)
   recommendedTime: number;       // Recommended time in minutes (20 for Task 1, 40 for Task 2)
   tips?: string[];               // Optional writing tips

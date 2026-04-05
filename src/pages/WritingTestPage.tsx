@@ -22,6 +22,8 @@ import {
   WritingTestResult,
   WritingTaskType
 } from '@/types';
+import { WritingTask1Renderer } from '@/components/test/WritingTask1Renderer';
+
 
 // ============================================
 // Sample Writing Test Data
@@ -539,14 +541,10 @@ export default function WritingTestPage() {
               dangerouslySetInnerHTML={{ __html: currentTaskData.prompt }}
             />
 
-            {/* Task Image (for Task 1) */}
-            {currentTaskData.imageUrl && (
+            {/* Task 1: Unified visual renderer (chart / table / process / map / legacy image) */}
+            {currentTaskData.taskNumber === 1 && (
               <div className="mb-6">
-                <img
-                  src={currentTaskData.imageUrl}
-                  alt="Task visual"
-                  className="max-w-full rounded-lg border shadow-sm"
-                />
+                <WritingTask1Renderer task={currentTaskData} />
               </div>
             )}
 
