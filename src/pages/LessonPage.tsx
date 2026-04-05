@@ -19,6 +19,120 @@ import { PieChartCoreExplanation } from '@/components/ui/PieChartVisuals';
 import { useLessons } from '@/contexts/LessonContext';
 import { useAuth } from '@/contexts/AuthContext';
 
+// Helper function to parse markdown-style text and render properly
+function parseMarkdownText(text: string): React.ReactNode {
+  if (!text) return null;
+  
+  // Split by **text** pattern for bold
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  
+  return parts.map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      const boldText = part.slice(2, -2);
+      return <strong key={index} className="font-semibold text-foreground">{boldText}</strong>;
+    }
+    return <span key={index}>{part}</span>;
+  });
+}
+
+// Helper to parse Speaking examples with Question/Band format
+function parseExampleContent(text: string): React.ReactNode {
+  if (!text) return null;
+  
+  // Check if it has Question/Band format
+  const hasQuestionFormat = text.includes('**Question:') || text.includes('**Band');
+  
+  if (!hasQuestionFormat) {
+    return <p className="text-muted-foreground leading-relaxed">{parseMarkdownText(text)}</p>;
+  }
+  
+  // Parse Question, Band 6, Band 9 sections
+  const questionMatch = text.match(/\*\*Question:\*\*\s*([^*]+?)(?=\*\*Band|\*\*$|$)/);
+  const band6Match = text.match(/\*\*Band 6:\*\*\s*"([^"]+)"/);
+  const band9Match = text.match(/\*\*Band 9:\*\*\s*"([^"]+)"/);
+  
+  return (
+    <div className="space-y-4">
+      {questionMatch && (
+        <div className="bg-accent/10 border border-accent/20 rounded-lg p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <MessageSquare className="h-4 w-4 text-accent" />
+            <span className="font-semibold text-accent text-sm uppercase tracking-wide">Question</span>
+          </div>
+          <p className="text-foreground font-medium">{questionMatch[1].trim()}</p>
+        </div>
+      )}
+      
+      {(band6Match || band9Match) && (
+        <div className="grid gap-4 md:grid-cols-2">
+          {band6Match && (
+            <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Badge variant="outline" className="bg-amber-100 text-amber-700 border-amber-300 dark:bg-amber-900 dark:text-amber-300">
+                  Band 6
+                </Badge>
+                <span className="text-xs text-amber-600 dark:text-amber-400">Basic Response</span>
+              </div>
+              <p className="text-amber-900 dark:text-amber-100 text-sm leading-relaxed italic">"{band6Match[1]}"</p>
+            </div>
+          )}
+          
+          {band9Match && (
+            <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Badge variant="outline" className="bg-green-100 text-green-700 border-green-300 dark:bg-green-900 dark:text-green-300">
+                  Band 9
+                </Badge>
+                <span className="text-xs text-green-600 dark:text-green-400">Advanced Response</span>
+              </div>
+              <p className="text-green-900 dark:text-green-100 text-sm leading-relaxed italic">"{band9Match[1]}"</p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Helper to parse vocabulary sections in examples
+function parseVocabularySection(text: string): React.ReactNode {
+  if (!text) return null;
+  
+  // Check for vocabulary format **WEATHER VOCABULARY:** etc.
+  const vocabMatch = text.match(/\*\*([A-Z\s]+VOCABULARY[^:]*|[A-Z\s]+):\*\*/);
+  
+  if (!vocabMatch) {
+    return <p className="text-muted-foreground leading-relaxed">{parseMarkdownText(text)}</p>;
+  }
+  
+  // Parse into structured format
+  const sections = text.split(/\*\*([^*]+):\*\*/g).filter(Boolean);
+  
+  return (
+    <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4 space-y-3">
+      <div className="flex items-center gap-2">
+        <BookMarked className="h-4 w-4 text-blue-600" />
+        <span className="font-semibold text-blue-700 dark:text-blue-300 text-sm uppercase tracking-wide">Key Vocabulary</span>
+      </div>
+      <div className="grid gap-2">
+        {sections.map((section, idx) => {
+          if (idx % 2 === 0) {
+            const content = sections[idx + 1];
+            if (!content) return null;
+            return (
+              <div key={idx} className="flex flex-wrap gap-2 items-start">
+                <Badge variant="secondary" className="text-xs shrink-0">{section}</Badge>
+                <p className="text-sm text-muted-foreground flex-1">{content.trim()}</p>
+              </div>
+            );
+          }
+          return null;
+        })}
+      </div>
+    </div>
+  );
+}
+
 export function LessonPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
@@ -421,12 +535,18 @@ export function LessonPage() {
                   <CheckCircle className="h-5 w-5 text-green-500" />
                   Examples ({content.examples.length})
                 </CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Real IELTS examples with Band 6 vs Band 9 comparisons
+                </p>
               </CardHeader>
               <CardContent>
-                <Accordion type="single" collapsible className="w-full" defaultValue="examples-0">
+                <div className="space-y-6">
                   {content.examples.map((example, index) => {
-                    // Parse "Error: X → Correct: Y" format for better display
+                    // Check for different formats
                     const hasErrorFormat = example.sentence.includes('Error:') && example.sentence.includes('Correct:');
+                    const hasQuestionFormat = example.sentence.includes('**Question:') || example.sentence.includes('**Band');
+                    const hasVocabFormat = example.sentence.includes('VOCABULARY:') || example.explanation?.includes('VOCABULARY:');
+                    
                     let errorPart = '';
                     let correctPart = '';
                     
@@ -437,36 +557,66 @@ export function LessonPage() {
                     }
                     
                     return (
-                      <AccordionItem key={index} value={`examples-${index}`}>
-                        <AccordionTrigger className="text-left hover:no-underline">
+                      <div key={index} className="border border-border rounded-xl overflow-hidden bg-card">
+                        {/* Example Header */}
+                        <div className="bg-muted/50 px-4 py-3 border-b border-border flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <span className="bg-accent text-accent-foreground text-xs font-bold px-2 py-1 rounded">
+                              Example {index + 1}
+                            </span>
+                            <SpeakButton text={example.sentence.replace(/\*\*/g, '')} size="sm" />
+                          </div>
+                        </div>
+                        
+                        {/* Example Content */}
+                        <div className="p-4 space-y-4">
                           {hasErrorFormat ? (
-                            <div className="flex flex-col sm:flex-row sm:items-center gap-2 pr-4 w-full">
-                              <div className="flex items-center gap-2 flex-1">
-                                <XCircle className="h-4 w-4 text-red-500 flex-shrink-0" />
-                                <span className="text-red-600 line-through text-sm">{errorPart}</span>
+                            // Error/Correct format
+                            <div className="grid gap-3 md:grid-cols-2">
+                              <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                                <div className="flex items-center gap-2 mb-2">
+                                  <XCircle className="h-4 w-4 text-red-500" />
+                                  <span className="text-xs font-semibold text-red-600 dark:text-red-400 uppercase">Incorrect</span>
+                                </div>
+                                <p className="text-red-700 dark:text-red-300 line-through">{errorPart}</p>
                               </div>
-                              <span className="text-muted-foreground text-sm hidden sm:block">→</span>
-                              <div className="flex items-center gap-2 flex-1">
-                                <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                                <span className="text-green-700 font-medium text-sm">{correctPart}</span>
+                              <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                                <div className="flex items-center gap-2 mb-2">
+                                  <CheckCircle className="h-4 w-4 text-green-500" />
+                                  <span className="text-xs font-semibold text-green-600 dark:text-green-400 uppercase">Correct</span>
+                                </div>
+                                <p className="text-green-700 dark:text-green-300 font-medium">{correctPart}</p>
                               </div>
                             </div>
+                          ) : hasQuestionFormat ? (
+                            // Question/Band format (Speaking examples)
+                            parseExampleContent(example.sentence)
                           ) : (
-                            <div className="flex items-center gap-2 pr-4">
-                              <SpeakButton text={example.sentence} size="sm" />
-                              <span className="font-medium text-foreground">"{example.sentence}"</span>
+                            // Regular sentence
+                            <div className="bg-muted/30 rounded-lg p-4">
+                              <p className="text-foreground leading-relaxed">{parseMarkdownText(example.sentence)}</p>
                             </div>
                           )}
-                        </AccordionTrigger>
-                        <AccordionContent>
-                          <div className="border-l-4 border-accent pl-4 py-2 bg-muted/50 rounded-r-lg">
-                            <p className="text-muted-foreground">{example.explanation}</p>
-                          </div>
-                        </AccordionContent>
-                      </AccordionItem>
+                          
+                          {/* Explanation */}
+                          {example.explanation && (
+                            hasVocabFormat || example.explanation.includes('**') ? (
+                              parseVocabularySection(example.explanation)
+                            ) : (
+                              <div className="border-l-4 border-accent pl-4 py-2">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <Lightbulb className="h-4 w-4 text-accent" />
+                                  <span className="text-xs font-semibold text-accent uppercase">Explanation</span>
+                                </div>
+                                <p className="text-muted-foreground leading-relaxed">{parseMarkdownText(example.explanation)}</p>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </div>
                     );
                   })}
-                </Accordion>
+                </div>
               </CardContent>
             </Card>
 
