@@ -46,20 +46,32 @@ function parseExampleContent(text: string): React.ReactNode {
     return <p className="text-muted-foreground leading-relaxed">{parseMarkdownText(text)}</p>;
   }
   
-  // Parse Question, Band 6, Band 9 sections
-  const questionMatch = text.match(/\*\*Question:\*\*\s*([^*]+?)(?=\*\*Band|\*\*$|$)/);
+  // Parse Question - handles both formats:
+  // Format 1: **Question: What's the weather?**
+  // Format 2: **Question:** What's the weather?
+  let questionText = '';
+  const questionMatch1 = text.match(/\*\*Question:\s*([^*]+?)\*\*/);
+  const questionMatch2 = text.match(/\*\*Question:\*\*\s*([^*]+?)(?=\*\*Band|$)/);
+  
+  if (questionMatch1) {
+    questionText = questionMatch1[1].trim();
+  } else if (questionMatch2) {
+    questionText = questionMatch2[1].trim();
+  }
+  
+  // Parse Band 6 and Band 9 responses
   const band6Match = text.match(/\*\*Band 6:\*\*\s*"([^"]+)"/);
   const band9Match = text.match(/\*\*Band 9:\*\*\s*"([^"]+)"/);
   
   return (
     <div className="space-y-4">
-      {questionMatch && (
+      {questionText && (
         <div className="bg-accent/10 border border-accent/20 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-2">
             <MessageSquare className="h-4 w-4 text-accent" />
             <span className="font-semibold text-accent text-sm uppercase tracking-wide">Question</span>
           </div>
-          <p className="text-foreground font-medium">{questionMatch[1].trim()}</p>
+          <p className="text-foreground font-medium text-lg">{questionText}</p>
         </div>
       )}
       
