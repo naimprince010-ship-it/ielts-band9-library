@@ -398,6 +398,23 @@ export function MockTestManagement() {
     }
   };
 
+  const checkTestIntegrity = (test: MockTest): { status: 'complete' | 'incomplete'; message?: string } => {
+    const data = test.test_data;
+    if (test.module_type === 'listening') {
+      const lData = data as ListeningTest;
+      if (!lData.audioUrl) return { status: 'incomplete', message: 'Missing Audio' };
+    }
+    if (test.module_type === 'writing') {
+      const wData = data as WritingTest;
+      const task1 = wData.tasks?.find(t => t.taskType === 'task1');
+      if (wData.testType === 'academic' && task1) {
+        const hasVisual = task1.chartData || task1.tableData || task1.processData || task1.mapData || task1.imageUrl;
+        if (!hasVisual) return { status: 'incomplete', message: 'Missing Task 1 Visual' };
+      }
+    }
+    return { status: 'complete' };
+  };
+
   if (!isSupabaseConfigured()) {
     return (
       <Card className="border-none shadow-sm rounded-[2rem] overflow-hidden">
@@ -515,6 +532,12 @@ export function MockTestManagement() {
                       <div className="flex items-center gap-2">
                         {test.is_premium && (
                           <Badge className="bg-amber-100 text-amber-800 rounded-lg font-bold">Premium</Badge>
+                        )}
+                        {checkTestIntegrity(test).status === 'incomplete' && (
+                          <Badge variant="destructive" className="bg-rose-50 text-rose-600 border border-rose-100 gap-1.5 font-bold animate-pulse rounded-lg">
+                            <AlertCircle className="h-3 w-3" />
+                            {checkTestIntegrity(test).message}
+                          </Badge>
                         )}
                         <Badge className={cn("rounded-lg font-bold px-3 py-1", test.is_published ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-800')}>
                           {test.is_published ? 'Published' : 'Draft'}

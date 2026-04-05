@@ -9,7 +9,13 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    watch: {
+      ignored: ['**/src/components/exam/**']
+    }
+  },
   build: {
+    chunkSizeWarningLimit: 600,
     rollupOptions: {
       output: {
         manualChunks(id) {
@@ -32,8 +38,6 @@ export default defineConfig({
           }
         }
       }
-    },
-    chunkSizeWarningLimit: 600
+    }
   }
 })
-
