@@ -1708,6 +1708,44 @@ function WritingTestBuilder({
     onChange({ ...data, tasks: tasks as [WritingTask, WritingTask] });
   };
 
+  // State for visual-only generation
+  const [isGeneratingVisual, setIsGeneratingVisual] = useState(false);
+  const [visualTopic, setVisualTopic] = useState('');
+  const [visualGenError, setVisualGenError] = useState<string | null>(null);
+
+  const handleGenerateVisualOnly = async () => {
+    if (!visualTopic.trim()) return;
+    setIsGeneratingVisual(true);
+    setVisualGenError(null);
+    try {
+      const response = await fetch('/api/generate-content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          moduleType: 'writing',
+          topic: visualTopic.trim(),
+          testType: data.testType || 'academic',
+        }),
+      });
+      const result = await response.json();
+      if (!result.success) throw new Error(result.error || 'AI generation failed');
+      const task1 = result.content?.task1;
+      if (!task1) throw new Error('No task1 content in AI response');
+      // Apply only visual data — do NOT overwrite existing prompt/title
+      updateTask(0, {
+        chartData: task1.chartData,
+        tableData: task1.tableData,
+        processData: task1.processData,
+        mapData: task1.mapData,
+      });
+      setVisualTopic('');
+    } catch (err) {
+      setVisualGenError(err instanceof Error ? err.message : 'Failed to generate visual');
+    } finally {
+      setIsGeneratingVisual(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <AIContentGenerator
@@ -1848,17 +1886,60 @@ function WritingTestBuilder({
                           </details>
                         </div>
                       ) : (
-                        <div className="space-y-2">
-                          <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 text-center text-slate-400 text-sm">
-                            <p className="font-medium">No visual yet</p>
-                            <p className="text-xs mt-1">Use AI Generate (Academic Task 1) to auto-create a chart, table, process diagram, or map.</p>
+                        <div className="space-y-3">
+                          {/* Quick visual generator */}
+                          <div className="bg-gradient-to-br from-indigo-50 to-violet-50 border border-indigo-100 rounded-xl p-4 space-y-3">
+                            <div className="flex items-center gap-2">
+                              <Sparkles className="h-4 w-4 text-indigo-500" />
+                              <span className="text-sm font-semibold text-indigo-700">Generate Visual with AI</span>
+                            </div>
+                            <p className="text-xs text-slate-500">Enter the topic and AI will auto-select the best visual type (chart, table, process diagram, or map).</p>
+                            <div className="flex gap-2">
+                              <Input
+                                value={visualTopic}
+                                onChange={(e) => setVisualTopic(e.target.value)}
+                                placeholder="e.g. Work and Employment, Climate Change..."
+                                className="flex-1 text-sm bg-white"
+                                onKeyDown={(e) => { if (e.key === 'Enter') handleGenerateVisualOnly(); }}
+                              />
+                              <Button
+                                type="button"
+                                onClick={handleGenerateVisualOnly}
+                                disabled={isGeneratingVisual || !visualTopic.trim()}
+                                className="bg-indigo-600 hover:bg-indigo-700 text-white gap-1.5 shrink-0"
+                                size="sm"
+                              >
+                                {isGeneratingVisual ? (
+                                  <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                  <Sparkles className="h-4 w-4" />
+                                )}
+                                {isGeneratingVisual ? 'Generating...' : 'Generate'}
+                              </Button>
+                            </div>
+                            {visualGenError && (
+                              <p className="text-xs text-rose-500 flex items-center gap-1">
+                                <AlertCircle className="h-3 w-3" />
+                                {visualGenError}
+                              </p>
+                            )}
                           </div>
-                          <Label className="text-xs text-slate-500">Legacy Image URL (optional fallback)</Label>
-                          <Input
-                            value={task.imageUrl || ''}
-                            onChange={(e) => updateTask(taskIndex, { imageUrl: e.target.value })}
-                            placeholder="https://example.com/chart.png"
-                          />
+
+                          <div className="flex items-center gap-2">
+                            <div className="flex-1 h-px bg-slate-200" />
+                            <span className="text-[10px] text-slate-400 uppercase tracking-wider">or</span>
+                            <div className="flex-1 h-px bg-slate-200" />
+                          </div>
+
+                          <div>
+                            <Label className="text-xs text-slate-500">Legacy Image URL (optional fallback)</Label>
+                            <Input
+                              value={task.imageUrl || ''}
+                              onChange={(e) => updateTask(taskIndex, { imageUrl: e.target.value })}
+                              placeholder="https://example.com/chart.png"
+                              className="mt-1"
+                            />
+                          </div>
                         </div>
                       )}
                     </div>
