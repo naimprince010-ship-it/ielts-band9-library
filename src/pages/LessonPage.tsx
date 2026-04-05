@@ -35,11 +35,72 @@ function parseMarkdownText(text: string): React.ReactNode {
   });
 }
 
+// Helper to parse Writing Task examples (Model Answer format)
+function parseWritingExample(text: string): React.ReactNode {
+  if (!text) return null;
+  
+  // Check for Writing Task format: BAND 9 MODEL ANSWER, Task:, Why Band 9:
+  const hasWritingFormat = text.includes('MODEL ANSWER') || text.includes('BAND 9:') || text.includes('Task:');
+  
+  if (!hasWritingFormat) return null;
+  
+  // Extract task/question if present
+  const taskMatch = text.match(/(?:\*\*)?Task:?\*?\*?\s*(.+?)(?=(?:\*\*)?(?:BAND|Model|$))/i);
+  
+  // Extract model answer
+  const modelAnswerMatch = text.match(/BAND 9 MODEL ANSWER[^:]*:\s*"?([^"]+)"?(?=(?:Why Band|$))/i) ||
+                           text.match(/BAND 9:\s*"?([^"]+)"?/i);
+  
+  // Extract explanation
+  const whyBandMatch = text.match(/Why Band 9:\s*(.+?)$/i);
+  
+  return (
+    <div className="space-y-4">
+      {taskMatch && (
+        <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <FileText className="h-4 w-4 text-blue-600" />
+            <span className="font-semibold text-blue-700 dark:text-blue-300 text-sm uppercase tracking-wide">Task</span>
+          </div>
+          <p className="text-blue-900 dark:text-blue-100">{taskMatch[1].trim()}</p>
+        </div>
+      )}
+      
+      {modelAnswerMatch && (
+        <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Badge className="bg-green-600 text-white">Band 9</Badge>
+            <span className="text-sm text-green-700 dark:text-green-300 font-medium">Model Answer</span>
+          </div>
+          <p className="text-green-900 dark:text-green-100 leading-relaxed italic border-l-4 border-green-400 pl-4">
+            "{modelAnswerMatch[1].trim()}"
+          </p>
+        </div>
+      )}
+      
+      {whyBandMatch && (
+        <div className="border-l-4 border-accent pl-4 py-2">
+          <div className="flex items-center gap-2 mb-1">
+            <Lightbulb className="h-4 w-4 text-accent" />
+            <span className="text-xs font-semibold text-accent uppercase">Why Band 9</span>
+          </div>
+          <p className="text-muted-foreground leading-relaxed">{whyBandMatch[1].trim()}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // Helper to parse Speaking examples with Question/Band format
 function parseExampleContent(text: string): React.ReactNode {
   if (!text) return null;
   
-  // Check if it has Question/Band format
+  // First check for Writing Task format
+  if (text.includes('MODEL ANSWER') || text.includes('BAND 9:')) {
+    return parseWritingExample(text);
+  }
+  
+  // Check if it has Question/Band format (Speaking)
   const hasQuestionFormat = text.includes('**Question:') || text.includes('**Band');
   
   if (!hasQuestionFormat) {
