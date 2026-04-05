@@ -1710,11 +1710,15 @@ function WritingTestBuilder({
 
   // State for visual-only generation
   const [isGeneratingVisual, setIsGeneratingVisual] = useState(false);
-  const [visualTopic, setVisualTopic] = useState('');
+  const [visualTopicOverride, setVisualTopicOverride] = useState('');
   const [visualGenError, setVisualGenError] = useState<string | null>(null);
 
-  const handleGenerateVisualOnly = async () => {
-    if (!visualTopic.trim()) return;
+  // Strip HTML tags to get plain text context from the existing prompt
+  const stripHtml = (html: string) =>
+    html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+
+  const handleGenerateVisualOnly = async (contextText: string) => {
+    if (!contextText.trim()) return;
     setIsGeneratingVisual(true);
     setVisualGenError(null);
     try {
@@ -1723,7 +1727,7 @@ function WritingTestBuilder({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           moduleType: 'writing',
-          topic: visualTopic.trim(),
+          topic: contextText.substring(0, 400), // use prompt text as rich context
           testType: data.testType || 'academic',
         }),
       });
@@ -1731,14 +1735,14 @@ function WritingTestBuilder({
       if (!result.success) throw new Error(result.error || 'AI generation failed');
       const task1 = result.content?.task1;
       if (!task1) throw new Error('No task1 content in AI response');
-      // Apply only visual data — do NOT overwrite existing prompt/title
+      // Apply ONLY visual data — do NOT overwrite existing prompt/title
       updateTask(0, {
         chartData: task1.chartData,
         tableData: task1.tableData,
         processData: task1.processData,
         mapData: task1.mapData,
       });
-      setVisualTopic('');
+      setVisualTopicOverride('');
     } catch (err) {
       setVisualGenError(err instanceof Error ? err.message : 'Failed to generate visual');
     } finally {
@@ -1887,36 +1891,61 @@ function WritingTestBuilder({
                         </div>
                       ) : (
                         <div className="space-y-3">
-                          {/* Quick visual generator */}
                           <div className="bg-gradient-to-br from-indigo-50 to-violet-50 border border-indigo-100 rounded-xl p-4 space-y-3">
                             <div className="flex items-center gap-2">
                               <Sparkles className="h-4 w-4 text-indigo-500" />
                               <span className="text-sm font-semibold text-indigo-700">Generate Visual with AI</span>
                             </div>
-                            <p className="text-xs text-slate-500">Enter the topic and AI will auto-select the best visual type (chart, table, process diagram, or map).</p>
-                            <div className="flex gap-2">
-                              <Input
-                                value={visualTopic}
-                                onChange={(e) => setVisualTopic(e.target.value)}
-                                placeholder="e.g. Work and Employment, Climate Change..."
-                                className="flex-1 text-sm bg-white"
-                                onKeyDown={(e) => { if (e.key === 'Enter') handleGenerateVisualOnly(); }}
-                              />
-                              <Button
-                                type="button"
-                                onClick={handleGenerateVisualOnly}
-                                disabled={isGeneratingVisual || !visualTopic.trim()}
-                                className="bg-indigo-600 hover:bg-indigo-700 text-white gap-1.5 shrink-0"
-                                size="sm"
-                              >
-                                {isGeneratingVisual ? (
-                                  <Loader2 className="h-4 w-4 animate-spin" />
-                                ) : (
-                                  <Sparkles className="h-4 w-4" />
-                                )}
-                                {isGeneratingVisual ? 'Generating...' : 'Generate'}
-                              </Button>
-                            </div>
+
+                            {task.prompt ? (
+                              /* Prompt exists — one-click generate from existing prompt text */
+                              <>
+                                <div className="bg-white border border-indigo-100 rounded-lg px-3 py-2 text-xs text-slate-600 line-clamp-3">
+                                  <span className="font-semibold text-indigo-600">Context detected: </span>
+                                  {stripHtml(task.prompt).substring(0, 160)}...
+                                </div>
+                                <p className="text-xs text-slate-500">AI will read the existing prompt and auto-select the most appropriate visual (chart, table, process, or map).</p>
+                                <Button
+                                  type="button"
+                                  onClick={() => handleGenerateVisualOnly(stripHtml(task.prompt))}
+                                  disabled={isGeneratingVisual}
+                                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white gap-2"
+                                  size="sm"
+                                >
+                                  {isGeneratingVisual ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                  ) : (
+                                    <Sparkles className="h-4 w-4" />
+                                  )}
+                                  {isGeneratingVisual ? 'Generating Visual...' : '✨ Generate Visual from Prompt'}
+                                </Button>
+                              </>
+                            ) : (
+                              /* No prompt — show manual topic input */
+                              <>
+                                <p className="text-xs text-slate-500">Enter a topic and AI will auto-select the best visual type.</p>
+                                <div className="flex gap-2">
+                                  <Input
+                                    value={visualTopicOverride}
+                                    onChange={(e) => setVisualTopicOverride(e.target.value)}
+                                    placeholder="e.g. Work and Employment, Climate Change..."
+                                    className="flex-1 text-sm bg-white"
+                                    onKeyDown={(e) => { if (e.key === 'Enter') handleGenerateVisualOnly(visualTopicOverride); }}
+                                  />
+                                  <Button
+                                    type="button"
+                                    onClick={() => handleGenerateVisualOnly(visualTopicOverride)}
+                                    disabled={isGeneratingVisual || !visualTopicOverride.trim()}
+                                    className="bg-indigo-600 hover:bg-indigo-700 text-white gap-1.5 shrink-0"
+                                    size="sm"
+                                  >
+                                    {isGeneratingVisual ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                                    {isGeneratingVisual ? 'Generating...' : 'Generate'}
+                                  </Button>
+                                </div>
+                              </>
+                            )}
+
                             {visualGenError && (
                               <p className="text-xs text-rose-500 flex items-center gap-1">
                                 <AlertCircle className="h-3 w-3" />
