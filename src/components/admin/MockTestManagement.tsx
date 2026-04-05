@@ -596,7 +596,7 @@ export function MockTestManagement() {
                 <Input
                   id="title"
                   value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
                   placeholder={`e.g., ${formData.module_type.charAt(0).toUpperCase() + formData.module_type.slice(1)} Test 1`}
                 />
               </div>
@@ -604,14 +604,14 @@ export function MockTestManagement() {
                 <div className="flex items-center gap-2">
                   <Switch
                     checked={formData.is_premium}
-                    onCheckedChange={(checked) => setFormData({ ...formData, is_premium: checked })}
+                    onCheckedChange={(checked) => setFormData(prev => ({ ...prev, is_premium: checked }))}
                   />
                   <Label>Premium</Label>
                 </div>
                 <div className="flex items-center gap-2">
                   <Switch
                     checked={formData.is_published}
-                    onCheckedChange={(checked) => setFormData({ ...formData, is_published: checked })}
+                    onCheckedChange={(checked) => setFormData(prev => ({ ...prev, is_published: checked }))}
                   />
                   <Label>Published</Label>
                 </div>
@@ -621,32 +621,32 @@ export function MockTestManagement() {
                         {formData.module_type === 'reading' && (
                           <ReadingTestBuilder
                             data={formData.reading_data}
-                            onChange={(data) => setFormData({ ...formData, reading_data: data })}
-                            onTitleSuggested={(title) => !formData.title && setFormData({ ...formData, title })}
+                            onChange={(data) => setFormData(prev => ({ ...prev, reading_data: data }))}
+                            onTitleSuggested={(title) => setFormData(prev => prev.title ? prev : { ...prev, title })}
                           />
                         )}
 
                         {formData.module_type === 'listening' && (
                           <ListeningTestBuilder
                             data={formData.listening_data}
-                            onChange={(data) => setFormData({ ...formData, listening_data: data })}
-                            onTitleSuggested={(title) => !formData.title && setFormData({ ...formData, title })}
+                            onChange={(data) => setFormData(prev => ({ ...prev, listening_data: data }))}
+                            onTitleSuggested={(title) => setFormData(prev => prev.title ? prev : { ...prev, title })}
                           />
                         )}
 
                         {formData.module_type === 'writing' && (
                           <WritingTestBuilder
                             data={formData.writing_data}
-                            onChange={(data) => setFormData({ ...formData, writing_data: data })}
-                            onTitleSuggested={(title) => !formData.title && setFormData({ ...formData, title })}
+                            onChange={(data) => setFormData(prev => ({ ...prev, writing_data: data }))}
+                            onTitleSuggested={(title) => setFormData(prev => prev.title ? prev : { ...prev, title })}
                           />
                         )}
 
                         {formData.module_type === 'speaking' && (
                           <SpeakingTestBuilder
                             data={formData.speaking_data}
-                            onChange={(data) => setFormData({ ...formData, speaking_data: data })}
-                            onTitleSuggested={(title) => !formData.title && setFormData({ ...formData, title })}
+                            onChange={(data) => setFormData(prev => ({ ...prev, speaking_data: data }))}
+                            onTitleSuggested={(title) => setFormData(prev => prev.title ? prev : { ...prev, title })}
                           />
                         )}
 
