@@ -792,10 +792,10 @@ export function AdminPage() {
                   <SelectContent>
                     <SelectItem value="all">All Courses</SelectItem>
                     <SelectItem value="none">General Library</SelectItem>
-                    <SelectItem value="ielts-masterclass">IELTS Masterclass</SelectItem>
-                    <SelectItem value="writing-intensive">Writing Intensive</SelectItem>
-                    <SelectItem value="speaking-club">Speaking Club</SelectItem>
-                    <SelectItem value="reading-listening-suite">Reading/Listening Suite</SelectItem>
+                    <SelectItem value="ielts-masterclass">IELTS Band 8+ Masterclass</SelectItem>
+                    <SelectItem value="writing-intensive">Writing Task 1 & 2 Intensive</SelectItem>
+                    <SelectItem value="speaking-club">IELTS Speaking Confidence Club</SelectItem>
+                    <SelectItem value="reading-listening-suite">Rapid Reading & Listening Suite</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -1169,10 +1169,10 @@ export function AdminPage() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="none">General Library (None)</SelectItem>
-                        <SelectItem value="ielts-masterclass">IELTS Masterclass</SelectItem>
-                        <SelectItem value="writing-intensive">Writing Intensive</SelectItem>
-                        <SelectItem value="speaking-club">Speaking Club</SelectItem>
-                        <SelectItem value="reading-listening-suite">Reading/Listening Suite</SelectItem>
+                        <SelectItem value="ielts-masterclass">IELTS Band 8+ Masterclass</SelectItem>
+                        <SelectItem value="writing-intensive">Writing Task 1 & 2 Intensive</SelectItem>
+                        <SelectItem value="speaking-club">IELTS Speaking Confidence Club</SelectItem>
+                        <SelectItem value="reading-listening-suite">Rapid Reading & Listening Suite</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
