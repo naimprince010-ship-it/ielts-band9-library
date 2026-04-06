@@ -172,7 +172,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = async (email: string, password: string, name: string) => {
     if (!isSupabaseConfigured()) {
-      const newUser: User = {
+      const newUser = {
         id: `demo-${Date.now()}`,
         email,
         name,
@@ -180,9 +180,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         subscription_status: 'free' as SubscriptionStatus,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
+        password,
       };
-      setUser(newUser);
-      localStorage.setItem('demo_user', JSON.stringify(newUser));
+      
+      const localUsersStr = localStorage.getItem('demo_users_map');
+      const localUsers = localUsersStr ? JSON.parse(localUsersStr) : {};
+      localUsers[email] = newUser;
+      localStorage.setItem('demo_users_map', JSON.stringify(localUsers));
+
+      const { password: _, ...userWithoutPassword } = newUser;
+      setUser(userWithoutPassword as User);
+      localStorage.setItem('demo_user', JSON.stringify(userWithoutPassword));
       return { error: null };
     }
 
@@ -216,14 +224,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signIn = async (email: string, password: string) => {
     if (!isSupabaseConfigured() || !supabase) {
-      const demoUser = DEMO_USERS[email];
+      const localUsersStr = localStorage.getItem('demo_users_map');
+      const localUsers = localUsersStr ? JSON.parse(localUsersStr) : {};
+      
+      const demoUser = DEMO_USERS[email] || localUsers[email];
       if (demoUser && password === (demoUser.password || 'password123')) {
         const { password: _, ...userWithoutPassword } = demoUser;
         setUser(userWithoutPassword as User);
         localStorage.setItem('demo_user', JSON.stringify(userWithoutPassword));
         return { error: null };
       }
-      return { error: new Error('Invalid credentials. Try admin@ielts.com or user@ielts.com with password123') };
+      return { error: new Error('Invalid credentials. Please attempt with registered email and password.') };
     }
 
     const { error } = await supabase.auth.signInWithPassword({
