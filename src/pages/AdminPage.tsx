@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { 
   Settings, Plus, Edit, Trash2, Eye, EyeOff, BookOpen, GraduationCap,
   Sparkles, Save, X, AlertCircle, CheckCircle, ShieldCheck, Square, CheckSquare,
   CreditCard, Clock, CheckCircle2, XCircle, Loader2, BarChart3, Tag, ExternalLink,
   LayoutDashboard, FileText, Users, Palette, Menu, ChevronDown, ChevronRight, Star,
-  Search, Bell, User as UserIcon, LogOut, Home, Mic, PenTool, Link, Filter
+  Search, Bell, User as UserIcon, LogOut, Home, Mic, PenTool, Link as LinkIcon, Filter
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -833,7 +833,7 @@ export function AdminPage() {
                               <Badge variant="outline" className="text-[10px] uppercase font-bold text-slate-400 rounded-lg">{lesson.level}</Badge>
                               {lesson.courseId && (
                                 <Badge className="bg-indigo-50 text-indigo-600 border-indigo-100 text-[10px] uppercase font-bold flex items-center gap-1 rounded-lg">
-                                  <Link className="h-3 w-3" /> {lesson.courseId.replace(/-/g, ' ')}
+                                  <LinkIcon className="h-3 w-3" /> {lesson.courseId.replace(/-/g, ' ')}
                                 </Badge>
                               )}
                               {lesson.moduleName && (
@@ -858,11 +858,11 @@ export function AdminPage() {
                             <Button variant="ghost" size="icon" className="rounded-xl hover:bg-slate-50 text-slate-400 hover:text-indigo-600" onClick={() => handleEditLesson(lesson)}>
                               <Edit className="h-5 w-5" />
                             </Button>
-                            <Link to={`/lesson/${lesson.slug}`} target="_blank" rel="noopener noreferrer">
+                            <RouterLink to={`/lesson/${lesson.slug}`} target="_blank" rel="noopener noreferrer">
                               <Button variant="ghost" size="icon" className="rounded-xl hover:bg-slate-50 text-slate-400 hover:text-indigo-600">
                                 <ExternalLink className="h-5 w-5" />
                               </Button>
-                            </Link>
+                            </RouterLink>
                             <Button variant="ghost" size="icon" className="rounded-xl hover:bg-rose-50 text-slate-400 hover:text-rose-600" onClick={() => handleDeleteLesson(lesson.id)}>
                               <Trash2 className="h-5 w-5" />
                             </Button>
