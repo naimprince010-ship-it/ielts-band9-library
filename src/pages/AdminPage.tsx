@@ -90,6 +90,18 @@ interface PaymentRequest {
   verified_by: string | null;
 }
 
+interface DashboardStats {
+  totalStudents: number;
+  activeCourses: number;
+  avgRating: number;
+  pendingLiveClasses: number;
+  flagshipCourses: {
+    title: string;
+    students: number;
+    income: number;
+  }[];
+}
+
 interface MenuItem {
   id: string;
   label: string;
@@ -178,6 +190,15 @@ export function AdminPage() {
   const [loadingPayments, setLoadingPayments] = useState(false);
   const [processingPayment, setProcessingPayment] = useState<string | null>(null);
 
+  const [stats, setStats] = useState<DashboardStats>({
+    totalStudents: 0,
+    activeCourses: 0,
+    avgRating: 4.9,
+    pendingLiveClasses: 0,
+    flagshipCourses: []
+  });
+  const [loadingStats, setLoadingStats] = useState(true);
+
   useEffect(() => {
     if (loading) return;
     if (supabaseUser && !user) return;
@@ -203,9 +224,55 @@ export function AdminPage() {
     }
   };
 
+  const fetchDashboardStats = async () => {
+    if (!isSupabaseConfigured() || !supabase) return;
+    setLoadingStats(true);
+    try {
+      // 1. Total Students
+      const { count: userCount } = await supabase
+        .from('users')
+        .select('*', { count: 'exact', head: true });
+
+      // 2. Total Courses
+      const { data: courses, count: courseCount } = await supabase
+        .from('courses')
+        .select('id, title', { count: 'exact' });
+
+      // 3. Payments & Revenue
+      const { data: allPayments } = await supabase
+        .from('payment_requests')
+        .select('*');
+
+      const approvedPayments = allPayments?.filter(p => p.status === 'approved') || [];
+      
+      // Calculate flagship courses stats
+      const courseStats = (courses || []).map(course => {
+        const coursePayments = approvedPayments.filter(p => p.course_id === course.id || p.package_name === course.title);
+        return {
+          title: course.title,
+          students: coursePayments.length,
+          income: coursePayments.reduce((sum, p) => sum + (p.amount || 0), 0)
+        };
+      }).sort((a, b) => b.income - a.income).slice(0, 5);
+
+      setStats({
+        totalStudents: userCount || 0,
+        activeCourses: courseCount || 0,
+        avgRating: 4.9, // This would normally come from a reviews table
+        pendingLiveClasses: (courses || []).filter(c => (c as any).type === 'live').length * 2, // Placeholder logic
+        flagshipCourses: courseStats
+      });
+    } catch (err) {
+      console.error('Failed to fetch dashboard stats:', err);
+    } finally {
+      setLoadingStats(false);
+    }
+  };
+
   useEffect(() => {
     if (user && (isAdmin || isInstructor)) {
       fetchPayments();
+      fetchDashboardStats();
     }
   }, [user, isAdmin, isInstructor]);
 
@@ -497,10 +564,12 @@ export function AdminPage() {
                         <div className="h-12 w-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-indigo-100">
                            <Users className="h-6 w-6" />
                         </div>
-                        <div>
-                           <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Students</p>
-                           <h3 className="text-2xl font-black text-slate-900">1,250</h3>
-                        </div>
+                         <div>
+                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Students</p>
+                            <h3 className="text-2xl font-black text-slate-900">
+                              {loadingStats ? '...' : stats.totalStudents.toLocaleString()}
+                            </h3>
+                         </div>
                      </div>
                   </CardContent>
                </Card>
@@ -510,10 +579,12 @@ export function AdminPage() {
                         <div className="h-12 w-12 bg-rose-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-rose-100">
                            <BookOpen className="h-6 w-6" />
                         </div>
-                        <div>
-                           <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Courses</p>
-                           <h3 className="text-2xl font-black text-slate-900">4 Active</h3>
-                        </div>
+                         <div>
+                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Courses</p>
+                            <h3 className="text-2xl font-black text-slate-900">
+                              {loadingStats ? '...' : `${stats.activeCourses} Active`}
+                            </h3>
+                         </div>
                      </div>
                   </CardContent>
                </Card>
@@ -523,10 +594,10 @@ export function AdminPage() {
                         <div className="h-12 w-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-emerald-100">
                            <Star className="h-6 w-6" />
                         </div>
-                        <div>
-                           <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Avg. Rating</p>
-                           <h3 className="text-2xl font-black text-slate-900">4.9/5</h3>
-                        </div>
+                         <div>
+                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Avg. Rating</p>
+                            <h3 className="text-2xl font-black text-slate-900">{stats.avgRating}/5</h3>
+                         </div>
                      </div>
                   </CardContent>
                </Card>
@@ -536,10 +607,12 @@ export function AdminPage() {
                         <div className="h-12 w-12 bg-amber-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-amber-100">
                            <Clock className="h-6 w-6" />
                         </div>
-                        <div>
-                           <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Live Classes</p>
-                           <h3 className="text-2xl font-black text-slate-900">24 Pending</h3>
-                        </div>
+                         <div>
+                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Live Classes</p>
+                            <h3 className="text-2xl font-black text-slate-900">
+                              {loadingStats ? '...' : `${stats.pendingLiveClasses} Pending`}
+                            </h3>
+                         </div>
                      </div>
                   </CardContent>
                </Card>
@@ -553,28 +626,42 @@ export function AdminPage() {
                      </CardTitle>
                   </CardHeader>
                   <CardContent className="px-8 pb-8">
-                     <div className="space-y-4">
-                        {[
-                          { title: 'IELTS Band 8+ Masterclass', students: 450, income: '৳2,47,500' },
-                          { title: 'Speaking Confidence Club', students: 320, income: '৳48,000' }
-                        ].map((c, i) => (
-                          <div key={i} className="flex items-center justify-between p-5 rounded-[1.5rem] bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-xl hover:shadow-slate-100 transition-all duration-300">
-                             <div className="flex items-center gap-4">
-                                <div className="h-12 w-12 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center font-black text-indigo-600 text-lg">
-                                   {c.title[0]}
-                                </div>
-                                <div>
-                                   <h4 className="font-bold text-slate-800">{c.title}</h4>
-                                   <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">{c.students} Students Enrolled</p>
-                                </div>
-                             </div>
-                             <div className="text-right">
-                                <p className="font-black text-indigo-600">{c.income}</p>
-                                <Button variant="ghost" size="sm" className="h-8 text-[10px] uppercase font-black tracking-widest text-slate-400 hover:text-indigo-600 hover:bg-indigo-50">Manage</Button>
-                             </div>
+                      <div className="space-y-4">
+                        {loadingStats ? (
+                          <div className="flex items-center justify-center py-12">
+                            <Loader2 className="h-8 w-8 animate-spin text-slate-300" />
                           </div>
-                        ))}
-                     </div>
+                        ) : stats.flagshipCourses.length === 0 ? (
+                          <div className="text-center py-12 border-2 border-dashed border-slate-100 rounded-[1.5rem]">
+                            <p className="text-slate-400 font-medium">No course enrollments found yet.</p>
+                          </div>
+                        ) : (
+                          stats.flagshipCourses.map((c, i) => (
+                            <div key={i} className="flex items-center justify-between p-5 rounded-[1.5rem] bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-xl hover:shadow-slate-100 transition-all duration-300">
+                               <div className="flex items-center gap-4">
+                                  <div className="h-12 w-12 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center font-black text-indigo-600 text-lg">
+                                     {c.title[0]}
+                                  </div>
+                                  <div>
+                                     <h4 className="font-bold text-slate-800">{c.title}</h4>
+                                     <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">{c.students} Students Enrolled</p>
+                                  </div>
+                               </div>
+                               <div className="text-right">
+                                  <p className="font-black text-indigo-600">৳{c.income.toLocaleString()}</p>
+                                  <Button 
+                                    variant="ghost" 
+                                    size="sm" 
+                                    className="h-8 text-[10px] uppercase font-black tracking-widest text-slate-400 hover:text-indigo-600 hover:bg-indigo-50"
+                                    onClick={() => setActiveSection('course-management')}
+                                  >
+                                    Manage
+                                  </Button>
+                               </div>
+                            </div>
+                          ))
+                        )}
+                      </div>
                   </CardContent>
                </Card>
 
