@@ -5,7 +5,7 @@ import {
   Sparkles, Save, X, AlertCircle, CheckCircle, ShieldCheck, Square, CheckSquare,
   CreditCard, Clock, CheckCircle2, XCircle, Loader2, BarChart3, Tag, ExternalLink,
   LayoutDashboard, FileText, Users, Palette, Menu, ChevronDown, ChevronRight, Star,
-  Search, Bell, User as UserIcon, LogOut, Home
+  Search, Bell, User as UserIcon, LogOut, Home, Mic, PenTool, Link, Filter
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -184,7 +184,10 @@ export function AdminPage() {
     is_premium: false,
     is_published: false,
     content: null as LessonContent | null,
+    courseId: '',
+    moduleName: '',
   });
+  const [filterCourse, setFilterCourse] = useState<string>('all');
 
   const [payments, setPayments] = useState<PaymentRequest[]>([]);
   const [loadingPayments, setLoadingPayments] = useState(false);
@@ -363,6 +366,8 @@ export function AdminPage() {
       is_premium: false,
       is_published: false,
       content: null,
+      courseId: '',
+      moduleName: '',
     });
     setQualityChecklist({
       naturalCollocations: false,
@@ -387,6 +392,8 @@ export function AdminPage() {
       is_premium: lesson.is_premium,
       is_published: lesson.is_published,
       content: lesson.content,
+      courseId: lesson.courseId || '',
+      moduleName: lesson.moduleName || '',
     });
     setError('');
     setSuccess('');
@@ -448,6 +455,8 @@ export function AdminPage() {
         content: formData.content,
         is_premium: formData.is_premium,
         is_published: formData.is_published,
+        courseId: formData.courseId || undefined,
+        moduleName: formData.moduleName || undefined,
       };
       if (editingLesson) {
         await updateLesson(editingLesson.id, lessonData);
@@ -468,9 +477,14 @@ export function AdminPage() {
     }
   };
 
-  const allLessons = lessons;
   const vocabularyLessons = lessons.filter(l => l.type === 'vocabulary');
   const grammarLessons = lessons.filter(l => l.type === 'grammar');
+
+  const filteredLessons = lessons.filter(lesson => {
+    if (filterCourse === 'all') return true;
+    if (filterCourse === 'none') return !lesson.courseId;
+    return lesson.courseId === filterCourse;
+  });
 
   const toggleGroup = (title: string) => {
     setExpandedGroups(prev => prev.includes(title) ? prev.filter(g => g !== title) : [...prev, title]);
@@ -763,30 +777,70 @@ export function AdminPage() {
                 <Plus className="h-5 w-5" /> New Lesson
               </Button>
             </div>
+
+            <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex flex-col sm:flex-row gap-4 items-center">
+              <div className="relative flex-1 w-full">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <Input placeholder="Search lessons by title..." className="pl-9 h-10 border-slate-100 rounded-xl" />
+              </div>
+              <div className="flex items-center gap-3 w-full sm:w-auto">
+                <Filter className="h-4 w-4 text-slate-400" />
+                <Select value={filterCourse} onValueChange={setFilterCourse}>
+                  <SelectTrigger className="w-full sm:w-[200px] rounded-xl border-slate-100 h-10 font-bold text-slate-600">
+                    <SelectValue placeholder="Filter by Course" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Courses</SelectItem>
+                    <SelectItem value="none">General Library</SelectItem>
+                    <SelectItem value="ielts-masterclass">IELTS Masterclass</SelectItem>
+                    <SelectItem value="writing-intensive">Writing Intensive</SelectItem>
+                    <SelectItem value="speaking-club">Speaking Club</SelectItem>
+                    <SelectItem value="reading-listening-suite">Reading/Listening Suite</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
             <div className="grid gap-4">
-              {allLessons.length === 0 ? (
+              {filteredLessons.length === 0 ? (
                 <Card className="rounded-[2rem] border-dashed border-2">
                   <CardContent className="py-16 text-center text-slate-400 font-bold uppercase tracking-widest">
-                    No lessons found. Start by creating one!
+                    No lessons found matching your filters.
                   </CardContent>
                 </Card>
               ) : (
-                allLessons.map((lesson) => (
+                filteredLessons.map((lesson) => (
                   <Card key={lesson.id} className="hover:shadow-xl hover:shadow-slate-100 transition-all duration-300 border-slate-100 rounded-2xl overflow-hidden group">
                     <CardContent className="p-5">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div className="flex items-center gap-4">
                           <div className={cn(
                             "h-12 w-12 rounded-2xl flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300",
-                            lesson.type === 'vocabulary' ? "bg-indigo-50 text-indigo-600" : "bg-purple-50 text-purple-600"
+                            lesson.type === 'vocabulary' ? "bg-indigo-50 text-indigo-600" : 
+                            lesson.type === 'grammar' ? "bg-purple-50 text-purple-600" :
+                            lesson.type === 'speaking' ? "bg-emerald-50 text-emerald-600" :
+                            "bg-rose-50 text-rose-600"
                           )}>
-                            {lesson.type === 'vocabulary' ? <BookOpen className="h-6 w-6" /> : <GraduationCap className="h-6 w-6" />}
+                            {lesson.type === 'vocabulary' ? <BookOpen className="h-6 w-6" /> : 
+                             lesson.type === 'grammar' ? <GraduationCap className="h-6 w-6" /> :
+                             lesson.type === 'speaking' ? <Mic className="h-6 w-6" /> :
+                             <PenTool className="h-6 w-6" />}
                           </div>
                           <div>
                             <h3 className="font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">{lesson.title}</h3>
-                            <div className="flex items-center gap-2 mt-1">
+                            <div className="flex flex-wrap items-center gap-2 mt-1">
                               <Badge variant="outline" className="text-[10px] uppercase font-bold text-slate-400 rounded-lg">{lesson.type}</Badge>
                               <Badge variant="outline" className="text-[10px] uppercase font-bold text-slate-400 rounded-lg">{lesson.level}</Badge>
+                              {lesson.courseId && (
+                                <Badge className="bg-indigo-50 text-indigo-600 border-indigo-100 text-[10px] uppercase font-bold flex items-center gap-1 rounded-lg">
+                                  <Link className="h-3 w-3" /> {lesson.courseId.replace(/-/g, ' ')}
+                                </Badge>
+                              )}
+                              {lesson.moduleName && (
+                                <Badge variant="secondary" className="text-[10px] font-bold rounded-lg truncate max-w-[200px]">
+                                  {lesson.moduleName}
+                                </Badge>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -1102,8 +1156,34 @@ export function AdminPage() {
                       <SelectContent>
                         <SelectItem value="vocabulary">Vocabulary</SelectItem>
                         <SelectItem value="grammar">Grammar</SelectItem>
+                        <SelectItem value="speaking">Speaking</SelectItem>
+                        <SelectItem value="writing">Writing</SelectItem>
                       </SelectContent>
                     </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Course Connection</Label>
+                    <Select value={formData.courseId} onValueChange={(v) => setFormData(prev => ({ ...prev, courseId: v }))}>
+                      <SelectTrigger className="rounded-xl border-slate-200 bg-white">
+                        <SelectValue placeholder="Select Course (Optional)" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">General Library (None)</SelectItem>
+                        <SelectItem value="ielts-masterclass">IELTS Masterclass</SelectItem>
+                        <SelectItem value="writing-intensive">Writing Intensive</SelectItem>
+                        <SelectItem value="speaking-club">Speaking Club</SelectItem>
+                        <SelectItem value="reading-listening-suite">Reading/Listening Suite</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Module Name</Label>
+                    <Input 
+                      value={formData.moduleName} 
+                      onChange={(e) => setFormData(prev => ({ ...prev, moduleName: e.target.value }))} 
+                      placeholder="e.g. Module 1: Speaking Mastery"
+                      className="rounded-xl border-slate-200 bg-white h-10 text-sm"
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Level</Label>

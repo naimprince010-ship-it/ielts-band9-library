@@ -62,6 +62,8 @@ export interface Lesson {
   updated_at: string;
   estimated_time?: number; // in minutes
   recommended_order?: number; // for band upgrade packs
+  courseId?: string; // Optional: Link to a specific Course
+  moduleName?: string; // Optional: Name of the module within that course
 }
 
 export type LessonProgress = 'not_started' | 'completed';

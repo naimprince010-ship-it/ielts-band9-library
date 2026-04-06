@@ -24,6 +24,8 @@ export const SPEAKING_LESSONS: Lesson[] = [
     created_at: '2026-04-06T10:00:00Z',
     updated_at: '2026-04-06T10:00:00Z',
     estimated_time: 30,
+    courseId: 'speaking-mastery',
+    moduleName: 'Module 1: Speaking Mastery',
     content: {
       title: 'Speaking Class 1: Part 1 Fluency & Confidence Building',
       targetLevel: 'Band 6.0 - 9.0',
