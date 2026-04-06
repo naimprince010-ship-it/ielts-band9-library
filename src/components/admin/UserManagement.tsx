@@ -19,13 +19,14 @@ interface UserData {
   id: string;
   email: string;
   name: string;
-  role: 'user' | 'admin';
+  role: 'user' | 'admin' | 'instructor';
   subscription_status: 'free' | 'premium';
   created_at: string;
 }
 
 const SQL_QUERIES = {
   makeAdmin: (email: string) => `UPDATE users SET role = 'admin' WHERE email = '${email}';`,
+  makeInstructor: (email: string) => `UPDATE users SET role = 'instructor' WHERE email = '${email}';`,
   removeAdmin: (email: string) => `UPDATE users SET role = 'user' WHERE email = '${email}';`,
   makePremium: (email: string) => `UPDATE users SET subscription_status = 'premium' WHERE email = '${email}';`,
   removePremium: (email: string) => `UPDATE users SET subscription_status = 'free' WHERE email = '${email}';`,
@@ -67,7 +68,7 @@ export function UserManagement() {
     }
   };
 
-  const updateUserRole = async (userId: string, newRole: 'user' | 'admin') => {
+  const updateUserRole = async (userId: string, newRole: 'user' | 'admin' | 'instructor') => {
     if (!supabase) return;
 
     setUpdating(userId);
@@ -143,6 +144,16 @@ export function UserManagement() {
         </Card>
         <Card>
           <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-gray-500">Instructors</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-3xl font-bold text-amber-600">
+              {users.filter(u => u.role === 'instructor').length}
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-2">
             <CardTitle className="text-sm text-gray-500">Admins</CardTitle>
           </CardHeader>
           <CardContent>
@@ -210,7 +221,13 @@ export function UserManagement() {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Badge variant={userData.role === 'admin' ? 'default' : 'secondary'} className="capitalize">
+                          <Badge 
+                            variant={userData.role === 'admin' ? 'default' : userData.role === 'instructor' ? 'outline' : 'secondary'} 
+                            className={cn(
+                              "capitalize",
+                              userData.role === 'instructor' ? "border-amber-200 text-amber-700 bg-amber-50" : ""
+                            )}
+                          >
                             {userData.role}
                           </Badge>
                         </TableCell>
@@ -230,7 +247,30 @@ export function UserManagement() {
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-2">
-                            {userData.role === 'user' ? (
+                            {userData.role === 'instructor' ? (
+                              <Button 
+                                size="sm" 
+                                variant="outline" 
+                                className="border-amber-200 text-amber-700"
+                                onClick={() => updateUserRole(userData.id, 'user')}
+                                disabled={updating === userData.id}
+                              >
+                                <Users className="h-4 w-4 mr-1" />
+                                Remove Instructor
+                              </Button>
+                            ) : userData.role === 'user' ? (
+                              <Button 
+                                size="sm" 
+                                variant="outline" 
+                                onClick={() => updateUserRole(userData.id, 'instructor')}
+                                disabled={updating === userData.id}
+                              >
+                                <GraduationCap className="h-4 w-4 mr-1" />
+                                Make Instructor
+                              </Button>
+                            ) : null}
+
+                            {userData.role === 'user' || userData.role === 'instructor' ? (
                               <Button 
                                 size="sm" 
                                 variant="outline" 
@@ -296,7 +336,13 @@ export function UserManagement() {
                           </div>
                         </div>
                         <div className="flex flex-col gap-1 items-end">
-                          <Badge variant={userData.role === 'admin' ? 'default' : 'secondary'} className="text-[10px] uppercase font-bold tracking-wider">
+                          <Badge 
+                            variant={userData.role === 'admin' ? 'default' : userData.role === 'instructor' ? 'outline' : 'secondary'} 
+                            className={cn(
+                              "text-[10px] uppercase font-bold tracking-wider",
+                              userData.role === 'instructor' ? "border-amber-200 text-amber-700 bg-amber-50" : ""
+                            )}
+                          >
                             {userData.role}
                           </Badge>
                           <Badge 
@@ -316,7 +362,29 @@ export function UserManagement() {
                       </div>
 
                       <div className="grid grid-cols-2 gap-2">
-                        {userData.role === 'user' ? (
+                        {userData.role === 'instructor' ? (
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            className="text-xs h-9 rounded-xl border-amber-200 text-amber-700"
+                            onClick={() => updateUserRole(userData.id, 'user')}
+                            disabled={updating === userData.id}
+                          >
+                            <Users className="h-3.5 w-3.5 mr-1.5" /> Remove Instructor
+                          </Button>
+                        ) : userData.role === 'user' ? (
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            className="text-xs h-9 rounded-xl"
+                            onClick={() => updateUserRole(userData.id, 'instructor')}
+                            disabled={updating === userData.id}
+                          >
+                            <GraduationCap className="h-3.5 w-3.5 mr-1.5" /> Make Instructor
+                          </Button>
+                        ) : null}
+
+                        {(userData.role === 'user' || userData.role === 'instructor') ? (
                           <Button 
                             size="sm" 
                             variant="outline" 
@@ -378,6 +446,22 @@ export function UserManagement() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-4">
+            <div className="bg-white rounded-lg p-4 border">
+              <div className="flex items-center justify-between mb-2">
+                <span className="font-medium text-sm text-slate-700">Make User Instructor</span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => copyToClipboard(SQL_QUERIES.makeInstructor('user@example.com'), 'makeInstructor')}
+                >
+                  {copiedQuery === 'makeInstructor' ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
+                </Button>
+              </div>
+              <code className="text-xs bg-slate-100 p-2 rounded block overflow-x-auto">
+                {SQL_QUERIES.makeInstructor('user@example.com')}
+              </code>
+            </div>
+
             <div className="bg-white rounded-lg p-4 border">
               <div className="flex items-center justify-between mb-2">
                 <span className="font-medium text-sm text-slate-700">Make User Admin</span>
