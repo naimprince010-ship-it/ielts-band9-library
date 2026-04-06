@@ -858,6 +858,11 @@ export function AdminPage() {
                             <Button variant="ghost" size="icon" className="rounded-xl hover:bg-slate-50 text-slate-400 hover:text-indigo-600" onClick={() => handleEditLesson(lesson)}>
                               <Edit className="h-5 w-5" />
                             </Button>
+                            <Link to={`/lesson/${lesson.slug}`} target="_blank" rel="noopener noreferrer">
+                              <Button variant="ghost" size="icon" className="rounded-xl hover:bg-slate-50 text-slate-400 hover:text-indigo-600">
+                                <ExternalLink className="h-5 w-5" />
+                              </Button>
+                            </Link>
                             <Button variant="ghost" size="icon" className="rounded-xl hover:bg-rose-50 text-slate-400 hover:text-rose-600" onClick={() => handleDeleteLesson(lesson.id)}>
                               <Trash2 className="h-5 w-5" />
                             </Button>

@@ -11,7 +11,8 @@ import {
   PlayCircle,
   Gem,
   LayoutList,
-  Sparkles
+  Sparkles,
+  ExternalLink
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -169,9 +170,10 @@ export function CourseDetailPage() {
                                   {title}
                                 </div>
                                 {hasLink && (
-                                  <Link to={`/lesson/${lesson.lessonId}`}>
-                                    <Button variant="ghost" size="sm" className="h-8 px-3 rounded-full bg-accent/10 text-accent hover:bg-accent hover:text-white font-bold text-[10px] uppercase tracking-wider">
+                                  <Link to={`/lesson/${lesson.lessonId}`} target="_blank" rel="noopener noreferrer">
+                                    <Button variant="ghost" size="sm" className="h-8 px-3 rounded-full bg-accent/10 text-accent hover:bg-accent hover:text-white font-bold text-[10px] uppercase tracking-wider flex items-center gap-1.5">
                                        View Document
+                                       <ExternalLink className="h-3 w-3" />
                                     </Button>
                                   </Link>
                                 )}
