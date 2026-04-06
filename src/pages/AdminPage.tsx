@@ -717,7 +717,7 @@ export function AdminPage() {
                   <CardTitle className="text-sm font-bold text-slate-400 uppercase tracking-widest">Total Lessons</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-4xl font-black text-slate-900">{allLessons.length}</p>
+                  <p className="text-4xl font-black text-slate-900">{lessons.length}</p>
                 </CardContent>
               </Card>
               <Card className="rounded-[2rem] border-none shadow-sm hover:shadow-xl transition-all duration-300">
