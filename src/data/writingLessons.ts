@@ -4,6 +4,607 @@ import { Lesson } from '@/types';
 // Each lesson includes: Model Answer, Band Upgrade Ladder (6→7→8→9), Examiner Perspective, Common Mistakes
 
 export const WRITING_LESSONS: Lesson[] = [
+  {
+    id: 'writing-class14-essay-review',
+    title: 'Class 14: Full Essay Live Review & Personal Feedback',
+    slug: 'writing-class14-essay-review',
+    type: 'writing',
+    level: 'advanced',
+    topic: 'Review',
+    description: 'The final rehearsal. Put all the pieces together in a full Band 9 essay walkthrough. Learn the "Self-Correction" checklist that can save you 1 band point in 2 minutes.',
+    is_premium: true,
+    is_published: true,
+    view_count: 0,
+    created_at: '2026-04-06T11:00:00Z',
+    updated_at: '2026-04-06T11:00:00Z',
+    estimated_time: 60,
+    courseId: 'ielts-masterclass',
+    moduleName: 'Module 2: Writing Task 1 & 2 Excellence (8 Classes)',
+    content: {
+      title: 'Class 14: Full Essay Live Review & Personal Feedback',
+      targetLevel: 'Band 7.5 - 9.0',
+      whatYouWillLearn: [
+        'How to manage your time (5-30-5 rule)',
+        'Planning like a pro in 5 minutes',
+        'Self-Correction Checklist (The Top 5 Fixes)',
+        'Identifying your personal grammar traps',
+        'Final check for Task Achievement'
+      ],
+      coreExplanation: `**The "Self-Correction" Checklist**
+      
+It's your final class! You have the structure, the vocabulary, and the grammar. Now it’s about **Execution**. 
+
+**1. The 5-30-5 Rule:**
+- **5 Min Planning**: Note down your Thesis, Reasons, and Examples. Never skip this.
+- **30 Min Writing**: Write with flow. Don't stop to search for "big" words.
+- **5 Min Review**: This is where you find the missing commas and small "S" mistakes (Subject-verb agreement).
+
+**2. The 2-Minute Fix Checklist:**
+Quickly scan for:
+- Did I write **250+** words?
+- Is my **Thesis** clear in the Intro?
+- Do my body paragraphs have **Topic Sentences**?
+- Are my **Commas** in the right place after linking words?
+- Did I use at least **3 complex sentences**?
+
+**3. Planning Your Success:**
+A simple table works best:
+- **Idea 1**: Education
+- **Support**: Online learning
+- **Ex/Detail**: Khan Academy / Flexible schedules.`,
+      examples: [
+        { 
+          sentence: '**The Power of Planning:**\n"If you don\'t plan, you start writing and realize halfway through that your argument is weak. A 5-minute plan prevents you from getting stuck in the middle of the test."', 
+          explanation: 'Note the practical advice for exam pressure.' 
+        },
+        { 
+          sentence: '**The Final Conclusion:**\n"To sum up, while X is important, Y is more effective. Ultimately, we must balance both if we want a sustainable future."', 
+          explanation: 'Note how it summarizes everything naturally.' 
+        }
+      ],
+      commonMistakes: [
+        { mistake: 'Running out of time mid-conclusion', correction: 'Practice writing your conclusion in exactly 3 minutes.', explanation: 'A missing conclusion is a Band 5 Task Achievement error.' },
+        { mistake: 'Not checking "S" mistakes', correction: 'Scan every verb to ensure it matches the subject (e.g., "The teacher useS").', explanation: 'Small, repeated grammar mistakes prevent you from getting a Band 8+.' }
+      ],
+      miniPractice: [
+        { question: 'What is the "5-30-5" rule?', options: ['Spend 5 mins per paragraph', 'Plan-Write-Review timer', 'Write 500 words', 'Read for 5 mins'], type: 'multiple-choice' },
+        { question: 'True/False: You should aim to write exactly 250 words.', options: ['True', 'False'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        'Plan-Write-Review timer',
+        'False (Aim for 270-290 to be safe and show range)'
+      ],
+      quickRecap: 'Class 14 is about confidence and execution. Master the 5-30-5 timing, never skip your 5-minute plan, and use the 2-minute fix checklist to polish your work before the examiner sees it. You are officially ready!',
+      speakingLines: [
+        "What this essay has demonstrated is that...",
+        "Taking all these points into account, I believe...",
+        "I trust that this overview has clarified the situation."
+      ]
+    }
+  },
+  {
+    id: 'writing-class13-grammatical-range',
+    title: 'Class 13: Grammatical Range & Accuracy for Band 8+',
+    slug: 'writing-class13-grammatical-range',
+    type: 'writing',
+    level: 'advanced',
+    topic: 'Grammar',
+    description: 'Master the "Mix-it-Up" system for Band 8+ Grammar. Learn where to use complex sentences, subordination, and the subtle "Punctuation Power-Ups" that impress IELTS examiners.',
+    is_premium: true,
+    is_published: true,
+    view_count: 0,
+    created_at: '2026-04-06T11:00:00Z',
+    updated_at: '2026-04-06T11:00:00Z',
+    estimated_time: 50,
+    courseId: 'ielts-masterclass',
+    moduleName: 'Module 2: Writing Task 1 & 2 Excellence (8 Classes)',
+    content: {
+      title: 'Class 13: Grammatical Range & Accuracy for Band 8+',
+      targetLevel: 'Band 7.5 - 9.0',
+      whatYouWillLearn: [
+        'How to write a mistake-free complex sentence',
+        'Mastering Subordination (While, whereas, although)',
+        'Using the Passive Voice for objectivity',
+        'Punctuation: Commas, Semicolons, and Colons',
+        'Proofreading strategies for accuracy'
+      ],
+      coreExplanation: `**The "Mix-it-Up" Grammar System**
+      
+Grammar isn't just about avoiding mistakes—it's about showing **Range**. 
+
+**1. The Complex Sentence Secret:**
+Band 9 students use a mix of simple, compound, and complex sentences. A complex sentence uses a **subordinator**:
+- *"**Although** some argue for stricter laws, I believe education is a better solution."*
+
+**2. Punctuation Power-Ups:**
+- **Comma ( , )**: Vital for separating clauses. *"Furthermore, computers are..."*
+- **Semicolon ( ; )**: Joins two related independent sentences. *"The internet provides vast knowledge; however, it also poses risks."* (Note: It’s followed by a small letter).
+
+**3. Passive Voice (Task 1 & Task 2):**
+If you want to sound objective and professional, use the passive:
+- Active: *"People use electricity for everything."*
+- Passive: *"Electricity **is utilized** extensively for various reasons."* (This is more academic).`,
+      examples: [
+        { 
+          sentence: '**Subordination Mastery:**\n"While many students prefer studying at night, research shows that morning study is more effective."', 
+          explanation: 'Starting with "**While**" creates a high-level complex sentence immediately.' 
+        },
+        { 
+          sentence: '**Punctuation Check:**\n"On the one hand, some believe...**; however,** I would argue..." ', 
+          explanation: 'Using the semicolon before "however" is a hallmark of sophisticated punctuation.' 
+        }
+      ],
+      commonMistakes: [
+        { mistake: 'Only using simple sentences', correction: 'Try to combine two sentences into one using words like "which" or "although".', explanation: 'A string of short, simple sentences is a Band 5/6 indicator.' },
+        { mistake: 'Too many "and" / "but"', correction: 'Use more formal connectors like "In addition to" or "Conversely".', explanation: 'Overusing basic conjunctions shows limited range.' }
+      ],
+      miniPractice: [
+        { question: 'What is a "Subordinating Conjunction"?', options: ['"And"', '"But"', '"Although"', '"So"'], type: 'multiple-choice' },
+        { question: 'True/False: You should always use the passive voice in an IELTS essay.', options: ['True', 'False'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        '"Although"',
+        'False (Only use it where appropriate to show range and objectivity)'
+      ],
+      quickRecap: 'The "Mix-it-Up" system means you shouldn’t use the same sentence structure twice in a row. Use subordination (while, despite, because) and perfect your punctuation (semicolons are your best friend) to hit that Band 8+ mark.',
+      speakingLines: [
+        "What I'd like to highlight is the complexity of...",
+        "Despite the clear advantages of X, it's crucial to realize...",
+        "Having considered these factors, it is evident that..."
+      ]
+    }
+  },
+  {
+    id: 'writing-class12-vocabulary-collocations',
+    title: 'Class 12: Advanced Vocabulary & Collocations for Writing',
+    slug: 'writing-class12-vocabulary-collocations',
+    type: 'writing',
+    level: 'intermediate',
+    topic: 'Vocabulary',
+    description: 'Banish common words like "good", "bad", and "people". Learn the "Vary-the-Verb" technique and master the top 100 collocations for Band 8+ writing.',
+    is_premium: true,
+    is_published: true,
+    view_count: 0,
+    created_at: '2026-04-06T11:00:00Z',
+    updated_at: '2026-04-06T11:00:00Z',
+    estimated_time: 45,
+    courseId: 'ielts-masterclass',
+    moduleName: 'Module 2: Writing Task 1 & 2 Excellence (8 Classes)',
+    content: {
+      title: 'Class 12: Advanced Vocabulary & Collocations for Writing',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'How to use "Topic Specific" vocabulary vs. "Formulaic" vocabulary',
+        'Academic synonyms for common verbs and adjectives',
+        'Collocations (Words that naturally go together)',
+        'Precise word choice: The difference between "problem" and "crisis"',
+        'Avoiding over-complicating (don’t use big words you don’t understand)'
+      ],
+      coreExplanation: `**The "Vary-the-Verb" Technique**
+      
+Vocabulary isn’t about "big" words—it's about **precise** words. Band 9 students use words that fit the *exact* context. 
+
+**1. Topic-Specific Vocabulary:**
+If the essay is about **Environment**: 
+- Don't say: *"Pollution is bad."*
+- Say: *"Environmental degradation is a pressing concern."* 
+- Don't say: *"Protect nature."*
+- Say: *"Preserve biodiversity."*
+
+**2. Master Collocations:**
+Collocations are word couples. If you say "make a crime" instead of "**commit a crime**", your score drops. 
+Examples:
+- **Exacerbate** a problem (make it worse).
+- **Profound** effect (big impact).
+- **Fundamental** right (basic law).
+
+**3. Varying Common Adjectives:**
+- **Good** → Beneficial, advantageous, instrumental.
+- **Bad** → Detrimental, counterproductive, detrimental.
+- **Problem** → Issue, dilemma, challenge, impediment.`,
+      examples: [
+        { 
+          sentence: '**Vocabulary Upgrade:**\n"The **growth** of cities **makes** traffic **worse**."\n\n**Band 9:** "The **rapid urbanization** of regions **exacerbates** existing traffic **congestion**."', 
+          explanation: 'Note how precise verbs (exacerbates) and nouns (urbanization, congestion) add academic weight.' 
+        },
+        { 
+          sentence: '**Common Collocations:**\n"This will have a **huge influence** on..."\n\n**Band 9:** "This will exert a **profound influence** on..."', 
+          explanation: 'The verb "**exert**" and adjective "**profound**" are high-level academic partners.' 
+        }
+      ],
+      commonMistakes: [
+        { mistake: 'Trying to use "impressive" words incorrectly', correction: 'Use a simple word you know 100% over a complex word you know 50%.', explanation: 'Incorrect use of complex words looks worse than using simple words accurately.' },
+        { mistake: 'Overusing "Nowadays" or "Every coin has two sides"', correction: 'Replace with specific, meaningful transitions.', explanation: 'These clichés scream "Band 6 student" to the examiner.' }
+      ],
+      miniPractice: [
+        { question: 'Which word is a better synonym for "bad"?', options: ['Terrible', 'Aweful', 'Detrimental', 'Un-good'], type: 'multiple-choice' },
+        { question: 'What is the best verb to use with the word "impact"?', options: ['Make', 'Do', 'Exert', 'Have'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        'Detrimental',
+        'Exert (Have is also okay, but Exert is more advanced)'
+      ],
+      quickRecap: 'Lexical Resource is about precision. Build a "word bank" for common topics (Education, Technology, Health) and master the word-partners (collocations) that make you sound like a native professional.',
+      speakingLines: [
+        "A primary factor contributing to this phenomenon is...",
+        "Such a measure would be instrumental in achieving...",
+        "The long-term implications of this trend could be detrimental to..."
+      ]
+    }
+  },
+  {
+    id: 'writing-class11-cohesion-coherence',
+    title: 'Class 11: Cohesion & Coherence: Linking Ideas Like a Pro',
+    slug: 'writing-class11-cohesion-coherence',
+    type: 'writing',
+    level: 'intermediate',
+    topic: 'Cohesion',
+    description: 'Learn the "Glue" technique that holds Band 9 essays together. Move beyond basic "Firstly, Secondly" and master professional signposting and reference words.',
+    is_premium: true,
+    is_published: true,
+    view_count: 0,
+    created_at: '2026-04-06T11:00:00Z',
+    updated_at: '2026-04-06T11:00:00Z',
+    estimated_time: 45,
+    courseId: 'ielts-masterclass',
+    moduleName: 'Module 2: Writing Task 1 & 2 Excellence (8 Classes)',
+    content: {
+      title: 'Class 11: Cohesion & Coherence: Linking Ideas Like a Pro',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'How to avoid "Mechanical" linking',
+        'Mastering Substitution (it, they, this, such problems)',
+        'Signposting phrases for paragraph transitions',
+        'Cohesion between sentences vs. cohesion between paragraphs',
+        'Advanced relative clauses for fluid writing'
+      ],
+      coreExplanation: `**The "Glue" of Writing**
+      
+Cohesion and Coherence carry 25% of your score. It’s not about how many "However" you use, but how **smoothly** your ideas flow. 
+
+**1. Avoid Mechanical Linking:**
+Band 6 students use: *"Firstly... Secondly... Moreover..."* at the start of every sentence. This is robotic.
+Band 9 students use **Reference Words**: *"This trend...", "Such issues...", "Taking these factors into account..."*.
+
+**2. The Bridge Paragraph:**
+Move from one idea to the next using a **Bridge Sentence** at the end or start of a paragraph. 
+- Example: *"While the economic benefits are clear, the social implications deserve equal attention."* (This "bridges" from an economics paragraph to a social one).
+
+**3. Use Transition Phrases:**
+- Contrasting: *"That said...", "Conversely...", "Having said that..."*
+- Adding: *"Furthermore...", "In addition to this...", "A further point to consider is..."*
+- Concluding: *"In the final analysis...", "Ultimately..."*`,
+      examples: [
+        { 
+          sentence: '**Reference Word Cohesion:**\n"Many governments are investing in green energy. **This commitment** is essential for reducing carbon emissions." ', 
+          explanation: 'Using "**This commitment**" connects to the previous sentence without repeating "green energy".' 
+        },
+        { 
+          sentence: '**Sophisticated Transition:**\n"Instead of just saying "But", use: "**Despite these clear advantages, there remain significant hurdles to overcome.**"', 
+          explanation: 'Note how it summarizes the previous point before introducing a new one.' 
+        }
+      ],
+      commonMistakes: [
+        { mistake: 'Overusing "Firstly, Secondly, Thirdly"', correction: 'Use variations like "A primary reason is...", "Another factor involves...", "In addition to this..."', explanation: 'Robotic lists indicate limited linguistic flexibility.' },
+        { mistake: 'New paragraph without a link', correction: 'Always "signpost" the transition at the start of a new paragraph.', explanation: 'Linking paragraphs shows the examiner your whole essay is one cohesive argument.' }
+      ],
+      miniPractice: [
+        { question: 'What is a "Reference Word"?', options: ['A word like "However"', 'A word like "this", "that", "these", "those"', 'A dictionary word', 'A quote'], type: 'multiple-choice' },
+        { question: 'True/False: It is okay to start every sentence with a linking word.', options: ['True', 'False'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        'A word like "this", "that", "these", "those"',
+        'False (This is mechanical and lowers your score)'
+      ],
+      quickRecap: 'Cohesion is about the "glue". Use reference words to point back to ideas, use bridge sentences to move between paragraphs, and avoid being a "robotic linker". Smooth flow = High score.',
+      speakingLines: [
+        "In light of these facts, it is clear that...",
+        "Taking these various perspectives into account, I believe...",
+        "Such a phenomenon could lead to long-term issues in..."
+      ]
+    }
+  },
+  {
+    id: 'writing-class10-task2-problem-solution',
+    title: 'Class 10: Task 2 Essay Structures (Problem/Solution & Direct)',
+    slug: 'writing-class10-task2-problem-solution',
+    type: 'writing',
+    level: 'intermediate',
+    topic: 'Task 2 Structures',
+    description: 'Master Problem/Solution and Two-Part questions. Learn how to create logical "Causal Links" between your problems and your solutions.',
+    is_premium: true,
+    is_published: true,
+    view_count: 0,
+    created_at: '2026-04-06T11:00:00Z',
+    updated_at: '2026-04-06T11:00:00Z',
+    estimated_time: 50,
+    courseId: 'ielts-masterclass',
+    moduleName: 'Module 2: Writing Task 1 & 2 Excellence (8 Classes)',
+    content: {
+      title: 'Class 10: Task 2 Essay Structures (Problem/Solution & Direct)',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'How to chain a problem directly to a solution',
+        'Addressing "Two-part" questions without confusion',
+        'Vocabulary for cause and effect (stems from, stems for, triggers)',
+        'Writing cohesive steps for a solution',
+        'Balanced paragraphing'
+      ],
+      coreExplanation: `**The "Causal Link" Framework**
+      
+In these essays, the examiner is testing your **Logic**. 
+
+**1. Problem/Solution Structure:**
+- **Intro**: Paraphrase + "This essay will explore the causes and offer solutions..."
+- **Body 1**: Discuss the Causes. Use the "Why?" chain (A happens because of B, which leads to C).
+- **Body 2**: Discuss the Solutions. Tip: A good solution MUST solve the specific cause you mentioned in Body 1.
+- **Conclusion**: Summarize + Final Prediction.
+
+**2. Direct Question (Two-Part) Structure:**
+Sometimes the prompt gives two unrelated questions. 
+- **Body 1**: Answer Question 1 fully.
+- **Body 2**: Answer Question 2 fully.
+- **Conclusion**: Combine both answers into a single summary.
+
+**3. Cause-Effect Vocabulary:**
+- *"This phenomenon stems from..."*
+- *"A primary factor contributing to this is..."*
+- *"This, in turn, results in..."*
+- *"Consequently, governments should..."*`,
+      examples: [
+        { 
+          sentence: '**Problem-Solution Chain:**\n"One reason for obesity is sedentary lifestyles (Problem). This arises because children spend too much time on screens (Cause). To combat this, schools should implement mandatory daily sports sessions (Solution)."', 
+          explanation: 'Note the logical flow from Problem → Cause → Solution.' 
+        },
+        { 
+          sentence: '**Two-Part Conclusion:**\n"In conclusion, although the internet has revolutionized research (Answer 1), I believe its downsides for children outweigh its benefits (Answer 2)."', 
+          explanation: 'It addresses both questions in the final summary.' 
+        }
+      ],
+      commonMistakes: [
+        { mistake: 'Mixing problems and solutions in the same paragraph', correction: 'Keep them separate. Body 1 for Problems, Body 2 for Solutions.', explanation: 'This keeps your essay "Coherent" and easy for the examiner to follow.' },
+        { mistake: 'Forgeting the second part of a 2-part question', correction: 'Treat both parts of the question with equal weight.', explanation: 'Missing a whole part costs you half your score for Task Achievement.' }
+      ],
+      miniPractice: [
+        { question: 'A solution MUST address which part of your essay?', options: ['The Intro', 'The Conclusion', 'The Causes in Body 1', 'Your Opinion'], type: 'multiple-choice' },
+        { question: 'True/False: You should use "In conclusion" at the beginning of your final paragraph.', options: ['True', 'False'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        'The Causes in Body 1',
+        'True (It is the standard, clear signal)'
+      ],
+      quickRecap: 'Problem/Solution essays are about the logical link between what’s wrong and how to fix it. Keep your chain tight, use cause-effect words, and never miss the second question in a two-part prompt.',
+      speakingLines: [
+        "In my view, the root of this problem lies in...",
+        "A feasible solution to this challenge would be to...",
+        "The consequences of remaining passive on this issue are..."
+      ]
+    }
+  },
+  {
+    id: 'writing-class9-task2-essay-logic',
+    title: 'Class 09: Task 2 Essay Structures (Agree/Disagree & Discussion)',
+    slug: 'writing-class9-task2-essay-logic',
+    type: 'writing',
+    level: 'intermediate',
+    topic: 'Task 2 Structures',
+    description: 'Master the logic behind the two most common IELTS Essay types. Learn the "Thesis-Driven" structure for Opinion and Discussion essays.',
+    is_premium: true,
+    is_published: true,
+    view_count: 0,
+    created_at: '2026-04-06T11:00:00Z',
+    updated_at: '2026-04-06T11:00:00Z',
+    estimated_time: 50,
+    courseId: 'ielts-masterclass',
+    moduleName: 'Module 2: Writing Task 1 & 2 Excellence (8 Classes)',
+    content: {
+      title: 'Class 09: Task 2 Essay Structures (Agree/Disagree & Discussion)',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'How to identify Agree/Disagree vs Discussion questions',
+        'Writing a Band 9 Thesis Statement',
+        'Paragraphing for Opinion Essays',
+        'Balanced vs. One-sided arguments',
+        'Advanced templates for Conclusion'
+      ],
+      coreExplanation: `**The "Thesis-Driven" Structure**
+      
+In Task 2, your **Clear Position** is what examiners look for first. 
+
+**1. Agree/Disagree (Opinion) Structure:**
+- **Intro**: Paraphrase + "I completely agree that..." or "While I see X, I disagree that..."
+- **Body 1**: Reason 1 + Explanation + Example.
+- **Body 2**: Reason 2 + Explanation + Example. (Focus on YOUR side).
+- **Conclusion**: Summarize reasons 1 & 2 + Restate opinion.
+
+**2. Discussion (+ Opinion) Structure:**
+- **Intro**: Paraphrase both sides + "This essay will argue that..."
+- **Body 1**: View 1 (The side you DISAGREE with) - Explain fairly.
+- **Body 2**: View 2 (The side you AGREE with) - Explain why it's better.
+- **Conclusion**: Summarize points + Final Opinion.
+
+**3. The Thesis Statement:**
+This is the second sentence of your intro. It must tell the examiner exactly what you believe. Example: *"I firmly believe that students should have the freedom to choose their own subjects rather than following a rigid curriculum."*`,
+      examples: [
+        { 
+          sentence: '**Agree/Disagree Thesis:**\n"I completely disagree with the idea that computers will replace teachers in the classroom."', 
+          explanation: 'Note the clarity. The examiner knows your position immediately.' 
+        },
+        { 
+          sentence: '**Discussion Opening:**\n"While some believe that formal education is the only path to success, others maintain that practical experience is more valuable. In my view, both are essential..."', 
+          explanation: 'Note the balance. It addresses the "Discuss both views" part of the prompt.' 
+        }
+      ],
+      commonMistakes: [
+        { mistake: 'Wait until the conclusion to give your opinion', correction: 'Give your opinion in the INTRO, BODY, and CONCLUSION.', explanation: 'The examiner needs to see a "clear position throughout the response".' },
+        { mistake: 'Not having a clear thesis', correction: 'Explicitly state "I believe" or "I disagree" in the first paragraph.', explanation: 'Without a thesis, your essay lacks direction and lowers your score.' }
+      ],
+      miniPractice: [
+        { question: 'A "Discuss both views" question requires how many views to be explained?', options: ['One', 'Two', 'Three', 'None'], type: 'multiple-choice' },
+        { question: 'True/False: You can partially agree in an "Agree/Disagree" essay.', options: ['True', 'False'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        'Two',
+        'True (This is called a balanced or nuanced approach)'
+      ],
+      quickRecap: 'Structure is the skeleton of your essay. For Opinion essays, focus on your side. For Discussion essays, look at both but lean towards one. ALWAYS have a clear Thesis in the Intro.',
+      speakingLines: [
+        "In my opinion, the benefits of X far outweigh the drawbacks of...",
+        "Having considered both sides of the argument, I am convinced that...",
+        "This essay will demonstrate that..."
+      ]
+    }
+  },
+  {
+    id: 'writing-class8-task1-general',
+    title: 'Class 08: Task 1 General - Letter Writing Tone & Purpose',
+    slug: 'writing-class8-task1-general',
+    type: 'writing',
+    level: 'intermediate',
+    topic: 'Task 1 General',
+    description: 'Master the "Tone-Matching" system for General Training Task 1. Learn how to switch between Formal, Semi-Formal, and Informal styles for perfect Task Achievement.',
+    is_premium: true,
+    is_published: true,
+    view_count: 0,
+    created_at: '2026-04-06T11:00:00Z',
+    updated_at: '2026-04-06T11:00:00Z',
+    estimated_time: 40,
+    courseId: 'ielts-masterclass',
+    moduleName: 'Module 2: Writing Task 1 & 2 Excellence (8 Classes)',
+    content: {
+      title: 'Class 08: Task 1 General - Letter Writing Tone & Purpose',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'The "Purpose-First" opening',
+        'Tone identification: Formal vs. Semi-Formal vs. Informal',
+        'Addressing all 3 bullet points logically',
+        'Sign-off mastery (Yours faithfully vs Sincerely vs Best regards)',
+        'Letter structures: Complaints, Requests, Apologies'
+      ],
+      coreExplanation: `**The "Tone-Matching" System**
+      
+In General Training Task 1, your **Tone** is the most important factor for Band 7+. 
+
+**1. Identifying Tone:**
+- **Formal**: To an official, manager, or company (someone you DON'T know). No contractions (I am, not I'm).
+- **Semi-Formal**: To a neighbor, colleague, or landlord (someone you know but are not friends with). 
+- **Informal**: To a friend or family member. Use contractions (I'll, I'm).
+
+**2. The 3-Bullet Rule:**
+Every letter has 3 bullet points. You MUST dedicate at least one paragraph to EACH bullet. If you miss even one detail, your score drops.
+
+**3. Standard Structure:**
+- **Dear [Salutation]**
+- **Purpose Statement**: "I am writing to..."
+- **P1: Detail 1**
+- **P2: Detail 2**
+- **P3: Detail 3**
+- **Closing Statement**: "I look forward to hearing from you."
+- **Sign-off**: Yours faithfully / Sincerely / Best wishes`,
+      examples: [
+        { 
+          sentence: '**Formal Opening:**\n"I am writing to express my dissatisfaction regarding a faulty coffee machine I purchased from your store last Tuesday."\n\n**Informal Opening:**\n"Hi John, I\'m just writing to say how much I enjoyed your birthday party last weekend!"', 
+          explanation: 'Note the difference in the first sentence. Immediate purpose vs. friendly opening.' 
+        },
+        { 
+          sentence: '**Formal Sign-off:**\n"Yours faithfully," (if you started with Dear Sir/Madam)\n\n**Informal Sign-off:**\n"Best wishes," or "See you soon,"', 
+          explanation: 'Getting the sign-off wrong can break your tone and lower your score.' 
+        }
+      ],
+      commonMistakes: [
+        { mistake: 'Mixing formal and informal styles', correction: 'Stay consistent. If you start formal, do NOT use slang later.', explanation: 'Inconsistency in tone confuses the recipient and lowers your band.' },
+        { mistake: 'Not addressing one bullet point', correction: 'Check off each bullet once you have written about it.', explanation: 'Missing a bullet point is the #1 reason for a Band 5 in Task Achievement.' }
+      ],
+      miniPractice: [
+        { question: 'Which opening is better for a letter to a bank manager?', options: ['"Hi, I want a loan."', '"I am writing to enquire about a business loan."', '"Dear Manager, fix my account."', '"Hey! Can you help?"'], type: 'multiple-choice' },
+        { question: 'True/False: You should use "Yours faithfully" if you know the person\'s name.', options: ['True', 'False'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        '"I am writing to enquire about a business loan."',
+        'False (Use "Yours sincerely" if you know the name)'
+      ],
+      quickRecap: 'General Task 1 is about getting the TONE right. Choose your style immediately, address all 3 bullet points clearly, and use the correct sign-off. Remember: P.A.S (Purpose, Action, Sign-off).',
+      speakingLines: [
+        "I am writing to formally request a transfer to...",
+        "I'd be extremely grateful if you could look into this matter.",
+        "I look forward to your prompt response."
+      ]
+    }
+  },
+  {
+    id: 'writing-class7-task1-academic',
+    title: 'Class 07: Task 1 Academic - Data Analysis & Report Writing',
+    slug: 'writing-class7-task1-academic',
+    type: 'writing',
+    level: 'intermediate',
+    topic: 'Task 1 Academic',
+    description: 'Master the "Divide-and-Conquer" method for Academic Task 1. Learn how to group data, identify trends, and write clear overviews for any chart type.',
+    is_premium: true,
+    is_published: true,
+    view_count: 0,
+    created_at: '2026-04-06T11:00:00Z',
+    updated_at: '2026-04-06T11:00:00Z',
+    estimated_time: 45,
+    courseId: 'ielts-masterclass',
+    moduleName: 'Module 2: Writing Task 1 & 2 Excellence (8 Classes)',
+    content: {
+      title: 'Class 07: Task 1 Academic - Data Analysis & Report Writing',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'The 4-Paragraph "Gold Standard" Structure',
+        'How to write a Band 9 Overview (The most important part!)',
+        'Grouping strategies for complex data',
+        'Comparison language that examiners love',
+        'Data-specific vocabulary (surged, plummeted, plateaued)'
+      ],
+      coreExplanation: `**The "Divide-and-Conquer" Strategy**
+      
+In Task 1 Academic, your job isn't just to "describe" data—it's to **summarize** and **compare**. 
+
+**1. The 4-Paragraph Structure:**
+- **P1: Introduction**: Paraphrase the prompt (Change "shows" to "illustrates/depicts").
+- **P2: Overview**: Highlight the 2 most significant trends. NO NUMBERS here.
+- **P3: Detail Body 1**: Group the first set of related data with numbers.
+- **P4: Detail Body 2**: Group the second set of data, making comparisons to Body 1.
+
+**2. The Overview Secret:**
+Without a clear overview, you cannot score above a Band 5 for Task Achievement. Start your overview with: *"Overall, it is clear that..."* or *"Notably, the most striking feature is..."*
+
+**3. Grouping Logic:**
+Don't describe every bar or every line. Group by:
+- **Trends**: Things going up vs. things going down.
+- **Magnitude**: Big players vs. small players.
+- **Time**: Beginning of the period vs. the end.`,
+      examples: [
+        { 
+          sentence: '**Prompt Paraphrasing:**\n"The graph shows the consumption of energy in the USA from 1980 to 2030."\n\n**Band 9 Paraphrase:** "The line graph illustrates the levels of energy usage in the United States over a fifty-year period, with actual data from 1980 to 2015 and projections until 2030."', 
+          explanation: 'Note the use of "illustrates", "levels of energy usage", and "projections" to avoid repetition.' 
+        },
+        { 
+          sentence: '**Overview Comparison:**\n"Overall, it is evident that while the consumption of fossil fuels is expected to dominate energy usage throughout the period, renewable energy sources are projected to show the most significant growth rate."', 
+          explanation: 'This identifies the main trend (fossil fuels dominate) and the most interesting change (renewables grow fastest).' 
+        }
+      ],
+      commonMistakes: [
+        { mistake: 'Including your own opinion', correction: 'Never say "This is because..." or "I think this is good."', explanation: 'Task 1 is purely objective. Only describe what is on the paper.' },
+        { mistake: 'Describing every single point', correction: 'Select key features and make comparisons.', explanation: 'Listing every number makes your report boring and lowers your Coherence score.' }
+      ],
+      miniPractice: [
+        { question: 'Which paragraph is the most important for Task Achievement?', options: ['Introduction', 'Overview', 'Body 1', 'Conclusion'], type: 'multiple-choice' },
+        { question: 'True/False: You should always write a conclusion in Task 1.', options: ['True', 'False'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        'Overview',
+        'False (An overview is needed, but a traditional "Conclusion" is for Task 2)'
+      ],
+      quickRecap: 'Task 1 Academic = Structure + Selectivity + Comparison. Master the Overview first! Use "Divide-and-Conquer" to group your data logically and never describe every single bar/line individually.',
+      speakingLines: [
+        "The graph illustrates a clear upward trend in...",
+        "In stark contrast, the figures for X plummeted to...",
+        "A closer look at the data reveals that..."
+      ]
+    }
+  },
   // ============================================
   // TASK 2: Opinion Essays
   // ============================================

@@ -1158,6 +1158,8 @@ export function AdminPage() {
                         <SelectItem value="grammar">Grammar</SelectItem>
                         <SelectItem value="speaking">Speaking</SelectItem>
                         <SelectItem value="writing">Writing</SelectItem>
+                        <SelectItem value="reading">Reading</SelectItem>
+                        <SelectItem value="listening">Listening</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

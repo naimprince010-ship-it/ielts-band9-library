@@ -12,7 +12,7 @@ export const SPEAKING_LESSONS: Lesson[] = [
   // ============================================
   {
     id: 'speaking-part1-fluency-confidence',
-    title: 'Class 1: Part 1 Fluency & Confidence Building',
+    title: 'Class 01: Part 1 Fluency & Confidence Building',
     slug: 'speaking-part1-fluency-confidence',
     type: 'speaking',
     level: 'beginner',
@@ -27,7 +27,7 @@ export const SPEAKING_LESSONS: Lesson[] = [
     courseId: 'ielts-masterclass',
     moduleName: 'Module 1: Speaking Mastery',
     content: {
-      title: 'Speaking Class 1: Part 1 Fluency & Confidence Building',
+      title: 'Class 01: Part 1 Fluency & Confidence Building',
       targetLevel: 'Band 6.0 - 9.0',
       whatYouWillLearn: [
         'How to maintain eye contact and natural body language',
@@ -79,6 +79,375 @@ Part 1 asks familiar questions (hometown, childhood, etc.). You don't need to "i
         "That's a very interesting question, let me see...",
         "Actually, I'd say I'm quite a morning person.",
         "Well, to be honest, I haven't really considered that before."
+      ]
+    }
+  },
+  {
+    id: 'speaking-class2-expansion-techniques',
+    title: 'Class 02: Expanding Answers with Cohesive Devices',
+    slug: 'speaking-class2-expansion-techniques',
+    type: 'speaking',
+    level: 'intermediate',
+    topic: 'Part 1 Expansion',
+    description: 'Learn how to extend your answers naturally using the P.E.E.L method and variety of cohesive devices for Band 7+ fluency.',
+    is_premium: true,
+    is_published: true,
+    view_count: 0,
+    created_at: '2026-04-06T10:00:00Z',
+    updated_at: '2026-04-06T10:00:00Z',
+    estimated_time: 40,
+    courseId: 'ielts-masterclass',
+    moduleName: 'Module 1: Speaking Mastery',
+    content: {
+      title: 'Class 02: Expanding Answers with Cohesive Devices',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'How to use the Point-Example-Explanation (P.E.X) method',
+        'Cohesive devices for contrast (however, on the other hand)',
+        'Techniques for adding reasons and anecdotes',
+        'Balanced answers (not too short, not too long)',
+        'Mastering "And" vs "Moreover" in speaking'
+      ],
+      coreExplanation: `**Class 2: The Art of Expansion**
+      
+One of the biggest mistakes candidates make is giving short, "robotic" answers. To reach Band 7+, you must **expand your ideas**.
+
+**The P.E.X Method:**
+1. **P**oint: Directly answer the question.
+2. **E**xample/Detail: Provide a specific detail or instance.
+3. **X**tra Info/Contrast: Add a contradictory point or a reason.
+
+**Example Topic: Parks**
+**Question:** Do you like to go to parks?
+- **P:** Absolutely, I'm quite a fan of spending time in green spaces.
+- **E:** For instance, there's a lovely park near my house where I go for a jog every morning.
+- **X:** However, when it's raining, I usually prefer staying indoors and reading a book.
+
+**Cohesive Devices for Speaking:**
+In speaking, cohesive devices must sound **natural**, not formal like in writing.
+- **Instead of "Furthermore":** Use "On top of that..." or "Also..."
+- **Instead of "In conclusion":** Use "So, basically..."
+- **Instead of "Nevertheless":** Use "Still..." or "Having said that..."`,
+      examples: [
+        { 
+          sentence: '**Question: What is your favorite type of food?**\n\n**Band 9 Response:** "Well, to be honest, I\'ve always been a huge fan of spicy cuisine, particularly anything with plenty of chili. Having said that, I do try to cut down on street food because, although it\'s delicious, it can be a bit unhealthy."', 
+          explanation: 'Note the "Having said that" for contrast and "Because, although..." for complex structure.' 
+        },
+        { 
+          sentence: '**EXPANSION TOOLKIT - Reason Connectors:**\n\n- "...as I was saying..." (Referencing back)\n- "...which is why..." (Cause/Effect)\n- "...particularly when..." (Specifying)\n- "...even though it can be..." (Concession)', 
+          explanation: 'These allow you to keep talking without repeating yourself.' 
+        }
+      ],
+      commonMistakes: [
+        { mistake: 'Saying "Yes" or "No" and stopping', correction: 'Always add at least one "Because" or "For instance"', explanation: 'The examiner needs to hear your language. If you dont speak, they cant grade you.' },
+        { mistake: 'Using writing-style connectors like "In contrast"', correction: 'Use "In contrast" only in Writing. In Speaking, use "On the other hand" or "But"', explanation: 'Register is important. Formal connectors in speaking sound memorized and unnatural.' }
+      ],
+      miniPractice: [
+        { question: 'What does the "X" in the P.E.X method stand for?', options: ['X-ray vision', 'Xtra Information/Contrast', 'Xpensive answers'], type: 'multiple-choice' },
+        { question: 'Fill in: "I love reading, _____ to be honest, I rarely find the time to do it."', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Xtra Information/Contrast',
+        'but / however / although'
+      ],
+      quickRecap: 'Class 2 is about NEVER stopping after one sentence. Use P.E.X to build 3-sentence answers. Use "but", "however", and "also" to link your thoughts naturally.',
+      speakingLines: [
+        "On top of that, it's a great way to meet new people.",
+        "Having said that, I'm not really fond of crowded places.",
+        "Which is why I prefer studying in the library."
+      ]
+    }
+  },
+  {
+    id: 'speaking-class3-cuecard-storytelling',
+    title: 'Class 03: Part 2 Cue-Card Storytelling Method (Group A)',
+    slug: 'speaking-class3-cuecard-storytelling',
+    type: 'speaking',
+    level: 'intermediate',
+    topic: 'Part 2 Cue Card',
+    description: 'Master the 1-minute preparation and 2-minute delivery of IELTS Speaking Part 2 using the Storytelling and PPF (Past-Present-Future) methods.',
+    is_premium: true,
+    is_published: true,
+    view_count: 0,
+    created_at: '2026-04-06T10:00:00Z',
+    updated_at: '2026-04-06T10:00:00Z',
+    estimated_time: 45,
+    courseId: 'ielts-masterclass',
+    moduleName: 'Module 1: Speaking Mastery',
+    content: {
+      title: 'Class 03: Part 2 Cue-Card Storytelling Method (Group A)',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'How to brainstrom in 1 minute using keywords',
+        'The PPF (Past, Present, Future) technique for content',
+        'The Storytelling frame for natural flow',
+        'How to keep talking for 2 full minutes',
+        'Using "Signposting" phrases'
+      ],
+      coreExplanation: `**Class 3: Part 2 Mastering the Long Turn**
+
+Part 2 is the most intimidating for many, but it's just a **2-minute story**.
+
+**Preparation Strategy (The 1-Minute Sprint):**
+Don't write sentences. Write **6-8 Keywords**. 
+Keywords should trigger a story, not a list.
+
+**The PPF Framework:**
+If you run out of things to say about the *present*, talk about the *past* and *future*:
+1. **Past**: "I remember it started when..."
+2. **Present**: "Now, I usually..."
+3. **Future**: "In the future, I hope to..."
+
+**The Storytelling Hook:**
+Start with a strong opening:
+- "I'd like to tell you about a time when..."
+- "There is one particular event that stands out in my mind..."
+- "I'm going to talk about..." (Simple but effective)`,
+      examples: [
+        { 
+          sentence: '**Topic: Describe a beautiful place you visited.**\n\n**Band 9 Hook:** "To be perfectly honest, I\'ve had the good fortune of traveling to quite a few stunning locations, but the one that truly took my breath away was a hidden beach I stumbled upon in Bali."', 
+          explanation: 'Using "To be perfectly honest..." and "...truly took my breath away" shows advanced lexical resource and fluency.' 
+        },
+        { 
+          sentence: '**SIGNPOSTING PHRASES:**\n\n- "Moving on to where it was..."\n- "As for why I liked it..."\n- "Another thing I should mention is..."\n- "Interestingly enough..."', 
+          explanation: 'These phrases act as "glue" for your 2-minute talk, making it easy to follow.' 
+        }
+      ],
+      commonMistakes: [
+        { mistake: 'Reading your notes word-for-word', correction: 'Glance at keywords, but keep eye contact with the examiner', explanation: 'Part 2 is a speaking test, not a reading test. Notes are just triggers.' },
+        { mistake: 'Stopping before the examiner says "Thank you"', correction: 'Keep talking until you are stopped.', explanation: 'Stopping early suggests you lack fluency to sustain a long speech.' }
+      ],
+      miniPractice: [
+        { question: 'What does "PPF" stand for in Speaking Part 2?', options: ['Point-Proof-Fact', 'Past-Present-Future', 'Practical-Positive-Form'], type: 'multiple-choice' },
+        { question: 'True/False: You should write full sentences during the 1-minute prep time.', options: ['True', 'False'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        'Past-Present-Future',
+        'False'
+      ],
+      quickRecap: 'In Class 3, we master the 2-minute long turn. Use the PPF method to never run out of ideas. Use signposting to keep your story organized. Practice with a timer!',
+      speakingLines: [
+        "I'd like to tell you about a person who has influenced me greatly.",
+        "Moving on to how I felt about the situation...",
+        "Interestingly enough, I didn't actually expect to enjoy it so much."
+      ]
+    }
+  },
+  {
+    id: 'speaking-class4-part2-logic',
+    title: 'Class 04: Part 2 Cue-Card Storytelling Method (Group B)',
+    slug: 'speaking-class4-part2-logic',
+    type: 'speaking',
+    level: 'intermediate',
+    topic: 'Part 2 Logic',
+    description: 'Advanced logical structuring for complex Part 2 topics including describing abstract things, objects, and people.',
+    is_premium: true,
+    is_published: true,
+    view_count: 0,
+    created_at: '2026-04-06T10:00:00Z',
+    updated_at: '2026-04-06T10:00:00Z',
+    estimated_time: 45,
+    courseId: 'ielts-masterclass',
+    moduleName: 'Module 1: Speaking Mastery',
+    content: {
+      title: 'Class 04: Part 2 Cue-Card Storytelling Method (Group B)',
+      targetLevel: 'Band 7.0 - 9.0',
+      whatYouWillLearn: [
+        'How to group topics (The "Macro-Topic" strategy)',
+        'Describing "Abstract" topics (Values, laws, ambitions)',
+        'Describing "People" (Personalities and appearances)',
+        'Describing "Objects" (Sensory details: sight, smell, touch)',
+        'Idiomatic expressions for Part 2'
+      ],
+      coreExplanation: `**Class 4: Part 2 Topic Mastery**
+
+Instead of practicing 100 topics, learn to group them into **5 Macro-Topics**:
+1. **Person**: (Teacher, family member, hero, neighbor)
+2. **Place**: (Hometown, cafe, building, country)
+3. **Object**: (Gift, phone, book, photo)
+4. **Event/Experience**: (Success, journey, change, celebration)
+5. **Abstract**: (Ambition, rule, law, value)
+
+**Sensory Details (The 5-Senses Rule):**
+When describing an object or place, use sensory details to sound natural and descriptive:
+- "The **aroma** of the coffee was..."
+- "It felt incredibly **smooth** to the touch..."
+- "The **vibrant colors** were quite a sight..."
+
+**Idioms for Part 2:**
+Don't lists idioms. Use them naturally:
+- "It was **once in a blue moon**."
+- "I was **over the moon**."
+- "It **cost an arm and a leg**."`,
+      examples: [
+        { 
+          sentence: '**Topic: Describe a gift you received.**\n\n**Band 9 Snippet:** "To be honest, it didn\'t cost an arm and a leg, but its sentimental value was priceless. It was an old, leather-bound journal that my grandfather had used to document his travels."', 
+          explanation: 'Uses an idiom (cost an arm and a leg) naturally and contrast with "sentimental value".' 
+        }
+      ],
+      commonMistakes: [
+        { mistake: 'Trying to use too many "Advanced" words', correction: 'Focus on topic-specific vocabulary (e.g., "leather-bound", "vibrant")', explanation: 'Using rare words incorrectly is worse than using common words correctly.' },
+        { mistake: 'Ignoring the bullet points on the card', correction: 'Use them as a guide, but don\'t be afraid to talk about more.', explanation: 'The bullet points help you stay on track, but you don\'t have to follow them strictly.' }
+      ],
+      miniPractice: [
+        { question: 'Which is NOT one of the 5 Macro-Topics spoken about in Class 4?', options: ['Person', 'Vegetable', 'Object', 'Abstract'], type: 'multiple-choice' },
+        { question: 'Fill in: "The hotel was beautiful, and the room was worth every ____."', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Vegetable',
+        'penny / cent'
+      ],
+      quickRecap: 'Class 4 is about classifying topics and using descriptive, sensory language. Use idioms selectively and don\'t forget the 5 Macro-Topics strategy.',
+      speakingLines: [
+        "It's something I only use once in a blue moon, but when I do...",
+        "The first thing that caught my eye was...",
+        "Words can't really do justice to how beautiful it was."
+      ]
+    }
+  },
+  {
+    id: 'speaking-class5-part3-analysis',
+    title: 'Class 05: Part 3 Analytical & Abstract Question Handling',
+    slug: 'speaking-class5-part3-analysis',
+    type: 'speaking',
+    level: 'advanced',
+    topic: 'Part 3 Analysis',
+    description: 'Master the "Discussion" stage of IELTS Speaking. Learn techniques for comparison, speculation, and expressing complex opinions for Band 8+.',
+    is_premium: true,
+    is_published: true,
+    view_count: 0,
+    created_at: '2026-04-06T10:00:00Z',
+    updated_at: '2026-04-06T10:00:00Z',
+    estimated_time: 50,
+    courseId: 'ielts-masterclass',
+    moduleName: 'Module 1: Speaking Mastery',
+    content: {
+      title: 'Class 05: Part 3 Analytical & Abstract Question Handling',
+      targetLevel: 'Band 7.5 - 9.0',
+      whatYouWillLearn: [
+        'Difference between Personal (Part 1) and General (Part 3) views',
+        'Comparison structures (In the past vs Nowadays)',
+        'Hypothetical/Speculative language (If, might, could)',
+        'Structuring long discussion points (Firstly, Secondly...)',
+        'How to agree and disagree politely'
+      ],
+      coreExplanation: `**Class 5: Part 3 The Discussion**
+
+In Part 3, the examiner wants to see if you can discuss **abstract ideas** objectively.
+
+**The Golden Rule:** Don't use "I". 
+Use "People", "Society", or "Individuals".
+- **Part 1:** "I love fast food."
+- **Part 3:** "Many people are drawn to fast food because of its convenience."
+
+**Speculation (Future/Hypothetical):**
+Questions often ask about the future. Use "Conditional" structures:
+- "If governments were to invest more in education, then..."
+- "It is highly likely that technology will..."
+
+**Comparison Over Time:**
+- "Previously, people tended to..."
+- "In this modern era, however, there has been a shift towards..."`,
+      examples: [
+        { 
+          sentence: '**Question: Is it better to live in a house or an apartment?**\n\n**Band 9 Answer:** "Well, it really depends on an individual\'s lifestyle. For instance, families with young children might find a house more suitable due to the extra space. Having said that, for young professionals, an apartment in the city center is often far more convenient."', 
+          explanation: 'Generalizing (Families, young professionals) and showing both sides (Having said that).' 
+        },
+        { 
+          sentence: '**AGREEING & DISAGREEING:**\n\n- "I couldn\'t agree more with that statement..."\n- "I\'m not entirely sure I agree with that because..."\n- "While I see your point, I think..."\n- "That\'s a valid perspective, but from another point of view..."', 
+          explanation: 'These phrases show maturity and high-level conversational skill.' 
+        }
+      ],
+      commonMistakes: [
+        { mistake: 'Giving personal examples in Part 3', correction: 'Use general examples from society or news', explanation: 'Part 3 is an abstract discussion. Keep it objective.' },
+        { mistake: 'Giving a 1-sentence answer', correction: 'Expand using "On the other hand" or "Furthermore"', explanation: 'Expect "Why?" from the examiner if you are too brief.' }
+      ],
+      miniPractice: [
+        { question: 'In Part 3, should you generally use "I" or talk about "People/Society"?', options: ['"I"', '"People/Society"'], type: 'multiple-choice' },
+        { question: 'True/False: "I couldn\'t agree more" means you disagree.', options: ['True', 'False'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        '"People/Society"',
+        'False'
+      ],
+      quickRecap: 'Class 5 is the most academic part of speaking. Stay objective, use speculation, and compare ideas. Practice turning your personal opinions into general statements.',
+      speakingLines: [
+        "From an economic standpoint, I think that...",
+        "It's highly probable that we will see a significant change in...",
+        "While some might argue that it is harmful, others believe..."
+      ]
+    }
+  },
+  {
+    id: 'speaking-class6-mocks-delivery',
+    title: 'Class 06: Pronunciation, Intonation & Final Speaking Mocks',
+    slug: 'speaking-class6-mocks-delivery',
+    type: 'speaking',
+    level: 'advanced',
+    topic: 'Final Delivery',
+    description: 'Polishing your delivery. Focus on syllable stress, intonation, chunking, and full 15-minute mock test simulation.',
+    is_premium: true,
+    is_published: true,
+    view_count: 0,
+    created_at: '2026-04-06T10:00:00Z',
+    updated_at: '2026-04-06T10:00:00Z',
+    estimated_time: 60,
+    courseId: 'ielts-masterclass',
+    moduleName: 'Module 1: Speaking Mastery',
+    content: {
+      title: 'Class 06: Pronunciation, Intonation & Final Speaking Mocks',
+      targetLevel: 'Band 7.5 - 9.0',
+      whatYouWillLearn: [
+        'Sentence stress and "Chunking" for natural rhythm',
+        'Intonation to express emotion and emphasize points',
+        'Consonant clusters and common mispronunciations',
+        'The psychology of the exam: Overcoming nerves',
+        'Full Speaking Mock Simulation'
+      ],
+      coreExplanation: `**Class 6: The Final Polish**
+
+Your final speaking class is all about **how** you say things.
+
+**1. Chunking:**
+Native speakers don't speak word-by-word. They speak in "chunks" (meaningful phrases). 
+*Bad:* I / went / to / the / park / yesterday.
+*Good:* I went to the park // yesterday.
+
+**2. Sentence Stress:**
+Stress the "Content Words" (Nouns, Verbs, Adjectives).
+- "It was a **magical** **experience** that I'll **never** **forget**."
+
+**3. Intonation:**
+Use your voice like a musical instrument.
+- High pitch for excitement.
+- Low pitch for something serious.
+- Rising intonation for lists.
+
+**4. The Mock mindset:**
+Smilling (where appropriate) actually helps your pronunciation by relaxing your facial muscles!`,
+      examples: [
+        { 
+          sentence: '**SAMPLE CHUNKING:**\n\n"To be honest, // I haven\'t been back to my hometown // in a very long time, // so I\'m not quite sure // how much it\'s changed."', 
+          explanation: 'The "//" indicate pauses for natural rhythm.' 
+        }
+      ],
+      commonMistakes: [
+        { mistake: 'Speaking like a robot (monotone)', correction: 'Use stress and intonation to highlight key words', explanation: 'Monotone speech is hard to understand and results in a Band 5/6 for Pronunciation.' },
+        { mistake: 'Worrying about an accent', correction: 'Focus on CLARITY, not hiding your accent', explanation: 'IELTS allows all accents as long as you are easy to understand.' }
+      ],
+      miniPractice: [
+        { question: 'What does "Chunking" mean in Speaking?', options: ['Eating during the exam', 'Speaking in meaningful phrases', 'Interrupting the examiner'], type: 'multiple-choice' },
+        { question: 'True/False: Having a non-native accent will automatically lower your score.', options: ['True', 'False'], type: 'multiple-choice' }
+      ],
+      answerKey: [
+        'Speaking in meaningful phrases',
+        'False'
+      ],
+      quickRecap: 'Class 6 is your final dress rehearsal. Focus on clarity, rhythm, and confidence. Record yourself and listen to your "Chunking". You are ready for the test!',
+      speakingLines: [
+        "In a nutshell, I'd say that...",
+        "If I had to sum it up in one word, it would be...",
+        "Actually, let me rephrase that..."
       ]
     }
   },

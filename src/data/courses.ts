@@ -52,45 +52,45 @@ export const COURSES: Course[] = [
       {
         module: "Module 1: Speaking Mastery (6 Classes)",
         lessons: [
-          { title: "Class 1: Part 1 Fluency & Confidence Building", lessonId: "speaking-part1-fluency-confidence" },
-          "Class 2: Expanding Answers with Cohesive Devices",
-          "Class 3: Part 2 Cue-Card Storytelling Method (Group A)",
-          "Class 4: Part 2 Cue-Card Storytelling Method (Group B)",
-          "Class 5: Part 3 Analytical & Abstract Question Handling",
-          "Class 6: Pronunciation, Intonation & Final Speaking Mocks"
+          { title: "Class 01: Part 1 Fluency & Confidence Building", lessonId: "speaking-part1-fluency-confidence" },
+          { title: "Class 02: Expanding Answers with Cohesive Devices", lessonId: "speaking-class2-expansion-techniques" },
+          { title: "Class 03: Part 2 Cue-Card Storytelling Method (Group A)", lessonId: "speaking-class3-cuecard-storytelling" },
+          { title: "Class 04: Part 2 Cue-Card Storytelling Method (Group B)", lessonId: "speaking-class4-part2-logic" },
+          { title: "Class 05: Part 3 Analytical & Abstract Question Handling", lessonId: "speaking-class5-part3-analysis" },
+          { title: "Class 06: Pronunciation, Intonation & Final Speaking Mocks", lessonId: "speaking-class6-mocks-delivery" }
         ]
       },
       {
         module: "Module 2: Writing Task 1 & 2 Excellence (8 Classes)",
         lessons: [
-          "Class 7: Task 1 Academic - Data Analysis & Report Writing",
-          "Class 8: Task 1 General - Letter Writing Tone & Purpose",
-          "Class 9: Task 2 Essay Structures (Agree/Disagree & Discussion)",
-          "Class 10: Task 2 Essay Structures (Problem/Solution & Direct)",
-          "Class 11: Cohesion & Coherence: Linking Ideas Like a Pro",
-          "Class 12: Advanced Vocabulary & Collocations for Writing",
-          "Class 13: Grammatical Range & Accuracy for Band 8+",
-          "Class 14: Full Essay Live Review & Personal Feedback"
+          { title: "Class 07: Task 1 Academic - Data Analysis & Report Writing", lessonId: "writing-class7-task1-academic" },
+          { title: "Class 08: Task 1 General - Letter Writing Tone & Purpose", lessonId: "writing-class8-task1-general" },
+          { title: "Class 09: Task 2 Essay Structures (Agree/Disagree & Discussion)", lessonId: "writing-class9-task2-essay-logic" },
+          { title: "Class 10: Task 2 Essay Structures (Problem/Solution & Direct)", lessonId: "writing-class10-task2-problem-solution" },
+          { title: "Class 11: Cohesion & Coherence: Linking Ideas Like a Pro", lessonId: "writing-class11-cohesion-coherence" },
+          { title: "Class 12: Advanced Vocabulary & Collocations for Writing", lessonId: "writing-class12-vocabulary-collocations" },
+          { title: "Class 13: Grammatical Range & Accuracy for Band 8+", lessonId: "writing-class13-grammatical-range" },
+          { title: "Class 14: Full Essay Live Review & Personal Feedback", lessonId: "writing-class14-essay-review" }
         ]
       },
       {
         module: "Module 3: Reading Speed & Strategy (5 Classes)",
         lessons: [
-          "Class 15: Skimming & Scanning: The FOUNDATION",
-          "Class 16: Solving True/False/Not Given & Yes/No/Not Given",
-          "Class 17: Heading Matching & Summary Completion Secrets",
-          "Class 18: Keyword Mapping & Eliminate Distractors",
-          "Class 19: Full Passage Solve - Time Management Under Pressure"
+          { title: "Class 15: Skimming & Scanning: The FOUNDATION", lessonId: "reading-class15-skimming-scanning" },
+          { title: "Class 16: Solving True/False/Not Given & Yes/No/Not Given", lessonId: "reading-class16-tfng" },
+          { title: "Class 17: Heading Matching & Summary Completion Secrets", lessonId: "reading-class17-headings-summary" },
+          { title: "Class 18: Keyword Mapping & Eliminate Distractors", lessonId: "reading-class18-keyword-mapping" },
+          { title: "Class 19: Full Passage Solve - Time Management Under Pressure", lessonId: "reading-class19-full-passage" }
         ]
       },
       {
         module: "Module 4: Listening Precision (5 Classes)",
         lessons: [
-          "Class 20: Avoiding Common Traps (Names, Numbers, Spellings)",
-          "Class 21: Section 1 & 2: Form & Note Completion Mastery",
-          "Class 22: Section 3: Multiple Choice & Matching in Dialogues",
-          "Class 23: Section 4: Academic Lecture Completion Techniques",
-          "Class 24: Final Full Mock Listening & Strategy Wrap-up"
+          { title: "Class 20: Avoiding Common Traps (Names, Numbers, Spellings)", lessonId: "listening-class20-avoiding-traps" },
+          { title: "Class 21: Section 1 & 2: Form & Note Completion Mastery", lessonId: "listening-class21-section1-2" },
+          { title: "Class 22: Section 3: Multiple Choice & Matching in Dialogues", lessonId: "listening-class22-section3" },
+          { title: "Class 23: Section 4: Academic Lecture Completion Techniques", lessonId: "listening-class23-section4" },
+          { title: "Class 24: Final Full Mock Listening & Strategy Wrap-up", lessonId: "listening-class24-mock-wrapup" }
         ]
       }
     ]

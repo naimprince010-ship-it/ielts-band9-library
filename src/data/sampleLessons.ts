@@ -3,8 +3,16 @@ import { NEW_VOCABULARY_LESSONS } from './newVocabularyLessons';
 import { NEW_GRAMMAR_LESSONS } from './newGrammarLessons';
 import { WRITING_LESSONS, WRITING_TOPICS } from './writingLessons';
 import { SPEAKING_LESSONS, SPEAKING_TOPICS } from './speakingLessons';
+import { READING_LESSONS } from './readingLessons';
+import { LISTENING_LESSONS } from './listeningLessons';
 
 export const SAMPLE_LESSONS: Lesson[] = [
+  ...READING_LESSONS,
+  ...LISTENING_LESSONS,
+  ...SPEAKING_LESSONS,
+  ...WRITING_LESSONS,
+  ...NEW_VOCABULARY_LESSONS,
+  ...NEW_GRAMMAR_LESSONS,
   {
     id: 'vocab-1',
     title: 'Academic Vocabulary: Education & Learning',
