@@ -16,9 +16,30 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { COURSES } from '@/data/courses';
+import { Badge } from '@/components/ui/badge';
+import { useState, useEffect } from 'react';
+import { courseService } from '@/services/courseService';
+import { Course } from '@/types';
+import { Loader2 } from 'lucide-react';
 
 export function CoursesPage() {
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const data = await courseService.getCourses();
+        setCourses(data);
+      } catch (err) {
+        console.error('Error fetching courses:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourses();
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
@@ -71,114 +92,126 @@ export function CoursesPage() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-            {COURSES.map((course, index) => (
-              <Card 
-                key={course.id} 
-                className={`group overflow-hidden transition-all duration-300 hover:shadow-lg ${
-                  index === 0 ? 'md:col-span-2 lg:col-span-1' : ''
-                }`}
-              >
-                <CardHeader className="pb-4">
-                  <div className="flex items-start justify-between gap-4 mb-4">
-                    <div className="flex items-center gap-2">
-                      <Badge 
-                        variant={course.type === 'live' ? 'default' : 'secondary'}
-                        className="font-medium"
-                      >
-                        {course.type === 'live' ? (
-                          <>
-                            <span className="w-1.5 h-1.5 bg-current rounded-full mr-1.5 animate-pulse" />
-                            Live
-                          </>
-                        ) : (
-                          <>
-                            <PlayCircle className="h-3 w-3 mr-1" />
-                            Recorded
-                          </>
-                        )}
-                      </Badge>
-                      {course.isPopular && (
-                        <Badge variant="outline" className="font-medium text-accent border-accent/30 bg-accent/5">
-                          Popular
+            {loading ? (
+              <div className="md:col-span-2 flex flex-col items-center justify-center py-20 bg-muted/30 rounded-3xl border-2 border-dashed border-border">
+                <Loader2 className="h-10 w-10 animate-spin text-accent mb-4" />
+                <p className="text-muted-foreground font-medium">Loading our world-class programs...</p>
+              </div>
+            ) : courses.length === 0 ? (
+              <div className="md:col-span-2 text-center py-20 bg-muted/30 rounded-3xl border-2 border-dashed border-border">
+                <h3 className="text-xl font-semibold text-foreground mb-2">No courses available right now</h3>
+                <p className="text-muted-foreground">Please check back later or contact support for updates.</p>
+              </div>
+            ) : (
+              courses.map((course, index) => (
+                <Card 
+                  key={course.id} 
+                  className={`group overflow-hidden transition-all duration-300 hover:shadow-lg border-border hover:border-accent/20 ${
+                    index === 0 && courses.length > 2 ? 'md:col-span-2 lg:col-span-1' : ''
+                  }`}
+                >
+                  <CardHeader className="pb-4">
+                    <div className="flex items-start justify-between gap-4 mb-4">
+                      <div className="flex items-center gap-2">
+                        <Badge 
+                          variant={course.type === 'live' ? 'default' : 'secondary'}
+                          className="font-medium"
+                        >
+                          {course.type === 'live' ? (
+                            <>
+                              <span className="w-1.5 h-1.5 bg-current rounded-full mr-1.5 animate-pulse" />
+                              Live
+                            </>
+                          ) : (
+                            <>
+                              <PlayCircle className="h-3 w-3 mr-1" />
+                              Recorded
+                            </>
+                          )}
                         </Badge>
-                      )}
+                        {course.isPopular && (
+                          <Badge variant="outline" className="font-medium text-accent border-accent/30 bg-accent/5">
+                            Popular
+                          </Badge>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  
-                  <h3 className="font-sans text-2xl md:text-3xl font-semibold text-foreground group-hover:text-accent transition-colors leading-tight">
-                    {course.title}
-                  </h3>
-                  
-                  <p className="text-muted-foreground mt-2 line-clamp-2">
-                    {course.description}
-                  </p>
-                </CardHeader>
-
-                <CardContent className="space-y-6">
-                  {/* Meta info */}
-                  <div className="flex flex-wrap gap-4 text-sm">
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <Users className="h-4 w-4" />
-                      <span>{course.instructor}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <Calendar className="h-4 w-4" />
-                      <span>{course.nextBatch}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <Clock className="h-4 w-4" />
-                      <span>{course.duration}</span>
-                    </div>
-                  </div>
-
-                  {/* Features */}
-                  <div className="space-y-3">
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                      What&apos;s included
+                    
+                    <h3 className="font-sans text-2xl md:text-3xl font-semibold text-foreground group-hover:text-accent transition-colors leading-tight">
+                      {course.title}
+                    </h3>
+                    
+                    <p className="text-muted-foreground mt-2 line-clamp-2">
+                      {course.description}
                     </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {course.features.slice(0, 4).map((feature, idx) => (
-                        <div key={idx} className="flex items-start gap-2 text-sm text-foreground">
-                          <CheckCircle2 className="h-4 w-4 text-accent mt-0.5 shrink-0" />
-                          <span className="line-clamp-1">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-                    {course.features.length > 4 && (
-                      <p className="text-sm text-muted-foreground">
-                        +{course.features.length - 4} more features
-                      </p>
-                    )}
-                  </div>
-                </CardContent>
+                  </CardHeader>
 
-                <CardFooter className="pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-t border-border bg-muted/30">
-                  <div>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-3xl font-semibold text-foreground">
-                        ৳{course.price.toLocaleString()}
-                      </span>
-                      {course.originalPrice && (
-                        <span className="text-lg text-muted-foreground line-through">
-                          ৳{course.originalPrice.toLocaleString()}
-                        </span>
+                  <CardContent className="space-y-6">
+                    {/* Meta info */}
+                    <div className="flex flex-wrap gap-4 text-sm">
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Users className="h-4 w-4" />
+                        <span>{course.instructor}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Calendar className="h-4 w-4" />
+                        <span>{course.nextBatch}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Clock className="h-4 w-4" />
+                        <span>{course.duration}</span>
+                      </div>
+                    </div>
+
+                    {/* Features */}
+                    <div className="space-y-3">
+                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                        What&apos;s included
+                      </p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {course.features.slice(0, 4).map((feature, idx) => (
+                          <div key={idx} className="flex items-start gap-2 text-sm text-foreground">
+                            <CheckCircle2 className="h-4 w-4 text-accent mt-0.5 shrink-0" />
+                            <span className="line-clamp-1">{feature}</span>
+                          </div>
+                        ))}
+                      </div>
+                      {course.features.length > 4 && (
+                        <p className="text-sm text-muted-foreground">
+                          +{course.features.length - 4} more features
+                        </p>
                       )}
                     </div>
-                    {course.originalPrice && (
-                      <p className="text-xs font-medium text-accent mt-1">
-                        Save ৳{(course.originalPrice - course.price).toLocaleString()}
-                      </p>
-                    )}
-                  </div>
-                  <Link to={`/courses/${course.id}`}>
-                    <Button className="w-full sm:w-auto group/btn">
-                      View Details
-                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                    </Button>
-                  </Link>
-                </CardFooter>
-              </Card>
-            ))}
+                  </CardContent>
+
+                  <CardFooter className="pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-t border-border bg-muted/30">
+                    <div>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-3xl font-semibold text-foreground">
+                          ৳{course.price.toLocaleString()}
+                        </span>
+                        {course.originalPrice && (
+                          <span className="text-lg text-muted-foreground line-through">
+                            ৳{course.originalPrice.toLocaleString()}
+                          </span>
+                        )}
+                      </div>
+                      {course.originalPrice && (
+                        <p className="text-xs font-medium text-accent mt-1">
+                          Save ৳{(course.originalPrice - course.price).toLocaleString()}
+                        </p>
+                      )}
+                    </div>
+                    <Link to={`/courses/${course.id}`} className="w-full sm:w-auto">
+                      <Button className="w-full group/btn">
+                        View Details
+                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                      </Button>
+                    </Link>
+                  </CardFooter>
+                </Card>
+              ))
+            )}
           </div>
         </div>
       </section>

@@ -15,11 +15,39 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { COURSES } from '@/data/courses';
+import { useState, useEffect } from 'react';
+import { courseService } from '@/services/courseService';
+import { Course } from '@/types';
+import { Loader2 } from 'lucide-react';
 
 export function CourseDetailPage() {
   const { courseId } = useParams();
-  const course = COURSES.find(c => c.id === courseId);
+  const [course, setCourse] = useState<Course | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCourse = async () => {
+      if (!courseId) return;
+      setLoading(true);
+      try {
+        const data = await courseService.getCourseById(courseId);
+        setCourse(data);
+      } catch (err) {
+        console.error(`Error fetching course ${courseId}:`, err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourse();
+  }, [courseId]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <Loader2 className="h-10 w-10 animate-spin text-accent" />
+      </div>
+    );
+  }
 
   if (!course) {
     return (
@@ -181,7 +209,7 @@ export function CourseDetailPage() {
                </div>
                
                <div className="space-y-4 mb-8">
-                 <Link to="/pricing" className="block w-full">
+                 <Link to={`/payment?package=course&courseId=${course.id}&name=${encodeURIComponent(course.title)}&price=${course.price}`} className="block w-full">
                    <Button className="w-full h-16 rounded-2xl bg-accent hover:bg-foreground text-white font-black text-lg transition-all shadow-[0_15px_30px_-5px_rgba(220,38,38,0.3)] transform hover:-translate-y-1">
                      Get Full Access Now
                    </Button>

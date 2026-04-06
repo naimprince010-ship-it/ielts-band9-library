@@ -629,3 +629,33 @@ export interface SpeakingTestResult {
     uploadedUrl?: string;
   }[];
 }
+// ============================================
+// Course Module Types
+// ============================================
+
+export type CourseType = 'live' | 'recorded' | 'hybrid';
+
+export interface CurriculumModule {
+  module: string;
+  lessons: string[];
+}
+
+export interface Course {
+  id: string;
+  title: string;
+  description: string;
+  instructor: string;
+  nextBatch: string;
+  price: number;
+  originalPrice?: number;
+  duration: string;
+  level: string;
+  type: CourseType;
+  features: string[];
+  isPopular?: boolean;
+  accentColor: string;
+  bgGradient: string;
+  curriculum?: CurriculumModule[];
+  created_at?: string;
+  updated_at?: string;
+}

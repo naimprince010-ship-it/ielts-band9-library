@@ -61,6 +61,7 @@ import { DesignAudit } from '@/components/admin/DesignAudit';
 import { VocabularyGenerator } from '@/components/admin/VocabularyGenerator';
 import { VocabularyEnricher } from '@/components/admin/VocabularyEnricher';
 import { VocabularyCategorizer } from '@/components/admin/VocabularyCategorizer';
+import { CourseManagement } from '@/components/admin/CourseManagement';
 import { Lesson, LessonType, LessonLevel, LessonContent } from '@/types';
 import { GRAMMAR_TOPICS, VOCABULARY_TOPICS } from '@/data/sampleLessons';
 import { generateLessonWithAI } from '@/services/aiLessonGenerator';
@@ -105,7 +106,8 @@ const menuGroups: MenuGroup[] = [
   {
     title: 'Instructor Panel',
     items: [
-      { id: 'instructor-dashboard', label: 'My Courses', icon: <GraduationCap className="h-4 w-4" /> },
+      { id: 'instructor-dashboard', label: 'Overview', icon: <GraduationCap className="h-4 w-4" /> },
+      { id: 'course-management', label: 'Manage Courses', icon: <Plus className="h-4 w-4" /> },
       { id: 'lessons', label: 'Course Lessons', icon: <BookOpen className="h-4 w-4" /> },
       { id: 'reading', label: 'Mock Test Content', icon: <FileText className="h-4 w-4" /> },
       { id: 'mock-tests', label: 'Manage Mock Tests', icon: <CheckCircle className="h-4 w-4" /> },
@@ -730,6 +732,7 @@ export function AdminPage() {
         );
 
       case 'reading': return <ReadingPassageManagement />;
+      case 'course-management': return <CourseManagement />;
       case 'mock-tests': return <MockTestManagement />;
       case 'page-content': return <PageContentManagement />;
       case 'payments':

@@ -23,6 +23,9 @@ import { useNavigate } from 'react-router-dom';
 import { SAMPLE_LESSONS } from '@/data/sampleLessons';
 import { ContinueLearning } from '@/components/dashboard/ContinueLearning';
 import { useAuth } from '@/contexts/AuthContext';
+import { courseService } from '@/services/courseService';
+import { Course } from '@/types';
+import { Loader2 } from 'lucide-react';
 
 const TESTIMONIALS = [
   {
@@ -70,6 +73,24 @@ export function HomePage() {
       navigate(`/vocabulary?search=${encodeURIComponent(searchQuery)}`);
     }
   };
+
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [loadingCourses, setLoadingCourses] = useState(true);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const data = await courseService.getCourses();
+        // Only show popular courses or first 2 on home page
+        setCourses(data.filter(c => c.isPopular).slice(0, 2));
+      } catch (err) {
+        console.error('Error fetching courses:', err);
+      } finally {
+        setLoadingCourses(false);
+      }
+    };
+    fetchCourses();
+  }, []);
 
   const featuredLessons = SAMPLE_LESSONS.filter(l => l.is_published).slice(0, 3);
 
@@ -315,6 +336,86 @@ export function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Featured Courses Section */}
+      {courses.length > 0 && (
+        <section className="py-16 lg:py-24 bg-background">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12 gap-6">
+              <div className="max-w-xl">
+                <p className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">
+                  Flagship Programs
+                </p>
+                <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
+                  Join our upcoming live batches
+                </h2>
+                <p className="text-muted-foreground text-lg">
+                  Structured learning with expert instructors and personalized feedback.
+                </p>
+              </div>
+              <Link to="/courses">
+                <Button 
+                  variant="outline" 
+                  className="border-border text-foreground hover:bg-muted font-medium group rounded-xl"
+                >
+                  View All Courses 
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </Link>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              {courses.map((course) => (
+                <Link key={course.id} to={`/courses/${course.id}`} className="group">
+                  <Card className="h-full border-0 bg-muted/30 overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-accent/5 hover:-translate-y-1 rounded-[2.5rem]">
+                    <div className={`h-2 w-full bg-gradient-to-r ${course.bgGradient}`} />
+                    <CardHeader className="p-8 pb-4">
+                      <div className="flex items-center justify-between mb-6">
+                        <Badge className="bg-background text-foreground border-border font-bold uppercase tracking-widest text-[10px] px-3">
+                          {course.type}
+                        </Badge>
+                        <div className="flex items-center gap-1.5 text-accent font-black text-sm">
+                          <Star className="h-4 w-4 fill-current" />
+                          4.9
+                        </div>
+                      </div>
+                      <CardTitle className="text-2xl lg:text-3xl font-black text-foreground group-hover:text-accent transition-colors">
+                        {course.title}
+                      </CardTitle>
+                      <CardDescription className="text-muted-foreground text-base mt-2 line-clamp-2 font-medium">
+                        {course.description}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-8 pt-0">
+                      <div className="flex flex-wrap gap-4 mb-8 text-sm font-bold text-muted-foreground uppercase tracking-tight">
+                        <div className="flex items-center gap-2">
+                          <Users className="h-4 w-4 text-accent" />
+                          {course.instructor}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Calendar className="h-4 w-4 text-accent" />
+                          {course.nextBatch}
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between pt-6 border-t border-border/50">
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-3xl font-black text-foreground">৳{course.price.toLocaleString()}</span>
+                          {course.originalPrice && (
+                            <span className="text-lg text-muted-foreground line-through opacity-50">৳{course.originalPrice.toLocaleString()}</span>
+                          )}
+                        </div>
+                        <div className="h-12 w-12 rounded-2xl bg-foreground text-background flex items-center justify-center group-hover:bg-accent group-hover:text-white transition-all duration-300">
+                          <ArrowRight className="h-6 w-6" />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Featured Lessons */}
       <section className="py-16 lg:py-24 bg-muted/30">

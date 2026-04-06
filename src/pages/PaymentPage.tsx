@@ -25,7 +25,10 @@ const DEFAULT_SETTINGS: PaymentSettings = {
 
 export function PaymentPage() {
   const [searchParams] = useSearchParams();
-  const packageType = searchParams.get('package') as 'monthly' | 'yearly' || 'monthly';
+  const packageType = searchParams.get('package') as 'monthly' | 'yearly' | 'course' || 'monthly';
+  const courseId = searchParams.get('courseId');
+  const courseName = searchParams.get('name');
+  const coursePrice = searchParams.get('price');
 
   const [settings, setSettings] = useState<PaymentSettings>(DEFAULT_SETTINGS);
   const [loadingSettings, setLoadingSettings] = useState(true);
@@ -71,9 +74,9 @@ export function PaymentPage() {
   };
 
   const selectedPackage = {
-    name: packageType === 'yearly' ? 'Premium Yearly' : 'Premium Monthly',
-    price: packageType === 'yearly' ? settings.yearly_price : settings.monthly_price,
-    duration: packageType === 'yearly' ? '1 Year' : '1 Month',
+    name: packageType === 'course' ? (courseName || 'Course') : (packageType === 'yearly' ? 'Premium Yearly' : 'Premium Monthly'),
+    price: packageType === 'course' ? (coursePrice ? parseInt(coursePrice) : 0) : (packageType === 'yearly' ? settings.yearly_price : settings.monthly_price),
+    duration: packageType === 'course' ? 'Lifetime' : (packageType === 'yearly' ? '1 Year' : '1 Month'),
   };
 
   const copyToClipboard = async () => {
@@ -123,6 +126,7 @@ export function PaymentPage() {
           user_email: user.email,
           package_type: packageType,
           package_name: selectedPackage.name,
+          course_id: courseId || null,
           amount: selectedPackage.price,
           transaction_id: transactionId.trim(),
           sender_number: senderNumber.trim(),
