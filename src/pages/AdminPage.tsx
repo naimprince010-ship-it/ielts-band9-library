@@ -188,6 +188,7 @@ export function AdminPage() {
     moduleName: '',
   });
   const [filterCourse, setFilterCourse] = useState<string>('all');
+  const [lessonSearch, setLessonSearch] = useState('');
 
   const [payments, setPayments] = useState<PaymentRequest[]>([]);
   const [loadingPayments, setLoadingPayments] = useState(false);
@@ -480,10 +481,27 @@ export function AdminPage() {
   const vocabularyLessons = lessons.filter(l => l.type === 'vocabulary');
   const grammarLessons = lessons.filter(l => l.type === 'grammar');
 
+  // Course slug → display name mapping for filter matching
+  const courseSlugMap: Record<string, string> = {
+    'ielts-masterclass': 'ielts band 8+ masterclass',
+    'writing-intensive': 'writing task 1 & 2 intensive',
+    'speaking-club': 'ielts speaking confidence club',
+    'reading-listening-suite': 'rapid reading & listening suite',
+  };
+
   const filteredLessons = lessons.filter(lesson => {
+    // Search filter
+    if (lessonSearch && !lesson.title.toLowerCase().includes(lessonSearch.toLowerCase())) return false;
+    // Course filter
     if (filterCourse === 'all') return true;
     if (filterCourse === 'none') return !lesson.courseId;
-    return lesson.courseId === filterCourse;
+    // Match by exact courseId OR by slug name match (for UUID-based storage)
+    const expectedName = courseSlugMap[filterCourse] || filterCourse;
+    return (
+      lesson.courseId === filterCourse ||
+      (lesson.courseId || '').toLowerCase().includes(filterCourse.replace(/-/g, ' ')) ||
+      (lesson.moduleName || '').toLowerCase().includes(expectedName)
+    );
   });
 
   const toggleGroup = (title: string) => {
@@ -781,7 +799,12 @@ export function AdminPage() {
             <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex flex-col sm:flex-row gap-4 items-center">
               <div className="relative flex-1 w-full">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input placeholder="Search lessons by title..." className="pl-9 h-10 border-slate-100 rounded-xl" />
+                <Input
+                  placeholder="Search lessons by title..."
+                  className="pl-9 h-10 border-slate-100 rounded-xl"
+                  value={lessonSearch}
+                  onChange={e => setLessonSearch(e.target.value)}
+                />
               </div>
               <div className="flex items-center gap-3 w-full sm:w-auto">
                 <Filter className="h-4 w-4 text-slate-400" />
