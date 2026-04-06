@@ -1,3 +1,13 @@
+export interface CurriculumLesson {
+  title: string;
+  lessonId?: string;
+}
+
+export interface CurriculumModule {
+  module: string;
+  lessons: (string | CurriculumLesson)[];
+}
+
 export interface Course {
   id: string;
   title: string;
@@ -13,10 +23,7 @@ export interface Course {
   isPopular?: boolean;
   accentColor: string;
   bgGradient: string;
-  curriculum?: {
-    module: string;
-    lessons: string[];
-  }[];
+  curriculum?: CurriculumModule[];
 }
 
 export const COURSES: Course[] = [
@@ -45,7 +52,7 @@ export const COURSES: Course[] = [
       {
         module: "Module 1: Speaking Mastery (6 Classes)",
         lessons: [
-          "Class 1: Part 1 Fluency & Confidence Building",
+          { title: "Class 1: Part 1 Fluency & Confidence Building", lessonId: "speaking-part1-fluency-confidence" },
           "Class 2: Expanding Answers with Cohesive Devices",
           "Class 3: Part 2 Cue-Card Storytelling Method (Group A)",
           "Class 4: Part 2 Cue-Card Storytelling Method (Group B)",

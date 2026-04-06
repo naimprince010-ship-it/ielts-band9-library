@@ -157,12 +157,27 @@ export function CourseDetailPage() {
                       </div>
                       <div className="px-10 pb-8 pl-[4.5rem]">
                         <ul className="space-y-4">
-                          {mod.lessons.map((lesson, j) => (
-                            <li key={j} className="flex items-center gap-3 text-muted-foreground font-bold group/lesson">
-                              <span className="h-2 w-2 rounded-full bg-accent/50 group-hover/lesson:bg-accent transition-colors"></span>
-                              {lesson}
-                            </li>
-                          ))}
+                          {mod.lessons.map((lesson, j) => {
+                            const isObject = typeof lesson !== 'string';
+                            const title = isObject ? lesson.title : lesson;
+                            const hasLink = isObject && lesson.lessonId;
+
+                            return (
+                              <li key={j} className="flex items-center justify-between group/lesson">
+                                <div className="flex items-center gap-3 text-muted-foreground font-bold group-hover/lesson:text-foreground transition-colors">
+                                  <span className="h-2 w-2 rounded-full bg-accent/50 group-hover/lesson:bg-accent transition-colors"></span>
+                                  {title}
+                                </div>
+                                {hasLink && (
+                                  <Link to={`/lesson/${lesson.lessonId}`}>
+                                    <Button variant="ghost" size="sm" className="h-8 px-3 rounded-full bg-accent/10 text-accent hover:bg-accent hover:text-white font-bold text-[10px] uppercase tracking-wider">
+                                       View Document
+                                    </Button>
+                                  </Link>
+                                )}
+                              </li>
+                            );
+                          })}
                         </ul>
                       </div>
                     </div>

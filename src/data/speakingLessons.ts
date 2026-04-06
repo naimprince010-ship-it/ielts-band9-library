@@ -7,6 +7,79 @@ export const SPEAKING_LESSONS: Lesson[] = [
   // ============================================
   // PART 1: Introduction & Interview
   // ============================================
+  // ============================================
+  // MASTERCLASS CURRICULUM LESSONS
+  // ============================================
+  {
+    id: 'speaking-part1-fluency-confidence',
+    title: 'Class 1: Part 1 Fluency & Confidence Building',
+    slug: 'speaking-part1-fluency-confidence',
+    type: 'speaking',
+    level: 'beginner',
+    topic: 'Part 1 Fluency',
+    description: 'Master the fundamentals of IELTS Speaking Part 1. Focus on building confidence, increasing fluency, and using natural fillers.',
+    is_premium: true,
+    is_published: true,
+    view_count: 1200,
+    created_at: '2026-04-06T10:00:00Z',
+    updated_at: '2026-04-06T10:00:00Z',
+    estimated_time: 30,
+    content: {
+      title: 'Speaking Class 1: Part 1 Fluency & Confidence Building',
+      targetLevel: 'Band 6.0 - 9.0',
+      whatYouWillLearn: [
+        'How to maintain eye contact and natural body language',
+        'Techniques for eliminating "Umms" and "Errs"',
+        'Natural fillers (opening phrases) for thinking time',
+        'Standard structure for successful Part 1 answers',
+        'The "3-Second Rule" for quick responses'
+      ],
+      coreExplanation: `**Part 1: Fundamentals of Fluency**
+      
+In your first class, we focus on the **Triangle of Confidence**:
+1. **Eye Contact**: This indicates transparency and naturally keeps you calm.
+2. **Breath Control**: Speaking from your diaphragm, not your throat, produces a more stable voice.
+3. **The 3-Second Rule**: Train yourself to start speaking within 3 seconds of a question.
+
+**Natural Fillers (Thinking Time):**
+Instead of saying "Umm...", use these:
+- "That's a very interesting question, actually..."
+- "I've never really thought about that before, but I'd say..."
+- "Well, to be honest..."
+- "Actually, if I had to choose, I'd say..."
+
+**Key Strategy: Don't Think, Just Speak**
+Part 1 asks familiar questions (hometown, childhood, etc.). You don't need to "invent" deep facts—just focus on a continuous flow of natural language.`,
+      examples: [
+        { 
+          sentence: '**Question: Do you enjoy your hometown?**\n\n**Typical Answer:** "Yes, I like it. It is very nice. Many buildings."\n\n**Band 9 Answer:** "Absolutely! What I love most is the incredible sense of community there. Even though it\'s a fairly busy city, everyone still seems to know their neighbors, which is quite rare these days."', 
+          explanation: 'Note the use of "What I love most is..." as a complex starting structure, and the extension using "Even though..."' 
+        },
+        { 
+          sentence: '**FLUNECY TOOLKIT - Confident Openers:**\n\n- "I\'m quite an avid reader..."\n- "To be honest, I\'ve always been interested in..."\n- "It really depends on the situation, but generally speaking..."\n- "Looking back, I\'d say that my interest started when..."', 
+          explanation: 'These phrases give you 2-3 seconds of "free speaking time" while you think of your main point.' 
+        }
+      ],
+      commonMistakes: [
+        { mistake: 'Looking at the floor while speaking', correction: 'Maintain soft, natural eye contact with the examiner', explanation: 'Speaking confidence is 50% body language. Looking down reflects nervousness and lowers the "Fluency and Coherence" score.' },
+        { mistake: 'Correcting yourself mid-sentence', correction: 'If you make a mistake, just keep going or correct it immediately and move on.', explanation: 'Frequent self-correction breaks your fluency. Keep the flow as the #1 priority.' }
+      ],
+      miniPractice: [
+        { question: 'What is the "3-Second Rule" in IELTS Speaking?', options: ['Speak for only 3 seconds', 'Start your answer within 3 seconds', 'Think for 3 seconds before each word'], type: 'multiple-choice' },
+        { question: 'Fill in the blank: "To be _____, I haven\'t thought much about it..."', type: 'fill-blank' }
+      ],
+      answerKey: [
+        'Start your answer within 3 seconds',
+        'honest'
+      ],
+      quickRecap: 'In Class 1, focus on Flow over Accuracy. Use fillers to kill silences. Maintain eye contact. Remember: your goal is to show the examiner you can hold a natural conversation without stopping.',
+      speakingLines: [
+        "That's a very interesting question, let me see...",
+        "Actually, I'd say I'm quite a morning person.",
+        "Well, to be honest, I haven't really considered that before."
+      ]
+    }
+  },
   {
     id: 'speaking-part1-work-study',
     title: 'Part 1: Work & Study Questions',

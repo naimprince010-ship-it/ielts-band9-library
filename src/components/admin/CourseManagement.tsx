@@ -264,7 +264,14 @@ export function CourseManagement() {
 
   const updateLessonContent = (moduleIndex: number, lessonIndex: number, text: string) => {
     const updated = [...formData.curriculum];
-    updated[moduleIndex].lessons[lessonIndex] = text;
+    const currentLesson = updated[moduleIndex].lessons[lessonIndex];
+    
+    if (typeof currentLesson === 'string') {
+      updated[moduleIndex].lessons[lessonIndex] = text;
+    } else {
+      updated[moduleIndex].lessons[lessonIndex] = { ...currentLesson, title: text };
+    }
+    
     setFormData({ ...formData, curriculum: updated });
   };
 
@@ -629,10 +636,16 @@ export function CourseManagement() {
                                     {lIdx + 1}
                                  </div>
                                  <Input
-                                    value={lesson}
+                                    value={typeof lesson === 'string' ? lesson : lesson.title}
                                     onChange={(e) => updateLessonContent(mIdx, lIdx, e.target.value)}
                                     className="h-10 rounded-xl border-slate-100"
+                                    placeholder="Lesson Title"
                                  />
+                                 {typeof lesson !== 'string' && lesson.lessonId && (
+                                   <Badge variant="secondary" className="bg-green-50 text-green-600 border-none rounded-lg text-[9px] uppercase font-black px-2">
+                                     Linked: {lesson.lessonId}
+                                   </Badge>
+                                 )}
                                  <Button variant="ghost" size="icon" onClick={() => removeLessonFromModule(mIdx, lIdx)} className="h-8 w-8 text-slate-300 hover:text-rose-500 shrink-0">
                                     <X className="h-4 w-4" />
                                  </Button>

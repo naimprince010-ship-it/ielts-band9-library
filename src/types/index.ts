@@ -635,9 +635,14 @@ export interface SpeakingTestResult {
 
 export type CourseType = 'live' | 'recorded' | 'hybrid';
 
+export interface CurriculumLesson {
+  title: string;
+  lessonId?: string; // Optional link to a Lesson object
+}
+
 export interface CurriculumModule {
   module: string;
-  lessons: string[];
+  lessons: (string | CurriculumLesson)[];
 }
 
 export interface Course {
