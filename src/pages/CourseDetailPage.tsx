@@ -135,58 +135,85 @@ export function CourseDetailPage() {
             </div>
 
             {/* Curriculum Card */}
-            {course.curriculum && (
-              <div className="bg-card rounded-[3rem] p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]">
-                <h2 className="text-3xl font-black text-foreground mb-10 flex items-center gap-4">
-                  <LayoutList className="h-8 w-8 text-accent" /> Course Curriculum
-                </h2>
-                <div className="space-y-6">
-                  {course.curriculum.map((mod, i) => (
-                    <div key={i} className="group overflow-hidden rounded-[2rem] border border-border bg-muted/50 hover:bg-card hover:shadow-xl transition-all duration-300">
-                      <div className="p-6 flex items-center justify-between">
-                         <div className="flex items-center gap-4">
-                            <span className="h-10 w-10 bg-accent text-white rounded-xl flex items-center justify-center font-bold text-lg shadow-lg">
-                                {i+1}
-                            </span>
-                            <h3 className="text-xl font-black text-foreground tracking-tight">
-                                {mod.module}
-                            </h3>
-                         </div>
-                         <Badge variant="outline" className="border-accent/30 text-accent font-bold uppercase tracking-wider px-3">
-                            {mod.lessons.length} Lessons
-                         </Badge>
-                      </div>
-                      <div className="px-10 pb-8 pl-[4.5rem]">
-                        <ul className="space-y-4">
-                          {mod.lessons.map((lesson, j) => {
-                            const isObject = typeof lesson !== 'string';
-                            const title = isObject ? lesson.title : lesson;
-                            const hasLink = isObject && lesson.lessonId;
+            {course.curriculum && (() => {
+              // Sort each module's lessons by their class number for correct serial order
+              const sortedCurriculum = course.curriculum.map(mod => ({
+                ...mod,
+                lessons: [...mod.lessons].sort((a, b) => {
+                  const getNum = (l: string | { title: string; lessonId?: string }) => {
+                    const t = typeof l === 'string' ? l : l.title;
+                    const m = t.match(/Class\s*(\d+)/i);
+                    return m ? parseInt(m[1]) : 9999;
+                  };
+                  return getNum(a) - getNum(b);
+                })
+              }));
 
-                            return (
-                              <li key={j} className="flex items-center justify-between group/lesson">
-                                <div className="flex items-center gap-3 text-muted-foreground font-bold group-hover/lesson:text-foreground transition-colors">
-                                  <span className="h-2 w-2 rounded-full bg-accent/50 group-hover/lesson:bg-accent transition-colors"></span>
-                                  {title}
-                                </div>
-                                {hasLink && (
-                                  <Link to={`/lesson/${lesson.lessonId}`} target="_blank" rel="noopener noreferrer">
-                                    <Button variant="ghost" size="sm" className="h-8 px-3 rounded-full bg-accent/10 text-accent hover:bg-accent hover:text-white font-bold text-[10px] uppercase tracking-wider flex items-center gap-1.5">
-                                       View Document
-                                       <ExternalLink className="h-3 w-3" />
-                                    </Button>
-                                  </Link>
-                                )}
-                              </li>
-                            );
-                          })}
-                        </ul>
+              // Calculate global lesson counter offset per module
+              const moduleOffsets: number[] = [];
+              let runningCount = 0;
+              sortedCurriculum.forEach(mod => {
+                moduleOffsets.push(runningCount);
+                runningCount += mod.lessons.length;
+              });
+
+              return (
+                <div className="bg-card rounded-[3rem] p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)]">
+                  <h2 className="text-3xl font-black text-foreground mb-10 flex items-center gap-4">
+                    <LayoutList className="h-8 w-8 text-accent" /> Course Curriculum
+                  </h2>
+                  <div className="space-y-6">
+                    {sortedCurriculum.map((mod, i) => (
+                      <div key={i} className="group overflow-hidden rounded-[2rem] border border-border bg-muted/50 hover:bg-card hover:shadow-xl transition-all duration-300">
+                        <div className="p-6 flex items-center justify-between">
+                           <div className="flex items-center gap-4">
+                              <span className="h-10 w-10 bg-accent text-white rounded-xl flex items-center justify-center font-bold text-lg shadow-lg">
+                                  {i+1}
+                              </span>
+                              <h3 className="text-xl font-black text-foreground tracking-tight">
+                                  {mod.module}
+                              </h3>
+                           </div>
+                           <Badge variant="outline" className="border-accent/30 text-accent font-bold uppercase tracking-wider px-3">
+                              {mod.lessons.length} Lessons
+                           </Badge>
+                        </div>
+                        <div className="px-10 pb-8 pl-[4.5rem]">
+                          <ul className="space-y-3">
+                            {mod.lessons.map((lesson, j) => {
+                              const isObject = typeof lesson !== 'string';
+                              const title = isObject ? lesson.title : lesson;
+                              const hasLink = isObject && lesson.lessonId;
+                              const globalNum = moduleOffsets[i] + j + 1;
+                              const displayNum = String(globalNum).padStart(2, '0');
+
+                              return (
+                                <li key={j} className="flex items-center justify-between group/lesson">
+                                  <div className="flex items-center gap-3 text-muted-foreground font-bold group-hover/lesson:text-foreground transition-colors">
+                                    <span className="h-6 w-6 rounded-md bg-accent/10 text-accent flex items-center justify-center text-[11px] font-black flex-shrink-0 group-hover/lesson:bg-accent group-hover/lesson:text-white transition-all">
+                                      {displayNum}
+                                    </span>
+                                    <span className="text-sm">{title}</span>
+                                  </div>
+                                  {hasLink && (
+                                    <Link to={`/lesson/${lesson.lessonId}`} target="_blank" rel="noopener noreferrer">
+                                      <Button variant="ghost" size="sm" className="h-8 px-3 rounded-full bg-accent/10 text-accent hover:bg-accent hover:text-white font-bold text-[10px] uppercase tracking-wider flex items-center gap-1.5">
+                                         View Document
+                                         <ExternalLink className="h-3 w-3" />
+                                      </Button>
+                                    </Link>
+                                  )}
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              );
+            })()}
             
             {/* About the Instructor */}
             <div className="bg-foreground rounded-[3rem] p-12 text-white overflow-hidden relative">
