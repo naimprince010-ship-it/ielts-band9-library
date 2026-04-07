@@ -31,7 +31,7 @@ import {
   Zap,
   Gift
 } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/lib/supabase';
 
 interface UserStats {
   lessonsCompleted: number;
@@ -74,7 +74,11 @@ export function ProfilePage() {
 
   const fetchUserStats = async () => {
     if (!user) return;
-    
+    if (!supabase) {
+      setStatsLoading(false);
+      return;
+    }
+
     try {
       // Fetch user activity stats
       const { data: activityData } = await supabase
