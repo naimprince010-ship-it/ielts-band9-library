@@ -6,17 +6,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { useLessons } from '@/contexts/LessonContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { Spinner } from '@/components/ui/spinner';
 
 export function BookmarksPage() {
   const { bookmarks, removeBookmark, lessons } = useLessons();
-  const { user } = useAuth();
+  const { user, loading, session } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) {
+    if (!loading && !user && !session) {
       navigate('/login');
     }
-  }, [user, navigate]);
+  }, [user, loading, session, navigate]);
 
   const bookmarkedLessons = bookmarks
     .map(b => lessons.find(l => l.id === b.lesson_id))
@@ -27,6 +28,14 @@ export function BookmarksPage() {
     e.stopPropagation();
     await removeBookmark(lessonId);
   };
+
+  if (loading || (session && !user)) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50" role="status" aria-live="polite">
+        <Spinner className="size-8 text-indigo-600" />
+      </div>
+    );
+  }
 
   if (!user) {
     return null;

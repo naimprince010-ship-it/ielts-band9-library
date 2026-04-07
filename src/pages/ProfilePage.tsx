@@ -7,17 +7,18 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  User, 
-  Mail, 
-  Calendar, 
-  Shield, 
-  LogOut, 
-  Crown, 
-  BookOpen, 
-  Target, 
-  Award, 
-  Settings, 
+import { Spinner } from '@/components/ui/spinner';
+import {
+  User,
+  Mail,
+  Calendar,
+  Shield,
+  LogOut,
+  Crown,
+  BookOpen,
+  Target,
+  Award,
+  Settings,
   Bell,
   Edit3,
   CheckCircle2,
@@ -40,7 +41,7 @@ interface UserStats {
 }
 
 export function ProfilePage() {
-  const { user, isAdmin, isPremium, signOut } = useAuth();
+  const { user, loading: authLoading, session, isAdmin, isPremium, signOut } = useAuth();
   const navigate = useNavigate();
   const [stats, setStats] = useState<UserStats>({
     lessonsCompleted: 0,
@@ -48,15 +49,28 @@ export function ProfilePage() {
     streakDays: 0,
     totalXP: 0
   });
-  const [loading, setLoading] = useState(true);
+  const [statsLoading, setStatsLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) {
+    if (!authLoading && !user && !session) {
       navigate('/login');
       return;
     }
-    fetchUserStats();
-  }, [user, navigate]);
+    if (user) {
+      fetchUserStats();
+    }
+  }, [user, authLoading, session, navigate]);
+
+  const authPending = authLoading || (!!session && !user);
+  if (authPending) {
+    return (
+      <Layout>
+        <div className="flex min-h-[40vh] items-center justify-center" role="status" aria-live="polite">
+          <Spinner className="size-8 text-accent" />
+        </div>
+      </Layout>
+    );
+  }
 
   const fetchUserStats = async () => {
     if (!user) return;
@@ -90,7 +104,7 @@ export function ProfilePage() {
     } catch (error) {
       console.error('Error fetching stats:', error);
     } finally {
-      setLoading(false);
+      setStatsLoading(false);
     }
   };
 

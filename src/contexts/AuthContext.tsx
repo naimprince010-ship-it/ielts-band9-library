@@ -21,6 +21,23 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+function fallbackUserFromSupabaseAuth(supabaseUserData: SupabaseUser): User {
+  const userName =
+    supabaseUserData.user_metadata?.full_name ||
+    supabaseUserData.user_metadata?.name ||
+    supabaseUserData.email?.split('@')[0] ||
+    'User';
+  return {
+    id: supabaseUserData.id,
+    email: supabaseUserData.email || '',
+    name: userName,
+    role: 'user',
+    subscription_status: 'free',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  };
+}
+
 const DEMO_USERS: Record<string, User & { password?: string }> = {
   'admin@ielts.com': {
     id: 'demo-admin-1',
@@ -83,6 +100,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (isSupabaseConfigured() && supabase) {
       const supabaseClient = supabase;
+      let initialized = false;
+
       const initAuth = async () => {
         try {
           const { data: { session }, error } = await supabaseClient.auth.getSession();
@@ -92,29 +111,45 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setSession(session);
             setSupabaseUser(session?.user ?? null);
             if (session?.user) {
-              fetchUserProfile(session.user.id, session.user).catch(err => {
-                console.error('Failed to fetch user profile:', err);
-              });
+              try {
+                await fetchUserProfile(session.user.id, session.user);
+              } catch (profileErr) {
+                console.error('Failed to load user profile on init:', profileErr);
+                setUser(fallbackUserFromSupabaseAuth(session.user));
+              }
             }
           }
         } catch (err) {
           console.error('Auth initialization error:', err);
         } finally {
           setLoading(false);
+          initialized = true;
         }
       };
 
       initAuth();
 
-      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+        // Don't process events until initial session check is complete
+        // This prevents race conditions during startup
+        if (!initialized && event !== 'SIGNED_OUT') {
+          return;
+        }
+
         setSession(session);
         setSupabaseUser(session?.user ?? null);
+
         if (session?.user) {
-          fetchUserProfile(session.user.id, session.user).catch(err => {
+          const su = session.user;
+          fetchUserProfile(su.id, su).catch(err => {
             console.error('Failed to fetch user profile on auth change:', err);
+            setUser(fallbackUserFromSupabaseAuth(su));
           });
-        } else if (!localStorage.getItem('demo_user')) {
-          setUser(null);
+        } else if (event === 'SIGNED_OUT') {
+          // Only clear user on explicit sign-out, not on intermediate null states
+          if (!localStorage.getItem('demo_user')) {
+            setUser(null);
+          }
         }
       });
 
@@ -156,16 +191,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!insertError && newUser) {
         setUser(newUser as User);
       } else {
-        const fallbackUser: User = {
-          id: userId,
-          email: supabaseUserData.email || '',
-          name: userName,
-          role: 'user' as UserRole,
-          subscription_status: 'free' as SubscriptionStatus,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        };
-        setUser(fallbackUser);
+        setUser(fallbackUserFromSupabaseAuth(supabaseUserData));
       }
     }
   };
