@@ -202,7 +202,7 @@ function clearSession() {
 
 export default function FullMockTestPage() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, isPremium } = useAuth();
 
   const [resultSaved, setResultSaved] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
@@ -908,7 +908,7 @@ export default function FullMockTestPage() {
              <p className="text-background/70 text-lg mb-12 font-medium max-w-2xl mx-auto leading-relaxed">
                Your full mock test begins with the Listening module. Ensure you have 3 hours of uninterrupted time for a realistic prediction.
              </p>
-             {user ? (
+             {user && isPremium ? (
                <Button 
                 size="lg" 
                 onClick={() => startSection(0)} 
@@ -916,6 +916,10 @@ export default function FullMockTestPage() {
                 className="bg-accent hover:bg-accent/90 text-white font-black text-xl px-12 py-8 rounded-[40px] shadow-2xl shadow-accent/40 group gap-4 scale-110"
                >
                  <Play className="h-6 w-6 fill-current" /> START FULL EXAM <ChevronRight className="h-6 w-6 group-hover:translate-x-2 transition-transform" />
+               </Button>
+             ) : user && !isPremium ? (
+               <Button size="lg" onClick={() => navigate('/pricing')} className="bg-amber-500 hover:bg-amber-600 text-white font-black text-xl px-12 py-8 rounded-[40px] gap-4">
+                 <Crown className="h-6 w-6" /> UPGRADE TO PRO
                </Button>
              ) : (
                <Button size="lg" onClick={() => navigate('/login')} className="bg-accent hover:bg-accent/90 text-white font-black text-xl px-12 py-8 rounded-[40px] gap-4">
