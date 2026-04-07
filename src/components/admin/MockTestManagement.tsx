@@ -96,6 +96,25 @@ const LISTENING_QUESTION_TYPES: { value: ListeningQuestionType; label: string }[
   { value: 'short-answer', label: 'Short Answer' },
 ];
 
+/** Ensures test_data is JSON-serializable for PostgREST (drops undefined, non-finite numbers → null). */
+function jsonbSafe<T>(data: T): T {
+  return JSON.parse(
+    JSON.stringify(data, (_k, v) => {
+      if (typeof v === 'number' && !Number.isFinite(v)) return null;
+      return v;
+    })
+  ) as T;
+}
+
+function formatSupabaseError(err: unknown): string {
+  if (err && typeof err === 'object') {
+    const o = err as { message?: string; details?: string; hint?: string; code?: string };
+    const parts = [o.message, o.details, o.hint].filter(Boolean);
+    if (parts.length) return parts.join(' — ');
+  }
+  return '';
+}
+
 export function MockTestManagement() {
   const [mockTests, setMockTests] = useState<MockTest[]>([]);
   const [loading, setLoading] = useState(true);
@@ -231,16 +250,16 @@ export function MockTestManagement() {
       
       switch (formData.module_type) {
         case 'reading':
-          testData = buildReadingTest();
+          testData = jsonbSafe(buildReadingTest());
           break;
         case 'listening':
-          testData = buildListeningTest();
+          testData = jsonbSafe(buildListeningTest());
           break;
         case 'writing':
-          testData = buildWritingTest();
+          testData = jsonbSafe(buildWritingTest());
           break;
         case 'speaking':
-          testData = buildSpeakingTest();
+          testData = jsonbSafe(buildSpeakingTest());
           break;
       }
 
@@ -253,7 +272,6 @@ export function MockTestManagement() {
             test_data: testData,
             is_published: formData.is_published,
             is_premium: formData.is_premium,
-            updated_at: new Date().toISOString()
           })
           .eq('id', editingTest.id);
 
@@ -267,7 +285,7 @@ export function MockTestManagement() {
             module_type: formData.module_type,
             test_data: testData,
             is_published: formData.is_published,
-            is_premium: formData.is_premium
+            is_premium: formData.is_premium,
           });
 
         if (error) throw error;
@@ -281,7 +299,12 @@ export function MockTestManagement() {
       }, 1500);
     } catch (err) {
       console.error('Error saving mock test:', err);
-      setError('Failed to save mock test. Please try again.');
+      const detail = formatSupabaseError(err);
+      setError(
+        detail
+          ? `Failed to save mock test: ${detail}`
+          : 'Failed to save mock test. Please try again.'
+      );
     } finally {
       setSaving(false);
     }
@@ -1735,13 +1758,19 @@ function WritingTestBuilder({
       if (!result.success) throw new Error(result.error || 'AI generation failed');
       const task1 = result.content?.task1;
       if (!task1) throw new Error('No task1 content in AI response');
-      // Apply ONLY visual data — do NOT overwrite existing prompt/title
-      updateTask(0, {
-        chartData: task1.chartData,
-        tableData: task1.tableData,
-        processData: task1.processData,
-        mapData: task1.mapData,
-      });
+      // Apply ONLY visual data — clear other visual slots so one canonical type is stored
+      const nextVisual: Partial<WritingTask> = {
+        chartData: undefined,
+        tableData: undefined,
+        processData: undefined,
+        mapData: undefined,
+      };
+      if (task1.chartData) nextVisual.chartData = task1.chartData;
+      else if (task1.tableData) nextVisual.tableData = task1.tableData;
+      else if (task1.processData) nextVisual.processData = task1.processData;
+      else if (task1.mapData) nextVisual.mapData = task1.mapData;
+      else throw new Error('AI did not return chartData, tableData, processData, or mapData');
+      updateTask(0, nextVisual);
       setVisualTopicOverride('');
     } catch (err) {
       setVisualGenError(err instanceof Error ? err.message : 'Failed to generate visual');
@@ -2705,10 +2734,10 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
       setProgress('Saving to database...');
       if (!isSupabaseConfigured() || !supabase) throw new Error("Supabase is not configured");
       const insertData = [
-        { title: readingTest.title, module_type: 'reading', test_data: readingTest, is_published: true, is_premium: false },
-        { title: listeningTest.title, module_type: 'listening', test_data: listeningTest, is_published: true, is_premium: false },
-        { title: writingTest.title, module_type: 'writing', test_data: writingTest, is_published: true, is_premium: false },
-        { title: speakingTest.title, module_type: 'speaking', test_data: speakingTest, is_published: true, is_premium: false }
+        { title: readingTest.title, module_type: 'reading', test_data: jsonbSafe(readingTest), is_published: true, is_premium: false },
+        { title: listeningTest.title, module_type: 'listening', test_data: jsonbSafe(listeningTest), is_published: true, is_premium: false },
+        { title: writingTest.title, module_type: 'writing', test_data: jsonbSafe(writingTest), is_published: true, is_premium: false },
+        { title: speakingTest.title, module_type: 'speaking', test_data: jsonbSafe(speakingTest), is_published: true, is_premium: false }
       ];
       const { error: insertError } = await supabase.from('mock_tests').insert(insertData);
       if (insertError) throw insertError;
