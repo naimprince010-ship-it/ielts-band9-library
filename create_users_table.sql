@@ -16,6 +16,23 @@ CREATE TABLE IF NOT EXISTS public.users (
 -- 2. Enable Row Level Security (RLS)
 ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
 
+-- 2b. Admin check must not query public.users inside a policy on public.users (infinite recursion).
+CREATE OR REPLACE FUNCTION public.is_admin()
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM public.users
+    WHERE id = auth.uid() AND role = 'admin'
+  );
+$$;
+
+GRANT EXECUTE ON FUNCTION public.is_admin() TO authenticated;
+GRANT EXECUTE ON FUNCTION public.is_admin() TO service_role;
+
 -- 3. RLS Policies
 -- Users can view their own profile
 DROP POLICY IF EXISTS "Users can view own profile" ON public.users;
@@ -36,18 +53,14 @@ DROP POLICY IF EXISTS "Admins can view all users" ON public.users;
 CREATE POLICY "Admins can view all users" 
 ON public.users 
 FOR SELECT 
-USING (
-  EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin')
-);
+USING (public.is_admin());
 
 -- Admins can update all users
 DROP POLICY IF EXISTS "Admins can update all users" ON public.users;
 CREATE POLICY "Admins can update all users" 
 ON public.users 
 FOR UPDATE 
-USING (
-  EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin')
-);
+USING (public.is_admin());
 
 -- 4. Create a function to handle new user signups
 CREATE OR REPLACE FUNCTION public.handle_new_user() 
