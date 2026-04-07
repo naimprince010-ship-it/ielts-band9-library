@@ -1,8 +1,10 @@
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Crown, Calendar, Clock, CreditCard, AlertCircle, CheckCircle2, ArrowUpCircle, ArrowDownCircle, History } from 'lucide-react';
+import { Crown, Calendar, Clock, CreditCard, AlertCircle, CheckCircle2, ArrowUpCircle, ArrowDownCircle, History, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface PaymentEvent {
@@ -12,8 +14,46 @@ interface PaymentEvent {
   amount?: string;
 }
 
+interface PaymentRequest {
+  id: string;
+  package_name: string;
+  amount: number;
+  transaction_id: string;
+  status: string;
+  created_at: string;
+}
+
 export function SubscriptionDashboard() {
   const { user, isPremium } = useAuth();
+  const [payments, setPayments] = useState<PaymentRequest[]>([]);
+  const [loadingPayments, setLoadingPayments] = useState(true);
+
+  useEffect(() => {
+    if (!user || !isSupabaseConfigured() || !supabase) {
+      setLoadingPayments(false);
+      return;
+    }
+    
+    const fetchPayments = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('payment_requests')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false });
+        
+        if (!error && data) {
+          setPayments(data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch payments:', err);
+      } finally {
+        setLoadingPayments(false);
+      }
+    };
+    
+    fetchPayments();
+  }, [user]);
 
   if (!user) return null;
 
@@ -188,89 +228,109 @@ export function SubscriptionDashboard() {
               </div>
             )}
 
-                    {premiumUntil && !isExpired && (
-                      <div className="text-sm text-gray-500">
-                        <p>Next payment due: <span className="font-medium">{getNextPaymentDate()}</span></p>
-                      </div>
-                    )}
+            {premiumUntil && !isExpired && (
+              <div className="text-sm text-gray-500">
+                <p>Next payment due: <span className="font-medium">{getNextPaymentDate()}</span></p>
+              </div>
+            )}
 
-                    <div className="border-t pt-6">
-                      <h4 className="font-medium flex items-center gap-2 mb-4">
-                        <History className="h-4 w-4 text-gray-500" />
-                        Payment Timeline
-                      </h4>
-                      <div className="space-y-3">
-                        {getPaymentTimeline().map((event, index) => (
-                          <div key={index} className="flex items-start gap-3">
-                            <div className="mt-0.5">{getEventIcon(event.type)}</div>
-                            <div className="flex-1">
-                              <p className="text-sm font-medium">{event.description}</p>
-                              <p className="text-xs text-gray-500">{event.date}</p>
-                            </div>
-                            {event.amount && (
-                              <span className="text-sm font-medium text-green-600">{event.amount}</span>
-                            )}
-                          </div>
-                        ))}
+            <div className="border-t pt-6">
+              <h4 className="font-medium mb-4">Change Plan</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {user.package_type === 'monthly' && (
+                  <Link to="/pricing" className="block">
+                    <div className="p-4 border-2 border-indigo-200 rounded-lg hover:border-indigo-400 transition-colors cursor-pointer">
+                      <div className="flex items-center gap-2 mb-2">
+                        <ArrowUpCircle className="h-5 w-5 text-indigo-600" />
+                        <span className="font-medium">Upgrade to Yearly</span>
                       </div>
+                      <p className="text-sm text-gray-600">Save ৳1,089/year (30% off)</p>
+                      <p className="text-xs text-indigo-600 mt-1">৳2,499/year instead of ৳3,588</p>
                     </div>
-
-                    <div className="border-t pt-6">
-                      <h4 className="font-medium mb-4">Change Plan</h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {user.package_type === 'monthly' && (
-                          <Link to="/pricing" className="block">
-                            <div className="p-4 border-2 border-indigo-200 rounded-lg hover:border-indigo-400 transition-colors cursor-pointer">
-                              <div className="flex items-center gap-2 mb-2">
-                                <ArrowUpCircle className="h-5 w-5 text-indigo-600" />
-                                <span className="font-medium">Upgrade to Yearly</span>
-                              </div>
-                              <p className="text-sm text-gray-600">Save ৳1,089/year (30% off)</p>
-                              <p className="text-xs text-indigo-600 mt-1">৳2,499/year instead of ৳3,588</p>
-                            </div>
-                          </Link>
-                        )}
-                        {user.package_type === 'yearly' && (
-                          <Link to="/pricing" className="block">
-                            <div className="p-4 border-2 border-gray-200 rounded-lg hover:border-gray-400 transition-colors cursor-pointer">
-                              <div className="flex items-center gap-2 mb-2">
-                                <ArrowDownCircle className="h-5 w-5 text-gray-600" />
-                                <span className="font-medium">Switch to Monthly</span>
-                              </div>
-                              <p className="text-sm text-gray-600">More flexibility, pay as you go</p>
-                              <p className="text-xs text-gray-500 mt-1">৳299/month</p>
-                            </div>
-                          </Link>
-                        )}
-                        <Link to="/pricing" className="block">
-                          <div className="p-4 border-2 border-green-200 rounded-lg hover:border-green-400 transition-colors cursor-pointer">
-                            <div className="flex items-center gap-2 mb-2">
-                              <Crown className="h-5 w-5 text-green-600" />
-                              <span className="font-medium">View All Plans</span>
-                            </div>
-                            <p className="text-sm text-gray-600">Compare features and pricing</p>
-                          </div>
-                        </Link>
+                  </Link>
+                )}
+                {user.package_type === 'yearly' && (
+                  <Link to="/pricing" className="block">
+                    <div className="p-4 border-2 border-gray-200 rounded-lg hover:border-gray-400 transition-colors cursor-pointer">
+                      <div className="flex items-center gap-2 mb-2">
+                        <ArrowDownCircle className="h-5 w-5 text-gray-600" />
+                        <span className="font-medium">Switch to Monthly</span>
                       </div>
+                      <p className="text-sm text-gray-600">More flexibility, pay as you go</p>
+                      <p className="text-xs text-gray-500 mt-1">৳299/month</p>
                     </div>
-                  </>
-                ) : (
-          <div className="text-center py-8">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Crown className="h-8 w-8 text-gray-400" />
+                  </Link>
+                )}
+                <Link to="/pricing" className="block">
+                  <div className="p-4 border-2 border-green-200 rounded-lg hover:border-green-400 transition-colors cursor-pointer">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Crown className="h-5 w-5 text-green-600" />
+                      <span className="font-medium">View All Plans</span>
+                    </div>
+                    <p className="text-sm text-gray-600">Compare features and pricing</p>
+                  </div>
+                </Link>
+              </div>
             </div>
-            <h3 className="font-semibold text-lg mb-2">Free Plan</h3>
-            <p className="text-gray-600 mb-6">
+          </>
+        ) : (
+          <div className="text-center py-8">
+            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+              <Crown className="h-8 w-8 text-muted-foreground" />
+            </div>
+            <h3 className="font-semibold text-lg text-foreground mb-2">Free Plan</h3>
+            <p className="text-muted-foreground mb-6">
               Upgrade to Premium to unlock all vocabulary and grammar lessons, plus exclusive content.
             </p>
             <Link to="/pricing">
-              <Button className="bg-indigo-600 hover:bg-indigo-700">
+              <Button>
                 <Crown className="h-4 w-4 mr-2" />
                 Upgrade to Premium
               </Button>
             </Link>
           </div>
         )}
+
+        {/* Payment History Section */}
+        {loadingPayments ? (
+          <div className="flex justify-center py-4 border-t mt-6">
+            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+          </div>
+        ) : payments.length > 0 ? (
+          <div className="border-t pt-6 mt-6">
+            <h4 className="font-medium flex items-center gap-2 mb-4 text-foreground">
+              <History className="h-4 w-4 text-muted-foreground" />
+              Recent Transactions
+            </h4>
+            <div className="space-y-3">
+              {payments.map(payment => (
+                <div key={payment.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-muted rounded-lg gap-2">
+                  <div>
+                    <p className="font-semibold text-foreground">{payment.package_name}</p>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <span>TrxID: {payment.transaction_id}</span>
+                      <span>•</span>
+                      <span>{new Date(payment.created_at).toLocaleDateString()}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4 justify-between sm:justify-end">
+                    <span className="font-bold text-foreground">৳{payment.amount}</span>
+                    <Badge variant={
+                      payment.status === 'approved' ? 'default' : 
+                      payment.status === 'rejected' ? 'destructive' : 
+                      'outline'
+                    } className={
+                       payment.status === 'approved' ? 'bg-green-500 hover:bg-green-600' :
+                       payment.status === 'pending' ? 'bg-amber-500 text-white hover:bg-amber-600 border-none' : ''
+                    }>
+                      {payment.status.toUpperCase()}
+                    </Badge>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
       </CardContent>
     </Card>
   );
