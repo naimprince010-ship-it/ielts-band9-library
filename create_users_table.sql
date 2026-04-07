@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS public.users (
   name TEXT,
   role TEXT CHECK (role IN ('user', 'admin', 'instructor')) DEFAULT 'user' NOT NULL,
   subscription_status TEXT CHECK (subscription_status IN ('free', 'premium')) DEFAULT 'free' NOT NULL,
+  premium_until TIMESTAMP WITH TIME ZONE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
 );

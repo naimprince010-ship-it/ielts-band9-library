@@ -91,22 +91,29 @@ export function UserManagement() {
     }
   };
 
-  const updateSubscription = async (userId: string, newStatus: 'free' | 'premium') => {
+  const updateSubscription = async (userId: string, newStatus: 'free' | 'premium', hours?: number) => {
     if (!supabase) return;
 
     setUpdating(userId);
     setMessage(null);
 
     try {
+      const updates: any = { subscription_status: newStatus };
+      if (hours) {
+         updates.premium_until = new Date(Date.now() + hours * 60 * 60 * 1000).toISOString();
+      } else if (newStatus === 'free') {
+         updates.premium_until = null;
+      }
+
       const { error } = await supabase
         .from('users')
-        .update({ subscription_status: newStatus })
+        .update(updates)
         .eq('id', userId);
 
       if (error) throw error;
 
       setUsers(users.map(u => u.id === userId ? { ...u, subscription_status: newStatus } : u));
-      setMessage({ type: 'success', text: `Subscription updated to ${newStatus}` });
+      setMessage({ type: 'success', text: `Subscription updated to ${newStatus}${hours ? ` for ${hours} hours` : ''}` });
     } catch (err: any) {
       setMessage({ type: 'error', text: `Failed to update subscription: ${err.message}` });
     } finally {
@@ -295,11 +302,16 @@ export function UserManagement() {
                               <Button 
                                 size="sm" 
                                 variant="outline" 
-                                onClick={() => updateSubscription(userData.id, 'premium')}
+                                onClick={() => {
+                                   const hoursStr = window.prompt("How many hours for this Custom Trial Pass? (Leave blank for permanent Premium)");
+                                   if (hoursStr === null) return;
+                                   const hours = parseInt(hoursStr);
+                                   updateSubscription(userData.id, 'premium', isNaN(hours) ? undefined : hours);
+                                }}
                                 disabled={updating === userData.id}
                               >
                                 <Crown className="h-4 w-4 mr-1" />
-                                Make Premium
+                                Grant Premium / Pass
                               </Button>
                             ) : (
                               <Button 
@@ -411,10 +423,15 @@ export function UserManagement() {
                             size="sm" 
                             variant="outline" 
                             className="text-xs h-9 rounded-xl"
-                            onClick={() => updateSubscription(userData.id, 'premium')}
+                            onClick={() => {
+                               const hoursStr = window.prompt("Hours for Trial Pass? (Leave empty for permanent)");
+                               if (hoursStr === null) return;
+                               const hours = parseInt(hoursStr);
+                               updateSubscription(userData.id, 'premium', isNaN(hours) ? undefined : hours);
+                            }}
                             disabled={updating === userData.id}
                           >
-                            <Crown className="h-3.5 w-3.5 mr-1.5" /> Make Premium
+                            <Crown className="h-3.5 w-3.5 mr-1.5" /> Grant Premium / Pass
                           </Button>
                         ) : (
                           <Button 

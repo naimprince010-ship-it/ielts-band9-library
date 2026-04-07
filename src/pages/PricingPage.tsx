@@ -15,7 +15,6 @@ const COUPON_CODES: Record<string, { discount: number; type: 'percent' | 'fixed'
 };
 
 const REFERRAL_STORAGE_KEY = 'ielts_referral_code';
-const TRIAL_STORAGE_KEY = 'ielts_trial_status';
 
 export function PricingPage() {
   const { user, isPremium } = useAuth();
@@ -27,7 +26,7 @@ export function PricingPage() {
   const [couponError, setCouponError] = useState('');
   const [referralCode, setReferralCode] = useState('');
   const [copied, setCopied] = useState(false);
-  const [trialDaysLeft, setTrialDaysLeft] = useState<number | null>(null);
+  const [trialTimeLeft, setTrialTimeLeft] = useState<{ value: number, unit: 'days' | 'hours' } | null>(null);
 
   const userPackageType = user?.package_type;
   const isMonthlyUser = isPremium && userPackageType === 'monthly';
@@ -43,16 +42,20 @@ export function PricingPage() {
       setReferralCode(`IELTS${user.id.slice(0, 6).toUpperCase()}`);
     }
     
-    const trialData = localStorage.getItem(TRIAL_STORAGE_KEY);
-    if (trialData) {
-      const { startDate } = JSON.parse(trialData);
-      const start = new Date(startDate);
+    if (isPremium && user?.premium_until) {
+      const end = new Date(user.premium_until);
       const now = new Date();
-      const daysPassed = Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-      const daysLeft = Math.max(0, 7 - daysPassed);
-      setTrialDaysLeft(daysLeft);
+      if (end > now) {
+        const msLeft = end.getTime() - now.getTime();
+        const hoursLeft = Math.floor(msLeft / (1000 * 60 * 60));
+        if (hoursLeft < 48) {
+          setTrialTimeLeft({ value: hoursLeft, unit: 'hours' });
+        } else {
+          setTrialTimeLeft({ value: Math.floor(hoursLeft / 24), unit: 'days' });
+        }
+      }
     }
-  }, [user, searchParams]);
+  }, [user, searchParams, isPremium]);
 
   const applyCoupon = () => {
     const code = couponCode.toUpperCase().trim();
@@ -70,19 +73,6 @@ export function PricingPage() {
     navigator.clipboard.writeText(link);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  };
-
-  const startFreeTrial = () => {
-    if (!user) {
-      navigate('/signup?trial=true');
-      return;
-    }
-    localStorage.setItem(TRIAL_STORAGE_KEY, JSON.stringify({
-      startDate: new Date().toISOString(),
-      userId: user.id
-    }));
-    setTrialDaysLeft(7);
-    alert('Your 7-day free trial has started! Enjoy full access to all premium content.');
   };
 
   const handleUpgrade = (packageType: 'monthly' | 'yearly') => {
@@ -183,31 +173,8 @@ export function PricingPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        {/* Free Trial Banner */}
-        {!isPremium && trialDaysLeft === null && (
-          <Card className="mb-8 border-2 border-accent/20 bg-accent/5">
-            <CardContent className="p-6">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 bg-accent/10 rounded-xl">
-                    <Gift className="h-7 w-7 text-accent" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-foreground">Try Premium Free for 7 Days!</h3>
-                    <p className="text-muted-foreground">Full access to all content. No credit card required.</p>
-                  </div>
-                </div>
-                <Button onClick={startFreeTrial} className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                  <Gift className="h-4 w-4 mr-2" />
-                  Start Free Trial
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Active Trial Banner */}
-        {trialDaysLeft !== null && trialDaysLeft > 0 && (
+        {/* Active Custom Premium Pass / Trial Banner */}
+        {trialTimeLeft !== null && (
           <Card className="mb-8 border-2 border-foreground/10 bg-muted">
             <CardContent className="p-6">
               <div className="flex flex-col md:flex-row items-center justify-between gap-4">
@@ -216,11 +183,11 @@ export function PricingPage() {
                     <CheckCircle2 className="h-7 w-7 text-foreground" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-foreground">Your Free Trial is Active!</h3>
-                    <p className="text-muted-foreground">{trialDaysLeft} days remaining. Upgrade now to keep access.</p>
+                    <h3 className="text-lg font-bold text-foreground">Your Premium Access is Active!</h3>
+                    <p className="text-muted-foreground">{trialTimeLeft.value} {trialTimeLeft.unit} remaining. Upgrade now to keep lifetime access.</p>
                   </div>
                 </div>
-                <Badge className="bg-foreground text-background text-base px-4 py-2">{trialDaysLeft} Days Left</Badge>
+                <Badge className="bg-foreground text-background text-base px-4 py-2">{trialTimeLeft.value} {trialTimeLeft.unit} Left</Badge>
               </div>
             </CardContent>
           </Card>

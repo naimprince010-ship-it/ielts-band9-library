@@ -301,24 +301,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   let isPremiumStatus = user?.subscription_status === 'premium';
   
-  // Calculate trial status
-  if (!isPremiumStatus && user) {
-    try {
-      const trialData = localStorage.getItem('ielts_trial_status');
-      if (trialData) {
-        const { startDate, userId } = JSON.parse(trialData);
-        // Only valid if trial belongs to current user
-        if (userId === user.id) {
-          const start = new Date(startDate);
-          const now = new Date();
-          const daysPassed = Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-          if (daysPassed >= 0 && daysPassed < 7) {
-            isPremiumStatus = true; // Grant premium access during 7-day trial
-          }
-        }
-      }
-    } catch (e) {
-      console.error('Failed to parse trial data', e);
+  // If user has a limited premium time (like a trial or subscription end date), verify it's still valid
+  if (isPremiumStatus && user?.premium_until) {
+    if (new Date(user.premium_until) < new Date()) {
+       isPremiumStatus = false; // Expired!
     }
   }
 
