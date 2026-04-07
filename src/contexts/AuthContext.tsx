@@ -299,6 +299,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
+  let isPremiumStatus = user?.subscription_status === 'premium';
+  
+  // Calculate trial status
+  if (!isPremiumStatus && user) {
+    try {
+      const trialData = localStorage.getItem('ielts_trial_status');
+      if (trialData) {
+        const { startDate, userId } = JSON.parse(trialData);
+        // Only valid if trial belongs to current user
+        if (userId === user.id) {
+          const start = new Date(startDate);
+          const now = new Date();
+          const daysPassed = Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+          if (daysPassed >= 0 && daysPassed < 7) {
+            isPremiumStatus = true; // Grant premium access during 7-day trial
+          }
+        }
+      }
+    } catch (e) {
+      console.error('Failed to parse trial data', e);
+    }
+  }
+
   const value = {
     user,
     supabaseUser,
@@ -312,7 +335,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signOut,
     isAdmin: user?.role === 'admin',
     isInstructor: user?.role === 'instructor',
-    isPremium: user?.subscription_status === 'premium',
+    isPremium: isPremiumStatus,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
