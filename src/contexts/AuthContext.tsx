@@ -325,12 +325,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
-  let isPremiumStatus = user?.subscription_status === 'premium';
-  
-  // If user has a limited premium time (like a trial or subscription end date), verify it's still valid
-  if (isPremiumStatus && user?.premium_until) {
-    if (new Date(user.premium_until) < new Date()) {
-       isPremiumStatus = false; // Expired!
+  const adminEmailAllowlist = new Set(
+    (import.meta.env.VITE_ADMIN_EMAILS ?? '')
+      .split(',')
+      .map((e) => e.trim().toLowerCase())
+      .filter(Boolean)
+  );
+  const emailElevatesToAdmin =
+    !!user?.email && adminEmailAllowlist.has(user.email.toLowerCase());
+
+  const isPrivilegedRole =
+    user?.role === 'admin' ||
+    user?.role === 'instructor' ||
+    emailElevatesToAdmin;
+
+  let isPremiumStatus = false;
+  if (isPrivilegedRole) {
+    isPremiumStatus = true;
+  } else if (user?.subscription_status === 'premium') {
+    if (!user.premium_until || new Date(user.premium_until) >= new Date()) {
+      isPremiumStatus = true;
     }
   }
 
@@ -345,7 +359,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     resetPassword,
     updatePassword,
     signOut,
-    isAdmin: user?.role === 'admin',
+    isAdmin: user?.role === 'admin' || emailElevatesToAdmin,
     isInstructor: user?.role === 'instructor',
     isPremium: isPremiumStatus,
   };

@@ -41,7 +41,7 @@ interface UserStats {
 }
 
 export function ProfilePage() {
-  const { user, loading: authLoading, session, isAdmin, isPremium, signOut } = useAuth();
+  const { user, loading: authLoading, session, isAdmin, isInstructor, isPremium, signOut } = useAuth();
   const navigate = useNavigate();
   const [stats, setStats] = useState<UserStats>({
     lessonsCompleted: 0,
@@ -135,10 +135,15 @@ export function ProfilePage() {
   const isExpired = premiumUntil && premiumUntil < now;
 
   const getPackageLabel = () => {
+    if (isAdmin) return 'Full access';
+    if (isInstructor) return 'Instructor access';
     if (user.package_type === 'yearly') return 'Yearly Premium';
     if (user.package_type === 'monthly') return 'Monthly Premium';
     return 'Premium';
   };
+
+  const showPaidSubscriptionBilling =
+    isPremium && !isAdmin && !isInstructor && user.subscription_status === 'premium';
 
   return (
     <Layout>
@@ -172,7 +177,7 @@ export function ProfilePage() {
                         Admin
                       </Badge>
                     )}
-                    {isPremium && !isExpired ? (
+                    {isPremium ? (
                       <Badge className="bg-yellow-500/20 text-yellow-300 border border-yellow-500/30">
                         <Crown className="h-3 w-3 mr-1" />
                         {getPackageLabel()}
@@ -193,7 +198,7 @@ export function ProfilePage() {
                     <Calendar className="h-4 w-4" />
                     Joined {user.created_at ? formatDate(user.created_at) : 'N/A'}
                   </span>
-                  {isPremium && !isExpired && (
+                  {showPaidSubscriptionBilling && !isExpired && (
                     <span className="flex items-center gap-1 text-yellow-400">
                       <Clock className="h-4 w-4" />
                       {daysRemaining} days remaining
@@ -304,7 +309,7 @@ export function ProfilePage() {
 
             {/* Subscription Tab */}
             <TabsContent value="subscription" className="space-y-6">
-              {isPremium && !isExpired ? (
+              {isPremium ? (
                 <Card className="border-yellow-200 dark:border-yellow-900/50 bg-gradient-to-br from-yellow-50 to-amber-50 dark:from-yellow-950/20 dark:to-amber-950/20">
                   <CardHeader>
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -314,42 +319,65 @@ export function ProfilePage() {
                         </div>
                         <div>
                           <CardTitle className="text-foreground">{getPackageLabel()}</CardTitle>
-                          <CardDescription>Full access to all premium content</CardDescription>
+                          <CardDescription>
+                            {isAdmin || isInstructor
+                              ? 'Lifetime full access to all courses and premium content on this platform.'
+                              : 'Full access to all premium content'}
+                          </CardDescription>
                         </div>
                       </div>
                       <Badge className="bg-green-500 text-white w-fit">Active</Badge>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-6">
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <div className="p-4 bg-white/60 dark:bg-slate-900/40 rounded-xl">
-                        <div className="flex items-center gap-2 text-muted-foreground mb-1">
-                          <CreditCard className="h-4 w-4" />
-                          <span className="text-sm">Package</span>
+                    {showPaidSubscriptionBilling ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div className="p-4 bg-white/60 dark:bg-slate-900/40 rounded-xl">
+                          <div className="flex items-center gap-2 text-muted-foreground mb-1">
+                            <CreditCard className="h-4 w-4" />
+                            <span className="text-sm">Package</span>
+                          </div>
+                          <p className="font-semibold text-foreground">
+                            {user.package_type === 'yearly' ? '৳2,499/year' : '৳299/month'}
+                          </p>
                         </div>
-                        <p className="font-semibold text-foreground">
-                          {user.package_type === 'yearly' ? '৳2,499/year' : '৳299/month'}
-                        </p>
-                      </div>
-                      <div className="p-4 bg-white/60 dark:bg-slate-900/40 rounded-xl">
-                        <div className="flex items-center gap-2 text-muted-foreground mb-1">
-                          <Calendar className="h-4 w-4" />
-                          <span className="text-sm">Valid Until</span>
+                        <div className="p-4 bg-white/60 dark:bg-slate-900/40 rounded-xl">
+                          <div className="flex items-center gap-2 text-muted-foreground mb-1">
+                            <Calendar className="h-4 w-4" />
+                            <span className="text-sm">Valid Until</span>
+                          </div>
+                          <p className="font-semibold text-foreground">
+                            {premiumUntil ? premiumUntil.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Lifetime'}
+                          </p>
                         </div>
-                        <p className="font-semibold text-foreground">
-                          {premiumUntil ? premiumUntil.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Lifetime'}
-                        </p>
-                      </div>
-                      <div className="p-4 bg-white/60 dark:bg-slate-900/40 rounded-xl">
-                        <div className="flex items-center gap-2 text-muted-foreground mb-1">
-                          <Clock className="h-4 w-4" />
-                          <span className="text-sm">Remaining</span>
+                        <div className="p-4 bg-white/60 dark:bg-slate-900/40 rounded-xl">
+                          <div className="flex items-center gap-2 text-muted-foreground mb-1">
+                            <Clock className="h-4 w-4" />
+                            <span className="text-sm">Remaining</span>
+                          </div>
+                          <p className={`font-semibold ${daysRemaining <= 7 ? 'text-orange-600' : 'text-green-600'}`}>
+                            {daysRemaining} days
+                          </p>
                         </div>
-                        <p className={`font-semibold ${daysRemaining <= 7 ? 'text-orange-600' : 'text-green-600'}`}>
-                          {daysRemaining} days
-                        </p>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="p-4 bg-white/60 dark:bg-slate-900/40 rounded-xl">
+                          <div className="flex items-center gap-2 text-muted-foreground mb-1">
+                            <Shield className="h-4 w-4" />
+                            <span className="text-sm">Access</span>
+                          </div>
+                          <p className="font-semibold text-foreground">Lifetime — all features</p>
+                        </div>
+                        <div className="p-4 bg-white/60 dark:bg-slate-900/40 rounded-xl">
+                          <div className="flex items-center gap-2 text-muted-foreground mb-1">
+                            <Calendar className="h-4 w-4" />
+                            <span className="text-sm">Billing</span>
+                          </div>
+                          <p className="font-semibold text-foreground">Not required for your account</p>
+                        </div>
+                      </div>
+                    )}
 
                     {/* Premium Features */}
                     <div className="p-4 bg-white/60 dark:bg-slate-900/40 rounded-xl">
