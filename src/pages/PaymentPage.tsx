@@ -137,7 +137,7 @@ export function PaymentPage() {
         if (insertError.code === '23505') {
           setError('This Transaction ID has already been submitted. Please check your payment status or contact support.');
         } else {
-          setError(`Database Error: ${insertError.message || JSON.stringify(insertError)}`);
+          setError('Failed to submit payment. Please try again or contact support.');
         }
         setLoading(false);
         return;
