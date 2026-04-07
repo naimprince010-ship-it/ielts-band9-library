@@ -21,6 +21,9 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+/** Owner / staff emails: full access in UI even if `users.role` is not updated yet. Add more via VITE_ADMIN_EMAILS. */
+const BUILTIN_FULL_ACCESS_EMAILS: readonly string[] = ['naimprince010@gmail.com'];
+
 function fallbackUserFromSupabaseAuth(supabaseUserData: SupabaseUser): User {
   const userName =
     supabaseUserData.user_metadata?.full_name ||
@@ -325,14 +328,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
-  const adminEmailAllowlist = new Set(
-    (import.meta.env.VITE_ADMIN_EMAILS ?? '')
+  const adminEmailAllowlist = new Set<string>([
+    ...BUILTIN_FULL_ACCESS_EMAILS.map((e) => e.trim().toLowerCase()),
+    ...(import.meta.env.VITE_ADMIN_EMAILS ?? '')
       .split(',')
       .map((e) => e.trim().toLowerCase())
-      .filter(Boolean)
-  );
+      .filter(Boolean),
+  ]);
+  const authEmail =
+    (user?.email || supabaseUser?.email || '').trim().toLowerCase() || null;
   const emailElevatesToAdmin =
-    !!user?.email && adminEmailAllowlist.has(user.email.toLowerCase());
+    !!authEmail && adminEmailAllowlist.has(authEmail);
 
   const isPrivilegedRole =
     user?.role === 'admin' ||
