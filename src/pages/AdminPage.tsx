@@ -294,17 +294,22 @@ export function AdminPage() {
         .eq('id', payment.id);
       if (updateError) throw updateError;
 
-      const { error: userError } = await supabase
-        .from('users')
-        .update({
-          subscription_status: 'premium',
-          premium_until: payment.package_type === 'yearly' 
-            ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
-            : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-        })
-        .eq('id', payment.user_id);
+      // Only give global 'premium' access if it's a general subscription (not a single course)
+      // For courses, our new Postgres Trigger automatically adds them to user_courses table!
+      if (payment.package_type !== 'course') {
+        const { error: userError } = await supabase
+          .from('users')
+          .update({
+            subscription_status: 'premium',
+            premium_until: payment.package_type === 'yearly' 
+              ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
+              : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+          })
+          .eq('id', payment.user_id);
 
-      if (userError) console.error('Failed to update user premium status:', userError);
+        if (userError) console.error('Failed to update user premium status:', userError);
+      }
+
       setSuccess('Payment approved successfully!');
       fetchPayments();
       setTimeout(() => setSuccess(''), 3000);

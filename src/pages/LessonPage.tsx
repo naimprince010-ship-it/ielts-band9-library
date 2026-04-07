@@ -18,6 +18,7 @@ import { SpeakButton } from '@/components/ui/SpeakButton';
 import { PieChartCoreExplanation } from '@/components/ui/PieChartVisuals';
 import { useLessons } from '@/contexts/LessonContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/lib/supabase';
 
 // Helper function to parse markdown-style text and render properly
 function parseMarkdownText(text: string): React.ReactNode {
@@ -216,13 +217,36 @@ export function LessonPage() {
   const lessonProgress = lesson ? getLessonProgress(lesson.id) : 'not_started';
   const isCompleted = lessonProgress === 'completed';
 
+  const [isCourseEnrolled, setIsCourseEnrolled] = useState(false);
+
   useEffect(() => {
     const foundLesson = getLessonBySlug(slug || '');
     setLesson(foundLesson);
     if (foundLesson) {
       incrementViewCount(foundLesson.id);
+      
+      // Check course enrollment if this lesson belongs to a course
+      const checkEnrollment = async () => {
+        if (user && foundLesson.courseId) {
+          const { data, error } = await supabase
+            .from('user_courses')
+            .select('*')
+            .eq('user_id', user.id)
+            .eq('course_id', foundLesson.courseId)
+            .eq('access_status', 'active')
+            .maybeSingle();
+            
+          if (data && !error) {
+            setIsCourseEnrolled(true);
+          }
+        }
+      };
+      
+      if (user && foundLesson.courseId) {
+        checkEnrollment();
+      }
     }
-  }, [slug, lessons]);
+  }, [slug, lessons, user]);
 
   if (!lesson) {
     return (
@@ -237,7 +261,8 @@ export function LessonPage() {
     );
   }
 
-  const canAccessContent = !lesson.is_premium || isPremium;
+  // They can access if it's NOT premium, OR they are a global premium user, OR they bought the specific course
+  const canAccessContent = !lesson.is_premium || isPremium || isCourseEnrolled;
   const content = lesson.content;
 
   const handleBookmarkToggle = async () => {

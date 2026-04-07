@@ -20,27 +20,46 @@ import { useState, useEffect } from 'react';
 import { courseService } from '@/services/courseService';
 import { Course } from '@/types';
 import { Loader2 } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/lib/supabase';
 
 export function CourseDetailPage() {
   const { courseId } = useParams();
   const [course, setCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
-    const fetchCourse = async () => {
+    const fetchCourseAndEnrollment = async () => {
       if (!courseId) return;
       setLoading(true);
       try {
         const data = await courseService.getCourseById(courseId);
         setCourse(data);
+
+        // Check if user is enrolled
+        if (user) {
+           const { data: enrollment, error } = await supabase
+             .from('user_courses')
+             .select('*')
+             .eq('user_id', user.id)
+             .eq('course_id', courseId)
+             .eq('access_status', 'active')
+             .maybeSingle();
+           
+           if (enrollment && !error) {
+              setIsEnrolled(true);
+           }
+        }
       } catch (err) {
         console.error(`Error fetching course ${courseId}:`, err);
       } finally {
         setLoading(false);
       }
     };
-    fetchCourse();
-  }, [courseId]);
+    fetchCourseAndEnrollment();
+  }, [courseId, user]);
 
   if (loading) {
     return (
@@ -196,12 +215,20 @@ export function CourseDetailPage() {
                                     <span className="text-sm">{title}</span>
                                   </div>
                                   {hasLink && (
-                                    <Link to={`/lesson/${lesson.lessonId}`} target="_blank" rel="noopener noreferrer">
-                                      <Button variant="ghost" size="sm" className="h-8 px-3 rounded-full bg-accent/10 text-accent hover:bg-accent hover:text-white font-bold text-[10px] uppercase tracking-wider flex items-center gap-1.5">
-                                         View Document
-                                         <ExternalLink className="h-3 w-3" />
-                                      </Button>
-                                    </Link>
+                                    <>
+                                      {isEnrolled ? (
+                                        <Link to={`/lesson/${lesson.lessonId}`} target="_blank" rel="noopener noreferrer">
+                                          <Button variant="ghost" size="sm" className="h-8 px-3 rounded-full bg-accent/10 text-accent hover:bg-accent hover:text-white font-bold text-[10px] uppercase tracking-wider flex items-center gap-1.5">
+                                            View Content
+                                            <ExternalLink className="h-3 w-3" />
+                                          </Button>
+                                        </Link>
+                                      ) : (
+                                        <Button disabled variant="ghost" size="sm" className="h-8 px-3 rounded-full bg-slate-100 text-slate-400 font-bold text-[10px] uppercase tracking-wider flex items-center gap-1.5 opacity-70">
+                                            Locked
+                                        </Button>
+                                      )}
+                                    </>
                                   )}
                                 </li>
                               );
@@ -253,11 +280,17 @@ export function CourseDetailPage() {
                </div>
                
                <div className="space-y-4 mb-8">
-                 <Link to={`/payment?package=course&courseId=${course.id}&name=${encodeURIComponent(course.title)}&price=${course.price}`} className="block w-full">
-                   <Button className="w-full h-16 rounded-2xl bg-accent hover:bg-foreground text-white font-black text-lg transition-all shadow-[0_15px_30px_-5px_rgba(220,38,38,0.3)] transform hover:-translate-y-1">
-                     Get Full Access Now
+                 {isEnrolled ? (
+                   <Button className="w-full h-16 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-lg transition-all shadow-lg transform hover:-translate-y-1">
+                     <CheckCircle2 className="mr-2 h-5 w-5" /> You are Enrolled
                    </Button>
-                 </Link>
+                 ) : (
+                   <Link to={`/payment?package=course&courseId=${course.id}&name=${encodeURIComponent(course.title)}&price=${course.price}`} className="block w-full">
+                     <Button className="w-full h-16 rounded-2xl bg-accent hover:bg-foreground text-white font-black text-lg transition-all shadow-[0_15px_30px_-5px_rgba(220,38,38,0.3)] transform hover:-translate-y-1">
+                       Get Full Access Now
+                     </Button>
+                   </Link>
+                 )}
                  <Link to="/contact" className="block w-full">
                    <Button variant="outline" className="w-full h-16 rounded-2xl border-2 border-border font-black text-lg text-foreground hover:bg-muted transition-all">
                      Contact Admissions
