@@ -136,7 +136,7 @@ const getTypeColor = (type: string) => {
 };
 
 export default function DailyStudyPlanPage() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [plan, setPlan] = useState<DailyPlan | null>(null);
   const [streak, setStreak] = useState<UserStreak>({
@@ -492,6 +492,14 @@ export default function DailyStudyPlanPage() {
   const progressPercent = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
   const totalMinutes = plan?.items.reduce((acc, item) => acc + item.recommended_minutes, 0) || 0;
 
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
+
   if (!user) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -527,17 +535,17 @@ export default function DailyStudyPlanPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="py-8 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-2xl font-bold flex items-center gap-2">
-                <Calendar className="h-7 w-7" />
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
+            <div className="min-w-0">
+              <h1 className="text-xl sm:text-2xl font-bold flex items-center gap-2">
+                <Calendar className="h-6 w-6 sm:h-7 sm:w-7 shrink-0" />
                 Today's Study Plan
               </h1>
-              <p className="text-indigo-100 mt-1">
+              <p className="text-indigo-100 mt-1 text-sm sm:text-base">
                 {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
               </p>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4 shrink-0">
               <div className="text-center bg-white/10 rounded-lg px-4 py-2">
                 <div className="flex items-center gap-1 text-2xl font-bold">
                   <Flame className="h-6 w-6 text-orange-400" />
@@ -555,12 +563,12 @@ export default function DailyStudyPlanPage() {
             </div>
           </div>
 
-          <div className="bg-white/10 rounded-lg p-4">
-            <div className="flex items-center justify-between mb-2">
+          <div className="bg-white/10 rounded-lg p-4 overflow-hidden">
+            <div className="flex items-center justify-between gap-2 mb-2">
               <span className="text-sm">Today's Progress</span>
-              <span className="text-sm font-medium">{completedCount}/{totalCount} tasks</span>
+              <span className="text-sm font-medium shrink-0">{completedCount}/{totalCount} tasks</span>
             </div>
-            <Progress value={progressPercent} className="h-3 bg-white/20" />
+            <Progress value={progressPercent} className="h-3 w-full max-w-full overflow-hidden bg-white/20" />
             <div className="flex items-center justify-between mt-2 text-xs text-indigo-100">
               <span className="flex items-center gap-1">
                 <Clock className="h-3 w-3" />
@@ -577,7 +585,7 @@ export default function DailyStudyPlanPage() {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto px-4 py-8 overflow-x-hidden">
         {plan?.status === 'completed' ? (
           <Card className="mb-8 bg-green-50 border-green-200">
             <CardContent className="pt-6">
@@ -628,19 +636,19 @@ export default function DailyStudyPlanPage() {
             return (
               <Card 
                 key={item.id} 
-                className={`transition-all ${
+                className={`transition-all overflow-hidden ${
                   item.completed_at 
                     ? 'bg-gray-50 opacity-75' 
                     : locked 
                       ? 'bg-gray-50 opacity-60 cursor-not-allowed' 
                       : isCurrentTask 
-                        ? 'ring-2 ring-indigo-500 ring-offset-2 hover:shadow-md' 
+                        ? 'ring-2 ring-indigo-500 ring-offset-0 sm:ring-offset-2 hover:shadow-md' 
                         : 'hover:shadow-md'
                 }`}
               >
                 <CardContent className="p-4">
-                  <div className="flex items-center gap-4">
-                    <div className="relative">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                    <div className="relative shrink-0">
                       <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
                         locked ? 'bg-gray-200 text-gray-400' : getTypeColor(item.type)
                       }`}>
@@ -657,8 +665,8 @@ export default function DailyStudyPlanPage() {
                         </div>
                       )}
                     </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
                         <h3 className={`font-semibold ${
                           item.completed_at 
                             ? 'line-through text-gray-400' 
@@ -687,7 +695,7 @@ export default function DailyStudyPlanPage() {
                         {item.description}
                       </p>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto sm:justify-end shrink-0">
                       {item.completed_at ? (
                         <div className="flex items-center gap-2 text-green-600">
                           <CheckCircle2 className="h-6 w-6" />
