@@ -74,7 +74,7 @@ function App() {
                 <Route path="/auth/callback" element={<AuthCallbackPage />} />
                 <Route path="/payment" element={<PaymentPage />} />
                 <Route path="/admin" element={<AdminPage />} />
-                <Route path="/profile" element={<Layout><ProfilePage /></Layout>} />
+                <Route path="/profile" element={<ProfilePage />} />
 
                 {/* Main pages with Layout */}
                 <Route path="/" element={<Layout><HomePage /></Layout>} />
