@@ -319,7 +319,7 @@ export function ProfilePage() {
                           <span className="text-sm">Valid Until</span>
                         </div>
                         <p className="font-semibold text-foreground">
-                          {premiumUntil ? formatDate(premiumUntil) : 'Lifetime'}
+                          {premiumUntil ? premiumUntil.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Lifetime'}
                         </p>
                       </div>
                       <div className="p-4 bg-white/60 dark:bg-slate-900/40 rounded-xl">
