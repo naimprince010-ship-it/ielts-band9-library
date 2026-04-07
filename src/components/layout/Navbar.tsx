@@ -226,7 +226,7 @@ export function Navbar() {
                     
                     <DropdownMenuItem onClick={() => navigate('/profile')} className="gap-2.5 py-2">
                       <Crown className="h-4 w-4 text-muted-foreground" />
-                      My Subscription
+                      My Profile
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate('/bookmarks')} className="gap-2.5 py-2">
                       <Bookmark className="h-4 w-4 text-muted-foreground" />
