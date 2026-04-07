@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { Layout } from '@/components/layout/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -123,7 +122,6 @@ export function ProfilePage() {
   };
 
   return (
-    <Layout>
       <div className="min-h-screen bg-gradient-to-b from-muted/30 to-background">
         {/* Hero Header Section */}
         <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white">
@@ -562,6 +560,5 @@ export function ProfilePage() {
           </Tabs>
         </div>
       </div>
-    </Layout>
   );
 }
