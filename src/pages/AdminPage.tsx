@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link as RouterLink } from 'react-router-dom';
 import { 
   Settings, Plus, Edit, Trash2, Eye, EyeOff, BookOpen, GraduationCap,
   Sparkles, Save, X, AlertCircle, CheckCircle, ShieldCheck, Square, CheckSquare,
@@ -157,8 +157,16 @@ export function AdminPage() {
   const { user, isAdmin, isInstructor, loading, supabaseUser, signOut } = useAuth();
   const { lessons, createLesson, updateLesson, deleteLesson } = useLessons();
   const navigate = useNavigate();
-  
-  const [activeSection, setActiveSection] = useState(isInstructor ? 'instructor-dashboard' : 'dashboard');
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const defaultSection = isInstructor ? 'instructor-dashboard' : 'dashboard';
+  const sectionFromUrl = searchParams.get('section');
+  const [activeSection, setActiveSectionState] = useState(sectionFromUrl || defaultSection);
+
+  const setActiveSection = (id: string) => {
+    setActiveSectionState(id);
+    setSearchParams({ section: id }, { replace: true });
+  };
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<string[]>(menuGroups.map(g => g.title));
   const [isEditorOpen, setIsEditorOpen] = useState(false);
