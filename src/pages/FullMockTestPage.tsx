@@ -271,27 +271,27 @@ export default function FullMockTestPage() {
   // Pre-fetch all section audio as blob URLs when the listening phase begins
   useEffect(() => {
     if (phase !== 'listening') return;
-    const sections = listeningTest?.sections ?? [];
+    const td = tests.listening?.test_data as Record<string, unknown> | undefined;
+    if (!td) return;
+    const sections = Array.isArray(td.sections)
+      ? (td.sections as Array<{ sectionNumber?: number; sectionAudioUrl?: string }>)
+      : [];
     sections.forEach((section) => {
       if (!section.sectionAudioUrl) return;
       const id = `section-${section.sectionNumber}`;
       if (prefetchedBlobs.current.has(id)) return;
-      // Fire-and-forget background fetch
       toBlobUrl(section.sectionAudioUrl).then(blobUrl => {
         prefetchedBlobs.current.set(id, blobUrl);
       }).catch(() => { /* will fall back to direct URL */ });
     });
-    // Also handle global audio
-    if (listeningTest?.audioUrl) {
-      const id = 'global';
-      if (!prefetchedBlobs.current.has(id)) {
-        toBlobUrl(listeningTest.audioUrl).then(blobUrl => {
-          prefetchedBlobs.current.set(id, blobUrl);
-        }).catch(() => {});
-      }
+    // Also handle global audio URL
+    const globalUrl = td.audioUrl as string | undefined;
+    if (globalUrl && !prefetchedBlobs.current.has('global')) {
+      toBlobUrl(globalUrl).then(blobUrl => {
+        prefetchedBlobs.current.set('global', blobUrl);
+      }).catch(() => {});
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase, listeningTest]);
+  }, [phase, tests.listening]);
 
   const playRealAudio = (id: string, url: string, fallbackTranscript?: string) => {
     // ① Unlock iOS audio session synchronously inside click handler
