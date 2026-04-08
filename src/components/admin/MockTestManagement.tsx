@@ -248,24 +248,45 @@ function fixQuestions<T extends ReadingQuestion | ListeningQuestion>(questions: 
   });
 }
 
-/** Count questions with generic question texts in a test (reading + listening). */
+/**
+ * Count questions that CAN be auto-fixed:
+ * - generic question text
+ * - has groupId (belongs to a table/summary group)
+ * - is NOT the master question (does not carry tableData / summaryData itself)
+ * - master question for its group EXISTS and has tableData / summaryData
+ */
+function countFixableGenericTexts(
+  questions: (ReadingQuestion | ListeningQuestion)[],
+): number {
+  // Build master map: groupId → first question that has tableData or summaryData
+  const masters = new Map<string, ReadingQuestion | ListeningQuestion>();
+  for (const q of questions) {
+    if (q.groupId && (q.tableData ?? q.summaryData) && !masters.has(q.groupId)) {
+      masters.set(q.groupId, q);
+    }
+  }
+  return questions.filter(q =>
+    q.groupId &&                              // must belong to a group
+    !q.tableData && !q.summaryData &&         // must NOT be the master
+    masters.has(q.groupId) &&                 // master must exist
+    isGenericQuestionText(q.questionText),    // text must still be generic
+  ).length;
+}
+
+/** Count fixable generic-text questions across a whole test. */
 function countGenericTexts(test: MockTest): number {
   try {
     if (test.module_type === 'reading') {
       const passages = Array.isArray((test.test_data as ReadingTest).passages)
         ? (test.test_data as ReadingTest).passages : [];
       return passages.reduce((sum, p) =>
-        sum + (Array.isArray(p.questions) ? p.questions : []).filter(
-          q => isGenericQuestionText(q.questionText),
-        ).length, 0);
+        sum + countFixableGenericTexts(Array.isArray(p.questions) ? p.questions : []), 0);
     }
     if (test.module_type === 'listening') {
       const sections = Array.isArray((test.test_data as ListeningTest).sections)
         ? (test.test_data as ListeningTest).sections : [];
       return sections.reduce((sum, s) =>
-        sum + (Array.isArray(s.questions) ? s.questions : []).filter(
-          q => isGenericQuestionText(q.questionText),
-        ).length, 0);
+        sum + countFixableGenericTexts(Array.isArray(s.questions) ? s.questions : []), 0);
     }
     return 0;
   } catch { return 0; }
