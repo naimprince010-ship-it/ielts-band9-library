@@ -235,6 +235,19 @@ export default function WritingTestPage() {
         return;
       }
       const normalized = normalizeWritingTestFromDb(data.test_data) as WritingTest;
+      /* ---- DEBUG (safe to deploy) ---- */
+      const dbTask1Raw = (data.test_data as Record<string, unknown>)?.tasks;
+      const t1raw = Array.isArray(dbTask1Raw)
+        ? (dbTask1Raw as unknown[])[0]
+        : (data.test_data as Record<string, unknown>)?.task1;
+      console.group('[WritingTestPage] Supabase DB snapshot');
+      console.log('raw test_data keys:', Object.keys(data.test_data as object ?? {}));
+      console.log('raw task1:', t1raw);
+      const nt1 = normalized.tasks?.[0];
+      console.log('normalized task1 visual keys: chartData=%o tableData=%o processData=%o mapData=%o imageUrl=%o',
+        nt1?.chartData, nt1?.tableData, nt1?.processData, nt1?.mapData, nt1?.imageUrl);
+      console.groupEnd();
+      /* ---- end DEBUG ---- */
       if (!normalized.tasks || normalized.tasks.length < 2) {
         setTestLoadError('Writing test data has fewer than 2 tasks in the database — re-save from Admin.');
         return;

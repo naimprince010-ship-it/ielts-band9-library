@@ -324,6 +324,8 @@ export function MockTestManagement() {
   const [bulkFixingTypes, setBulkFixingTypes] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  // Track unsaved changes so admins are warned before closing without saving
+  const [isDirty, setIsDirty] = useState(false);
 
     const [formData, setFormData] = useState<{
     title: string;
@@ -531,10 +533,11 @@ export function MockTestManagement() {
     });
     setError('');
     setSuccess('');
+    setIsDirty(false);
     setIsEditorOpen(true);
   };
 
-    const handleEditTest = (test: MockTest) => {
+  const handleEditTest = (test: MockTest) => {
       setEditingTest(test);
       setFormData({
         title: test.title,
@@ -549,8 +552,9 @@ export function MockTestManagement() {
             : getDefaultWritingData(),
         speaking_data: test.module_type === 'speaking' ? test.test_data as SpeakingTest : getDefaultSpeakingData(),
       });
-      setError('');
+    setError('');
     setSuccess('');
+    setIsDirty(false);
     setIsEditorOpen(true);
   };
 
@@ -629,6 +633,7 @@ export function MockTestManagement() {
         setSuccess('Mock test created successfully!');
       }
 
+      setIsDirty(false); // Mark as saved — no unsaved changes warning
       fetchMockTests();
       setTimeout(() => {
         setIsEditorOpen(false);
@@ -999,7 +1004,18 @@ export function MockTestManagement() {
         </CardContent>
       </Card>
 
-      <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
+      <Dialog
+        open={isEditorOpen}
+        onOpenChange={(open) => {
+          if (!open && isDirty) {
+            if (!window.confirm('You have unsaved changes. Are you sure you want to close without saving?')) {
+              return; // Keep dialog open
+            }
+          }
+          setIsDirty(false);
+          setIsEditorOpen(open);
+        }}
+      >
         <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
@@ -1012,6 +1028,15 @@ export function MockTestManagement() {
           </DialogHeader>
 
           <div className="space-y-6">
+            {/* Unsaved changes warning banner */}
+            {isDirty && !success && (
+              <div className="flex items-center gap-2 rounded-lg bg-amber-50 border border-amber-200 px-4 py-2.5 text-sm text-amber-900 animate-in fade-in slide-in-from-top-2">
+                <AlertCircle className="h-4 w-4 text-amber-500 shrink-0" />
+                <span className="font-semibold">Unsaved changes</span>
+                <span className="text-amber-700">— Click "Save Mock Test" below to save your changes to the database.</span>
+              </div>
+            )}
+
             {error && (
               <Alert className="bg-red-50 border-red-200">
                 <AlertCircle className="h-4 w-4 text-red-600" />
@@ -1057,7 +1082,7 @@ export function MockTestManagement() {
                         {formData.module_type === 'reading' && (
                           <ReadingTestBuilder
                             data={formData.reading_data}
-                            onChange={(data) => setFormData(prev => ({ ...prev, reading_data: data }))}
+                            onChange={(data) => { setFormData(prev => ({ ...prev, reading_data: data })); setIsDirty(true); }}
                             onTitleSuggested={(title) => setFormData(prev => prev.title ? prev : { ...prev, title })}
                           />
                         )}
@@ -1065,7 +1090,7 @@ export function MockTestManagement() {
                         {formData.module_type === 'listening' && (
                           <ListeningTestBuilder
                             data={formData.listening_data}
-                            onChange={(data) => setFormData(prev => ({ ...prev, listening_data: data }))}
+                            onChange={(data) => { setFormData(prev => ({ ...prev, listening_data: data })); setIsDirty(true); }}
                             onTitleSuggested={(title) => setFormData(prev => prev.title ? prev : { ...prev, title })}
                           />
                         )}
@@ -1073,7 +1098,7 @@ export function MockTestManagement() {
                         {formData.module_type === 'writing' && (
                           <WritingTestBuilder
                             data={formData.writing_data}
-                            onChange={(data) => setFormData(prev => ({ ...prev, writing_data: data }))}
+                            onChange={(data) => { setFormData(prev => ({ ...prev, writing_data: data })); setIsDirty(true); }}
                             onTitleSuggested={(title) => setFormData(prev => prev.title ? prev : { ...prev, title })}
                           />
                         )}
@@ -1081,21 +1106,34 @@ export function MockTestManagement() {
                         {formData.module_type === 'speaking' && (
                           <SpeakingTestBuilder
                             data={formData.speaking_data}
-                            onChange={(data) => setFormData(prev => ({ ...prev, speaking_data: data }))}
+                            onChange={(data) => { setFormData(prev => ({ ...prev, speaking_data: data })); setIsDirty(true); }}
                             onTitleSuggested={(title) => setFormData(prev => prev.title ? prev : { ...prev, title })}
                           />
                         )}
 
             <div className="flex justify-end gap-2 pt-4 border-t">
-              <Button variant="outline" onClick={() => setIsEditorOpen(false)}>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  if (isDirty && !window.confirm('You have unsaved changes. Close without saving?')) return;
+                  setIsDirty(false);
+                  setIsEditorOpen(false);
+                }}
+              >
                 Cancel
               </Button>
-              <Button onClick={handleSaveTest} disabled={saving}>
+              <Button
+                onClick={handleSaveTest}
+                disabled={saving}
+                className={isDirty ? 'bg-amber-500 hover:bg-amber-600 text-white animate-pulse' : ''}
+              >
                 {saving ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                     Saving...
                   </>
+                ) : isDirty ? (
+                  '⚠️ Save Mock Test (Unsaved!)'
                 ) : (
                   'Save Mock Test'
                 )}
