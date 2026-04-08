@@ -168,17 +168,16 @@ function normalizeQuestionType(
 
 // ── Question-text fix utilities ───────────────────────────────────────────────
 
-/** Patterns that indicate a generic, non-specific question text. */
-const GENERIC_TEXT_RE = [
-  /^complete the (table|summary|notes?|form|flow[- ]?chart|diagram) below\.?$/i,
-  /^complete the (table|summary|notes?) (about|regarding|on) .+\.?$/i,
-  /^fill in the (blank|gap)s?\.?$/i,
-  /^answer the following\.?$/i,
-];
-
+/** Returns true if the question text is a generic instruction rather than a specific question. */
 function isGenericQuestionText(text: string): boolean {
-  const t = (text ?? '').trim();
-  return !t || GENERIC_TEXT_RE.some(p => p.test(t));
+  const t = (text ?? '').trim().toLowerCase();
+  if (!t) return true;
+  // Starts with a generic "complete the X" or "fill in" instruction
+  if (/^complete the (table|summary|notes?|form|flow[- ]?chart|diagram)\b/i.test(t)) return true;
+  if (/^fill in the (blank|gap)s?\b/i.test(t)) return true;
+  if (/^answer the following\b/i.test(t)) return true;
+  if (/^write (your )?answer\b/i.test(t)) return true;
+  return false;
 }
 
 /**
@@ -249,7 +248,7 @@ function fixQuestions<T extends ReadingQuestion | ListeningQuestion>(questions: 
   });
 }
 
-/** Count grouped questions with generic question texts in a test. */
+/** Count questions with generic question texts in a test (reading + listening). */
 function countGenericTexts(test: MockTest): number {
   try {
     if (test.module_type === 'reading') {
@@ -257,7 +256,7 @@ function countGenericTexts(test: MockTest): number {
         ? (test.test_data as ReadingTest).passages : [];
       return passages.reduce((sum, p) =>
         sum + (Array.isArray(p.questions) ? p.questions : []).filter(
-          q => q.groupId && isGenericQuestionText(q.questionText),
+          q => isGenericQuestionText(q.questionText),
         ).length, 0);
     }
     if (test.module_type === 'listening') {
@@ -265,7 +264,7 @@ function countGenericTexts(test: MockTest): number {
         ? (test.test_data as ListeningTest).sections : [];
       return sections.reduce((sum, s) =>
         sum + (Array.isArray(s.questions) ? s.questions : []).filter(
-          q => q.groupId && isGenericQuestionText(q.questionText),
+          q => isGenericQuestionText(q.questionText),
         ).length, 0);
     }
     return 0;
