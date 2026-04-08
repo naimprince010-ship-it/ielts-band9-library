@@ -1387,11 +1387,12 @@ function ListeningTestBuilder({
         }
       }
 
-      // Use first section audio as the top-level audioUrl (for backward-compat integrity check)
-      const firstUrl = updatedSections.find(s => s.sectionAudioUrl)?.sectionAudioUrl ?? '';
+      // Keep the existing global audioUrl (if any) — do NOT overwrite it with a per-section URL.
+      // Each section stores its own sectionAudioUrl; the global audioUrl is only for a single
+      // monolithic recording that covers all sections at once.
       onChange({
         ...data,
-        audioUrl: firstUrl || data.audioUrl || '',
+        audioUrl: data.audioUrl || '',
         audioDuration: sectionsWithTranscript.reduce((sum, s) => sum + Math.ceil((s.transcript?.length ?? 0) / 15), 0),
         sections: updatedSections,
       });

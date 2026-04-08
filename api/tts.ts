@@ -54,13 +54,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (SUPABASE_URL && SUPABASE_SERVICE_KEY) {
       const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
       
+      // Check if file already exists by trying to get its public URL metadata
       const { data: existingFile } = await supabase.storage
         .from('audio')
-        .createSignedUrl(audioFileName, 3600);
+        .list('tts', { search: `${cacheKey}.mp3` });
 
-      if (existingFile?.signedUrl) {
+      if (existingFile && existingFile.length > 0) {
+        // Use permanent public URL instead of signed URL (which expires after 1 hour)
+        const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/audio/${audioFileName}`;
         return res.status(200).json({ 
-          audioUrl: existingFile.signedUrl,
+          audioUrl: publicUrl,
           cached: true 
         });
       }
@@ -137,16 +140,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           upsert: true,
         });
 
-      const { data: signedUrl } = await supabase.storage
-        .from('audio')
-        .createSignedUrl(audioFileName, 3600);
-
-      if (signedUrl?.signedUrl) {
-        return res.status(200).json({ 
-          audioUrl: signedUrl.signedUrl,
-          cached: false 
-        });
-      }
+      // Use permanent public URL — no expiry, works for all users
+      const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/audio/${audioFileName}`;
+      return res.status(200).json({ 
+        audioUrl: publicUrl,
+        cached: false 
+      });
     }
 
     return res.status(200).json({ 

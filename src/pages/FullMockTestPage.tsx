@@ -1195,7 +1195,11 @@ export default function FullMockTestPage() {
             {phase === 'listening' && (() => {
               const sections = (td?.sections as Array<{ sectionNumber: number; title: string; questions: Question[], transcript?: string; sectionAudioUrl?: string }>) ?? [];
               const globalTranscript = typeof td?.transcript === 'string' ? td.transcript : '';
-              const globalAudioUrl = typeof (td as any)?.audioUrl === 'string' ? (td as any).audioUrl as string : '';
+              const rawGlobalAudioUrl = typeof (td as any)?.audioUrl === 'string' ? (td as any).audioUrl as string : '';
+              // If any section has its own audio URL, use per-section mode and ignore the global audioUrl.
+              // The global audioUrl is only meaningful when there is a single monolithic recording for all sections.
+              const hasPerSectionAudio = sections.some(s => s.sectionAudioUrl);
+              const globalAudioUrl = hasPerSectionAudio ? '' : rawGlobalAudioUrl;
               let qIdx = 0;
               return (
                 <div className="space-y-12">
@@ -1206,8 +1210,8 @@ export default function FullMockTestPage() {
                       <p className="text-sm font-bold">Text-to-speech is not supported in this browser. Please use Chrome, Safari, or Edge for audio playback.</p>
                     </div>
                   )}
-                  {/* Global audio player — prefers real MP3 over TTS */}
-                  {(globalAudioUrl || globalTranscript) && (
+                  {/* Global audio player — only shown when there is ONE recording for all sections */}
+                  {(globalAudioUrl || (!hasPerSectionAudio && globalTranscript)) && (
                     <Card className="border-violet-100 shadow-xl rounded-[30px] overflow-hidden">
                       <div className="bg-violet-600 p-6 flex items-center justify-between text-white">
                         <div className="flex items-center gap-3"><Headphones className="h-6 w-6" /><h3 className="font-black uppercase tracking-wider">Audio Interface</h3></div>
@@ -1258,8 +1262,9 @@ export default function FullMockTestPage() {
                     <div key={sec.sectionNumber} className="space-y-6">
                       <div className="flex items-center justify-between gap-3 px-4">
                         <div className="flex items-center gap-3"><div className="h-1 w-12 bg-violet-500 rounded-full" /><h4 className="font-black text-violet-600 uppercase tracking-widest text-sm">{sec.title || `Part ${sec.sectionNumber}`}</h4></div>
-                        {/* Per-section audio — prefers real MP3, falls back to TTS */}
-                        {hasAudio && !globalTranscript && !globalAudioUrl && (
+                        {/* Per-section audio — prefers real MP3, falls back to TTS.
+                            Show whenever section has its own audio/transcript and there is no single global audio. */}
+                        {hasAudio && !globalAudioUrl && (
                           <Button
                             type="button"
                             size="sm"
