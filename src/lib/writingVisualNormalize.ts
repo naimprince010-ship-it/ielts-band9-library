@@ -149,8 +149,10 @@ function isNonEmptyVisualBlob(c: unknown): boolean {
   const o = c as Record<string, unknown>;
   const keys = Object.keys(o);
   if (keys.length === 0) return false;
-  if (o.type === 'table' || Array.isArray(o.headers)) {
-    return Array.isArray(o.headers) && o.headers.length > 0;
+  if (o.type === 'table' || Array.isArray(o.headers) || Array.isArray(o.rows)) {
+    if (Array.isArray(o.headers) && o.headers.length > 0) return true;
+    if (Array.isArray(o.rows) && o.rows.length > 0) return true;
+    return false;
   }
   if (o.type === 'line' || o.type === 'bar' || o.type === 'pie') {
     return Array.isArray(o.labels) && o.labels.length > 0;
@@ -231,6 +233,12 @@ export function normalizeWritingTestFromDb(raw: unknown): WritingTest {
   if (!out.testType && w.test_type) {
     out.testType = w.test_type as WritingTest['testType'];
   }
+  if (typeof out.testType === 'string') {
+    const low = out.testType.toLowerCase();
+    if (low === 'academic' || low === 'general') {
+      out.testType = low as WritingTest['testType'];
+    }
+  }
   return out;
 }
 
@@ -252,6 +260,8 @@ export function findWritingTask1(wData: WritingTest): WritingTask | undefined {
 export function writingTask1HasAcademicVisual(task: WritingTask | undefined): boolean {
   if (!task) return false;
   if (typeof task.imageUrl === 'string' && task.imageUrl.trim()) return true;
+  // Same detection as AI merge (table/chart/process/map alternate keys on the task object).
+  if (extractTask1Visuals(task) != null) return true;
   const r = task as Record<string, unknown>;
   const blobs = [
     task.chartData,
@@ -262,6 +272,13 @@ export function writingTask1HasAcademicVisual(task: WritingTask | undefined): bo
     r.table_data,
     r.process_data,
     r.map_data,
+    r.chart,
+    r.table,
+    r.data_table,
+    r.process,
+    r.flowchart,
+    r.map,
+    r.maps,
   ];
   return blobs.some(isNonEmptyVisualBlob);
 }

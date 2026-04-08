@@ -287,6 +287,19 @@ export function MockTestManagement() {
           .eq('id', editingTest.id);
 
         if (error) throw error;
+        setMockTests((prev) =>
+          prev.map((t) =>
+            t.id === editingTest.id
+              ? normalizeMockTestRow({
+                  ...t,
+                  title: formData.title,
+                  test_data: testData as WritingTest,
+                  is_published: formData.is_published,
+                  is_premium: formData.is_premium,
+                } as MockTest)
+              : t
+          )
+        );
         setSuccess('Mock test updated successfully!');
       } else {
         const { error } = await supabase
