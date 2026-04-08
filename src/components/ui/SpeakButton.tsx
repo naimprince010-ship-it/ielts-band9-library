@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Volume2, VolumeX, Loader2 } from 'lucide-react';
 import { Button } from './button';
+import { unlockIOSAudio, toBlobUrl, createAudioElement } from '@/lib/iosAudio';
 
 interface SpeakButtonProps {
   text: string;
@@ -40,18 +41,14 @@ export function SpeakButton({
 
   const speakWithWebSpeechAPI = useCallback(() => {
     if (!('speechSynthesis' in window)) return;
-
     window.speechSynthesis.cancel();
-
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.rate = 0.9;
     utterance.pitch = 1;
     utterance.lang = 'en-GB';
-
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);
-
     window.speechSynthesis.speak(utterance);
   }, [text]);
 
@@ -59,77 +56,66 @@ export function SpeakButton({
     try {
       setIsLoading(true);
 
+      // Check cache first
       const cachedUrl = audioCache.get(text);
       if (cachedUrl) {
-        const audio = new Audio(cachedUrl);
+        const audio = createAudioElement(cachedUrl);
         audioRef.current = audio;
-        audio.onplay = () => {
-          setIsLoading(false);
-          setIsSpeaking(true);
-        };
+        audio.onplay = () => { setIsLoading(false); setIsSpeaking(true); };
         audio.onended = () => setIsSpeaking(false);
-        audio.onerror = () => {
-          setIsSpeaking(false);
-          setIsLoading(false);
-        };
+        audio.onerror = () => { setIsSpeaking(false); setIsLoading(false); };
         await audio.play();
         return;
       }
 
       const response = await fetch('/api/tts', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          text,
-          voice: 'en-GB-Neural2-B',
-          languageCode: 'en-GB',
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, voice: 'en-GB-Neural2-B', languageCode: 'en-GB' }),
       });
 
-      if (!response.ok) {
-        throw new Error('TTS API failed');
-      }
+      if (!response.ok) throw new Error('TTS API failed');
 
       const data = await response.json();
 
       let audioUrl: string;
-      if (data.audioUrl) {
-        audioUrl = data.audioUrl;
-      } else if (data.audioContent) {
+      if (data.audioContent) {
+        // Base64 → blob URL (works everywhere, including iOS)
         const audioBlob = new Blob(
           [Uint8Array.from(atob(data.audioContent), c => c.charCodeAt(0))],
           { type: 'audio/mpeg' }
         );
         audioUrl = URL.createObjectURL(audioBlob);
+      } else if (data.audioUrl) {
+        // Fetch external URL as blob so iOS Safari can stream it reliably
+        audioUrl = await toBlobUrl(data.audioUrl);
       } else {
         throw new Error('No audio data received');
       }
 
       audioCache.set(text, audioUrl);
 
-      const audio = new Audio(audioUrl);
+      const audio = createAudioElement(audioUrl);
       audioRef.current = audio;
-      audio.onplay = () => {
-        setIsLoading(false);
-        setIsSpeaking(true);
-      };
+      audio.onplay = () => { setIsLoading(false); setIsSpeaking(true); };
       audio.onended = () => setIsSpeaking(false);
       audio.onerror = () => {
         setIsSpeaking(false);
         setIsLoading(false);
+        speakWithWebSpeechAPI();
       };
       await audio.play();
 
-    } catch (error) {
-      console.warn('Professional TTS failed, falling back to Web Speech API:', error);
+    } catch {
       setIsLoading(false);
       speakWithWebSpeechAPI();
     }
   }, [text, speakWithWebSpeechAPI]);
 
   const handleSpeak = useCallback(() => {
+    // iOS audio session unlock — must happen synchronously in the click handler
+    unlockIOSAudio();
+
     if (isSpeaking) {
       if (audioRef.current) {
         audioRef.current.pause();

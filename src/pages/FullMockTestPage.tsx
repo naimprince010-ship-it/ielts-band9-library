@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { unlockIOSAudio, toBlobUrl, createAudioElement } from '@/lib/iosAudio';
 import { sanitizeHtml } from '@/lib/sanitize';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -259,37 +260,10 @@ export default function FullMockTestPage() {
   // ─── Real audio player (for pre-generated MP3 sectionAudioUrl) ──────────
   const [realAudioPlaying, setRealAudioPlaying] = useState<string | null>(null);
   const realAudioRef = useRef<HTMLAudioElement | null>(null);
-  // Track whether the iOS AudioContext has been unlocked once
-  const iosAudioUnlocked = useRef(false);
-
-  /**
-   * iOS Fix: unlock the audio session via a silent AudioContext buffer.
-   * Must be called INSIDE a user-gesture handler (onClick).
-   * Once unlocked, subsequent HTMLAudioElement.play() calls bypass the
-   * hardware mute/silent switch on iPhone/iPad.
-   */
-  const unlockIOSAudio = () => {
-    if (iosAudioUnlocked.current) return;
-    try {
-      type WebkitWindow = Window & { webkitAudioContext?: typeof AudioContext };
-      const AudioCtx = window.AudioContext ?? (window as WebkitWindow).webkitAudioContext;
-      if (!AudioCtx) return;
-      const ctx = new AudioCtx();
-      // Play a 1-sample silent buffer — this "activates" the iOS audio session
-      const buf = ctx.createBuffer(1, 1, 22050);
-      const src = ctx.createBufferSource();
-      src.buffer = buf;
-      src.connect(ctx.destination);
-      src.start(0);
-      ctx.resume().catch(() => undefined);
-      iosAudioUnlocked.current = true;
-    } catch {
-      // Non-critical — ignore silently
-    }
-  };
 
   const playRealAudio = (id: string, url: string, fallbackTranscript?: string) => {
-    // Unlock iOS audio session on every tap (safe to call repeatedly)
+    // iOS audio session unlock (bypasses hardware mute switch) — must be
+    // called synchronously inside the click handler.
     unlockIOSAudio();
 
     // Second tap on same button → stop
@@ -316,43 +290,36 @@ export default function FullMockTestPage() {
       return;
     }
 
-    const audio = new Audio(url);
-    audio.volume = 1;
-    audio.preload = 'auto';
-    // Both forms needed: attribute for HTML parser, property for DOM API
-    audio.setAttribute('playsinline', '');
-    audio.setAttribute('webkit-playsinline', '');
-    (audio as HTMLAudioElement & { playsInline: boolean }).playsInline = true;
+    setRealAudioPlaying(id);
+    setPlayedAudios(prev => new Set(prev).add(id));
 
     const handleFail = () => {
       realAudioRef.current = null;
       setRealAudioPlaying(null);
-      // Remove from played so user can retry (or TTS fallback kicks in)
       setPlayedAudios(prev => { const s = new Set(prev); s.delete(id); return s; });
-      // Fall back to TTS if transcript is available
-      if (fallbackTranscript) {
-        toggleAudio(id, fallbackTranscript);
-      }
+      if (fallbackTranscript) toggleAudio(id, fallbackTranscript);
     };
 
-    audio.onended = () => {
-      realAudioRef.current = null;
-      setRealAudioPlaying(null);
-    };
-    audio.onerror = () => {
-      console.error('Real audio playback error — falling back to TTS');
-      handleFail();
-    };
-
-    realAudioRef.current = audio;
-    setRealAudioPlaying(id);
-    setPlayedAudios(prev => new Set(prev).add(id));
-
-    // .play() called directly inside user-gesture handler → works on iOS
-    audio.play().catch(err => {
-      console.error('audio.play() failed:', err);
-      handleFail();
-    });
+    // Fetch audio as a local blob URL so iOS Safari can play it without
+    // HTTP range-request or CORS streaming issues.
+    toBlobUrl(url).then(blobUrl => {
+      const audio = createAudioElement(blobUrl);
+      audio.onended = () => {
+        if (blobUrl !== url) URL.revokeObjectURL(blobUrl);
+        realAudioRef.current = null;
+        setRealAudioPlaying(null);
+      };
+      audio.onerror = () => {
+        console.error('Real audio playback error — falling back to TTS');
+        if (blobUrl !== url) URL.revokeObjectURL(blobUrl);
+        handleFail();
+      };
+      realAudioRef.current = audio;
+      audio.play().catch(err => {
+        console.error('audio.play() failed:', err);
+        handleFail();
+      });
+    }).catch(() => handleFail());
   };
 
   // Stop real audio when navigating away from listening phase
