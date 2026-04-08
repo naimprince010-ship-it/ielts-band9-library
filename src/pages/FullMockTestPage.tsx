@@ -210,7 +210,7 @@ export default function FullMockTestPage() {
 
   const [resultSaved, setResultSaved] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
-  const saveResultToDb = async (finalScores: SectionScores) => {
+  const saveResultToDb = async (finalScores: SectionScores, usedTests: Partial<Record<ModuleType, MockTest>>) => {
     if (!user || !supabase || !isSupabaseConfigured()) return;
     setResultSaved('saving');
     try {
@@ -223,6 +223,11 @@ export default function FullMockTestPage() {
         writing_band: finalScores.writing,
         speaking_band: finalScores.speaking,
         completed_at: new Date().toISOString(),
+        // Track which specific tests were used so we can avoid repeats next time
+        listening_test_id: usedTests.listening?.id ?? null,
+        reading_test_id:   usedTests.reading?.id   ?? null,
+        writing_test_id:   usedTests.writing?.id   ?? null,
+        speaking_test_id:  usedTests.speaking?.id  ?? null,
       });
       if (error) {
         console.error('Failed to save result:', error);
@@ -626,25 +631,66 @@ export default function FullMockTestPage() {
 
   useEffect(() => {
     if (!isSupabaseConfigured() || !supabase) { setLoading(false); return; }
-    const fetch = async () => {
+
+    const fetchTests = async () => {
       try {
+        // ── 1. Fetch user's already-attempted test IDs per module ────────────
+        const attemptedIds: Partial<Record<ModuleType, Set<string>>> = {};
+        if (user) {
+          const { data: history } = await supabase!
+            .from('mock_test_results')
+            .select('listening_test_id, reading_test_id, writing_test_id, speaking_test_id')
+            .eq('user_id', user.id)
+            .order('completed_at', { ascending: false })
+            .limit(20);
+
+          if (history) {
+            const cols: Record<ModuleType, string> = {
+              listening: 'listening_test_id',
+              reading:   'reading_test_id',
+              writing:   'writing_test_id',
+              speaking:  'speaking_test_id',
+            };
+            for (const mod of Object.keys(cols) as ModuleType[]) {
+              attemptedIds[mod] = new Set(
+                history.map((r: Record<string, string | null>) => r[cols[mod]]).filter(Boolean) as string[]
+              );
+            }
+          }
+        }
+
+        // ── 2. For each module, pick the best unused test ────────────────────
         const result: Partial<Record<ModuleType, MockTest>> = {};
+
         for (const s of SECTIONS) {
-          const { data } = await supabase!
+          const { data: allTests } = await supabase!
             .from('mock_tests')
             .select('*')
             .eq('module_type', s.module)
             .eq('is_published', true)
-            .order('created_at', { ascending: false })
-            .limit(1)
-            .maybeSingle();
-          if (data) result[s.module] = normalizeMockTestRow(data as MockTest);
+            .order('created_at', { ascending: false });
+
+          if (!allTests || allTests.length === 0) continue;
+
+          const tried = attemptedIds[s.module] ?? new Set<string>();
+
+          // Prefer a test the user hasn't seen; fall back to least-recently-used
+          const fresh = allTests.find(t => !tried.has(t.id));
+          const chosen = fresh ?? allTests[allTests.length - 1]; // oldest if all tried
+
+          result[s.module] = normalizeMockTestRow(chosen as MockTest);
         }
+
         setTests(result);
-      } catch (err) { console.error('FullMockTestPage fetch error:', err); } finally { setLoading(false); }
+      } catch (err) {
+        console.error('FullMockTestPage fetch error:', err);
+      } finally {
+        setLoading(false);
+      }
     };
-    fetch();
-  }, []);
+
+    fetchTests();
+  }, [user]);
 
   const startSection = (idx: number) => {
     setSectionIndex(idx);
@@ -709,7 +755,7 @@ export default function FullMockTestPage() {
     } else {
       setPhase('results');
       clearSession(); // Test complete — wipe session
-      saveResultToDb(finalScores); // 💾 Save to Supabase
+      saveResultToDb(finalScores, tests); // 💾 Save to Supabase with test IDs
     }
     setAnswers({});
     window.scrollTo({ top: 0, behavior: 'smooth' });
