@@ -53,19 +53,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     if (SUPABASE_URL && SUPABASE_SERVICE_KEY) {
       const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
-      
-      // Check if file already exists by trying to get its public URL metadata
-      const { data: existingFile } = await supabase.storage
-        .from('audio')
-        .list('tts', { search: `${cacheKey}.mp3` });
 
-      if (existingFile && existingFile.length > 0) {
-        // Use permanent public URL instead of signed URL (which expires after 1 hour)
+      // Use createSignedUrl as a lightweight existence check (it fails if file doesn't exist).
+      // We only use the signed URL to confirm the file is present, then return the permanent
+      // public URL so audio never expires for students.
+      const { data: existingFile, error: checkError } = await supabase.storage
+        .from('audio')
+        .createSignedUrl(audioFileName, 60);
+
+      if (!checkError && existingFile?.signedUrl) {
         const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/audio/${audioFileName}`;
-        return res.status(200).json({ 
-          audioUrl: publicUrl,
-          cached: true 
-        });
+        return res.status(200).json({ audioUrl: publicUrl, cached: true });
       }
     }
 
@@ -133,19 +131,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (SUPABASE_URL && SUPABASE_SERVICE_KEY) {
       const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
-      await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from('audio')
         .upload(audioFileName, audioBuffer, {
           contentType: 'audio/mpeg',
           upsert: true,
         });
 
-      // Use permanent public URL — no expiry, works for all users
-      const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/audio/${audioFileName}`;
-      return res.status(200).json({ 
-        audioUrl: publicUrl,
-        cached: false 
-      });
+      if (uploadError) {
+        console.error('Supabase upload error:', uploadError);
+        // Fall through to return base64 audioContent below
+      } else {
+        // Return permanent public URL — no expiry, works for all users
+        const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/audio/${audioFileName}`;
+        return res.status(200).json({ audioUrl: publicUrl, cached: false });
+      }
     }
 
     return res.status(200).json({ 
