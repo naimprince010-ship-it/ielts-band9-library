@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Volume2, VolumeX, Loader2 } from 'lucide-react';
 import { Button } from './button';
-import { unlockIOSAudio, toBlobUrl, createAudioElement } from '@/lib/iosAudio';
+import { unlockIOSAudio, getAudioContext, playWithAudioContext } from '@/lib/iosAudio';
 
 interface SpeakButtonProps {
   text: string;
@@ -12,7 +12,8 @@ interface SpeakButtonProps {
   useProfessionalTTS?: boolean;
 }
 
-const audioCache = new Map<string, string>();
+// Cache audio data by text → base64 or URL (avoid re-fetching the same word)
+const audioCache = new Map<string, { type: 'base64'; data: string } | { type: 'url'; data: string }>();
 
 export function SpeakButton({ 
   text, 
@@ -24,19 +25,14 @@ export function SpeakButton({
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSupported, setIsSupported] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const stopRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     setIsSupported('speechSynthesis' in window || useProfessionalTTS);
   }, [useProfessionalTTS]);
 
   useEffect(() => {
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-    };
+    return () => { stopRef.current?.(); };
   }, []);
 
   const speakWithWebSpeechAPI = useCallback(() => {
@@ -49,23 +45,57 @@ export function SpeakButton({
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);
+    stopRef.current = () => window.speechSynthesis.cancel();
     window.speechSynthesis.speak(utterance);
   }, [text]);
+
+  /**
+   * Play audio via AudioContext (decodeAudioData).
+   * This approach works on iOS even when called asynchronously, because the
+   * AudioContext was already resumed synchronously in handleSpeak (user gesture).
+   */
+  const playViaAudioContext = useCallback(async (url: string): Promise<boolean> => {
+    const ctx = getAudioContext();
+    if (!ctx) return false;
+    try {
+      if (ctx.state === 'suspended') await ctx.resume();
+      const resp = await fetch(url);
+      if (!resp.ok) return false;
+      const arrayBuf = await resp.arrayBuffer();
+      const audioBuf = await ctx.decodeAudioData(arrayBuf);
+      const src = ctx.createBufferSource();
+      src.buffer = audioBuf;
+      src.connect(ctx.destination);
+      src.onended = () => { setIsSpeaking(false); setIsLoading(false); };
+      src.start(0);
+      stopRef.current = () => { try { src.stop(); } catch { /* already stopped */ } };
+      setIsLoading(false);
+      setIsSpeaking(true);
+      return true;
+    } catch {
+      return false;
+    }
+  }, []);
 
   const speakWithProfessionalTTS = useCallback(async () => {
     try {
       setIsLoading(true);
 
-      // Check cache first
-      const cachedUrl = audioCache.get(text);
-      if (cachedUrl) {
-        const audio = createAudioElement(cachedUrl);
-        audioRef.current = audio;
-        audio.onplay = () => { setIsLoading(false); setIsSpeaking(true); };
-        audio.onended = () => setIsSpeaking(false);
-        audio.onerror = () => { setIsSpeaking(false); setIsLoading(false); };
-        await audio.play();
-        return;
+      const cached = audioCache.get(text);
+
+      if (cached?.type === 'url') {
+        const ok = await playViaAudioContext(cached.data);
+        if (ok) return;
+      }
+
+      if (cached?.type === 'base64') {
+        // Base64 → blob URL → AudioContext
+        const bytes = Uint8Array.from(atob(cached.data), c => c.charCodeAt(0));
+        const blob = new Blob([bytes], { type: 'audio/mpeg' });
+        const blobUrl = URL.createObjectURL(blob);
+        const ok = await playViaAudioContext(blobUrl);
+        URL.revokeObjectURL(blobUrl);
+        if (ok) return;
       }
 
       const response = await fetch('/api/tts', {
@@ -75,54 +105,52 @@ export function SpeakButton({
       });
 
       if (!response.ok) throw new Error('TTS API failed');
-
       const data = await response.json();
 
-      let audioUrl: string;
       if (data.audioContent) {
-        // Base64 → blob URL (works everywhere, including iOS)
-        const audioBlob = new Blob(
-          [Uint8Array.from(atob(data.audioContent), c => c.charCodeAt(0))],
-          { type: 'audio/mpeg' }
-        );
-        audioUrl = URL.createObjectURL(audioBlob);
-      } else if (data.audioUrl) {
-        // Fetch external URL as blob so iOS Safari can stream it reliably
-        audioUrl = await toBlobUrl(data.audioUrl);
-      } else {
-        throw new Error('No audio data received');
+        // Base64 MP3 — decode directly via AudioContext
+        audioCache.set(text, { type: 'base64', data: data.audioContent });
+        const bytes = Uint8Array.from(atob(data.audioContent), c => c.charCodeAt(0));
+        const blob = new Blob([bytes], { type: 'audio/mpeg' });
+        const blobUrl = URL.createObjectURL(blob);
+        const ok = await playViaAudioContext(blobUrl);
+        URL.revokeObjectURL(blobUrl);
+        if (ok) return;
+        throw new Error('AudioContext playback failed');
       }
 
-      audioCache.set(text, audioUrl);
+      if (data.audioUrl) {
+        audioCache.set(text, { type: 'url', data: data.audioUrl });
+        const handle = await playWithAudioContext(data.audioUrl, () => {
+          setIsSpeaking(false);
+          setIsLoading(false);
+        });
+        if (handle) {
+          stopRef.current = handle.stop;
+          setIsLoading(false);
+          setIsSpeaking(true);
+          return;
+        }
+        throw new Error('AudioContext playback failed');
+      }
 
-      const audio = createAudioElement(audioUrl);
-      audioRef.current = audio;
-      audio.onplay = () => { setIsLoading(false); setIsSpeaking(true); };
-      audio.onended = () => setIsSpeaking(false);
-      audio.onerror = () => {
-        setIsSpeaking(false);
-        setIsLoading(false);
-        speakWithWebSpeechAPI();
-      };
-      await audio.play();
-
+      throw new Error('No audio data received');
     } catch {
       setIsLoading(false);
       speakWithWebSpeechAPI();
     }
-  }, [text, speakWithWebSpeechAPI]);
+  }, [text, speakWithWebSpeechAPI, playViaAudioContext]);
 
   const handleSpeak = useCallback(() => {
-    // iOS audio session unlock — must happen synchronously in the click handler
+    // MUST be synchronous — this unlocks iOS audio session for subsequent
+    // async AudioContext playback calls.
     unlockIOSAudio();
 
-    if (isSpeaking) {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-      }
+    if (isSpeaking || isLoading) {
+      stopRef.current?.();
       window.speechSynthesis?.cancel();
       setIsSpeaking(false);
+      setIsLoading(false);
       return;
     }
 
@@ -131,7 +159,7 @@ export function SpeakButton({
     } else {
       speakWithWebSpeechAPI();
     }
-  }, [isSpeaking, useProfessionalTTS, speakWithProfessionalTTS, speakWithWebSpeechAPI]);
+  }, [isSpeaking, isLoading, useProfessionalTTS, speakWithProfessionalTTS, speakWithWebSpeechAPI]);
 
   if (!isSupported) return null;
 
@@ -140,7 +168,7 @@ export function SpeakButton({
       variant={variant}
       size={size}
       onClick={handleSpeak}
-      disabled={isLoading}
+      disabled={false}
       className={cn(
         "transition-colors",
         isSpeaking && "text-indigo-600",

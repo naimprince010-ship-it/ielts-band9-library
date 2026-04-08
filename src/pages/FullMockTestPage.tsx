@@ -261,9 +261,40 @@ export default function FullMockTestPage() {
   const [realAudioPlaying, setRealAudioPlaying] = useState<string | null>(null);
   const realAudioRef = useRef<HTMLAudioElement | null>(null);
 
+  /**
+   * Pre-fetched blob URL cache: sectionAudioId → blob URL
+   * Populated when the listening phase starts so play() can be called
+   * synchronously (iOS requires play() in the same call-stack as the tap).
+   */
+  const prefetchedBlobs = useRef<Map<string, string>>(new Map());
+
+  // Pre-fetch all section audio as blob URLs when the listening phase begins
+  useEffect(() => {
+    if (phase !== 'listening') return;
+    const sections = listeningTest?.sections ?? [];
+    sections.forEach((section) => {
+      if (!section.sectionAudioUrl) return;
+      const id = `section-${section.sectionNumber}`;
+      if (prefetchedBlobs.current.has(id)) return;
+      // Fire-and-forget background fetch
+      toBlobUrl(section.sectionAudioUrl).then(blobUrl => {
+        prefetchedBlobs.current.set(id, blobUrl);
+      }).catch(() => { /* will fall back to direct URL */ });
+    });
+    // Also handle global audio
+    if (listeningTest?.audioUrl) {
+      const id = 'global';
+      if (!prefetchedBlobs.current.has(id)) {
+        toBlobUrl(listeningTest.audioUrl).then(blobUrl => {
+          prefetchedBlobs.current.set(id, blobUrl);
+        }).catch(() => {});
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, listeningTest]);
+
   const playRealAudio = (id: string, url: string, fallbackTranscript?: string) => {
-    // iOS audio session unlock (bypasses hardware mute switch) — must be
-    // called synchronously inside the click handler.
+    // ① Unlock iOS audio session synchronously inside click handler
     unlockIOSAudio();
 
     // Second tap on same button → stop
@@ -279,7 +310,6 @@ export default function FullMockTestPage() {
       realAudioRef.current.pause();
       realAudioRef.current = null;
     }
-    // Also stop any speechSynthesis that may be running
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     stopIosResumePing();
     setPlayingAudioId(null);
@@ -290,9 +320,6 @@ export default function FullMockTestPage() {
       return;
     }
 
-    setRealAudioPlaying(id);
-    setPlayedAudios(prev => new Set(prev).add(id));
-
     const handleFail = () => {
       realAudioRef.current = null;
       setRealAudioPlaying(null);
@@ -300,26 +327,30 @@ export default function FullMockTestPage() {
       if (fallbackTranscript) toggleAudio(id, fallbackTranscript);
     };
 
-    // Fetch audio as a local blob URL so iOS Safari can play it without
-    // HTTP range-request or CORS streaming issues.
-    toBlobUrl(url).then(blobUrl => {
-      const audio = createAudioElement(blobUrl);
-      audio.onended = () => {
-        if (blobUrl !== url) URL.revokeObjectURL(blobUrl);
-        realAudioRef.current = null;
-        setRealAudioPlaying(null);
-      };
-      audio.onerror = () => {
-        console.error('Real audio playback error — falling back to TTS');
-        if (blobUrl !== url) URL.revokeObjectURL(blobUrl);
-        handleFail();
-      };
-      realAudioRef.current = audio;
-      audio.play().catch(err => {
-        console.error('audio.play() failed:', err);
-        handleFail();
-      });
-    }).catch(() => handleFail());
+    // ② Use pre-fetched blob URL if ready — otherwise direct URL.
+    //    Either way, play() is called synchronously here.
+    const playUrl = prefetchedBlobs.current.get(id) ?? url;
+    const audio = createAudioElement(playUrl);
+
+    audio.onended = () => {
+      realAudioRef.current = null;
+      setRealAudioPlaying(null);
+    };
+    audio.onerror = () => {
+      console.error('Real audio error, falling back to TTS');
+      handleFail();
+    };
+
+    realAudioRef.current = audio;
+    setRealAudioPlaying(id);
+    setPlayedAudios(prev => new Set(prev).add(id));
+
+    // ③ Synchronous play() — iOS allows this because unlockIOSAudio()
+    //    already ran in this same click handler call-stack.
+    audio.play().catch(err => {
+      console.error('audio.play() failed:', err);
+      handleFail();
+    });
   };
 
   // Stop real audio when navigating away from listening phase
