@@ -56,8 +56,14 @@ const TypingPracticePage = lazy(() => import('@/pages/TypingPracticePage'));
 
 function LoadingSpinner() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="animate-spin rounded-full h-10 w-10 border-2 border-muted border-t-foreground"></div>
+    <div
+      role="status"
+      aria-live="polite"
+      aria-label="Loading page"
+      className="min-h-screen flex items-center justify-center bg-background"
+    >
+      <div className="animate-spin rounded-full h-10 w-10 border-2 border-muted border-t-foreground" aria-hidden="true" />
+      <span className="sr-only">Loading…</span>
     </div>
   );
 }

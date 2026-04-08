@@ -270,30 +270,40 @@ export function Navbar() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              onKeyDown={(e) => e.key === 'Escape' && setMobileMenuOpen(false)}
               className="lg:hidden flex items-center justify-center h-10 w-10 rounded-lg hover:bg-muted transition-colors touch-target"
-              aria-label="Toggle menu"
+              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-nav-panel"
             >
-              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {mobileMenuOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
             </button>
           </div>
         </div>
       </nav>
 
       {/* Mobile Menu Overlay */}
-      <div 
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation menu"
         className={`lg:hidden fixed inset-0 z-40 transition-opacity duration-300 ${
           mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       >
         {/* Backdrop */}
-        <div 
+        <div
           className="absolute inset-0 bg-foreground/20 backdrop-blur-sm"
           onClick={() => setMobileMenuOpen(false)}
+          onKeyDown={(e) => e.key === 'Escape' && setMobileMenuOpen(false)}
+          role="button"
+          tabIndex={mobileMenuOpen ? 0 : -1}
+          aria-label="Close navigation menu"
         />
         
         {/* Menu Panel */}
-        <div 
+        <div
+          id="mobile-nav-panel"
           className={`absolute top-16 left-0 right-0 bottom-0 bg-background overflow-y-auto transition-transform duration-300 ${
             mobileMenuOpen ? 'translate-y-0' : '-translate-y-4'
           }`}

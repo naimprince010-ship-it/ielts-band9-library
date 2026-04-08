@@ -599,14 +599,14 @@ export function MockTestManagement() {
                           {test.is_published ? 'Published' : 'Draft'}
                         </Badge>
                         <div className="flex items-center gap-1 ml-2">
-                          <Button variant="ghost" size="icon" className="rounded-xl hover:bg-slate-50 text-slate-400 hover:text-indigo-600" onClick={() => handleTogglePublish(test)}>
-                            {test.is_published ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                          <Button variant="ghost" size="icon" aria-label={test.is_published ? 'Unpublish test' : 'Publish test'} className="rounded-xl hover:bg-slate-50 text-slate-400 hover:text-indigo-600" onClick={() => handleTogglePublish(test)}>
+                            {test.is_published ? <EyeOff className="h-5 w-5" aria-hidden="true" /> : <Eye className="h-5 w-5" aria-hidden="true" />}
                           </Button>
-                          <Button variant="ghost" size="icon" className="rounded-xl hover:bg-slate-50 text-slate-400 hover:text-indigo-600" onClick={() => handleEditTest(test)}>
-                            <Edit className="h-5 w-5" />
+                          <Button variant="ghost" size="icon" aria-label={`Edit ${test.title}`} className="rounded-xl hover:bg-slate-50 text-slate-400 hover:text-indigo-600" onClick={() => handleEditTest(test)}>
+                            <Edit className="h-5 w-5" aria-hidden="true" />
                           </Button>
-                          <Button variant="ghost" size="icon" className="rounded-xl hover:bg-rose-50 text-slate-400 hover:text-rose-600" onClick={() => handleDeleteTest(test.id)}>
-                            <Trash2 className="h-5 w-5" />
+                          <Button variant="ghost" size="icon" aria-label={`Delete ${test.title}`} className="rounded-xl hover:bg-rose-50 text-slate-400 hover:text-rose-600" onClick={() => handleDeleteTest(test.id)}>
+                            <Trash2 className="h-5 w-5" aria-hidden="true" />
                           </Button>
                         </div>
                       </div>
@@ -955,12 +955,13 @@ function AIContentGenerator({ moduleType, testType = 'academic', onGenerated }: 
                 size="sm"
                 onClick={handleSuggestTopics}
                 disabled={loadingTopics || generating}
+                aria-label="Suggest topics with AI"
                 className="shrink-0"
               >
                 {loadingTopics ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
                 ) : (
-                  <Sparkles className="h-4 w-4" />
+                  <Sparkles className="h-4 w-4" aria-hidden="true" />
                 )}
               </Button>
             </div>
