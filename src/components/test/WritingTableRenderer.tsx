@@ -6,7 +6,21 @@ interface Props {
   compact?: boolean;
 }
 
+function normalizeRows(rows: unknown): string[][] {
+  if (!Array.isArray(rows)) return [];
+  return rows.map((row) => {
+    if (Array.isArray(row)) return row.map((c) => String(c ?? ''));
+    if (row && typeof row === 'object') {
+      return Object.values(row as Record<string, unknown>).map((c) => String(c ?? ''));
+    }
+    return [String(row ?? '')];
+  });
+}
+
 export function WritingTableRenderer({ tableData, className = '', compact = false }: Props) {
+  const headers = Array.isArray(tableData.headers) ? tableData.headers : [];
+  const rows = normalizeRows(tableData.rows);
+
   return (
     <div className={`bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden ${className}`}>
       {/* Header */}
@@ -32,13 +46,13 @@ export function WritingTableRenderer({ tableData, className = '', compact = fals
         <table className="w-full text-sm border-collapse rounded-lg overflow-hidden">
           <thead>
             <tr>
-              {tableData.headers.map((header, i) => (
+              {headers.map((header, i) => (
                 <th
                   key={i}
                   className={`bg-slate-800 text-white px-3 py-2.5 text-left font-semibold whitespace-nowrap
                     ${compact ? 'text-xs' : 'text-sm'}
                     ${i === 0 ? 'rounded-tl-lg' : ''}
-                    ${i === tableData.headers.length - 1 ? 'rounded-tr-lg' : ''}`}
+                    ${i === headers.length - 1 ? 'rounded-tr-lg' : ''}`}
                 >
                   {header}
                 </th>
@@ -46,7 +60,7 @@ export function WritingTableRenderer({ tableData, className = '', compact = fals
             </tr>
           </thead>
           <tbody>
-            {tableData.rows.map((row, ri) => (
+            {rows.map((row, ri) => (
               <tr
                 key={ri}
                 className={`border-b border-slate-100 transition-colors hover:bg-slate-50 ${ri % 2 === 0 ? 'bg-white' : 'bg-slate-50/60'}`}

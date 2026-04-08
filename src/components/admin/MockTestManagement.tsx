@@ -41,6 +41,7 @@ import {
   Volume2
 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { extractTask1Visuals } from '@/lib/writingVisualNormalize';
 import { cn } from '@/lib/utils';
 import { WritingTask1Renderer } from '@/components/test/WritingTask1Renderer';
 import {
@@ -1693,6 +1694,8 @@ function WritingTestBuilder({
       task2: { title: string; prompt: string; sampleAnswer?: string; tips?: string[] };
     };
 
+    const task1Visuals = extractTask1Visuals(aiContent.task1) || {};
+
     const newTasks: [WritingTask, WritingTask] = [
       {
         id: `task-1-${Date.now()}`,
@@ -1700,10 +1703,10 @@ function WritingTestBuilder({
         taskType: 'task1',
         title: aiContent.task1.title || 'Task 1',
         prompt: aiContent.task1.prompt,
-        chartData: aiContent.task1.chartData,
-        tableData: aiContent.task1.tableData,
-        processData: aiContent.task1.processData,
-        mapData: aiContent.task1.mapData,
+        chartData: task1Visuals.chartData,
+        tableData: task1Visuals.tableData,
+        processData: task1Visuals.processData,
+        mapData: task1Visuals.mapData,
         minWords: 150,
         recommendedTime: 20,
         tips: aiContent.task1.tips,
@@ -1755,22 +1758,31 @@ function WritingTestBuilder({
         }),
       });
       const result = await response.json();
+      if (!response.ok) {
+        throw new Error(
+          typeof result?.error === 'string'
+            ? result.error
+            : typeof result?.details === 'string'
+              ? result.details
+              : `Request failed (${response.status})`
+        );
+      }
       if (!result.success) throw new Error(result.error || 'AI generation failed');
       const task1 = result.content?.task1;
       if (!task1) throw new Error('No task1 content in AI response');
-      // Apply ONLY visual data — clear other visual slots so one canonical type is stored
-      const nextVisual: Partial<WritingTask> = {
+      const patch = extractTask1Visuals(task1);
+      if (!patch) {
+        throw new Error(
+          'AI did not return a usable Task 1 visual. Try again, or paste JSON under "Edit visual data".'
+        );
+      }
+      updateTask(0, {
         chartData: undefined,
         tableData: undefined,
         processData: undefined,
         mapData: undefined,
-      };
-      if (task1.chartData) nextVisual.chartData = task1.chartData;
-      else if (task1.tableData) nextVisual.tableData = task1.tableData;
-      else if (task1.processData) nextVisual.processData = task1.processData;
-      else if (task1.mapData) nextVisual.mapData = task1.mapData;
-      else throw new Error('AI did not return chartData, tableData, processData, or mapData');
-      updateTask(0, nextVisual);
+        ...patch,
+      });
       setVisualTopicOverride('');
     } catch (err) {
       setVisualGenError(err instanceof Error ? err.message : 'Failed to generate visual');
