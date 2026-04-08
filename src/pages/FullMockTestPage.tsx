@@ -255,6 +255,10 @@ export default function FullMockTestPage() {
   );
   const [audioSupported, setAudioSupported] = useState(true);
   const cachedVoicesRef = useRef<SpeechSynthesisVoice[]>([]);
+
+  // ── Audio pre-download state (iOS: download before starting listening) ────
+  const [audioPreloading, setAudioPreloading] = useState(false);
+  const [audioPreloadProgress, setAudioPreloadProgress] = useState({ done: 0, total: 0 });
   const iosResumeIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // ── WakeLock: keep screen on during listening phase ───────────────────────
@@ -839,6 +843,52 @@ export default function FullMockTestPage() {
     fetchTests();
   }, [user]);
 
+  /**
+   * Pre-download all listening section audio as blob URLs.
+   * Shows progress and proceeds with streaming fallback if download fails.
+   * Runs with a 45-second hard timeout so the exam is never blocked.
+   */
+  const preloadListeningAudio = async (): Promise<void> => {
+    const td = tests.listening?.test_data as Record<string, unknown> | undefined;
+    if (!td) return;
+
+    const sections = Array.isArray(td.sections)
+      ? (td.sections as Array<{ sectionNumber?: number; sectionAudioUrl?: string }>)
+      : [];
+    const globalUrl = td.audioUrl as string | undefined;
+
+    const targets: { id: string; url: string }[] = [];
+    sections.forEach(s => {
+      if (s.sectionAudioUrl) targets.push({ id: `section-${s.sectionNumber}`, url: s.sectionAudioUrl });
+    });
+    if (globalUrl) targets.push({ id: 'global', url: globalUrl });
+
+    // Nothing to preload
+    if (targets.length === 0) return;
+
+    setAudioPreloading(true);
+    setAudioPreloadProgress({ done: 0, total: targets.length });
+
+    // Hard timeout — never block the user for more than 45 s
+    const deadline = Date.now() + 45_000;
+
+    for (let i = 0; i < targets.length; i++) {
+      if (Date.now() > deadline) break;
+      const { id, url } = targets[i];
+      if (!prefetchedBlobs.current.has(id)) {
+        try {
+          const blobUrl = await toBlobUrl(url);
+          prefetchedBlobs.current.set(id, blobUrl);
+        } catch {
+          // Network error — streaming fallback will handle it
+        }
+      }
+      setAudioPreloadProgress({ done: i + 1, total: targets.length });
+    }
+
+    setAudioPreloading(false);
+  };
+
   const startSection = (idx: number) => {
     setSectionIndex(idx);
     setAnswers({});
@@ -847,6 +897,14 @@ export default function FullMockTestPage() {
     resetTimerRef.current?.(SECTIONS[idx].duration);
     saveSession({ timerRemaining: SECTIONS[idx].duration, sectionIndex: idx, phase: SECTIONS[idx].phase });
     setTimeout(() => startTimerRef.current?.(), 100);
+  };
+
+  /** Start section, but pre-download listening audio first if section is listening. */
+  const startSectionWithPreload = async (idx: number) => {
+    if (SECTIONS[idx].phase === 'listening') {
+      await preloadListeningAudio();
+    }
+    startSection(idx);
   };
 
   const submitSection = useCallback((_timeUp = false) => {
@@ -945,10 +1003,26 @@ export default function FullMockTestPage() {
                 </div>
                 <Button 
                   className="w-full bg-indigo-500 hover:bg-indigo-400 text-white py-6 rounded-xl font-bold text-lg"
-                  onClick={() => startSection(sectionIndex)}
+                  onClick={() => startSectionWithPreload(sectionIndex)}
+                  disabled={audioPreloading}
                 >
-                  Start {nextSection.label} Section
+                  {audioPreloading
+                    ? <span className="flex items-center gap-2"><Loader2 className="h-5 w-5 animate-spin" />Preparing Audio…</span>
+                    : `Start ${nextSection.label} Section`}
                 </Button>
+                {audioPreloading && audioPreloadProgress.total > 0 && (
+                  <div className="space-y-1">
+                    <div className="w-full bg-white/20 rounded-full h-1.5 overflow-hidden">
+                      <div
+                        className="h-full bg-indigo-400 rounded-full transition-all duration-300"
+                        style={{ width: `${Math.round((audioPreloadProgress.done / audioPreloadProgress.total) * 100)}%` }}
+                      />
+                    </div>
+                    <p className="text-xs text-indigo-300 text-center">
+                      Audio {audioPreloadProgress.done}/{audioPreloadProgress.total} downloaded
+                    </p>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
@@ -1106,14 +1180,31 @@ export default function FullMockTestPage() {
                Your full mock test begins with the Listening module. Ensure you have 3 hours of uninterrupted time for a realistic prediction.
              </p>
              {user && isPremium ? (
-               <Button 
-                size="lg" 
-                onClick={() => startSection(0)} 
-                disabled={!allChecked} 
-                className="bg-accent hover:bg-accent/90 text-white font-black text-xl px-12 py-8 rounded-[40px] shadow-2xl shadow-accent/40 group gap-4 scale-110"
-               >
-                 <Play className="h-6 w-6 fill-current" /> START FULL EXAM <ChevronRight className="h-6 w-6 group-hover:translate-x-2 transition-transform" />
-               </Button>
+               <div className="flex flex-col items-center gap-4">
+                 <Button 
+                  size="lg" 
+                  onClick={() => startSectionWithPreload(0)} 
+                  disabled={!allChecked || audioPreloading}
+                  className="bg-accent hover:bg-accent/90 text-white font-black text-xl px-12 py-8 rounded-[40px] shadow-2xl shadow-accent/40 group gap-4 scale-110"
+                 >
+                   {audioPreloading
+                     ? <><Loader2 className="h-6 w-6 animate-spin" /> Preparing Audio…</>
+                     : <><Play className="h-6 w-6 fill-current" /> START FULL EXAM <ChevronRight className="h-6 w-6 group-hover:translate-x-2 transition-transform" /></>}
+                 </Button>
+                 {audioPreloading && audioPreloadProgress.total > 0 && (
+                   <div className="w-72 space-y-2">
+                     <div className="w-full bg-white/20 rounded-full h-2 overflow-hidden">
+                       <div
+                         className="h-full bg-accent rounded-full transition-all duration-300"
+                         style={{ width: `${Math.round((audioPreloadProgress.done / audioPreloadProgress.total) * 100)}%` }}
+                       />
+                     </div>
+                     <p className="text-sm text-background/60 font-medium text-center">
+                       Downloading audio {audioPreloadProgress.done}/{audioPreloadProgress.total} for offline playback…
+                     </p>
+                   </div>
+                 )}
+               </div>
              ) : user && !isPremium ? (
                <Button size="lg" onClick={() => navigate('/pricing')} className="bg-amber-500 hover:bg-amber-600 text-white font-black text-xl px-12 py-8 rounded-[40px] gap-4">
                  <Crown className="h-6 w-6" /> UPGRADE TO PRO
