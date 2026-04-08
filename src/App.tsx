@@ -87,16 +87,16 @@ function App() {
                 <Route path="/bookmarks" element={<Layout><BookmarksPage /></Layout>} />
                 <Route path="/courses" element={<Layout><CoursesPage /></Layout>} />
                 <Route path="/courses/:courseId" element={<Layout><CourseDetailPage /></Layout>} />
-                <Route path="/quiz" element={<Layout><QuizPage /></Layout>} />
-                <Route path="/quiz/:quizId" element={<Layout><QuizPage /></Layout>} />
-                <Route path="/diagnostic" element={<Layout><DiagnosticTestPage /></Layout>} />
-                <Route path="/flashcards" element={<Layout><FlashcardsPage /></Layout>} />
-                <Route path="/speaking-practice" element={<Layout><SpeakingPracticePage /></Layout>} />
-                <Route path="/writing-checker" element={<Layout><WritingCheckerPage /></Layout>} />
-                <Route path="/achievements" element={<Layout><AchievementsPage /></Layout>} />
-                <Route path="/reading-practice" element={<Layout><ReadingPracticePage /></Layout>} />
-                <Route path="/practice/typing" element={<Layout><TypingPracticePage /></Layout>} />
-                <Route path="/progress" element={<Layout><ProgressDashboardPage /></Layout>} />
+                <Route path="/quiz" element={<Layout hideFooter><QuizPage /></Layout>} />
+                <Route path="/quiz/:quizId" element={<Layout hideFooter><QuizPage /></Layout>} />
+                <Route path="/diagnostic" element={<Layout hideFooter><DiagnosticTestPage /></Layout>} />
+                <Route path="/flashcards" element={<Layout hideFooter><FlashcardsPage /></Layout>} />
+                <Route path="/speaking-practice" element={<Layout hideFooter><SpeakingPracticePage /></Layout>} />
+                <Route path="/writing-checker" element={<Layout hideFooter><WritingCheckerPage /></Layout>} />
+                <Route path="/achievements" element={<Layout hideFooter><AchievementsPage /></Layout>} />
+                <Route path="/reading-practice" element={<Layout hideFooter><ReadingPracticePage /></Layout>} />
+                <Route path="/practice/typing" element={<Layout hideFooter><TypingPracticePage /></Layout>} />
+                <Route path="/progress" element={<Layout hideFooter><ProgressDashboardPage /></Layout>} />
                 <Route path="/mock-test" element={<Layout><MockTestPage /></Layout>} />
                 <Route path="/full-mock-test" element={<Layout hideNavFooter={true}><FullMockTestPage /></Layout>} />
                 <Route path="/certificate" element={<Layout><CertificatePage /></Layout>} />
