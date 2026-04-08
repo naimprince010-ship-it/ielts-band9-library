@@ -103,31 +103,41 @@ Generate a JSON response with this exact structure:
     {
       "questionNumber": ${((sectionNumber - 1) * 10) + 1},
       "type": "multiple-choice",
-      "questionText": "Question text here",
-      "options": ["A", "B", "C"],
-      "correctAnswer": "A",
+      "questionText": "A specific question about the audio content?",
+      "options": ["A. Option one", "B. Option two", "C. Option three"],
+      "correctAnswer": "A. Option one",
       "explanation": "Brief explanation"
     },
     {
       "questionNumber": ${((sectionNumber - 1) * 10) + 2},
       "type": "table-completion",
       "groupId": "table-1",
-      "questionText": "Complete the table below.",
-      "tableData": { "headers": ["Name", "Date"], "rows": [{ "cells": ["John", "[Q${((sectionNumber - 1) * 10) + 2}]"] }] },
+      "questionText": "Complete the booking details table.",
+      "tableData": { "headers": ["Customer Name", "Date", "Event"], "rows": [{ "cells": ["John Smith", "[Q${((sectionNumber - 1) * 10) + 2}]", "[Q${((sectionNumber - 1) * 10) + 3}]"] }] },
       "correctAnswer": "12th May"
     },
     {
       "questionNumber": ${((sectionNumber - 1) * 10) + 3},
       "type": "table-completion",
       "groupId": "table-1",
-      "questionText": "Complete the table below.",
+      "questionText": "Event type: ___",
       "correctAnswer": "Concert"
     }
   ]
 }
 
 Question Count: Generate exactly 10 questions for this section (Questions ${((sectionNumber - 1) * 10) + 1} to ${sectionNumber * 10}).
-IMPORTANT: If using table-completion or summary-completion, use the "groupId" field to group them. The first question MUST include "tableData" (having structured headers and rows with cells containing [Q<number>] placeholders) or "summaryData" (a string with [Q<number>] placeholders). Subsequent questions in the group only need their questionNumber and correctAnswer.
+
+CRITICAL RULES FOR questionText:
+- Every question MUST have a UNIQUE, SPECIFIC questionText — NEVER repeat the same text across questions.
+- For MCQ/True-False: write the full question sentence ending with "?".
+- For table-completion FIRST question (with tableData): write a brief title like "Complete the table about [subject]."
+- For table-completion SUBSEQUENT questions (same groupId, no tableData): write the column label and blank, e.g. "Date of arrival: ___" or "Payment method: ___".
+- For summary-completion FIRST question (with summaryData): write "Complete the summary about [subject]."
+- For summary-completion SUBSEQUENT questions: copy the exact sentence fragment from summaryData that contains their [Q<n>] placeholder, replacing [Q<n>] with ___, e.g. "The first step involves ___."
+- For fill-blank: write a complete sentence with ___ marking the blank, e.g. "The factory produces ___ tonnes per year."
+
+IMPORTANT: If using table-completion or summary-completion, use the "groupId" field to group them. The first question MUST include "tableData" (structured headers and rows with cells containing [Q<number>] placeholders) or "summaryData" (a string with [Q<number>] placeholders).
 Return ONLY valid JSON.
 `;
 
@@ -145,22 +155,22 @@ Generate a JSON response with this exact structure:
   "questions": [
     {
       "type": "true-false-not-given",
-      "questionText": "Question text here",
+      "questionText": "A specific factual statement from the passage that students must verify.",
       "options": ["TRUE", "FALSE", "NOT GIVEN"],
       "correctAnswer": "TRUE",
-      "explanation": "Brief explanation"
+      "explanation": "Brief explanation of why this is TRUE/FALSE/NOT GIVEN"
     },
     {
       "type": "summary-completion",
       "groupId": "summary-1",
-      "questionText": "Complete the summary below.",
-      "summaryData": "The coffee was first discovered in [Q2] by a goat herder. He took it to a [Q3] where they made a drink.",
+      "questionText": "Complete the summary about coffee's origins.",
+      "summaryData": "Coffee was first discovered in [Q2] by a goat herder. He took it to a [Q3] where they prepared a drink.",
       "correctAnswer": "Ethiopia"
     },
     {
       "type": "summary-completion",
       "groupId": "summary-1",
-      "questionText": "Complete the summary below.",
+      "questionText": "He took it to a ___ where they prepared a drink.",
       "correctAnswer": "monastery"
     }
   ]
@@ -170,8 +180,20 @@ Question Count Requirements:
 - If Passage 1 or 2: Generate exactly 13 questions.
 - If Passage 3: Generate exactly 14 questions.
 
-Mix question types: Multiple choice, True/False/Not Given, Matching headings, Sentence completion, table-completion, summary-completion.
-IMPORTANT: If using table-completion or summary-completion, use the "groupId" field to group them. The first question MUST include "tableData" (structured headers and rows with [Q<number>] placeholders) or "summaryData" (a string with [Q<number>] placeholders). Subsequent questions in the group only need their type, groupId, questionNumber, and correctAnswer.
+Mix question types: mcq, true-false-not-given, matching-headings, fill-blank, table-completion, summary-completion.
+
+CRITICAL RULES FOR questionText:
+- Every question MUST have a UNIQUE, SPECIFIC questionText — NEVER repeat the same text across questions.
+- For true-false-not-given: write a complete factual statement to evaluate, e.g. "Scientists discovered coffee in the 9th century."
+- For mcq: write a clear question ending with "?", e.g. "What is the main reason coffee became popular in Europe?"
+- For matching-headings: write "Match the paragraph heading: [paragraph letter/number]" e.g. "Choose the correct heading for Paragraph B."
+- For fill-blank: write a sentence from the passage with ___ for the missing word, e.g. "The researchers found ___ species of birds in the region."
+- For table-completion FIRST question (with tableData): write a brief title like "Complete the table about [subject]."
+- For table-completion SUBSEQUENT questions (same groupId, no tableData): write the column label and blank, e.g. "Year of discovery: ___" or "Country of origin: ___".
+- For summary-completion FIRST question (with summaryData): write "Complete the summary about [subject]."
+- For summary-completion SUBSEQUENT questions: copy the exact sentence fragment from summaryData containing their [Q<n>] placeholder, replacing [Q<n>] with ___, e.g. "The substance is produced in ___."
+
+IMPORTANT: If using table-completion or summary-completion, use "groupId" to group them. The first question MUST include "tableData" or "summaryData".
 Return ONLY valid JSON.
 `;
 
@@ -219,8 +241,19 @@ RULES:
 - Passage 3: exactly 14 questions
 - Total: exactly 40 questions
 - Mix types: true-false-not-given, mcq, fill-blank, summary-completion, table-completion
-- For table-completion or summary-completion, use "groupId" to group them. The first question MUST include "tableData" (headers and rows with cells containing [Q<number>] placeholders) or "summaryData" (a string with [Q<number>] placeholders). Subsequent questions in the group only need their type, groupId, questionText and correctAnswer.
-- Questions must be based on the actual passage content. Output ONLY the JSON object, nothing else.
+- For table-completion or summary-completion, use "groupId" to group them. The first question MUST include "tableData" (headers and rows with cells containing [Q<number>] placeholders) or "summaryData" (a string with [Q<number>] placeholders).
+- Questions must be based on the actual passage content.
+
+CRITICAL RULES FOR questionText — every question MUST have a UNIQUE, SPECIFIC questionText:
+- true-false-not-given: a complete factual statement to verify, e.g. "The author argues that technology has improved education."
+- mcq: a clear question ending with "?", e.g. "According to paragraph C, what caused the decline?"
+- fill-blank: a sentence with ___ for the blank, e.g. "The process requires ___ degrees of heat."
+- table-completion FIRST (has tableData): short title, e.g. "Complete the table about research findings."
+- table-completion SUBSEQUENT (same groupId, no tableData): column-label + blank, e.g. "Year published: ___"
+- summary-completion FIRST (has summaryData): short title, e.g. "Complete the summary about the experiment."
+- summary-completion SUBSEQUENT: the exact sentence fragment from summaryData for that blank, with [Q<n>] replaced by ___, e.g. "The samples were collected from ___."
+
+Output ONLY the JSON object, nothing else.
 `;
 
 const LISTENING_PROMPT = (topic: string, difficulty: string) => `
@@ -274,9 +307,18 @@ RULES:
 - Part 3: Academic conversation (students discussing assignment) — exactly 10 questions
 - Part 4: Academic lecture — exactly 10 questions
 - Total: exactly 40 questions
-- Mix types: table-completion, summary-completion, mcq, matching
-- For table-completion or summary-completion, use "groupId" to group them. The first question MUST include "tableData" (headers and rows with cells containing [Q<number>] placeholders) or "summaryData" (a string with [Q<number>] placeholders). Subsequent questions in the group only need their type, groupId, questionText and correctAnswer.
-- Output ONLY the JSON object, nothing else
+- Mix types: table-completion, summary-completion, mcq, fill-blank
+- For table-completion or summary-completion, use "groupId" to group them. The first question MUST include "tableData" (headers and rows with cells containing [Q<number>] placeholders) or "summaryData" (a string with [Q<number>] placeholders).
+
+CRITICAL RULES FOR questionText — every question MUST have a UNIQUE, SPECIFIC questionText:
+- mcq: a complete question ending with "?", e.g. "Why does the speaker recommend this option?"
+- fill-blank: sentence with ___ marking the blank, e.g. "The tour departs at ___ each morning."
+- table-completion FIRST (has tableData): brief title, e.g. "Complete the registration form."
+- table-completion SUBSEQUENT (same groupId, no tableData): the specific column label + blank, e.g. "Phone number: ___" or "Departure date: ___"
+- summary-completion FIRST (has summaryData): brief title, e.g. "Complete the notes about the lecture."
+- summary-completion SUBSEQUENT: exact sentence fragment from summaryData for that blank, replacing [Q<n>] with ___, e.g. "The main cause is ___."
+
+Output ONLY the JSON object, nothing else
 `;
 
 const WRITING_PROMPT = (topic: string, testType: string) => `
