@@ -221,13 +221,25 @@ export function normalizeWritingTaskFromDb(raw: unknown): WritingTask {
   return out;
 }
 
+/** JSONB sometimes stores tasks as { "0": {...}, "1": {...} } instead of an array. */
+function coerceWritingTasksArray(rawTasks: unknown): unknown[] {
+  if (Array.isArray(rawTasks)) return rawTasks;
+  if (rawTasks && typeof rawTasks === 'object' && !Array.isArray(rawTasks)) {
+    const o = rawTasks as Record<string, unknown>;
+    const numericKeys = Object.keys(o).filter((k) => /^\d+$/.test(k));
+    if (numericKeys.length > 0) {
+      return numericKeys.sort((a, b) => Number(a) - Number(b)).map((k) => o[k]);
+    }
+    return Object.values(o);
+  }
+  return [];
+}
+
 /** Normalize full writing test from DB (tasks + testType). */
 export function normalizeWritingTestFromDb(raw: unknown): WritingTest {
   const w = (raw && typeof raw === 'object' ? raw : {}) as Record<string, unknown>;
-  const rawTasks = w.tasks;
-  const tasks: WritingTask[] = Array.isArray(rawTasks)
-    ? rawTasks.map((task) => normalizeWritingTaskFromDb(task))
-    : [];
+  const rawTasks = coerceWritingTasksArray(w.tasks);
+  const tasks: WritingTask[] = rawTasks.map((task) => normalizeWritingTaskFromDb(task));
 
   const out = { ...(w as unknown as WritingTest), tasks: tasks as WritingTest['tasks'] };
   if (!out.testType && w.test_type) {

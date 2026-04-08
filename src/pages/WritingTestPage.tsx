@@ -166,6 +166,7 @@ export default function WritingTestPage() {
   const [showConfirmSubmit, setShowConfirmSubmit] = useState(false);
   const [startedAt] = useState<number>(Date.now());
   const [pasteAttempted, setPasteAttempted] = useState(false);
+  const [testLoadError, setTestLoadError] = useState<string | null>(null);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -178,20 +179,39 @@ export default function WritingTestPage() {
   useEffect(() => {
     if (!remoteMockTestId || !isSupabaseConfigured() || !supabase) return;
     let cancelled = false;
+    setTestLoadError(null);
     (async () => {
       const { data, error } = await supabase
         .from('mock_tests')
-        .select('title, module_type, test_data')
+        .select('title, module_type, test_data, is_published')
         .eq('id', remoteMockTestId)
-        .eq('is_published', true)
         .maybeSingle();
       if (cancelled) return;
       if (error) {
-        console.warn('[WritingTestPage] mock_tests refresh failed:', error.message);
+        const msg = error.message || 'Unknown error';
+        console.warn('[WritingTestPage] mock_tests refresh failed:', msg);
+        setTestLoadError(`Could not load test from server: ${msg}. Check Supabase RLS (anon SELECT on published mock_tests).`);
         return;
       }
-      if (!data || data.module_type !== 'writing' || data.test_data == null) return;
+      if (!data) {
+        setTestLoadError(
+          'This mock test was not found or is not visible (unpublished or wrong link). In Admin, ensure the writing test is Published and run fix_mock_tests_rls.sql if saves fail.'
+        );
+        return;
+      }
+      if (!data.is_published) {
+        setTestLoadError('This mock test is not published yet — students only see published tests.');
+        return;
+      }
+      if (data.module_type !== 'writing' || data.test_data == null) {
+        setTestLoadError('Wrong test type or empty test data in the database.');
+        return;
+      }
       const normalized = normalizeWritingTestFromDb(data.test_data) as WritingTest;
+      if (!normalized.tasks || normalized.tasks.length < 2) {
+        setTestLoadError('Writing test data has fewer than 2 tasks in the database — re-save from Admin.');
+        return;
+      }
       const merged: WritingTest = {
         ...normalized,
         title: typeof data.title === 'string' && data.title.trim() ? data.title : normalized.title,
@@ -204,6 +224,7 @@ export default function WritingTestPage() {
         task1: { ...prev.task1, taskId: t1.id },
         task2: { ...prev.task2, taskId: t2.id },
       }));
+      setTestLoadError(null);
     })();
     return () => {
       cancelled = true;
@@ -511,6 +532,13 @@ export default function WritingTestPage() {
         </div>
       </header>
 
+      {testLoadError && (
+        <div className="bg-rose-50 border-b border-rose-200 px-4 py-2.5 text-sm text-rose-900 shrink-0">
+          <strong className="font-semibold">Could not sync test: </strong>
+          {testLoadError}
+        </div>
+      )}
+
       {/* Task Tabs */}
       <div className="bg-white border-b px-4 py-2">
         <Tabs value={currentTask} onValueChange={(v) => setCurrentTask(v as WritingTaskType)}>
@@ -614,6 +642,12 @@ export default function WritingTestPage() {
                       If it still fails, hard-refresh (Ctrl+F5) or clear this site&apos;s cache — an old app version can hide
                       the table.
                     </p>
+                    {!remoteMockTestId && (
+                      <p className="mt-2 text-xs text-amber-900/90">
+                        Your URL has no <code className="rounded bg-amber-100/80 px-1">?testId=</code> — open the test from{' '}
+                        <strong>IELTS Mock Tests → Writing → Start</strong> so the app can load the latest data from Supabase.
+                      </p>
+                    )}
                   </div>
                 )}
               </div>
