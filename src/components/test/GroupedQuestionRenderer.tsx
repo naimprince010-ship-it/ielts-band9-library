@@ -1,5 +1,6 @@
 import React from 'react';
 import { ReadingQuestion, ListeningQuestion, UserAnswer } from '@/types';
+import { sanitizeHtml } from '@/lib/sanitize';
 
 interface GroupedQuestionRendererProps {
   firstQuestion: ReadingQuestion | ListeningQuestion;
@@ -64,7 +65,7 @@ export function GroupedQuestionRenderer({
            </span>
         );
       }
-      return <span key={index} dangerouslySetInnerHTML={{ __html: part }} />;
+      return <span key={index} dangerouslySetInnerHTML={{ __html: sanitizeHtml(part) }} />;
     });
   };
 

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { sanitizeHtml } from '@/lib/sanitize';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Clock,
@@ -660,7 +661,7 @@ export default function WritingTestPage() {
             {/* Task Prompt */}
             <div
               className="prose prose-lg max-w-none text-gray-700 mb-6"
-              dangerouslySetInnerHTML={{ __html: currentTaskData.prompt }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(currentTaskData.prompt) }}
             />
 
             {/* Task 1 tab: show Task 1 visual (avoid missing table when taskNumber is string/wrong from DB) */}

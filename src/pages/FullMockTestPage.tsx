@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { sanitizeHtml } from '@/lib/sanitize';
 import { useNavigate } from 'react-router-dom';
 import {
   Clock, Headphones, BookOpen, PenTool, Mic, ChevronRight,
@@ -1221,7 +1222,7 @@ export default function FullMockTestPage() {
                       <Card className="rounded-[50px] shadow-3xl border-none overflow-hidden bg-white">
                         <div className="bg-slate-50 p-10 border-b border-slate-100">
                            <h2 className="text-3xl font-black mb-6 flex items-center gap-4 text-slate-800"><BookOpen className="h-8 w-8 text-blue-500" /> {passage.title}</h2>
-                           <div className="prose prose-lg max-w-none text-slate-600 leading-[1.8] font-medium whitespace-pre-line text-lg" dangerouslySetInnerHTML={{ __html: passage.textContent }} />
+                           <div className="prose prose-lg max-w-none text-slate-600 leading-[1.8] font-medium whitespace-pre-line text-lg" dangerouslySetInnerHTML={{ __html: sanitizeHtml(passage.textContent) }} />
                         </div>
                         <CardContent className="p-12 space-y-12">
                            <h3 className="text-2xl font-black uppercase tracking-widest text-slate-400">Questions</h3>
@@ -1304,7 +1305,7 @@ export default function FullMockTestPage() {
                       {/* Task prompt */}
                       <div className="bg-emerald-50/50 border-2 border-emerald-100 rounded-3xl p-8 text-lg font-medium text-emerald-900/80 leading-relaxed">
                         {task1?.prompt
-                          ? <span dangerouslySetInnerHTML={{ __html: task1.prompt }} />
+                          ? <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(task1.prompt) }} />
                           : <><p className="font-black mb-2">Describe the visual information below:</p><p>The chart below shows the percentage of households in owned and rented accommodation in England and Wales between 1918 and 2011. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p><p className="mt-3 text-sm text-emerald-700 font-bold">Write at least 150 words. Spend about 20 minutes on this task.</p></>
                         }
                       </div>
@@ -1347,7 +1348,7 @@ export default function FullMockTestPage() {
                     <CardContent className="p-10 space-y-8">
                       <div className="bg-emerald-50/50 border-2 border-emerald-100 rounded-3xl p-8 text-lg font-medium text-emerald-900/80 leading-relaxed">
                         {task2?.prompt
-                          ? <span dangerouslySetInnerHTML={{ __html: task2.prompt }} />
+                          ? <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(task2.prompt) }} />
                           : <><p className="font-black mb-2">Write an essay in response to the argument below:</p><p>Some people believe that university education should be free for all students, while others argue that students should pay for their own tuition. Discuss both views and give your own opinion.</p><p className="mt-3 text-sm text-emerald-700 font-bold">Write at least 250 words. Spend about 40 minutes on this task.</p></>
                         }
                       </div>

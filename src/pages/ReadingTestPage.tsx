@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { sanitizeHtml } from '@/lib/sanitize';
 import { Link, useLocation } from 'react-router-dom';
 import {
   Clock,
@@ -815,7 +816,7 @@ export default function ReadingTestPage() {
             {/* Passage Content */}
             <div
               className="prose prose-lg max-w-none text-gray-700 leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: currentPassage?.textContent || '' }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(currentPassage?.textContent) }}
             />
           </div>
         </div>
