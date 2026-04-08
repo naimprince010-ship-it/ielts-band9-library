@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { LessonProvider } from '@/contexts/LessonContext';
 import { ProgressProvider } from '@/contexts/ProgressContext';
@@ -61,6 +62,37 @@ function LoadingSpinner() {
   );
 }
 
+function RouteErrorFallback({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) {
+  return (
+    <div className="min-h-[60vh] flex flex-col items-center justify-center p-8 text-center">
+      <div className="w-16 h-16 bg-destructive/10 rounded-full flex items-center justify-center mb-4">
+        <svg className="w-8 h-8 text-destructive" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+            d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+        </svg>
+      </div>
+      <h2 className="text-xl font-bold text-foreground mb-2">Page failed to load</h2>
+      <p className="text-muted-foreground mb-6 max-w-sm">
+        {import.meta.env.DEV ? error.message : 'An unexpected error occurred on this page.'}
+      </p>
+      <div className="flex gap-3">
+        <button
+          onClick={resetErrorBoundary}
+          className="px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
+        >
+          Try Again
+        </button>
+        <button
+          onClick={() => { window.location.href = '/'; }}
+          className="px-4 py-2 bg-muted text-foreground rounded-md text-sm font-medium hover:bg-muted/80 transition-colors"
+        >
+          Go Home
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function AppInner() {
   useSiteSettings();
   return null;
@@ -74,6 +106,7 @@ function App() {
           <LessonProvider>
             <AppInner />
             <PageTitleManager />
+            <ErrorBoundary FallbackComponent={RouteErrorFallback}>
             <Suspense fallback={<LoadingSpinner />}>
               <Routes>
                 {/* Auth pages without Layout */}
@@ -196,6 +229,7 @@ function App() {
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </Suspense>
+            </ErrorBoundary>
           </LessonProvider>
         </ProgressProvider>
       </AuthProvider>
