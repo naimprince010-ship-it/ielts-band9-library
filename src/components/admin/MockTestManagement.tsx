@@ -267,7 +267,8 @@ export function MockTestManagement() {
           testData = jsonbSafe(buildListeningTest());
           break;
         case 'writing':
-          testData = jsonbSafe(normalizeWritingTestFromDb(buildWritingTest()));
+          // Save form payload as-is; normalizeWritingTestFromDb is for DB → UI load only (avoids edge-case drops on save).
+          testData = jsonbSafe(buildWritingTest());
           break;
         case 'speaking':
           testData = jsonbSafe(buildSpeakingTest());
@@ -403,15 +404,21 @@ export function MockTestManagement() {
 
   const buildWritingTest = (): WritingTest => {
     const data = formData.writing_data;
+    const prior = editingTest?.test_data as WritingTest | undefined;
+    const innerId =
+      (typeof data.id === 'string' && data.id.trim() ? data.id : null) ||
+      (prior?.id && String(prior.id)) ||
+      `writing-${Date.now()}`;
+    const tasks = data.tasks || [getDefaultWritingTask(1), getDefaultWritingTask(2)];
     return {
-      id: editingTest?.id || `writing-${Date.now()}`,
+      id: innerId,
       title: formData.title,
       testType: data.testType || 'academic',
       timeLimit: data.timeLimit || 3600,
-      tasks: data.tasks || [getDefaultWritingTask(1), getDefaultWritingTask(2)],
+      tasks,
       instructions: data.instructions,
       is_premium: formData.is_premium,
-      created_at: new Date().toISOString()
+      created_at: prior?.created_at || new Date().toISOString(),
     };
   };
 
