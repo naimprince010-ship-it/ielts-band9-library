@@ -26,49 +26,54 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  if (!checkRateLimit(req, res, LIMITS.heavy, 'tts')) return;
+  // TTS is admin-only heavy generation — allow up to 50 per hour per IP
+  if (!checkRateLimit(req, res, LIMITS.tts, 'tts')) return;
 
   const { text, voice, languageCode = 'en-GB', provider } = req.body as TTSRequest;
-  
-  const useOpenAI = provider === 'openai' || (!GOOGLE_TTS_API_KEY && OPENAI_API_KEY);
-  const useGoogle = provider === 'google' || (GOOGLE_TTS_API_KEY && !useOpenAI);
-  
-  if (!GOOGLE_TTS_API_KEY && !OPENAI_API_KEY) {
-    return res.status(500).json({ error: 'No TTS API key configured. Please add GOOGLE_TTS_API_KEY or OPENAI_API_KEY to your environment variables.' });
+
+  if (!text || typeof text !== 'string') {
+    return res.status(400).json({ error: 'Missing or invalid text field.' });
   }
-  
-  const effectiveVoice = voice || (useOpenAI ? 'alloy' : 'en-GB-Neural2-B');
 
   // OpenAI TTS hard limit: 4096 characters per request.
-  // Admin now generates audio per section (each section stays well under 4096 chars).
-  if (!text || text.length > 4096) {
+  if (text.length > 4096) {
     return res.status(400).json({
-      error: `Text too long (${text?.length ?? 0} chars). Max 4096 chars per request. Split into sections.`,
+      error: `Text too long (${text.length} chars). Max 4096 chars per request. Split into sections.`,
     });
   }
 
+  const useOpenAI = provider === 'openai' || (!GOOGLE_TTS_API_KEY && !!OPENAI_API_KEY);
+  const useGoogle = provider === 'google' || (!!GOOGLE_TTS_API_KEY && !useOpenAI);
+
+  if (!OPENAI_API_KEY && !GOOGLE_TTS_API_KEY) {
+    return res.status(500).json({ error: 'No TTS API key configured on the server.' });
+  }
+
+  const effectiveVoice = voice || (useOpenAI ? 'alloy' : 'en-GB-Neural2-B');
   const cacheKey = generateCacheKey(text, effectiveVoice, languageCode);
   const audioFileName = `tts/${cacheKey}.mp3`;
 
-  try {
-    if (SUPABASE_URL && SUPABASE_SERVICE_KEY) {
+  // ── Step 1: Cache check ──────────────────────────────────────────────────────
+  if (SUPABASE_URL && SUPABASE_SERVICE_KEY) {
+    try {
       const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
-
-      // Use createSignedUrl as a lightweight existence check (it fails if file doesn't exist).
-      // We only use the signed URL to confirm the file is present, then return the permanent
-      // public URL so audio never expires for students.
       const { data: existingFile, error: checkError } = await supabase.storage
         .from('audio')
         .createSignedUrl(audioFileName, 60);
-
       if (!checkError && existingFile?.signedUrl) {
         const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/audio/${audioFileName}`;
         return res.status(200).json({ audioUrl: publicUrl, cached: true });
       }
+    } catch (cacheErr) {
+      // Cache check failure is non-fatal — continue to generate
+      console.warn('TTS cache check failed (non-fatal):', cacheErr);
     }
+  }
 
-    let audioBuffer: Buffer;
-    
+  // ── Step 2: Generate audio ───────────────────────────────────────────────────
+  let audioBuffer: Buffer;
+
+  try {
     if (useOpenAI && OPENAI_API_KEY) {
       const openaiResponse = await fetch('https://api.openai.com/v1/audio/speech', {
         method: 'POST',
@@ -86,75 +91,71 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
 
       if (!openaiResponse.ok) {
-        const errorData = await openaiResponse.json().catch(() => ({}));
-        console.error('OpenAI TTS Error:', errorData);
-        return res.status(500).json({ error: 'TTS generation failed', details: errorData.error?.message });
+        let details = '';
+        try {
+          const errJson = await openaiResponse.json();
+          details = errJson?.error?.message || JSON.stringify(errJson);
+        } catch {
+          details = `HTTP ${openaiResponse.status}`;
+        }
+        console.error('OpenAI TTS Error:', details);
+        return res.status(502).json({ error: 'OpenAI TTS failed', details });
       }
 
       const arrayBuffer = await openaiResponse.arrayBuffer();
       audioBuffer = Buffer.from(arrayBuffer);
+
     } else if (useGoogle && GOOGLE_TTS_API_KEY) {
       const ttsResponse = await fetch(
         `https://texttospeech.googleapis.com/v1/text:synthesize?key=${GOOGLE_TTS_API_KEY}`,
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             input: { text },
-            voice: {
-              languageCode,
-              name: effectiveVoice,
-            },
-            audioConfig: {
-              audioEncoding: 'MP3',
-              speakingRate: 0.9,
-              pitch: 0,
-            },
+            voice: { languageCode, name: effectiveVoice },
+            audioConfig: { audioEncoding: 'MP3', speakingRate: 0.9, pitch: 0 },
           }),
         }
       );
 
       if (!ttsResponse.ok) {
-        const errorData = await ttsResponse.json();
-        console.error('Google TTS Error:', errorData);
-        return res.status(500).json({ error: 'TTS generation failed' });
+        const details = await ttsResponse.text().catch(() => `HTTP ${ttsResponse.status}`);
+        console.error('Google TTS Error:', details);
+        return res.status(502).json({ error: 'Google TTS failed', details });
       }
 
       const ttsData = await ttsResponse.json();
       audioBuffer = Buffer.from(ttsData.audioContent, 'base64');
+
     } else {
-      return res.status(500).json({ error: 'No TTS provider available' });
+      return res.status(500).json({ error: 'No TTS provider available. Check server environment variables.' });
     }
+  } catch (genErr) {
+    const msg = genErr instanceof Error ? genErr.message : String(genErr);
+    console.error('TTS generation exception:', msg);
+    return res.status(500).json({ error: 'TTS generation failed', details: msg });
+  }
 
-    if (SUPABASE_URL && SUPABASE_SERVICE_KEY) {
+  // ── Step 3: Upload to Supabase Storage ────────────────────────────────────────
+  if (SUPABASE_URL && SUPABASE_SERVICE_KEY) {
+    try {
       const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
-
       const { error: uploadError } = await supabase.storage
         .from('audio')
-        .upload(audioFileName, audioBuffer, {
-          contentType: 'audio/mpeg',
-          upsert: true,
-        });
+        .upload(audioFileName, audioBuffer, { contentType: 'audio/mpeg', upsert: true });
 
       if (uploadError) {
-        console.error('Supabase upload error:', uploadError);
-        // Fall through to return base64 audioContent below
+        console.warn('Supabase upload failed (non-fatal), returning base64:', uploadError.message);
       } else {
-        // Return permanent public URL — no expiry, works for all users
         const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/audio/${audioFileName}`;
         return res.status(200).json({ audioUrl: publicUrl, cached: false });
       }
+    } catch (uploadErr) {
+      console.warn('Supabase upload exception (non-fatal):', uploadErr);
     }
-
-    return res.status(200).json({ 
-      audioContent: audioBuffer.toString('base64'),
-      cached: false 
-    });
-
-  } catch (error) {
-    console.error('TTS Error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
   }
+
+  // ── Step 4: Fallback — return raw base64 if Supabase not configured or failed ─
+  return res.status(200).json({ audioContent: audioBuffer.toString('base64'), cached: false });
 }

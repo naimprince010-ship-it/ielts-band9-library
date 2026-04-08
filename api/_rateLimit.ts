@@ -37,8 +37,10 @@ export interface RateLimitOptions {
  * Preset limits for different endpoint classes.
  */
 export const LIMITS = {
-  /** Heavy AI generation (IELTS content, TTS per-section) */
-  heavy: { max: 15, windowSec: 60 * 60, label: 'AI generation' },
+  /** Heavy AI generation (IELTS content) */
+  heavy: { max: 20, windowSec: 60 * 60, label: 'AI generation' },
+  /** TTS audio generation — admin generates 4+ sections per test */
+  tts: { max: 60, windowSec: 60 * 60, label: 'TTS generation' },
   /** Medium AI calls (vocabulary generation, design audit) */
   medium: { max: 30, windowSec: 60 * 60, label: 'AI request' },
   /** Light calls (topic suggestions, synonym check) */
