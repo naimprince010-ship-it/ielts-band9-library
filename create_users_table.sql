@@ -24,10 +24,25 @@ STABLE
 SECURITY DEFINER
 SET search_path = public
 AS $$
-  SELECT EXISTS (
-    SELECT 1 FROM public.users
-    WHERE id = auth.uid() AND role = 'admin'
-  );
+  SELECT
+    auth.uid() IS NOT NULL
+    AND (
+      EXISTS (
+        SELECT 1 FROM public.users
+        WHERE id = auth.uid() AND role IN ('admin', 'instructor')
+      )
+      OR EXISTS (
+        SELECT 1
+        FROM unnest(ARRAY[
+          'naimprince010@gmail.com'
+        ]::text[]) AS allowlisted(raw_email)
+        WHERE lower(trim(COALESCE(
+          NULLIF(auth.jwt() ->> 'email', ''),
+          (SELECT au.email FROM auth.users au WHERE au.id = auth.uid()),
+          ''
+        ))) = lower(trim(allowlisted.raw_email))
+      )
+    );
 $$;
 
 GRANT EXECUTE ON FUNCTION public.is_admin() TO authenticated;

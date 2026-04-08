@@ -1337,8 +1337,9 @@ function ListeningTestBuilder({
       return;
     }
 
-    if (transcripts.length > 5000) {
-      setAudioError('Transcript is too long (max 5000 characters). Please shorten it.');
+    // OpenAI TTS limit is 4096 tokens ≈ ~16 000 chars; keep a safe ceiling of 14 000.
+    if (transcripts.length > 14000) {
+      setAudioError(`Transcript is too long (${transcripts.length.toLocaleString()} / 14 000 chars). Please shorten the section transcripts.`);
       return;
     }
 
@@ -1539,6 +1540,16 @@ function ListeningTestBuilder({
           {audioError && (
             <p className="text-red-500 text-sm mt-1">{audioError}</p>
           )}
+          {(() => {
+            const totalChars = (data.sections?.map(s => s.transcript).filter(Boolean).join('\n\n') || '').length;
+            if (totalChars === 0) return null;
+            const over = totalChars > 14000;
+            return (
+              <p className={`text-xs mt-1 ${over ? 'text-red-500 font-semibold' : 'text-slate-400'}`}>
+                Transcript: {totalChars.toLocaleString()} / 14 000 chars{over ? ' — too long, shorten sections' : ''}
+              </p>
+            );
+          })()}
           {data.audioUrl && (
             <div className="mt-2">
               <audio controls src={data.audioUrl} className="w-full h-8" />

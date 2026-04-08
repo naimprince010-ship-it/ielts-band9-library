@@ -1,5 +1,5 @@
 -- Fix: Admin cannot UPDATE mock_tests (save fails) or students cannot read published tests.
--- Requires public.is_admin() from fix_users_rls_infinite_recursion.sql first.
+-- Requires public.is_admin() from fix_users_rls_infinite_recursion.sql first (re-run after is_admin is updated for instructors / allowlist emails).
 -- If mock_tests list fails for everyone: grant anon execute on is_admin (see fix_users_rls_infinite_recursion.sql).
 --
 -- Run in Supabase → SQL Editor.

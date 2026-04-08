@@ -21,7 +21,10 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-/** Owner / staff emails: full access in UI even if `users.role` is not updated yet. Add more via VITE_ADMIN_EMAILS. */
+/**
+ * Owner / staff emails: full access in UI even if `users.role` is not updated yet. Add more via VITE_ADMIN_EMAILS.
+ * For Supabase RLS (mock_tests, etc.), duplicate new built-in addresses in `fix_users_rls_infinite_recursion.sql` → `is_admin()` allowlist array.
+ */
 const BUILTIN_FULL_ACCESS_EMAILS: readonly string[] = ['naimprince010@gmail.com'];
 
 function fallbackUserFromSupabaseAuth(supabaseUserData: SupabaseUser): User {
