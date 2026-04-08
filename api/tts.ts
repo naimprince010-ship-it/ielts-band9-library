@@ -36,8 +36,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   
   const effectiveVoice = voice || (useOpenAI ? 'alloy' : 'en-GB-Neural2-B');
 
-  if (!text || text.length > 5000) {
-    return res.status(400).json({ error: 'Invalid text (max 5000 characters)' });
+  // OpenAI TTS supports up to ~4096 tokens; Google TTS supports up to 5000 bytes.
+  // A single IELTS listening transcript across 4 sections can easily be 6-10k chars.
+  // Use 14 000 chars as the safe ceiling (well within OpenAI token budget at ~3.5 chars/token).
+  if (!text || text.length > 14000) {
+    return res.status(400).json({ error: `Invalid text (${text?.length ?? 0} chars; max 14 000 characters)` });
   }
 
   const cacheKey = generateCacheKey(text, effectiveVoice, languageCode);
