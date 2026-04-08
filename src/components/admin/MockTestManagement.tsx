@@ -439,7 +439,7 @@ export function MockTestManagement() {
       id: editingTest?.id || `reading-${Date.now()}`,
       title: formData.title,
       testType: data.testType || 'academic',
-      totalQuestions: data.passages?.reduce((sum, p) => sum + (p.questions?.length || 0), 0) || 0,
+      totalQuestions: (Array.isArray(data.passages) ? data.passages : []).reduce((sum, p) => sum + (Array.isArray(p.questions) ? p.questions.length : 0), 0),
       timeLimit: data.timeLimit || 3600,
       passages: data.passages || [],
       instructions: data.instructions,
@@ -535,20 +535,26 @@ export function MockTestManagement() {
 
   /** Returns the count of questions that have a blank or unrecognised type. */
   const countBlankTypes = (test: MockTest): number => {
-    const data = test.test_data;
-    if (test.module_type === 'reading') {
-      const rData = data as ReadingTest;
-      const validValues = READING_QUESTION_TYPES.map(t => t.value);
-      return (rData.passages ?? []).reduce((sum, p) =>
-        sum + (p.questions ?? []).filter(q => !q.type || !validValues.includes(q.type as string)).length, 0);
+    try {
+      const data = test.test_data;
+      if (test.module_type === 'reading') {
+        const rData = data as ReadingTest;
+        const passages = Array.isArray(rData.passages) ? rData.passages : [];
+        const validValues = READING_QUESTION_TYPES.map(t => t.value);
+        return passages.reduce((sum, p) =>
+          sum + (Array.isArray(p.questions) ? p.questions : []).filter(q => !q.type || !validValues.includes(q.type as string)).length, 0);
+      }
+      if (test.module_type === 'listening') {
+        const lData = data as ListeningTest;
+        const sections = Array.isArray(lData.sections) ? lData.sections : [];
+        const validValues = LISTENING_QUESTION_TYPES.map(t => t.value);
+        return sections.reduce((sum, s) =>
+          sum + (Array.isArray(s.questions) ? s.questions : []).filter(q => !q.type || !validValues.includes(q.type as string)).length, 0);
+      }
+      return 0;
+    } catch {
+      return 0;
     }
-    if (test.module_type === 'listening') {
-      const lData = data as ListeningTest;
-      const validValues = LISTENING_QUESTION_TYPES.map(t => t.value);
-      return (lData.sections ?? []).reduce((sum, s) =>
-        sum + (s.questions ?? []).filter(q => !q.type || !validValues.includes(q.type as string)).length, 0);
-    }
-    return 0;
   };
 
   if (!isSupabaseConfigured()) {
