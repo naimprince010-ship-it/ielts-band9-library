@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
+import { checkRateLimit, LIMITS } from './_rateLimit';
 
 const GOOGLE_TTS_API_KEY = process.env.GOOGLE_TTS_API_KEY;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -24,6 +25,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  if (!checkRateLimit(req, res, LIMITS.heavy, 'tts')) return;
 
   const { text, voice, languageCode = 'en-GB', provider } = req.body as TTSRequest;
   

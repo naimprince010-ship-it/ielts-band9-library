@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { checkRateLimit, LIMITS } from './_rateLimit';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
@@ -159,6 +160,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  if (!checkRateLimit(req, res, LIMITS.medium, 'analyze-design')) return;
 
   try {
     if (!GEMINI_API_KEY) {
