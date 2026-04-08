@@ -1,17 +1,26 @@
 /**
  * iOS Safari Audio Utilities
  *
- * Core iOS Safari constraint:
- *   HTMLAudioElement.play() MUST be called synchronously inside a user-gesture
- *   handler (onClick). Any async gap (fetch, await, Promise.then) breaks the
- *   association and iOS silently blocks the play.
+ * iOS Safari problems solved here:
+ *   1. Hardware mute switch silences HTMLAudioElement — fixed by routing
+ *      audio through AudioContext (createMediaElementSource).
+ *   2. async audio.play() blocked outside user-gesture — fixed by calling
+ *      play() synchronously AND/OR using AudioContext (which persists after
+ *      first user-gesture resume).
+ *   3. Supabase streaming/range-request issues — fixed by pre-fetching as
+ *      blob URL before the tap, so play() gets a same-origin blob.
  *
- * Strategy:
- *   1. FullMockTestPage (long MP3s): pre-fetch all section audio as blob URLs
- *      BEFORE the user taps — then play() is called synchronously with a blob URL.
- *   2. SpeakButton (short words): use AudioContext.decodeAudioData() which plays
- *      via AudioContext and does NOT require user-gesture context after the
- *      AudioContext has been resumed once.
+ * Strategy per use-case:
+ *   FullMockTestPage (long MP3s, streaming):
+ *     - Pre-fetch as blob URL in background when listening phase starts
+ *     - On tap: unlockIOSAudio() sync → play blob URL sync
+ *     - createAudioElement() routes through AudioContext via MediaElementSource
+ *       so mute switch is bypassed regardless of whether it's blob or direct URL
+ *
+ *   SpeakButton (short vocabulary TTS clips):
+ *     - unlockIOSAudio() sync on tap
+ *     - Fetch from /api/tts, decode with decodeAudioData, play via AudioContext
+ *     - No user-gesture lock since AudioContext already running
  */
 
 // ── Persistent AudioContext ────────────────────────────────────────────────────
@@ -32,7 +41,7 @@ export function getAudioContext(): AudioContext | null {
 /**
  * Resume the AudioContext and play a 1-sample silent buffer.
  * MUST be called synchronously inside a user-gesture handler.
- * Once called, AudioContext-based playback works even from async code.
+ * Once done, AudioContext-based playback works from async code too.
  */
 export function unlockIOSAudio(): void {
   try {
@@ -52,8 +61,8 @@ export function unlockIOSAudio(): void {
 // ── Blob URL pre-fetch (for FullMockTestPage) ─────────────────────────────────
 /**
  * Fetch an audio URL and return a same-origin blob URL.
- * Blob URLs bypass iOS streaming/range-request issues.
- * Falls back to the original URL on network error.
+ * Blob URLs bypass iOS streaming / range-request issues AND allow
+ * createMediaElementSource to work without CORS headers.
  */
 export async function toBlobUrl(url: string): Promise<string> {
   if (url.startsWith('blob:') || url.startsWith('data:')) return url;
@@ -75,8 +84,8 @@ export interface AudioHandle {
 
 /**
  * Fetch audio from URL, decode with AudioContext, and play.
- * Works on iOS even when called from async code — no user-gesture lock.
- * Requires unlockIOSAudio() to have been called at least once first.
+ * Works on iOS even when called from async code — no user-gesture lock needed
+ * after unlockIOSAudio() has been called at least once.
  */
 export async function playWithAudioContext(
   url: string,
@@ -109,17 +118,47 @@ export async function playWithAudioContext(
   }
 }
 
-// ── HTMLAudioElement factory ──────────────────────────────────────────────────
+// ── HTMLAudioElement factory (with AudioContext routing) ──────────────────────
 /**
  * Create an <audio> element configured for iOS playback.
- * play() MUST still be called synchronously from a user-gesture handler.
+ *
+ * Key enhancement: connect the element to the shared AudioContext via
+ * createMediaElementSource(). This routes audio through the AudioContext
+ * output, which runs in "playback" session mode and bypasses the iOS
+ * hardware mute switch — the same mechanism used by music apps.
+ *
+ * Requirements:
+ *   - unlockIOSAudio() must have been called (synchronously) in the same
+ *     user-gesture handler before play() is invoked.
+ *   - For non-blob URLs, the server must send CORS headers (Supabase public
+ *     storage does this by default).  Blob URLs are always same-origin.
  */
 export function createAudioElement(url: string): HTMLAudioElement {
-  const audio = new Audio(url);
+  const audio = new Audio();
+
+  // crossOrigin must be set BEFORE src for non-blob URLs so the browser
+  // sends the CORS preflight/request and the AudioContext can decode it.
+  const isBlob = url.startsWith('blob:') || url.startsWith('data:');
+  if (!isBlob) audio.crossOrigin = 'anonymous';
+
+  audio.src = url;
   audio.volume = 1;
   audio.preload = 'auto';
   audio.setAttribute('playsinline', '');
   audio.setAttribute('webkit-playsinline', '');
   (audio as HTMLAudioElement & { playsInline: boolean }).playsInline = true;
+
+  // Route through AudioContext so iOS mute switch is bypassed.
+  try {
+    const ctx = getAudioContext();
+    if (ctx && ctx.state !== 'closed') {
+      const source = ctx.createMediaElementSource(audio);
+      source.connect(ctx.destination);
+    }
+  } catch {
+    // createMediaElementSource can throw if the element is already connected
+    // or if the context is closed; audio will still play through default output.
+  }
+
   return audio;
 }
