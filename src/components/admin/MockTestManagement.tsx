@@ -166,6 +166,114 @@ function normalizeQuestionType(
   return validTypes[0];
 }
 
+// ── Question-text fix utilities ───────────────────────────────────────────────
+
+/** Patterns that indicate a generic, non-specific question text. */
+const GENERIC_TEXT_RE = [
+  /^complete the (table|summary|notes?|form|flow[- ]?chart|diagram) below\.?$/i,
+  /^complete the (table|summary|notes?) (about|regarding|on) .+\.?$/i,
+  /^fill in the (blank|gap)s?\.?$/i,
+  /^answer the following\.?$/i,
+];
+
+function isGenericQuestionText(text: string): boolean {
+  const t = (text ?? '').trim();
+  return !t || GENERIC_TEXT_RE.some(p => p.test(t));
+}
+
+/**
+ * Derive a specific questionText for a grouped question using the master
+ * question's tableData or summaryData.
+ */
+function deriveQuestionText(
+  question: ReadingQuestion | ListeningQuestion,
+  allQuestions: (ReadingQuestion | ListeningQuestion)[],
+): string | null {
+  if (!question.groupId) return null;
+
+  // Find the master question (first in group that carries tableData / summaryData)
+  const master = allQuestions.find(
+    q => q.groupId === question.groupId && (q.tableData ?? q.summaryData),
+  );
+  if (!master) return null;
+
+  const placeholder = `[Q${question.questionNumber}]`;
+
+  // ── Table completion ────────────────────────────────────────────────────────
+  if (master.tableData) {
+    const { headers, rows } = master.tableData as {
+      headers?: string[];
+      rows?: { cells?: string[] }[];
+    };
+    if (rows) {
+      for (const row of rows) {
+        const idx = (row.cells ?? []).findIndex(c => c === placeholder);
+        if (idx !== -1) {
+          const col = (headers ?? [])[idx];
+          return col ? `${col}: ___` : null;
+        }
+      }
+    }
+  }
+
+  // ── Summary completion ──────────────────────────────────────────────────────
+  if (master.summaryData) {
+    const text = master.summaryData as string;
+    if (!text.includes(placeholder)) return null;
+
+    // Try to extract the sentence containing the placeholder
+    const parts = text.split(/(?<=[.!?])\s+/);
+    for (const part of parts) {
+      if (part.includes(placeholder)) {
+        return part.replace(placeholder, '___').trim();
+      }
+    }
+    // Fallback: extract around placeholder without sentence boundary
+    const idx = text.indexOf(placeholder);
+    const start = Math.max(0, text.lastIndexOf('.', idx - 1) + 1);
+    const rawEnd = text.indexOf('.', idx + placeholder.length);
+    const end = rawEnd === -1 ? text.length : rawEnd + 1;
+    return text.slice(start, end).trim().replace(placeholder, '___');
+  }
+
+  return null;
+}
+
+/** Apply question-text fixes to an array of questions (non-destructive). */
+function fixQuestions<T extends ReadingQuestion | ListeningQuestion>(questions: T[]): T[] {
+  return questions.map(q => {
+    if (!isGenericQuestionText(q.questionText)) return q;
+    if (!q.groupId) return q;
+    const derived = deriveQuestionText(q, questions);
+    return derived ? { ...q, questionText: derived } : q;
+  });
+}
+
+/** Count grouped questions with generic question texts in a test. */
+function countGenericTexts(test: MockTest): number {
+  try {
+    if (test.module_type === 'reading') {
+      const passages = Array.isArray((test.test_data as ReadingTest).passages)
+        ? (test.test_data as ReadingTest).passages : [];
+      return passages.reduce((sum, p) =>
+        sum + (Array.isArray(p.questions) ? p.questions : []).filter(
+          q => q.groupId && isGenericQuestionText(q.questionText),
+        ).length, 0);
+    }
+    if (test.module_type === 'listening') {
+      const sections = Array.isArray((test.test_data as ListeningTest).sections)
+        ? (test.test_data as ListeningTest).sections : [];
+      return sections.reduce((sum, s) =>
+        sum + (Array.isArray(s.questions) ? s.questions : []).filter(
+          q => q.groupId && isGenericQuestionText(q.questionText),
+        ).length, 0);
+    }
+    return 0;
+  } catch { return 0; }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 /** Ensures test_data is JSON-serializable for PostgREST (drops undefined, non-finite numbers → null). */
 function jsonbSafe<T>(data: T): T {
   return JSON.parse(
@@ -192,8 +300,9 @@ export function MockTestManagement() {
   const [isFullTestModalOpen, setIsFullTestModalOpen] = useState(false);
   const [editingTest, setEditingTest] = useState<MockTest | null>(null);
   const [saving, setSaving] = useState(false);
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
+  const [bulkFixing, setBulkFixing] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
     const [formData, setFormData] = useState<{
     title: string;
@@ -239,6 +348,58 @@ export function MockTestManagement() {
     } finally {
       setLoading(false);
     }
+  };
+
+  /** Fix generic question texts (e.g. "Complete the table below.") across ALL tests. */
+  const handleBulkFixQuestionTexts = async () => {
+    if (!isSupabaseConfigured() || !supabase) return;
+    const testsToFix = mockTests.filter(t => countGenericTexts(t) > 0);
+    if (testsToFix.length === 0) {
+      setSuccess('All tests already have specific question texts!');
+      return;
+    }
+    setBulkFixing(true);
+    setError('');
+    let fixed = 0, failed = 0;
+
+    for (const test of testsToFix) {
+      try {
+        let updatedData = test.test_data;
+        if (test.module_type === 'reading') {
+          const rData = updatedData as ReadingTest;
+          updatedData = {
+            ...rData,
+            passages: (Array.isArray(rData.passages) ? rData.passages : []).map(p => ({
+              ...p,
+              questions: fixQuestions(Array.isArray(p.questions) ? p.questions : []),
+            })),
+          };
+        } else if (test.module_type === 'listening') {
+          const lData = updatedData as ListeningTest;
+          updatedData = {
+            ...lData,
+            sections: (Array.isArray(lData.sections) ? lData.sections : []).map(s => ({
+              ...s,
+              questions: fixQuestions(Array.isArray(s.questions) ? s.questions : []),
+            })),
+          };
+        }
+        const { error: saveErr } = await supabase
+          .from('mock_tests')
+          .update({ test_data: jsonbSafe(updatedData), updated_at: new Date().toISOString() })
+          .eq('id', test.id);
+        if (saveErr) { console.error(`Fix failed for ${test.title}:`, saveErr); failed++; }
+        else fixed++;
+      } catch (err) {
+        console.error(`Error fixing ${test.title}:`, err);
+        failed++;
+      }
+    }
+
+    setBulkFixing(false);
+    await fetchMockTests();
+    if (failed === 0) setSuccess(`✓ Fixed question texts in ${fixed} test${fixed !== 1 ? 's' : ''}!`);
+    else setError(`Fixed ${fixed} tests, but ${failed} could not be saved. Check console.`);
   };
 
   const getNextTestNumber = (moduleType: ModuleType): number => {
@@ -618,6 +779,22 @@ export function MockTestManagement() {
                 <Sparkles className="h-4 w-4" />
                 AI Generate Full Test
               </Button>
+              {mockTests.some(t => countGenericTexts(t) > 0) && (
+                <Button
+                  onClick={handleBulkFixQuestionTexts}
+                  disabled={bulkFixing}
+                  variant="outline"
+                  className="h-11 rounded-xl font-bold border-blue-200 text-blue-700 hover:bg-blue-50 gap-2"
+                  title="Fix all questions that still show generic text like 'Complete the table below.'"
+                >
+                  {bulkFixing
+                    ? <Loader2 className="h-4 w-4 animate-spin" />
+                    : <Wrench className="h-4 w-4" />}
+                  {bulkFixing
+                    ? 'Fixing…'
+                    : `Fix ${mockTests.reduce((s, t) => s + countGenericTexts(t), 0)} Generic Texts`}
+                </Button>
+              )}
               <div className="w-px h-10 bg-slate-200 mx-2 hidden lg:block"></div>
               <Button onClick={() => handleNewTest('reading')} variant="outline" className="h-11 rounded-xl font-bold border-slate-200 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition-all">
                 <FileText className="h-4 w-4 mr-2" /> Reading
@@ -685,6 +862,12 @@ export function MockTestManagement() {
                           <Badge className="bg-amber-50 text-amber-700 border border-amber-200 gap-1.5 font-bold rounded-lg" title={`${countBlankTypes(test)} question(s) have blank type — open and click Auto-fix Types`}>
                             <Wrench className="h-3 w-3" />
                             {countBlankTypes(test)} blank type{countBlankTypes(test) > 1 ? 's' : ''}
+                          </Badge>
+                        )}
+                        {countGenericTexts(test) > 0 && (
+                          <Badge className="bg-blue-50 text-blue-700 border border-blue-200 gap-1.5 font-bold rounded-lg" title={`${countGenericTexts(test)} question(s) have generic text — click 'Fix Generic Texts' above`}>
+                            <Wrench className="h-3 w-3" />
+                            {countGenericTexts(test)} generic text{countGenericTexts(test) > 1 ? 's' : ''}
                           </Badge>
                         )}
                         <Badge className={cn("rounded-lg font-bold px-3 py-1", test.is_published ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-800')}>
