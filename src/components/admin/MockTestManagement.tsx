@@ -1333,6 +1333,8 @@ function ListeningTestBuilder({
   const [audioError, setAudioError] = useState<string | null>(null);
   // Per-section error map: sectionNumber → error message
   const [sectionErrors, setSectionErrors] = useState<Record<number, string>>({});
+  // Progress tracking: { done, total, currentLabel }
+  const [audioProgress, setAudioProgress] = useState<{ done: number; total: number; currentLabel: string } | null>(null);
 
   const handleGenerateAudio = async () => {
     const sectionsWithTranscript = data.sections?.filter(s => s.transcript?.trim()) || [];
@@ -1354,6 +1356,7 @@ function ListeningTestBuilder({
     setIsGeneratingAudio(true);
     setAudioError(null);
     setSectionErrors({});
+    setAudioProgress({ done: 0, total: sectionsWithTranscript.length, currentLabel: '' });
 
     const updatedSections = (data.sections || []).map(s => ({ ...s }));
     const failedSections: number[] = [];
@@ -1361,6 +1364,7 @@ function ListeningTestBuilder({
     // Process every section independently — one failure does not abort the others
     for (let i = 0; i < sectionsWithTranscript.length; i++) {
       const section = sectionsWithTranscript[i];
+      setAudioProgress({ done: i, total: sectionsWithTranscript.length, currentLabel: `Section ${section.sectionNumber}` });
       const text = section.transcript!.trim();
 
       try {
@@ -1396,6 +1400,8 @@ function ListeningTestBuilder({
         failedSections.push(section.sectionNumber);
         setSectionErrors(prev => ({ ...prev, [section.sectionNumber]: msg }));
       }
+      // Update progress after each section completes (success or fail)
+      setAudioProgress({ done: i + 1, total: sectionsWithTranscript.length, currentLabel: i + 1 < sectionsWithTranscript.length ? `Section ${sectionsWithTranscript[i + 1].sectionNumber}` : '' });
     }
 
     // Update form data with whatever succeeded
@@ -1411,6 +1417,7 @@ function ListeningTestBuilder({
     }
 
     setIsGeneratingAudio(false);
+    setAudioProgress(null);
   };
 
   const handleAIGenerated = (content: unknown, topic?: string) => {
@@ -1569,6 +1576,39 @@ function ListeningTestBuilder({
               {isGeneratingAudio ? 'Generating...' : 'Generate Audio'}
             </Button>
           </div>
+          {/* ── Audio generation progress bar ── */}
+          {audioProgress && (
+            <div className="mt-2 space-y-1">
+              <div className="flex justify-between text-xs text-slate-500">
+                <span>
+                  {audioProgress.done < audioProgress.total
+                    ? `Generating ${audioProgress.currentLabel}…`
+                    : 'Finishing up…'}
+                </span>
+                <span>{audioProgress.done} / {audioProgress.total} sections</span>
+              </div>
+              <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                <div
+                  className="h-2 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 transition-all duration-500"
+                  style={{ width: `${Math.round((audioProgress.done / audioProgress.total) * 100)}%` }}
+                />
+              </div>
+              <div className="flex gap-1 mt-0.5">
+                {Array.from({ length: audioProgress.total }).map((_, idx) => {
+                  const section = data.sections?.filter(s => s.transcript?.trim())[idx];
+                  const sNum = section?.sectionNumber ?? idx + 1;
+                  const done = idx < audioProgress.done;
+                  const active = idx === audioProgress.done && audioProgress.done < audioProgress.total;
+                  const haserr = section && sectionErrors[sNum];
+                  return (
+                    <div key={idx} className={`flex-1 text-center text-[10px] py-0.5 rounded ${haserr ? 'bg-red-100 text-red-600' : done ? 'bg-emerald-100 text-emerald-700' : active ? 'bg-purple-100 text-purple-700 animate-pulse' : 'bg-slate-100 text-slate-400'}`}>
+                      {haserr ? '✗' : done ? '✓' : active ? '⟳' : '·'} S{sNum}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
           {audioError && (
             <p className="text-red-500 text-sm mt-1">{audioError}</p>
           )}
