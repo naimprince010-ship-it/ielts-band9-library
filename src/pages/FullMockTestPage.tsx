@@ -261,7 +261,7 @@ export default function FullMockTestPage() {
   const [realAudioPlaying, setRealAudioPlaying] = useState<string | null>(null);
   const realAudioRef = useRef<HTMLAudioElement | null>(null);
 
-  const playRealAudio = (id: string, url: string) => {
+  const playRealAudio = (id: string, url: string, fallbackTranscript?: string) => {
     // Second tap on same button → stop
     if (realAudioPlaying === id) {
       realAudioRef.current?.pause();
@@ -290,14 +290,24 @@ export default function FullMockTestPage() {
     (audio as HTMLAudioElement & { playsInline: boolean }).playsInline = true;
     audio.preload = 'auto';
 
+    const handleFail = () => {
+      realAudioRef.current = null;
+      setRealAudioPlaying(null);
+      // Remove from played so user can retry (or TTS fallback kicks in)
+      setPlayedAudios(prev => { const s = new Set(prev); s.delete(id); return s; });
+      // Fall back to TTS if transcript is available
+      if (fallbackTranscript) {
+        toggleAudio(id, fallbackTranscript);
+      }
+    };
+
     audio.onended = () => {
       realAudioRef.current = null;
       setRealAudioPlaying(null);
     };
     audio.onerror = () => {
       console.error('Real audio playback error — falling back to TTS');
-      realAudioRef.current = null;
-      setRealAudioPlaying(null);
+      handleFail();
     };
 
     realAudioRef.current = audio;
@@ -307,9 +317,7 @@ export default function FullMockTestPage() {
     // .play() called directly inside user-gesture handler → works on iOS
     audio.play().catch(err => {
       console.error('audio.play() failed:', err);
-      realAudioRef.current = null;
-      setRealAudioPlaying(null);
-      setPlayedAudios(prev => { const s = new Set(prev); s.delete(id); return s; });
+      handleFail();
     });
   };
 
@@ -1225,7 +1233,7 @@ export default function FullMockTestPage() {
                             'bg-white text-violet-700 hover:bg-white/90 shadow-xl'
                           }`}
                           onClick={() => globalAudioUrl
-                            ? playRealAudio('global', globalAudioUrl)
+                            ? playRealAudio('global', globalAudioUrl, globalTranscript)
                             : toggleAudio('global', globalTranscript)
                           }
                         >
@@ -1275,7 +1283,7 @@ export default function FullMockTestPage() {
                               'bg-violet-600 text-white hover:bg-violet-700 shadow-lg'
                             }`}
                             onClick={() => sectionUrl
-                              ? playRealAudio(sectionAudioId, sectionUrl)
+                              ? playRealAudio(sectionAudioId, sectionUrl, sectionTranscript)
                               : toggleAudio(sectionAudioId, sectionTranscript)
                             }
                           >
