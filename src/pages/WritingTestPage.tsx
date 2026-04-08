@@ -23,6 +23,7 @@ import {
   WritingTaskType
 } from '@/types';
 import { WritingTask1Renderer } from '@/components/test/WritingTask1Renderer';
+import { normalizeWritingTestFromDb } from '@/lib/writingVisualNormalize';
 
 
 // ============================================
@@ -121,8 +122,11 @@ const countWords = (text: string): number => {
 export default function WritingTestPage() {
   const location = useLocation();
   const stateData = location.state as { testData?: WritingTest; testId?: string; testTitle?: string } | null;
-  const hasValidData = stateData?.testData && Array.isArray(stateData.testData.tasks) && stateData.testData.tasks.length >= 2;
-  const [test] = useState<WritingTest>(hasValidData ? (stateData!.testData as WritingTest) : SAMPLE_WRITING_TEST);
+  const raw = stateData?.testData;
+  const hasValidData = raw && Array.isArray(raw.tasks) && raw.tasks.length >= 2;
+  const [test] = useState<WritingTest>(() =>
+    hasValidData ? normalizeWritingTestFromDb(raw) : SAMPLE_WRITING_TEST
+  );
   const [currentTask, setCurrentTask] = useState<WritingTaskType>('task1');
   const [timeRemaining, setTimeRemaining] = useState(test.timeLimit);
   const [responses, setResponses] = useState<{

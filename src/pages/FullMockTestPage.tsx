@@ -13,6 +13,9 @@ import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { normalizeMockTestRow, normalizeWritingTestFromDb, findWritingTask1 } from '@/lib/writingVisualNormalize';
+import { WritingTask1Renderer } from '@/components/test/WritingTask1Renderer';
+import type { WritingTask } from '@/types';
 
 type Phase = 'intro' | 'listening' | 'reading' | 'writing' | 'speaking' | 'results';
 type ModuleType = 'reading' | 'listening' | 'writing' | 'speaking';
@@ -634,7 +637,7 @@ export default function FullMockTestPage() {
             .order('created_at', { ascending: false })
             .limit(1)
             .maybeSingle();
-          if (data) result[s.module] = data as MockTest;
+          if (data) result[s.module] = normalizeMockTestRow(data as MockTest);
         }
         setTests(result);
       } catch (err) { console.error('FullMockTestPage fetch error:', err); } finally { setLoading(false); }
@@ -1273,11 +1276,22 @@ export default function FullMockTestPage() {
             })()}
 
             {phase === 'writing' && (() => {
-              // Writing test_data is stored as { tasks: [WritingTask, WritingTask] }
-              // Each WritingTask has: { title, prompt, imageUrl, minWords, recommendedTime }
-              const tasks = (td?.tasks as Array<{ title: string; prompt: string; imageUrl?: string; minWords?: number; recommendedTime?: number }>) ?? [];
-              const task1 = tasks[0];
-              const task2 = tasks[1];
+              const wData = normalizeWritingTestFromDb(td);
+              const task1 = findWritingTask1(wData);
+              const task2 =
+                wData.tasks?.find(
+                  (t) =>
+                    t.taskType === 'task2' ||
+                    (t as Record<string, unknown>).task_type === 'task2' ||
+                    t.taskNumber === 2
+                ) ?? wData.tasks?.[1];
+              const t1Visual =
+                task1 &&
+                (task1.imageUrl ||
+                  task1.chartData ||
+                  task1.tableData ||
+                  task1.processData ||
+                  task1.mapData);
               return (
                 <div className="space-y-12">
                    <div className="bg-emerald-600 text-white p-10 rounded-[40px] shadow-2xl flex items-center gap-6"><div className="p-4 bg-white/20 rounded-3xl"><PenTool className="h-10 w-10" /></div><div><h2 className="text-3xl font-black mb-1">Writing Assessment</h2><p className="text-emerald-100 font-medium">Complete both tasks. Your word count is tracked automatically.</p></div></div>
@@ -1295,38 +1309,23 @@ export default function FullMockTestPage() {
                         }
                       </div>
 
-                      {/* Chart / Graph image — REQUIRED for IELTS Academic Task 1 */}
-                      {task1?.imageUrl ? (
+                      {/* Task 1: chart / table / process / map / image URL */}
+                      {t1Visual && task1 ? (
                         <div className="rounded-3xl overflow-hidden border-2 border-emerald-200 bg-white shadow-xl">
                           <div className="bg-emerald-700 text-white px-6 py-3 flex items-center gap-2">
                             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-                            <span className="font-black uppercase tracking-widest text-sm">Chart / Graph</span>
+                            <span className="font-black uppercase tracking-widest text-sm">Task 1 visual</span>
                           </div>
                           <div className="p-4 bg-slate-50">
-                            <img
-                              src={task1.imageUrl}
-                              alt="Writing Task 1 Chart"
-                              className="w-full max-h-[500px] object-contain rounded-2xl mx-auto"
-                              onError={(e) => {
-                                const target = e.currentTarget;
-                                target.style.display = 'none';
-                                const fallback = target.nextElementSibling as HTMLElement;
-                                if (fallback) fallback.style.display = 'flex';
-                              }}
-                            />
-                            <div className="hidden flex-col items-center justify-center p-12 text-center gap-3 text-amber-700">
-                              <AlertCircle className="h-10 w-10 text-amber-500" />
-                              <p className="font-bold">Chart image could not be loaded.</p>
-                              <p className="text-sm text-muted-foreground">URL: {task1.imageUrl}</p>
-                            </div>
+                            <WritingTask1Renderer task={task1 as WritingTask} />
                           </div>
                         </div>
                       ) : (
                         <div className="flex items-center gap-3 bg-amber-50 border-2 border-amber-200 rounded-2xl p-5 text-amber-800">
                           <AlertCircle className="h-6 w-6 flex-shrink-0 text-amber-500" />
                           <div>
-                            <p className="font-black text-sm">No chart image provided</p>
-                            <p className="text-xs text-amber-700 mt-0.5">An admin needs to add a chart/graph image URL for this Task 1 in the Admin Panel → Mock Test Management.</p>
+                            <p className="font-black text-sm">No Task 1 visual provided</p>
+                            <p className="text-xs text-amber-700 mt-0.5">Add a table, chart, or image for Task 1 in Admin → Manage Mock Tests.</p>
                           </div>
                         </div>
                       )}

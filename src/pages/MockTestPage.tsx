@@ -21,6 +21,7 @@ import {
   BarChart3
 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { normalizeMockTestRow } from '@/lib/writingVisualNormalize';
 import {
   ReadingTest,
   ListeningTest,
@@ -117,7 +118,7 @@ export default function MockTestPage() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setTests(data || []);
+      setTests((data || []).map((row) => normalizeMockTestRow(row as MockTest)));
     } catch (err) {
       console.error('Error fetching mock tests:', err);
       setError('Failed to load mock tests');

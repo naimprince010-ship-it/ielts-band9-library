@@ -41,7 +41,13 @@ import {
   Volume2
 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
-import { extractTask1Visuals } from '@/lib/writingVisualNormalize';
+import {
+  extractTask1Visuals,
+  normalizeMockTestRow,
+  normalizeWritingTestFromDb,
+  findWritingTask1,
+  writingTask1HasAcademicVisual,
+} from '@/lib/writingVisualNormalize';
 import { cn } from '@/lib/utils';
 import { WritingTask1Renderer } from '@/components/test/WritingTask1Renderer';
 import {
@@ -163,7 +169,7 @@ export function MockTestManagement() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setMockTests(data || []);
+      setMockTests((data || []).map((row) => normalizeMockTestRow(row as MockTest)));
     } catch (err) {
       console.error('Error fetching mock tests:', err);
       setError('Failed to load mock tests. Make sure you have run the SQL setup.');
@@ -257,7 +263,7 @@ export function MockTestManagement() {
           testData = jsonbSafe(buildListeningTest());
           break;
         case 'writing':
-          testData = jsonbSafe(buildWritingTest());
+          testData = jsonbSafe(normalizeWritingTestFromDb(buildWritingTest()));
           break;
         case 'speaking':
           testData = jsonbSafe(buildSpeakingTest());
@@ -429,11 +435,12 @@ export function MockTestManagement() {
       if (!lData.audioUrl) return { status: 'incomplete', message: 'Missing Audio' };
     }
     if (test.module_type === 'writing') {
-      const wData = data as WritingTest;
-      const task1 = wData.tasks?.find(t => t.taskType === 'task1');
+      const wData = normalizeWritingTestFromDb(data);
+      const task1 = findWritingTask1(wData);
       if (wData.testType === 'academic' && task1) {
-        const hasVisual = task1.chartData || task1.tableData || task1.processData || task1.mapData || task1.imageUrl;
-        if (!hasVisual) return { status: 'incomplete', message: 'Missing Task 1 Visual' };
+        if (!writingTask1HasAcademicVisual(task1)) {
+          return { status: 'incomplete', message: 'Missing Task 1 Visual' };
+        }
       }
     }
     return { status: 'complete' };
@@ -2668,20 +2675,38 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
         writingTasksData.push(tData);
       }
       
-      const writingTest = {
-        id: `writing-${now}`, title: `Mock Test: ${topic} - Writing`, testType: 'academic', timeLimit: 3600,
+      const writingTest = normalizeWritingTestFromDb({
+        id: `writing-${now}`,
+        title: `Mock Test: ${topic} - Writing`,
+        testType: 'academic',
+        timeLimit: 3600,
         instructions: 'Complete both writing tasks within the time limit.',
-        tasks: writingTasksData.map((t, tIndex) => ({
-          id: `task-${tIndex + 1}-${now}`, 
-          taskNumber: tIndex + 1, 
-          taskType: tIndex === 0 ? 'task1' : 'task2', 
-          title: t.title || `Task ${tIndex + 1}`, 
-          prompt: t.prompt, 
-          minWords: tIndex === 0 ? 150 : 250, 
-          recommendedTime: tIndex === 0 ? 20 : 40, 
-          sampleAnswer: t.sampleAnswer 
-        }))
-      };
+        tasks: writingTasksData.map((t, tIndex) => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const tr = t as Record<string, any>;
+          const base = {
+            id: `task-${tIndex + 1}-${now}`,
+            taskNumber: tIndex + 1,
+            taskType: tIndex === 0 ? ('task1' as const) : ('task2' as const),
+            title: tr.title || `Task ${tIndex + 1}`,
+            prompt: tr.prompt,
+            minWords: tIndex === 0 ? 150 : 250,
+            recommendedTime: tIndex === 0 ? 20 : 40,
+            sampleAnswer: tr.sampleAnswer,
+          };
+          if (tIndex === 0) {
+            const patch = extractTask1Visuals(tr) || {};
+            const imageUrl =
+              typeof tr.imageUrl === 'string' && tr.imageUrl.trim()
+                ? tr.imageUrl.trim()
+                : typeof tr.image_url === 'string' && tr.image_url.trim()
+                  ? tr.image_url.trim()
+                  : undefined;
+            return { ...base, ...patch, ...(imageUrl ? { imageUrl } : {}) };
+          }
+          return base;
+        }),
+      });
 
       // 4. Speaking (Generate 3 parts one by one)
       const speakingPartsData = [];
