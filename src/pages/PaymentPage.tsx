@@ -89,19 +89,43 @@ export function PaymentPage() {
     }
   };
 
+  const validateTransactionId = (id: string): boolean => /^[A-Z0-9]{8,12}$/.test(id);
+  const validatePhoneNumber = (num: string): boolean => /^01[3-9]\d{8}$/.test(num);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    if (!transactionId.trim()) {
+    const trimmedTrxId = transactionId.trim();
+    const trimmedPhone = senderNumber.trim();
+
+    if (!trimmedTrxId) {
       setError('Please enter your bKash Transaction ID');
       setLoading(false);
       return;
     }
 
-    if (!senderNumber.trim()) {
+    if (!validateTransactionId(trimmedTrxId)) {
+      setError('Invalid Transaction ID format. bKash TrxID is 8–12 uppercase letters and digits (e.g. 9K7F5H3D2A)');
+      setLoading(false);
+      return;
+    }
+
+    if (!trimmedPhone) {
       setError('Please enter your bKash number');
+      setLoading(false);
+      return;
+    }
+
+    if (!validatePhoneNumber(trimmedPhone)) {
+      setError('Invalid phone number. Please enter a valid Bangladeshi mobile number (e.g. 01712345678)');
+      setLoading(false);
+      return;
+    }
+
+    if (selectedPackage.price <= 0) {
+      setError('Invalid package price. Please go back and select a valid package.');
       setLoading(false);
       return;
     }
@@ -128,8 +152,8 @@ export function PaymentPage() {
           package_name: selectedPackage.name,
           course_id: courseId || null,
           amount: selectedPackage.price,
-          transaction_id: transactionId.trim(),
-          sender_number: senderNumber.trim(),
+          transaction_id: trimmedTrxId,
+          sender_number: trimmedPhone,
           status: 'pending',
         });
 

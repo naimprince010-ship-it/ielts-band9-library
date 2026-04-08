@@ -288,67 +288,62 @@ export function AdminPage() {
     }
   }, [user, isAdmin, isInstructor]);
 
+  const getAuthToken = async (): Promise<string | null> => {
+    if (!supabase) return null;
+    const { data } = await supabase.auth.getSession();
+    return data.session?.access_token ?? null;
+  };
+
   const handleApprovePayment = async (payment: PaymentRequest) => {
-    if (!isSupabaseConfigured() || !supabase) return;
     setProcessingPayment(payment.id);
     try {
-      const { error: updateError } = await supabase
-        .from('payment_requests')
-        .update({
-          status: 'approved',
-          verified_at: new Date().toISOString(),
-          verified_by: user?.email || 'admin',
-        })
-        .eq('id', payment.id);
-      if (updateError) throw updateError;
+      const token = await getAuthToken();
+      if (!token) throw new Error('Not authenticated');
 
-      // Only give global 'premium' access if it's a general subscription (not a single course)
-      // For courses, our new Postgres Trigger automatically adds them to user_courses table!
-      if (payment.package_type !== 'course') {
-        const { error: userError } = await supabase
-          .from('users')
-          .update({
-            subscription_status: 'premium',
-            premium_until: payment.package_type === 'yearly' 
-              ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
-              : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-          })
-          .eq('id', payment.user_id);
+      const res = await fetch('/api/approve-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ paymentId: payment.id }),
+      });
 
-        if (userError) console.error('Failed to update user premium status:', userError);
-      }
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Approval failed');
 
       setSuccess('Payment approved successfully!');
       fetchPayments();
       setTimeout(() => setSuccess(''), 3000);
-    } catch (err) {
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Failed to approve payment';
       console.error('Failed to approve payment:', err);
-      setError('Failed to approve payment. Please try again.');
+      setError(msg);
     } finally {
       setProcessingPayment(null);
     }
   };
 
   const handleRejectPayment = async (payment: PaymentRequest) => {
-    if (!isSupabaseConfigured() || !supabase) return;
     if (!confirm('Are you sure you want to reject this payment?')) return;
     setProcessingPayment(payment.id);
     try {
-      const { error } = await supabase
-        .from('payment_requests')
-        .update({
-          status: 'rejected',
-          verified_at: new Date().toISOString(),
-          verified_by: user?.email || 'admin',
-        })
-        .eq('id', payment.id);
-      if (error) throw error;
+      const token = await getAuthToken();
+      if (!token) throw new Error('Not authenticated');
+
+      const res = await fetch('/api/reject-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ paymentId: payment.id }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Rejection failed');
+
       setSuccess('Payment rejected.');
       fetchPayments();
       setTimeout(() => setSuccess(''), 3000);
-    } catch (err) {
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Failed to reject payment';
       console.error('Failed to reject payment:', err);
-      setError('Failed to reject payment. Please try again.');
+      setError(msg);
     } finally {
       setProcessingPayment(null);
     }
