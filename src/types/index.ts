@@ -476,8 +476,9 @@ export interface ListeningSection {
   title: string;                 // Section title (e.g., "Section 1: Conversation")
   description?: string;          // Brief description of the audio context
   transcript?: string;           // Transcript of the audio for this section (used for TTS generation)
-  audioStartTime: number;        // When this section starts in the audio (seconds)
-  audioEndTime: number;          // When this section ends in the audio (seconds)
+  sectionAudioUrl?: string;      // Individual audio URL generated per section via TTS (when present, player uses per-section mode)
+  audioStartTime: number;        // When this section starts in the audio (seconds) — used in single-audio-file mode
+  audioEndTime: number;          // When this section ends in the audio (seconds) — used in single-audio-file mode
   questions: ListeningQuestion[];
   questionRange: {
     start: number;

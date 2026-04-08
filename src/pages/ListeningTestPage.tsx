@@ -192,9 +192,14 @@ export default function ListeningTestPage() {
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(1);
   const [showCheatingWarning, setShowCheatingWarning] = useState(false);
+  // Per-section audio: tracks which section is currently playing when sectionAudioUrl is used
+  const [currentSectionIdx, setCurrentSectionIdx] = useState(0);
 
   const audioRef = useRef<HTMLAudioElement>(null);
   const questionRefs = useRef<Record<number, HTMLDivElement | null>>({});
+
+  // Detect per-section audio mode (each section has its own TTS-generated audio URL)
+  const usesPerSectionAudio = test.sections.some(s => s.sectionAudioUrl);
 
   const allQuestions = Array.isArray(test?.sections) ? test.sections.flatMap(s => s?.questions || []) : [];
 
@@ -290,8 +295,29 @@ export default function ListeningTestPage() {
   };
 
   const handleAudioEnded = () => {
-    setAudioState('transfer-time');
+    if (usesPerSectionAudio) {
+      const nextIdx = currentSectionIdx + 1;
+      if (nextIdx < test.sections.length && test.sections[nextIdx].sectionAudioUrl) {
+        setCurrentSectionIdx(nextIdx);
+        // The effect below loads and plays the next section's audio
+      } else {
+        setAudioState('transfer-time');
+      }
+    } else {
+      setAudioState('transfer-time');
+    }
   };
+
+  // Load and auto-play next section's audio when currentSectionIdx changes (per-section mode)
+  useEffect(() => {
+    if (!usesPerSectionAudio || audioState !== 'playing' || !audioRef.current) return;
+    const src = test.sections[currentSectionIdx]?.sectionAudioUrl;
+    if (src) {
+      audioRef.current.src = src;
+      audioRef.current.load();
+      audioRef.current.play().catch(console.error);
+    }
+  }, [currentSectionIdx]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ============================================
   // Start test after sound check
@@ -796,10 +822,10 @@ export default function ListeningTestPage() {
           </Card>
         </div>
 
-        {/* Hidden Audio Element */}
+        {/* Hidden Audio Element — per-section mode uses sectionAudioUrl; single-file mode uses test.audioUrl */}
         <audio
           ref={audioRef}
-          src={test.audioUrl}
+          src={usesPerSectionAudio ? (test.sections[0]?.sectionAudioUrl ?? '') : test.audioUrl}
           onTimeUpdate={handleAudioTimeUpdate}
           onEnded={handleAudioEnded}
           preload="auto"
@@ -942,8 +968,10 @@ export default function ListeningTestPage() {
       {/* Questions - All Sections on One Scrollable Page */}
       <div className="flex-1 overflow-y-auto p-4 md:p-6">
         <div className="max-w-4xl mx-auto space-y-8">
-          {test.sections.map((section) => {
-            const isActive = audioCurrentTime >= section.audioStartTime && audioCurrentTime < section.audioEndTime;
+          {test.sections.map((section, sectionIdx) => {
+            const isActive = usesPerSectionAudio
+              ? (audioState === 'playing' && currentSectionIdx === sectionIdx)
+              : (audioCurrentTime >= section.audioStartTime && audioCurrentTime < section.audioEndTime);
             return (
               <div key={section.id} className="space-y-4">
                 {/* Section Header */}

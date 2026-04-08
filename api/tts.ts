@@ -36,11 +36,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   
   const effectiveVoice = voice || (useOpenAI ? 'alloy' : 'en-GB-Neural2-B');
 
-  // OpenAI TTS supports up to ~4096 tokens; Google TTS supports up to 5000 bytes.
-  // A single IELTS listening transcript across 4 sections can easily be 6-10k chars.
-  // Use 14 000 chars as the safe ceiling (well within OpenAI token budget at ~3.5 chars/token).
-  if (!text || text.length > 14000) {
-    return res.status(400).json({ error: `Invalid text (${text?.length ?? 0} chars; max 14 000 characters)` });
+  // OpenAI TTS hard limit: 4096 characters per request.
+  // Admin now generates audio per section (each section stays well under 4096 chars).
+  if (!text || text.length > 4096) {
+    return res.status(400).json({
+      error: `Text too long (${text?.length ?? 0} chars). Max 4096 chars per request. Split into sections.`,
+    });
   }
 
   const cacheKey = generateCacheKey(text, effectiveVoice, languageCode);

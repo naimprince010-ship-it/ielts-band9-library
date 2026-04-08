@@ -456,7 +456,8 @@ export function MockTestManagement() {
     const data = test.test_data;
     if (test.module_type === 'listening') {
       const lData = data as ListeningTest;
-      if (!lData.audioUrl) return { status: 'incomplete', message: 'Missing Audio' };
+      const hasPerSectionAudio = lData.sections?.some(s => s.sectionAudioUrl);
+      if (!lData.audioUrl && !hasPerSectionAudio) return { status: 'incomplete', message: 'Missing Audio' };
     }
     if (test.module_type === 'writing') {
       const wData = normalizeWritingTestFromDb(data);
@@ -1331,48 +1332,68 @@ function ListeningTestBuilder({
   const [audioError, setAudioError] = useState<string | null>(null);
 
   const handleGenerateAudio = async () => {
-    const transcripts = data.sections?.map(s => s.transcript).filter(Boolean).join('\n\n');
-    if (!transcripts) {
-      setAudioError('No transcript available. Please add sections with transcripts first.');
+    const sectionsWithTranscript = data.sections?.filter(s => s.transcript?.trim()) || [];
+    if (sectionsWithTranscript.length === 0) {
+      setAudioError('No transcript available. Please add section transcripts first.');
       return;
     }
 
-    // OpenAI TTS limit is 4096 tokens ≈ ~16 000 chars; keep a safe ceiling of 14 000.
-    if (transcripts.length > 14000) {
-      setAudioError(`Transcript is too long (${transcripts.length.toLocaleString()} / 14 000 chars). Please shorten the section transcripts.`);
+    // Check individual section lengths (OpenAI TTS hard limit is 4096 chars per request)
+    const tooLong = sectionsWithTranscript.filter(s => (s.transcript?.length ?? 0) > 4000);
+    if (tooLong.length > 0) {
+      setAudioError(
+        `Section(s) ${tooLong.map(s => s.sectionNumber).join(', ')} transcript exceeds 4000 chars ` +
+        `(${tooLong.map(s => s.transcript!.length).join(', ')} chars). Please shorten them.`
+      );
       return;
     }
 
     setIsGeneratingAudio(true);
     setAudioError(null);
 
+    const updatedSections = (data.sections || []).map(s => ({ ...s }));
+
     try {
-      const response = await fetch('/api/tts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          text: transcripts,
-          voice: 'alloy',
-          provider: 'openai'
-        }),
+      for (let i = 0; i < sectionsWithTranscript.length; i++) {
+        const section = sectionsWithTranscript[i];
+        const text = section.transcript!.trim();
+
+        const response = await fetch('/api/tts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text, voice: 'alloy', provider: 'openai' }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(
+            `Section ${section.sectionNumber}: ${errorData.details || errorData.error || 'TTS failed'}`
+          );
+        }
+
+        const result = await response.json();
+        const idx = updatedSections.findIndex(s => s.id === section.id);
+        if (idx !== -1) {
+          if (result.audioUrl) {
+            updatedSections[idx].sectionAudioUrl = result.audioUrl;
+          } else if (result.audioContent) {
+            const blob = new Blob(
+              [Uint8Array.from(atob(result.audioContent), c => c.charCodeAt(0))],
+              { type: 'audio/mpeg' }
+            );
+            updatedSections[idx].sectionAudioUrl = URL.createObjectURL(blob);
+          }
+        }
+      }
+
+      // Use first section audio as the top-level audioUrl (for backward-compat integrity check)
+      const firstUrl = updatedSections.find(s => s.sectionAudioUrl)?.sectionAudioUrl ?? '';
+      onChange({
+        ...data,
+        audioUrl: firstUrl || data.audioUrl || '',
+        audioDuration: sectionsWithTranscript.reduce((sum, s) => sum + Math.ceil((s.transcript?.length ?? 0) / 15), 0),
+        sections: updatedSections,
       });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || errorData.details || 'Failed to generate audio');
-      }
-
-      const result = await response.json();
-      if (result.audioUrl) {
-        onChange({ ...data, audioUrl: result.audioUrl, audioDuration: Math.ceil(transcripts.length / 15) });
-      } else if (result.audioContent) {
-        const audioBlob = new Blob(
-          [Uint8Array.from(atob(result.audioContent), c => c.charCodeAt(0))],
-          { type: 'audio/mpeg' }
-        );
-        const audioUrl = URL.createObjectURL(audioBlob);
-        onChange({ ...data, audioUrl, audioDuration: Math.ceil(transcripts.length / 15) });
-      }
     } catch (err) {
       console.error('TTS Error:', err);
       setAudioError(err instanceof Error ? err.message : 'Failed to generate audio');
@@ -1541,13 +1562,29 @@ function ListeningTestBuilder({
             <p className="text-red-500 text-sm mt-1">{audioError}</p>
           )}
           {(() => {
-            const totalChars = (data.sections?.map(s => s.transcript).filter(Boolean).join('\n\n') || '').length;
-            if (totalChars === 0) return null;
-            const over = totalChars > 14000;
+            const sections = data.sections?.filter(s => s.transcript?.trim()) || [];
+            if (sections.length === 0) return null;
+            const overLimit = sections.filter(s => (s.transcript?.length ?? 0) > 4000);
+            const hasAudio = sections.some(s => s.sectionAudioUrl);
             return (
-              <p className={`text-xs mt-1 ${over ? 'text-red-500 font-semibold' : 'text-slate-400'}`}>
-                Transcript: {totalChars.toLocaleString()} / 14 000 chars{over ? ' — too long, shorten sections' : ''}
-              </p>
+              <div className="mt-1 space-y-0.5">
+                {sections.map(s => {
+                  const len = s.transcript?.length ?? 0;
+                  const over = len > 4000;
+                  return (
+                    <p key={s.id} className={`text-xs ${over ? 'text-red-500 font-semibold' : s.sectionAudioUrl ? 'text-emerald-600' : 'text-slate-400'}`}>
+                      Section {s.sectionNumber}: {len.toLocaleString()} / 4 000 chars
+                      {s.sectionAudioUrl ? ' ✓ audio ready' : over ? ' — too long!' : ''}
+                    </p>
+                  );
+                })}
+                {overLimit.length > 0 && (
+                  <p className="text-xs text-red-500 font-semibold">⚠ Shorten sections above 4000 chars before generating audio</p>
+                )}
+                {hasAudio && overLimit.length === 0 && (
+                  <p className="text-xs text-emerald-600 font-medium">All sections have audio — ready to save!</p>
+                )}
+              </div>
             );
           })()}
           {data.audioUrl && (
