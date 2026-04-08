@@ -20,7 +20,10 @@ $$;
 COMMENT ON FUNCTION public.is_admin() IS 'RLS-safe admin check for policies on public.users (avoids recursive policy)';
 
 GRANT EXECUTE ON FUNCTION public.is_admin() TO authenticated;
+GRANT EXECUTE ON FUNCTION public.is_admin() TO anon;
 GRANT EXECUTE ON FUNCTION public.is_admin() TO service_role;
+-- anon: required so RLS policies that use (published OR is_admin()) work for the anon API key;
+-- is_admin() returns false when auth.uid() is null.
 
 -- 2) Replace recursive policies
 DROP POLICY IF EXISTS "Admins can view all users" ON public.users;

@@ -1,5 +1,6 @@
 -- Fix: Admin cannot UPDATE mock_tests (save fails) or students cannot read published tests.
 -- Requires public.is_admin() from fix_users_rls_infinite_recursion.sql first.
+-- If mock_tests list fails for everyone: grant anon execute on is_admin (see fix_users_rls_infinite_recursion.sql).
 --
 -- Run in Supabase → SQL Editor.
 
@@ -58,6 +59,9 @@ CREATE POLICY "mock_tests_admin_delete"
 ON public.mock_tests FOR DELETE
 TO authenticated
 USING (public.is_admin());
+
+-- Let anon evaluate is_admin() in SELECT policy (returns false without a session).
+GRANT EXECUTE ON FUNCTION public.is_admin() TO anon;
 
 GRANT SELECT ON public.mock_tests TO anon, authenticated;
 GRANT INSERT, UPDATE, DELETE ON public.mock_tests TO authenticated;

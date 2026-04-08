@@ -7,6 +7,9 @@ import type {
   WritingTask,
 } from '@/types';
 
+/** Embedded on writing `test_data` when navigating from mock list so Supabase refresh still works if ?testId= is stripped. */
+export const WRITING_MOCK_ROW_ID_KEY = '_ieltstreeMockRowId';
+
 export type Task1VisualPatch = {
   chartData?: WritingChartData;
   tableData?: WritingTableData;
@@ -17,14 +20,21 @@ export type Task1VisualPatch = {
 function normalizeTable(raw: unknown): WritingTableData | null {
   if (!raw || typeof raw !== 'object') return null;
   const o = raw as Record<string, unknown>;
-  const headersRaw = o.headers;
+  const headersRaw = o.headers ?? o.columns ?? o.columnHeaders;
   if (!Array.isArray(headersRaw) || headersRaw.length === 0) return null;
   const headers = headersRaw.map((h) => String(h ?? ''));
 
-  const rowsRaw = o.rows;
-  if (!Array.isArray(rowsRaw)) return null;
+  let rowsRaw: unknown = o.rows ?? o.body;
+  if (
+    !Array.isArray(rowsRaw) &&
+    Array.isArray(o.data) &&
+    (o.data.length === 0 || Array.isArray((o.data as unknown[])[0]))
+  ) {
+    rowsRaw = o.data;
+  }
+  if (!Array.isArray(rowsRaw)) rowsRaw = [];
 
-  const rows: string[][] = rowsRaw.map((row: unknown) => {
+  const rows: string[][] = (rowsRaw as unknown[]).map((row: unknown) => {
     if (Array.isArray(row)) {
       return row.map((c) => String(c ?? ''));
     }
@@ -114,6 +124,14 @@ function normalizeMap(raw: unknown): WritingMapData | null {
   };
 }
 
+/** Match WritingTask1Renderer: skip empty chart payloads so they do not block a valid table. */
+function isRenderableChartData(chart: WritingChartData): boolean {
+  if (!chart || typeof chart !== 'object') return false;
+  if (!Array.isArray(chart.labels) || chart.labels.length === 0) return false;
+  if (!Array.isArray(chart.datasets) || chart.datasets.length === 0) return false;
+  return chart.datasets.some((ds) => ds && Array.isArray(ds.data) && ds.data.length > 0);
+}
+
 /**
  * Pull Task 1 visual fields from AI JSON (handles alternate keys and table row shapes).
  */
@@ -131,7 +149,7 @@ export function extractTask1Visuals(task1: unknown): Task1VisualPatch | null {
   if (tableData) return { tableData };
 
   const chartData = normalizeChart(chartRaw);
-  if (chartData) return { chartData };
+  if (chartData && isRenderableChartData(chartData)) return { chartData };
 
   const processData = normalizeProcess(processRaw);
   if (processData) return { processData };
@@ -237,7 +255,11 @@ function coerceWritingTasksArray(rawTasks: unknown): unknown[] {
 
 /** Normalize full writing test from DB (tasks + testType). */
 export function normalizeWritingTestFromDb(raw: unknown): WritingTest {
-  const w = (raw && typeof raw === 'object' ? raw : {}) as Record<string, unknown>;
+  const w =
+    raw && typeof raw === 'object'
+      ? ({ ...(raw as Record<string, unknown>) } as Record<string, unknown>)
+      : ({} as Record<string, unknown>);
+  delete w[WRITING_MOCK_ROW_ID_KEY];
   const rawTasks = coerceWritingTasksArray(w.tasks);
   const tasks: WritingTask[] = rawTasks.map((task) => normalizeWritingTaskFromDb(task));
 

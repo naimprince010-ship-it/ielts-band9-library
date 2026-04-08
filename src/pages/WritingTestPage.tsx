@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Clock,
   FileText,
@@ -9,7 +9,8 @@ import {
   PenTool,
   AlertTriangle,
   CheckCircle2,
-  Info
+  Info,
+  Loader2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -27,6 +28,7 @@ import {
   normalizeWritingTestFromDb,
   findWritingTask1,
   findWritingTask2,
+  WRITING_MOCK_ROW_ID_KEY,
 } from '@/lib/writingVisualNormalize';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
@@ -126,11 +128,19 @@ const countWords = (text: string): number => {
 // ============================================
 export default function WritingTestPage() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const stateData = location.state as { testData?: WritingTest; testId?: string; testTitle?: string } | null;
   const raw = stateData?.testData;
   const hasValidData = raw && Array.isArray(raw.tasks) && raw.tasks.length >= 2;
-  const remoteMockTestId = stateData?.testId || searchParams.get('testId') || undefined;
+  const embeddedMockRowId =
+    raw && typeof raw === 'object' && WRITING_MOCK_ROW_ID_KEY in raw
+      ? String((raw as Record<string, unknown>)[WRITING_MOCK_ROW_ID_KEY] ?? '').trim() || undefined
+      : undefined;
+  const remoteMockTestId =
+    stateData?.testId || searchParams.get('testId') || embeddedMockRowId || undefined;
+  /** Bare /writing-test (no DB id, no nav state) would wrongly show the built-in sample — send users to pick a published mock. */
+  const needsMockSelection = !hasValidData && !remoteMockTestId;
 
   const [test, setTest] = useState<WritingTest>(() =>
     hasValidData ? normalizeWritingTestFromDb(raw) : SAMPLE_WRITING_TEST
@@ -170,6 +180,21 @@ export default function WritingTestPage() {
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  useEffect(() => {
+    if (!needsMockSelection) return;
+    navigate('/mock-test?module=writing', { replace: true });
+  }, [needsMockSelection, navigate]);
+
+  // If ?testId= was stripped (e.g. www redirect) but we still have row id in state payload, restore it for refresh/share.
+  useEffect(() => {
+    if (!remoteMockTestId || needsMockSelection) return;
+    if (searchParams.get('testId') === remoteMockTestId) return;
+    navigate(
+      { pathname: '/writing-test', search: `?testId=${encodeURIComponent(remoteMockTestId)}` },
+      { replace: true, state: location.state }
+    );
+  }, [remoteMockTestId, needsMockSelection, searchParams, navigate, location.state]);
+
   const task1 = findWritingTask1(test) ?? test.tasks[0];
   const task2 = findWritingTask2(test) ?? test.tasks[1];
   const currentTaskData = currentTask === 'task1' ? task1 : task2;
@@ -177,6 +202,7 @@ export default function WritingTestPage() {
 
   // Refresh full test_data from Supabase so Task 1 table/chart is never missing due to slim navigation state or cache.
   useEffect(() => {
+    if (needsMockSelection) return;
     if (!remoteMockTestId || !isSupabaseConfigured() || !supabase) return;
     let cancelled = false;
     setTestLoadError(null);
@@ -229,12 +255,13 @@ export default function WritingTestPage() {
     return () => {
       cancelled = true;
     };
-  }, [remoteMockTestId]);
+  }, [remoteMockTestId, needsMockSelection]);
 
   // ============================================
   // Load session from localStorage on mount
   // ============================================
   useEffect(() => {
+    if (needsMockSelection) return;
     const savedSession = localStorage.getItem(STORAGE_KEY);
     if (savedSession) {
       try {
@@ -248,13 +275,13 @@ export default function WritingTestPage() {
         console.error('Failed to load session:', e);
       }
     }
-  }, [test.id]);
+  }, [test.id, needsMockSelection]);
 
   // ============================================
   // Save session to localStorage on every change
   // ============================================
   const saveSession = useCallback(() => {
-    if (isSubmitted) return;
+    if (needsMockSelection || isSubmitted) return;
 
     const session: WritingTestSession = {
       testId: test.id,
@@ -265,17 +292,18 @@ export default function WritingTestPage() {
       isSubmitted: false
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
-  }, [test.id, startedAt, timeRemaining, responses, currentTask, isSubmitted]);
+  }, [test.id, startedAt, timeRemaining, responses, currentTask, isSubmitted, needsMockSelection]);
 
   useEffect(() => {
+    if (needsMockSelection) return;
     saveSession();
-  }, [saveSession]);
+  }, [saveSession, needsMockSelection]);
 
   // ============================================
   // Timer countdown
   // ============================================
   useEffect(() => {
-    if (isSubmitted || timeRemaining <= 0) return;
+    if (needsMockSelection || isSubmitted || timeRemaining <= 0) return;
 
     const timer = setInterval(() => {
       setTimeRemaining(prev => {
@@ -404,6 +432,15 @@ export default function WritingTestPage() {
   // ============================================
   // Results Screen
   // ============================================
+  if (needsMockSelection) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-gray-50 text-gray-600">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" aria-hidden />
+        <p className="text-sm">Taking you to Writing mock tests…</p>
+      </div>
+    );
+  }
+
   if (isSubmitted && result) {
     return (
       <div className="min-h-screen bg-gray-50 p-4 md:p-8">

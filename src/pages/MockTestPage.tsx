@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -21,7 +21,7 @@ import {
   BarChart3
 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
-import { normalizeMockTestRow } from '@/lib/writingVisualNormalize';
+import { normalizeMockTestRow, WRITING_MOCK_ROW_ID_KEY } from '@/lib/writingVisualNormalize';
 import {
   ReadingTest,
   ListeningTest,
@@ -95,10 +95,18 @@ const MODULE_INFO = {
 
 export default function MockTestPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [tests, setTests] = useState<MockTest[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [activeModule, setActiveModule] = useState<ModuleType>('reading');
+
+  useEffect(() => {
+    const m = searchParams.get('module');
+    if (m === 'reading' || m === 'listening' || m === 'writing' || m === 'speaking') {
+      setActiveModule(m);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     fetchPublishedTests();
@@ -121,7 +129,15 @@ export default function MockTestPage() {
       setTests((data || []).map((row) => normalizeMockTestRow(row as MockTest)));
     } catch (err) {
       console.error('Error fetching mock tests:', err);
-      setError('Failed to load mock tests');
+      const msg =
+        err && typeof err === 'object' && 'message' in err && typeof (err as { message: unknown }).message === 'string'
+          ? (err as { message: string }).message
+          : '';
+      setError(
+        msg
+          ? `Failed to load mock tests: ${msg}`
+          : 'Failed to load mock tests'
+      );
     } finally {
       setLoading(false);
     }
@@ -139,13 +155,27 @@ export default function MockTestPage() {
       speaking: '/speaking-test'
     };
 
-    navigate(routeMap[test.module_type], {
-      state: {
-        testData: test.test_data,
-        testId: test.id,
-        testTitle: test.title
+    const pathname = routeMap[test.module_type];
+    const search = `?testId=${encodeURIComponent(test.id)}`;
+
+    let testDataForState = test.test_data;
+    if (test.module_type === 'writing' && test.test_data && typeof test.test_data === 'object') {
+      testDataForState = {
+        ...(test.test_data as Record<string, unknown>),
+        [WRITING_MOCK_ROW_ID_KEY]: test.id,
+      } as MockTest['test_data'];
+    }
+
+    navigate(
+      { pathname, search },
+      {
+        state: {
+          testData: testDataForState,
+          testId: test.id,
+          testTitle: test.title,
+        },
       }
-    });
+    );
   };
 
   const getQuestionCount = (test: MockTest): number => {
