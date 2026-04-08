@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import { Toaster } from '@/components/ui/sonner';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { LessonProvider } from '@/contexts/LessonContext';
 import { ProgressProvider } from '@/contexts/ProgressContext';
@@ -239,6 +240,7 @@ function App() {
           </LessonProvider>
         </ProgressProvider>
       </AuthProvider>
+      <Toaster position="bottom-center" richColors />
     </Router>
   );
 }

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -309,15 +310,24 @@ export default function FlashcardsPage() {
       }
     }, [currentIndex, dueCards, flashcards, user]);
 
-  const addWrongQuestionsAsFlashcards = () => {
+  const addWrongQuestionsAsFlashcards = async () => {
     const wrongQuestions = getAllWrongQuestions();
+
+    if (wrongQuestions.length === 0) {
+      toast.info('No quiz mistakes found yet', {
+        description: 'Complete some quizzes first — wrong answers will automatically appear here.',
+      });
+      return;
+    }
+
+    // Use questionId as the flashcard ID to reliably detect duplicates
     const existingIds = new Set(flashcards.map(f => f.id));
-    
+
     const newCards: Flashcard[] = wrongQuestions
-      .filter((_, index) => !existingIds.has(`wrong-${index}`))
-      .slice(0, 10)
-      .map((wq, index) => ({
-        id: `wrong-new-${Date.now()}-${index}`,
+      .filter(wq => !existingIds.has(wq.questionId))
+      .slice(0, 20)
+      .map(wq => ({
+        id: wq.questionId,
         front: wq.question,
         back: wq.correctAnswer,
         hint: wq.hint,
@@ -326,15 +336,49 @@ export default function FlashcardsPage() {
         nextReview: new Date().toISOString(),
         interval: 1,
         easeFactor: 2.5,
-        repetitions: 0
+        repetitions: 0,
       }));
-    
-    if (newCards.length > 0) {
-      const updatedCards = [...flashcards, ...newCards];
-      setFlashcards(updatedCards);
-      saveFlashcardsToStorage(updatedCards);
-      setDueCards(getDueCards(updatedCards));
+
+    if (newCards.length === 0) {
+      toast.success('All quiz mistakes already added!', {
+        description: `You have ${wrongQuestions.length} mistake(s) — all are already in your flashcard deck.`,
+      });
+      return;
     }
+
+    const updatedCards = [...flashcards, ...newCards];
+    setFlashcards(updatedCards);
+    saveFlashcardsToStorage(updatedCards);
+    setDueCards(getDueCards(updatedCards));
+
+    // Sync to Supabase if logged in
+    if (user && isSupabaseConfigured() && supabase) {
+      try {
+        const srsItems = newCards.map(card => ({
+          user_id: user.id,
+          content_type: 'quiz-mistake',
+          content_id: card.id,
+          front: card.front,
+          back: card.back,
+          hint: card.hint || null,
+          category: card.category,
+          level: 0,
+          due_date: new Date().toISOString().split('T')[0],
+          ease_factor: card.easeFactor,
+          interval_days: card.interval,
+          repetitions: card.repetitions,
+        }));
+        await supabase.from('srs_items').upsert(srsItems, {
+          onConflict: 'user_id,content_type,content_id',
+        });
+      } catch (err) {
+        console.log('Error syncing quiz mistakes to Supabase:', err);
+      }
+    }
+
+    toast.success(`${newCards.length} flashcard${newCards.length > 1 ? 's' : ''} added!`, {
+      description: `Quiz mistakes added to your deck. ${getDueCards(updatedCards).length} cards due today.`,
+    });
   };
 
   const currentCard = dueCards[currentIndex];
