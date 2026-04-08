@@ -17,14 +17,70 @@ export type Task1VisualPatch = {
   mapData?: WritingMapData;
 };
 
-function normalizeTable(raw: unknown): WritingTableData | null {
-  if (!raw || typeof raw !== 'object') return null;
-  const o = raw as Record<string, unknown>;
-  const headersRaw = o.headers ?? o.columns ?? o.columnHeaders;
-  if (!Array.isArray(headersRaw) || headersRaw.length === 0) return null;
-  const headers = headersRaw.map((h) => String(h ?? ''));
+function headerCellToString(c: unknown): string {
+  if (c == null) return '';
+  if (typeof c === 'string' || typeof c === 'number' || typeof c === 'boolean') return String(c);
+  if (typeof c === 'object' && c !== null && 'name' in (c as Record<string, unknown>)) {
+    return String((c as Record<string, unknown>).name ?? '');
+  }
+  return String(c);
+}
 
-  let rowsRaw: unknown = o.rows ?? o.body;
+/** Turn rows / body / data / grid into a list of row arrays; unwrap { "0": [...], "1": [...] }. */
+function coerceTableRowsSource(raw: unknown): unknown[] | null {
+  let src: unknown = raw;
+  if (!Array.isArray(src) && src && typeof src === 'object' && !Array.isArray(src)) {
+    const o = src as Record<string, unknown>;
+    const nk = Object.keys(o).filter((k) => /^\d+$/.test(k));
+    if (nk.length > 0) {
+      src = nk.sort((a, b) => Number(a) - Number(b)).map((k) => o[k]);
+    }
+  }
+  return Array.isArray(src) ? src : null;
+}
+
+function normalizeTable(raw: unknown): WritingTableData | null {
+  if (raw == null) return null;
+  if (Array.isArray(raw)) {
+    return normalizeTable({ rows: raw });
+  }
+  if (typeof raw !== 'object') return null;
+  const o = raw as Record<string, unknown>;
+
+  const meta = {
+    title: String(o.title ?? 'Data table'),
+    description: o.description != null ? String(o.description) : undefined,
+    unit: o.unit != null ? String(o.unit) : undefined,
+    source: o.source != null ? String(o.source) : undefined,
+  };
+
+  // Array of uniform objects → headers from keys
+  const fromRows = coerceTableRowsSource(o.rows ?? o.body ?? o.grid);
+  const fromData = coerceTableRowsSource(o.data);
+  const rowsSource =
+    Array.isArray(fromRows) && fromRows.length > 0 ? fromRows : fromData;
+
+  if (Array.isArray(rowsSource) && rowsSource.length > 0) {
+    const r0 = rowsSource[0];
+    if (r0 && typeof r0 === 'object' && !Array.isArray(r0)) {
+      const headers = Object.keys(r0 as Record<string, unknown>);
+      if (headers.length > 0) {
+        const rows: string[][] = (rowsSource as Record<string, unknown>[]).map((row) =>
+          headers.map((h) => {
+            const v =
+              row[h] ??
+              row[h.replace(/\s+/g, '_')] ??
+              row[h.toLowerCase().replace(/\s+/g, '_')];
+            return v != null ? String(v) : '';
+          })
+        );
+        return { type: 'table', ...meta, headers, rows };
+      }
+    }
+  }
+
+  let headersRaw = o.headers ?? o.columns ?? o.columnHeader ?? o.columnHeaders;
+  let rowsRaw: unknown = o.rows ?? o.body ?? o.grid;
   if (
     !Array.isArray(rowsRaw) &&
     Array.isArray(o.data) &&
@@ -32,9 +88,58 @@ function normalizeTable(raw: unknown): WritingTableData | null {
   ) {
     rowsRaw = o.data;
   }
-  if (!Array.isArray(rowsRaw)) rowsRaw = [];
 
-  const rows: string[][] = (rowsRaw as unknown[]).map((row: unknown) => {
+  const coercedRows = coerceTableRowsSource(rowsRaw);
+  const matrix: unknown[][] =
+    coercedRows?.map((row: unknown) => {
+      if (Array.isArray(row)) return row;
+      if (row && typeof row === 'object') {
+        return [row];
+      }
+      return [row];
+    }) ?? [];
+
+  // Grid only: first row = headers (very common in AI / JSON exports)
+  if ((!Array.isArray(headersRaw) || headersRaw.length === 0) && matrix.length > 0) {
+    const first = matrix[0];
+    const rest = matrix.slice(1);
+    const allPrimitive =
+      first.length > 0 &&
+      first.every(
+        (c) =>
+          c == null ||
+          typeof c === 'string' ||
+          typeof c === 'number' ||
+          typeof c === 'boolean'
+      );
+    if (allPrimitive) {
+      const headers = first.map((c) => headerCellToString(c));
+      if (headers.some((h) => h.length > 0)) {
+        const rows: string[][] = rest.map((row) => {
+          if (Array.isArray(row)) {
+            return headers.map((_, i) => String(row[i] ?? ''));
+          }
+          if (row && typeof row === 'object') {
+            const obj = row as Record<string, unknown>;
+            return headers.map((h) => {
+              const v =
+                obj[h] ??
+                obj[h.replace(/\s+/g, '_')] ??
+                obj[h.toLowerCase().replace(/\s+/g, '_')];
+              return v != null ? String(v) : '';
+            });
+          }
+          return headers.map((_, i) => (i === 0 ? String(row ?? '') : ''));
+        });
+        return { type: 'table', ...meta, headers, rows };
+      }
+    }
+  }
+
+  if (!Array.isArray(headersRaw) || headersRaw.length === 0) return null;
+  const headers = headersRaw.map((h) => headerCellToString(h));
+
+  const rows: string[][] = matrix.map((row: unknown) => {
     if (Array.isArray(row)) {
       return row.map((c) => String(c ?? ''));
     }
@@ -53,10 +158,7 @@ function normalizeTable(raw: unknown): WritingTableData | null {
 
   return {
     type: 'table',
-    title: String(o.title ?? 'Data table'),
-    description: o.description != null ? String(o.description) : undefined,
-    unit: o.unit != null ? String(o.unit) : undefined,
-    source: o.source != null ? String(o.source) : undefined,
+    ...meta,
     headers,
     rows,
   };
@@ -140,7 +242,20 @@ export function extractTask1Visuals(task1: unknown): Task1VisualPatch | null {
   const t1 = task1 as Record<string, unknown>;
 
   const chartRaw = t1.chartData ?? t1.chart;
-  const tableRaw = t1.tableData ?? t1.table ?? t1.dataTable;
+  const vis = t1.visual;
+  const visTable =
+    vis && typeof vis === 'object'
+      ? (vis as Record<string, unknown>).tableData ??
+        (vis as Record<string, unknown>).table ??
+        (vis as Record<string, unknown>).dataTable ??
+        (vis as Record<string, unknown>).grid
+      : undefined;
+  const tableRaw =
+    t1.tableData ??
+    t1.table ??
+    t1.dataTable ??
+    t1.grid ??
+    visTable;
   const processRaw = t1.processData ?? t1.process ?? t1.flowchart;
   const mapRaw = t1.mapData ?? t1.map ?? t1.maps;
 
@@ -223,6 +338,8 @@ export function normalizeWritingTaskFromDb(raw: unknown): WritingTask {
     chart: t.chart,
     table: t.table,
     dataTable: t.data_table,
+    grid: t.grid,
+    visual: out.visual ?? t.visual ?? t.visual_data,
     process: t.process,
     flowchart: t.flowchart,
     map: t.map,
@@ -326,6 +443,8 @@ export function writingTask1HasAcademicVisual(task: WritingTask | undefined): bo
     r.chart,
     r.table,
     r.data_table,
+    r.grid,
+    r.visual,
     r.process,
     r.flowchart,
     r.map,
