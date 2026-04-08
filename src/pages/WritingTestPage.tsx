@@ -23,7 +23,11 @@ import {
   WritingTaskType
 } from '@/types';
 import { WritingTask1Renderer } from '@/components/test/WritingTask1Renderer';
-import { normalizeWritingTestFromDb } from '@/lib/writingVisualNormalize';
+import {
+  normalizeWritingTestFromDb,
+  findWritingTask1,
+  findWritingTask2,
+} from '@/lib/writingVisualNormalize';
 
 
 // ============================================
@@ -132,21 +136,26 @@ export default function WritingTestPage() {
   const [responses, setResponses] = useState<{
     task1: WritingResponse;
     task2: WritingResponse;
-  }>({
-    task1: {
-      taskId: test.tasks[0].id,
-      taskNumber: 1,
-      content: '',
-      wordCount: 0,
-      lastUpdatedAt: Date.now()
-    },
-    task2: {
-      taskId: test.tasks[1].id,
-      taskNumber: 2,
-      content: '',
-      wordCount: 0,
-      lastUpdatedAt: Date.now()
-    }
+  }>(() => {
+    const t = hasValidData && raw ? normalizeWritingTestFromDb(raw) : SAMPLE_WRITING_TEST;
+    const t1 = findWritingTask1(t) ?? t.tasks[0];
+    const t2 = findWritingTask2(t) ?? t.tasks[1];
+    return {
+      task1: {
+        taskId: t1.id,
+        taskNumber: 1,
+        content: '',
+        wordCount: 0,
+        lastUpdatedAt: Date.now(),
+      },
+      task2: {
+        taskId: t2.id,
+        taskNumber: 2,
+        content: '',
+        wordCount: 0,
+        lastUpdatedAt: Date.now(),
+      },
+    };
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [result, setResult] = useState<WritingTestResult | null>(null);
@@ -156,7 +165,9 @@ export default function WritingTestPage() {
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const currentTaskData = currentTask === 'task1' ? test.tasks[0] : test.tasks[1];
+  const task1 = findWritingTask1(test) ?? test.tasks[0];
+  const task2 = findWritingTask2(test) ?? test.tasks[1];
+  const currentTaskData = currentTask === 'task1' ? task1 : task2;
   const currentResponse = currentTask === 'task1' ? responses.task1 : responses.task2;
 
   // ============================================
@@ -260,13 +271,13 @@ export default function WritingTestPage() {
           taskNumber: 1,
           content: responses.task1.content,
           wordCount: responses.task1.wordCount,
-          meetsMinWords: responses.task1.wordCount >= test.tasks[0].minWords
+          meetsMinWords: responses.task1.wordCount >= task1.minWords
         },
         {
           taskNumber: 2,
           content: responses.task2.content,
           wordCount: responses.task2.wordCount,
-          meetsMinWords: responses.task2.wordCount >= test.tasks[1].minWords
+          meetsMinWords: responses.task2.wordCount >= task2.minWords
         }
       ]
     };
@@ -292,17 +303,19 @@ export default function WritingTestPage() {
   // Reset test
   // ============================================
   const handleReset = () => {
+    const t1 = findWritingTask1(test) ?? test.tasks[0];
+    const t2 = findWritingTask2(test) ?? test.tasks[1];
     localStorage.removeItem(STORAGE_KEY);
     setResponses({
       task1: {
-        taskId: test.tasks[0].id,
+        taskId: t1.id,
         taskNumber: 1,
         content: '',
         wordCount: 0,
         lastUpdatedAt: Date.now()
       },
       task2: {
-        taskId: test.tasks[1].id,
+        taskId: t2.id,
         taskNumber: 2,
         content: '',
         wordCount: 0,
@@ -349,7 +362,7 @@ export default function WritingTestPage() {
                   <div className="text-2xl font-bold">
                     {result.responses[0].wordCount} words
                   </div>
-                  <div className="text-sm">Task 1 (min: 150)</div>
+                  <div className="text-sm">Task 1 (min: {task1.minWords})</div>
                   {result.responses[0].meetsMinWords ? (
                     <CheckCircle2 className="h-5 w-5 text-green-600 mx-auto mt-2" />
                   ) : (
@@ -363,7 +376,7 @@ export default function WritingTestPage() {
                   <div className="text-2xl font-bold">
                     {result.responses[1].wordCount} words
                   </div>
-                  <div className="text-sm">Task 2 (min: 250)</div>
+                  <div className="text-sm">Task 2 (min: {task2.minWords})</div>
                   {result.responses[1].meetsMinWords ? (
                     <CheckCircle2 className="h-5 w-5 text-green-600 mx-auto mt-2" />
                   ) : (
@@ -465,14 +478,14 @@ export default function WritingTestPage() {
             <TabsTrigger value="task1" className="gap-2">
               <FileText className="h-4 w-4" />
               Task 1
-              <Badge variant={responses.task1.wordCount >= 150 ? 'default' : 'secondary'} className="ml-1">
+              <Badge variant={responses.task1.wordCount >= task1.minWords ? 'default' : 'secondary'} className="ml-1">
                 {responses.task1.wordCount}
               </Badge>
             </TabsTrigger>
             <TabsTrigger value="task2" className="gap-2">
               <PenTool className="h-4 w-4" />
               Task 2
-              <Badge variant={responses.task2.wordCount >= 250 ? 'default' : 'secondary'} className="ml-1">
+              <Badge variant={responses.task2.wordCount >= task2.minWords ? 'default' : 'secondary'} className="ml-1">
                 {responses.task2.wordCount}
               </Badge>
             </TabsTrigger>
@@ -489,18 +502,18 @@ export default function WritingTestPage() {
               <div className="space-y-2 mb-4">
                 <p className="text-gray-600">
                   Task 1: {responses.task1.wordCount} words
-                  {responses.task1.wordCount < 150 && (
+                  {responses.task1.wordCount < task1.minWords && (
                     <span className="text-red-600"> (below minimum)</span>
                   )}
                 </p>
                 <p className="text-gray-600">
                   Task 2: {responses.task2.wordCount} words
-                  {responses.task2.wordCount < 250 && (
+                  {responses.task2.wordCount < task2.minWords && (
                     <span className="text-red-600"> (below minimum)</span>
                   )}
                 </p>
               </div>
-              {(responses.task1.wordCount < 150 || responses.task2.wordCount < 250) && (
+              {(responses.task1.wordCount < task1.minWords || responses.task2.wordCount < task2.minWords) && (
                 <p className="text-amber-600 text-sm mb-4">
                   Warning: One or more tasks are below the minimum word count.
                 </p>
@@ -545,10 +558,10 @@ export default function WritingTestPage() {
               dangerouslySetInnerHTML={{ __html: currentTaskData.prompt }}
             />
 
-            {/* Task 1: Unified visual renderer (chart / table / process / map / legacy image) */}
-            {currentTaskData.taskNumber === 1 && (
+            {/* Task 1 tab: show Task 1 visual (avoid missing table when taskNumber is string/wrong from DB) */}
+            {currentTask === 'task1' && (
               <div className="mb-6">
-                <WritingTask1Renderer task={currentTaskData} />
+                <WritingTask1Renderer task={task1} />
               </div>
             )}
 

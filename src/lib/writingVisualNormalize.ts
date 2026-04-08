@@ -253,7 +253,24 @@ export function findWritingTask1(wData: WritingTest): WritingTask | undefined {
   if (byType) return byType;
   return tasks.find(
     (t) =>
-      t.taskNumber === 1 || (t as Record<string, unknown>).task_number === 1
+      Number(t.taskNumber) === 1 ||
+      Number((t as Record<string, unknown>).task_number) === 1
+  );
+}
+
+export function findWritingTask2(wData: WritingTest): WritingTask | undefined {
+  const tasks = wData.tasks;
+  if (!Array.isArray(tasks)) return undefined;
+  const byType = tasks.find(
+    (t) =>
+      t.taskType === 'task2' ||
+      (t as Record<string, unknown>).task_type === 'task2'
+  );
+  if (byType) return byType;
+  return tasks.find(
+    (t) =>
+      Number(t.taskNumber) === 2 ||
+      Number((t as Record<string, unknown>).task_number) === 2
   );
 }
 
