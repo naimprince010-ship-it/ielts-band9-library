@@ -454,8 +454,9 @@ export default function FlashcardsPage() {
         )}
 
         {mode === 'review' && currentCard && (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
+          <div className="flex flex-col" style={{ minHeight: 'calc(100vh - 9rem)' }}>
+            {/* Header: category + counter */}
+            <div className="flex items-center justify-between mb-3">
               <Badge variant="outline">{currentCard.category}</Badge>
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-gray-500" />
@@ -464,16 +465,17 @@ export default function FlashcardsPage() {
                 </span>
               </div>
             </div>
-            
-            <Progress value={progress} className="h-2" />
-            
-            <div 
-              className="perspective-1000 cursor-pointer"
-              onClick={() => setIsFlipped(!isFlipped)}
-            >
-              <div className={`relative transition-transform duration-500 transform-style-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
-                <Card className={`min-h-[300px] ${isFlipped ? 'hidden' : ''}`}>
-                  <CardContent className="flex flex-col items-center justify-center h-full min-h-[300px] p-8">
+
+            <Progress value={progress} className="h-2 mb-4" />
+
+            {/* Card — fills remaining vertical space and centers content */}
+            <div className="flex-1 flex flex-col justify-center">
+              <div
+                className="perspective-1000 cursor-pointer"
+                onClick={() => setIsFlipped(!isFlipped)}
+              >
+                <Card className={`min-h-[260px] ${isFlipped ? 'hidden' : ''}`}>
+                  <CardContent className="flex flex-col items-center justify-center h-full min-h-[260px] p-8">
                     <Badge className="mb-4" variant={
                       currentCard.difficulty === 'easy' ? 'default' :
                       currentCard.difficulty === 'medium' ? 'secondary' : 'destructive'
@@ -487,9 +489,9 @@ export default function FlashcardsPage() {
                     <p className="text-sm text-gray-400 mt-6">Tap to reveal answer</p>
                   </CardContent>
                 </Card>
-                
-                <Card className={`min-h-[300px] ${!isFlipped ? 'hidden' : ''}`}>
-                  <CardContent className="flex flex-col items-center justify-center h-full min-h-[300px] p-8">
+
+                <Card className={`min-h-[260px] ${!isFlipped ? 'hidden' : ''}`}>
+                  <CardContent className="flex flex-col items-center justify-center h-full min-h-[260px] p-8">
                     <CheckCircle2 className="h-8 w-8 text-green-500 mb-4" />
                     <h2 className="text-xl font-medium text-center text-green-700">{currentCard.back}</h2>
                     <p className="text-sm text-gray-400 mt-6">How well did you know this?</p>
@@ -497,54 +499,60 @@ export default function FlashcardsPage() {
                 </Card>
               </div>
             </div>
-            
-            {isFlipped && (
-              <div className="space-y-3">
-                <p className="text-center text-sm text-gray-600">Rate your recall:</p>
-                <div className="grid grid-cols-4 gap-2">
-                  <Button 
-                    variant="outline" 
-                    className="flex flex-col py-4 border-red-200 hover:bg-red-50 hover:border-red-300"
-                    onClick={() => handleResponse(1)}
-                  >
-                    <ThumbsDown className="h-5 w-5 text-red-500 mb-1" />
-                    <span className="text-xs">Again</span>
-                  </Button>
-                  <Button 
-                    variant="outline"
-                    className="flex flex-col py-4 border-orange-200 hover:bg-orange-50 hover:border-orange-300"
-                    onClick={() => handleResponse(2)}
-                  >
-                    <span className="text-lg mb-1">😕</span>
-                    <span className="text-xs">Hard</span>
-                  </Button>
-                  <Button 
-                    variant="outline"
-                    className="flex flex-col py-4 border-blue-200 hover:bg-blue-50 hover:border-blue-300"
-                    onClick={() => handleResponse(3)}
-                  >
-                    <span className="text-lg mb-1">🙂</span>
-                    <span className="text-xs">Good</span>
-                  </Button>
-                  <Button 
-                    variant="outline"
-                    className="flex flex-col py-4 border-green-200 hover:bg-green-50 hover:border-green-300"
-                    onClick={() => handleResponse(5)}
-                  >
-                    <ThumbsUp className="h-5 w-5 text-green-500 mb-1" />
-                    <span className="text-xs">Easy</span>
-                  </Button>
+
+            {/* Bottom actions — always at the bottom of the viewport */}
+            <div className="mt-6 space-y-3">
+              {isFlipped ? (
+                <div className="space-y-3">
+                  <p className="text-center text-sm text-gray-500 font-medium">Rate your recall:</p>
+                  <div className="grid grid-cols-4 gap-2">
+                    <Button
+                      variant="outline"
+                      className="flex flex-col h-auto py-4 border-red-200 hover:bg-red-50 hover:border-red-300"
+                      onClick={() => handleResponse(1)}
+                    >
+                      <ThumbsDown className="h-5 w-5 text-red-500 mb-1" aria-hidden="true" />
+                      <span className="text-xs font-semibold text-red-600">Again</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="flex flex-col h-auto py-4 border-orange-200 hover:bg-orange-50 hover:border-orange-300"
+                      onClick={() => handleResponse(2)}
+                    >
+                      <span className="text-lg mb-1" aria-hidden="true">😕</span>
+                      <span className="text-xs font-semibold text-orange-600">Hard</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="flex flex-col h-auto py-4 border-blue-200 hover:bg-blue-50 hover:border-blue-300"
+                      onClick={() => handleResponse(3)}
+                    >
+                      <span className="text-lg mb-1" aria-hidden="true">🙂</span>
+                      <span className="text-xs font-semibold text-blue-600">Good</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="flex flex-col h-auto py-4 border-green-200 hover:bg-green-50 hover:border-green-300"
+                      onClick={() => handleResponse(5)}
+                    >
+                      <ThumbsUp className="h-5 w-5 text-green-500 mb-1" aria-hidden="true" />
+                      <span className="text-xs font-semibold text-green-600">Easy</span>
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            )}
-            
-            <Button 
-              variant="ghost" 
-              className="w-full"
-              onClick={() => setMode('menu')}
-            >
-              Exit Review
-            </Button>
+              ) : (
+                /* Placeholder so Exit Review stays at consistent position */
+                <div className="h-[88px]" />
+              )}
+
+              <Button
+                variant="ghost"
+                className="w-full text-gray-500 hover:text-gray-700"
+                onClick={() => setMode('menu')}
+              >
+                Exit Review
+              </Button>
+            </div>
           </div>
         )}
 
