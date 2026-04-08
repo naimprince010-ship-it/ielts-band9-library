@@ -1331,6 +1331,8 @@ function ListeningTestBuilder({
   const [activeSection, setActiveSection] = useState(0);
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
   const [audioError, setAudioError] = useState<string | null>(null);
+  // Per-section error map: sectionNumber → error message
+  const [sectionErrors, setSectionErrors] = useState<Record<number, string>>({});
 
   const handleGenerateAudio = async () => {
     const sectionsWithTranscript = data.sections?.filter(s => s.transcript?.trim()) || [];
@@ -1351,14 +1353,17 @@ function ListeningTestBuilder({
 
     setIsGeneratingAudio(true);
     setAudioError(null);
+    setSectionErrors({});
 
     const updatedSections = (data.sections || []).map(s => ({ ...s }));
+    const failedSections: number[] = [];
 
-    try {
-      for (let i = 0; i < sectionsWithTranscript.length; i++) {
-        const section = sectionsWithTranscript[i];
-        const text = section.transcript!.trim();
+    // Process every section independently — one failure does not abort the others
+    for (let i = 0; i < sectionsWithTranscript.length; i++) {
+      const section = sectionsWithTranscript[i];
+      const text = section.transcript!.trim();
 
+      try {
         const response = await fetch('/api/tts', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -1367,9 +1372,7 @@ function ListeningTestBuilder({
 
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
-          throw new Error(
-            `Section ${section.sectionNumber}: ${errorData.details || errorData.error || 'TTS failed'}`
-          );
+          throw new Error(errorData.details || errorData.error || 'TTS failed');
         }
 
         const result = await response.json();
@@ -1385,23 +1388,29 @@ function ListeningTestBuilder({
             updatedSections[idx].sectionAudioUrl = URL.createObjectURL(blob);
           }
         }
+        // Clear any previous error for this section on success
+        setSectionErrors(prev => { const s = { ...prev }; delete s[section.sectionNumber]; return s; });
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : 'TTS failed';
+        console.error(`TTS Error Section ${section.sectionNumber}:`, err);
+        failedSections.push(section.sectionNumber);
+        setSectionErrors(prev => ({ ...prev, [section.sectionNumber]: msg }));
       }
-
-      // Keep the existing global audioUrl (if any) — do NOT overwrite it with a per-section URL.
-      // Each section stores its own sectionAudioUrl; the global audioUrl is only for a single
-      // monolithic recording that covers all sections at once.
-      onChange({
-        ...data,
-        audioUrl: data.audioUrl || '',
-        audioDuration: sectionsWithTranscript.reduce((sum, s) => sum + Math.ceil((s.transcript?.length ?? 0) / 15), 0),
-        sections: updatedSections,
-      });
-    } catch (err) {
-      console.error('TTS Error:', err);
-      setAudioError(err instanceof Error ? err.message : 'Failed to generate audio');
-    } finally {
-      setIsGeneratingAudio(false);
     }
+
+    // Update form data with whatever succeeded
+    onChange({
+      ...data,
+      audioUrl: data.audioUrl || '',
+      audioDuration: sectionsWithTranscript.reduce((sum, s) => sum + Math.ceil((s.transcript?.length ?? 0) / 15), 0),
+      sections: updatedSections,
+    });
+
+    if (failedSections.length > 0) {
+      setAudioError(`Section(s) ${failedSections.join(', ')} failed. Click Generate Audio again to retry them.`);
+    }
+
+    setIsGeneratingAudio(false);
   };
 
   const handleAIGenerated = (content: unknown, topic?: string) => {
@@ -1567,23 +1576,24 @@ function ListeningTestBuilder({
             const sections = data.sections?.filter(s => s.transcript?.trim()) || [];
             if (sections.length === 0) return null;
             const overLimit = sections.filter(s => (s.transcript?.length ?? 0) > 4000);
-                const hasAudio = Array.isArray(sections) && sections.some(s => s.sectionAudioUrl);
+            const allHaveAudio = sections.length > 0 && sections.every(s => s.sectionAudioUrl);
             return (
               <div className="mt-1 space-y-0.5">
                 {sections.map(s => {
                   const len = s.transcript?.length ?? 0;
                   const over = len > 4000;
+                  const err = sectionErrors[s.sectionNumber];
                   return (
-                    <p key={s.id} className={`text-xs ${over ? 'text-red-500 font-semibold' : s.sectionAudioUrl ? 'text-emerald-600' : 'text-slate-400'}`}>
+                    <p key={s.id} className={`text-xs ${over ? 'text-red-500 font-semibold' : err ? 'text-red-500' : s.sectionAudioUrl ? 'text-emerald-600' : 'text-slate-400'}`}>
                       Section {s.sectionNumber}: {len.toLocaleString()} / 4 000 chars
-                      {s.sectionAudioUrl ? ' ✓ audio ready' : over ? ' — too long!' : ''}
+                      {err ? ` ✗ ${err}` : s.sectionAudioUrl ? ' ✓ audio ready' : over ? ' — too long!' : ''}
                     </p>
                   );
                 })}
                 {overLimit.length > 0 && (
                   <p className="text-xs text-red-500 font-semibold">⚠ Shorten sections above 4000 chars before generating audio</p>
                 )}
-                {hasAudio && overLimit.length === 0 && (
+                {allHaveAudio && overLimit.length === 0 && (
                   <p className="text-xs text-emerald-600 font-medium">All sections have audio — ready to save!</p>
                 )}
               </div>
