@@ -6,6 +6,7 @@ import { ProgressProvider } from '@/contexts/ProgressContext';
 import { Layout } from '@/components/layout/Layout';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
 import { PageTitleManager } from '@/components/layout/PageTitleManager';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import './App.css';
 
 // Lazy load pages
@@ -81,9 +82,21 @@ function App() {
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                 <Route path="/reset-password" element={<ResetPasswordPage />} />
                 <Route path="/auth/callback" element={<AuthCallbackPage />} />
-                <Route path="/payment" element={<PaymentPage />} />
-                <Route path="/admin" element={<AdminPage />} />
-                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/payment" element={
+                  <ProtectedRoute requireAuth>
+                    <PaymentPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin" element={
+                  <ProtectedRoute requireAdmin>
+                    <AdminPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/profile" element={
+                  <ProtectedRoute requireAuth>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                } />
 
                 {/* Main pages with Layout */}
                 <Route path="/" element={<Layout><HomePage /></Layout>} />
@@ -93,22 +106,54 @@ function App() {
                 <Route path="/speaking" element={<Layout><LibraryPage type="speaking" /></Layout>} />
                 <Route path="/lesson/:slug" element={<Layout><LessonPage /></Layout>} />
                 <Route path="/pricing" element={<Layout><PricingPage /></Layout>} />
-                <Route path="/bookmarks" element={<Layout><BookmarksPage /></Layout>} />
+                <Route path="/bookmarks" element={
+                  <ProtectedRoute requireAuth>
+                    <Layout><BookmarksPage /></Layout>
+                  </ProtectedRoute>
+                } />
                 <Route path="/courses" element={<Layout><CoursesPage /></Layout>} />
                 <Route path="/courses/:courseId" element={<Layout><CourseDetailPage /></Layout>} />
-                <Route path="/quiz" element={<Layout hideFooter><QuizPage /></Layout>} />
-                <Route path="/quiz/:quizId" element={<Layout hideFooter><QuizPage /></Layout>} />
-                <Route path="/diagnostic" element={<Layout hideFooter><DiagnosticTestPage /></Layout>} />
+                <Route path="/quiz" element={
+                  <ProtectedRoute requireAuth>
+                    <Layout hideFooter><QuizPage /></Layout>
+                  </ProtectedRoute>
+                } />
+                <Route path="/quiz/:quizId" element={
+                  <ProtectedRoute requireAuth>
+                    <Layout hideFooter><QuizPage /></Layout>
+                  </ProtectedRoute>
+                } />
+                <Route path="/diagnostic" element={
+                  <ProtectedRoute requireAuth>
+                    <Layout hideFooter><DiagnosticTestPage /></Layout>
+                  </ProtectedRoute>
+                } />
                 <Route path="/flashcards" element={<Layout hideFooter><FlashcardsPage /></Layout>} />
                 <Route path="/speaking-practice" element={<Layout hideFooter><SpeakingPracticePage /></Layout>} />
                 <Route path="/writing-checker" element={<Layout hideFooter><WritingCheckerPage /></Layout>} />
-                <Route path="/achievements" element={<Layout hideFooter><AchievementsPage /></Layout>} />
+                <Route path="/achievements" element={
+                  <ProtectedRoute requireAuth>
+                    <Layout hideFooter><AchievementsPage /></Layout>
+                  </ProtectedRoute>
+                } />
                 <Route path="/reading-practice" element={<Layout hideFooter><ReadingPracticePage /></Layout>} />
                 <Route path="/practice/typing" element={<Layout hideFooter><TypingPracticePage /></Layout>} />
-                <Route path="/progress" element={<Layout hideFooter><ProgressDashboardPage /></Layout>} />
+                <Route path="/progress" element={
+                  <ProtectedRoute requireAuth>
+                    <Layout hideFooter><ProgressDashboardPage /></Layout>
+                  </ProtectedRoute>
+                } />
                 <Route path="/mock-test" element={<Layout><MockTestPage /></Layout>} />
-                <Route path="/full-mock-test" element={<Layout hideNavFooter={true}><FullMockTestPage /></Layout>} />
-                <Route path="/certificate" element={<Layout><CertificatePage /></Layout>} />
+                <Route path="/full-mock-test" element={
+                  <ProtectedRoute requireAuth>
+                    <Layout hideNavFooter={true}><FullMockTestPage /></Layout>
+                  </ProtectedRoute>
+                } />
+                <Route path="/certificate" element={
+                  <ProtectedRoute requireAuth>
+                    <Layout><CertificatePage /></Layout>
+                  </ProtectedRoute>
+                } />
                 <Route path="/grammar-exercises" element={<Layout><GrammarExercisesPage /></Layout>} />
                 <Route path="/essay-bank" element={<Layout><EssayBankPage /></Layout>} />
                 <Route path="/daily-plan" element={<Layout><DailyStudyPlanPage /></Layout>} />
@@ -119,13 +164,33 @@ function App() {
                 <Route path="/terms" element={<Layout><TermsPage /></Layout>} />
                 <Route path="/privacy" element={<Layout><PrivacyPage /></Layout>} />
                 <Route path="/natural-grammar" element={<Layout><NaturalGrammarPage /></Layout>} />
-                <Route path="/results" element={<Layout><ResultDashboardPage /></Layout>} />
+                <Route path="/results" element={
+                  <ProtectedRoute requireAuth>
+                    <Layout><ResultDashboardPage /></Layout>
+                  </ProtectedRoute>
+                } />
 
-                {/* Test pages with Layout */}
-                <Route path="/reading-test" element={<Layout hideNavFooter={true}><ReadingTestPage /></Layout>} />
-                <Route path="/writing-test" element={<Layout hideNavFooter={true}><WritingTestPage /></Layout>} />
-                <Route path="/listening-test" element={<Layout hideNavFooter={true}><ListeningTestPage /></Layout>} />
-                <Route path="/speaking-test" element={<Layout hideNavFooter={true}><SpeakingTestPage /></Layout>} />
+                {/* Test pages — require login */}
+                <Route path="/reading-test" element={
+                  <ProtectedRoute requireAuth>
+                    <Layout hideNavFooter={true}><ReadingTestPage /></Layout>
+                  </ProtectedRoute>
+                } />
+                <Route path="/writing-test" element={
+                  <ProtectedRoute requireAuth>
+                    <Layout hideNavFooter={true}><WritingTestPage /></Layout>
+                  </ProtectedRoute>
+                } />
+                <Route path="/listening-test" element={
+                  <ProtectedRoute requireAuth>
+                    <Layout hideNavFooter={true}><ListeningTestPage /></Layout>
+                  </ProtectedRoute>
+                } />
+                <Route path="/speaking-test" element={
+                  <ProtectedRoute requireAuth>
+                    <Layout hideNavFooter={true}><SpeakingTestPage /></Layout>
+                  </ProtectedRoute>
+                } />
 
                 {/* Catch all - redirect to home */}
                 <Route path="*" element={<Navigate to="/" replace />} />
