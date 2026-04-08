@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import {
   Clock,
   FileText,
@@ -22,12 +22,13 @@ import {
   WritingTestResult,
   WritingTaskType
 } from '@/types';
-import { WritingTask1Renderer } from '@/components/test/WritingTask1Renderer';
+import { WritingTask1Renderer, writingTask1RendererWouldShow } from '@/components/test/WritingTask1Renderer';
 import {
   normalizeWritingTestFromDb,
   findWritingTask1,
   findWritingTask2,
 } from '@/lib/writingVisualNormalize';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 
 // ============================================
@@ -125,10 +126,13 @@ const countWords = (text: string): number => {
 // ============================================
 export default function WritingTestPage() {
   const location = useLocation();
+  const [searchParams] = useSearchParams();
   const stateData = location.state as { testData?: WritingTest; testId?: string; testTitle?: string } | null;
   const raw = stateData?.testData;
   const hasValidData = raw && Array.isArray(raw.tasks) && raw.tasks.length >= 2;
-  const [test] = useState<WritingTest>(() =>
+  const remoteMockTestId = stateData?.testId || searchParams.get('testId') || undefined;
+
+  const [test, setTest] = useState<WritingTest>(() =>
     hasValidData ? normalizeWritingTestFromDb(raw) : SAMPLE_WRITING_TEST
   );
   const [currentTask, setCurrentTask] = useState<WritingTaskType>('task1');
@@ -169,6 +173,42 @@ export default function WritingTestPage() {
   const task2 = findWritingTask2(test) ?? test.tasks[1];
   const currentTaskData = currentTask === 'task1' ? task1 : task2;
   const currentResponse = currentTask === 'task1' ? responses.task1 : responses.task2;
+
+  // Refresh full test_data from Supabase so Task 1 table/chart is never missing due to slim navigation state or cache.
+  useEffect(() => {
+    if (!remoteMockTestId || !isSupabaseConfigured() || !supabase) return;
+    let cancelled = false;
+    (async () => {
+      const { data, error } = await supabase
+        .from('mock_tests')
+        .select('title, module_type, test_data')
+        .eq('id', remoteMockTestId)
+        .eq('is_published', true)
+        .maybeSingle();
+      if (cancelled) return;
+      if (error) {
+        console.warn('[WritingTestPage] mock_tests refresh failed:', error.message);
+        return;
+      }
+      if (!data || data.module_type !== 'writing' || data.test_data == null) return;
+      const normalized = normalizeWritingTestFromDb(data.test_data) as WritingTest;
+      const merged: WritingTest = {
+        ...normalized,
+        title: typeof data.title === 'string' && data.title.trim() ? data.title : normalized.title,
+      };
+      setTest(merged);
+      setTimeRemaining((prev) => merged.timeLimit ?? prev);
+      const t1 = findWritingTask1(merged) ?? merged.tasks[0];
+      const t2 = findWritingTask2(merged) ?? merged.tasks[1];
+      setResponses((prev) => ({
+        task1: { ...prev.task1, taskId: t1.id },
+        task2: { ...prev.task2, taskId: t2.id },
+      }));
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [remoteMockTestId]);
 
   // ============================================
   // Load session from localStorage on mount
@@ -540,10 +580,10 @@ export default function WritingTestPage() {
       )}
 
       {/* Split Screen Layout */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden min-h-0">
         {/* Left Pane - Question/Prompt */}
-        <div className="w-1/2 border-r bg-white overflow-y-auto">
-          <div className="p-6">
+        <div className="w-1/2 min-w-0 border-r bg-white overflow-y-auto overflow-x-hidden">
+          <div className="p-6 min-w-0">
             {/* Task Header */}
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-gray-900">{currentTaskData.title}</h2>
@@ -560,8 +600,22 @@ export default function WritingTestPage() {
 
             {/* Task 1 tab: show Task 1 visual (avoid missing table when taskNumber is string/wrong from DB) */}
             {currentTask === 'task1' && (
-              <div className="mb-6">
-                <WritingTask1Renderer task={task1} />
+              <div className="mb-6 min-w-0 space-y-4">
+                <div className="min-w-0">
+                  <WritingTask1Renderer task={task1} />
+                </div>
+                {test.testType === 'academic' && !writingTask1RendererWouldShow(task1) && (
+                  <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
+                    <p className="font-semibold text-amber-900">No chart or table is showing for Task 1</p>
+                    <p className="mt-1 text-amber-800">
+                      Either this test has no table/chart data saved yet, or a broken empty chart is blocking the table.
+                      In <strong>Admin → Manage Mock Tests</strong>, edit this writing test, use <strong>Remove all visuals</strong>{' '}
+                      then add a table (or Generate Visual), <strong>Save</strong>, and start again from the mock list.
+                      If it still fails, hard-refresh (Ctrl+F5) or clear this site&apos;s cache — an old app version can hide
+                      the table.
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 
@@ -583,7 +637,7 @@ export default function WritingTestPage() {
         </div>
 
         {/* Right Pane - Text Editor */}
-        <div className="w-1/2 bg-gray-50 flex flex-col">
+        <div className="w-1/2 min-w-0 bg-gray-50 flex flex-col">
           <div className="flex-1 p-4">
             <textarea
               ref={textareaRef}
