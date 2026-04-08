@@ -151,7 +151,7 @@ export function HomePage() {
                     key={i} 
                     className="h-10 w-10 rounded-full border-2 border-background bg-muted overflow-hidden"
                   >
-                    <img 
+                    <img loading="lazy" 
                       src={`https://i.pravatar.cc/150?u=${i + 10}`} 
                       alt="Student" 
                       className="h-full w-full object-cover"

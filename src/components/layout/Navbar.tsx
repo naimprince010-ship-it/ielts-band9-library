@@ -72,7 +72,7 @@ export function Navbar() {
           <div className="flex items-center justify-between h-16 lg:h-18">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2.5 shrink-0">
-              <img src="/icon.png" alt="IELTS Tree Logo" className="h-8 w-8 object-contain" />
+              <img loading="eager" src="/icon.png" alt="IELTS Tree Logo" className="h-8 w-8 object-contain" />
               <span className="text-lg font-semibold text-foreground tracking-tight">IELTS Tree</span>
             </Link>
 

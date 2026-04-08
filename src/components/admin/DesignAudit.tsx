@@ -207,7 +207,7 @@ export function DesignAudit() {
             <div className="border rounded-lg p-4 bg-white">
               <Label className="mb-2 block">Preview</Label>
               <div className="relative max-h-64 overflow-hidden rounded-lg border">
-                <img 
+                <img loading="lazy" 
                   src={selectedImage} 
                   alt="Selected screenshot" 
                   className="w-full h-auto object-contain max-h-64"

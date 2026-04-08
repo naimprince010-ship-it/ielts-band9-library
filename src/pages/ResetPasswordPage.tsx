@@ -53,7 +53,7 @@ export function ResetPasswordPage() {
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
             <Link to="/" className="flex items-center gap-2">
-              <img src="/icon.png" alt="IELTS Tree" className="h-8 w-8" />
+              <img loading="eager" src="/icon.png" alt="IELTS Tree" className="h-8 w-8" />
               <span className="text-lg font-semibold text-foreground">IELTS Tree</span>
             </Link>
           </div>

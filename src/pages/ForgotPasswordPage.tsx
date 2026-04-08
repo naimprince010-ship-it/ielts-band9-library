@@ -40,7 +40,7 @@ export function ForgotPasswordPage() {
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
               <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center">
-                <img src="/icon.png" alt="IELTS Tree" className="h-6 w-6" />
+                <img loading="eager" src="/icon.png" alt="IELTS Tree" className="h-6 w-6" />
               </div>
             </div>
             <CardTitle className="text-2xl text-foreground">Password Reset</CardTitle>
@@ -70,7 +70,7 @@ export function ForgotPasswordPage() {
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
             <Link to="/" className="flex items-center gap-2">
-              <img src="/icon.png" alt="IELTS Tree" className="h-8 w-8" />
+              <img loading="eager" src="/icon.png" alt="IELTS Tree" className="h-8 w-8" />
               <span className="text-lg font-semibold text-foreground">IELTS Tree</span>
             </Link>
           </div>

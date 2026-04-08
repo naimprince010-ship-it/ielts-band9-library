@@ -288,7 +288,7 @@ export function SiteSettings() {
               <CardContent className="p-8 pt-0 space-y-6">
                 <div className="flex items-center gap-6 p-6 bg-slate-50 rounded-3xl border border-slate-100">
                   <div className="w-20 h-20 bg-white rounded-2xl shadow-sm border border-slate-200 flex items-center justify-center overflow-hidden shrink-0">
-                    <img 
+                    <img loading="lazy" 
                       src={getSettingValue('favicon_url', '/vite.svg')} 
                       alt="Favicon" 
                       className="w-10 h-10 object-contain"
@@ -318,7 +318,7 @@ export function SiteSettings() {
                 <div className="p-6 bg-slate-50 rounded-3xl border border-slate-100 space-y-4">
                    <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">OG Share Image</Label>
                    <div className="aspect-[1.91/1] w-full bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden relative group">
-                      <img 
+                      <img loading="lazy" 
                         src={getSettingValue('og_image_url')} 
                         alt="Social Share" 
                         className="w-full h-full object-cover"

@@ -62,7 +62,7 @@ export function LoginPage() {
         <div className="relative z-10">
           <Link to="/" className="flex items-center gap-3">
             <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center p-2">
-              <img src="/icon.png" alt="IELTS Tree" className="h-full w-full object-contain" />
+              <img loading="eager" src="/icon.png" alt="IELTS Tree" className="h-full w-full object-contain" />
             </div>
             <span className="text-2xl font-bold">IELTS Tree</span>
           </Link>
@@ -136,7 +136,7 @@ export function LoginPage() {
           <div className="lg:hidden flex justify-center mb-8">
             <Link to="/" className="flex items-center gap-2">
               <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center p-1.5 border border-border">
-                <img src="/icon.png" alt="IELTS Tree" className="h-full w-full object-contain" />
+                <img loading="eager" src="/icon.png" alt="IELTS Tree" className="h-full w-full object-contain" />
               </div>
               <span className="text-xl font-bold text-foreground">IELTS Tree</span>
             </Link>
