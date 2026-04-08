@@ -257,11 +257,41 @@ export default function FullMockTestPage() {
   const iosResumeIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // ─── Real audio player (for pre-generated MP3 sectionAudioUrl) ──────────
-  // Using HTMLAudioElement directly works reliably on iOS Safari.
   const [realAudioPlaying, setRealAudioPlaying] = useState<string | null>(null);
   const realAudioRef = useRef<HTMLAudioElement | null>(null);
+  // Track whether the iOS AudioContext has been unlocked once
+  const iosAudioUnlocked = useRef(false);
+
+  /**
+   * iOS Fix: unlock the audio session via a silent AudioContext buffer.
+   * Must be called INSIDE a user-gesture handler (onClick).
+   * Once unlocked, subsequent HTMLAudioElement.play() calls bypass the
+   * hardware mute/silent switch on iPhone/iPad.
+   */
+  const unlockIOSAudio = () => {
+    if (iosAudioUnlocked.current) return;
+    try {
+      type WebkitWindow = Window & { webkitAudioContext?: typeof AudioContext };
+      const AudioCtx = window.AudioContext ?? (window as WebkitWindow).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      // Play a 1-sample silent buffer — this "activates" the iOS audio session
+      const buf = ctx.createBuffer(1, 1, 22050);
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.connect(ctx.destination);
+      src.start(0);
+      ctx.resume().catch(() => undefined);
+      iosAudioUnlocked.current = true;
+    } catch {
+      // Non-critical — ignore silently
+    }
+  };
 
   const playRealAudio = (id: string, url: string, fallbackTranscript?: string) => {
+    // Unlock iOS audio session on every tap (safe to call repeatedly)
+    unlockIOSAudio();
+
     // Second tap on same button → stop
     if (realAudioPlaying === id) {
       realAudioRef.current?.pause();
@@ -287,8 +317,12 @@ export default function FullMockTestPage() {
     }
 
     const audio = new Audio(url);
-    (audio as HTMLAudioElement & { playsInline: boolean }).playsInline = true;
+    audio.volume = 1;
     audio.preload = 'auto';
+    // Both forms needed: attribute for HTML parser, property for DOM API
+    audio.setAttribute('playsinline', '');
+    audio.setAttribute('webkit-playsinline', '');
+    (audio as HTMLAudioElement & { playsInline: boolean }).playsInline = true;
 
     const handleFail = () => {
       realAudioRef.current = null;
