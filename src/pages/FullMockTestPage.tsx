@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { unlockIOSAudio, toBlobUrl, createAudioElement } from '@/lib/iosAudio';
+import { unlockIOSAudio, toBlobUrl, createAudioElement, getAudioContext } from '@/lib/iosAudio';
 import { sanitizeHtml } from '@/lib/sanitize';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -256,6 +256,47 @@ export default function FullMockTestPage() {
   const [audioSupported, setAudioSupported] = useState(true);
   const cachedVoicesRef = useRef<SpeechSynthesisVoice[]>([]);
   const iosResumeIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // ── WakeLock: keep screen on during listening phase ───────────────────────
+  const wakeLockRef = useRef<WakeLockSentinel | null>(null);
+
+  useEffect(() => {
+    if (phase !== 'listening') {
+      wakeLockRef.current?.release().catch(() => {});
+      wakeLockRef.current = null;
+      return;
+    }
+    const acquire = () => {
+      if ('wakeLock' in navigator && !wakeLockRef.current) {
+        (navigator.wakeLock as WakeLock).request('screen')
+          .then(lock => {
+            wakeLockRef.current = lock;
+            lock.addEventListener('release', () => { wakeLockRef.current = null; });
+          })
+          .catch(() => {});
+      }
+    };
+    acquire();
+
+    // Re-acquire + resume AudioContext when user returns from lock-screen
+    const onVisible = () => {
+      if (document.visibilityState !== 'visible') return;
+      acquire();
+      // Resume AudioContext so audio continues after screen unlock
+      getAudioContext()?.resume().catch(() => {});
+      // If real audio was playing and got paused, restart it
+      const audio = realAudioRef.current;
+      if (audio && audio.paused && !audio.ended) {
+        audio.play().catch(() => {});
+      }
+    };
+    document.addEventListener('visibilitychange', onVisible);
+    return () => {
+      document.removeEventListener('visibilitychange', onVisible);
+      wakeLockRef.current?.release().catch(() => {});
+      wakeLockRef.current = null;
+    };
+  }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ─── Real audio player (for pre-generated MP3 sectionAudioUrl) ──────────
   const [realAudioPlaying, setRealAudioPlaying] = useState<string | null>(null);
