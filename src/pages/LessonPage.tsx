@@ -213,6 +213,13 @@ export function LessonPage() {
   const { getLessonBySlug, addBookmark, removeBookmark, isBookmarked, incrementViewCount, lessons, getLessonProgress, setLessonProgress } = useLessons();
   const { user, isPremium } = useAuth();
   const [lesson, setLesson] = useState(getLessonBySlug(slug || ''));
+
+  // Dynamic page title
+  useEffect(() => {
+    if (lesson?.title) {
+      document.title = `${lesson.title} | IELTS Band 9 Materials Library`;
+    }
+  }, [lesson?.title]);
   
   const lessonProgress = lesson ? getLessonProgress(lesson.id) : 'not_started';
   const isCompleted = lessonProgress === 'completed';

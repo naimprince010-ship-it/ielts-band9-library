@@ -4,6 +4,8 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { LessonProvider } from '@/contexts/LessonContext';
 import { ProgressProvider } from '@/contexts/ProgressContext';
 import { Layout } from '@/components/layout/Layout';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
+import { PageTitleManager } from '@/components/layout/PageTitleManager';
 import './App.css';
 
 // Lazy load pages
@@ -58,12 +60,19 @@ function LoadingSpinner() {
   );
 }
 
+function AppInner() {
+  useSiteSettings();
+  return null;
+}
+
 function App() {
   return (
     <Router>
       <AuthProvider>
         <ProgressProvider>
           <LessonProvider>
+            <AppInner />
+            <PageTitleManager />
             <Suspense fallback={<LoadingSpinner />}>
               <Routes>
                 {/* Auth pages without Layout */}

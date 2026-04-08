@@ -31,6 +31,12 @@ export function CourseDetailPage() {
   const { user } = useAuth();
 
   useEffect(() => {
+    if (course?.title) {
+      document.title = `${course.title} | IELTS Band 9 Materials Library`;
+    }
+  }, [course?.title]);
+
+  useEffect(() => {
     const fetchCourseAndEnrollment = async () => {
       if (!courseId) return;
       setLoading(true);

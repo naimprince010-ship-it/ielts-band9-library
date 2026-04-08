@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+
+# Block private/tool pages from indexing
+Disallow: /admin
+Disallow: /admin/
+Disallow: /profile
+Disallow: /payment
+Disallow: /auth/
+Disallow: /reading-test
+Disallow: /writing-test
+Disallow: /listening-test
+Disallow: /speaking-test
+Disallow: /full-mock-test
+Disallow: /certificate
+Disallow: /results
+Disallow: /bookmarks
+Disallow: /progress
+Disallow: /achievements
+
+# Sitemap
+Sitemap: https://www.ieltstree.com/sitemap.xml
