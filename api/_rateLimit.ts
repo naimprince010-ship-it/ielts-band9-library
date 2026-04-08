@@ -15,14 +15,20 @@ interface WindowEntry {
 
 const store = new Map<string, WindowEntry>();
 
-// Prune entries older than 1 hour every 5 minutes to prevent memory leak
-setInterval(() => {
-  const cutoff = Date.now() - 60 * 60 * 1000;
+// Lazy cleanup: prune stale entries on each request instead of using
+// setInterval (setInterval at module level can cause issues in serverless
+// environments like Vercel where the runtime may not support long-lived timers).
+let lastCleanup = Date.now();
+function maybePruneStore(): void {
+  const now = Date.now();
+  if (now - lastCleanup < 5 * 60 * 1000) return;
+  lastCleanup = now;
+  const cutoff = now - 60 * 60 * 1000;
   for (const [key, entry] of store.entries()) {
     entry.timestamps = entry.timestamps.filter(t => t > cutoff);
     if (entry.timestamps.length === 0) store.delete(key);
   }
-}, 5 * 60 * 1000);
+}
 
 export interface RateLimitOptions {
   /** Max requests allowed in the window */
@@ -72,6 +78,7 @@ export function checkRateLimit(
   /** Optional extra key suffix (e.g. endpoint name) to namespace limits */
   keySuffix = '',
 ): boolean {
+  maybePruneStore();
   const ip = getClientIp(req);
   const key = `${ip}::${keySuffix || opts.label ?? 'default'}`;
   const now = Date.now();
