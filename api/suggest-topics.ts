@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { checkRateLimit, LIMITS } from './_rateLimit';
+import { checkRateLimit, LIMITS } from './_rateLimit.js';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -163,3 +163,4 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
   }
 }
+

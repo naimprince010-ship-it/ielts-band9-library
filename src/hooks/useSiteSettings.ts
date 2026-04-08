@@ -32,7 +32,7 @@ function setFavicon(url: string) {
 }
 
 async function applySettings() {
-  let settings: Record<string, string> = { ...FALLBACK };
+  const settings: Record<string, string> = { ...FALLBACK };
 
   if (isSupabaseConfigured() && supabase) {
     try {

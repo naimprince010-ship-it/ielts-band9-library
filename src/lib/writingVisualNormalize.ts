@@ -168,7 +168,7 @@ function normalizeTable(raw: unknown): WritingTableData | null {
     }
   }
 
-  let headersRaw = o.headers ?? o.columns ?? o.columnHeader ?? o.columnHeaders;
+  const headersRaw = o.headers ?? o.columns ?? o.columnHeader ?? o.columnHeaders;
   let rowsRaw: unknown = o.rows ?? o.body ?? o.grid;
   if (
     !Array.isArray(rowsRaw) &&

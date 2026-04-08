@@ -256,7 +256,7 @@ export default function DailyStudyPlanPage() {
             const dailyGrammarTopic = getDailyTopic(GRAMMAR_TOPICS, user.id, today);
       
             const items = PLAN_ITEM_TEMPLATES.map((template, index) => {
-              let target = { ...template.target };
+              const target = { ...template.target };
               if (template.type === 'vocab_review') {
                 target.topic = dailyVocabTopic;
               } else if (template.type === 'grammar_exercise') {
@@ -302,7 +302,7 @@ export default function DailyStudyPlanPage() {
         plan_date: today,
         status: 'active',
         items: PLAN_ITEM_TEMPLATES.map((template, index) => {
-          let target = { ...template.target };
+          const target = { ...template.target };
           if (template.type === 'vocab_review') {
             target.topic = dailyVocabTopic;
           } else if (template.type === 'grammar_exercise') {

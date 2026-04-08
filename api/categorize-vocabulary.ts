@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
-import { checkRateLimit, LIMITS } from './_rateLimit';
+import { checkRateLimit, LIMITS } from './_rateLimit.js';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
@@ -266,3 +266,4 @@ async function getCategoryCounts(supabase: ReturnType<typeof createClient>) {
 
   return counts;
 }
+

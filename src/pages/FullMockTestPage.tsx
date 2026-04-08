@@ -574,7 +574,7 @@ export default function FullMockTestPage() {
     activeAudioIdRef.current = null;
     chunkQueueRef.current = [];
     setPlayingAudioId(null);
-  }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [phase]);  
 
   // iOS Safari pauses speechSynthesis after ~15s — periodic resume keeps it alive
   const startIosResumePing = () => {
@@ -1146,7 +1146,7 @@ export default function FullMockTestPage() {
   const td = test?.test_data as Record<string, unknown> | undefined;
   const timeColor = remaining < 300 ? 'text-red-400' : remaining < 600 ? 'text-yellow-400' : 'text-green-400';
 
-  let navKeys: string[] = [];
+  const navKeys: string[] = [];
 
   if (phase === 'listening') {
     const sections = (td?.sections as Array<{questions: any[]}>) ?? [];

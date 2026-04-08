@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
-import { checkRateLimit, LIMITS } from './_rateLimit';
+import { checkRateLimit, LIMITS } from './_rateLimit.js';
 
 const GOOGLE_TTS_API_KEY = process.env.GOOGLE_TTS_API_KEY;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -159,3 +159,4 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // ── Step 4: Fallback — return raw base64 if Supabase not configured or failed ─
   return res.status(200).json({ audioContent: audioBuffer.toString('base64'), cached: false });
 }
+
