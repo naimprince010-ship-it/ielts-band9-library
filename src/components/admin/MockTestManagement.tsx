@@ -533,6 +533,24 @@ export function MockTestManagement() {
     return { status: 'complete' };
   };
 
+  /** Returns the count of questions that have a blank or unrecognised type. */
+  const countBlankTypes = (test: MockTest): number => {
+    const data = test.test_data;
+    if (test.module_type === 'reading') {
+      const rData = data as ReadingTest;
+      const validValues = READING_QUESTION_TYPES.map(t => t.value);
+      return (rData.passages ?? []).reduce((sum, p) =>
+        sum + (p.questions ?? []).filter(q => !q.type || !validValues.includes(q.type as string)).length, 0);
+    }
+    if (test.module_type === 'listening') {
+      const lData = data as ListeningTest;
+      const validValues = LISTENING_QUESTION_TYPES.map(t => t.value);
+      return (lData.sections ?? []).reduce((sum, s) =>
+        sum + (s.questions ?? []).filter(q => !q.type || !validValues.includes(q.type as string)).length, 0);
+    }
+    return 0;
+  };
+
   if (!isSupabaseConfigured()) {
     return (
       <Card className="border-none shadow-sm rounded-[2rem] overflow-hidden">
@@ -655,6 +673,12 @@ export function MockTestManagement() {
                           <Badge variant="destructive" className="bg-rose-50 text-rose-600 border border-rose-100 gap-1.5 font-bold animate-pulse rounded-lg">
                             <AlertCircle className="h-3 w-3" />
                             {checkTestIntegrity(test).message}
+                          </Badge>
+                        )}
+                        {countBlankTypes(test) > 0 && (
+                          <Badge className="bg-amber-50 text-amber-700 border border-amber-200 gap-1.5 font-bold rounded-lg" title={`${countBlankTypes(test)} question(s) have blank type — open and click Auto-fix Types`}>
+                            <Wrench className="h-3 w-3" />
+                            {countBlankTypes(test)} blank type{countBlankTypes(test) > 1 ? 's' : ''}
                           </Badge>
                         )}
                         <Badge className={cn("rounded-lg font-bold px-3 py-1", test.is_published ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-800')}>
