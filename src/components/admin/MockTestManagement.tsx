@@ -104,6 +104,67 @@ const LISTENING_QUESTION_TYPES: { value: ListeningQuestionType; label: string }[
   { value: 'short-answer', label: 'Short Answer' },
 ];
 
+/**
+ * Normalises a raw AI-returned question type string to the nearest valid
+ * value from READING_QUESTION_TYPES or LISTENING_QUESTION_TYPES.
+ * Falls back to inferring from the question text when the type is unknown.
+ */
+function normalizeQuestionType(
+  rawType: string,
+  questionText: string,
+  validTypes: string[],
+): string {
+  const t = (rawType ?? '').toLowerCase().replace(/[\s_]/g, '-');
+
+  // Direct match
+  if (validTypes.includes(t)) return t;
+
+  // Known aliases → canonical value
+  const aliases: Record<string, string> = {
+    // Table / Note / Flow-chart completions → fill-blank
+    'table-completion':      'fill-blank',
+    'note-completion':       'fill-blank',
+    'flow-chart-completion': 'fill-blank',
+    'flowchart-completion':  'fill-blank',
+    'form-completion':       'fill-blank',
+    // Matching variants
+    'matching-names':        'matching-features',
+    'matching-endings':      'sentence-completion',
+    // Labeling variants
+    'diagram-labelling':     'diagram-labeling',
+    'map-labelling':         'map-labeling',
+    'plan-labeling':         'map-labeling',
+    // MCQ variants
+    'multiple-choice':       'mcq',
+    'multiple-choice-question': 'mcq',
+    // True/False/Not Given variants
+    'true/false/not-given':  'true-false-not-given',
+    'true-false':            'true-false-not-given',
+    // Yes/No/Not Given variants
+    'yes/no/not-given':      'yes-no-not-given',
+    'yes-no':                'yes-no-not-given',
+  };
+  if (aliases[t] && validTypes.includes(aliases[t])) return aliases[t];
+
+  // Infer from question text keywords
+  const txt = questionText.toLowerCase();
+  if (txt.includes('table'))               return validTypes.includes('fill-blank') ? 'fill-blank' : validTypes[0];
+  if (txt.includes('note'))                return validTypes.includes('fill-blank') ? 'fill-blank' : validTypes[0];
+  if (txt.includes('flow') || txt.includes('chart')) return validTypes.includes('fill-blank') ? 'fill-blank' : validTypes[0];
+  if (txt.includes('form'))                return validTypes.includes('fill-blank') ? 'fill-blank' : validTypes[0];
+  if (txt.includes('summary'))             return validTypes.includes('summary-completion') ? 'summary-completion' : 'fill-blank';
+  if (txt.includes('sentence'))            return validTypes.includes('sentence-completion') ? 'sentence-completion' : 'fill-blank';
+  if (txt.includes('heading'))             return validTypes.includes('matching-headings') ? 'matching-headings' : validTypes[0];
+  if (txt.includes('true') || txt.includes('false')) return validTypes.includes('true-false-not-given') ? 'true-false-not-given' : validTypes[0];
+  if (txt.includes('yes') || txt.includes('no'))     return validTypes.includes('yes-no-not-given') ? 'yes-no-not-given' : validTypes[0];
+  if (txt.includes('diagram') || txt.includes('label')) return validTypes.includes('diagram-labeling') ? 'diagram-labeling' : validTypes[0];
+  if (txt.includes('map') || txt.includes('plan'))   return validTypes.includes('map-labeling') ? 'map-labeling' : validTypes[0];
+  if (txt.includes('match'))               return validTypes.includes('matching-information') ? 'matching-information' : validTypes[0];
+
+  // Give up — return first valid type (fill-blank is always first for listening)
+  return validTypes[0];
+}
+
 /** Ensures test_data is JSON-serializable for PostgREST (drops undefined, non-finite numbers → null). */
 function jsonbSafe<T>(data: T): T {
   return JSON.parse(
@@ -1078,7 +1139,7 @@ function ReadingTestBuilder({
       questions: aiContent.questions.map((q, i) => ({
         id: `q-${Date.now()}-${i}`,
         questionNumber: (data.passages?.flatMap(p => p.questions).length || 0) + i + 1,
-        type: q.type as ReadingQuestionType,
+        type: normalizeQuestionType(q.type, q.questionText, READING_QUESTION_TYPES.map(t => t.value)) as ReadingQuestionType,
         questionText: q.questionText,
         options: q.options,
         correctAnswer: q.correctAnswer,
@@ -1438,7 +1499,7 @@ function ListeningTestBuilder({
         questions: s.questions.map((q, qIndex) => ({
           id: `q-${Date.now()}-${sIndex}-${qIndex}`,
           questionNumber: existingQCount + qIndex + 1,
-          type: q.type as ListeningQuestionType,
+          type: normalizeQuestionType(q.type, q.questionText, LISTENING_QUESTION_TYPES.map(t => t.value)) as ListeningQuestionType,
           questionText: q.questionText,
           options: q.options,
           correctAnswer: q.correctAnswer,
