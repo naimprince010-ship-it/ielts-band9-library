@@ -155,7 +155,7 @@ export function LoginPage() {
                 <br />
                 <code className="text-xs bg-background px-1.5 py-0.5 rounded border border-border">admin@ielts.com</code>
                 {' / '}
-                <code className="text-xs bg-background px-1.5 py-0.5 rounded border border-border">password123</code>
+                <code className="text-xs bg-background px-1.5 py-0.5 rounded border border-border">demo123</code>
               </AlertDescription>
             </Alert>
           )}

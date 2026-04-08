@@ -44,7 +44,13 @@ function fallbackUserFromSupabaseAuth(supabaseUserData: SupabaseUser): User {
   };
 }
 
-const DEMO_USERS: Record<string, User & { password?: string }> = {
+/**
+ * Demo-only fallback users — only active when Supabase is NOT configured.
+ * NEVER include real passwords or real production emails here.
+ * Password for all demo accounts: "demo123"
+ */
+const DEMO_PASSWORD = 'demo123';
+const DEMO_USERS: Record<string, User & { password: string }> = {
   'admin@ielts.com': {
     id: 'demo-admin-1',
     email: 'admin@ielts.com',
@@ -53,7 +59,7 @@ const DEMO_USERS: Record<string, User & { password?: string }> = {
     subscription_status: 'premium',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-    password: 'password123',
+    password: DEMO_PASSWORD,
   },
   'user@ielts.com': {
     id: 'demo-user-1',
@@ -63,28 +69,20 @@ const DEMO_USERS: Record<string, User & { password?: string }> = {
     subscription_status: 'free',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-    password: 'password123',
+    password: DEMO_PASSWORD,
   },
   'instructor@ielts.com': {
     id: 'demo-instructor-1',
     email: 'instructor@ielts.com',
-    name: 'Arefin Shovo',
+    name: 'Instructor Demo',
     role: 'instructor',
     subscription_status: 'premium',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-    password: 'password123',
+    password: DEMO_PASSWORD,
   },
-  'naimprince010@gmail.com': {
-    id: 'demo-naim-1',
-    email: 'naimprince010@gmail.com',
-    name: 'Naim Prince',
-    role: 'admin',
-    subscription_status: 'premium',
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    password: 'Naim18005@',
-  },
+  // NOTE: Production users must authenticate via Supabase Auth.
+  // Do NOT add real emails or passwords here.
 };
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -260,7 +258,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const localUsers = localUsersStr ? JSON.parse(localUsersStr) : {};
       
       const demoUser = DEMO_USERS[email] || localUsers[email];
-      if (demoUser && password === (demoUser.password || 'password123')) {
+      if (demoUser && password === (demoUser.password || DEMO_PASSWORD)) {
         const { password: _, ...userWithoutPassword } = demoUser;
         setUser(userWithoutPassword as User);
         localStorage.setItem('demo_user', JSON.stringify(userWithoutPassword));
