@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ielts-tree-v3';
+const CACHE_NAME = 'ielts-tree-v4';
 const OFFLINE_URL = '/offline.html';
 
 const STATIC_ASSETS = [
@@ -37,6 +37,25 @@ self.addEventListener('fetch', (event) => {
       fetch(event.request).catch(() => {
         return caches.match(OFFLINE_URL);
       })
+    );
+    return;
+  }
+
+  const url = new URL(event.request.url);
+  // Network-first for built JS/CSS so deploys are not stuck behind an old cache-first chunk.
+  if (url.origin === self.location.origin && url.pathname.startsWith('/assets/')) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response.status === 200 && response.type === 'basic') {
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseToCache);
+            });
+          }
+          return response;
+        })
+        .catch(() => caches.match(event.request))
     );
     return;
   }

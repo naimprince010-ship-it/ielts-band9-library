@@ -17,6 +17,94 @@ export type Task1VisualPatch = {
   mapData?: WritingMapData;
 };
 
+function maybeJsonParse(value: unknown): unknown {
+  if (typeof value !== 'string') return value;
+  const s = value.trim();
+  if (
+    (s.startsWith('{') && s.endsWith('}')) ||
+    (s.startsWith('[') && s.endsWith(']'))
+  ) {
+    try {
+      return JSON.parse(s) as unknown;
+    } catch {
+      return value;
+    }
+  }
+  return value;
+}
+
+/** Unwrap { content: { rows... } } style wrappers (common in AI / CMS exports). */
+function unwrapShallowTableWrapper(raw: unknown, depth = 0): unknown {
+  if (depth > 6 || raw == null) return raw;
+  const un = maybeJsonParse(raw);
+  if (Array.isArray(un)) return un;
+  if (typeof un !== 'object') return un;
+  const o = un as Record<string, unknown>;
+  if (
+    Array.isArray(o.rows) ||
+    Array.isArray(o.headers) ||
+    Array.isArray(o.columns) ||
+    o.type === 'table' ||
+    (Array.isArray(o.data) &&
+      (o.data.length === 0 || Array.isArray((o.data as unknown[])[0])))
+  ) {
+    return un;
+  }
+  const inner = o.content ?? o.value ?? o.payload ?? o.table;
+  if (inner != null && inner !== un) return unwrapShallowTableWrapper(inner, depth + 1);
+  return un;
+}
+
+const TASK_FIELD_KEYS = new Set([
+  'id',
+  'taskNumber',
+  'task_number',
+  'taskType',
+  'task_type',
+  'title',
+  'prompt',
+  'minWords',
+  'min_words',
+  'recommendedTime',
+  'recommended_time',
+  'tips',
+  'sampleAnswer',
+  'sample_answer',
+  'imageUrl',
+  'image_url',
+  'chartData',
+  'chart_data',
+  'chart',
+  'processData',
+  'process_data',
+  'process',
+  'flowchart',
+  'mapData',
+  'map_data',
+  'map',
+  'maps',
+  'visual',
+  'visual_data',
+  'tableData',
+  'table_data',
+  'table',
+  'dataTable',
+  'data_table',
+  'grid',
+  'body',
+]);
+
+/** Last resort: find any nested value on the task that parses as a table (odd AI keys). */
+function harvestTableFromTaskRecord(t1: Record<string, unknown>): WritingTableData | null {
+  for (const [k, v] of Object.entries(t1)) {
+    if (TASK_FIELD_KEYS.has(k)) continue;
+    if (v == null || typeof v === 'boolean' || typeof v === 'number') continue;
+    const t = normalizeTable(unwrapShallowTableWrapper(v));
+    if (t && (t.headers.length > 0 || t.rows.length > 0)) return t;
+  }
+  return null;
+}
+
 function headerCellToString(c: unknown): string {
   if (c == null) return '';
   if (typeof c === 'string' || typeof c === 'number' || typeof c === 'boolean') return String(c);
@@ -41,6 +129,7 @@ function coerceTableRowsSource(raw: unknown): unknown[] | null {
 
 function normalizeTable(raw: unknown): WritingTableData | null {
   if (raw == null) return null;
+  raw = unwrapShallowTableWrapper(maybeJsonParse(raw));
   if (Array.isArray(raw)) {
     return normalizeTable({ rows: raw });
   }
@@ -252,15 +341,18 @@ export function extractTask1Visuals(task1: unknown): Task1VisualPatch | null {
       : undefined;
   const tableRaw =
     t1.tableData ??
+    t1.table_data ??
     t1.table ??
     t1.dataTable ??
+    t1.data_table ??
     t1.grid ??
     visTable;
   const processRaw = t1.processData ?? t1.process ?? t1.flowchart;
   const mapRaw = t1.mapData ?? t1.map ?? t1.maps;
 
   // Prefer table when present (Task 1 prompts often say "table below")
-  const tableData = normalizeTable(tableRaw);
+  let tableData = normalizeTable(tableRaw);
+  if (!tableData) tableData = harvestTableFromTaskRecord(t1);
   if (tableData) return { tableData };
 
   const chartData = normalizeChart(chartRaw);
@@ -358,9 +450,10 @@ export function normalizeWritingTaskFromDb(raw: unknown): WritingTask {
 
 /** JSONB sometimes stores tasks as { "0": {...}, "1": {...} } instead of an array. */
 function coerceWritingTasksArray(rawTasks: unknown): unknown[] {
-  if (Array.isArray(rawTasks)) return rawTasks;
-  if (rawTasks && typeof rawTasks === 'object' && !Array.isArray(rawTasks)) {
-    const o = rawTasks as Record<string, unknown>;
+  const parsed = maybeJsonParse(rawTasks);
+  if (Array.isArray(parsed)) return parsed;
+  if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+    const o = parsed as Record<string, unknown>;
     const numericKeys = Object.keys(o).filter((k) => /^\d+$/.test(k));
     if (numericKeys.length > 0) {
       return numericKeys.sort((a, b) => Number(a) - Number(b)).map((k) => o[k]);
@@ -377,7 +470,11 @@ export function normalizeWritingTestFromDb(raw: unknown): WritingTest {
       ? ({ ...(raw as Record<string, unknown>) } as Record<string, unknown>)
       : ({} as Record<string, unknown>);
   delete w[WRITING_MOCK_ROW_ID_KEY];
-  const rawTasks = coerceWritingTasksArray(w.tasks);
+  let tasksSource: unknown = w.tasks;
+  if (tasksSource == null && (w.task1 != null || w.task2 != null)) {
+    tasksSource = [w.task1, w.task2].filter((x) => x != null);
+  }
+  const rawTasks = coerceWritingTasksArray(tasksSource);
   const tasks: WritingTask[] = rawTasks.map((task) => normalizeWritingTaskFromDb(task));
 
   const out = { ...(w as unknown as WritingTest), tasks: tasks as WritingTest['tasks'] };
