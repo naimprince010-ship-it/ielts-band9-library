@@ -38,7 +38,8 @@ import {
   X,
   GripVertical,
   Sparkles,
-  Volume2
+  Volume2,
+  Wrench
 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import {
@@ -1348,10 +1349,29 @@ function ReadingTestBuilder({
                   <div className="border-t pt-4">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-medium">Questions ({passage.questions.length})</h4>
-                      <Button onClick={() => addQuestion(pIndex)} size="sm" className="gap-1">
-                        <Plus className="h-4 w-4" />
-                        Add Question
-                      </Button>
+                      <div className="flex gap-2">
+                        {passage.questions.some(q => !q.type || !READING_QUESTION_TYPES.some(t => t.value === q.type)) && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="gap-1 text-amber-600 border-amber-300 hover:bg-amber-50"
+                            onClick={() => {
+                              const fixed = passage.questions.map(q => ({
+                                ...q,
+                                type: normalizeQuestionType(q.type ?? '', q.questionText ?? '', READING_QUESTION_TYPES.map(t => t.value)) as ReadingQuestionType,
+                              }));
+                              updatePassage(pIndex, { questions: fixed });
+                            }}
+                          >
+                            <Wrench className="h-3 w-3" />
+                            Auto-fix Types
+                          </Button>
+                        )}
+                        <Button onClick={() => addQuestion(pIndex)} size="sm" className="gap-1">
+                          <Plus className="h-4 w-4" />
+                          Add Question
+                        </Button>
+                      </div>
                     </div>
 
                     {passage.questions.length === 0 ? (
@@ -1826,10 +1846,29 @@ function ListeningTestBuilder({
                   <div className="border-t pt-4">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-medium">Questions ({section.questions.length})</h4>
-                      <Button onClick={() => addQuestion(sIndex)} size="sm" className="gap-1">
-                        <Plus className="h-4 w-4" />
-                        Add Question
-                      </Button>
+                      <div className="flex gap-2">
+                        {section.questions.some(q => !q.type || !LISTENING_QUESTION_TYPES.some(t => t.value === q.type)) && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="gap-1 text-amber-600 border-amber-300 hover:bg-amber-50"
+                            onClick={() => {
+                              const fixed = section.questions.map(q => ({
+                                ...q,
+                                type: normalizeQuestionType(q.type ?? '', q.questionText ?? '', LISTENING_QUESTION_TYPES.map(t => t.value)) as ListeningQuestionType,
+                              }));
+                              updateSection(sIndex, { questions: fixed });
+                            }}
+                          >
+                            <Wrench className="h-3 w-3" />
+                            Auto-fix Types
+                          </Button>
+                        )}
+                        <Button onClick={() => addQuestion(sIndex)} size="sm" className="gap-1">
+                          <Plus className="h-4 w-4" />
+                          Add Question
+                        </Button>
+                      </div>
                     </div>
 
                     {section.questions.length === 0 ? (
