@@ -321,6 +321,7 @@ export function MockTestManagement() {
   const [editingTest, setEditingTest] = useState<MockTest | null>(null);
   const [saving, setSaving] = useState(false);
   const [bulkFixing, setBulkFixing] = useState(false);
+  const [bulkFixingTypes, setBulkFixingTypes] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -420,6 +421,74 @@ export function MockTestManagement() {
     await fetchMockTests();
     if (failed === 0) setSuccess(`✓ Fixed question texts in ${fixed} test${fixed !== 1 ? 's' : ''}!`);
     else setError(`Fixed ${fixed} tests, but ${failed} could not be saved. Check console.`);
+  };
+
+  /** Apply normalizeQuestionType to ALL questions across ALL reading/listening tests. */
+  const handleBulkFixTypes = async () => {
+    if (!isSupabaseConfigured() || !supabase) return;
+    const testsToFix = mockTests.filter(t => countBlankTypes(t) > 0);
+    if (testsToFix.length === 0) {
+      setSuccess('All question types are already set!');
+      return;
+    }
+    setBulkFixingTypes(true);
+    setError('');
+    let fixed = 0, failed = 0;
+
+    for (const test of testsToFix) {
+      try {
+        let updatedData = test.test_data;
+        if (test.module_type === 'reading') {
+          const rData = updatedData as ReadingTest;
+          const validValues = READING_QUESTION_TYPES.map(t => t.value);
+          updatedData = {
+            ...rData,
+            passages: (Array.isArray(rData.passages) ? rData.passages : []).map(p => ({
+              ...p,
+              questions: (Array.isArray(p.questions) ? p.questions : []).map(q => ({
+                ...q,
+                type: normalizeQuestionType(
+                  q.type as string,
+                  q.questionText ?? '',
+                  validValues,
+                ) as ReadingQuestionType,
+              })),
+            })),
+          };
+        } else if (test.module_type === 'listening') {
+          const lData = updatedData as ListeningTest;
+          const validValues = LISTENING_QUESTION_TYPES.map(t => t.value);
+          updatedData = {
+            ...lData,
+            sections: (Array.isArray(lData.sections) ? lData.sections : []).map(s => ({
+              ...s,
+              questions: (Array.isArray(s.questions) ? s.questions : []).map(q => ({
+                ...q,
+                type: normalizeQuestionType(
+                  q.type as string,
+                  q.questionText ?? '',
+                  validValues,
+                ) as ListeningQuestionType,
+              })),
+            })),
+          };
+        }
+        const { error: saveErr } = await supabase
+          .from('mock_tests')
+          .update({ test_data: jsonbSafe(updatedData), updated_at: new Date().toISOString() })
+          .eq('id', test.id);
+        if (saveErr) { console.error(`Type fix failed for ${test.title}:`, saveErr); failed++; }
+        else fixed++;
+      } catch (err) {
+        console.error(`Error fixing types for ${test.title}:`, err);
+        failed++;
+      }
+    }
+
+    setBulkFixingTypes(false);
+    await fetchMockTests();
+    if (failed === 0) setSuccess(`✓ Fixed question types in ${fixed} test${fixed !== 1 ? 's' : ''}!`);
+    else setError(`Fixed ${fixed} tests, but ${failed} could not be saved.`);
   };
 
   const getNextTestNumber = (moduleType: ModuleType): number => {
@@ -799,6 +868,22 @@ export function MockTestManagement() {
                 <Sparkles className="h-4 w-4" />
                 AI Generate Full Test
               </Button>
+              {mockTests.some(t => countBlankTypes(t) > 0) && (
+                <Button
+                  onClick={handleBulkFixTypes}
+                  disabled={bulkFixingTypes}
+                  variant="outline"
+                  className="h-11 rounded-xl font-bold border-orange-200 text-orange-700 hover:bg-orange-50 gap-2"
+                  title="Auto-fix all blank/invalid question types across all tests"
+                >
+                  {bulkFixingTypes
+                    ? <Loader2 className="h-4 w-4 animate-spin" />
+                    : <Wrench className="h-4 w-4" />}
+                  {bulkFixingTypes
+                    ? 'Fixing…'
+                    : `Fix ${mockTests.reduce((s, t) => s + countBlankTypes(t), 0)} Blank Types`}
+                </Button>
+              )}
               {mockTests.some(t => countGenericTexts(t) > 0) && (
                 <Button
                   onClick={handleBulkFixQuestionTexts}
