@@ -199,7 +199,7 @@ export default function ListeningTestPage() {
   const questionRefs = useRef<Record<number, HTMLDivElement | null>>({});
 
   // Detect per-section audio mode (each section has its own TTS-generated audio URL)
-  const usesPerSectionAudio = test.sections.some(s => s.sectionAudioUrl);
+  const usesPerSectionAudio = Array.isArray(test.sections) && test.sections.some(s => s.sectionAudioUrl);
 
   const allQuestions = Array.isArray(test?.sections) ? test.sections.flatMap(s => s?.questions || []) : [];
 

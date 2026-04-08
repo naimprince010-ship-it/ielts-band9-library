@@ -456,7 +456,7 @@ export function MockTestManagement() {
     const data = test.test_data;
     if (test.module_type === 'listening') {
       const lData = data as ListeningTest;
-      const hasPerSectionAudio = lData.sections?.some(s => s.sectionAudioUrl);
+      const hasPerSectionAudio = Array.isArray(lData.sections) && lData.sections.some(s => s.sectionAudioUrl);
       if (!lData.audioUrl && !hasPerSectionAudio) return { status: 'incomplete', message: 'Missing Audio' };
     }
     if (test.module_type === 'writing') {
@@ -1565,7 +1565,7 @@ function ListeningTestBuilder({
             const sections = data.sections?.filter(s => s.transcript?.trim()) || [];
             if (sections.length === 0) return null;
             const overLimit = sections.filter(s => (s.transcript?.length ?? 0) > 4000);
-            const hasAudio = sections.some(s => s.sectionAudioUrl);
+                const hasAudio = Array.isArray(sections) && sections.some(s => s.sectionAudioUrl);
             return (
               <div className="mt-1 space-y-0.5">
                 {sections.map(s => {
