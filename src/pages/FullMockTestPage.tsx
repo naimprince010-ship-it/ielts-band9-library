@@ -256,6 +256,72 @@ export default function FullMockTestPage() {
   const cachedVoicesRef = useRef<SpeechSynthesisVoice[]>([]);
   const iosResumeIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // ─── Real audio player (for pre-generated MP3 sectionAudioUrl) ──────────
+  // Using HTMLAudioElement directly works reliably on iOS Safari.
+  const [realAudioPlaying, setRealAudioPlaying] = useState<string | null>(null);
+  const realAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  const playRealAudio = (id: string, url: string) => {
+    // Second tap on same button → stop
+    if (realAudioPlaying === id) {
+      realAudioRef.current?.pause();
+      realAudioRef.current = null;
+      setRealAudioPlaying(null);
+      return;
+    }
+
+    // Stop any currently playing real audio
+    if (realAudioRef.current) {
+      realAudioRef.current.pause();
+      realAudioRef.current = null;
+    }
+    // Also stop any speechSynthesis that may be running
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    stopIosResumePing();
+    setPlayingAudioId(null);
+
+    // Already played check (exam integrity — only once)
+    if (playedAudios.has(id)) {
+      alert('In the real IELTS exam, audio plays only once. This section has already been played.');
+      return;
+    }
+
+    const audio = new Audio(url);
+    (audio as HTMLAudioElement & { playsInline: boolean }).playsInline = true;
+    audio.preload = 'auto';
+
+    audio.onended = () => {
+      realAudioRef.current = null;
+      setRealAudioPlaying(null);
+    };
+    audio.onerror = () => {
+      console.error('Real audio playback error — falling back to TTS');
+      realAudioRef.current = null;
+      setRealAudioPlaying(null);
+    };
+
+    realAudioRef.current = audio;
+    setRealAudioPlaying(id);
+    setPlayedAudios(prev => new Set(prev).add(id));
+
+    // .play() called directly inside user-gesture handler → works on iOS
+    audio.play().catch(err => {
+      console.error('audio.play() failed:', err);
+      realAudioRef.current = null;
+      setRealAudioPlaying(null);
+      setPlayedAudios(prev => { const s = new Set(prev); s.delete(id); return s; });
+    });
+  };
+
+  // Stop real audio when navigating away from listening phase
+  useEffect(() => {
+    if (realAudioRef.current) {
+      realAudioRef.current.pause();
+      realAudioRef.current = null;
+    }
+    setRealAudioPlaying(null);
+  }, [phase]);
+
   // ─── Voice Recording state (Speaking section) ───────────────────────────
   const [isRecording, setIsRecording] = useState(false);
   const [recordingSeconds, setRecordingSeconds] = useState(0);
@@ -1127,8 +1193,9 @@ export default function FullMockTestPage() {
         ) : (
           <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
             {phase === 'listening' && (() => {
-              const sections = (td?.sections as Array<{ sectionNumber: number; title: string; questions: Question[], transcript?: string }>) ?? [];
+              const sections = (td?.sections as Array<{ sectionNumber: number; title: string; questions: Question[], transcript?: string; sectionAudioUrl?: string }>) ?? [];
               const globalTranscript = typeof td?.transcript === 'string' ? td.transcript : '';
+              const globalAudioUrl = typeof (td as any)?.audioUrl === 'string' ? (td as any).audioUrl as string : '';
               let qIdx = 0;
               return (
                 <div className="space-y-12">
@@ -1139,24 +1206,26 @@ export default function FullMockTestPage() {
                       <p className="text-sm font-bold">Text-to-speech is not supported in this browser. Please use Chrome, Safari, or Edge for audio playback.</p>
                     </div>
                   )}
-                  {/* Global transcript audio player */}
-                   {globalTranscript && (
+                  {/* Global audio player — prefers real MP3 over TTS */}
+                  {(globalAudioUrl || globalTranscript) && (
                     <Card className="border-violet-100 shadow-xl rounded-[30px] overflow-hidden">
                       <div className="bg-violet-600 p-6 flex items-center justify-between text-white">
                         <div className="flex items-center gap-3"><Headphones className="h-6 w-6" /><h3 className="font-black uppercase tracking-wider">Audio Interface</h3></div>
-                        <Button 
+                        <Button
                           type="button"
-                          size="lg" 
-                          disabled={!audioSupported || (playedAudios.has('global') && playingAudioId !== 'global')}
+                          size="lg"
+                          disabled={playedAudios.has('global') && realAudioPlaying !== 'global' && playingAudioId !== 'global'}
                           className={`rounded-full font-black px-8 ${
-                            !audioSupported ? 'bg-white/20 text-white/40 cursor-not-allowed' :
-                            playedAudios.has('global') && playingAudioId !== 'global' ? 'bg-white/20 text-white/40' :
-                            playingAudioId === 'global' ? 'bg-amber-400 text-amber-900 hover:bg-amber-300' :
+                            playedAudios.has('global') && realAudioPlaying !== 'global' && playingAudioId !== 'global' ? 'bg-white/20 text-white/40' :
+                            (realAudioPlaying === 'global' || playingAudioId === 'global') ? 'bg-amber-400 text-amber-900 hover:bg-amber-300' :
                             'bg-white text-violet-700 hover:bg-white/90 shadow-xl'
                           }`}
-                          onClick={() => toggleAudio('global', globalTranscript)}
+                          onClick={() => globalAudioUrl
+                            ? playRealAudio('global', globalAudioUrl)
+                            : toggleAudio('global', globalTranscript)
+                          }
                         >
-                          {playingAudioId === 'global'
+                          {(realAudioPlaying === 'global' || playingAudioId === 'global')
                             ? <><Volume2 className="h-5 w-5 mr-2 animate-pulse" /> PLAYING — CLICK TO STOP</>
                             : playedAudios.has('global')
                             ? <><Volume2 className="h-5 w-5 mr-2 opacity-40" /> PLAYED (EXAM: ONCE ONLY)</>
@@ -1165,40 +1234,50 @@ export default function FullMockTestPage() {
                         </Button>
                       </div>
                       <CardContent className="p-8 text-center bg-violet-50/50">
-                         <div className="max-w-md mx-auto">
-                           <div className={`w-16 h-16 bg-violet-100 rounded-full flex items-center justify-center mx-auto mb-4 ${playingAudioId === 'global' ? 'animate-pulse' : ''}`}><Volume2 className="h-8 w-8 text-violet-600" /></div>
-                           <p className="text-sm font-bold text-violet-800">
-                             {playingAudioId === 'global'
-                               ? 'Audio is playing. Answer questions as you listen.'
-                               : 'Recording will play once only. Answer questions as you listen. Text transcript is hidden for exam integrity.'}
-                           </p>
-                         </div>
+                        <div className="max-w-md mx-auto">
+                          <div className={`w-16 h-16 bg-violet-100 rounded-full flex items-center justify-center mx-auto mb-4 ${(realAudioPlaying === 'global' || playingAudioId === 'global') ? 'animate-pulse' : ''}`}>
+                            <Volume2 className="h-8 w-8 text-violet-600" />
+                          </div>
+                          <p className="text-sm font-bold text-violet-800">
+                            {(realAudioPlaying === 'global' || playingAudioId === 'global')
+                              ? 'Audio is playing. Answer questions as you listen.'
+                              : 'Recording will play once only. Answer questions as you listen.'}
+                          </p>
+                        </div>
                       </CardContent>
                     </Card>
                   )}
                   {sections.map((sec) => {
                     const sectionAudioId = `section_${sec.sectionNumber}`;
                     const sectionTranscript = typeof sec.transcript === 'string' ? sec.transcript : '';
+                    const sectionUrl = sec.sectionAudioUrl ?? '';
+                    const hasAudio = !!(sectionUrl || sectionTranscript);
+                    const isPlayingThis = realAudioPlaying === sectionAudioId || playingAudioId === sectionAudioId;
+                    const wasPlayed = playedAudios.has(sectionAudioId);
                     return (
                     <div key={sec.sectionNumber} className="space-y-6">
                       <div className="flex items-center justify-between gap-3 px-4">
                         <div className="flex items-center gap-3"><div className="h-1 w-12 bg-violet-500 rounded-full" /><h4 className="font-black text-violet-600 uppercase tracking-widest text-sm">{sec.title || `Part ${sec.sectionNumber}`}</h4></div>
-                        {/* Per-section audio button (when no global transcript) */}
-                        {sectionTranscript && !globalTranscript && (
+                        {/* Per-section audio — prefers real MP3, falls back to TTS */}
+                        {hasAudio && !globalTranscript && !globalAudioUrl && (
                           <Button
                             type="button"
                             size="sm"
-                            disabled={!audioSupported || (playedAudios.has(sectionAudioId) && playingAudioId !== sectionAudioId)}
+                            disabled={wasPlayed && !isPlayingThis}
                             className={`rounded-full font-black px-6 ${
-                              !audioSupported ? 'bg-violet-200 text-violet-400 cursor-not-allowed' :
-                              playedAudios.has(sectionAudioId) && playingAudioId !== sectionAudioId ? 'bg-violet-200 text-violet-400' :
-                              playingAudioId === sectionAudioId ? 'bg-amber-500 text-white' :
+                              wasPlayed && !isPlayingThis ? 'bg-violet-200 text-violet-400' :
+                              isPlayingThis ? 'bg-amber-500 text-white' :
                               'bg-violet-600 text-white hover:bg-violet-700 shadow-lg'
                             }`}
-                            onClick={() => toggleAudio(sectionAudioId, sectionTranscript)}
+                            onClick={() => sectionUrl
+                              ? playRealAudio(sectionAudioId, sectionUrl)
+                              : toggleAudio(sectionAudioId, sectionTranscript)
+                            }
                           >
-                            {playingAudioId === sectionAudioId
+                            {isPlayingThis
                               ? <><Volume2 className="h-4 w-4 mr-1.5 animate-pulse" /> PLAYING</>
+                              : wasPlayed
+                              ? <><Volume2 className="h-4 w-4 mr-1.5 opacity-50" /> PLAYED</>
                               : <><Play className="h-4 w-4 mr-1.5" /> PLAY SECTION AUDIO</>
                             }
                           </Button>
