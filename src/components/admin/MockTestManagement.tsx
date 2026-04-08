@@ -61,6 +61,7 @@ import {
   ListeningQuestionType,
   WritingTest,
   WritingTask,
+  WritingTableData,
   SpeakingTest,
   SpeakingPart,
   SpeakingQuestion,
@@ -230,7 +231,10 @@ export function MockTestManagement() {
         is_premium: test.is_premium,
         reading_data: test.module_type === 'reading' ? test.test_data as ReadingTest : getDefaultReadingData(),
         listening_data: test.module_type === 'listening' ? test.test_data as ListeningTest : getDefaultListeningData(),
-        writing_data: test.module_type === 'writing' ? test.test_data as WritingTest : getDefaultWritingData(),
+        writing_data:
+          test.module_type === 'writing'
+            ? (normalizeWritingTestFromDb(test.test_data) as WritingTest)
+            : getDefaultWritingData(),
         speaking_data: test.module_type === 'speaking' ? test.test_data as SpeakingTest : getDefaultSpeakingData(),
       });
       setError('');
@@ -1850,6 +1854,26 @@ function WritingTestBuilder({
 
         {[0, 1].map((taskIndex) => {
           const task = data.tasks?.[taskIndex] || getDefaultWritingTask((taskIndex + 1) as 1 | 2);
+          const hasStructuredVisual = !!(
+            task.chartData ||
+            task.tableData ||
+            task.processData ||
+            task.mapData
+          );
+          const hasImageUrl = !!(typeof task.imageUrl === 'string' && task.imageUrl.trim());
+          const hasTask1Visual = hasStructuredVisual || hasImageUrl;
+
+          const starterTableData: WritingTableData = {
+            type: 'table',
+            title: 'Employment status (example — edit or replace)',
+            headers: ['Category', '2019', '2023'],
+            rows: [
+              ['Full-time employed', '62%', '58%'],
+              ['Part-time employed', '22%', '25%'],
+              ['Self-employed', '16%', '17%'],
+            ],
+          };
+
           return (
             <TabsContent key={taskIndex} value={`task${taskIndex + 1}`} className="space-y-4">
               <Card>
@@ -1883,59 +1907,99 @@ function WritingTestBuilder({
                   {taskIndex === 0 && (
                     <div className="space-y-3">
                       <Label className="font-semibold">Task 1 Visual</Label>
+                      <p className="text-xs text-slate-500">
+                        Academic Task 1 needs a chart, table, diagram, map, or image. Without it, the admin list shows &quot;Missing Task 1 Visual&quot;.
+                      </p>
 
-                      {(task.chartData || task.tableData || task.processData || task.mapData) ? (
+                      {hasTask1Visual ? (
                         <div className="space-y-3">
                           <WritingTask1Renderer task={task} compact />
-                          <div className="flex items-center gap-2">
+                          <div className="flex flex-wrap items-center gap-2">
                             <Badge className="bg-emerald-100 text-emerald-700 font-bold">
-                              ✓ Visual Generated
+                              ✓ Visual set
                             </Badge>
                             <Button
                               type="button"
                               variant="ghost"
                               size="sm"
                               className="text-rose-500 hover:text-rose-700 text-xs"
-                              onClick={() => updateTask(taskIndex, {
-                                chartData: undefined,
-                                tableData: undefined,
-                                processData: undefined,
-                                mapData: undefined,
-                              })}
+                              onClick={() =>
+                                updateTask(taskIndex, {
+                                  chartData: undefined,
+                                  tableData: undefined,
+                                  processData: undefined,
+                                  mapData: undefined,
+                                  imageUrl: undefined,
+                                })
+                              }
                             >
-                              Remove Visual
+                              Remove all visuals
                             </Button>
                           </div>
-                          <details>
-                            <summary className="text-xs text-slate-400 cursor-pointer hover:text-slate-600 select-none">
-                              Edit visual data (JSON)
-                            </summary>
-                            <Textarea
-                              className="mt-2 font-mono text-xs"
-                              rows={10}
-                              value={JSON.stringify(
-                                task.chartData || task.tableData || task.processData || task.mapData,
-                                null, 2
-                              )}
-                              onChange={(e) => {
-                                try {
-                                  const parsed = JSON.parse(e.target.value);
-                                  const t = parsed?.type;
-                                  if (t === 'line' || t === 'bar' || t === 'pie') {
-                                    updateTask(taskIndex, { chartData: parsed, tableData: undefined, processData: undefined, mapData: undefined });
-                                  } else if (t === 'table') {
-                                    updateTask(taskIndex, { tableData: parsed, chartData: undefined, processData: undefined, mapData: undefined });
-                                  } else if (t === 'process') {
-                                    updateTask(taskIndex, { processData: parsed, chartData: undefined, tableData: undefined, mapData: undefined });
-                                  } else if (t === 'map') {
-                                    updateTask(taskIndex, { mapData: parsed, chartData: undefined, tableData: undefined, processData: undefined });
+                          {hasImageUrl && !hasStructuredVisual && (
+                            <div>
+                              <Label className="text-xs text-slate-500">Image URL</Label>
+                              <Input
+                                value={task.imageUrl || ''}
+                                onChange={(e) => updateTask(taskIndex, { imageUrl: e.target.value })}
+                                placeholder="https://..."
+                                className="mt-1"
+                              />
+                            </div>
+                          )}
+                          {hasStructuredVisual && (
+                            <details>
+                              <summary className="text-xs text-slate-400 cursor-pointer hover:text-slate-600 select-none">
+                                Edit visual data (JSON)
+                              </summary>
+                              <Textarea
+                                className="mt-2 font-mono text-xs"
+                                rows={10}
+                                value={JSON.stringify(
+                                  task.chartData || task.tableData || task.processData || task.mapData,
+                                  null,
+                                  2
+                                )}
+                                onChange={(e) => {
+                                  try {
+                                    const parsed = JSON.parse(e.target.value);
+                                    const t = parsed?.type;
+                                    if (t === 'line' || t === 'bar' || t === 'pie') {
+                                      updateTask(taskIndex, {
+                                        chartData: parsed,
+                                        tableData: undefined,
+                                        processData: undefined,
+                                        mapData: undefined,
+                                      });
+                                    } else if (t === 'table') {
+                                      updateTask(taskIndex, {
+                                        tableData: parsed,
+                                        chartData: undefined,
+                                        processData: undefined,
+                                        mapData: undefined,
+                                      });
+                                    } else if (t === 'process') {
+                                      updateTask(taskIndex, {
+                                        processData: parsed,
+                                        chartData: undefined,
+                                        tableData: undefined,
+                                        mapData: undefined,
+                                      });
+                                    } else if (t === 'map') {
+                                      updateTask(taskIndex, {
+                                        mapData: parsed,
+                                        chartData: undefined,
+                                        tableData: undefined,
+                                        processData: undefined,
+                                      });
+                                    }
+                                  } catch {
+                                    // ignore parse errors while typing
                                   }
-                                } catch {
-                                  // ignore parse errors while typing
-                                }
-                              }}
-                            />
-                          </details>
+                                }}
+                              />
+                            </details>
+                          )}
                         </div>
                       ) : (
                         <div className="space-y-3">
@@ -1946,7 +2010,6 @@ function WritingTestBuilder({
                             </div>
 
                             {task.prompt ? (
-                              /* Prompt exists — one-click generate from existing prompt text */
                               <>
                                 <div className="bg-white border border-indigo-100 rounded-lg px-3 py-2 text-xs text-slate-600 line-clamp-3">
                                   <span className="font-semibold text-indigo-600">Context detected: </span>
@@ -1969,7 +2032,6 @@ function WritingTestBuilder({
                                 </Button>
                               </>
                             ) : (
-                              /* No prompt — show manual topic input */
                               <>
                                 <p className="text-xs text-slate-500">Enter a topic and AI will auto-select the best visual type.</p>
                                 <div className="flex gap-2">
@@ -1978,7 +2040,9 @@ function WritingTestBuilder({
                                     onChange={(e) => setVisualTopicOverride(e.target.value)}
                                     placeholder="e.g. Work and Employment, Climate Change..."
                                     className="flex-1 text-sm bg-white"
-                                    onKeyDown={(e) => { if (e.key === 'Enter') handleGenerateVisualOnly(visualTopicOverride); }}
+                                    onKeyDown={(e) => {
+                                      if (e.key === 'Enter') handleGenerateVisualOnly(visualTopicOverride);
+                                    }}
                                   />
                                   <Button
                                     type="button"
@@ -1987,7 +2051,11 @@ function WritingTestBuilder({
                                     className="bg-indigo-600 hover:bg-indigo-700 text-white gap-1.5 shrink-0"
                                     size="sm"
                                   >
-                                    {isGeneratingVisual ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                                    {isGeneratingVisual ? (
+                                      <Loader2 className="h-4 w-4 animate-spin" />
+                                    ) : (
+                                      <Sparkles className="h-4 w-4" />
+                                    )}
                                     {isGeneratingVisual ? 'Generating...' : 'Generate'}
                                   </Button>
                                 </div>
@@ -2002,6 +2070,23 @@ function WritingTestBuilder({
                             )}
                           </div>
 
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            className="w-full border-emerald-200 text-emerald-800 hover:bg-emerald-50"
+                            onClick={() =>
+                              updateTask(0, {
+                                tableData: starterTableData,
+                                chartData: undefined,
+                                processData: undefined,
+                                mapData: undefined,
+                              })
+                            }
+                          >
+                            Add sample table (edit numbers in JSON after)
+                          </Button>
+
                           <div className="flex items-center gap-2">
                             <div className="flex-1 h-px bg-slate-200" />
                             <span className="text-[10px] text-slate-400 uppercase tracking-wider">or</span>
@@ -2009,7 +2094,7 @@ function WritingTestBuilder({
                           </div>
 
                           <div>
-                            <Label className="text-xs text-slate-500">Legacy Image URL (optional fallback)</Label>
+                            <Label className="text-xs text-slate-500">Image URL (chart/graph photo)</Label>
                             <Input
                               value={task.imageUrl || ''}
                               onChange={(e) => updateTask(taskIndex, { imageUrl: e.target.value })}
