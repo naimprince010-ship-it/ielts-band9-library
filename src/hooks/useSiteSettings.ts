@@ -10,6 +10,19 @@ const FALLBACK = {
     'https://fjzqtzqflsqjevrurgbm.supabase.co/storage/v1/object/public/site-assets/site-assets/og-1766730300872.png',
 };
 
+export const SEO_PAGE_KEY_PREFIX = 'seo_page__';
+
+export type RouteSeoConfig = {
+  path: string;
+  title?: string;
+  description?: string;
+  h1?: string;
+  h2?: string;
+};
+
+let cachedSettings: Record<string, string> = { ...FALLBACK };
+let cachedRouteSeoMap: Record<string, RouteSeoConfig> = {};
+
 function setMeta(name: string, content: string, property = false) {
   const attr = property ? 'property' : 'name';
   let el = document.querySelector<HTMLMetaElement>(`meta[${attr}="${name}"]`);
@@ -19,6 +32,55 @@ function setMeta(name: string, content: string, property = false) {
     document.head.appendChild(el);
   }
   el.setAttribute('content', content);
+}
+
+function normalizePath(path: string): string {
+  if (!path) return '/';
+  const p = path.trim();
+  if (!p) return '/';
+  return p.startsWith('/') ? p : `/${p}`;
+}
+
+function decodeRouteSeoPathFromKey(key: string): string | null {
+  if (!key.startsWith(SEO_PAGE_KEY_PREFIX)) return null;
+  const encoded = key.slice(SEO_PAGE_KEY_PREFIX.length);
+  if (!encoded) return null;
+  try {
+    return normalizePath(decodeURIComponent(encoded));
+  } catch {
+    return normalizePath(encoded);
+  }
+}
+
+function parseRouteSeoValue(raw: string): Omit<RouteSeoConfig, 'path'> {
+  try {
+    const parsed = JSON.parse(raw) as Partial<RouteSeoConfig>;
+    if (parsed && typeof parsed === 'object') {
+      return {
+        title: typeof parsed.title === 'string' ? parsed.title : undefined,
+        description: typeof parsed.description === 'string' ? parsed.description : undefined,
+        h1: typeof parsed.h1 === 'string' ? parsed.h1 : undefined,
+        h2: typeof parsed.h2 === 'string' ? parsed.h2 : undefined,
+      };
+    }
+  } catch {
+    // Backward compatible: if value is plain text, treat as description.
+  }
+  return { description: raw };
+}
+
+function buildRouteSeoMap(settings: Record<string, string>): Record<string, RouteSeoConfig> {
+  const out: Record<string, RouteSeoConfig> = {};
+  Object.entries(settings).forEach(([key, value]) => {
+    const keyPath = decodeRouteSeoPathFromKey(key);
+    if (!keyPath) return;
+    const parsed = parseRouteSeoValue(value);
+    out[keyPath] = {
+      path: keyPath,
+      ...parsed,
+    };
+  });
+  return out;
 }
 
 function setFavicon(url: string) {
@@ -66,6 +128,10 @@ async function applySettings() {
   setMeta('twitter:title', title);
   setMeta('twitter:description', desc);
   setMeta('twitter:image', ogImage);
+
+  cachedSettings = settings;
+  cachedRouteSeoMap = buildRouteSeoMap(settings);
+  window.dispatchEvent(new CustomEvent('site-settings-updated'));
 }
 
 /**
@@ -75,6 +141,13 @@ export function useSiteSettings() {
   useEffect(() => {
     applySettings();
   }, []);
+}
+
+export function getBaseSiteSettings() {
+  return {
+    site_title: cachedSettings.site_title || FALLBACK.site_title,
+    site_description: cachedSettings.site_description || FALLBACK.site_description,
+  };
 }
 
 /**
@@ -134,3 +207,26 @@ export const ROUTE_TITLES: Record<string, string> = {
   '/certificate': 'Certificate',
   '/admin': 'Admin Panel',
 };
+
+export function resolveRouteTitle(pathname: string): string | null {
+  if (ROUTE_TITLES[pathname]) return ROUTE_TITLES[pathname];
+  const prefix = Object.keys(ROUTE_TITLES)
+    .filter((k) => k !== '/')
+    .sort((a, b) => b.length - a.length)
+    .find((k) => pathname.startsWith(`${k}/`));
+  return prefix ? ROUTE_TITLES[prefix] : null;
+}
+
+export function getRouteSeoConfig(pathname: string): RouteSeoConfig | null {
+  const exact = cachedRouteSeoMap[pathname];
+  if (exact) return exact;
+
+  const prefixes = Object.keys(cachedRouteSeoMap)
+    .filter((p) => p !== '/')
+    .sort((a, b) => b.length - a.length);
+
+  for (const p of prefixes) {
+    if (pathname.startsWith(`${p}/`)) return cachedRouteSeoMap[p];
+  }
+  return cachedRouteSeoMap['/'] || null;
+}

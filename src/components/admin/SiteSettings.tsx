@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/dialog';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { cn } from '@/lib/utils';
+import { SEO_PAGE_KEY_PREFIX, resolveRouteTitle } from '@/hooks/useSiteSettings';
 
 interface SiteSetting {
   id?: string;
@@ -33,6 +34,15 @@ interface SiteSetting {
 const CRITICAL_KEYS = ['site_title', 'site_description', 'favicon_url', 'og_image_url'];
 const CONTACT_KEYS = ['support_phone', 'support_email', 'support_hours', 'whatsapp_link', 'company_name', 'company_address'];
 
+interface SeoRouteSetting {
+  path: string;
+  key: string;
+  title: string;
+  description: string;
+  h1: string;
+  h2: string;
+}
+
 export function SiteSettings() {
   const [allSettings, setAllSettings] = useState<SiteSetting[]>([]);
   const [loading, setLoading] = useState(true);
@@ -44,6 +54,17 @@ export function SiteSettings() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingSetting, setEditingSetting] = useState<SiteSetting | null>(null);
   const [dialogData, setDialogData] = useState({ key: '', value: '', description: '' });
+  const [activeTab, setActiveTab] = useState('general');
+  const [seoFilter, setSeoFilter] = useState('');
+  const [isSeoDialogOpen, setIsSeoDialogOpen] = useState(false);
+  const [editingSeoPath, setEditingSeoPath] = useState<string | null>(null);
+  const [seoDialogData, setSeoDialogData] = useState({
+    path: '',
+    title: '',
+    description: '',
+    h1: '',
+    h2: '',
+  });
 
   useEffect(() => {
     loadAllSettings();
@@ -81,6 +102,60 @@ export function SiteSettings() {
       return [...prev, { key, value }];
     });
   };
+
+  const normalizeSeoPath = (rawPath: string): string => {
+    const p = rawPath.trim();
+    if (!p) return '/';
+    return p.startsWith('/') ? p : `/${p}`;
+  };
+
+  const seoKeyFromPath = (path: string): string => {
+    return `${SEO_PAGE_KEY_PREFIX}${encodeURIComponent(normalizeSeoPath(path))}`;
+  };
+
+  const parseSeoValue = (value: string): Omit<SeoRouteSetting, 'path' | 'key'> => {
+    try {
+      const parsed = JSON.parse(value) as Partial<SeoRouteSetting>;
+      return {
+        title: typeof parsed.title === 'string' ? parsed.title : '',
+        description: typeof parsed.description === 'string' ? parsed.description : '',
+        h1: typeof parsed.h1 === 'string' ? parsed.h1 : '',
+        h2: typeof parsed.h2 === 'string' ? parsed.h2 : '',
+      };
+    } catch {
+      return { title: '', description: value, h1: '', h2: '' };
+    }
+  };
+
+  const allSeoRoutes: SeoRouteSetting[] = allSettings
+    .filter((s) => s.key.startsWith(SEO_PAGE_KEY_PREFIX))
+    .map((s) => {
+      const encoded = s.key.slice(SEO_PAGE_KEY_PREFIX.length);
+      let path = '/';
+      try {
+        path = normalizeSeoPath(decodeURIComponent(encoded));
+      } catch {
+        path = normalizeSeoPath(encoded);
+      }
+      const parsed = parseSeoValue(s.value);
+      return {
+        path,
+        key: s.key,
+        ...parsed,
+      };
+    })
+    .sort((a, b) => a.path.localeCompare(b.path));
+
+  const visibleSeoRoutes = allSeoRoutes.filter((r) => {
+    const q = seoFilter.trim().toLowerCase();
+    if (!q) return true;
+    return (
+      r.path.toLowerCase().includes(q) ||
+      r.title.toLowerCase().includes(q) ||
+      r.h1.toLowerCase().includes(q) ||
+      r.description.toLowerCase().includes(q)
+    );
+  });
 
   const handleFileUpload = async (file: File, type: 'favicon' | 'og') => {
     if (!isSupabaseConfigured() || !supabase) return;
@@ -227,6 +302,60 @@ export function SiteSettings() {
     setIsDialogOpen(false);
   };
 
+  const openSeoDialog = (row?: SeoRouteSetting) => {
+    if (row) {
+      setEditingSeoPath(row.path);
+      setSeoDialogData({
+        path: row.path,
+        title: row.title || '',
+        description: row.description || '',
+        h1: row.h1 || '',
+        h2: row.h2 || '',
+      });
+    } else {
+      setEditingSeoPath(null);
+      setSeoDialogData({
+        path: '',
+        title: '',
+        description: '',
+        h1: '',
+        h2: '',
+      });
+    }
+    setIsSeoDialogOpen(true);
+  };
+
+  const handleSeoSave = async () => {
+    const path = normalizeSeoPath(seoDialogData.path);
+    if (!path) {
+      setMessage({ type: 'error', text: 'Route path is required (example: /mock-test).' });
+      return;
+    }
+    if (!seoDialogData.title.trim() && !seoDialogData.description.trim() && !seoDialogData.h1.trim() && !seoDialogData.h2.trim()) {
+      setMessage({ type: 'error', text: 'Fill at least one SEO field (title/description/H1/H2).' });
+      return;
+    }
+
+    const key = seoKeyFromPath(path);
+    const payload = {
+      title: seoDialogData.title.trim(),
+      description: seoDialogData.description.trim(),
+      h1: seoDialogData.h1.trim(),
+      h2: seoDialogData.h2.trim(),
+    };
+    await saveSetting(
+      key,
+      JSON.stringify(payload),
+      `Route SEO for ${path}`
+    );
+    setIsSeoDialogOpen(false);
+  };
+
+  const handleSeoDelete = async (path: string) => {
+    const key = seoKeyFromPath(path);
+    await deleteSetting(key);
+  };
+
   if (loading && allSettings.length === 0) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -262,10 +391,13 @@ export function SiteSettings() {
         </Alert>
       )}
 
-      <Tabs defaultValue="general" className="space-y-6">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList className="bg-slate-100 p-1.5 rounded-2xl w-full sm:w-fit">
           <TabsTrigger value="general" className="rounded-xl px-6 py-2.5 font-bold data-[state=active]:bg-white data-[state=active]:text-indigo-600 data-[state=active]:shadow-sm">
             <Globe className="h-4 w-4 mr-2" /> General & SEO
+          </TabsTrigger>
+          <TabsTrigger value="page-seo" className="rounded-xl px-6 py-2.5 font-bold data-[state=active]:bg-white data-[state=active]:text-indigo-600 data-[state=active]:shadow-sm">
+            <Info className="h-4 w-4 mr-2" /> Page SEO
           </TabsTrigger>
           <TabsTrigger value="contact" className="rounded-xl px-6 py-2.5 font-bold data-[state=active]:bg-white data-[state=active]:text-indigo-600 data-[state=active]:shadow-sm">
             <Phone className="h-4 w-4 mr-2" /> Contact Info
@@ -422,6 +554,92 @@ export function SiteSettings() {
           </Card>
         </TabsContent>
 
+        {/* ─── PAGE SEO TAB ─────────────────────────────────────────────────────── */}
+        <TabsContent value="page-seo" className="space-y-6">
+          <Card className="rounded-[2rem] border-none shadow-sm overflow-hidden">
+            <CardHeader className="p-8 pb-4">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                <div>
+                  <CardTitle className="text-xl font-bold flex items-center gap-2">
+                    <Info className="h-5 w-5 text-indigo-600" /> Route SEO Manager
+                  </CardTitle>
+                  <CardDescription className="font-medium">
+                    Add/Edit/Delete page-level Title, Meta Description, H1, and H2 from admin.
+                  </CardDescription>
+                </div>
+                <Button
+                  onClick={() => openSeoDialog()}
+                  className="bg-indigo-600 hover:bg-indigo-700 rounded-xl font-bold"
+                >
+                  <Plus className="h-4 w-4 mr-2" /> Add SEO Rule
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="p-8 pt-0 space-y-4">
+              <Input
+                value={seoFilter}
+                onChange={(e) => setSeoFilter(e.target.value)}
+                placeholder="Filter by route/title..."
+                className="h-11 rounded-xl border-slate-200"
+              />
+              <div className="rounded-2xl border border-slate-200 overflow-hidden">
+                <div className="grid grid-cols-12 gap-3 bg-slate-50 px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                  <div className="col-span-3">Route</div>
+                  <div className="col-span-3">Title</div>
+                  <div className="col-span-2">H1</div>
+                  <div className="col-span-2">H2</div>
+                  <div className="col-span-2 text-right">Actions</div>
+                </div>
+                {visibleSeoRoutes.length === 0 ? (
+                  <div className="px-4 py-12 text-center text-sm text-slate-500">
+                    No page SEO rules found.
+                  </div>
+                ) : (
+                  visibleSeoRoutes.map((row) => {
+                    const suggested = resolveRouteTitle(row.path);
+                    return (
+                      <div key={row.key} className="grid grid-cols-12 gap-3 px-4 py-3 border-t border-slate-100 items-center">
+                        <div className="col-span-3">
+                          <code className="text-xs font-bold bg-indigo-50 text-indigo-700 px-2 py-1 rounded-lg">
+                            {row.path}
+                          </code>
+                          {suggested && (
+                            <p className="text-[11px] text-slate-400 mt-1">Default title: {suggested}</p>
+                          )}
+                        </div>
+                        <div className="col-span-3 text-sm font-semibold text-slate-800 truncate">
+                          {row.title || '—'}
+                        </div>
+                        <div className="col-span-2 text-xs text-slate-700 truncate">{row.h1 || '—'}</div>
+                        <div className="col-span-2 text-xs text-slate-700 truncate">{row.h2 || '—'}</div>
+                        <div className="col-span-2 flex justify-end gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-9 w-9 rounded-xl hover:bg-slate-100"
+                            onClick={() => openSeoDialog(row)}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-9 w-9 rounded-xl hover:bg-rose-50 text-rose-600"
+                            onClick={() => handleSeoDelete(row.path)}
+                            disabled={saving === row.key}
+                          >
+                            {saving === row.key ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                          </Button>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         {/* ─── ALL SETTINGS (ADVANCED) TAB ──────────────────────────────────────── */}
         <TabsContent value="advanced" className="space-y-6">
           <Card className="rounded-[2.5rem] border-none shadow-sm overflow-hidden">
@@ -539,6 +757,85 @@ export function SiteSettings() {
              <Button onClick={handleDialogSubmit} className="rounded-xl font-bold h-12 px-8 bg-indigo-600 hover:bg-slate-900 text-white shadow-lg shadow-indigo-100 flex-1">
                 {editingSetting ? 'Update Setting' : 'Add Setting'}
              </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isSeoDialogOpen} onOpenChange={setIsSeoDialogOpen}>
+        <DialogContent className="rounded-[2rem] border-none shadow-2xl p-0 overflow-hidden sm:max-w-xl">
+          <DialogHeader className="p-8 pb-4">
+            <DialogTitle className="text-2xl font-black text-slate-900">
+              {editingSeoPath ? 'Edit Page SEO Rule' : 'Add Page SEO Rule'}
+            </DialogTitle>
+            <DialogDescription className="font-medium">
+              Configure route-specific SEO tags. These values override defaults for matching route paths.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="p-8 pt-0 space-y-4">
+            <div className="space-y-2">
+              <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Route Path</Label>
+              <Input
+                value={seoDialogData.path}
+                onChange={(e) => setSeoDialogData((prev) => ({ ...prev, path: e.target.value }))}
+                placeholder="/mock-test"
+                className="h-11 rounded-xl border-slate-200 font-mono font-bold"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Page Title</Label>
+              <Input
+                value={seoDialogData.title}
+                onChange={(e) => setSeoDialogData((prev) => ({ ...prev, title: e.target.value }))}
+                placeholder="Mock Tests"
+                className="h-11 rounded-xl border-slate-200"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Meta Description</Label>
+              <Textarea
+                value={seoDialogData.description}
+                onChange={(e) => setSeoDialogData((prev) => ({ ...prev, description: e.target.value }))}
+                placeholder="Describe this page for search engines..."
+                className="rounded-xl border-slate-200 min-h-[90px]"
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">H1</Label>
+                <Input
+                  value={seoDialogData.h1}
+                  onChange={(e) => setSeoDialogData((prev) => ({ ...prev, h1: e.target.value }))}
+                  placeholder="IELTS Mock Tests"
+                  className="h-11 rounded-xl border-slate-200"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">H2</Label>
+                <Input
+                  value={seoDialogData.h2}
+                  onChange={(e) => setSeoDialogData((prev) => ({ ...prev, h2: e.target.value }))}
+                  placeholder="Select a test module"
+                  className="h-11 rounded-xl border-slate-200"
+                />
+              </div>
+            </div>
+          </div>
+          <DialogFooter className="p-8 bg-slate-50 flex gap-3">
+            <Button variant="ghost" onClick={() => setIsSeoDialogOpen(false)} className="rounded-xl font-bold h-12">
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSeoSave}
+              disabled={saving === seoKeyFromPath(seoDialogData.path || '/')}
+              className="rounded-xl font-bold h-12 px-8 bg-indigo-600 hover:bg-slate-900 text-white shadow-lg shadow-indigo-100 flex-1"
+            >
+              {saving === seoKeyFromPath(seoDialogData.path || '/') ? (
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+              ) : (
+                <Save className="h-4 w-4 mr-2" />
+              )}
+              {editingSeoPath ? 'Update SEO Rule' : 'Add SEO Rule'}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

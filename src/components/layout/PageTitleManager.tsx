@@ -1,8 +1,21 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ROUTE_TITLES } from '@/hooks/useSiteSettings';
+import {
+  getBaseSiteSettings,
+  getRouteSeoConfig,
+  resolveRouteTitle,
+} from '@/hooks/useSiteSettings';
 
-const SITE_NAME = 'IELTS Band 9 Materials Library';
+function setMeta(name: string, content: string, property = false) {
+  const attr = property ? 'property' : 'name';
+  let el = document.querySelector<HTMLMetaElement>(`meta[${attr}="${name}"]`);
+  if (!el) {
+    el = document.createElement('meta');
+    el.setAttribute(attr, name);
+    document.head.appendChild(el);
+  }
+  el.setAttribute('content', content);
+}
 
 /**
  * Automatically sets document.title on every route change based on ROUTE_TITLES map.
@@ -13,23 +26,25 @@ export function PageTitleManager() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    // Exact match first
-    if (ROUTE_TITLES[pathname]) {
-      document.title = `${ROUTE_TITLES[pathname]} | ${SITE_NAME}`;
-      return;
-    }
+    const applyForPath = () => {
+      const base = getBaseSiteSettings();
+      const routeSeo = getRouteSeoConfig(pathname);
+      const fallbackRouteTitle = resolveRouteTitle(pathname);
+      const chosenTitle = routeSeo?.title || fallbackRouteTitle;
+      document.title = chosenTitle ? `${chosenTitle} | ${base.site_title}` : base.site_title;
 
-    // Prefix match for dynamic routes (e.g. /lesson/some-slug, /courses/123)
-    const prefix = Object.keys(ROUTE_TITLES)
-      .filter(k => k !== '/')
-      .sort((a, b) => b.length - a.length) // longest first
-      .find(k => pathname.startsWith(k + '/'));
+      const chosenDesc = routeSeo?.description || base.site_description;
+      setMeta('description', chosenDesc);
+      setMeta('og:title', chosenTitle || base.site_title, true);
+      setMeta('og:description', chosenDesc, true);
+      setMeta('twitter:title', chosenTitle || base.site_title);
+      setMeta('twitter:description', chosenDesc);
+    };
 
-    if (prefix) {
-      document.title = `${ROUTE_TITLES[prefix]} | ${SITE_NAME}`;
-    }
-    // Dynamic pages (lesson, course detail) will call usePageTitle() themselves
-    // and override this — that's fine.
+    applyForPath();
+    const onSettingsUpdated = () => applyForPath();
+    window.addEventListener('site-settings-updated', onSettingsUpdated);
+    return () => window.removeEventListener('site-settings-updated', onSettingsUpdated);
   }, [pathname]);
 
   return null;
