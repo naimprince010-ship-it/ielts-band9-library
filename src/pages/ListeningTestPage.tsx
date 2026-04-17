@@ -703,11 +703,11 @@ export default function ListeningTestPage() {
           {/* Left Side: Info & Visual */}
           <div className="lg:col-span-5 space-y-6">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-bold uppercase tracking-wider">
-              <Zap className="h-3 w-3" /> Full Simulation
+              <Zap className="h-3 w-3" /> Listening Simulation
             </div>
             <h1 className="text-4xl md:text-5xl font-black text-slate-900 leading-tight">
               IELTS Listening <br />
-              <span className="text-indigo-600">Full Mock Test</span>
+              <span className="text-indigo-600">Listening Mock Test</span>
             </h1>
             <p className="text-lg text-slate-600 font-medium leading-relaxed">
               Experience the real exam environment. 40 questions, 4 parts, and 30 minutes of focused listening.
@@ -811,7 +811,7 @@ export default function ListeningTestPage() {
                     onClick={handleStartTest}
                     className="w-full h-16 rounded-2xl bg-slate-900 hover:bg-indigo-600 text-lg font-bold transition-all duration-300 shadow-xl shadow-slate-200"
                   >
-                    Start Full Mock Test <ArrowRight className="ml-2 h-5 w-5" />
+                    Start Listening Test <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                   <p className="text-center text-[11px] text-slate-400 font-bold uppercase tracking-widest mt-4">
                     By starting, you agree to follow IELTS exam rules
