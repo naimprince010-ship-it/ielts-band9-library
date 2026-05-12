@@ -140,12 +140,55 @@ function formatTime(secs: number): string {
   return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
 
+function sectionAudioKey(sectionNumber?: number): string {
+  return `section-${sectionNumber ?? 'unknown'}`;
+}
+
+function normalizeAnswer(value: unknown): string {
+  return String(value ?? '')
+    .trim()
+    .toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/[.,!?;:()[\]{}"']/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function getAcceptedAnswers(correctAnswer: unknown): string[] {
+  if (Array.isArray(correctAnswer)) return correctAnswer.map(normalizeAnswer).filter(Boolean);
+  return String(correctAnswer ?? '')
+    .split(/\s*(?:\/|\||;|,|\bor\b)\s*/i)
+    .map(normalizeAnswer)
+    .filter(Boolean);
+}
+
+function isAnswerCorrect(userAnswer: string, correctAnswer: unknown): boolean {
+  const normalizedUser = normalizeAnswer(userAnswer);
+  if (!normalizedUser) return false;
+  return getAcceptedAnswers(correctAnswer).some(answer => answer === normalizedUser);
+}
+
+function bandFromWritingWordCounts(task1: number, task2: number): number {
+  if (task1 === 0 && task2 === 0) return 0;
+  if (task1 < 120 || task2 < 200) return 4.5;
+  const total = task1 + task2;
+  return total >= 600 ? 7.5 : total >= 450 ? 7.0 : total >= 350 ? 6.5 : total >= 250 ? 6.0 : 5.0;
+}
+
+function bandFromSpeakingResponse(words: number, clips: number): number {
+  if (words === 0 && clips === 0) return 0;
+  const recordingCredit = Math.min(clips, 3) * 45;
+  const responseSize = words + recordingCredit;
+  return responseSize >= 300 ? 7.0 : responseSize >= 200 ? 6.5 : responseSize >= 100 ? 6.0 : 5.0;
+}
+
 function useTimer(initial: number, onExpire: () => void) {
   const [remaining, setRemaining] = useState(initial);
   const [running, setRunning] = useState(false);
   const ref = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const start = useCallback(() => setRunning(true), []);
+  const pause = useCallback(() => setRunning(false), []);
 
   useEffect(() => {
     if (!running) return;
@@ -164,7 +207,7 @@ function useTimer(initial: number, onExpire: () => void) {
     setRemaining(val);
   }, []);
 
-  return { remaining, start, reset };
+  return { remaining, running, start, pause, reset };
 }
 
 // ─── Session persistence helpers ──────────────────────────────────────────
@@ -174,6 +217,8 @@ interface TestSession {
   phase: Phase;
   sectionIndex: number;
   scores: SectionScores;
+  selectedMode: 'practice' | 'exam';
+  tests: Partial<Record<ModuleType, MockTest>>;
   playedAudios: string[];
   timerRemaining: number;
   savedAt: number;
@@ -211,8 +256,11 @@ export default function FullMockTestPage() {
 
   const [resultSaved, setResultSaved] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
-  const saveResultToDb = async (finalScores: SectionScores, usedTests: Partial<Record<ModuleType, MockTest>>) => {
-    if (!user || !supabase || !isSupabaseConfigured()) return;
+  const saveResultToDb = useCallback(async (finalScores: SectionScores, usedTests: Partial<Record<ModuleType, MockTest>>) => {
+    if (!user || !supabase || !isSupabaseConfigured()) {
+      setResultSaved('idle');
+      return;
+    }
     setResultSaved('saving');
     try {
       const overall = overallBand(finalScores);
@@ -240,13 +288,14 @@ export default function FullMockTestPage() {
       console.error('Error saving result:', err);
       setResultSaved('error');
     }
-  };
+  }, [user]);
 
   // Restore from session on first render
   const savedSession = loadSession();
+  const savedSessionRef = useRef(savedSession);
 
   const [phase, setPhaseRaw] = useState<Phase>(savedSession?.phase ?? 'intro');
-  const [tests, setTests] = useState<Partial<Record<ModuleType, MockTest>>>({});
+  const [tests, setTestsRaw] = useState<Partial<Record<ModuleType, MockTest>>>(savedSession?.tests ?? {});
   const [loading, setLoading] = useState(true);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [playingAudioId, setPlayingAudioId] = useState<string | null>(null);
@@ -300,7 +349,7 @@ export default function FullMockTestPage() {
       wakeLockRef.current?.release().catch(() => {});
       wakeLockRef.current = null;
     };
-  }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [phase]);
 
   // ─── Real audio player (for pre-generated MP3 sectionAudioUrl) ──────────
   const [realAudioPlaying, setRealAudioPlaying] = useState<string | null>(null);
@@ -323,7 +372,7 @@ export default function FullMockTestPage() {
       : [];
     sections.forEach((section) => {
       if (!section.sectionAudioUrl) return;
-      const id = `section-${section.sectionNumber}`;
+      const id = sectionAudioKey(section.sectionNumber);
       if (prefetchedBlobs.current.has(id)) return;
       toBlobUrl(section.sectionAudioUrl).then(blobUrl => {
         prefetchedBlobs.current.set(id, blobUrl);
@@ -534,7 +583,6 @@ export default function FullMockTestPage() {
   };
 
   // Landing page specific state
-  const [selectedMode, setSelectedMode] = useState<'practice' | 'exam'>('exam');
   const [checkedItems, setCheckedItems] = useState<number[]>([]);
 
   const toggleCheckItem = (id: number) => {
@@ -726,8 +774,14 @@ export default function FullMockTestPage() {
   );
   // Saved timer value — used once on mount to restore remaining time
   const restoredTimerRef = useRef<number | null>(savedSession?.timerRemaining ?? null);
+  const [selectedMode, setSelectedModeRaw] = useState<'practice' | 'exam'>(savedSession?.selectedMode ?? 'exam');
 
   // Wrap setters to auto-persist session
+  const setTests = (next: Partial<Record<ModuleType, MockTest>>) => {
+    setTestsRaw(next);
+    saveSession({ tests: next });
+  };
+
   const setScores = (updater: SectionScores | ((prev: SectionScores) => SectionScores)) => {
     setScoresRaw(prev => {
       const next = typeof updater === 'function' ? updater(prev) : updater;
@@ -739,6 +793,11 @@ export default function FullMockTestPage() {
   const setSectionIndex = (idx: number) => {
     setSectionIndexRaw(idx);
     saveSession({ sectionIndex: idx });
+  };
+
+  const setSelectedMode = (mode: 'practice' | 'exam') => {
+    setSelectedModeRaw(mode);
+    saveSession({ selectedMode: mode });
   };
 
   // Persist playedAudios whenever it changes
@@ -755,7 +814,7 @@ export default function FullMockTestPage() {
 
   // Restore timer from session if available, otherwise use section default
   const initialTimerValue = restoredTimerRef.current ?? (currentSection?.duration ?? 1800);
-  const { remaining, start: startTimer, reset: resetTimer } = useTimer(initialTimerValue, handleTimeUp);
+  const { remaining, running: timerRunning, start: startTimer, pause: pauseTimer, reset: resetTimer } = useTimer(initialTimerValue, handleTimeUp);
 
   // Persist remaining time every 10 seconds to avoid excessive writes
   const lastTimerSaveRef = useRef(0);
@@ -770,7 +829,8 @@ export default function FullMockTestPage() {
   // On mount: if we restored an in-progress session, auto-start the timer
   const sessionRestoredRef = useRef(false);
   useEffect(() => {
-    if (!sessionRestoredRef.current && savedSession && savedSession.phase !== 'intro' && savedSession.phase !== 'results') {
+    const initialSession = savedSessionRef.current;
+    if (!sessionRestoredRef.current && initialSession && initialSession.phase !== 'intro' && initialSession.phase !== 'results') {
       sessionRestoredRef.current = true;
       // Small delay to let useTimer initialize
       setTimeout(() => startTimerRef.current?.(), 200);
@@ -785,6 +845,12 @@ export default function FullMockTestPage() {
 
     const fetchTests = async () => {
       try {
+        const initialSession = savedSessionRef.current;
+        if (initialSession?.tests && initialSession.phase !== 'intro' && initialSession.phase !== 'results') {
+          setTestsRaw(initialSession.tests);
+          return;
+        }
+
         // ── 1. Fetch user's already-attempted test IDs per module ────────────
         const attemptedIds: Partial<Record<ModuleType, Set<string>>> = {};
         if (user) {
@@ -859,7 +925,7 @@ export default function FullMockTestPage() {
 
     const targets: { id: string; url: string }[] = [];
     sections.forEach(s => {
-      if (s.sectionAudioUrl) targets.push({ id: `section-${s.sectionNumber}`, url: s.sectionAudioUrl });
+      if (s.sectionAudioUrl) targets.push({ id: sectionAudioKey(s.sectionNumber), url: s.sectionAudioUrl });
     });
     if (globalUrl) targets.push({ id: 'global', url: globalUrl });
 
@@ -895,7 +961,7 @@ export default function FullMockTestPage() {
     setPhase(SECTIONS[idx].phase);
     restoredTimerRef.current = null; // Clear restored timer — use fresh duration
     resetTimerRef.current?.(SECTIONS[idx].duration);
-    saveSession({ timerRemaining: SECTIONS[idx].duration, sectionIndex: idx, phase: SECTIONS[idx].phase });
+    saveSession({ timerRemaining: SECTIONS[idx].duration, sectionIndex: idx, phase: SECTIONS[idx].phase, selectedMode, tests });
     setTimeout(() => startTimerRef.current?.(), 100);
   };
 
@@ -907,12 +973,12 @@ export default function FullMockTestPage() {
     startSection(idx);
   };
 
-  const submitSection = useCallback((_timeUp = false) => {
+  const submitSection = useCallback(() => {
     const sec = SECTIONS[sectionIndex];
     const test = tests[sec.module];
     console.log('Submitting section:', sec.module, 'Test data available:', !!test);
     
-    let band = 5.0;
+    let band: number | null = null;
 
     try {
       if (test && test.test_data) {
@@ -923,29 +989,24 @@ export default function FullMockTestPage() {
           const qs = passages.flatMap((p: any) => p.questions || []);
           console.log(`Scoring Reading: ${qs.length} questions found`);
           const correct = qs.filter((q: any, i: number) => {
-            const userAnswer = (answers[`r_${i}`] ?? '').trim().toLowerCase();
-            const correctAnswer = (q.correctAnswer || '').trim().toLowerCase();
-            return userAnswer && correctAnswer && userAnswer === correctAnswer;
+            return isAnswerCorrect(answers[`r_${i}`] ?? '', q.correctAnswer);
           }).length;
-          band = bandFromScore(correct, qs.length);
+          band = qs.length > 0 ? bandFromScore(correct, qs.length) : null;
         } else if (sec.module === 'listening') {
           const sections = Array.isArray(td.sections) ? td.sections : [];
           const qs = sections.flatMap((s: any) => s.questions || []);
           console.log(`Scoring Listening: ${qs.length} questions found`);
           const correct = qs.filter((q: any, i: number) => {
-            const userAnswer = (answers[`l_${i}`] ?? '').trim().toLowerCase();
-            const correctAnswer = (q.correctAnswer || '').trim().toLowerCase();
-            return userAnswer && correctAnswer && userAnswer === correctAnswer;
+            return isAnswerCorrect(answers[`l_${i}`] ?? '', q.correctAnswer);
           }).length;
-          band = bandFromScore(correct, qs.length);
+          band = qs.length > 0 ? bandFromScore(correct, qs.length) : null;
         } else if (sec.module === 'writing') {
           const task1 = (answers['w_task1'] ?? '').split(/\s+/).filter(Boolean).length;
           const task2 = (answers['w_task2'] ?? '').split(/\s+/).filter(Boolean).length;
-          const total = task1 + task2;
-          band = total >= 600 ? 7.5 : total >= 450 ? 7.0 : total >= 350 ? 6.5 : total >= 250 ? 6.0 : total >= 150 ? 5.5 : 5.0;
+          band = bandFromWritingWordCounts(task1, task2);
         } else if (sec.module === 'speaking') {
           const words = (answers['sp_answers'] ?? '').split(/\s+/).filter(Boolean).length;
-          band = words >= 300 ? 7.0 : words >= 200 ? 6.5 : words >= 100 ? 6.0 : 5.5;
+          band = bandFromSpeakingResponse(words, recordedClips.length);
         }
       }
     } catch (err) { console.error('Error calculating score:', err); }
@@ -964,7 +1025,7 @@ export default function FullMockTestPage() {
     }
     setAnswers({});
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [sectionIndex, tests, answers]);
+  }, [sectionIndex, tests, answers, scores, recordedClips.length, saveResultToDb]);
 
   useEffect(() => { submitSectionRef.current = submitSection; }, [submitSection]);
 
@@ -1139,8 +1200,8 @@ export default function FullMockTestPage() {
                         <h3 className="text-xl font-bold mb-1">Practice Mode</h3>
                         <p className="text-sm text-muted-foreground mb-4">Flexible learning environment</p>
                         <ul className="space-y-2 text-xs font-bold">
-                          <li className="flex items-center gap-2"><CheckCircle className="h-3.5 w-3.5 text-emerald-500" /> Pause anytime</li>
-                          <li className="flex items-center gap-2"><CheckCircle className="h-3.5 w-3.5 text-emerald-500" /> View hints & tips</li>
+                          <li className="flex items-center gap-2"><CheckCircle className="h-3.5 w-3.5 text-emerald-500" /> Pause or resume timer</li>
+                          <li className="flex items-center gap-2"><CheckCircle className="h-3.5 w-3.5 text-emerald-500" /> Flexible section pacing</li>
                         </ul>
                       </div>
                     </div>
@@ -1347,6 +1408,17 @@ export default function FullMockTestPage() {
                 <div key={i} className={`h-1.5 w-12 rounded-full transition-all ${i < sectionIndex ? 'bg-green-500' : i === sectionIndex ? 'bg-accent' : 'bg-white/10'}`} />
              ))}
            </div>
+           {selectedMode === 'practice' && (
+             <Button
+               type="button"
+               size="sm"
+               variant="outline"
+               onClick={() => timerRunning ? pauseTimer() : startTimer()}
+               className="hidden sm:inline-flex border-white/20 bg-white/5 text-white hover:bg-white/15 hover:text-white rounded-2xl font-black"
+             >
+               {timerRunning ? 'PAUSE' : 'RESUME'}
+             </Button>
+           )}
            <div className={`flex items-center gap-3 font-mono font-black text-2xl py-2 px-6 rounded-2xl bg-white/5 border border-white/10 ${timeColor}`}>
             <Clock className="h-6 w-6" />
             {formatTime(remaining)}
@@ -1424,7 +1496,7 @@ export default function FullMockTestPage() {
                     </Card>
                   )}
                   {sections.map((sec) => {
-                    const sectionAudioId = `section_${sec.sectionNumber}`;
+                    const sectionAudioId = sectionAudioKey(sec.sectionNumber);
                     const sectionTranscript = typeof sec.transcript === 'string' ? sec.transcript : '';
                     const sectionUrl = sec.sectionAudioUrl ?? '';
                     const hasAudio = !!(sectionUrl || sectionTranscript);

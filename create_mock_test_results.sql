@@ -11,9 +11,19 @@ CREATE TABLE IF NOT EXISTS public.mock_test_results (
   reading_band   NUMERIC(3,1),
   writing_band   NUMERIC(3,1),
   speaking_band  NUMERIC(3,1),
+  listening_test_id UUID REFERENCES public.mock_tests(id) ON DELETE SET NULL,
+  reading_test_id   UUID REFERENCES public.mock_tests(id) ON DELETE SET NULL,
+  writing_test_id   UUID REFERENCES public.mock_tests(id) ON DELETE SET NULL,
+  speaking_test_id  UUID REFERENCES public.mock_tests(id) ON DELETE SET NULL,
   completed_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
   created_at    TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+ALTER TABLE public.mock_test_results
+  ADD COLUMN IF NOT EXISTS listening_test_id UUID REFERENCES public.mock_tests(id) ON DELETE SET NULL,
+  ADD COLUMN IF NOT EXISTS reading_test_id   UUID REFERENCES public.mock_tests(id) ON DELETE SET NULL,
+  ADD COLUMN IF NOT EXISTS writing_test_id   UUID REFERENCES public.mock_tests(id) ON DELETE SET NULL,
+  ADD COLUMN IF NOT EXISTS speaking_test_id  UUID REFERENCES public.mock_tests(id) ON DELETE SET NULL;
 
 -- Indexes for fast user lookups
 CREATE INDEX IF NOT EXISTS idx_mock_test_results_user_id
@@ -21,6 +31,22 @@ CREATE INDEX IF NOT EXISTS idx_mock_test_results_user_id
 
 CREATE INDEX IF NOT EXISTS idx_mock_test_results_completed_at
   ON public.mock_test_results (completed_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_mock_test_results_user_listening
+  ON public.mock_test_results (user_id, listening_test_id)
+  WHERE listening_test_id IS NOT NULL;
+
+CREATE INDEX IF NOT EXISTS idx_mock_test_results_user_reading
+  ON public.mock_test_results (user_id, reading_test_id)
+  WHERE reading_test_id IS NOT NULL;
+
+CREATE INDEX IF NOT EXISTS idx_mock_test_results_user_writing
+  ON public.mock_test_results (user_id, writing_test_id)
+  WHERE writing_test_id IS NOT NULL;
+
+CREATE INDEX IF NOT EXISTS idx_mock_test_results_user_speaking
+  ON public.mock_test_results (user_id, speaking_test_id)
+  WHERE speaking_test_id IS NOT NULL;
 
 -- Row Level Security: users can only see their own results
 ALTER TABLE public.mock_test_results ENABLE ROW LEVEL SECURITY;
