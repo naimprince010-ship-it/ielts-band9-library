@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Home,
@@ -23,6 +23,8 @@ import {
   getBandScoreColor,
   getBandScoreLevel
 } from '@/utils/scoring';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 interface ModuleResult {
   moduleName: string;
@@ -41,6 +43,18 @@ interface TestSession {
   testTitle: string;
   startedAt: number;
   modules: ModuleResult[];
+}
+
+interface FullMockAttempt {
+  id: string;
+  overall_band: number;
+  listening_band: number | null;
+  reading_band: number | null;
+  writing_band: number | null;
+  speaking_band: number | null;
+  completed_at: string;
+  review_data?: unknown;
+  writing_feedback?: unknown;
 }
 
 const STORAGE_KEYS = {
@@ -71,15 +85,47 @@ const formatTime = (seconds: number): string => {
 };
 
 export default function ResultDashboardPage() {
+  const { user } = useAuth();
   const [testSession, setTestSession] = useState<TestSession | null>(null);
+  const [fullMockAttempts, setFullMockAttempts] = useState<FullMockAttempt[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadAllResults();
-  }, []);
+  const loadFullMockAttempts = useCallback(async () => {
+    if (!user || !isSupabaseConfigured() || !supabase) {
+      setFullMockAttempts([]);
+      return;
+    }
 
-  const loadAllResults = () => {
+    try {
+      let { data, error } = await supabase
+        .from('mock_test_results')
+        .select('id, overall_band, listening_band, reading_band, writing_band, speaking_band, completed_at, review_data, writing_feedback')
+        .eq('user_id', user.id)
+        .order('completed_at', { ascending: false })
+        .limit(10);
+
+      if (error && /review_data|writing_feedback|column/i.test(error.message || '')) {
+        const legacy = await supabase
+          .from('mock_test_results')
+          .select('id, overall_band, listening_band, reading_band, writing_band, speaking_band, completed_at')
+          .eq('user_id', user.id)
+          .order('completed_at', { ascending: false })
+          .limit(10);
+        data = legacy.data;
+        error = legacy.error;
+      }
+
+      if (error) throw error;
+      setFullMockAttempts((data || []) as FullMockAttempt[]);
+    } catch (err) {
+      console.error('Failed to load full mock attempts:', err);
+      setFullMockAttempts([]);
+    }
+  }, [user]);
+
+  const loadAllResults = useCallback(async () => {
     setLoading(true);
+    await loadFullMockAttempts();
     
     const modules: ModuleResult[] = [];
     let earliestStart = Date.now();
@@ -91,7 +137,7 @@ export default function ResultDashboardPage() {
         const session = JSON.parse(readingSession);
         if (session.isSubmitted) {
           const answers = Object.values(session.answers || {}) as { answer?: string; isCorrect?: boolean }[];
-          const correctCount = answers.filter((a) => a.answer).length;
+          const correctCount = answers.filter((a) => a.isCorrect).length;
           
           modules.push({
             moduleName: 'Reading',
@@ -121,7 +167,7 @@ export default function ResultDashboardPage() {
         const session = JSON.parse(listeningSession);
         if (session.isSubmitted) {
           const answers = Object.values(session.answers || {}) as { answer?: string; isCorrect?: boolean }[];
-          const correctCount = answers.filter((a) => a.answer).length;
+          const correctCount = answers.filter((a) => a.isCorrect).length;
           
           modules.push({
             moduleName: 'Listening',
@@ -220,7 +266,11 @@ export default function ResultDashboardPage() {
     }
 
     setLoading(false);
-  };
+  }, [loadFullMockAttempts]);
+
+  useEffect(() => {
+    loadAllResults();
+  }, [loadAllResults]);
 
   const handleClearAll = () => {
     Object.values(STORAGE_KEYS).forEach(key => {
@@ -249,6 +299,7 @@ export default function ResultDashboardPage() {
   const overallBand = getOverallBandScore();
   const completedModules = testSession?.modules.filter(m => m.status === 'completed').length || 0;
   const pendingModules = testSession?.modules.filter(m => m.status === 'pending').length || 0;
+  const latestFullMock = fullMockAttempts[0];
 
   if (loading) {
     return (
@@ -261,7 +312,7 @@ export default function ResultDashboardPage() {
     );
   }
 
-  if (!testSession || testSession.modules.every(m => m.status === 'not-started')) {
+  if (fullMockAttempts.length === 0 && (!testSession || testSession.modules.every(m => m.status === 'not-started'))) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
@@ -286,6 +337,12 @@ export default function ResultDashboardPage() {
                   Start Listening Test
                 </Button>
               </Link>
+              <Link to="/full-mock-test" className="block">
+                <Button variant="outline" className="w-full gap-2">
+                  <Award className="h-4 w-4" />
+                  Start Full Mock Test
+                </Button>
+              </Link>
             </div>
           </CardContent>
         </Card>
@@ -305,7 +362,7 @@ export default function ResultDashboardPage() {
           <div className="flex gap-3">
             <Button variant="outline" onClick={handleClearAll} className="gap-2">
               <RotateCcw className="h-4 w-4" />
-              Clear All
+              Clear Local
             </Button>
             <Link to="/">
               <Button className="gap-2">
@@ -317,6 +374,78 @@ export default function ResultDashboardPage() {
         </div>
 
         {/* Overall Score Card */}
+        {latestFullMock && (
+          <Card className="mb-8 overflow-hidden border-indigo-100 shadow-lg">
+            <div className="h-2 bg-gradient-to-r from-indigo-600 via-violet-500 to-emerald-500" />
+            <CardContent className="p-8">
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+                <div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="h-12 w-12 rounded-2xl bg-indigo-100 flex items-center justify-center">
+                      <Award className="h-6 w-6 text-indigo-600" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-gray-900">Latest Full Mock Test</h2>
+                      <p className="text-sm text-gray-500">
+                        Completed {new Date(latestFullMock.completed_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-gray-600 max-w-2xl">
+                    This score comes from the complete four-module mock test and is the most reliable dashboard signal.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                  {[
+                    { label: 'Overall', value: latestFullMock.overall_band, accent: true },
+                    { label: 'Listening', value: latestFullMock.listening_band },
+                    { label: 'Reading', value: latestFullMock.reading_band },
+                    { label: 'Writing', value: latestFullMock.writing_band },
+                    { label: 'Speaking', value: latestFullMock.speaking_band },
+                  ].map(item => (
+                    <div key={item.label} className={`text-center rounded-lg p-4 ${item.accent ? 'bg-indigo-600 text-white' : 'bg-gray-50 text-gray-900'}`}>
+                      <div className="text-xs uppercase tracking-wide opacity-75 mb-1">{item.label}</div>
+                      <div className="text-3xl font-bold">{item.value !== null ? formatBandScore(Number(item.value)) : '--'}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {fullMockAttempts.length > 1 && (
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-indigo-600" />
+                Full Mock History
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {fullMockAttempts.slice(0, 5).map((attempt, index) => (
+                  <div key={attempt.id} className="flex items-center justify-between rounded-lg bg-gray-50 p-4">
+                    <div>
+                      <p className="font-semibold text-gray-900">Attempt {fullMockAttempts.length - index}</p>
+                      <p className="text-sm text-gray-500">{new Date(attempt.completed_at).toLocaleString()}</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Badge className={getBandScoreColor(Number(attempt.overall_band))}>
+                        Overall {formatBandScore(Number(attempt.overall_band))}
+                      </Badge>
+                      {index === 0 && <Badge variant="outline">Latest</Badge>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Overall Score Card */}
+        {testSession && (
         <Card className="mb-8">
           <CardContent className="p-8">
             <div className="grid md:grid-cols-3 gap-8 items-center">
@@ -384,8 +513,10 @@ export default function ResultDashboardPage() {
             </div>
           </CardContent>
         </Card>
+        )}
 
         {/* Module Cards */}
+        {testSession && (
         <div className="grid md:grid-cols-2 gap-6">
           {testSession.modules.map((module) => {
             const Icon = MODULE_ICONS[module.moduleType];
@@ -514,6 +645,7 @@ export default function ResultDashboardPage() {
             );
           })}
         </div>
+        )}
 
         {/* Band Score Legend */}
         <Card className="mt-8">

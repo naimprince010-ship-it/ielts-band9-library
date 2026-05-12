@@ -336,8 +336,14 @@ export default function FullMockTestPage() {
   const { user, isPremium } = useAuth();
 
   const [resultSaved, setResultSaved] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const savedResultIdRef = useRef<string | null>(null);
 
-  const saveResultToDb = useCallback(async (finalScores: SectionScores, usedTests: Partial<Record<ModuleType, MockTest>>) => {
+  const saveResultToDb = useCallback(async (
+    finalScores: SectionScores,
+    usedTests: Partial<Record<ModuleType, MockTest>>,
+    finalReviewData: ReviewData,
+    finalWritingFeedback: WritingFeedback | null
+  ) => {
     if (!user || !supabase || !isSupabaseConfigured()) {
       setResultSaved('idle');
       return;
@@ -345,7 +351,7 @@ export default function FullMockTestPage() {
     setResultSaved('saving');
     try {
       const overall = overallBand(finalScores);
-      const { error } = await supabase.from('mock_test_results').insert({
+      const insertData = {
         user_id: user.id,
         overall_band: overall,
         listening_band: finalScores.listening,
@@ -358,11 +364,32 @@ export default function FullMockTestPage() {
         reading_test_id:   usedTests.reading?.id   ?? null,
         writing_test_id:   usedTests.writing?.id   ?? null,
         speaking_test_id:  usedTests.speaking?.id  ?? null,
-      });
+        review_data: finalReviewData,
+        writing_feedback: finalWritingFeedback,
+      };
+      let { data: savedResult, error } = await supabase
+        .from('mock_test_results')
+        .insert(insertData)
+        .select('id')
+        .single();
+
+      if (error && /review_data|writing_feedback|column/i.test(error.message || '')) {
+        const legacyInsertData: Record<string, unknown> = { ...insertData };
+        delete legacyInsertData.review_data;
+        delete legacyInsertData.writing_feedback;
+        const retry = await supabase
+          .from('mock_test_results')
+          .insert(legacyInsertData)
+          .select('id')
+          .single();
+        savedResult = retry.data;
+        error = retry.error;
+      }
       if (error) {
         console.error('Failed to save result:', error);
         setResultSaved('error');
       } else {
+        savedResultIdRef.current = savedResult?.id ?? null;
         setResultSaved('saved');
       }
     } catch (err) {
@@ -1125,9 +1152,8 @@ export default function FullMockTestPage() {
     } catch (err) { console.error('Error calculating score:', err); }
 
     const finalScores = { ...scores, [sec.module]: band };
-    if (sectionReview) {
-      setReviewData(prev => ({ ...prev, [sec.module]: sectionReview }));
-    }
+    const finalReviewData = sectionReview ? { ...reviewData, [sec.module]: sectionReview } : reviewData;
+    if (sectionReview) setReviewData(finalReviewData);
     setScores(finalScores);
 
     const next = sectionIndex + 1;
@@ -1137,11 +1163,11 @@ export default function FullMockTestPage() {
     } else {
       setPhase('results');
       clearSession(); // Test complete — wipe session
-      saveResultToDb(finalScores, tests); // 💾 Save to Supabase with test IDs
+      saveResultToDb(finalScores, tests, finalReviewData, writingFeedback);
     }
     setAnswers({});
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [sectionIndex, tests, answers, scores, recordedClips.length, saveResultToDb]);
+  }, [sectionIndex, tests, answers, scores, recordedClips.length, saveResultToDb, reviewData, writingFeedback]);
 
   useEffect(() => { submitSectionRef.current = submitSection; }, [submitSection]);
 
@@ -1167,8 +1193,40 @@ export default function FullMockTestPage() {
         throw new Error(data.error || data.details || 'Failed to generate writing feedback.');
       }
 
-      setWritingFeedback(data.feedback as WritingFeedback);
+      const feedback = data.feedback as WritingFeedback;
+      setWritingFeedback(feedback);
       setWritingFeedbackStatus('ready');
+
+      if (user && supabase && isSupabaseConfigured()) {
+        try {
+          let resultId = savedResultIdRef.current;
+          if (!resultId) {
+            const latest = await supabase
+              .from('mock_test_results')
+              .select('id')
+              .eq('user_id', user.id)
+              .order('completed_at', { ascending: false })
+              .limit(1)
+              .maybeSingle();
+            resultId = latest.data?.id ?? null;
+            savedResultIdRef.current = resultId;
+          }
+
+          if (resultId) {
+            const { error: updateError } = await supabase
+              .from('mock_test_results')
+              .update({ writing_feedback: feedback })
+              .eq('id', resultId)
+              .eq('user_id', user.id);
+
+            if (updateError && !/writing_feedback|column/i.test(updateError.message || '')) {
+              console.error('Failed to persist writing feedback:', updateError);
+            }
+          }
+        } catch (persistError) {
+          console.error('Error persisting writing feedback:', persistError);
+        }
+      }
     } catch (err) {
       setWritingFeedbackStatus('error');
       setWritingFeedbackError(err instanceof Error ? err.message : 'Failed to generate writing feedback.');
@@ -2307,3 +2365,4 @@ export default function FullMockTestPage() {
     </div>
   );
 }
+

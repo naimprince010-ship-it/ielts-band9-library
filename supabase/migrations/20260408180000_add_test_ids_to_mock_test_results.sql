@@ -5,7 +5,9 @@ ALTER TABLE public.mock_test_results
   ADD COLUMN IF NOT EXISTS listening_test_id  uuid REFERENCES public.mock_tests(id) ON DELETE SET NULL,
   ADD COLUMN IF NOT EXISTS reading_test_id    uuid REFERENCES public.mock_tests(id) ON DELETE SET NULL,
   ADD COLUMN IF NOT EXISTS writing_test_id    uuid REFERENCES public.mock_tests(id) ON DELETE SET NULL,
-  ADD COLUMN IF NOT EXISTS speaking_test_id   uuid REFERENCES public.mock_tests(id) ON DELETE SET NULL;
+  ADD COLUMN IF NOT EXISTS speaking_test_id   uuid REFERENCES public.mock_tests(id) ON DELETE SET NULL,
+  ADD COLUMN IF NOT EXISTS review_data        jsonb,
+  ADD COLUMN IF NOT EXISTS writing_feedback   jsonb;
 
 -- Index so we can quickly find which tests a user has already attempted
 CREATE INDEX IF NOT EXISTS idx_mock_test_results_user_listening
