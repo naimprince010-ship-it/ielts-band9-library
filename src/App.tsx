@@ -51,6 +51,7 @@ const WritingTestPage = lazy(() => import('@/pages/WritingTestPage'));
 const ListeningTestPage = lazy(() => import('@/pages/ListeningTestPage'));
 const SpeakingTestPage = lazy(() => import('@/pages/SpeakingTestPage'));
 const ResultDashboardPage = lazy(() => import('@/pages/ResultDashboardPage'));
+const FullMockAttemptDetailPage = lazy(() => import('@/pages/FullMockAttemptDetailPage'));
 const CoursesPage = lazy(() => import('@/pages/CoursesPage').then(module => ({ default: module.CoursesPage })));
 const CourseDetailPage = lazy(() => import('@/pages/CourseDetailPage').then(module => ({ default: module.CourseDetailPage })));
 const TypingPracticePage = lazy(() => import('@/pages/TypingPracticePage'));
@@ -211,6 +212,11 @@ function App() {
                 } />
 
                 {/* Test pages — require login */}
+                <Route path="/results/:attemptId" element={
+                  <ProtectedRoute requireAuth>
+                    <Layout><FullMockAttemptDetailPage /></Layout>
+                  </ProtectedRoute>
+                } />
                 <Route path="/reading-test" element={
                   <ProtectedRoute requireAuth>
                     <Layout hideNavFooter={true}><ReadingTestPage /></Layout>

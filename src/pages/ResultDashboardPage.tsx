@@ -16,16 +16,8 @@ import {
   FileCheck2,
   Sparkles,
   Target,
+  ChevronRight,
 } from 'lucide-react';
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  CartesianGrid,
-} from 'recharts';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -115,11 +107,66 @@ const hasSavedPayload = (value: unknown): boolean => {
   return true;
 };
 
+interface TrendPoint {
+  name: string;
+  date: string;
+  overall: number;
+}
+
+function BandTrendChart({ data }: { data: TrendPoint[] }) {
+  if (data.length === 0) {
+    return (
+      <div className="flex h-72 items-center justify-center rounded-lg bg-slate-50 text-sm text-slate-500">
+        Complete more mocks to see your score trend.
+      </div>
+    );
+  }
+
+  const width = 720;
+  const height = 280;
+  const padding = { top: 18, right: 24, bottom: 42, left: 38 };
+  const innerWidth = width - padding.left - padding.right;
+  const innerHeight = height - padding.top - padding.bottom;
+  const points = data.map((item, index) => {
+    const x = padding.left + (data.length === 1 ? innerWidth / 2 : (index / (data.length - 1)) * innerWidth);
+    const y = padding.top + innerHeight - (Math.min(9, Math.max(0, item.overall)) / 9) * innerHeight;
+    return { ...item, x, y };
+  });
+  const path = points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ');
+
+  return (
+    <div className="h-72 w-full overflow-hidden">
+      <svg viewBox={`0 0 ${width} ${height}`} className="h-full w-full" role="img" aria-label="Overall band trend">
+        {[0, 3, 5, 6, 7, 8, 9].map((tick) => {
+          const y = padding.top + innerHeight - (tick / 9) * innerHeight;
+          return (
+            <g key={tick}>
+              <line x1={padding.left} x2={width - padding.right} y1={y} y2={y} stroke="#e2e8f0" strokeDasharray="4 4" />
+              <text x={padding.left - 10} y={y + 4} textAnchor="end" fontSize="12" fill="#64748b">{tick}</text>
+            </g>
+          );
+        })}
+        <path d={path} fill="none" stroke="#4f46e5" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+        {points.map((point) => (
+          <g key={`${point.name}-${point.date}`}>
+            <circle cx={point.x} cy={point.y} r="5" fill="#4f46e5" stroke="#fff" strokeWidth="3" />
+            <text x={point.x} y={height - 22} textAnchor="middle" fontSize="12" fill="#64748b">{point.name}</text>
+            <text x={point.x} y={Math.max(16, point.y - 12)} textAnchor="middle" fontSize="12" fontWeight="700" fill="#1e293b">
+              {formatBandScore(point.overall)}
+            </text>
+          </g>
+        ))}
+      </svg>
+    </div>
+  );
+}
+
 export default function ResultDashboardPage() {
   const { user } = useAuth();
   const [testSession, setTestSession] = useState<TestSession | null>(null);
   const [fullMockAttempts, setFullMockAttempts] = useState<FullMockAttempt[]>([]);
   const [loading, setLoading] = useState(true);
+  const [visibleHistoryCount, setVisibleHistoryCount] = useState(5);
 
   const loadFullMockAttempts = useCallback(async () => {
     if (!user || !isSupabaseConfigured() || !supabase) {
@@ -133,7 +180,7 @@ export default function ResultDashboardPage() {
         .select('id, overall_band, listening_band, reading_band, writing_band, speaking_band, completed_at, review_data, writing_feedback')
         .eq('user_id', user.id)
         .order('completed_at', { ascending: false })
-        .limit(10);
+        .limit(50);
 
       if (error && /review_data|writing_feedback|column/i.test(error.message || '')) {
         const legacy = await supabase
@@ -141,7 +188,7 @@ export default function ResultDashboardPage() {
           .select('id, overall_band, listening_band, reading_band, writing_band, speaking_band, completed_at')
           .eq('user_id', user.id)
           .order('completed_at', { ascending: false })
-          .limit(10);
+          .limit(50);
         data = legacy.data;
         error = legacy.error;
       }
@@ -358,6 +405,18 @@ export default function ResultDashboardPage() {
     { label: 'Writing', value: latestFullMock.writing_band, icon: PenTool, color: 'bg-amber-500' },
     { label: 'Speaking', value: latestFullMock.speaking_band, icon: Mic, color: 'bg-emerald-500' },
   ] : [];
+  const validSectionScores = sectionScores.filter(section => section.value != null);
+  const weakestSection = validSectionScores.reduce<typeof validSectionScores[number] | null>((weakest, section) => {
+    if (!weakest) return section;
+    return Number(section.value) < Number(weakest.value) ? section : weakest;
+  }, null);
+  const strongestSection = validSectionScores.reduce<typeof validSectionScores[number] | null>((strongest, section) => {
+    if (!strongest) return section;
+    return Number(section.value) > Number(strongest.value) ? section : strongest;
+  }, null);
+  const targetBand = latestFullMock && Number(latestFullMock.overall_band) >= 7 ? 8 : 7;
+  const targetGap = latestFullMock ? Math.max(0, targetBand - Number(latestFullMock.overall_band || 0)) : null;
+  const visibleHistory = fullMockAttempts.slice(0, visibleHistoryCount);
 
   if (loading) {
     return (
@@ -419,7 +478,12 @@ export default function ResultDashboardPage() {
             <p className="mt-1 text-slate-600">Track your IELTS mock performance, review readiness, and section gaps.</p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Button variant="outline" onClick={handleClearAll} className="gap-2">
+            <Button
+              variant="outline"
+              onClick={handleClearAll}
+              className="gap-2"
+              title="Clears only unfinished local single-module practice sessions. Saved full mock attempts stay in your account."
+            >
               <RotateCcw className="h-4 w-4" />
               Clear Local
             </Button>
@@ -499,21 +563,7 @@ export default function ResultDashboardPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="h-72">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={trendData} margin={{ top: 10, right: 18, bottom: 0, left: -8 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                      <XAxis dataKey="name" stroke="#64748b" fontSize={12} />
-                      <YAxis domain={[0, 9]} ticks={[0, 3, 5, 6, 7, 8, 9]} stroke="#64748b" fontSize={12} />
-                      <Tooltip
-                        contentStyle={{ borderRadius: 8, border: '1px solid #e2e8f0' }}
-                        labelFormatter={(_, items) => items?.[0]?.payload?.date || ''}
-                        formatter={(value) => [formatBandScore(Number(value)), 'Overall']}
-                      />
-                      <Line type="monotone" dataKey="overall" stroke="#4f46e5" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
+                <BandTrendChart data={trendData} />
               </CardContent>
             </Card>
 
@@ -560,6 +610,42 @@ export default function ResultDashboardPage() {
           </div>
         )}
 
+        {latestFullMock && (
+          <Card className="mb-8 border-slate-200">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-indigo-600" />
+                Action Insights
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4 md:grid-cols-3">
+                <div className="rounded-lg border border-rose-100 bg-rose-50 p-4">
+                  <p className="text-sm font-semibold text-rose-700">Priority Skill</p>
+                  <p className="mt-2 text-2xl font-bold text-rose-900">{weakestSection?.label || 'Not enough data'}</p>
+                  <p className="mt-1 text-sm text-rose-700">
+                    {weakestSection ? `Band ${formatBandScore(Number(weakestSection.value))}. Put your next practice block here.` : 'Complete all sections to get a weakness signal.'}
+                  </p>
+                </div>
+                <div className="rounded-lg border border-emerald-100 bg-emerald-50 p-4">
+                  <p className="text-sm font-semibold text-emerald-700">Strongest Skill</p>
+                  <p className="mt-2 text-2xl font-bold text-emerald-900">{strongestSection?.label || 'Not enough data'}</p>
+                  <p className="mt-1 text-sm text-emerald-700">
+                    {strongestSection ? `Band ${formatBandScore(Number(strongestSection.value))}. Keep this stable while lifting weaker sections.` : 'More scored sections will unlock this.'}
+                  </p>
+                </div>
+                <div className="rounded-lg border border-indigo-100 bg-indigo-50 p-4">
+                  <p className="text-sm font-semibold text-indigo-700">Next Target</p>
+                  <p className="mt-2 text-2xl font-bold text-indigo-900">Band {targetBand}.0</p>
+                  <p className="mt-1 text-sm text-indigo-700">
+                    {targetGap === 0 ? 'You reached this target. Push the next band boundary.' : `${targetGap?.toFixed(1)} band point gap from latest overall.`}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {fullMockAttempts.length > 1 && (
           <Card className="mb-8">
             <CardHeader>
@@ -570,8 +656,8 @@ export default function ResultDashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {fullMockAttempts.slice(0, 5).map((attempt, index) => (
-                  <div key={attempt.id} className="flex items-center justify-between rounded-lg bg-gray-50 p-4">
+                {visibleHistory.map((attempt, index) => (
+                  <Link key={attempt.id} to={`/results/${attempt.id}`} className="flex items-center justify-between rounded-lg bg-gray-50 p-4 transition hover:bg-indigo-50">
                     <div>
                       <p className="font-semibold text-gray-900">Attempt {fullMockAttempts.length - index}</p>
                       <p className="text-sm text-gray-500">{new Date(attempt.completed_at).toLocaleString()}</p>
@@ -581,10 +667,20 @@ export default function ResultDashboardPage() {
                         Overall {formatBandScore(Number(attempt.overall_band))}
                       </Badge>
                       {index === 0 && <Badge variant="outline">Latest</Badge>}
+                      <ChevronRight className="h-4 w-4 text-slate-400" />
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
+              {visibleHistoryCount < fullMockAttempts.length && (
+                <Button
+                  variant="outline"
+                  className="mt-4 w-full"
+                  onClick={() => setVisibleHistoryCount((count) => Math.min(count + 5, fullMockAttempts.length))}
+                >
+                  Show more attempts
+                </Button>
+              )}
             </CardContent>
           </Card>
         )}

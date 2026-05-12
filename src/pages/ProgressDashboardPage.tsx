@@ -40,6 +40,13 @@ interface Achievement {
   earned_at: string;
 }
 
+interface FullMockStats {
+  attempts: number;
+  latestBand: number | null;
+  bestBand: number | null;
+  lastCompletedAt: string | null;
+}
+
 const ACTIVITY_KEY = 'ielts_daily_activity';
 
 const COLLECTION_NAMES: Record<string, { title: string; lessonCount: number }> = {
@@ -65,6 +72,12 @@ export default function ProgressDashboardPage() {
     const [streak, setStreak] = useState(0);
     const [totalStudyTime, setTotalStudyTime] = useState(0);
     const [averageScore, setAverageScore] = useState(0);
+    const [fullMockStats, setFullMockStats] = useState<FullMockStats>({
+      attempts: 0,
+      latestBand: null,
+      bestBand: null,
+      lastCompletedAt: null,
+    });
 
   useEffect(() => {
     fetchActivityData();
@@ -99,6 +112,23 @@ export default function ProgressDashboardPage() {
 
         if (!achievementError && achievementData) {
           setAchievements(achievementData);
+        }
+
+        const { data: mockData, error: mockError } = await supabase
+          .from('mock_test_results')
+          .select('overall_band, completed_at')
+          .eq('user_id', user.id)
+          .order('completed_at', { ascending: false })
+          .limit(50);
+
+        if (!mockError && mockData) {
+          const bands = mockData.map(item => Number(item.overall_band || 0)).filter(Boolean);
+          setFullMockStats({
+            attempts: mockData.length,
+            latestBand: bands[0] ?? null,
+            bestBand: bands.length ? Math.max(...bands) : null,
+            lastCompletedAt: mockData[0]?.completed_at ?? null,
+          });
         }
       } catch (err) {
         console.error('Error fetching activity:', err);
@@ -387,6 +417,33 @@ export default function ProgressDashboardPage() {
             </CardContent>
           </Card>
         </div>
+
+        <Card className="mb-8 border-indigo-200 bg-indigo-50/60">
+          <CardContent className="p-5">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div className="flex items-center gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-600 text-white">
+                  <Award className="h-6 w-6" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold uppercase tracking-wide text-indigo-700">Full Mock Readiness</p>
+                  <p className="text-2xl font-bold text-slate-900">
+                    {fullMockStats.latestBand != null ? `Latest band ${fullMockStats.latestBand.toFixed(1)}` : 'No saved full mock yet'}
+                  </p>
+                  <p className="text-sm text-slate-600">
+                    {fullMockStats.attempts > 0
+                      ? `${fullMockStats.attempts} saved attempt${fullMockStats.attempts > 1 ? 's' : ''}. Best band ${fullMockStats.bestBand?.toFixed(1) ?? '--'}${fullMockStats.lastCompletedAt ? `, last on ${new Date(fullMockStats.lastCompletedAt).toLocaleDateString()}` : ''}.`
+                      : 'Take a full mock to connect exam readiness with your progress dashboard.'}
+                  </p>
+                </div>
+              </div>
+              <Button onClick={() => navigate(fullMockStats.attempts > 0 ? '/results' : '/full-mock-test')} className="gap-2">
+                {fullMockStats.attempts > 0 ? 'Open Results' : 'Start Full Mock'}
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           <Card className="lg:col-span-2">

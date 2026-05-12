@@ -38,6 +38,8 @@ interface UserStats {
   vocabularyLearned: number;
   streakDays: number;
   totalXP: number;
+  bestMockBand: number | null;
+  mockAttempts: number;
 }
 
 export function ProfilePage() {
@@ -47,7 +49,9 @@ export function ProfilePage() {
     lessonsCompleted: 0,
     vocabularyLearned: 0,
     streakDays: 0,
-    totalXP: 0
+    totalXP: 0,
+    bestMockBand: null,
+    mockAttempts: 0
   });
   const [statsLoading, setStatsLoading] = useState(true);
 
@@ -99,11 +103,22 @@ export function ProfilePage() {
         .select('id')
         .eq('user_id', user.id);
 
+      const { data: mockData } = await supabase
+        .from('mock_test_results')
+        .select('overall_band, completed_at')
+        .eq('user_id', user.id)
+        .order('completed_at', { ascending: false })
+        .limit(50);
+
+      const mockBands = (mockData || []).map(item => Number(item.overall_band || 0)).filter(Boolean);
+
       setStats({
         lessonsCompleted: activityData?.filter(a => a.activity_type === 'lesson_complete').length || 0,
         vocabularyLearned: vocabData?.length || 0,
         streakDays: streakData?.current_streak || 0,
-        totalXP: streakData?.total_xp || 0
+        totalXP: streakData?.total_xp || 0,
+        bestMockBand: mockBands.length ? Math.max(...mockBands) : null,
+        mockAttempts: mockBands.length
       });
     } catch (error) {
       console.error('Error fetching stats:', error);
@@ -230,7 +245,7 @@ export function ProfilePage() {
 
         {/* Stats Cards */}
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 sm:-mt-8 relative z-10">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
             <Card className="bg-card border-border shadow-lg hover:shadow-xl transition-shadow">
               <CardContent className="p-4 sm:p-6">
                 <div className="flex items-center gap-3">
@@ -286,6 +301,24 @@ export function ProfilePage() {
                 </div>
               </CardContent>
             </Card>
+
+            <Link to={stats.mockAttempts > 0 ? '/results' : '/full-mock-test'} className="block">
+              <Card className="bg-card border-border shadow-lg hover:shadow-xl transition-shadow">
+                <CardContent className="p-4 sm:p-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center">
+                      <Award className="h-5 w-5 sm:h-6 sm:w-6 text-indigo-600" />
+                    </div>
+                    <div>
+                      <p className="text-xl sm:text-2xl font-bold text-foreground">
+                        {stats.bestMockBand != null ? stats.bestMockBand.toFixed(1) : '--'}
+                      </p>
+                      <p className="text-xs sm:text-sm text-muted-foreground">Best Mock</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
           </div>
         </div>
 
