@@ -257,7 +257,7 @@ function normalizeChart(raw: unknown): WritingChartData | null {
   if (!raw || typeof raw !== 'object') return null;
   const o = raw as Record<string, unknown>;
   const type = o.type;
-  if (type !== 'line' && type !== 'bar' && type !== 'pie') return null;
+  if (type !== 'line' && type !== 'bar' && type !== 'pie' && type !== 'combo') return null;
   if (!Array.isArray(o.labels) || !Array.isArray(o.datasets)) return null;
   const datasets = (o.datasets as unknown[]).map((ds) => {
     if (!ds || typeof ds !== 'object') return { label: '', data: [] };
@@ -266,6 +266,7 @@ function normalizeChart(raw: unknown): WritingChartData | null {
     return {
       label: String(d.label ?? ''),
       data,
+      type: d.type === 'line' || d.type === 'bar' ? d.type : undefined,
       borderColor: d.borderColor != null ? String(d.borderColor) : undefined,
       backgroundColor: d.backgroundColor != null ? String(d.backgroundColor) : undefined,
     };
@@ -379,7 +380,7 @@ function isNonEmptyVisualBlob(c: unknown): boolean {
     if (Array.isArray(o.rows) && o.rows.length > 0) return true;
     return false;
   }
-  if (o.type === 'line' || o.type === 'bar' || o.type === 'pie') {
+  if (o.type === 'line' || o.type === 'bar' || o.type === 'pie' || o.type === 'combo') {
     return Array.isArray(o.labels) && o.labels.length > 0;
   }
   if (o.type === 'process' || Array.isArray(o.steps)) {

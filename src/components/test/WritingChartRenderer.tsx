@@ -8,6 +8,8 @@ import {
   BarElement,
   ArcElement,
   PieController,
+  LineController,
+  BarController,
   Title,
   Tooltip,
   Legend,
@@ -26,6 +28,8 @@ Chart.register(
   BarElement,
   ArcElement,
   PieController,
+  LineController,
+  BarController,
   Title,
   Tooltip,
   Legend,
@@ -69,6 +73,7 @@ const TYPE_BADGE: Record<string, string> = {
   line: 'bg-indigo-100 text-indigo-700',
   bar:  'bg-amber-100 text-amber-700',
   pie:  'bg-rose-100 text-rose-700',
+  combo: 'bg-emerald-100 text-emerald-700',
 };
 
 interface WritingChartRendererProps {
@@ -90,6 +95,7 @@ export function WritingChartRenderer({ chartData, className = '', compact = fals
     }
 
     const isPie = chartData.type === 'pie';
+    const isCombo = chartData.type === 'combo';
 
     let data: ChartData;
 
@@ -112,19 +118,22 @@ export function WritingChartRenderer({ chartData, className = '', compact = fals
       data = {
         labels: chartData.labels,
         datasets: chartData.datasets.map((ds, idx) => {
-          const color = palette[idx % palette.length];
+          const datasetType = isCombo ? (ds.type || (idx === 0 ? 'bar' : 'line')) : chartData.type;
+          const datasetPalette = datasetType === 'bar' ? BAR_COLORS : LINE_COLORS;
+          const color = datasetPalette[idx % datasetPalette.length] || palette[idx % palette.length];
           return {
+            type: datasetType,
             label: ds.label,
             data: ds.data,
             borderColor: ds.borderColor || color.border,
             backgroundColor: ds.backgroundColor || color.background,
-            borderWidth: chartData.type === 'line' ? 2.5 : 1.5,
-            pointRadius: chartData.type === 'line' ? 4 : 0,
-            pointHoverRadius: chartData.type === 'line' ? 6 : 0,
+            borderWidth: datasetType === 'line' ? 2.5 : 1.5,
+            pointRadius: datasetType === 'line' ? 4 : 0,
+            pointHoverRadius: datasetType === 'line' ? 6 : 0,
             pointBackgroundColor: ds.borderColor || color.border,
-            tension: chartData.type === 'line' ? 0.3 : 0,
-            fill: chartData.type === 'line' && chartData.datasets.length === 1,
-            borderRadius: chartData.type === 'bar' ? 4 : 0,
+            tension: datasetType === 'line' ? 0.3 : 0,
+            fill: datasetType === 'line' && chartData.datasets.length === 1,
+            borderRadius: datasetType === 'bar' ? 4 : 0,
           };
         }),
       };
@@ -189,7 +198,7 @@ export function WritingChartRenderer({ chartData, className = '', compact = fals
     };
 
     chartRef.current = new Chart(canvasRef.current, {
-      type: chartData.type,
+      type: isCombo ? 'bar' : chartData.type,
       data,
       options,
     });

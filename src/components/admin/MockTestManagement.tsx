@@ -50,6 +50,14 @@ import {
   writingTask1HasAcademicVisual,
 } from '@/lib/writingVisualNormalize';
 import { cn } from '@/lib/utils';
+import {
+  formatValidationIssues,
+  hasBlockingIssues,
+  validateListeningTest,
+  validateReadingTest,
+  validateSpeakingTest,
+  validateWritingTest,
+} from '@/lib/ieltsMockValidation';
 import { WritingTask1Renderer } from '@/components/test/WritingTask1Renderer';
 import {
   ReadingTest,
@@ -593,6 +601,13 @@ export function MockTestManagement() {
           break;
       }
 
+      const validationIssues = getValidationIssuesForModule(formData.module_type, testData);
+      if (formData.is_published && hasBlockingIssues(validationIssues)) {
+        setError(`Fix these IELTS pattern issues before saving:\n${formatValidationIssues(validationIssues)}`);
+        setSaving(false);
+        return;
+      }
+
       if (editingTest) {
         const { error } = await supabase
           .from('mock_tests')
@@ -678,6 +693,14 @@ export function MockTestManagement() {
     if (!isSupabaseConfigured() || !supabase) return;
 
     try {
+      if (!test.is_published) {
+        const validationIssues = getValidationIssuesForModule(test.module_type, test.test_data);
+        if (hasBlockingIssues(validationIssues)) {
+          setError(`Fix these IELTS pattern issues before publishing:\n${formatValidationIssues(validationIssues)}`);
+          return;
+        }
+      }
+
       const { error } = await supabase
         .from('mock_tests')
         .update({ is_published: !test.is_published })
@@ -1306,6 +1329,22 @@ function getAIReadingPassages(content: unknown): Array<Record<string, unknown> &
   }
 
   throw new Error('AI did not return readable reading passages.');
+}
+
+function getValidationIssuesForModule(
+  moduleType: ModuleType,
+  testData: ReadingTest | ListeningTest | WritingTest | SpeakingTest,
+) {
+  switch (moduleType) {
+    case 'reading':
+      return validateReadingTest(testData as ReadingTest);
+    case 'listening':
+      return validateListeningTest(testData as ListeningTest);
+    case 'writing':
+      return validateWritingTest(testData as WritingTest);
+    case 'speaking':
+      return validateSpeakingTest(testData as SpeakingTest);
+  }
 }
 
 function AIContentGenerator({ moduleType, testType = 'academic', onGenerated }: AIGeneratorProps) {
@@ -3521,6 +3560,16 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
           }
         })
       };
+
+      const validationIssues = [
+        ...validateReadingTest(readingTest as ReadingTest),
+        ...validateListeningTest(listeningTest as ListeningTest),
+        ...validateWritingTest(writingTest as WritingTest),
+        ...validateSpeakingTest(speakingTest as SpeakingTest),
+      ];
+      if (hasBlockingIssues(validationIssues)) {
+        throw new Error(`AI generated content did not pass IELTS validation:\n${formatValidationIssues(validationIssues)}`);
+      }
 
       setProgress('Saving to database...');
       if (!isSupabaseConfigured() || !supabase) throw new Error("Supabase is not configured");

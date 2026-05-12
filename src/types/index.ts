@@ -320,13 +320,14 @@ export type WritingTestType = 'academic' | 'general';
 export interface WritingChartDataset {
   label: string;
   data: number[];
+  type?: 'line' | 'bar';
   borderColor?: string;
   backgroundColor?: string;
 }
 
 // Structured chart data for Writing Task 1 Academic (rendered via Chart.js)
 export interface WritingChartData {
-  type: 'line' | 'bar' | 'pie';   // pie: datasets[0].data = values, labels = slice names
+  type: 'line' | 'bar' | 'pie' | 'combo';   // pie: datasets[0].data = values, labels = slice names
   title: string;                 // Chart title shown above the chart
   description?: string;          // Axis/chart description
   labels: string[];              // X-axis labels (line/bar) OR slice names (pie)

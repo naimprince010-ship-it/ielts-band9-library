@@ -12,6 +12,7 @@ interface Props {
 
 function isRenderableChart(chart: WritingChartData | undefined): boolean {
   if (!chart || typeof chart !== 'object') return false;
+  if (!['line', 'bar', 'pie', 'combo'].includes(chart.type)) return false;
   if (!Array.isArray(chart.labels) || chart.labels.length === 0) return false;
   if (!Array.isArray(chart.datasets) || chart.datasets.length === 0) return false;
   return chart.datasets.some((ds) => ds && Array.isArray(ds.data) && ds.data.length > 0);

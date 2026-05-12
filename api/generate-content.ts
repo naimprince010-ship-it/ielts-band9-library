@@ -331,15 +331,16 @@ ${testType === 'academic' ? `For Academic Task 1, choose the MOST APPROPRIATE vi
 1. "line" chart (chartData) — for trends over time (years/decades)
 2. "bar" chart (chartData) — for comparing quantities across categories
 3. "pie" chart (chartData) — for proportions/percentages of a whole
-4. "table" (tableData) — for detailed multi-row/column data comparisons
-5. "process" (processData) — for stages of production, manufacturing, or natural cycles
-6. "map" (mapData) — for how a location changes over time (before/after town/building plans)
+4. "combo" chart (chartData) — for mixed visuals such as bars plus a line on the same axes
+5. "table" (tableData) — for detailed multi-row/column data comparisons
+6. "process" (processData) — for stages of production, manufacturing, or natural cycles
+7. "map" (mapData) — for how a location changes over time (before/after town/building plans)
 
 Return task1 with EXACTLY ONE visual field (chartData, tableData, processData, OR mapData).
 
 JSON schema for each visual type:
 
-chartData (line/bar/pie):
+chartData (line/bar/pie/combo):
 {
   "type": "line",
   "title": "Internet Usage in 5 Countries (2000–2020)",
@@ -352,6 +353,7 @@ chartData (line/bar/pie):
   ]
 }
 For pie: datasets has ONE entry, data[] = values for each label[], labels[] = slice names.
+For combo: use "type": "combo" and set each dataset's "type" to either "bar" or "line".
 
 tableData:
 {
@@ -432,6 +434,8 @@ RULES:
 - Include ONLY ONE of: chartData, tableData, processData, mapData in task1
 - Do NOT include chartData in task2
 - For the prompt text, describe the visual accurately
+- Chart dataset lengths MUST exactly match labels length
+- Sample answer must include a clear overview and key comparisons
 - Return ONLY valid JSON, no markdown or explanation.` : `For General Training Task 1, create a letter writing task (no chart needed).
 
 Generate a JSON response with this EXACT structure:
