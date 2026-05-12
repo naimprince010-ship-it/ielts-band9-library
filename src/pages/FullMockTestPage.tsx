@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { unlockIOSAudio, toBlobUrl, createAudioElement, getAudioContext } from '@/lib/iosAudio';
+import { unlockIOSAudio, toBlobUrl, createNativeAudioElement, getAudioContext } from '@/lib/iosAudio';
 import { sanitizeHtml } from '@/lib/sanitize';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -495,6 +495,7 @@ export default function FullMockTestPage() {
     source: 'blob' | 'direct' | 'tts';
     status: 'ready' | 'playing' | 'ended' | 'fallback' | 'error';
     message: string;
+    controlsUrl?: string;
   }>>({});
   const iosResumeIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -602,6 +603,9 @@ export default function FullMockTestPage() {
       return;
     }
 
+    const playUrl = prefetchedBlobs.current.get(id) ?? url;
+    const source = prefetchedBlobs.current.has(id) ? 'blob' : 'direct';
+
     const handleFail = () => {
       realAudioRef.current = null;
       setRealAudioPlaying(null);
@@ -612,8 +616,9 @@ export default function FullMockTestPage() {
           source: fallbackTranscript ? 'tts' : 'direct',
           status: fallbackTranscript ? 'fallback' : 'error',
           message: fallbackTranscript
-            ? 'Real audio failed. Playing transcript audio fallback.'
-            : 'Audio failed to play. Please check the audio URL.',
+            ? 'Real audio failed. Use the native audio controls below, or transcript audio fallback will start.'
+            : 'Audio failed to play automatically. Try the native audio controls below.',
+          controlsUrl: playUrl,
         },
       }));
       if (fallbackTranscript) toggleAudio(id, fallbackTranscript, true);
@@ -621,9 +626,7 @@ export default function FullMockTestPage() {
 
     // ② Use pre-fetched blob URL if ready — otherwise direct URL.
     //    Either way, play() is called synchronously here.
-    const playUrl = prefetchedBlobs.current.get(id) ?? url;
-    const source = prefetchedBlobs.current.has(id) ? 'blob' : 'direct';
-    const audio = createAudioElement(playUrl);
+    const audio = createNativeAudioElement(playUrl, source === 'blob' ? 'auto' : 'metadata');
 
     audio.onplaying = () => {
       setPlayedAudios(prev => new Set(prev).add(id));
@@ -632,7 +635,8 @@ export default function FullMockTestPage() {
         [id]: {
           source,
           status: 'playing',
-          message: source === 'blob' ? 'Playing downloaded audio.' : 'Playing direct audio stream.',
+          message: source === 'blob' ? 'Playing downloaded audio with native iPhone-safe playback.' : 'Playing direct native audio stream.',
+          controlsUrl: playUrl,
         },
       }));
     };
@@ -646,6 +650,7 @@ export default function FullMockTestPage() {
           source,
           status: 'ended',
           message: 'Audio completed.',
+          controlsUrl: playUrl,
         },
       }));
     };
@@ -661,7 +666,8 @@ export default function FullMockTestPage() {
       [id]: {
         source,
         status: 'ready',
-        message: source === 'blob' ? 'Downloaded audio is ready.' : 'Using direct audio stream.',
+        message: source === 'blob' ? 'Downloaded audio is ready for native playback.' : 'Using native direct audio stream.',
+        controlsUrl: playUrl,
       },
     }));
 
@@ -2400,6 +2406,16 @@ export default function FullMockTestPage() {
                               {audioPlaybackStatus.global.message}
                             </p>
                           )}
+                          {audioPlaybackStatus.global?.controlsUrl && audioPlaybackStatus.global.status !== 'ended' && (
+                            <audio
+                              src={audioPlaybackStatus.global.controlsUrl}
+                              controls
+                              preload="metadata"
+                              playsInline
+                              onPlay={() => setPlayedAudios(prev => new Set(prev).add('global'))}
+                              className="mt-4 w-full"
+                            />
+                          )}
                         </div>
                       </CardContent>
                     </Card>
@@ -2450,6 +2466,18 @@ export default function FullMockTestPage() {
                         }`}>
                           {sectionPlaybackStatus.message}
                         </p>
+                      )}
+                      {sectionPlaybackStatus?.controlsUrl && sectionPlaybackStatus.status !== 'ended' && (
+                        <div className="px-4">
+                          <audio
+                            src={sectionPlaybackStatus.controlsUrl}
+                            controls
+                            preload="metadata"
+                            playsInline
+                            onPlay={() => setPlayedAudios(prev => new Set(prev).add(sectionAudioId))}
+                            className="w-full max-w-xl"
+                          />
+                        </div>
                       )}
                       <Card className="rounded-[40px] shadow-2xl border-none shadow-black/5 overflow-hidden">
                       <CardContent className="p-10 space-y-10">

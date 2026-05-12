@@ -133,20 +133,27 @@ export async function playWithAudioContext(
  *   - For non-blob URLs, the server must send CORS headers (Supabase public
  *     storage does this by default).  Blob URLs are always same-origin.
  */
-export function createAudioElement(url: string): HTMLAudioElement {
+export function createNativeAudioElement(url: string, preload: 'metadata' | 'auto' = 'auto'): HTMLAudioElement {
   const audio = new Audio();
 
-  // crossOrigin must be set BEFORE src for non-blob URLs so the browser
-  // sends the CORS preflight/request and the AudioContext can decode it.
+  // crossOrigin must be set BEFORE src for non-blob URLs so Safari can stream
+  // public storage audio while still allowing a same-origin blob fallback.
   const isBlob = url.startsWith('blob:') || url.startsWith('data:');
   if (!isBlob) audio.crossOrigin = 'anonymous';
 
   audio.src = url;
   audio.volume = 1;
-  audio.preload = 'auto';
+  audio.preload = preload;
+  audio.controls = true;
   audio.setAttribute('playsinline', '');
   audio.setAttribute('webkit-playsinline', '');
   (audio as HTMLAudioElement & { playsInline: boolean }).playsInline = true;
+
+  return audio;
+}
+
+export function createAudioElement(url: string): HTMLAudioElement {
+  const audio = createNativeAudioElement(url, 'auto');
 
   // Route through AudioContext so iOS mute switch is bypassed.
   try {
