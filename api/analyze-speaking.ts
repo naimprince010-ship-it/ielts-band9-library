@@ -30,7 +30,7 @@ function buildPrompt(body: AnalyzeSpeakingRequest): string {
     : 'No specific speaking questions provided.';
 
   return `
-You are a strict but constructive IELTS Speaking examiner. Evaluate the candidate's typed speaking response as a transcript-style substitute for live audio.
+You are a strict but constructive IELTS Speaking examiner. Evaluate the candidate's speaking transcript. The transcript may come from typed responses, recorded-audio transcription, or both.
 
 Return ONLY valid JSON with this exact shape:
 {
@@ -40,7 +40,7 @@ Return ONLY valid JSON with this exact shape:
     { "name": "Fluency and Coherence", "band": 6.5, "feedback": "Specific feedback." },
     { "name": "Lexical Resource", "band": 6.5, "feedback": "Specific feedback." },
     { "name": "Grammatical Range and Accuracy", "band": 6.5, "feedback": "Specific feedback." },
-    { "name": "Pronunciation", "band": 6.0, "feedback": "Explain that pronunciation cannot be fully judged from typed text unless recordings are transcribed." }
+    { "name": "Pronunciation", "band": 6.0, "feedback": "Give cautious pronunciation-related feedback only when the transcript provides evidence such as hesitations or repeated repairs; otherwise state the limitation." }
   ],
   "strengths": ["strength 1", "strength 2", "strength 3"],
   "improvements": ["improvement 1", "improvement 2", "improvement 3"],
@@ -51,9 +51,9 @@ Return ONLY valid JSON with this exact shape:
 Scoring rules:
 - Use IELTS public speaking band descriptors in spirit.
 - Be realistic and use 0.5 increments.
-- This is typed text, so do not claim to hear pronunciation. Mention pronunciation limits clearly.
+- Do not claim to hear pronunciation unless acoustic evidence was provided. This request provides transcript text, not raw audio features.
 - Penalize very short answers. Typed response length is ${words} words.
-- The student recorded ${body.clipCount ?? 0} clips totaling about ${body.totalRecordedSeconds ?? 0} seconds, but audio transcription is not included.
+- The student recorded ${body.clipCount ?? 0} clips totaling about ${body.totalRecordedSeconds ?? 0} seconds. If the response includes transcript text, treat it as the student's spoken content.
 - Keep feedback concise, concrete, and student-friendly.
 
 Speaking questions:

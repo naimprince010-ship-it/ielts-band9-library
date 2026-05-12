@@ -119,6 +119,21 @@ interface SpeakingFeedback {
   actionPlan: string[];
 }
 
+interface RecordedClip {
+  id: string;
+  url: string;
+  duration: number;
+  label: string;
+  size: number;
+  mimeType: string;
+  blob?: Blob;
+  uploadStatus: 'local' | 'uploading' | 'uploaded' | 'error';
+  uploadedUrl?: string;
+  transcript?: string;
+  transcriptStatus: 'idle' | 'transcribing' | 'ready' | 'error';
+  transcriptError?: string;
+}
+
 const SECTIONS: { phase: Phase; module: ModuleType; label: string; duration: number; icon: React.ReactNode; color: string; bg: string }[] = [
   { phase: 'listening', module: 'listening', label: 'Listening', duration: 30 * 60, icon: <Headphones className="h-5 w-5" />, color: 'text-violet-600', bg: 'bg-violet-500' },
   { phase: 'reading',   module: 'reading',   label: 'Reading',   duration: 60 * 60, icon: <BookOpen className="h-5 w-5" />,   color: 'text-blue-600',   bg: 'bg-blue-500'   },
@@ -474,6 +489,13 @@ export default function FullMockTestPage() {
   // ── Audio pre-download state (iOS: download before starting listening) ────
   const [audioPreloading, setAudioPreloading] = useState(false);
   const [audioPreloadProgress, setAudioPreloadProgress] = useState({ done: 0, total: 0 });
+  const [audioPreloadStatus, setAudioPreloadStatus] = useState<'idle' | 'loading' | 'ready' | 'partial' | 'failed'>('idle');
+  const [audioPreloadMessage, setAudioPreloadMessage] = useState('');
+  const [audioPlaybackStatus, setAudioPlaybackStatus] = useState<Record<string, {
+    source: 'blob' | 'direct' | 'tts';
+    status: 'ready' | 'playing' | 'ended' | 'fallback' | 'error';
+    message: string;
+  }>>({});
   const iosResumeIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // ── WakeLock: keep screen on during listening phase ───────────────────────
@@ -584,17 +606,48 @@ export default function FullMockTestPage() {
       realAudioRef.current = null;
       setRealAudioPlaying(null);
       setPlayedAudios(prev => { const s = new Set(prev); s.delete(id); return s; });
-      if (fallbackTranscript) toggleAudio(id, fallbackTranscript);
+      setAudioPlaybackStatus(prev => ({
+        ...prev,
+        [id]: {
+          source: fallbackTranscript ? 'tts' : 'direct',
+          status: fallbackTranscript ? 'fallback' : 'error',
+          message: fallbackTranscript
+            ? 'Real audio failed. Playing transcript audio fallback.'
+            : 'Audio failed to play. Please check the audio URL.',
+        },
+      }));
+      if (fallbackTranscript) toggleAudio(id, fallbackTranscript, true);
     };
 
     // ② Use pre-fetched blob URL if ready — otherwise direct URL.
     //    Either way, play() is called synchronously here.
     const playUrl = prefetchedBlobs.current.get(id) ?? url;
+    const source = prefetchedBlobs.current.has(id) ? 'blob' : 'direct';
     const audio = createAudioElement(playUrl);
+
+    audio.onplaying = () => {
+      setPlayedAudios(prev => new Set(prev).add(id));
+      setAudioPlaybackStatus(prev => ({
+        ...prev,
+        [id]: {
+          source,
+          status: 'playing',
+          message: source === 'blob' ? 'Playing downloaded audio.' : 'Playing direct audio stream.',
+        },
+      }));
+    };
 
     audio.onended = () => {
       realAudioRef.current = null;
       setRealAudioPlaying(null);
+      setAudioPlaybackStatus(prev => ({
+        ...prev,
+        [id]: {
+          source,
+          status: 'ended',
+          message: 'Audio completed.',
+        },
+      }));
     };
     audio.onerror = () => {
       console.error('Real audio error, falling back to TTS');
@@ -603,7 +656,14 @@ export default function FullMockTestPage() {
 
     realAudioRef.current = audio;
     setRealAudioPlaying(id);
-    setPlayedAudios(prev => new Set(prev).add(id));
+    setAudioPlaybackStatus(prev => ({
+      ...prev,
+      [id]: {
+        source,
+        status: 'ready',
+        message: source === 'blob' ? 'Downloaded audio is ready.' : 'Using direct audio stream.',
+      },
+    }));
 
     // ③ Synchronous play() — iOS allows this because unlockIOSAudio()
     //    already ran in this same click handler call-stack.
@@ -627,13 +687,12 @@ export default function FullMockTestPage() {
   const [recordingSeconds, setRecordingSeconds] = useState(0);
   const [recordingLabel, setRecordingLabel] = useState('');
   const [recordingError, setRecordingError] = useState<string | null>(null);
-  const [recordedClips, setRecordedClips] = useState<Array<{
-    id: string; url: string; duration: number; label: string; size: number;
-  }>>([]);
+  const [recordedClips, setRecordedClips] = useState<RecordedClip[]>([]);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const recordingTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const recordingStartedAtRef = useRef<number>(0);
 
   // Cleanup recording resources when phase changes
   useEffect(() => {
@@ -647,6 +706,97 @@ export default function FullMockTestPage() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase]);
+
+  const blobToBase64 = (blob: Blob): Promise<string> => (
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = String(reader.result || '');
+        resolve(result.includes(',') ? result.split(',')[1] : result);
+      };
+      reader.onerror = () => reject(reader.error);
+      reader.readAsDataURL(blob);
+    })
+  );
+
+  const uploadSpeakingClip = async (clipId: string, blob: Blob, mimeType: string) => {
+    if (!user || !supabase || !isSupabaseConfigured()) return;
+    setRecordedClips(prev => prev.map(clip => (
+      clip.id === clipId ? { ...clip, uploadStatus: 'uploading' } : clip
+    )));
+
+    try {
+      const extension = mimeType.includes('mp4') ? 'm4a' : mimeType.includes('ogg') ? 'ogg' : 'webm';
+      const path = `${user.id}/full-mock/${Date.now()}-${clipId}.${extension}`;
+      const { error: uploadError } = await supabase.storage
+        .from('speaking-recordings')
+        .upload(path, blob, { contentType: mimeType, upsert: false });
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage
+        .from('speaking-recordings')
+        .getPublicUrl(path);
+
+      setRecordedClips(prev => prev.map(clip => (
+        clip.id === clipId
+          ? { ...clip, uploadStatus: 'uploaded', uploadedUrl: data.publicUrl }
+          : clip
+      )));
+    } catch (err) {
+      console.error('Speaking clip upload failed:', err);
+      setRecordedClips(prev => prev.map(clip => (
+        clip.id === clipId ? { ...clip, uploadStatus: 'error' } : clip
+      )));
+    }
+  };
+
+  const transcribeSpeakingClip = async (clip: RecordedClip): Promise<string> => {
+    if (clip.transcript) return clip.transcript;
+    if (!clip.blob && !clip.uploadedUrl) {
+      throw new Error('Recording is only available in this browser session. Please record again to transcribe.');
+    }
+
+    setRecordedClips(prev => prev.map(item => (
+      item.id === clip.id ? { ...item, transcriptStatus: 'transcribing', transcriptError: undefined } : item
+    )));
+
+    try {
+      const payload = clip.blob
+        ? {
+            audioBase64: await blobToBase64(clip.blob),
+            mimeType: clip.mimeType,
+            fileName: `${clip.id}.${clip.mimeType.includes('mp4') ? 'm4a' : clip.mimeType.includes('ogg') ? 'ogg' : 'webm'}`,
+          }
+        : {
+            audioUrl: clip.uploadedUrl,
+            mimeType: clip.mimeType,
+          };
+
+      const response = await fetch('/api/transcribe-speaking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || data.details || 'Failed to transcribe recording.');
+      }
+
+      const transcript = String(data.transcript || '').trim();
+      setRecordedClips(prev => prev.map(item => (
+        item.id === clip.id ? { ...item, transcript, transcriptStatus: 'ready' } : item
+      )));
+      return transcript;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to transcribe recording.';
+      setRecordedClips(prev => prev.map(item => (
+        item.id === clip.id ? { ...item, transcriptStatus: 'error', transcriptError: message } : item
+      )));
+      throw err;
+    }
+  };
 
   const startRecording = async (label: string) => {
     setRecordingError(null);
@@ -678,14 +828,21 @@ export default function FullMockTestPage() {
       recorder.onstop = () => {
         const blob = new Blob(audioChunksRef.current, { type: mimeType || 'audio/webm' });
         const url = URL.createObjectURL(blob);
-        const duration = recordingSeconds;
-        setRecordedClips(prev => [...prev, {
-          id: `clip-${Date.now()}`,
+        const duration = Math.max(recordingSeconds, Math.round((Date.now() - recordingStartedAtRef.current) / 1000));
+        const clipId = `clip-${Date.now()}`;
+        const clip: RecordedClip = {
+          id: clipId,
           url,
           duration,
           label,
-          size: blob.size
-        }]);
+          size: blob.size,
+          mimeType: mimeType || 'audio/webm',
+          blob,
+          uploadStatus: 'local',
+          transcriptStatus: 'idle',
+        };
+        setRecordedClips(prev => [...prev, clip]);
+        uploadSpeakingClip(clipId, blob, mimeType || 'audio/webm');
         setIsRecording(false);
         setRecordingSeconds(0);
         stream.getTracks().forEach(t => t.stop());
@@ -701,6 +858,7 @@ export default function FullMockTestPage() {
       setRecordingLabel(label);
       setIsRecording(true);
       setRecordingSeconds(0);
+      recordingStartedAtRef.current = Date.now();
       recorder.start(100);
 
       // Timer
@@ -819,8 +977,19 @@ export default function FullMockTestPage() {
         speakChunk(next, voiceObj);
       } else {
         // All chunks done
+        const completedId = activeAudioIdRef.current;
         activeAudioIdRef.current = null;
         setPlayingAudioId(null);
+        if (completedId) {
+          setAudioPlaybackStatus(prev => ({
+            ...prev,
+            [completedId]: {
+              source: 'tts',
+              status: 'ended',
+              message: 'Transcript audio completed.',
+            },
+          }));
+        }
         stopIosResumePing();
       }
     };
@@ -885,7 +1054,7 @@ export default function FullMockTestPage() {
   // ── toggleAudio ────────────────────────────────────────────────────────────
   // MUST be called synchronously from an onClick to satisfy mobile user-gesture
   // requirements. No await, no setTimeout before the first speak().
-  const toggleAudio = (id: string, text: string) => {
+  const toggleAudio = (id: string, text: string, fromFallback = false) => {
     if (!('speechSynthesis' in window)) {
       alert('Your browser does not support audio playback. Please use Chrome, Safari, or Edge.');
       return;
@@ -926,6 +1095,14 @@ export default function FullMockTestPage() {
     activeAudioIdRef.current = id;
     setPlayingAudioId(id);
     setPlayedAudios(prev => new Set(prev).add(id));
+    setAudioPlaybackStatus(prev => ({
+      ...prev,
+      [id]: {
+        source: 'tts',
+        status: fromFallback ? 'fallback' : 'playing',
+        message: fromFallback ? 'Playing transcript audio fallback.' : 'Playing generated transcript audio.',
+      },
+    }));
     startIosResumePing();
 
     // ── speak() called synchronously in click handler — user-gesture OK ──────
@@ -1124,9 +1301,15 @@ export default function FullMockTestPage() {
     if (globalUrl) targets.push({ id: 'global', url: globalUrl });
 
     // Nothing to preload
-    if (targets.length === 0) return;
+    if (targets.length === 0) {
+      setAudioPreloadStatus('idle');
+      setAudioPreloadMessage('No real audio files were found. Transcript audio fallback will be available.');
+      return;
+    }
 
     setAudioPreloading(true);
+    setAudioPreloadStatus('loading');
+    setAudioPreloadMessage('Preparing listening audio for reliable playback.');
     setAudioPreloadProgress({ done: 0, total: targets.length });
 
     // Hard timeout — never block the user for more than 45 s
@@ -1138,6 +1321,7 @@ export default function FullMockTestPage() {
       if (!prefetchedBlobs.current.has(id)) {
         try {
           const blobUrl = await toBlobUrl(url);
+          if (blobUrl === url) throw new Error('Blob download unavailable');
           prefetchedBlobs.current.set(id, blobUrl);
         } catch {
           // Network error — streaming fallback will handle it
@@ -1147,6 +1331,17 @@ export default function FullMockTestPage() {
     }
 
     setAudioPreloading(false);
+    const readyCount = targets.filter(target => prefetchedBlobs.current.has(target.id)).length;
+    if (readyCount === targets.length) {
+      setAudioPreloadStatus('ready');
+      setAudioPreloadMessage('All listening audio downloaded for stable playback.');
+    } else if (readyCount > 0) {
+      setAudioPreloadStatus('partial');
+      setAudioPreloadMessage(`${readyCount}/${targets.length} audio files downloaded. Remaining files will stream or use transcript fallback.`);
+    } else {
+      setAudioPreloadStatus('failed');
+      setAudioPreloadMessage('Audio download was not available. The test will use direct streaming or transcript fallback.');
+    }
   };
 
   const startSection = (idx: number) => {
@@ -1208,9 +1403,10 @@ export default function FullMockTestPage() {
         } else if (sec.module === 'speaking') {
           const words = (answers['sp_answers'] ?? '').split(/\s+/).filter(Boolean).length;
           const clipSeconds = recordedClips.reduce((sum, clip) => sum + clip.duration, 0);
+          const clipTranscripts = recordedClips.map(clip => clip.transcript).filter(Boolean).join('\n\n');
           setSpeakingSubmission({
             questions: extractSpeakingQuestions(td),
-            typedResponse: answers['sp_answers'] ?? '',
+            typedResponse: [answers['sp_answers'] ?? '', clipTranscripts].filter(Boolean).join('\n\n'),
             clipCount: recordedClips.length,
             totalRecordedSeconds: clipSeconds,
           });
@@ -1315,10 +1511,37 @@ export default function FullMockTestPage() {
     setSpeakingFeedbackError('');
 
     try {
+      let transcriptText = '';
+      const clipsToTranscribe = recordedClips.filter(clip => !clip.transcript);
+      if (clipsToTranscribe.length > 0) {
+        const transcripts = await Promise.all(
+          clipsToTranscribe.map(clip => transcribeSpeakingClip(clip).catch((err) => {
+            console.error('Speaking transcription failed:', err);
+            return '';
+          }))
+        );
+        transcriptText = transcripts.filter(Boolean).join('\n\n');
+      }
+
+      const existingTranscripts = recordedClips
+        .map(clip => clip.transcript)
+        .filter(Boolean)
+        .join('\n\n');
+      const typedResponse = [
+        speakingSubmission.typedResponse,
+        existingTranscripts,
+        transcriptText,
+      ].filter(Boolean).join('\n\n').trim();
+      const submissionForAnalysis: SpeakingSubmission = {
+        ...speakingSubmission,
+        typedResponse,
+      };
+      setSpeakingSubmission(submissionForAnalysis);
+
       const response = await fetch('/api/analyze-speaking', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(speakingSubmission),
+        body: JSON.stringify(submissionForAnalysis),
       });
       const data = await response.json();
 
@@ -1420,6 +1643,15 @@ export default function FullMockTestPage() {
                       Audio {audioPreloadProgress.done}/{audioPreloadProgress.total} downloaded
                     </p>
                   </div>
+                )}
+                {audioPreloadMessage && (
+                  <p className={`text-xs text-center font-bold ${
+                    audioPreloadStatus === 'ready' ? 'text-emerald-300' :
+                    audioPreloadStatus === 'partial' ? 'text-amber-300' :
+                    audioPreloadStatus === 'failed' ? 'text-red-300' : 'text-indigo-300'
+                  }`}>
+                    {audioPreloadMessage}
+                  </p>
                 )}
               </CardContent>
             </Card>
@@ -1589,8 +1821,8 @@ export default function FullMockTestPage() {
                      ? <><Loader2 className="h-6 w-6 animate-spin" /> Preparing Audio…</>
                      : <><Play className="h-6 w-6 fill-current" /> START FULL EXAM <ChevronRight className="h-6 w-6 group-hover:translate-x-2 transition-transform" /></>}
                  </Button>
-                 {audioPreloading && audioPreloadProgress.total > 0 && (
-                   <div className="w-72 space-y-2">
+                  {audioPreloading && audioPreloadProgress.total > 0 && (
+                    <div className="w-72 space-y-2">
                      <div className="w-full bg-white/20 rounded-full h-2 overflow-hidden">
                        <div
                          className="h-full bg-accent rounded-full transition-all duration-300"
@@ -1600,9 +1832,18 @@ export default function FullMockTestPage() {
                      <p className="text-sm text-background/60 font-medium text-center">
                        Downloading audio {audioPreloadProgress.done}/{audioPreloadProgress.total} for offline playback…
                      </p>
-                   </div>
-                 )}
-               </div>
+                    </div>
+                  )}
+                  {audioPreloadMessage && (
+                    <p className={`max-w-sm text-center text-sm font-bold ${
+                      audioPreloadStatus === 'ready' ? 'text-emerald-300' :
+                      audioPreloadStatus === 'partial' ? 'text-amber-300' :
+                      audioPreloadStatus === 'failed' ? 'text-red-300' : 'text-background/60'
+                    }`}>
+                      {audioPreloadMessage}
+                    </p>
+                  )}
+                </div>
              ) : user && !isPremium ? (
                <Button size="lg" onClick={() => navigate('/pricing')} className="bg-amber-500 hover:bg-amber-600 text-white font-black text-xl px-12 py-8 rounded-[40px] gap-4">
                  <Crown className="h-6 w-6" /> UPGRADE TO PRO
@@ -2005,6 +2246,8 @@ export default function FullMockTestPage() {
                 setSpeakingFeedback(null);
                 setSpeakingFeedbackStatus('idle');
                 setSpeakingFeedbackError('');
+                recordedClips.forEach(clip => URL.revokeObjectURL(clip.url));
+                setRecordedClips([]);
                 setAnswers({}); 
                 setPlayedAudios(new Set());
               }}
@@ -2148,6 +2391,15 @@ export default function FullMockTestPage() {
                               ? 'Audio is playing. Answer questions as you listen.'
                               : 'Recording will play once only. Answer questions as you listen.'}
                           </p>
+                          {audioPlaybackStatus.global?.message && (
+                            <p className={`mt-3 text-xs font-bold ${
+                              audioPlaybackStatus.global.status === 'error' ? 'text-red-600' :
+                              audioPlaybackStatus.global.status === 'fallback' ? 'text-amber-600' :
+                              audioPlaybackStatus.global.status === 'ended' ? 'text-emerald-600' : 'text-violet-600'
+                            }`}>
+                              {audioPlaybackStatus.global.message}
+                            </p>
+                          )}
                         </div>
                       </CardContent>
                     </Card>
@@ -2159,6 +2411,7 @@ export default function FullMockTestPage() {
                     const hasAudio = !!(sectionUrl || sectionTranscript);
                     const isPlayingThis = realAudioPlaying === sectionAudioId || playingAudioId === sectionAudioId;
                     const wasPlayed = playedAudios.has(sectionAudioId);
+                    const sectionPlaybackStatus = audioPlaybackStatus[sectionAudioId];
                     return (
                     <div key={sec.sectionNumber} className="space-y-6">
                       <div className="flex items-center justify-between gap-3 px-4">
@@ -2189,6 +2442,15 @@ export default function FullMockTestPage() {
                           </Button>
                         )}
                       </div>
+                      {sectionPlaybackStatus?.message && (
+                        <p className={`px-4 text-xs font-bold ${
+                          sectionPlaybackStatus.status === 'error' ? 'text-red-600' :
+                          sectionPlaybackStatus.status === 'fallback' ? 'text-amber-600' :
+                          sectionPlaybackStatus.status === 'ended' ? 'text-emerald-600' : 'text-violet-600'
+                        }`}>
+                          {sectionPlaybackStatus.message}
+                        </p>
+                      )}
                       <Card className="rounded-[40px] shadow-2xl border-none shadow-black/5 overflow-hidden">
                       <CardContent className="p-10 space-y-10">
                         {Array.isArray(sec.questions) && sec.questions.map((q) => {
@@ -2526,28 +2788,58 @@ export default function FullMockTestPage() {
                       </CardHeader>
                       <CardContent className="p-8 space-y-4">
                         {recordedClips.map((clip, ci) => (
-                          <div key={clip.id} className="flex items-center gap-4 p-5 bg-slate-50 rounded-3xl border-2 border-slate-100 hover:border-orange-200 transition-colors">
+                          <div key={clip.id} className="flex flex-col gap-4 p-5 bg-slate-50 rounded-3xl border-2 border-slate-100 hover:border-orange-200 transition-colors sm:flex-row sm:items-center">
                             <div className="w-10 h-10 bg-orange-100 rounded-2xl flex items-center justify-center flex-shrink-0">
                               <span className="font-black text-orange-600 text-sm">{ci + 1}</span>
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="font-black text-sm text-slate-800 truncate">{clip.label}</p>
-                              <p className="text-xs text-slate-400 font-bold">{formatRecordingTime(clip.duration)} &bull; {(clip.size / 1024).toFixed(0)} KB</p>
+                              <p className="text-xs text-slate-400 font-bold">
+                                {formatRecordingTime(clip.duration)} &bull; {(clip.size / 1024).toFixed(0)} KB &bull; {
+                                  clip.uploadStatus === 'uploaded' ? 'Uploaded' :
+                                  clip.uploadStatus === 'uploading' ? 'Uploading...' :
+                                  clip.uploadStatus === 'error' ? 'Upload failed, local only' : 'Local'
+                                }
+                              </p>
                               <audio
                                 src={clip.url}
                                 controls
                                 className="w-full h-9 mt-2"
                                 style={{ minWidth: '180px' }}
                               />
+                              {clip.transcript && (
+                                <p className="mt-3 rounded-2xl bg-white p-3 text-xs font-medium text-slate-600">
+                                  {clip.transcript}
+                                </p>
+                              )}
+                              {clip.transcriptStatus === 'error' && (
+                                <p className="mt-2 text-xs font-bold text-red-500">{clip.transcriptError}</p>
+                              )}
                             </div>
-                            <button
-                              type="button"
-                              onClick={() => deleteClip(clip.id)}
-                              className="p-2.5 rounded-2xl text-red-400 hover:bg-red-50 hover:text-red-600 transition-colors flex-shrink-0"
-                              title="Delete clip"
-                            >
-                              <Trash2 className="h-5 w-5" />
-                            </button>
+                            <div className="flex items-center gap-2 self-end sm:self-center">
+                              <Button
+                                type="button"
+                                size="sm"
+                                variant="outline"
+                                disabled={clip.transcriptStatus === 'transcribing'}
+                                onClick={() => transcribeSpeakingClip(clip).catch(() => undefined)}
+                                className="rounded-2xl font-black"
+                              >
+                                {clip.transcriptStatus === 'transcribing'
+                                  ? <><Loader2 className="h-4 w-4 animate-spin" /> Transcribing</>
+                                  : clip.transcript
+                                  ? 'Transcript Ready'
+                                  : 'Transcribe'}
+                              </Button>
+                              <button
+                                type="button"
+                                onClick={() => deleteClip(clip.id)}
+                                className="p-2.5 rounded-2xl text-red-400 hover:bg-red-50 hover:text-red-600 transition-colors flex-shrink-0"
+                                title="Delete clip"
+                              >
+                                <Trash2 className="h-5 w-5" />
+                              </button>
+                            </div>
                           </div>
                         ))}
                       </CardContent>
