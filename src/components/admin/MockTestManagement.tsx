@@ -71,6 +71,7 @@ import {
   WritingTest,
   WritingTask,
   WritingTableData,
+  WritingChartData,
   SpeakingTest,
   SpeakingPart,
   SpeakingQuestion,
@@ -1311,6 +1312,125 @@ function mapAIListeningQuestion(q: AIQuestion, questionNumber: number, id: strin
     summaryData: q.summaryData,
     wordLimit: q.wordLimit,
   };
+}
+
+function fallbackAnswer(questionNumber: number): string {
+  return `answer ${questionNumber}`;
+}
+
+function normalizeCompletionTableRows(rows: unknown): { cells: string[] }[] {
+  if (!Array.isArray(rows)) return [];
+  return rows
+    .map((row) => {
+      if (Array.isArray(row)) return { cells: row.map(cell => String(cell ?? '')) };
+      if (row && typeof row === 'object' && Array.isArray((row as { cells?: unknown[] }).cells)) {
+        return { cells: ((row as { cells: unknown[] }).cells).map(cell => String(cell ?? '')) };
+      }
+      return null;
+    })
+    .filter((row): row is { cells: string[] } => !!row && row.cells.length > 0);
+}
+
+function makeTableDataForGroup(groupQuestions: Array<ReadingQuestion | ListeningQuestion>) {
+  const sorted = [...groupQuestions].sort((a, b) => a.questionNumber - b.questionNumber);
+  const labels = sorted.map(q => `Q${q.questionNumber}`);
+  return {
+    headers: ['Item', 'Answer'],
+    rows: labels.map(label => ({ cells: [label, `[${label}]`] })),
+  };
+}
+
+function makeSummaryDataForGroup(groupQuestions: Array<ReadingQuestion | ListeningQuestion>, topic = 'the passage'): string {
+  return [...groupQuestions]
+    .sort((a, b) => a.questionNumber - b.questionNumber)
+    .map(q => `${q.questionText?.replace(/_+/g, `[Q${q.questionNumber}]`) || `Key detail [Q${q.questionNumber}]`} `)
+    .join(' ')
+    .trim() || `Complete the notes about ${topic}: [Q${groupQuestions[0]?.questionNumber ?? 1}].`;
+}
+
+function repairGroupedQuestionData<T extends ReadingQuestion | ListeningQuestion>(questions: T[], topic: string): T[] {
+  const byGroup = new Map<string, T[]>();
+  questions.forEach((q) => {
+    q.correctAnswer = String(q.correctAnswer || q.acceptedAnswers?.[0] || fallbackAnswer(q.questionNumber));
+    if (!q.groupId) return;
+    byGroup.set(q.groupId, [...(byGroup.get(q.groupId) || []), q]);
+  });
+
+  byGroup.forEach((groupQuestions, groupId) => {
+    const master = groupQuestions.find(q => q.tableData || q.summaryData) ?? groupQuestions[0];
+    if (!master) return;
+    const isTable = groupId.toLowerCase().includes('table') || groupQuestions.some(q => q.type === 'table-completion' || q.tableData);
+    if (isTable) {
+      const rawTable = master.tableData as unknown as { headers?: unknown; rows?: unknown } | undefined;
+      const headers = Array.isArray(rawTable?.headers) && rawTable.headers.length
+        ? rawTable.headers.map(header => String(header || 'Answer'))
+        : ['Item', 'Answer'];
+      const rows = normalizeCompletionTableRows(rawTable?.rows);
+      const repaired = rows.length ? { headers, rows } : makeTableDataForGroup(groupQuestions);
+      const serialized = JSON.stringify(repaired);
+      groupQuestions.forEach((q) => {
+        if (!serialized.includes(`[Q${q.questionNumber}]`) && !serialized.includes(`[${q.questionNumber}]`)) {
+          repaired.rows.push({ cells: [`Q${q.questionNumber}`, `[Q${q.questionNumber}]`] });
+        }
+      });
+      master.tableData = repaired as T['tableData'];
+      master.summaryData = undefined;
+    } else {
+      const summary = typeof master.summaryData === 'string' && master.summaryData.trim()
+        ? master.summaryData
+        : makeSummaryDataForGroup(groupQuestions, topic);
+      const missingPlaceholders = groupQuestions
+        .filter(q => !summary.includes(`[Q${q.questionNumber}]`) && !summary.includes(`[${q.questionNumber}]`))
+        .map(q => ` Q${q.questionNumber}: [Q${q.questionNumber}].`)
+        .join('');
+      master.summaryData = `${summary}${missingPlaceholders}`.trim();
+    }
+  });
+
+  return fixQuestions(questions);
+}
+
+function fitQuestionCount<T extends ReadingQuestion | ListeningQuestion>(
+  questions: T[],
+  target: number,
+  makeQuestion: (questionNumber: number, index: number) => T,
+): T[] {
+  const fitted = questions.slice(0, target);
+  while (fitted.length < target) {
+    fitted.push(makeQuestion(fitted.length + 1, fitted.length));
+  }
+  return fitted.map((q, index) => ({ ...q, questionNumber: index + 1 }));
+}
+
+function createFallbackWritingVisual(topic: string): WritingChartData {
+  return {
+    type: 'bar',
+    title: `${topic || 'Topic'}: Comparative Survey Results`,
+    description: 'Percentage of respondents across three urban groups',
+    labels: ['Young adults', 'Working adults', 'Older adults'],
+    unit: '%',
+    yMin: 0,
+    yMax: 100,
+    datasets: [
+      { label: 'High impact', data: [68, 54, 39] },
+      { label: 'Moderate impact', data: [22, 31, 36] },
+    ],
+  };
+}
+
+function repairWritingTest(test: WritingTest, topic: string): WritingTest {
+  const tasks = [...(test.tasks || [])] as WritingTask[];
+  const task1 = tasks.find(task => task.taskNumber === 1);
+  if (task1 && !writingTask1HasAcademicVisual(task1)) {
+    task1.chartData = createFallbackWritingVisual(topic);
+    task1.tableData = undefined;
+    task1.processData = undefined;
+    task1.mapData = undefined;
+  }
+  if (task1 && (!task1.sampleAnswer || task1.sampleAnswer.split(/\s+/).filter(Boolean).length < 140)) {
+    task1.sampleAnswer = `The bar chart compares survey responses about ${topic || 'the topic'} among young adults, working adults, and older adults. Overall, young adults report the strongest impact, while older adults are less likely to describe the issue as highly influential. For young adults, 68 percent selected high impact, compared with 54 percent of working adults and 39 percent of older adults. Moderate impact responses show the opposite pattern, rising from 22 percent among young adults to 31 percent for working adults and 36 percent for older adults. This suggests that the issue is recognised across all age groups, but its perceived intensity declines with age. A further point is that the combined share of high and moderate responses remains substantial in every group, indicating that the topic has broad relevance rather than being limited to a single demographic.`;
+  }
+  return { ...test, tasks: tasks as WritingTest['tasks'] };
 }
 
 function getAIReadingPassages(content: unknown): Array<Record<string, unknown> & { questions?: AIQuestion[] }> {
@@ -3417,6 +3537,33 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
         }),
         totalQuestions: totalReadingQuestions
       };
+      const readingTargets = [13, 13, 14];
+      let repairedReadingNumber = 1;
+      readingTest.passages = readingTest.passages.map((passage, pIndex) => {
+        const target = readingTargets[pIndex] ?? 13;
+        const fitted = fitQuestionCount<ReadingQuestion>(
+          passage.questions as ReadingQuestion[],
+          target,
+          (_questionNumber, qIndex) => ({
+            id: `q-${now}-${pIndex}-repair-${qIndex}`,
+            questionNumber: qIndex + 1,
+            type: 'short-answer',
+            questionText: `Write one key detail from Passage ${pIndex + 1}.`,
+            correctAnswer: fallbackAnswer(qIndex + 1),
+            explanation: 'Auto-repaired placeholder question. Regenerate this passage for richer source-based content.',
+          }),
+        ).map((q) => ({ ...q, questionNumber: repairedReadingNumber++ }));
+        const repairedQuestions = repairGroupedQuestionData(fitted, topic);
+        return {
+          ...passage,
+          questions: repairedQuestions,
+          questionRange: {
+            start: repairedQuestions[0]?.questionNumber ?? 1,
+            end: repairedQuestions[repairedQuestions.length - 1]?.questionNumber ?? 1,
+          },
+        };
+      });
+      readingTest.totalQuestions = readingTest.passages.reduce((sum, passage) => sum + passage.questions.length, 0);
 
       // 2. Listening (Generate 4 sections one by one)
       const listeningSectionsData = [];
@@ -3460,6 +3607,31 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
         id: `listening-${now}`, title: `Mock Test: ${topic} - Listening`, totalQuestions: currentQNum - 1,
         audioUrl: '', audioDuration: 0, transferTime: 600, sections: listeningSections, instructions: 'Listen to the audio and answer.'
       };
+      let repairedListeningNumber = 1;
+      listeningTest.sections = listeningTest.sections.map((section, sIndex) => {
+        const fitted = fitQuestionCount<ListeningQuestion>(
+          section.questions as ListeningQuestion[],
+          10,
+          (_questionNumber, qIndex) => ({
+            id: `lq-${now}-${sIndex}-repair-${qIndex}`,
+            questionNumber: qIndex + 1,
+            type: 'short-answer',
+            questionText: `Write one detail mentioned in Section ${sIndex + 1}.`,
+            correctAnswer: fallbackAnswer(qIndex + 1),
+            explanation: 'Auto-repaired placeholder question. Regenerate this section for richer transcript-based content.',
+          }),
+        ).map((q) => ({ ...q, questionNumber: repairedListeningNumber++ }));
+        const repairedQuestions = repairGroupedQuestionData(fitted, topic);
+        return {
+          ...section,
+          questions: repairedQuestions,
+          questionRange: {
+            start: repairedQuestions[0]?.questionNumber ?? 1,
+            end: repairedQuestions[repairedQuestions.length - 1]?.questionNumber ?? 1,
+          },
+        };
+      });
+      listeningTest.totalQuestions = listeningTest.sections.reduce((sum, section) => sum + section.questions.length, 0);
 
       // 3. Writing (Generate 2 tasks one by one)
       const writingTasksData = [];
@@ -3468,7 +3640,7 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
         writingTasksData.push(tData);
       }
       
-      const writingTest = normalizeWritingTestFromDb({
+      const writingTest = repairWritingTest(normalizeWritingTestFromDb({
         id: `writing-${now}`,
         title: `Mock Test: ${topic} - Writing`,
         testType: 'academic',
@@ -3499,7 +3671,7 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
           }
           return base;
         }),
-      });
+      }), topic);
 
       // 4. Speaking (Generate 3 parts one by one)
       const speakingPartsData = [];
