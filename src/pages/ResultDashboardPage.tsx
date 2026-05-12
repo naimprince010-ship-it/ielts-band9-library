@@ -60,6 +60,7 @@ interface FullMockAttempt {
   completed_at: string;
   review_data?: unknown;
   writing_feedback?: unknown;
+  speaking_feedback?: unknown;
 }
 
 const STORAGE_KEYS = {
@@ -177,12 +178,12 @@ export default function ResultDashboardPage() {
     try {
       let { data, error } = await supabase
         .from('mock_test_results')
-        .select('id, overall_band, listening_band, reading_band, writing_band, speaking_band, completed_at, review_data, writing_feedback')
+        .select('id, overall_band, listening_band, reading_band, writing_band, speaking_band, completed_at, review_data, writing_feedback, speaking_feedback')
         .eq('user_id', user.id)
         .order('completed_at', { ascending: false })
         .limit(50);
 
-      if (error && /review_data|writing_feedback|column/i.test(error.message || '')) {
+      if (error && /review_data|writing_feedback|speaking_feedback|column/i.test(error.message || '')) {
         const legacy = await supabase
           .from('mock_test_results')
           .select('id, overall_band, listening_band, reading_band, writing_band, speaking_band, completed_at')
@@ -600,9 +601,9 @@ export default function ResultDashboardPage() {
                     <FileCheck2 className="h-3 w-3" />
                     {hasSavedPayload(latestFullMock.review_data) ? 'Review saved' : 'No review'}
                   </Badge>
-                  <Badge variant={hasSavedPayload(latestFullMock.writing_feedback) ? 'default' : 'outline'} className="justify-center gap-1 py-2">
+                  <Badge variant={hasSavedPayload(latestFullMock.writing_feedback) || hasSavedPayload(latestFullMock.speaking_feedback) ? 'default' : 'outline'} className="justify-center gap-1 py-2">
                     <Sparkles className="h-3 w-3" />
-                    {hasSavedPayload(latestFullMock.writing_feedback) ? 'AI feedback' : 'No feedback'}
+                    {hasSavedPayload(latestFullMock.writing_feedback) || hasSavedPayload(latestFullMock.speaking_feedback) ? 'AI feedback' : 'No feedback'}
                   </Badge>
                 </div>
               </CardContent>

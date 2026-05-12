@@ -33,6 +33,7 @@ interface FullMockAttempt {
   completed_at: string;
   review_data?: unknown;
   writing_feedback?: unknown;
+  speaking_feedback?: unknown;
 }
 
 interface ReviewItem {
@@ -66,6 +67,10 @@ interface WritingFeedback {
   task1Notes?: string;
   task2Notes?: string;
   actionPlan?: string[];
+}
+
+interface SpeakingFeedback extends WritingFeedback {
+  partNotes?: string[];
 }
 
 const MODULES: Array<{ key: ModuleKey; label: string; icon: typeof Headphones; color: string; bg: string }> = [
@@ -120,6 +125,15 @@ const parseWritingFeedback = (value: unknown): WritingFeedback | null => {
   };
 };
 
+const parseSpeakingFeedback = (value: unknown): SpeakingFeedback | null => {
+  const feedback = parseWritingFeedback(value);
+  if (!feedback || !isRecord(value)) return feedback;
+  return {
+    ...feedback,
+    partNotes: Array.isArray(value.partNotes) ? (value.partNotes as string[]) : [],
+  };
+};
+
 export default function FullMockAttemptDetailPage() {
   const { attemptId } = useParams();
   const { user } = useAuth();
@@ -138,12 +152,12 @@ export default function FullMockAttemptDetailPage() {
       setLoading(true);
       let { data, error: fetchError } = await supabase
         .from('mock_test_results')
-        .select('id, overall_band, listening_band, reading_band, writing_band, speaking_band, completed_at, review_data, writing_feedback')
+        .select('id, overall_band, listening_band, reading_band, writing_band, speaking_band, completed_at, review_data, writing_feedback, speaking_feedback')
         .eq('id', attemptId)
         .eq('user_id', user.id)
         .single();
 
-      if (fetchError && /review_data|writing_feedback|column/i.test(fetchError.message || '')) {
+      if (fetchError && /review_data|writing_feedback|speaking_feedback|column/i.test(fetchError.message || '')) {
         const legacy = await supabase
           .from('mock_test_results')
           .select('id, overall_band, listening_band, reading_band, writing_band, speaking_band, completed_at')
@@ -172,6 +186,7 @@ export default function FullMockAttemptDetailPage() {
 
   const reviewData = parseReviewData(attempt?.review_data);
   const writingFeedback = parseWritingFeedback(attempt?.writing_feedback);
+  const speakingFeedback = parseSpeakingFeedback(attempt?.speaking_feedback);
 
   if (loading) {
     return (
@@ -322,6 +337,7 @@ export default function FullMockAttemptDetailPage() {
             </CardContent>
           </Card>
 
+          <div className="space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -396,6 +412,55 @@ export default function FullMockAttemptDetailPage() {
               )}
             </CardContent>
           </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Mic className="h-5 w-5 text-orange-600" />
+                AI Speaking Feedback
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {speakingFeedback ? (
+                <div className="space-y-5">
+                  <div className="rounded-xl bg-orange-50 p-4">
+                    <p className="text-sm font-semibold text-orange-700">Estimated speaking band</p>
+                    <p className="mt-2 text-4xl font-bold text-orange-900">
+                      {speakingFeedback.estimatedBand != null ? formatBandScore(speakingFeedback.estimatedBand) : '--'}
+                    </p>
+                    {speakingFeedback.summary && <p className="mt-3 text-sm text-orange-800">{speakingFeedback.summary}</p>}
+                  </div>
+                  {(speakingFeedback.criteria || []).map((criterion) => (
+                    <div key={criterion.name} className="rounded-lg border border-slate-200 p-3">
+                      <div className="flex items-center justify-between">
+                        <p className="font-semibold text-slate-900">{criterion.name}</p>
+                        <Badge>{formatBandScore(Number(criterion.band))}</Badge>
+                      </div>
+                      <p className="mt-2 text-sm text-slate-600">{criterion.feedback}</p>
+                    </div>
+                  ))}
+                  {(speakingFeedback.partNotes || []).length > 0 && (
+                    <div>
+                      <p className="font-semibold text-slate-900">Part Notes</p>
+                      <ul className="mt-2 space-y-2">
+                        {speakingFeedback.partNotes?.map((item, index) => (
+                          <li key={index} className="rounded-lg bg-slate-50 p-3 text-sm text-slate-700">{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="rounded-xl bg-slate-50 p-6 text-center">
+                  <Mic className="mx-auto mb-3 h-8 w-8 text-slate-400" />
+                  <p className="font-semibold text-slate-900">No AI speaking feedback saved</p>
+                  <p className="mt-2 text-sm text-slate-600">
+                    Generate speaking feedback from the full mock result screen to store it here.
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+          </div>
         </div>
       </div>
     </div>

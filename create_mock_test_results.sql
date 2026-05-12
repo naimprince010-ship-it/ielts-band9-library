@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS public.mock_test_results (
   speaking_test_id  UUID REFERENCES public.mock_tests(id) ON DELETE SET NULL,
   review_data JSONB,
   writing_feedback JSONB,
+  speaking_feedback JSONB,
   completed_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
   created_at    TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -27,7 +28,8 @@ ALTER TABLE public.mock_test_results
   ADD COLUMN IF NOT EXISTS writing_test_id   UUID REFERENCES public.mock_tests(id) ON DELETE SET NULL,
   ADD COLUMN IF NOT EXISTS speaking_test_id  UUID REFERENCES public.mock_tests(id) ON DELETE SET NULL,
   ADD COLUMN IF NOT EXISTS review_data JSONB,
-  ADD COLUMN IF NOT EXISTS writing_feedback JSONB;
+  ADD COLUMN IF NOT EXISTS writing_feedback JSONB,
+  ADD COLUMN IF NOT EXISTS speaking_feedback JSONB;
 
 -- Indexes for fast user lookups
 CREATE INDEX IF NOT EXISTS idx_mock_test_results_user_id

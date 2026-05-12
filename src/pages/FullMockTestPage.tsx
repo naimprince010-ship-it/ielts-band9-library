@@ -96,6 +96,29 @@ interface WritingFeedback {
   actionPlan: string[];
 }
 
+interface SpeakingSubmission {
+  questions: string[];
+  typedResponse: string;
+  clipCount: number;
+  totalRecordedSeconds: number;
+}
+
+interface SpeakingFeedbackCriterion {
+  name: string;
+  band: number;
+  feedback: string;
+}
+
+interface SpeakingFeedback {
+  estimatedBand: number;
+  summary: string;
+  criteria: SpeakingFeedbackCriterion[];
+  strengths: string[];
+  improvements: string[];
+  partNotes: string[];
+  actionPlan: string[];
+}
+
 const SECTIONS: { phase: Phase; module: ModuleType; label: string; duration: number; icon: React.ReactNode; color: string; bg: string }[] = [
   { phase: 'listening', module: 'listening', label: 'Listening', duration: 30 * 60, icon: <Headphones className="h-5 w-5" />, color: 'text-violet-600', bg: 'bg-violet-500' },
   { phase: 'reading',   module: 'reading',   label: 'Reading',   duration: 60 * 60, icon: <BookOpen className="h-5 w-5" />,   color: 'text-blue-600',   bg: 'bg-blue-500'   },
@@ -260,6 +283,23 @@ function extractWritingTasks(testData: Record<string, unknown> | undefined) {
   return { task1, task2, wData };
 }
 
+function extractSpeakingQuestions(testData: Record<string, unknown> | undefined): string[] {
+  const parts = Array.isArray(testData?.parts) ? testData.parts as Array<{
+    title?: string;
+    questions?: Array<{ text?: string }>;
+    cueCard?: { topic?: string; bulletPoints?: string[] };
+  }> : [];
+
+  return parts.flatMap((part) => {
+    const prefix = part.title ? `${part.title}: ` : '';
+    if (part.cueCard) {
+      const bullets = Array.isArray(part.cueCard.bulletPoints) ? part.cueCard.bulletPoints.join('; ') : '';
+      return [`${prefix}${part.cueCard.topic || 'Cue card'}${bullets ? ` (${bullets})` : ''}`];
+    }
+    return (part.questions || []).map(question => `${prefix}${question.text || ''}`.trim()).filter(Boolean);
+  });
+}
+
 function useTimer(initial: number, onExpire: () => void) {
   const [remaining, setRemaining] = useState(initial);
   const [running, setRunning] = useState(false);
@@ -298,6 +338,8 @@ interface TestSession {
   reviewData: ReviewData;
   writingSubmission: WritingSubmission | null;
   writingFeedback: WritingFeedback | null;
+  speakingSubmission: SpeakingSubmission | null;
+  speakingFeedback: SpeakingFeedback | null;
   selectedMode: 'practice' | 'exam';
   tests: Partial<Record<ModuleType, MockTest>>;
   playedAudios: string[];
@@ -342,7 +384,8 @@ export default function FullMockTestPage() {
     finalScores: SectionScores,
     usedTests: Partial<Record<ModuleType, MockTest>>,
     finalReviewData: ReviewData,
-    finalWritingFeedback: WritingFeedback | null
+    finalWritingFeedback: WritingFeedback | null,
+    finalSpeakingFeedback: SpeakingFeedback | null
   ) => {
     if (!user || !supabase || !isSupabaseConfigured()) {
       setResultSaved('idle');
@@ -366,6 +409,7 @@ export default function FullMockTestPage() {
         speaking_test_id:  usedTests.speaking?.id  ?? null,
         review_data: finalReviewData,
         writing_feedback: finalWritingFeedback,
+        speaking_feedback: finalSpeakingFeedback,
       };
       let { data: savedResult, error } = await supabase
         .from('mock_test_results')
@@ -373,10 +417,11 @@ export default function FullMockTestPage() {
         .select('id')
         .single();
 
-      if (error && /review_data|writing_feedback|column/i.test(error.message || '')) {
+      if (error && /review_data|writing_feedback|speaking_feedback|column/i.test(error.message || '')) {
         const legacyInsertData: Record<string, unknown> = { ...insertData };
         delete legacyInsertData.review_data;
         delete legacyInsertData.writing_feedback;
+        delete legacyInsertData.speaking_feedback;
         const retry = await supabase
           .from('mock_test_results')
           .insert(legacyInsertData)
@@ -407,10 +452,16 @@ export default function FullMockTestPage() {
   const [reviewData, setReviewDataRaw] = useState<ReviewData>(savedSession?.reviewData ?? {});
   const [writingSubmission, setWritingSubmissionRaw] = useState<WritingSubmission | null>(savedSession?.writingSubmission ?? null);
   const [writingFeedback, setWritingFeedbackRaw] = useState<WritingFeedback | null>(savedSession?.writingFeedback ?? null);
+  const [speakingSubmission, setSpeakingSubmissionRaw] = useState<SpeakingSubmission | null>(savedSession?.speakingSubmission ?? null);
+  const [speakingFeedback, setSpeakingFeedbackRaw] = useState<SpeakingFeedback | null>(savedSession?.speakingFeedback ?? null);
   const [writingFeedbackStatus, setWritingFeedbackStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>(
     savedSession?.writingFeedback ? 'ready' : 'idle'
   );
   const [writingFeedbackError, setWritingFeedbackError] = useState('');
+  const [speakingFeedbackStatus, setSpeakingFeedbackStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>(
+    savedSession?.speakingFeedback ? 'ready' : 'idle'
+  );
+  const [speakingFeedbackError, setSpeakingFeedbackError] = useState('');
   const [loading, setLoading] = useState(true);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [playingAudioId, setPlayingAudioId] = useState<string | null>(null);
@@ -923,6 +974,16 @@ export default function FullMockTestPage() {
     saveSession({ writingFeedback: feedback });
   };
 
+  const setSpeakingSubmission = (submission: SpeakingSubmission | null) => {
+    setSpeakingSubmissionRaw(submission);
+    saveSession({ speakingSubmission: submission });
+  };
+
+  const setSpeakingFeedback = (feedback: SpeakingFeedback | null) => {
+    setSpeakingFeedbackRaw(feedback);
+    saveSession({ speakingFeedback: feedback });
+  };
+
   const setSectionIndex = (idx: number) => {
     setSectionIndexRaw(idx);
     saveSession({ sectionIndex: idx });
@@ -1146,6 +1207,16 @@ export default function FullMockTestPage() {
           band = bandFromWritingWordCounts(task1, task2);
         } else if (sec.module === 'speaking') {
           const words = (answers['sp_answers'] ?? '').split(/\s+/).filter(Boolean).length;
+          const clipSeconds = recordedClips.reduce((sum, clip) => sum + clip.duration, 0);
+          setSpeakingSubmission({
+            questions: extractSpeakingQuestions(td),
+            typedResponse: answers['sp_answers'] ?? '',
+            clipCount: recordedClips.length,
+            totalRecordedSeconds: clipSeconds,
+          });
+          setSpeakingFeedback(null);
+          setSpeakingFeedbackStatus('idle');
+          setSpeakingFeedbackError('');
           band = bandFromSpeakingResponse(words, recordedClips.length);
         }
       }
@@ -1163,11 +1234,11 @@ export default function FullMockTestPage() {
     } else {
       setPhase('results');
       clearSession(); // Test complete — wipe session
-      saveResultToDb(finalScores, tests, finalReviewData, writingFeedback);
+      saveResultToDb(finalScores, tests, finalReviewData, writingFeedback, speakingFeedback);
     }
     setAnswers({});
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [sectionIndex, tests, answers, scores, recordedClips.length, saveResultToDb, reviewData, writingFeedback]);
+  }, [sectionIndex, tests, answers, scores, recordedClips, saveResultToDb, reviewData, writingFeedback, speakingFeedback]);
 
   useEffect(() => { submitSectionRef.current = submitSection; }, [submitSection]);
 
@@ -1230,6 +1301,68 @@ export default function FullMockTestPage() {
     } catch (err) {
       setWritingFeedbackStatus('error');
       setWritingFeedbackError(err instanceof Error ? err.message : 'Failed to generate writing feedback.');
+    }
+  };
+
+  const requestSpeakingFeedback = async () => {
+    if (!speakingSubmission) {
+      setSpeakingFeedbackStatus('error');
+      setSpeakingFeedbackError('No speaking submission found for this attempt.');
+      return;
+    }
+
+    setSpeakingFeedbackStatus('loading');
+    setSpeakingFeedbackError('');
+
+    try {
+      const response = await fetch('/api/analyze-speaking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(speakingSubmission),
+      });
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || data.details || 'Failed to generate speaking feedback.');
+      }
+
+      const feedback = data.feedback as SpeakingFeedback;
+      setSpeakingFeedback(feedback);
+      setSpeakingFeedbackStatus('ready');
+
+      if (user && supabase && isSupabaseConfigured()) {
+        try {
+          let resultId = savedResultIdRef.current;
+          if (!resultId) {
+            const latest = await supabase
+              .from('mock_test_results')
+              .select('id')
+              .eq('user_id', user.id)
+              .order('completed_at', { ascending: false })
+              .limit(1)
+              .maybeSingle();
+            resultId = latest.data?.id ?? null;
+            savedResultIdRef.current = resultId;
+          }
+
+          if (resultId) {
+            const { error: updateError } = await supabase
+              .from('mock_test_results')
+              .update({ speaking_feedback: feedback })
+              .eq('id', resultId)
+              .eq('user_id', user.id);
+
+            if (updateError && !/speaking_feedback|column/i.test(updateError.message || '')) {
+              console.error('Failed to persist speaking feedback:', updateError);
+            }
+          }
+        } catch (persistError) {
+          console.error('Error persisting speaking feedback:', persistError);
+        }
+      }
+    } catch (err) {
+      setSpeakingFeedbackStatus('error');
+      setSpeakingFeedbackError(err instanceof Error ? err.message : 'Failed to generate speaking feedback.');
     }
   };
 
@@ -1737,6 +1870,126 @@ export default function FullMockTestPage() {
             </div>
           )}
 
+          {speakingSubmission && (
+            <div className="mb-12 bg-white/10 border border-white/15 rounded-[36px] overflow-hidden">
+              <div className="px-8 py-6 bg-white/5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-orange-500 flex items-center justify-center">
+                    <Mic className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-black">AI Speaking Feedback</h2>
+                    <p className="text-sm text-white/55 font-bold">
+                      Transcript-style review for your typed speaking response
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  type="button"
+                  onClick={requestSpeakingFeedback}
+                  disabled={speakingFeedbackStatus === 'loading'}
+                  className="bg-orange-500 hover:bg-orange-400 text-white rounded-2xl font-black px-7 py-6 gap-2"
+                >
+                  {speakingFeedbackStatus === 'loading'
+                    ? <><Loader2 className="h-5 w-5 animate-spin" /> ANALYZING</>
+                    : speakingFeedback
+                    ? <><Sparkles className="h-5 w-5" /> REGENERATE FEEDBACK</>
+                    : <><Sparkles className="h-5 w-5" /> GENERATE FEEDBACK</>}
+                </Button>
+              </div>
+
+              <div className="p-6 sm:p-8">
+                {speakingFeedbackStatus === 'error' && (
+                  <div className="mb-6 rounded-2xl border border-red-400/25 bg-red-500/10 p-4 text-red-100 font-bold">
+                    {speakingFeedbackError}
+                  </div>
+                )}
+
+                {!speakingFeedback && speakingFeedbackStatus !== 'loading' && (
+                  <div className="grid sm:grid-cols-3 gap-4 text-sm">
+                    <div className="rounded-3xl bg-black/15 p-5">
+                      <p className="text-white/45 font-black uppercase tracking-widest text-[10px] mb-2">Typed Response</p>
+                      <p className="text-white font-bold">{speakingSubmission.typedResponse.trim().split(/\s+/).filter(Boolean).length} words</p>
+                    </div>
+                    <div className="rounded-3xl bg-black/15 p-5">
+                      <p className="text-white/45 font-black uppercase tracking-widest text-[10px] mb-2">Recordings</p>
+                      <p className="text-white font-bold">{speakingSubmission.clipCount} clips</p>
+                    </div>
+                    <div className="rounded-3xl bg-black/15 p-5">
+                      <p className="text-white/45 font-black uppercase tracking-widest text-[10px] mb-2">Duration</p>
+                      <p className="text-white font-bold">{Math.round(speakingSubmission.totalRecordedSeconds)} seconds</p>
+                    </div>
+                  </div>
+                )}
+
+                {speakingFeedback && (
+                  <div className="space-y-7">
+                    <div className="rounded-[30px] bg-orange-500/15 border border-orange-400/25 p-7">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+                        <div>
+                          <p className="text-orange-200 text-xs font-black uppercase tracking-[0.25em] mb-2">Estimated Speaking Band</p>
+                          <p className="text-6xl font-black text-orange-300">{Number(speakingFeedback.estimatedBand).toFixed(1)}</p>
+                        </div>
+                        <Badge className="bg-orange-300 text-orange-950 rounded-full px-5 py-2 font-black">
+                          AI Estimate
+                        </Badge>
+                      </div>
+                      <p className="text-white/80 font-medium leading-relaxed">{speakingFeedback.summary}</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {speakingFeedback.criteria.map((criterion) => (
+                        <div key={criterion.name} className="rounded-3xl bg-black/15 border border-white/10 p-5">
+                          <div className="flex items-start justify-between gap-3 mb-3">
+                            <h3 className="font-black text-white">{criterion.name}</h3>
+                            <Badge className="bg-white text-slate-900 rounded-full font-black">
+                              {Number(criterion.band).toFixed(1)}
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-white/65 font-medium leading-relaxed">{criterion.feedback}</p>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="grid lg:grid-cols-3 gap-4">
+                      {[
+                        { title: 'Strengths', items: speakingFeedback.strengths, tone: 'text-emerald-200' },
+                        { title: 'Improve Next', items: speakingFeedback.improvements, tone: 'text-amber-200' },
+                        { title: 'Action Plan', items: speakingFeedback.actionPlan, tone: 'text-indigo-200' },
+                      ].map(section => (
+                        <div key={section.title} className="rounded-3xl bg-black/15 border border-white/10 p-5">
+                          <h3 className={`font-black mb-4 ${section.tone}`}>{section.title}</h3>
+                          <ul className="space-y-3">
+                            {section.items.map((item, index) => (
+                              <li key={index} className="text-sm text-white/70 font-medium leading-relaxed flex gap-3">
+                                <span className="text-white/35 font-black">{index + 1}</span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+
+                    {speakingFeedback.partNotes.length > 0 && (
+                      <div className="rounded-3xl bg-black/15 border border-white/10 p-5">
+                        <h3 className="font-black text-orange-200 mb-4">Part Notes</h3>
+                        <ul className="space-y-3">
+                          {speakingFeedback.partNotes.map((item, index) => (
+                            <li key={index} className="text-sm text-white/70 font-medium leading-relaxed flex gap-3">
+                              <span className="text-white/35 font-black">{index + 1}</span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button size="lg" onClick={() => { 
                 clearSession(); // Wipe persisted session for a clean retake
@@ -1748,6 +2001,10 @@ export default function FullMockTestPage() {
                 setWritingFeedback(null);
                 setWritingFeedbackStatus('idle');
                 setWritingFeedbackError('');
+                setSpeakingSubmission(null);
+                setSpeakingFeedback(null);
+                setSpeakingFeedbackStatus('idle');
+                setSpeakingFeedbackError('');
                 setAnswers({}); 
                 setPlayedAudios(new Set());
               }}
