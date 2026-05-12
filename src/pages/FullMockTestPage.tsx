@@ -6,7 +6,8 @@ import {
   Clock, Headphones, BookOpen, PenTool, Mic, ChevronRight,
   CheckCircle, AlertCircle, Award, Play, RotateCcw,
   Loader2, Target, Crown, Timer, Check, Volume2,
-  Shield, Zap, Wifi, Lock, ArrowRight, Square, MicOff, Trash2
+  Shield, Zap, Wifi, Lock, ArrowRight, Square, MicOff, Trash2,
+  Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -52,6 +53,47 @@ interface SectionScores {
   reading: number | null;
   writing: number | null;
   speaking: number | null;
+}
+
+interface ReviewItem {
+  questionNumber: number;
+  questionText: string;
+  userAnswer: string;
+  acceptedAnswers: string[];
+  correct: boolean;
+  explanation?: string;
+}
+
+interface SectionReview {
+  correct: number;
+  total: number;
+  items: ReviewItem[];
+}
+
+type ReviewData = Partial<Record<ModuleType, SectionReview>>;
+
+interface WritingSubmission {
+  task1Prompt: string;
+  task2Prompt: string;
+  task1Response: string;
+  task2Response: string;
+}
+
+interface WritingFeedbackCriterion {
+  name: string;
+  band: number;
+  feedback: string;
+}
+
+interface WritingFeedback {
+  estimatedBand: number;
+  summary: string;
+  criteria: WritingFeedbackCriterion[];
+  strengths: string[];
+  improvements: string[];
+  task1Notes: string;
+  task2Notes: string;
+  actionPlan: string[];
 }
 
 const SECTIONS: { phase: Phase; module: ModuleType; label: string; duration: number; icon: React.ReactNode; color: string; bg: string }[] = [
@@ -168,6 +210,28 @@ function isAnswerCorrect(userAnswer: string, correctAnswer: unknown): boolean {
   return getAcceptedAnswers(correctAnswer).some(answer => answer === normalizedUser);
 }
 
+function buildObjectiveReview(questions: Question[], answers: Record<string, string>, keyPrefix: 'l' | 'r'): SectionReview {
+  const items = questions.map((q, index) => {
+    const key = `${keyPrefix}_${index}`;
+    const acceptedAnswers = getAcceptedAnswers(q.correctAnswer);
+    const userAnswer = answers[key] ?? '';
+    return {
+      questionNumber: index + 1,
+      questionText: q.questionText,
+      userAnswer,
+      acceptedAnswers,
+      correct: isAnswerCorrect(userAnswer, q.correctAnswer),
+      explanation: q.explanation,
+    };
+  });
+
+  return {
+    correct: items.filter(item => item.correct).length,
+    total: items.length,
+    items,
+  };
+}
+
 function bandFromWritingWordCounts(task1: number, task2: number): number {
   if (task1 === 0 && task2 === 0) return 0;
   if (task1 < 120 || task2 < 200) return 4.5;
@@ -180,6 +244,20 @@ function bandFromSpeakingResponse(words: number, clips: number): number {
   const recordingCredit = Math.min(clips, 3) * 45;
   const responseSize = words + recordingCredit;
   return responseSize >= 300 ? 7.0 : responseSize >= 200 ? 6.5 : responseSize >= 100 ? 6.0 : 5.0;
+}
+
+function extractWritingTasks(testData: Record<string, unknown> | undefined) {
+  const wData = normalizeWritingTestFromDb(testData);
+  const task1 = findWritingTask1(wData);
+  const task2 =
+    wData.tasks?.find(
+      (t) =>
+        t.taskType === 'task2' ||
+        (t as Record<string, unknown>).task_type === 'task2' ||
+        t.taskNumber === 2
+    ) ?? wData.tasks?.[1];
+
+  return { task1, task2, wData };
 }
 
 function useTimer(initial: number, onExpire: () => void) {
@@ -217,6 +295,9 @@ interface TestSession {
   phase: Phase;
   sectionIndex: number;
   scores: SectionScores;
+  reviewData: ReviewData;
+  writingSubmission: WritingSubmission | null;
+  writingFeedback: WritingFeedback | null;
   selectedMode: 'practice' | 'exam';
   tests: Partial<Record<ModuleType, MockTest>>;
   playedAudios: string[];
@@ -296,6 +377,13 @@ export default function FullMockTestPage() {
 
   const [phase, setPhaseRaw] = useState<Phase>(savedSession?.phase ?? 'intro');
   const [tests, setTestsRaw] = useState<Partial<Record<ModuleType, MockTest>>>(savedSession?.tests ?? {});
+  const [reviewData, setReviewDataRaw] = useState<ReviewData>(savedSession?.reviewData ?? {});
+  const [writingSubmission, setWritingSubmissionRaw] = useState<WritingSubmission | null>(savedSession?.writingSubmission ?? null);
+  const [writingFeedback, setWritingFeedbackRaw] = useState<WritingFeedback | null>(savedSession?.writingFeedback ?? null);
+  const [writingFeedbackStatus, setWritingFeedbackStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>(
+    savedSession?.writingFeedback ? 'ready' : 'idle'
+  );
+  const [writingFeedbackError, setWritingFeedbackError] = useState('');
   const [loading, setLoading] = useState(true);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [playingAudioId, setPlayingAudioId] = useState<string | null>(null);
@@ -790,6 +878,24 @@ export default function FullMockTestPage() {
     });
   };
 
+  const setReviewData = (updater: ReviewData | ((prev: ReviewData) => ReviewData)) => {
+    setReviewDataRaw(prev => {
+      const next = typeof updater === 'function' ? updater(prev) : updater;
+      saveSession({ reviewData: next });
+      return next;
+    });
+  };
+
+  const setWritingSubmission = (submission: WritingSubmission | null) => {
+    setWritingSubmissionRaw(submission);
+    saveSession({ writingSubmission: submission });
+  };
+
+  const setWritingFeedback = (feedback: WritingFeedback | null) => {
+    setWritingFeedbackRaw(feedback);
+    saveSession({ writingFeedback: feedback });
+  };
+
   const setSectionIndex = (idx: number) => {
     setSectionIndexRaw(idx);
     saveSession({ sectionIndex: idx });
@@ -979,6 +1085,7 @@ export default function FullMockTestPage() {
     console.log('Submitting section:', sec.module, 'Test data available:', !!test);
     
     let band: number | null = null;
+    let sectionReview: SectionReview | null = null;
 
     try {
       if (test && test.test_data) {
@@ -988,21 +1095,27 @@ export default function FullMockTestPage() {
           const passages = Array.isArray(td.passages) ? td.passages : (td.passage ? [td.passage] : []);
           const qs = passages.flatMap((p: any) => p.questions || []);
           console.log(`Scoring Reading: ${qs.length} questions found`);
-          const correct = qs.filter((q: any, i: number) => {
-            return isAnswerCorrect(answers[`r_${i}`] ?? '', q.correctAnswer);
-          }).length;
-          band = qs.length > 0 ? bandFromScore(correct, qs.length) : null;
+          sectionReview = buildObjectiveReview(qs, answers, 'r');
+          band = sectionReview.total > 0 ? bandFromScore(sectionReview.correct, sectionReview.total) : null;
         } else if (sec.module === 'listening') {
           const sections = Array.isArray(td.sections) ? td.sections : [];
           const qs = sections.flatMap((s: any) => s.questions || []);
           console.log(`Scoring Listening: ${qs.length} questions found`);
-          const correct = qs.filter((q: any, i: number) => {
-            return isAnswerCorrect(answers[`l_${i}`] ?? '', q.correctAnswer);
-          }).length;
-          band = qs.length > 0 ? bandFromScore(correct, qs.length) : null;
+          sectionReview = buildObjectiveReview(qs, answers, 'l');
+          band = sectionReview.total > 0 ? bandFromScore(sectionReview.correct, sectionReview.total) : null;
         } else if (sec.module === 'writing') {
           const task1 = (answers['w_task1'] ?? '').split(/\s+/).filter(Boolean).length;
           const task2 = (answers['w_task2'] ?? '').split(/\s+/).filter(Boolean).length;
+          const { task1: task1Data, task2: task2Data } = extractWritingTasks(td);
+          setWritingSubmission({
+            task1Prompt: task1Data?.prompt ?? '',
+            task2Prompt: task2Data?.prompt ?? '',
+            task1Response: answers['w_task1'] ?? '',
+            task2Response: answers['w_task2'] ?? '',
+          });
+          setWritingFeedback(null);
+          setWritingFeedbackStatus('idle');
+          setWritingFeedbackError('');
           band = bandFromWritingWordCounts(task1, task2);
         } else if (sec.module === 'speaking') {
           const words = (answers['sp_answers'] ?? '').split(/\s+/).filter(Boolean).length;
@@ -1012,6 +1125,9 @@ export default function FullMockTestPage() {
     } catch (err) { console.error('Error calculating score:', err); }
 
     const finalScores = { ...scores, [sec.module]: band };
+    if (sectionReview) {
+      setReviewData(prev => ({ ...prev, [sec.module]: sectionReview }));
+    }
     setScores(finalScores);
 
     const next = sectionIndex + 1;
@@ -1028,6 +1144,36 @@ export default function FullMockTestPage() {
   }, [sectionIndex, tests, answers, scores, recordedClips.length, saveResultToDb]);
 
   useEffect(() => { submitSectionRef.current = submitSection; }, [submitSection]);
+
+  const requestWritingFeedback = async () => {
+    if (!writingSubmission) {
+      setWritingFeedbackStatus('error');
+      setWritingFeedbackError('No writing submission found for this attempt.');
+      return;
+    }
+
+    setWritingFeedbackStatus('loading');
+    setWritingFeedbackError('');
+
+    try {
+      const response = await fetch('/api/analyze-writing', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(writingSubmission),
+      });
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || data.details || 'Failed to generate writing feedback.');
+      }
+
+      setWritingFeedback(data.feedback as WritingFeedback);
+      setWritingFeedbackStatus('ready');
+    } catch (err) {
+      setWritingFeedbackStatus('error');
+      setWritingFeedbackError(err instanceof Error ? err.message : 'Failed to generate writing feedback.');
+    }
+  };
 
   if (loading) {
     return (
@@ -1289,7 +1435,7 @@ export default function FullMockTestPage() {
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white">
-        <div className="container mx-auto px-4 py-20 max-w-3xl">
+        <div className="container mx-auto px-4 py-20 max-w-5xl">
           <div className="text-center mb-16">
             <div className="w-28 h-28 bg-amber-400 rounded-[40px] flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-amber-400/40 rotate-12">
               <Award className="h-14 w-14 text-amber-900" />
@@ -1330,6 +1476,7 @@ export default function FullMockTestPage() {
             {SECTIONS.map(s => {
               const band = scores[s.module];
               const bc = band && band >= 7 ? 'text-green-400' : band && band >= 5.5 ? 'text-yellow-400' : 'text-red-400';
+              const review = reviewData[s.module];
               return (
                 <div key={s.phase} className="bg-white/5 rounded-3xl p-8 border border-white/10 transition-transform hover:scale-105">
                   <div className="flex items-center gap-3 mb-4">
@@ -1337,10 +1484,200 @@ export default function FullMockTestPage() {
                     <span className="font-black text-sm uppercase tracking-wider">{s.label}</span>
                   </div>
                   <p className={`text-5xl font-black ${bc}`}>{band?.toFixed(1) ?? '—'}</p>
+                  {review && (
+                    <p className="mt-3 text-xs font-black uppercase tracking-widest text-white/50">
+                      {review.correct}/{review.total} correct
+                    </p>
+                  )}
                 </div>
               );
             })}
           </div>
+
+          {(reviewData.listening || reviewData.reading) && (
+            <div className="mb-12 space-y-8">
+              <div className="text-center">
+                <p className="text-indigo-300 text-sm font-black uppercase tracking-[0.3em] mb-3">Answer Review</p>
+                <h2 className="text-3xl font-black">Objective Module Breakdown</h2>
+              </div>
+
+              {(['listening', 'reading'] as ModuleType[]).map(module => {
+                const review = reviewData[module];
+                if (!review) return null;
+                const section = SECTIONS.find(s => s.module === module);
+                const wrongCount = review.total - review.correct;
+
+                return (
+                  <div key={module} className="bg-white/10 border border-white/15 rounded-[36px] overflow-hidden">
+                    <div className="px-8 py-6 bg-white/5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-11 h-11 rounded-2xl ${section?.bg ?? 'bg-indigo-500'} flex items-center justify-center`}>
+                          {section?.icon}
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-black capitalize">{module}</h3>
+                          <p className="text-sm text-white/55 font-bold">{review.correct} correct, {wrongCount} needs review</p>
+                        </div>
+                      </div>
+                      <Badge className="bg-white text-slate-900 rounded-full px-5 py-2 font-black">
+                        Raw {review.correct}/{review.total}
+                      </Badge>
+                    </div>
+
+                    <div className="p-5 sm:p-8 space-y-4 max-h-[520px] overflow-y-auto">
+                      {review.items.map(item => (
+                        <div
+                          key={`${module}-${item.questionNumber}`}
+                          className={`rounded-3xl border p-5 ${
+                            item.correct
+                              ? 'bg-emerald-500/10 border-emerald-400/25'
+                              : 'bg-red-500/10 border-red-400/25'
+                          }`}
+                        >
+                          <div className="flex items-start gap-4">
+                            <div className={`w-9 h-9 rounded-2xl flex items-center justify-center flex-shrink-0 font-black ${
+                              item.correct ? 'bg-emerald-400 text-emerald-950' : 'bg-red-400 text-red-950'
+                            }`}>
+                              {item.questionNumber}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="font-bold text-white/90 leading-relaxed">{item.questionText}</p>
+                              <div className="grid md:grid-cols-2 gap-3 mt-4 text-sm">
+                                <div className="rounded-2xl bg-black/15 p-4">
+                                  <p className="text-white/45 font-black uppercase tracking-widest text-[10px] mb-1">Your Answer</p>
+                                  <p className="font-bold text-white">{item.userAnswer.trim() || 'Not answered'}</p>
+                                </div>
+                                <div className="rounded-2xl bg-black/15 p-4">
+                                  <p className="text-white/45 font-black uppercase tracking-widest text-[10px] mb-1">Accepted Answer</p>
+                                  <p className="font-bold text-white">{item.acceptedAnswers.join(' / ') || 'Not provided'}</p>
+                                </div>
+                              </div>
+                              {item.explanation && (
+                                <p className="mt-4 text-sm text-white/65 font-medium leading-relaxed">{item.explanation}</p>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {writingSubmission && (
+            <div className="mb-12 bg-white/10 border border-white/15 rounded-[36px] overflow-hidden">
+              <div className="px-8 py-6 bg-white/5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center">
+                    <Sparkles className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-black">AI Writing Feedback</h2>
+                    <p className="text-sm text-white/55 font-bold">
+                      Rubric-based review for Task 1 and Task 2
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  type="button"
+                  onClick={requestWritingFeedback}
+                  disabled={writingFeedbackStatus === 'loading'}
+                  className="bg-emerald-500 hover:bg-emerald-400 text-white rounded-2xl font-black px-7 py-6 gap-2"
+                >
+                  {writingFeedbackStatus === 'loading'
+                    ? <><Loader2 className="h-5 w-5 animate-spin" /> ANALYZING</>
+                    : writingFeedback
+                    ? <><Sparkles className="h-5 w-5" /> REGENERATE FEEDBACK</>
+                    : <><Sparkles className="h-5 w-5" /> GENERATE FEEDBACK</>}
+                </Button>
+              </div>
+
+              <div className="p-6 sm:p-8">
+                {writingFeedbackStatus === 'error' && (
+                  <div className="mb-6 rounded-2xl border border-red-400/25 bg-red-500/10 p-4 text-red-100 font-bold">
+                    {writingFeedbackError}
+                  </div>
+                )}
+
+                {!writingFeedback && writingFeedbackStatus !== 'loading' && (
+                  <div className="grid sm:grid-cols-2 gap-4 text-sm">
+                    <div className="rounded-3xl bg-black/15 p-5">
+                      <p className="text-white/45 font-black uppercase tracking-widest text-[10px] mb-2">Task 1</p>
+                      <p className="text-white font-bold">{writingSubmission.task1Response.trim().split(/\s+/).filter(Boolean).length} words ready for review</p>
+                    </div>
+                    <div className="rounded-3xl bg-black/15 p-5">
+                      <p className="text-white/45 font-black uppercase tracking-widest text-[10px] mb-2">Task 2</p>
+                      <p className="text-white font-bold">{writingSubmission.task2Response.trim().split(/\s+/).filter(Boolean).length} words ready for review</p>
+                    </div>
+                  </div>
+                )}
+
+                {writingFeedback && (
+                  <div className="space-y-7">
+                    <div className="rounded-[30px] bg-emerald-500/15 border border-emerald-400/25 p-7">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+                        <div>
+                          <p className="text-emerald-200 text-xs font-black uppercase tracking-[0.25em] mb-2">Estimated Writing Band</p>
+                          <p className="text-6xl font-black text-emerald-300">{Number(writingFeedback.estimatedBand).toFixed(1)}</p>
+                        </div>
+                        <Badge className="bg-emerald-300 text-emerald-950 rounded-full px-5 py-2 font-black">
+                          AI Estimate
+                        </Badge>
+                      </div>
+                      <p className="text-white/80 font-medium leading-relaxed">{writingFeedback.summary}</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {writingFeedback.criteria.map((criterion) => (
+                        <div key={criterion.name} className="rounded-3xl bg-black/15 border border-white/10 p-5">
+                          <div className="flex items-start justify-between gap-3 mb-3">
+                            <h3 className="font-black text-white">{criterion.name}</h3>
+                            <Badge className="bg-white text-slate-900 rounded-full font-black">
+                              {Number(criterion.band).toFixed(1)}
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-white/65 font-medium leading-relaxed">{criterion.feedback}</p>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="grid lg:grid-cols-3 gap-4">
+                      {[
+                        { title: 'Strengths', items: writingFeedback.strengths, tone: 'text-emerald-200' },
+                        { title: 'Improve Next', items: writingFeedback.improvements, tone: 'text-amber-200' },
+                        { title: 'Action Plan', items: writingFeedback.actionPlan, tone: 'text-indigo-200' },
+                      ].map(section => (
+                        <div key={section.title} className="rounded-3xl bg-black/15 border border-white/10 p-5">
+                          <h3 className={`font-black mb-4 ${section.tone}`}>{section.title}</h3>
+                          <ul className="space-y-3">
+                            {section.items.map((item, index) => (
+                              <li key={index} className="text-sm text-white/70 font-medium leading-relaxed flex gap-3">
+                                <span className="text-white/35 font-black">{index + 1}</span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="rounded-3xl bg-black/15 border border-white/10 p-5">
+                        <h3 className="font-black text-emerald-200 mb-3">Task 1 Notes</h3>
+                        <p className="text-sm text-white/70 font-medium leading-relaxed">{writingFeedback.task1Notes}</p>
+                      </div>
+                      <div className="rounded-3xl bg-black/15 border border-white/10 p-5">
+                        <h3 className="font-black text-emerald-200 mb-3">Task 2 Notes</h3>
+                        <p className="text-sm text-white/70 font-medium leading-relaxed">{writingFeedback.task2Notes}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button size="lg" onClick={() => { 
@@ -1348,6 +1685,11 @@ export default function FullMockTestPage() {
                 setPhase('intro'); 
                 setSectionIndex(0); 
                 setScores({ listening: null, reading: null, writing: null, speaking: null }); 
+                setReviewData({});
+                setWritingSubmission(null);
+                setWritingFeedback(null);
+                setWritingFeedbackStatus('idle');
+                setWritingFeedbackError('');
                 setAnswers({}); 
                 setPlayedAudios(new Set());
               }}
