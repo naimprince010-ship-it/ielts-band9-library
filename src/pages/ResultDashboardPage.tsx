@@ -11,8 +11,21 @@ import {
   TrendingUp,
   Award,
   AlertCircle,
-  CheckCircle2
+  CheckCircle2,
+  BarChart3,
+  FileCheck2,
+  Sparkles,
+  Target,
 } from 'lucide-react';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+} from 'recharts';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -82,6 +95,24 @@ const formatTime = (seconds: number): string => {
   const mins = Math.floor(seconds / 60);
   const secs = seconds % 60;
   return `${mins}m ${secs}s`;
+};
+
+const bandTextClass = (band: number | null | undefined): string => {
+  if (band == null) return 'text-gray-400';
+  if (band >= 8) return 'text-emerald-600';
+  if (band >= 7) return 'text-blue-600';
+  if (band >= 6) return 'text-amber-600';
+  return 'text-rose-600';
+};
+
+const formatShortDate = (value: string): string =>
+  new Date(value).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+
+const hasSavedPayload = (value: unknown): boolean => {
+  if (!value) return false;
+  if (Array.isArray(value)) return value.length > 0;
+  if (typeof value === 'object') return Object.keys(value as Record<string, unknown>).length > 0;
+  return true;
 };
 
 export default function ResultDashboardPage() {
@@ -300,6 +331,33 @@ export default function ResultDashboardPage() {
   const completedModules = testSession?.modules.filter(m => m.status === 'completed').length || 0;
   const pendingModules = testSession?.modules.filter(m => m.status === 'pending').length || 0;
   const latestFullMock = fullMockAttempts[0];
+  const orderedFullMocks = [...fullMockAttempts].reverse();
+  const trendData = orderedFullMocks.map((attempt, index) => ({
+    name: `A${index + 1}`,
+    date: formatShortDate(attempt.completed_at),
+    overall: Number(attempt.overall_band || 0),
+    listening: attempt.listening_band ?? null,
+    reading: attempt.reading_band ?? null,
+    writing: attempt.writing_band ?? null,
+    speaking: attempt.speaking_band ?? null,
+  }));
+  const bestFullMock = fullMockAttempts.reduce<FullMockAttempt | null>((best, attempt) => {
+    if (!best) return attempt;
+    return Number(attempt.overall_band) > Number(best.overall_band) ? attempt : best;
+  }, null);
+  const averageOverall = fullMockAttempts.length
+    ? fullMockAttempts.reduce((sum, attempt) => sum + Number(attempt.overall_band || 0), 0) / fullMockAttempts.length
+    : null;
+  const previousFullMock = fullMockAttempts[1];
+  const latestDelta = latestFullMock && previousFullMock
+    ? Number(latestFullMock.overall_band) - Number(previousFullMock.overall_band)
+    : null;
+  const sectionScores = latestFullMock ? [
+    { label: 'Listening', value: latestFullMock.listening_band, icon: Headphones, color: 'bg-purple-500' },
+    { label: 'Reading', value: latestFullMock.reading_band, icon: BookOpen, color: 'bg-blue-500' },
+    { label: 'Writing', value: latestFullMock.writing_band, icon: PenTool, color: 'bg-amber-500' },
+    { label: 'Speaking', value: latestFullMock.speaking_band, icon: Mic, color: 'bg-emerald-500' },
+  ] : [];
 
   if (loading) {
     return (
@@ -351,19 +409,26 @@ export default function ResultDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-slate-50 p-4 md:p-8">
+      <div className="mx-auto max-w-7xl">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="mb-6 flex flex-col gap-4 md:mb-8 md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Result Dashboard</h1>
-            <p className="text-gray-600 mt-1">Your IELTS Practice Test Results</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-indigo-600">Full Mock Analytics</p>
+            <h1 className="mt-1 text-3xl font-bold text-slate-950">Result Dashboard</h1>
+            <p className="mt-1 text-slate-600">Track your IELTS mock performance, review readiness, and section gaps.</p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             <Button variant="outline" onClick={handleClearAll} className="gap-2">
               <RotateCcw className="h-4 w-4" />
               Clear Local
             </Button>
+            <Link to="/full-mock-test">
+              <Button variant="outline" className="gap-2">
+                <Award className="h-4 w-4" />
+                New Mock
+              </Button>
+            </Link>
             <Link to="/">
               <Button className="gap-2">
                 <Home className="h-4 w-4" />
@@ -373,46 +438,126 @@ export default function ResultDashboardPage() {
           </div>
         </div>
 
-        {/* Overall Score Card */}
         {latestFullMock && (
-          <Card className="mb-8 overflow-hidden border-indigo-100 shadow-lg">
-            <div className="h-2 bg-gradient-to-r from-indigo-600 via-violet-500 to-emerald-500" />
-            <CardContent className="p-8">
-              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-                <div>
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="h-12 w-12 rounded-2xl bg-indigo-100 flex items-center justify-center">
-                      <Award className="h-6 w-6 text-indigo-600" />
-                    </div>
-                    <div>
-                      <h2 className="text-2xl font-bold text-gray-900">Latest Full Mock Test</h2>
-                      <p className="text-sm text-gray-500">
-                        Completed {new Date(latestFullMock.completed_at).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
-                  <p className="text-gray-600 max-w-2xl">
-                    This score comes from the complete four-module mock test and is the most reliable dashboard signal.
-                  </p>
+          <div className="mb-6 grid gap-4 md:grid-cols-4">
+            <Card className="border-indigo-100 bg-indigo-600 text-white md:col-span-1">
+              <CardContent className="p-5">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold text-indigo-100">Latest Overall</p>
+                  <Award className="h-5 w-5 text-indigo-100" />
                 </div>
+                <div className="mt-4 text-5xl font-bold">{formatBandScore(Number(latestFullMock.overall_band))}</div>
+                <p className="mt-2 text-sm text-indigo-100">{formatShortDate(latestFullMock.completed_at)} attempt</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-5">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold text-slate-500">Best Score</p>
+                  <Target className="h-5 w-5 text-emerald-500" />
+                </div>
+                <div className={`mt-4 text-4xl font-bold ${bandTextClass(bestFullMock?.overall_band)}`}>
+                  {bestFullMock ? formatBandScore(Number(bestFullMock.overall_band)) : '--'}
+                </div>
+                <p className="mt-2 text-sm text-slate-500">{bestFullMock ? formatShortDate(bestFullMock.completed_at) : 'No best yet'}</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-5">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold text-slate-500">Average</p>
+                  <BarChart3 className="h-5 w-5 text-blue-500" />
+                </div>
+                <div className={`mt-4 text-4xl font-bold ${bandTextClass(averageOverall)}`}>
+                  {averageOverall != null ? formatBandScore(averageOverall) : '--'}
+                </div>
+                <p className="mt-2 text-sm text-slate-500">{fullMockAttempts.length} saved attempts</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-5">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold text-slate-500">Last Change</p>
+                  <TrendingUp className="h-5 w-5 text-violet-500" />
+                </div>
+                <div className={`mt-4 text-4xl font-bold ${latestDelta == null ? 'text-slate-400' : latestDelta >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
+                  {latestDelta == null ? '--' : `${latestDelta >= 0 ? '+' : ''}${latestDelta.toFixed(1)}`}
+                </div>
+                <p className="mt-2 text-sm text-slate-500">Compared with previous</p>
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
-                <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-                  {[
-                    { label: 'Overall', value: latestFullMock.overall_band, accent: true },
-                    { label: 'Listening', value: latestFullMock.listening_band },
-                    { label: 'Reading', value: latestFullMock.reading_band },
-                    { label: 'Writing', value: latestFullMock.writing_band },
-                    { label: 'Speaking', value: latestFullMock.speaking_band },
-                  ].map(item => (
-                    <div key={item.label} className={`text-center rounded-lg p-4 ${item.accent ? 'bg-indigo-600 text-white' : 'bg-gray-50 text-gray-900'}`}>
-                      <div className="text-xs uppercase tracking-wide opacity-75 mb-1">{item.label}</div>
-                      <div className="text-3xl font-bold">{item.value !== null ? formatBandScore(Number(item.value)) : '--'}</div>
-                    </div>
-                  ))}
+        {latestFullMock && (
+          <div className="mb-8 grid gap-6 lg:grid-cols-[1.35fr_0.95fr]">
+            <Card className="overflow-hidden border-slate-200">
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <TrendingUp className="h-5 w-5 text-indigo-600" />
+                  Band Trend
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={trendData} margin={{ top: 10, right: 18, bottom: 0, left: -8 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                      <XAxis dataKey="name" stroke="#64748b" fontSize={12} />
+                      <YAxis domain={[0, 9]} ticks={[0, 3, 5, 6, 7, 8, 9]} stroke="#64748b" fontSize={12} />
+                      <Tooltip
+                        contentStyle={{ borderRadius: 8, border: '1px solid #e2e8f0' }}
+                        labelFormatter={(_, items) => items?.[0]?.payload?.date || ''}
+                        formatter={(value) => [formatBandScore(Number(value)), 'Overall']}
+                      />
+                      <Line type="monotone" dataKey="overall" stroke="#4f46e5" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+                    </LineChart>
+                  </ResponsiveContainer>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <FileCheck2 className="h-5 w-5 text-emerald-600" />
+                  Latest Section Breakdown
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {sectionScores.map((section) => {
+                  const Icon = section.icon;
+                  const value = Number(section.value || 0);
+                  return (
+                    <div key={section.label} className="rounded-lg border border-slate-200 bg-white p-3">
+                      <div className="mb-2 flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${section.color} bg-opacity-10`}>
+                            <Icon className={`h-4 w-4 ${section.color.replace('bg-', 'text-')}`} />
+                          </span>
+                          <span className="font-semibold text-slate-800">{section.label}</span>
+                        </div>
+                        <span className={`text-xl font-bold ${bandTextClass(section.value)}`}>
+                          {section.value != null ? formatBandScore(value) : '--'}
+                        </span>
+                      </div>
+                      <Progress value={(value / 9) * 100} className="h-2" />
+                    </div>
+                  );
+                })}
+                <div className="grid grid-cols-2 gap-3 pt-2">
+                  <Badge variant={hasSavedPayload(latestFullMock.review_data) ? 'default' : 'outline'} className="justify-center gap-1 py-2">
+                    <FileCheck2 className="h-3 w-3" />
+                    {hasSavedPayload(latestFullMock.review_data) ? 'Review saved' : 'No review'}
+                  </Badge>
+                  <Badge variant={hasSavedPayload(latestFullMock.writing_feedback) ? 'default' : 'outline'} className="justify-center gap-1 py-2">
+                    <Sparkles className="h-3 w-3" />
+                    {hasSavedPayload(latestFullMock.writing_feedback) ? 'AI feedback' : 'No feedback'}
+                  </Badge>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         )}
 
         {fullMockAttempts.length > 1 && (
@@ -442,6 +587,14 @@ export default function ResultDashboardPage() {
               </div>
             </CardContent>
           </Card>
+        )}
+
+        {/* Overall Score Card */}
+        {testSession && (
+        <div className="mb-4 mt-10">
+          <p className="text-xs font-bold uppercase tracking-widest text-slate-500">Local Practice Snapshot</p>
+          <h2 className="mt-1 text-xl font-bold text-slate-900">Single Module Results</h2>
+        </div>
         )}
 
         {/* Overall Score Card */}
