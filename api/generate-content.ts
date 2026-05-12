@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { checkRateLimit, LIMITS } from './_rateLimit.js';
+import { jsonrepair } from 'jsonrepair';
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
@@ -671,6 +672,22 @@ function cleanJsonResponse(response: string): string {
   return cleaned.trim();
 }
 
+function parseAiJson(rawResponse: string): unknown {
+  const cleanedResponse = cleanJsonResponse(rawResponse);
+  try {
+    return JSON.parse(cleanedResponse);
+  } catch (firstError) {
+    try {
+      return JSON.parse(jsonrepair(cleanedResponse));
+    } catch (repairError) {
+      console.error('JSON Parse Error:', firstError);
+      console.error('JSON Repair Error:', repairError);
+      console.error('Raw response:', rawResponse);
+      throw new Error('Failed to parse AI response');
+    }
+  }
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Always return JSON
   res.setHeader('Content-Type', 'application/json');
@@ -768,17 +785,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const rawResponse = provider === 'gemini'
       ? await callGemini(prompt)
       : await callOpenAI(prompt);
-    const cleanedResponse = cleanJsonResponse(rawResponse);
-
     let parsedContent;
     try {
-      parsedContent = JSON.parse(cleanedResponse);
-    } catch (parseError) {
-      console.error('JSON Parse Error:', parseError);
-      console.error('Raw response:', rawResponse);
+      parsedContent = parseAiJson(rawResponse);
+    } catch {
       return res.status(500).json({
         error: 'Failed to parse AI response',
-        rawResponse: cleanedResponse.substring(0, 500)
+        rawResponse: cleanJsonResponse(rawResponse).substring(0, 500)
       });
     }
 

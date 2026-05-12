@@ -101,6 +101,8 @@ const LISTENING_QUESTION_TYPES: { value: ListeningQuestionType; label: string }[
   { value: 'fill-blank', label: 'Fill in the Blank' },
   { value: 'matching', label: 'Matching' },
   { value: 'map-labeling', label: 'Map/Plan Labeling' },
+  { value: 'table-completion', label: 'Table Completion' },
+  { value: 'summary-completion', label: 'Summary Completion' },
   { value: 'sentence-completion', label: 'Sentence Completion' },
   { value: 'short-answer', label: 'Short Answer' },
 ];
@@ -1238,6 +1240,74 @@ interface TopicSuggestion {
   difficulty: string;
 }
 
+type AIQuestion = {
+  type?: string;
+  questionText?: string;
+  options?: string[];
+  correctAnswer?: string;
+  acceptedAnswers?: string[];
+  explanation?: string;
+  passageRef?: string;
+  groupId?: string;
+  tableData?: ReadingQuestion['tableData'] | ListeningQuestion['tableData'];
+  summaryData?: string;
+  wordLimit?: number;
+};
+
+function mapAIReadingQuestion(q: AIQuestion, questionNumber: number, id: string): ReadingQuestion {
+  const questionText = q.questionText?.trim() || `Question ${questionNumber}`;
+  return {
+    id,
+    questionNumber,
+    type: normalizeQuestionType(q.type ?? '', questionText, READING_QUESTION_TYPES.map(t => t.value)) as ReadingQuestionType,
+    questionText,
+    options: q.options,
+    correctAnswer: String(q.correctAnswer ?? ''),
+    acceptedAnswers: q.acceptedAnswers,
+    explanation: q.explanation,
+    passageRef: q.passageRef,
+    groupId: q.groupId,
+    tableData: q.tableData as ReadingQuestion['tableData'],
+    summaryData: q.summaryData,
+  };
+}
+
+function mapAIListeningQuestion(q: AIQuestion, questionNumber: number, id: string): ListeningQuestion {
+  const questionText = q.questionText?.trim() || `Question ${questionNumber}`;
+  return {
+    id,
+    questionNumber,
+    type: normalizeQuestionType(q.type ?? '', questionText, LISTENING_QUESTION_TYPES.map(t => t.value)) as ListeningQuestionType,
+    questionText,
+    options: q.options,
+    correctAnswer: String(q.correctAnswer ?? ''),
+    acceptedAnswers: q.acceptedAnswers,
+    explanation: q.explanation,
+    groupId: q.groupId,
+    tableData: q.tableData as ListeningQuestion['tableData'],
+    summaryData: q.summaryData,
+    wordLimit: q.wordLimit,
+  };
+}
+
+function getAIReadingPassages(content: unknown): Array<Record<string, unknown> & { questions?: AIQuestion[] }> {
+  const aiContent = content as {
+    passages?: Array<Record<string, unknown> & { questions?: AIQuestion[] }>;
+    passage?: Record<string, unknown>;
+    questions?: AIQuestion[];
+  };
+
+  if (Array.isArray(aiContent.passages) && aiContent.passages.length > 0) {
+    return aiContent.passages;
+  }
+
+  if (aiContent.passage && typeof aiContent.passage === 'object') {
+    return [{ ...aiContent.passage, questions: aiContent.questions || [] }];
+  }
+
+  throw new Error('AI did not return readable reading passages.');
+}
+
 function AIContentGenerator({ moduleType, testType = 'academic', onGenerated }: AIGeneratorProps) {
   const [generating, setGenerating] = useState(false);
   const [topic, setTopic] = useState('');
@@ -1481,33 +1551,37 @@ function ReadingTestBuilder({
   const [activePassage, setActivePassage] = useState(0);
 
   const handleAIGenerated = (content: unknown, topic?: string) => {
-    const aiContent = content as { passage: { title: string; textContent: string; paragraphs?: Array<{ label: string; content: string }> }; questions: Array<{ type: string; questionText: string; options?: string[]; correctAnswer: string; acceptedAnswers?: string[]; explanation?: string; passageRef?: string }> };
-    
     if (topic && onTitleSuggested && !data.passages?.length) {
       onTitleSuggested(`Reading Test: ${topic}`);
     }
-    
-    const newPassage: ReadingPassage = {
-      id: `passage-${Date.now()}`,
-      passageNumber: (data.passages?.length || 0) + 1,
-      title: aiContent.passage.title,
-      textContent: aiContent.passage.textContent,
-      paragraphs: aiContent.passage.paragraphs,
-      questions: aiContent.questions.map((q, i) => ({
-        id: `q-${Date.now()}-${i}`,
-        questionNumber: (data.passages?.flatMap(p => p.questions).length || 0) + i + 1,
-        type: normalizeQuestionType(q.type, q.questionText, READING_QUESTION_TYPES.map(t => t.value)) as ReadingQuestionType,
-        questionText: q.questionText,
-        options: q.options,
-        correctAnswer: q.correctAnswer,
-        acceptedAnswers: q.acceptedAnswers,
-        explanation: q.explanation,
-        passageRef: q.passageRef
-      })),
-      questionRange: { start: 1, end: aiContent.questions.length }
-    };
 
-    const passages = [...(data.passages || []), newPassage];
+    const existingQuestionCount = data.passages?.flatMap(p => p.questions).length || 0;
+    let nextQuestionNumber = existingQuestionCount + 1;
+    const generatedPassages = getAIReadingPassages(content);
+
+    const newPassages: ReadingPassage[] = generatedPassages.map((passage, pIndex) => {
+      const questions = Array.isArray(passage.questions) ? passage.questions : [];
+      const start = nextQuestionNumber;
+      const mappedQuestions = questions.map((q, qIndex) =>
+        mapAIReadingQuestion(q, nextQuestionNumber++, `q-${Date.now()}-${pIndex}-${qIndex}`)
+      );
+
+      return {
+        id: `passage-${Date.now()}-${pIndex}`,
+        passageNumber: (data.passages?.length || 0) + pIndex + 1,
+        title: String(passage.title || `Passage ${(data.passages?.length || 0) + pIndex + 1}`),
+        textContent: String(passage.textContent || passage.content || ''),
+        paragraphs: passage.paragraphs as ReadingPassage['paragraphs'],
+        questions: mappedQuestions,
+        questionRange: { start, end: nextQuestionNumber - 1 }
+      };
+    });
+
+    if (newPassages.length === 0 || newPassages.every(p => p.questions.length === 0)) {
+      throw new Error('AI generated reading content without questions.');
+    }
+
+    const passages = [...(data.passages || []), ...newPassages];
     let qNum = 1;
     passages.forEach(p => {
       const startNum = qNum;
@@ -1861,29 +1935,40 @@ function ListeningTestBuilder({
     if (topic && onTitleSuggested && !data.sections?.length) {
       onTitleSuggested(`Listening Test: ${topic}`);
     }
-    const aiContent = content as { transcript: string; sections: Array<{ sectionNumber: number; title: string; questions: Array<{ type: string; questionText: string; options?: string[]; correctAnswer: string; acceptedAnswers?: string[] }> }> };
+    const aiContent = content as {
+      transcript?: string;
+      sections?: Array<{
+        sectionNumber?: number;
+        title?: string;
+        transcript?: string;
+        questions?: AIQuestion[];
+      }>;
+    };
+
+    if (!Array.isArray(aiContent.sections) || aiContent.sections.length === 0) {
+      throw new Error('AI did not return listening sections.');
+    }
     
     const newSections: ListeningSection[] = aiContent.sections.map((s, sIndex) => {
       const existingQCount = data.sections?.flatMap(sec => sec.questions).length || 0;
+      const questions = Array.isArray(s.questions) ? s.questions : [];
       return {
         id: `section-${Date.now()}-${sIndex}`,
         sectionNumber: (data.sections?.length || 0) + sIndex + 1,
-        title: s.title,
+        title: s.title || `Section ${(data.sections?.length || 0) + sIndex + 1}`,
         audioStartTime: 0,
         audioEndTime: 0,
-        transcript: aiContent.transcript,
-        questions: s.questions.map((q, qIndex) => ({
-          id: `q-${Date.now()}-${sIndex}-${qIndex}`,
-          questionNumber: existingQCount + qIndex + 1,
-          type: normalizeQuestionType(q.type, q.questionText, LISTENING_QUESTION_TYPES.map(t => t.value)) as ListeningQuestionType,
-          questionText: q.questionText,
-          options: q.options,
-          correctAnswer: q.correctAnswer,
-          acceptedAnswers: q.acceptedAnswers
-        })),
-        questionRange: { start: 1, end: s.questions.length }
+        transcript: s.transcript || aiContent.transcript || '',
+        questions: questions.map((q, qIndex) =>
+          mapAIListeningQuestion(q, existingQCount + qIndex + 1, `q-${Date.now()}-${sIndex}-${qIndex}`)
+        ),
+        questionRange: { start: 1, end: questions.length }
       };
     });
+
+    if (newSections.every(s => s.questions.length === 0)) {
+      throw new Error('AI generated listening content without questions.');
+    }
 
     const sections = [...(data.sections || []), ...newSections];
     let qNum = 1;
@@ -3277,12 +3362,16 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
             questions: (p.questions || []).map((q: any, qIndex: number) => ({
               id: `q-${now}-${pIndex}-${qIndex}`,
               questionNumber: startNum + qIndex,
-              type: q.type,
+              type: normalizeQuestionType(q.type ?? '', q.questionText ?? '', READING_QUESTION_TYPES.map(t => t.value)) as ReadingQuestionType,
               questionText: q.questionText,
               options: q.options,
               correctAnswer: q.correctAnswer,
               acceptedAnswers: q.acceptedAnswers,
-              explanation: q.explanation
+              explanation: q.explanation,
+              passageRef: q.passageRef,
+              groupId: q.groupId,
+              tableData: q.tableData,
+              summaryData: q.summaryData
             })),
             questionRange: { start: startNum, end: endNum }
           };
@@ -3305,12 +3394,16 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
           return {
             id: `lq-${now}-${sIndex}-${qIndex}`, 
             questionNumber: num, 
-            type: q.type, 
+            type: normalizeQuestionType(q.type ?? '', q.questionText ?? '', LISTENING_QUESTION_TYPES.map(t => t.value)) as ListeningQuestionType, 
             questionText: q.questionText,
             options: q.options, 
             correctAnswer: q.correctAnswer, 
             acceptedAnswers: q.acceptedAnswers,
-            explanation: q.explanation
+            explanation: q.explanation,
+            groupId: q.groupId,
+            tableData: q.tableData,
+            summaryData: q.summaryData,
+            wordLimit: q.wordLimit
           };
         });
         return {
