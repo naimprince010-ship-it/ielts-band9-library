@@ -2929,6 +2929,12 @@ export default function FullMockTestPage() {
                           </div>
                       <Textarea placeholder="Begin typing your Task 1 response here... (min. 150 words)" className="min-h-[440px] lg:min-h-[560px] xl:min-h-[calc(100vh-22rem)] rounded-[26px] lg:rounded-[30px] border-2 border-emerald-100 p-5 sm:p-6 text-base sm:text-lg font-bold focus:ring-[12px] focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
                         value={answers['w_task1'] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, w_task1: e.target.value }))} />
+                          <div className="flex flex-wrap items-center justify-between gap-3 px-2 text-xs font-black uppercase tracking-widest text-emerald-500">
+                            <span>{answers['w_task1'] ? 'Task 1 response saved' : 'Task 1 response not started'}</span>
+                            <span className={(answers['w_task1'] ?? '').split(/\s+/).filter(Boolean).length >= 150 ? 'text-emerald-600' : 'text-amber-600'}>
+                              Minimum 150 words
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </CardContent>
@@ -2956,6 +2962,12 @@ export default function FullMockTestPage() {
                           </div>
                       <Textarea placeholder="Begin typing your Task 2 essay here... (min. 250 words)" className="min-h-[520px] lg:min-h-[700px] xl:min-h-[calc(100vh-18rem)] rounded-[26px] lg:rounded-[30px] border-2 border-emerald-100 p-5 sm:p-6 text-base sm:text-lg font-bold focus:ring-[12px] focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
                         value={answers['w_task2'] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, w_task2: e.target.value }))} />
+                          <div className="flex flex-wrap items-center justify-between gap-3 px-2 text-xs font-black uppercase tracking-widest text-emerald-500">
+                            <span>{answers['w_task2'] ? 'Task 2 response saved' : 'Task 2 response not started'}</span>
+                            <span className={(answers['w_task2'] ?? '').split(/\s+/).filter(Boolean).length >= 250 ? 'text-emerald-600' : 'text-amber-600'}>
+                              Minimum 250 words
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </CardContent>
