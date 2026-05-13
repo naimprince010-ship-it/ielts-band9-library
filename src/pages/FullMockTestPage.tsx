@@ -2313,9 +2313,14 @@ export default function FullMockTestPage() {
   }> = [];
 
   if (phase === 'listening') {
-    const sections = (td?.sections as Array<{questions: any[]}>) ?? [];
+    const sections = Array.isArray(td?.sections)
+      ? (td.sections as Array<{ questions?: unknown }>)
+      : [];
     let i = 0;
-    sections.forEach(s => { if (Array.isArray(s.questions)) s.questions.forEach(() => navKeys.push(`l_${i++}`)); });
+    sections.forEach(s => {
+      const questions = s && typeof s === 'object' && Array.isArray(s.questions) ? s.questions : [];
+      questions.forEach(() => navKeys.push(`l_${i++}`));
+    });
   } else if (phase === 'reading') {
     const passages = Array.isArray(td?.passages) ? td.passages : (td?.passage ? [td.passage] : []);
     let i = 0;
@@ -2411,7 +2416,9 @@ export default function FullMockTestPage() {
         ) : (
           <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
             {phase === 'listening' && (() => {
-              const sections = (td?.sections as Array<{ sectionNumber: number; title: string; questions: Question[], transcript?: string; sectionAudioUrl?: string }>) ?? [];
+              const sections = Array.isArray(td?.sections)
+                ? (td.sections as Array<{ sectionNumber: number; title: string; questions: Question[], transcript?: string; sectionAudioUrl?: string }>)
+                : [];
               const globalTranscript = typeof td?.transcript === 'string' ? td.transcript : '';
               const rawGlobalAudioUrl = typeof (td as any)?.audioUrl === 'string' ? (td as any).audioUrl as string : '';
               // If any section has its own audio URL, use per-section mode and ignore the global audioUrl.
