@@ -18,6 +18,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { normalizeMockTestRow, normalizeWritingTestFromDb, findWritingTask1 } from '@/lib/writingVisualNormalize';
 import { WritingTask1Renderer } from '@/components/test/WritingTask1Renderer';
+import { FULL_MOCK_FALLBACK_TESTS } from '@/data/fullMockFallback';
 import type { WritingTask } from '@/types';
 
 type Phase = 'intro' | 'listening' | 'reading' | 'writing' | 'speaking' | 'results';
@@ -272,6 +273,31 @@ function normalizeListeningSections(testData: Record<string, unknown> | undefine
   }
 
   return [];
+}
+
+function countListeningQuestions(testData: Record<string, unknown> | undefined): number {
+  return normalizeListeningSections(testData).reduce((sum, section) => sum + (section.questions?.length ?? 0), 0);
+}
+
+function countReadingQuestions(testData: Record<string, unknown> | undefined): number {
+  const passages = Array.isArray(testData?.passages) ? testData.passages : (testData?.passage ? [testData.passage] : []);
+  return passages.reduce((sum, passage) => {
+    if (!isRecord(passage)) return sum;
+    return sum + (Array.isArray(passage.questions) ? passage.questions.length : 0);
+  }, 0);
+}
+
+function isUsableFullMockTest(test: MockTest | undefined, module: ModuleType): boolean {
+  if (!test?.test_data) return false;
+  if (module === 'listening') return countListeningQuestions(test.test_data) >= 10;
+  if (module === 'reading') return countReadingQuestions(test.test_data) >= 10;
+  if (module === 'writing') return Array.isArray(test.test_data.tasks) && test.test_data.tasks.length >= 2;
+  if (module === 'speaking') return Array.isArray(test.test_data.parts) && test.test_data.parts.length >= 3;
+  return false;
+}
+
+function getFallbackMockTest(module: ModuleType): MockTest {
+  return FULL_MOCK_FALLBACK_TESTS[module] as MockTest;
 }
 
 function normalizeAnswer(value: unknown): string {
@@ -1288,14 +1314,33 @@ export default function FullMockTestPage() {
   useEffect(() => { resetTimerRef.current = resetTimer; }, [resetTimer]);
 
   useEffect(() => {
-    if (!isSupabaseConfigured() || !supabase) { setLoading(false); return; }
+    if (!isSupabaseConfigured() || !supabase) {
+      setTests({
+        listening: getFallbackMockTest('listening'),
+        reading: getFallbackMockTest('reading'),
+        writing: getFallbackMockTest('writing'),
+        speaking: getFallbackMockTest('speaking'),
+      });
+      setLoading(false);
+      return;
+    }
 
     const fetchTests = async () => {
       try {
         const initialSession = savedSessionRef.current;
         if (initialSession?.tests && initialSession.phase !== 'intro' && initialSession.phase !== 'results') {
-          setTestsRaw(initialSession.tests);
-          return;
+          const restoredModule = SECTIONS[initialSession.sectionIndex]?.module;
+          const restoredTest = restoredModule ? initialSession.tests[restoredModule] : undefined;
+          if (restoredModule && isUsableFullMockTest(restoredTest, restoredModule)) {
+            setTestsRaw(initialSession.tests);
+            return;
+          }
+
+          clearSession();
+          savedSessionRef.current = null;
+          setPhaseRaw('intro');
+          setSectionIndexRaw(0);
+          setScoresRaw({ listening: null, reading: null, writing: null, speaking: null });
         }
 
         // ── 1. Fetch user's already-attempted test IDs per module ────────────
@@ -1334,15 +1379,18 @@ export default function FullMockTestPage() {
             .eq('is_published', true)
             .order('created_at', { ascending: false });
 
-          if (!allTests || allTests.length === 0) continue;
+          const usableTests = (allTests || [])
+            .map(t => normalizeMockTestRow(t as MockTest))
+            .filter(t => isUsableFullMockTest(t as MockTest, s.module));
 
           const tried = attemptedIds[s.module] ?? new Set<string>();
 
           // Prefer a test the user hasn't seen; fall back to least-recently-used
-          const fresh = allTests.find(t => !tried.has(t.id));
-          const chosen = fresh ?? allTests[allTests.length - 1]; // oldest if all tried
+          const candidates = usableTests.length > 0 ? usableTests : [getFallbackMockTest(s.module)];
+          const fresh = candidates.find(t => !tried.has(t.id));
+          const chosen = fresh ?? candidates[candidates.length - 1]; // oldest if all tried
 
-          result[s.module] = normalizeMockTestRow(chosen as MockTest);
+          result[s.module] = chosen as MockTest;
         }
 
         setTests(result);
