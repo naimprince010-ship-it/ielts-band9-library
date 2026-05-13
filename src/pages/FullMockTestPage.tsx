@@ -3228,13 +3228,13 @@ export default function FullMockTestPage() {
       )}
 
       {navKeys.length === 0 && test && !objectiveSectionMissingQuestions && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t-2 border-border p-8 shadow-[0_-10px_50px_rgba(0,0,0,0.1)] z-50 flex justify-center">
+        <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t-2 border-border p-3 sm:p-4 shadow-[0_-10px_50px_rgba(0,0,0,0.1)] z-50 flex justify-center lg:justify-end">
           <Button size="lg" onClick={() => submitSection()}
-            className={`min-w-[320px] ${currentSection.bg} text-white hover:opacity-90 font-black text-2xl py-10 rounded-[40px] shadow-2xl shadow-indigo-500/30 scale-110 active:scale-100 transition-all`}>
+            className={`w-full max-w-[420px] ${currentSection.bg} text-white hover:opacity-90 font-black text-base sm:text-lg py-6 rounded-2xl shadow-xl active:scale-95 transition-all lg:w-auto lg:px-8`}>
             {sectionIndex < SECTIONS.length - 1 ? (
-              <><CheckCircle className="h-8 w-8 mr-4" /> CONTINUE TO NEXT SECTION</>
+              <><CheckCircle className="h-5 w-5 mr-3" /> CONTINUE TO NEXT SECTION</>
             ) : (
-              <><Award className="h-8 w-8 mr-4" /> FINISH & SEE RESULTS</>
+              <><Award className="h-5 w-5 mr-3" /> FINISH & SEE RESULTS</>
             )}
           </Button>
         </div>
