@@ -2538,32 +2538,44 @@ export default function FullMockTestPage() {
               return (
                 <div className="space-y-16">
                   {passages.map((passage: any, pi: number) => (
-                    <div key={pi} className="space-y-8">
-                       <div className="flex items-center gap-4 px-4"><div className="h-1.5 w-16 bg-blue-500 rounded-full" /><h4 className="font-black text-blue-600 uppercase tracking-[0.2em] text-sm">Passage {pi + 1}</h4></div>
-                      <Card className="rounded-[50px] shadow-3xl border-none overflow-hidden bg-white">
-                        <div className="bg-slate-50 p-10 border-b border-slate-100">
-                           <h2 className="text-3xl font-black mb-6 flex items-center gap-4 text-slate-800"><BookOpen className="h-8 w-8 text-blue-500" /> {passage.title}</h2>
-                           <div className="prose prose-lg max-w-none text-slate-600 leading-[1.8] font-medium whitespace-pre-line text-lg" dangerouslySetInnerHTML={{ __html: sanitizeHtml(passage.textContent) }} />
-                        </div>
-                        <CardContent className="p-12 space-y-12">
-                           <h3 className="text-2xl font-black uppercase tracking-widest text-slate-400">Questions</h3>
+                    <div key={pi} className="space-y-6">
+                      <div className="flex items-center gap-4 px-4">
+                        <div className="h-1.5 w-16 bg-blue-500 rounded-full" />
+                        <h4 className="font-black text-blue-600 uppercase tracking-[0.2em] text-sm">Passage {pi + 1}</h4>
+                      </div>
+                      <div className="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(420px,1.05fr)] lg:items-start">
+                        <Card className="rounded-[34px] shadow-2xl border-none overflow-hidden bg-white lg:sticky lg:top-28 lg:max-h-[calc(100vh-13rem)] lg:overflow-y-auto">
+                          <div className="bg-slate-50 p-6 sm:p-8 border-b border-slate-100">
+                            <h2 className="text-2xl font-black mb-5 flex items-center gap-3 text-slate-800">
+                              <BookOpen className="h-7 w-7 text-blue-500 flex-shrink-0" />
+                              {passage.title}
+                            </h2>
+                            <div className="prose prose-base max-w-none text-slate-600 leading-[1.85] font-medium whitespace-pre-line" dangerouslySetInnerHTML={{ __html: sanitizeHtml(passage.textContent) }} />
+                          </div>
+                        </Card>
+                        <Card className="rounded-[34px] shadow-2xl border-none overflow-hidden bg-white">
+                          <CardContent className="p-6 sm:p-8 space-y-8">
+                           <h3 className="text-xl font-black uppercase tracking-widest text-slate-400">Questions</h3>
                            {Array.isArray(passage.questions) && passage.questions.map((q: any) => {
                              const key = `r_${qIdx++}`;
                              return (
-                               <div key={key} id={key} className="p-8 rounded-[40px] bg-slate-50/50 hover:bg-white transition-all border-2 border-transparent hover:border-blue-100 hover:shadow-2xl">
-                                 <div className="flex items-start gap-4 mb-8"><span className="bg-slate-800 text-white rounded-3xl w-12 h-12 flex items-center justify-center flex-shrink-0 font-black text-xl shadow-xl">{qIdx}</span><p className="font-bold text-xl pt-1 leading-relaxed text-slate-800">{q.questionText}</p></div>
+                               <div key={key} id={key} className="p-5 sm:p-6 rounded-[28px] bg-slate-50/50 hover:bg-white transition-all border-2 border-transparent hover:border-blue-100 hover:shadow-xl scroll-mt-28">
+                                 <div className="flex items-start gap-4 mb-6">
+                                   <span className="bg-slate-800 text-white rounded-2xl w-10 h-10 flex items-center justify-center flex-shrink-0 font-black text-lg shadow-xl">{qIdx}</span>
+                                   <p className="font-bold text-lg pt-1 leading-relaxed text-slate-800">{q.questionText}</p>
+                                 </div>
                                  {q.tableData ? (
-                                   <div className="overflow-x-auto border-4 border-slate-100 rounded-[35px] my-8 bg-white overflow-hidden shadow-inner">
+                                   <div className="overflow-x-auto border-4 border-slate-100 rounded-[26px] my-6 bg-white overflow-hidden shadow-inner">
                                      <table className="w-full text-sm text-left">
-                                       {q.tableData.headers && <thead className="bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest"><tr>{q.tableData.headers.map((h: any, i: number) => <th key={i} className="px-8 py-6">{h}</th>)}</tr></thead>}
+                                       {q.tableData.headers && <thead className="bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest"><tr>{q.tableData.headers.map((h: any, i: number) => <th key={i} className="px-5 py-4">{h}</th>)}</tr></thead>}
                                        <tbody>
                                          {q.tableData.rows.map((row: any, ri: number) => (
                                            <tr key={ri} className="border-b last:border-b-0 hover:bg-slate-50 transition-colors">
-                                             {row.map((cell: any, ci: number) => (
-                                               <td key={ci} className="px-8 py-6 align-middle font-bold text-slate-600">
+                                             {(Array.isArray(row) ? row : row.cells || []).map((cell: any, ci: number) => (
+                                               <td key={ci} className="px-5 py-4 align-middle font-bold text-slate-600">
                                                  {cell.type === 'text' ? (<span>{cell.value}</span>) : (
                                                    <input type="text" placeholder="..." value={answers[key] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, [key]: e.target.value }))}
-                                                     className="w-full bg-slate-100 border-2 border-transparent rounded-2xl px-6 py-4 focus:ring-8 focus:ring-blue-400/20 focus:border-blue-400 focus:bg-white transition-all outline-none font-black text-slate-800" />
+                                                     className="w-full bg-slate-100 border-2 border-transparent rounded-2xl px-4 py-3 focus:ring-8 focus:ring-blue-400/20 focus:border-blue-400 focus:bg-white transition-all outline-none font-black text-slate-800" />
                                                  )}
                                                </td>
                                              ))}
@@ -2573,24 +2585,25 @@ export default function FullMockTestPage() {
                                      </table>
                                    </div>
                                  ) : Array.isArray(q.options) && q.options.length > 0 ? (
-                                   <div className="grid md:grid-cols-2 gap-6">
+                                   <div className="grid md:grid-cols-2 gap-4">
                                      {q.options.map((opt: any) => (
-                                       <label key={opt} className={`flex items-center gap-5 p-7 rounded-[30px] border-2 cursor-pointer transition-all ${answers[key] === opt ? 'border-blue-500 bg-blue-600 text-white shadow-2xl scale-[1.02]' : 'border-slate-200 bg-white hover:border-blue-300'}`}>
+                                       <label key={opt} className={`flex items-center gap-4 p-5 rounded-[24px] border-2 cursor-pointer transition-all ${answers[key] === opt ? 'border-blue-500 bg-blue-600 text-white shadow-2xl scale-[1.02]' : 'border-slate-200 bg-white hover:border-blue-300'}`}>
                                          <input type="radio" name={key} value={opt} checked={answers[key] === opt} onChange={() => setAnswers(prev => ({ ...prev, [key]: opt }))} className="hidden" />
-                                         <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${answers[key] === opt ? 'bg-white border-white shadow-inner' : 'border-slate-300'}`}>{answers[key] === opt && <div className="w-3 h-3 bg-blue-600 rounded-full" />}</div>
-                                         <span className="font-black text-lg">{opt}</span>
+                                         <div className={`w-7 h-7 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0 ${answers[key] === opt ? 'bg-white border-white shadow-inner' : 'border-slate-300'}`}>{answers[key] === opt && <div className="w-3 h-3 bg-blue-600 rounded-full" />}</div>
+                                         <span className="font-black text-base">{opt}</span>
                                        </label>
                                      ))}
                                    </div>
                                  ) : (
                                    <input type="text" placeholder="Type your answer here..." value={answers[key] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, [key]: e.target.value }))}
-                                     className="w-full border-2 border-slate-200 rounded-[30px] px-8 py-6 font-black text-xl focus:outline-none focus:ring-[15px] focus:ring-blue-400/10 focus:border-blue-400 transition-all shadow-sm" />
+                                     className="w-full border-2 border-slate-200 rounded-[24px] px-6 py-5 font-black text-lg focus:outline-none focus:ring-[12px] focus:ring-blue-400/10 focus:border-blue-400 transition-all shadow-sm" />
                                  )}
                                </div>
                              );
                            })}
-                        </CardContent>
-                      </Card>
+                          </CardContent>
+                        </Card>
+                      </div>
                     </div>
                   ))}
                 </div>
