@@ -300,6 +300,20 @@ function getFallbackMockTest(module: ModuleType): MockTest {
   return FULL_MOCK_FALLBACK_TESTS[module] as MockTest;
 }
 
+function displayText(value: unknown, fallback = ''): string {
+  if (value === null || value === undefined) return fallback;
+  if (typeof value === 'string') return value;
+  if (typeof value === 'number' || typeof value === 'boolean') return String(value);
+  if (Array.isArray(value)) return value.map(item => displayText(item)).filter(Boolean).join(', ') || fallback;
+  if (isRecord(value)) {
+    for (const key of ['text', 'questionText', 'value', 'label', 'title', 'answer', 'content', 'prompt']) {
+      const text = displayText(value[key]);
+      if (text) return text;
+    }
+  }
+  return fallback;
+}
+
 function normalizeAnswer(value: unknown): string {
   return String(value ?? '')
     .trim()
@@ -331,7 +345,7 @@ function buildObjectiveReview(questions: Question[], answers: Record<string, str
     const userAnswer = answers[key] ?? '';
     return {
       questionNumber: index + 1,
-      questionText: q.questionText,
+      questionText: displayText(q.questionText, `Question ${index + 1}`),
       userAnswer,
       acceptedAnswers,
       correct: isAnswerCorrect(userAnswer, q.correctAnswer),
@@ -2112,7 +2126,7 @@ export default function FullMockTestPage() {
                               {item.questionNumber}
                             </div>
                             <div className="min-w-0 flex-1">
-                              <p className="font-bold text-white/90 leading-relaxed">{item.questionText}</p>
+                              <p className="font-bold text-white/90 leading-relaxed">{displayText(item.questionText, `Question ${item.questionNumber}`)}</p>
                               <div className="grid md:grid-cols-2 gap-3 mt-4 text-sm">
                                 <div className="rounded-2xl bg-black/15 p-4">
                                   <p className="text-white/45 font-black uppercase tracking-widest text-[10px] mb-1">Your Answer</p>
@@ -2600,7 +2614,7 @@ export default function FullMockTestPage() {
                               audioPlaybackStatus.global.status === 'fallback' ? 'text-amber-600' :
                               audioPlaybackStatus.global.status === 'ended' ? 'text-emerald-600' : 'text-violet-600'
                             }`}>
-                              {audioPlaybackStatus.global.message}
+                              {displayText(audioPlaybackStatus.global.message)}
                             </p>
                           )}
                           {audioPlaybackStatus.global?.controlsUrl && audioPlaybackStatus.global.status !== 'ended' && (
@@ -2628,7 +2642,7 @@ export default function FullMockTestPage() {
                     return (
                     <div key={sec.sectionNumber} className="space-y-6">
                       <div className="flex items-center justify-between gap-3 px-4">
-                        <div className="flex items-center gap-3"><div className="h-1 w-12 bg-violet-500 rounded-full" /><h4 className="font-black text-violet-600 uppercase tracking-widest text-sm">{sec.title || `Part ${sec.sectionNumber}`}</h4></div>
+                        <div className="flex items-center gap-3"><div className="h-1 w-12 bg-violet-500 rounded-full" /><h4 className="font-black text-violet-600 uppercase tracking-widest text-sm">{displayText(sec.title, `Part ${sec.sectionNumber}`)}</h4></div>
                         {/* Per-section audio — prefers real MP3, falls back to TTS.
                             Show whenever section has its own audio/transcript and there is no single global audio. */}
                         {hasAudio && !globalAudioUrl && (
@@ -2661,7 +2675,7 @@ export default function FullMockTestPage() {
                           sectionPlaybackStatus.status === 'fallback' ? 'text-amber-600' :
                           sectionPlaybackStatus.status === 'ended' ? 'text-emerald-600' : 'text-violet-600'
                         }`}>
-                          {sectionPlaybackStatus.message}
+                          {displayText(sectionPlaybackStatus.message)}
                         </p>
                       )}
                       {sectionPlaybackStatus?.controlsUrl && sectionPlaybackStatus.status !== 'ended' && (
@@ -2682,17 +2696,17 @@ export default function FullMockTestPage() {
                           const key = `l_${qIdx++}`;
                           return (
                             <div key={key} id={key} className="p-6 rounded-3xl bg-muted/30 hover:bg-muted transition-colors border-2 border-transparent hover:border-violet-100">
-                              <div className="flex items-start gap-4 mb-6"><span className="bg-foreground text-white rounded-2xl w-10 h-10 flex items-center justify-center flex-shrink-0 font-black text-lg">{qIdx}</span><p className="font-bold text-lg pt-1 leading-relaxed">{q.questionText}</p></div>
+                              <div className="flex items-start gap-4 mb-6"><span className="bg-foreground text-white rounded-2xl w-10 h-10 flex items-center justify-center flex-shrink-0 font-black text-lg">{qIdx}</span><p className="font-bold text-lg pt-1 leading-relaxed">{displayText(q.questionText, `Question ${qIdx}`)}</p></div>
                               {q.tableData ? (
                                 <div className="overflow-x-auto border-2 border-border/50 rounded-[30px] my-6 bg-white overflow-hidden">
                                   <table className="w-full text-sm text-left">
-                                    {q.tableData.headers && <thead className="bg-muted text-foreground font-black uppercase text-[10px] tracking-widest"><tr>{q.tableData.headers.map((h, i) => <th key={i} className="px-6 py-4 border-b">{h}</th>)}</tr></thead>}
+                                    {q.tableData.headers && <thead className="bg-muted text-foreground font-black uppercase text-[10px] tracking-widest"><tr>{q.tableData.headers.map((h, i) => <th key={i} className="px-6 py-4 border-b">{displayText(h, `Column ${i + 1}`)}</th>)}</tr></thead>}
                                     <tbody>
                                       {q.tableData.rows.map((row, ri) => (
                                         <tr key={ri} className="border-b last:border-b-0 hover:bg-muted/10 transition-colors">
                                           {row.map((cell, ci) => (
                                             <td key={ci} className="px-6 py-5 align-middle font-bold text-muted-foreground transition-all">
-                                              {cell.type === 'text' ? (<span>{cell.value}</span>) : (
+                                              {cell.type === 'text' ? (<span>{displayText(cell.value)}</span>) : (
                                                 <input type="text" placeholder="Answer..." value={answers[key] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, [key]: e.target.value }))}
                                                   className="w-full bg-muted/50 border-2 border-transparent rounded-xl px-4 py-2.5 focus:ring-4 focus:ring-violet-400/20 focus:border-violet-400 focus:bg-white transition-all outline-none font-black text-foreground" />
                                               )}
@@ -2705,13 +2719,15 @@ export default function FullMockTestPage() {
                                 </div>
                               ) : Array.isArray(q.options) && q.options.length > 0 ? (
                                 <div className="grid md:grid-cols-2 gap-4">
-                                  {q.options.map((opt) => (
-                                    <label key={opt} className={`flex items-center gap-4 p-5 rounded-2xl border-2 cursor-pointer transition-all ${answers[key] === opt ? 'border-violet-500 bg-violet-600 text-white shadow-xl translate-y-[-2px]' : 'border-border bg-white hover:border-violet-300'}`}>
-                                      <input type="radio" name={key} value={opt} checked={answers[key] === opt} onChange={() => setAnswers(prev => ({ ...prev, [key]: opt }))} className="hidden" />
-                                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${answers[key] === opt ? 'bg-white border-white' : 'border-muted-foreground/30'}`}>{answers[key] === opt && <div className="w-2.5 h-2.5 bg-violet-600 rounded-full" />}</div>
-                                      <span className="font-bold">{opt}</span>
+                                  {q.options.map((opt, optionIndex) => {
+                                    const optionText = displayText(opt, `Option ${optionIndex + 1}`);
+                                    return (
+                                    <label key={`${key}-${optionIndex}-${optionText}`} className={`flex items-center gap-4 p-5 rounded-2xl border-2 cursor-pointer transition-all ${answers[key] === optionText ? 'border-violet-500 bg-violet-600 text-white shadow-xl translate-y-[-2px]' : 'border-border bg-white hover:border-violet-300'}`}>
+                                      <input type="radio" name={key} value={optionText} checked={answers[key] === optionText} onChange={() => setAnswers(prev => ({ ...prev, [key]: optionText }))} className="hidden" />
+                                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${answers[key] === optionText ? 'bg-white border-white' : 'border-muted-foreground/30'}`}>{answers[key] === optionText && <div className="w-2.5 h-2.5 bg-violet-600 rounded-full" />}</div>
+                                      <span className="font-bold">{optionText}</span>
                                     </label>
-                                  ))}
+                                  );})}
                                 </div>
                               ) : (
                                 <input type="text" placeholder="Type your answer..." value={answers[key] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, [key]: e.target.value }))}
@@ -2766,9 +2782,9 @@ export default function FullMockTestPage() {
                           <div className="bg-slate-50 p-6 sm:p-8 border-b border-slate-100">
                             <h2 className="text-2xl font-black mb-5 flex items-center gap-3 text-slate-800">
                               <BookOpen className="h-7 w-7 text-blue-500 flex-shrink-0" />
-                              {passage.title}
+                              {displayText(passage.title, `Passage ${pi + 1}`)}
                             </h2>
-                            <div className="prose prose-base max-w-none text-slate-600 leading-[1.85] font-medium whitespace-pre-line" dangerouslySetInnerHTML={{ __html: sanitizeHtml(passage.textContent) }} />
+                            <div className="prose prose-base max-w-none text-slate-600 leading-[1.85] font-medium whitespace-pre-line" dangerouslySetInnerHTML={{ __html: sanitizeHtml(displayText(passage.textContent)) }} />
                           </div>
                         </Card>
                         <Card className={`rounded-[34px] shadow-2xl border-none overflow-hidden bg-white lg:max-h-[calc(100vh-16rem)] lg:overflow-y-auto ${readingMobileView === 'passage' ? 'hidden lg:block' : ''}`}>
@@ -2789,18 +2805,18 @@ export default function FullMockTestPage() {
                                <div key={key} id={key} className="p-5 sm:p-6 rounded-[28px] bg-slate-50/50 hover:bg-white transition-all border-2 border-transparent hover:border-blue-100 hover:shadow-xl scroll-mt-28">
                                  <div className="flex items-start gap-4 mb-6">
                                    <span className="bg-slate-800 text-white rounded-2xl w-10 h-10 flex items-center justify-center flex-shrink-0 font-black text-lg shadow-xl">{qIdx}</span>
-                                   <p className="font-bold text-lg pt-1 leading-relaxed text-slate-800">{q.questionText}</p>
+                                   <p className="font-bold text-lg pt-1 leading-relaxed text-slate-800">{displayText(q.questionText, `Question ${qIdx}`)}</p>
                                  </div>
                                  {q.tableData ? (
                                    <div className="overflow-x-auto border-4 border-slate-100 rounded-[26px] my-6 bg-white overflow-hidden shadow-inner">
                                      <table className="w-full text-sm text-left">
-                                       {q.tableData.headers && <thead className="bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest"><tr>{q.tableData.headers.map((h: any, i: number) => <th key={i} className="px-5 py-4">{h}</th>)}</tr></thead>}
+                                       {q.tableData.headers && <thead className="bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest"><tr>{q.tableData.headers.map((h: any, i: number) => <th key={i} className="px-5 py-4">{displayText(h, `Column ${i + 1}`)}</th>)}</tr></thead>}
                                        <tbody>
                                          {q.tableData.rows.map((row: any, ri: number) => (
                                            <tr key={ri} className="border-b last:border-b-0 hover:bg-slate-50 transition-colors">
                                              {(Array.isArray(row) ? row : row.cells || []).map((cell: any, ci: number) => (
                                                <td key={ci} className="px-5 py-4 align-middle font-bold text-slate-600">
-                                                 {cell.type === 'text' ? (<span>{cell.value}</span>) : (
+                                                 {cell.type === 'text' ? (<span>{displayText(cell.value)}</span>) : (
                                                    <input type="text" placeholder="..." value={answers[key] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, [key]: e.target.value }))}
                                                      className="w-full bg-slate-100 border-2 border-transparent rounded-2xl px-4 py-3 focus:ring-8 focus:ring-blue-400/20 focus:border-blue-400 focus:bg-white transition-all outline-none font-black text-slate-800" />
                                                  )}
@@ -2813,13 +2829,15 @@ export default function FullMockTestPage() {
                                    </div>
                                  ) : Array.isArray(q.options) && q.options.length > 0 ? (
                                    <div className="grid md:grid-cols-2 gap-4">
-                                     {q.options.map((opt: any) => (
-                                       <label key={opt} className={`flex items-center gap-4 p-5 rounded-[24px] border-2 cursor-pointer transition-all ${answers[key] === opt ? 'border-blue-500 bg-blue-600 text-white shadow-2xl scale-[1.02]' : 'border-slate-200 bg-white hover:border-blue-300'}`}>
-                                         <input type="radio" name={key} value={opt} checked={answers[key] === opt} onChange={() => setAnswers(prev => ({ ...prev, [key]: opt }))} className="hidden" />
-                                         <div className={`w-7 h-7 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0 ${answers[key] === opt ? 'bg-white border-white shadow-inner' : 'border-slate-300'}`}>{answers[key] === opt && <div className="w-3 h-3 bg-blue-600 rounded-full" />}</div>
-                                         <span className="font-black text-base">{opt}</span>
+                                     {q.options.map((opt: any, optionIndex: number) => {
+                                       const optionText = displayText(opt, `Option ${optionIndex + 1}`);
+                                       return (
+                                       <label key={`${key}-${optionIndex}-${optionText}`} className={`flex items-center gap-4 p-5 rounded-[24px] border-2 cursor-pointer transition-all ${answers[key] === optionText ? 'border-blue-500 bg-blue-600 text-white shadow-2xl scale-[1.02]' : 'border-slate-200 bg-white hover:border-blue-300'}`}>
+                                         <input type="radio" name={key} value={optionText} checked={answers[key] === optionText} onChange={() => setAnswers(prev => ({ ...prev, [key]: optionText }))} className="hidden" />
+                                         <div className={`w-7 h-7 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0 ${answers[key] === optionText ? 'bg-white border-white shadow-inner' : 'border-slate-300'}`}>{answers[key] === optionText && <div className="w-3 h-3 bg-blue-600 rounded-full" />}</div>
+                                         <span className="font-black text-base">{optionText}</span>
                                        </label>
-                                     ))}
+                                     );})}
                                    </div>
                                  ) : (
                                    <input type="text" placeholder="Type your answer here..." value={answers[key] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, [key]: e.target.value }))}
@@ -2861,13 +2879,13 @@ export default function FullMockTestPage() {
                   {/* Task 1 */}
                   <Card className="rounded-[40px] shadow-3xl overflow-hidden border-none">
                     <CardHeader className="bg-emerald-50 p-10 border-b border-emerald-100">
-                      <CardTitle className="text-2xl font-black text-emerald-900">Task 1 — {task1?.title ?? 'Report / Letter (min. 150 words)'}</CardTitle>
+                      <CardTitle className="text-2xl font-black text-emerald-900">Task 1 — {displayText(task1?.title, 'Report / Letter (min. 150 words)')}</CardTitle>
                     </CardHeader>
                     <CardContent className="p-10 space-y-8">
                       {/* Task prompt */}
                       <div className="bg-emerald-50/50 border-2 border-emerald-100 rounded-3xl p-8 text-lg font-medium text-emerald-900/80 leading-relaxed">
                         {task1?.prompt
-                          ? <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(task1.prompt) }} />
+                          ? <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(displayText(task1.prompt)) }} />
                           : <><p className="font-black mb-2">Describe the visual information below:</p><p>The chart below shows the percentage of households in owned and rented accommodation in England and Wales between 1918 and 2011. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p><p className="mt-3 text-sm text-emerald-700 font-bold">Write at least 150 words. Spend about 20 minutes on this task.</p></>
                         }
                       </div>
@@ -2905,12 +2923,12 @@ export default function FullMockTestPage() {
                   {/* Task 2 */}
                   <Card className="rounded-[40px] shadow-3xl overflow-hidden border-none">
                     <CardHeader className="bg-emerald-50 p-10 border-b border-emerald-100">
-                      <CardTitle className="text-2xl font-black text-emerald-900">Task 2 — {task2?.title ?? 'Essay (min. 250 words)'}</CardTitle>
+                      <CardTitle className="text-2xl font-black text-emerald-900">Task 2 — {displayText(task2?.title, 'Essay (min. 250 words)')}</CardTitle>
                     </CardHeader>
                     <CardContent className="p-10 space-y-8">
                       <div className="bg-emerald-50/50 border-2 border-emerald-100 rounded-3xl p-8 text-lg font-medium text-emerald-900/80 leading-relaxed">
                         {task2?.prompt
-                          ? <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(task2.prompt) }} />
+                          ? <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(displayText(task2.prompt)) }} />
                           : <><p className="font-black mb-2">Write an essay in response to the argument below:</p><p>Some people believe that university education should be free for all students, while others argue that students should pay for their own tuition. Discuss both views and give your own opinion.</p><p className="mt-3 text-sm text-emerald-700 font-bold">Write at least 250 words. Spend about 40 minutes on this task.</p></>
                         }
                       </div>
@@ -2937,10 +2955,10 @@ export default function FullMockTestPage() {
               // Build display parts — handle both formats
               const displayParts: Array<{ label: string; questions: string[] }> = parts.length > 0
                 ? parts.map(p => ({
-                    label: p.title,
+                    label: displayText(p.title, 'Speaking Part'),
                     questions: p.cueCard
-                      ? [`Cue Card: ${p.cueCard.topic}\n\u2022 ${p.cueCard.bulletPoints.join('\n\u2022 ')}`]
-                      : (p.questions ?? []).map(q => q.text)
+                      ? [`Cue Card: ${displayText(p.cueCard.topic, 'Cue card')}\n\u2022 ${(Array.isArray(p.cueCard.bulletPoints) ? p.cueCard.bulletPoints : []).map(point => displayText(point)).filter(Boolean).join('\n\u2022 ')}`]
+                      : (p.questions ?? []).map(q => displayText(q.text)).filter(Boolean)
                   }))
                 : [
                     { label: 'Part 1 — Introduction & Interview', questions: ['Tell me about yourself.', 'What do you do in your free time?'] },
@@ -3016,7 +3034,7 @@ export default function FullMockTestPage() {
                   {displayParts.map((part, pi) => (
                     <Card key={pi} className="rounded-[35px] shadow-xl border-none overflow-hidden">
                       <CardHeader className="bg-orange-50 px-10 py-7 border-b border-orange-100 flex flex-row items-center justify-between gap-4">
-                        <CardTitle className="text-xl font-black text-orange-900">{part.label}</CardTitle>
+                        <CardTitle className="text-xl font-black text-orange-900">{displayText(part.label, `Part ${pi + 1}`)}</CardTitle>
                         <Button
                           type="button"
                           disabled={isRecording}
@@ -3034,7 +3052,7 @@ export default function FullMockTestPage() {
                       <CardContent className="p-10 space-y-5">
                         {part.questions.map((q, qi) => (
                           <div key={qi} className="bg-orange-50/50 border-2 border-orange-100 rounded-[25px] p-7 text-lg font-bold text-orange-900 leading-relaxed whitespace-pre-line">
-                            {q}
+                            {displayText(q, `Question ${qi + 1}`)}
                           </div>
                         ))}
                       </CardContent>
