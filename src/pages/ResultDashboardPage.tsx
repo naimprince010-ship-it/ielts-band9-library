@@ -657,21 +657,65 @@ export default function ResultDashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {visibleHistory.map((attempt, index) => (
-                  <Link key={attempt.id} to={`/results/${attempt.id}`} className="flex items-center justify-between rounded-lg bg-gray-50 p-4 transition hover:bg-indigo-50">
-                    <div>
-                      <p className="font-semibold text-gray-900">Attempt {fullMockAttempts.length - index}</p>
-                      <p className="text-sm text-gray-500">{new Date(attempt.completed_at).toLocaleString()}</p>
+                {visibleHistory.map((attempt, index) => {
+                  const attemptModules = [
+                    { label: 'L', name: 'Listening', value: attempt.listening_band, icon: Headphones, color: 'text-purple-600 bg-purple-50' },
+                    { label: 'R', name: 'Reading', value: attempt.reading_band, icon: BookOpen, color: 'text-blue-600 bg-blue-50' },
+                    { label: 'W', name: 'Writing', value: attempt.writing_band, icon: PenTool, color: 'text-amber-600 bg-amber-50' },
+                    { label: 'S', name: 'Speaking', value: attempt.speaking_band, icon: Mic, color: 'text-emerald-600 bg-emerald-50' },
+                  ];
+                  const reviewSaved = hasSavedPayload(attempt.review_data);
+                  const aiFeedbackSaved = hasSavedPayload(attempt.writing_feedback) || hasSavedPayload(attempt.speaking_feedback);
+                  return (
+                    <div key={attempt.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-indigo-200 hover:shadow-md">
+                      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                        <div className="min-w-0">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <p className="font-bold text-slate-900">Attempt {fullMockAttempts.length - index}</p>
+                            {index === 0 && <Badge variant="outline">Latest</Badge>}
+                            <Badge className={getBandScoreColor(Number(attempt.overall_band))}>
+                              Overall {formatBandScore(Number(attempt.overall_band))}
+                            </Badge>
+                          </div>
+                          <p className="mt-1 text-sm text-slate-500">{new Date(attempt.completed_at).toLocaleString()}</p>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:w-[420px]">
+                          {attemptModules.map((module) => {
+                            const Icon = module.icon;
+                            return (
+                              <div key={module.name} className={`rounded-xl px-3 py-2 ${module.color}`}>
+                                <div className="flex items-center justify-between gap-2">
+                                  <span className="text-[10px] font-black uppercase tracking-widest">{module.label}</span>
+                                  <Icon className="h-3.5 w-3.5" />
+                                </div>
+                                <p className="mt-1 text-lg font-black">
+                                  {module.value != null ? formatBandScore(Number(module.value)) : '--'}
+                                </p>
+                              </div>
+                            );
+                          })}
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-2 lg:justify-end">
+                          <Badge variant={reviewSaved ? 'default' : 'outline'} className="gap-1">
+                            <FileCheck2 className="h-3 w-3" />
+                            {reviewSaved ? 'Review' : 'No review'}
+                          </Badge>
+                          <Badge variant={aiFeedbackSaved ? 'default' : 'outline'} className="gap-1">
+                            <Sparkles className="h-3 w-3" />
+                            {aiFeedbackSaved ? 'AI feedback' : 'No AI'}
+                          </Badge>
+                          <Link to={`/results/${attempt.id}`}>
+                            <Button size="sm" variant="outline" className="gap-2">
+                              Review <ChevronRight className="h-4 w-4" />
+                            </Button>
+                          </Link>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Badge className={getBandScoreColor(Number(attempt.overall_band))}>
-                        Overall {formatBandScore(Number(attempt.overall_band))}
-                      </Badge>
-                      {index === 0 && <Badge variant="outline">Latest</Badge>}
-                      <ChevronRight className="h-4 w-4 text-slate-400" />
-                    </div>
-                  </Link>
-                ))}
+                  );
+                })}
               </div>
               {visibleHistoryCount < fullMockAttempts.length && (
                 <Button

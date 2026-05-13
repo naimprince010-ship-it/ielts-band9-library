@@ -220,6 +220,24 @@ export default function FullMockAttemptDetailPage() {
     );
   }
 
+  const moduleSummary = MODULES.map((module) => ({
+    ...module,
+    band: attempt[`${module.key}_band` as keyof FullMockAttempt] as number | null,
+    review: reviewData[module.key],
+  }));
+  const scoredModules = moduleSummary.filter((module) => module.band != null);
+  const strongestModule = scoredModules.reduce<typeof scoredModules[number] | null>((strongest, module) => {
+    if (!strongest) return module;
+    return Number(module.band) > Number(strongest.band) ? module : strongest;
+  }, null);
+  const weakestModule = scoredModules.reduce<typeof scoredModules[number] | null>((weakest, module) => {
+    if (!weakest) return module;
+    return Number(module.band) < Number(weakest.band) ? module : weakest;
+  }, null);
+  const objectiveCorrect = (reviewData.listening?.correct || 0) + (reviewData.reading?.correct || 0);
+  const objectiveTotal = (reviewData.listening?.total || 0) + (reviewData.reading?.total || 0);
+  const feedbackCount = [writingFeedback, speakingFeedback].filter(Boolean).length;
+
   return (
     <div className="min-h-screen bg-slate-50 p-4 md:p-8">
       <div className="mx-auto max-w-6xl">
@@ -268,6 +286,43 @@ export default function FullMockAttemptDetailPage() {
               );
             })}
           </div>
+        </div>
+
+        <div className="mb-6 grid gap-4 md:grid-cols-4">
+          <Card className="border-rose-100 bg-rose-50">
+            <CardContent className="p-5">
+              <p className="text-sm font-semibold text-rose-700">Priority Section</p>
+              <p className="mt-2 text-2xl font-bold text-rose-950">{weakestModule?.label || 'Not enough data'}</p>
+              <p className="mt-1 text-sm text-rose-700">
+                {weakestModule?.band != null ? `Band ${formatBandScore(Number(weakestModule.band))}` : 'Complete more modules'}
+              </p>
+            </CardContent>
+          </Card>
+          <Card className="border-emerald-100 bg-emerald-50">
+            <CardContent className="p-5">
+              <p className="text-sm font-semibold text-emerald-700">Strongest Section</p>
+              <p className="mt-2 text-2xl font-bold text-emerald-950">{strongestModule?.label || 'Not enough data'}</p>
+              <p className="mt-1 text-sm text-emerald-700">
+                {strongestModule?.band != null ? `Band ${formatBandScore(Number(strongestModule.band))}` : 'No scored section'}
+              </p>
+            </CardContent>
+          </Card>
+          <Card className="border-blue-100 bg-blue-50">
+            <CardContent className="p-5">
+              <p className="text-sm font-semibold text-blue-700">Objective Review</p>
+              <p className="mt-2 text-2xl font-bold text-blue-950">
+                {objectiveTotal ? `${objectiveCorrect}/${objectiveTotal}` : '--'}
+              </p>
+              <p className="mt-1 text-sm text-blue-700">Listening + Reading saved answers</p>
+            </CardContent>
+          </Card>
+          <Card className="border-indigo-100 bg-indigo-50">
+            <CardContent className="p-5">
+              <p className="text-sm font-semibold text-indigo-700">AI Feedback</p>
+              <p className="mt-2 text-2xl font-bold text-indigo-950">{feedbackCount}/2</p>
+              <p className="mt-1 text-sm text-indigo-700">Writing and speaking reports</p>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[1fr_0.9fr]">
