@@ -2495,6 +2495,12 @@ export default function FullMockTestPage() {
   };
 
   const objectiveSectionMissingQuestions = !!test && (phase === 'listening' || phase === 'reading') && navKeys.length === 0;
+  const pageContainerClass =
+    phase === 'reading'
+      ? 'py-6 max-w-[1280px]'
+      : phase === 'writing'
+      ? 'py-6 sm:py-8 max-w-[min(100%,1400px)] 2xl:max-w-[1500px]'
+      : 'py-12 max-w-4xl';
 
   return (
     <div className="min-h-screen bg-background pt-[88px] pb-40">
@@ -2530,7 +2536,7 @@ export default function FullMockTestPage() {
         </div>
       </div>
 
-      <div className={`container mx-auto px-4 ${phase === 'reading' ? 'py-6 max-w-[1280px]' : 'py-12 max-w-4xl'}`}>
+      <div className={`w-full mx-auto px-4 sm:px-6 ${pageContainerClass}`}>
         {!test ? (
           <Card className="border-dashed border-4 border-muted py-32 text-center rounded-[40px]">
             <div className="bg-muted w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6"><AlertCircle className="h-10 w-10 text-muted-foreground" /></div>
@@ -2874,16 +2880,16 @@ export default function FullMockTestPage() {
                   task1.processData ||
                   task1.mapData);
               return (
-                <div className="space-y-12">
-                   <div className="bg-emerald-600 text-white p-10 rounded-[40px] shadow-2xl flex items-center gap-6"><div className="p-4 bg-white/20 rounded-3xl"><PenTool className="h-10 w-10" /></div><div><h2 className="text-3xl font-black mb-1">Writing Assessment</h2><p className="text-emerald-100 font-medium">Complete both tasks. Your word count is tracked automatically.</p></div></div>
+                <div className="space-y-8 lg:space-y-10">
+                   <div className="bg-emerald-600 text-white p-6 sm:p-8 lg:p-10 rounded-[28px] lg:rounded-[40px] shadow-2xl flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-6"><div className="w-16 h-16 bg-white/20 rounded-3xl flex items-center justify-center lg:w-20 lg:h-20"><PenTool className="h-8 w-8 lg:h-10 lg:w-10" /></div><div><h2 className="text-2xl lg:text-3xl font-black mb-1">Writing Assessment</h2><p className="text-sm sm:text-base text-emerald-100 font-medium">Complete both tasks. Your word count is tracked automatically.</p></div></div>
                   {/* Task 1 */}
-                  <Card className="rounded-[40px] shadow-3xl overflow-hidden border-none">
-                    <CardHeader className="bg-emerald-50 p-10 border-b border-emerald-100">
-                      <CardTitle className="text-2xl font-black text-emerald-900">Task 1 — {displayText(task1?.title, 'Report / Letter (min. 150 words)')}</CardTitle>
+                  <Card className="rounded-[28px] lg:rounded-[40px] shadow-3xl overflow-hidden border-none">
+                    <CardHeader className="bg-emerald-50 p-6 sm:p-8 lg:p-10 border-b border-emerald-100">
+                      <CardTitle className="text-xl lg:text-2xl font-black text-emerald-900">Task 1 — {displayText(task1?.title, 'Report / Letter (min. 150 words)')}</CardTitle>
                     </CardHeader>
                     <CardContent className="p-6 sm:p-8">
-                      <div className="grid gap-8 xl:grid-cols-[minmax(0,0.95fr)_minmax(420px,1.05fr)] xl:items-start">
-                        <div className="space-y-6 xl:sticky xl:top-28 xl:max-h-[calc(100vh-16rem)] xl:overflow-y-auto xl:pr-2">
+                      <div className="grid gap-6 lg:grid-cols-[minmax(280px,0.95fr)_minmax(360px,1.05fr)] xl:grid-cols-[minmax(360px,0.95fr)_minmax(520px,1.05fr)] 2xl:grid-cols-[minmax(420px,0.9fr)_minmax(620px,1.1fr)] lg:items-start">
+                        <div className="space-y-6 lg:sticky lg:top-28 lg:max-h-[calc(100vh-16rem)] lg:overflow-y-auto lg:pr-2">
                       {/* Task prompt */}
                       <div className="bg-emerald-50/50 border-2 border-emerald-100 rounded-3xl p-6 text-base font-medium text-emerald-900/80 leading-relaxed">
                         {task1?.prompt
@@ -2919,7 +2925,7 @@ export default function FullMockTestPage() {
                             <p className="text-sm font-black uppercase tracking-widest text-emerald-500">Task 1 Response</p>
                             <Badge className={`px-5 py-2 rounded-full font-black text-white ${(answers['w_task1'] ?? '').split(/\s+/).filter(Boolean).length >= 150 ? 'bg-emerald-600' : 'bg-amber-500'}`}>{(answers['w_task1'] ?? '').split(/\s+/).filter(Boolean).length} / 150</Badge>
                           </div>
-                      <Textarea placeholder="Begin typing your Task 1 response here... (min. 150 words)" className="min-h-[520px] xl:min-h-[calc(100vh-25rem)] rounded-[30px] border-2 border-emerald-100 p-6 text-lg font-bold focus:ring-[12px] focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
+                      <Textarea placeholder="Begin typing your Task 1 response here... (min. 150 words)" className="min-h-[360px] lg:min-h-[520px] xl:min-h-[calc(100vh-25rem)] rounded-[26px] lg:rounded-[30px] border-2 border-emerald-100 p-5 sm:p-6 text-base sm:text-lg font-bold focus:ring-[12px] focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
                         value={answers['w_task1'] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, w_task1: e.target.value }))} />
                       <div className="flex items-center justify-between px-2">
                         <p className="text-sm font-black uppercase tracking-widest text-emerald-400">Word Count</p>
@@ -2931,13 +2937,13 @@ export default function FullMockTestPage() {
                   </Card>
 
                   {/* Task 2 */}
-                  <Card className="rounded-[40px] shadow-3xl overflow-hidden border-none">
-                    <CardHeader className="bg-emerald-50 p-10 border-b border-emerald-100">
-                      <CardTitle className="text-2xl font-black text-emerald-900">Task 2 — {displayText(task2?.title, 'Essay (min. 250 words)')}</CardTitle>
+                  <Card className="rounded-[28px] lg:rounded-[40px] shadow-3xl overflow-hidden border-none">
+                    <CardHeader className="bg-emerald-50 p-6 sm:p-8 lg:p-10 border-b border-emerald-100">
+                      <CardTitle className="text-xl lg:text-2xl font-black text-emerald-900">Task 2 — {displayText(task2?.title, 'Essay (min. 250 words)')}</CardTitle>
                     </CardHeader>
                     <CardContent className="p-6 sm:p-8">
-                      <div className="grid gap-8 xl:grid-cols-[minmax(0,0.95fr)_minmax(420px,1.05fr)] xl:items-start">
-                        <div className="xl:sticky xl:top-28 xl:max-h-[calc(100vh-16rem)] xl:overflow-y-auto xl:pr-2">
+                      <div className="grid gap-6 lg:grid-cols-[minmax(280px,0.95fr)_minmax(360px,1.05fr)] xl:grid-cols-[minmax(360px,0.95fr)_minmax(520px,1.05fr)] 2xl:grid-cols-[minmax(420px,0.9fr)_minmax(620px,1.1fr)] lg:items-start">
+                        <div className="lg:sticky lg:top-28 lg:max-h-[calc(100vh-16rem)] lg:overflow-y-auto lg:pr-2">
                       <div className="bg-emerald-50/50 border-2 border-emerald-100 rounded-3xl p-6 text-base font-medium text-emerald-900/80 leading-relaxed">
                         {task2?.prompt
                           ? <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(displayText(task2.prompt)) }} />
@@ -2950,7 +2956,7 @@ export default function FullMockTestPage() {
                             <p className="text-sm font-black uppercase tracking-widest text-emerald-500">Task 2 Response</p>
                             <Badge className={`px-5 py-2 rounded-full font-black text-white ${(answers['w_task2'] ?? '').split(/\s+/).filter(Boolean).length >= 250 ? 'bg-emerald-600' : 'bg-amber-500'}`}>{(answers['w_task2'] ?? '').split(/\s+/).filter(Boolean).length} / 250</Badge>
                           </div>
-                      <Textarea placeholder="Begin typing your Task 2 essay here... (min. 250 words)" className="min-h-[620px] xl:min-h-[calc(100vh-23rem)] rounded-[30px] border-2 border-emerald-100 p-6 text-lg font-bold focus:ring-[12px] focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
+                      <Textarea placeholder="Begin typing your Task 2 essay here... (min. 250 words)" className="min-h-[420px] lg:min-h-[620px] xl:min-h-[calc(100vh-23rem)] rounded-[26px] lg:rounded-[30px] border-2 border-emerald-100 p-5 sm:p-6 text-base sm:text-lg font-bold focus:ring-[12px] focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
                         value={answers['w_task2'] ?? ''} onChange={e => setAnswers(prev => ({ ...prev, w_task2: e.target.value }))} />
                       <div className="flex items-center justify-between px-2">
                         <p className="text-sm font-black uppercase tracking-widest text-emerald-400">Word Count</p>
