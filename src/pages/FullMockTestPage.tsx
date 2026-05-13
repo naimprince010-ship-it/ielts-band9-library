@@ -2496,7 +2496,7 @@ export default function FullMockTestPage() {
 
   const objectiveSectionMissingQuestions = !!test && (phase === 'listening' || phase === 'reading') && navKeys.length === 0;
   const pageContainerClass =
-    phase === 'reading'
+    phase === 'reading' || phase === 'listening'
       ? 'py-6 max-w-[1280px]'
       : phase === 'writing'
       ? 'py-6 sm:py-8 max-w-[1280px]'
@@ -2646,17 +2646,19 @@ export default function FullMockTestPage() {
                     const wasPlayed = playedAudios.has(sectionAudioId);
                     const sectionPlaybackStatus = audioPlaybackStatus[sectionAudioId];
                     return (
-                    <div key={sec.sectionNumber} className="space-y-6">
-                      <div className="flex items-center justify-between gap-3 px-4">
+                    <div key={sec.sectionNumber} className="grid gap-6 lg:grid-cols-[minmax(280px,0.85fr)_minmax(420px,1.15fr)] lg:items-start">
+                      <Card className="rounded-[30px] border-2 border-violet-100 bg-white shadow-xl lg:sticky lg:top-28 lg:max-h-[calc(100vh-12rem)] lg:overflow-y-auto">
+                        <CardContent className="space-y-5 p-6">
+                      <div className="flex flex-col gap-4">
                         <div className="flex items-center gap-3"><div className="h-1 w-12 bg-violet-500 rounded-full" /><h4 className="font-black text-violet-600 uppercase tracking-widest text-sm">{displayText(sec.title, `Part ${sec.sectionNumber}`)}</h4></div>
                         {/* Per-section audio — prefers real MP3, falls back to TTS.
                             Show whenever section has its own audio/transcript and there is no single global audio. */}
                         {hasAudio && !globalAudioUrl && (
                           <Button
                             type="button"
-                            size="sm"
+                            size="lg"
                             disabled={wasPlayed && !isPlayingThis}
-                            className={`rounded-full font-black px-6 ${
+                            className={`w-full rounded-2xl font-black ${
                               wasPlayed && !isPlayingThis ? 'bg-violet-200 text-violet-400' :
                               isPlayingThis ? 'bg-amber-500 text-white' :
                               'bg-violet-600 text-white hover:bg-violet-700 shadow-lg'
@@ -2676,7 +2678,7 @@ export default function FullMockTestPage() {
                         )}
                       </div>
                       {sectionPlaybackStatus?.message && (
-                        <p className={`px-4 text-xs font-bold ${
+                        <p className={`text-xs font-bold ${
                           sectionPlaybackStatus.status === 'error' ? 'text-red-600' :
                           sectionPlaybackStatus.status === 'fallback' ? 'text-amber-600' :
                           sectionPlaybackStatus.status === 'ended' ? 'text-emerald-600' : 'text-violet-600'
@@ -2685,17 +2687,19 @@ export default function FullMockTestPage() {
                         </p>
                       )}
                       {sectionPlaybackStatus?.controlsUrl && sectionPlaybackStatus.status !== 'ended' && (
-                        <div className="px-4">
+                        <div>
                           <audio
                             src={sectionPlaybackStatus.controlsUrl}
                             controls
                             preload="metadata"
                             playsInline
                             onPlay={() => setPlayedAudios(prev => new Set(prev).add(sectionAudioId))}
-                            className="w-full max-w-xl"
+                            className="w-full"
                           />
                         </div>
                       )}
+                        </CardContent>
+                      </Card>
                       <Card className="rounded-[40px] shadow-2xl border-none shadow-black/5 overflow-hidden">
                       <CardContent className="p-10 space-y-10">
                         {Array.isArray(sec.questions) && sec.questions.map((q) => {
