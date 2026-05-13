@@ -2278,6 +2278,7 @@ export default function FullMockTestPage() {
   const timeColor = remaining < 300 ? 'text-red-400' : remaining < 600 ? 'text-yellow-400' : 'text-green-400';
 
   const navKeys: string[] = [];
+  const readingPassageNav: Array<{ id: string; label: string; range: string; firstQuestionKey: string }> = [];
 
   if (phase === 'listening') {
     const sections = (td?.sections as Array<{questions: any[]}>) ?? [];
@@ -2286,7 +2287,19 @@ export default function FullMockTestPage() {
   } else if (phase === 'reading') {
     const passages = Array.isArray(td?.passages) ? td.passages : (td?.passage ? [td.passage] : []);
     let i = 0;
-    passages.forEach((p: any) => { if (Array.isArray(p.questions)) p.questions.forEach(() => navKeys.push(`r_${i++}`)); });
+    passages.forEach((p: any, passageIndex: number) => {
+      const questions = Array.isArray(p.questions) ? p.questions : [];
+      const start = i + 1;
+      questions.forEach(() => navKeys.push(`r_${i++}`));
+      if (questions.length > 0) {
+        readingPassageNav.push({
+          id: `reading-passage-${passageIndex + 1}`,
+          label: `Passage ${passageIndex + 1}`,
+          range: `Q${start}-Q${i}`,
+          firstQuestionKey: `r_${start - 1}`,
+        });
+      }
+    });
   }
 
   const scrollToQuestion = (key: string) => {
@@ -2295,6 +2308,15 @@ export default function FullMockTestPage() {
       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       el.classList.add('ring-4', 'ring-indigo-400', 'rounded-2xl', 'transition-all', 'duration-500');
       setTimeout(() => el.classList.remove('ring-4', 'ring-indigo-400'), 2000);
+    }
+  };
+
+  const scrollToPassage = (passageId: string, firstQuestionKey: string) => {
+    const el = document.getElementById(passageId) ?? document.getElementById(firstQuestionKey);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      el.classList.add('ring-4', 'ring-blue-300', 'rounded-2xl', 'transition-all', 'duration-500');
+      setTimeout(() => el.classList.remove('ring-4', 'ring-blue-300'), 1600);
     }
   };
 
@@ -2538,7 +2560,7 @@ export default function FullMockTestPage() {
               return (
                 <div className="space-y-10">
                   {passages.map((passage: any, pi: number) => (
-                    <div key={pi} className="space-y-6">
+                    <div key={pi} id={`reading-passage-${pi + 1}`} className="space-y-6 scroll-mt-28">
                       <div className="flex items-center gap-4 px-4">
                         <div className="h-1.5 w-16 bg-blue-500 rounded-full" />
                         <h4 className="font-black text-blue-600 uppercase tracking-[0.2em] text-sm">Passage {pi + 1}</h4>
@@ -2918,7 +2940,22 @@ export default function FullMockTestPage() {
       </div>
 
       {navKeys.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t-2 border-border p-6 shadow-[0_-10px_50px_rgba(0,0,0,0.1)] z-50 flex items-center justify-between">
+        <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t-2 border-border p-4 sm:p-6 shadow-[0_-10px_50px_rgba(0,0,0,0.1)] z-50 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          {phase === 'reading' && readingPassageNav.length > 0 && (
+            <div className="flex gap-2 overflow-x-auto no-scrollbar px-1 lg:max-w-[360px]">
+              {readingPassageNav.map(item => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => scrollToPassage(item.id, item.firstQuestionKey)}
+                  className="flex-shrink-0 rounded-2xl border-2 border-blue-100 bg-blue-50 px-4 py-2 text-left font-black text-blue-700 hover:border-blue-300 hover:bg-blue-100 transition-all"
+                >
+                  <span className="block text-xs uppercase tracking-widest">{item.label}</span>
+                  <span className="block text-[11px] text-blue-500">{item.range}</span>
+                </button>
+              ))}
+            </div>
+          )}
           <div className="flex-1 overflow-x-auto no-scrollbar">
             <div className="flex gap-3 min-w-max px-4">
               {navKeys.map((key, i) => (
