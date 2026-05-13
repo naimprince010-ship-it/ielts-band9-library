@@ -1283,6 +1283,23 @@ export default function FullMockTestPage() {
   const startTimerRef = useRef<(() => void) | null>(null);
   const resetTimerRef = useRef<((val: number) => void) | null>(null);
 
+  useEffect(() => {
+    if (loading || phase === 'intro' || phase === 'results' || !currentSection) return;
+    const currentTest = tests[currentSection.module];
+    if (!currentTest || isUsableFullMockTest(currentTest, currentSection.module)) return;
+
+    const nextTests = {
+      ...tests,
+      [currentSection.module]: getFallbackMockTest(currentSection.module),
+    };
+    setTests(nextTests);
+    setAnswers({});
+    if (currentSection.module === 'listening') {
+      setPlayedAudios(new Set());
+      setAudioPlaybackStatus({});
+    }
+  }, [currentSection, loading, phase, tests]);
+
   const handleTimeUp = useCallback(() => submitSectionRef.current(), []);
 
   // Restore timer from session if available, otherwise use section default
