@@ -479,6 +479,8 @@ export default function FullMockTestPage() {
   const [speakingFeedbackError, setSpeakingFeedbackError] = useState('');
   const [loading, setLoading] = useState(true);
   const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [activeReadingPassage, setActiveReadingPassage] = useState(0);
+  const [readingMobileView, setReadingMobileView] = useState<'passage' | 'questions'>('passage');
   const [playingAudioId, setPlayingAudioId] = useState<string | null>(null);
   const [playedAudios, setPlayedAudios] = useState<Set<string>>(
     new Set(savedSession?.playedAudios ?? [])
@@ -539,6 +541,26 @@ export default function FullMockTestPage() {
       wakeLockRef.current = null;
     };
   }, [phase]);
+
+  useEffect(() => {
+    if (phase !== 'reading') return;
+    const passages = Array.from(document.querySelectorAll<HTMLElement>('[data-reading-passage-index]'));
+    if (passages.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter(entry => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        const index = Number(visible?.target.getAttribute('data-reading-passage-index'));
+        if (Number.isFinite(index)) setActiveReadingPassage(index);
+      },
+      { rootMargin: '-120px 0px -45% 0px', threshold: [0.15, 0.35, 0.6] },
+    );
+
+    passages.forEach(passage => observer.observe(passage));
+    return () => observer.disconnect();
+  }, [phase, tests.reading]);
 
   // ─── Real audio player (for pre-generated MP3 sectionAudioUrl) ──────────
   const [realAudioPlaying, setRealAudioPlaying] = useState<string | null>(null);
@@ -2278,7 +2300,17 @@ export default function FullMockTestPage() {
   const timeColor = remaining < 300 ? 'text-red-400' : remaining < 600 ? 'text-yellow-400' : 'text-green-400';
 
   const navKeys: string[] = [];
-  const readingPassageNav: Array<{ id: string; label: string; range: string; firstQuestionKey: string }> = [];
+  const readingPassageNav: Array<{
+    id: string;
+    index: number;
+    label: string;
+    range: string;
+    firstQuestionKey: string;
+    startIndex: number;
+    endIndex: number;
+    answered: number;
+    total: number;
+  }> = [];
 
   if (phase === 'listening') {
     const sections = (td?.sections as Array<{questions: any[]}>) ?? [];
@@ -2292,17 +2324,29 @@ export default function FullMockTestPage() {
       const start = i + 1;
       questions.forEach(() => navKeys.push(`r_${i++}`));
       if (questions.length > 0) {
+        const questionKeys = Array.from({ length: questions.length }, (_unused, offset) => `r_${start - 1 + offset}`);
         readingPassageNav.push({
           id: `reading-passage-${passageIndex + 1}`,
+          index: passageIndex,
           label: `Passage ${passageIndex + 1}`,
           range: `Q${start}-Q${i}`,
           firstQuestionKey: `r_${start - 1}`,
+          startIndex: start - 1,
+          endIndex: i - 1,
+          answered: questionKeys.filter(key => !!answers[key]).length,
+          total: questions.length,
         });
       }
     });
   }
 
   const scrollToQuestion = (key: string) => {
+    if (phase === 'reading') {
+      const questionIndex = Number(key.split('_')[1]);
+      const passage = readingPassageNav.find(item => questionIndex >= item.startIndex && questionIndex <= item.endIndex);
+      if (passage) setActiveReadingPassage(passage.index);
+      setReadingMobileView('questions');
+    }
     const el = document.getElementById(key);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -2311,8 +2355,10 @@ export default function FullMockTestPage() {
     }
   };
 
-  const scrollToPassage = (passageId: string, firstQuestionKey: string) => {
-    const el = document.getElementById(passageId) ?? document.getElementById(firstQuestionKey);
+  const scrollToPassage = (item: typeof readingPassageNav[number]) => {
+    setActiveReadingPassage(item.index);
+    setReadingMobileView('passage');
+    const el = document.getElementById(item.id) ?? document.getElementById(item.firstQuestionKey);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       el.classList.add('ring-4', 'ring-blue-300', 'rounded-2xl', 'transition-all', 'duration-500');
@@ -2560,13 +2606,34 @@ export default function FullMockTestPage() {
               return (
                 <div className="space-y-10">
                   {passages.map((passage: any, pi: number) => (
-                    <div key={pi} id={`reading-passage-${pi + 1}`} className="space-y-6 scroll-mt-28">
-                      <div className="flex items-center gap-4 px-4">
+                    <div
+                      key={pi}
+                      id={`reading-passage-${pi + 1}`}
+                      data-reading-passage-index={pi}
+                      className="space-y-6 scroll-mt-28"
+                    >
+                      <div className="flex flex-col gap-3 px-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="flex items-center gap-4">
                         <div className="h-1.5 w-16 bg-blue-500 rounded-full" />
                         <h4 className="font-black text-blue-600 uppercase tracking-[0.2em] text-sm">Passage {pi + 1}</h4>
+                        </div>
+                        <div className="flex rounded-2xl border-2 border-blue-100 bg-blue-50 p-1 lg:hidden">
+                          {(['passage', 'questions'] as const).map(view => (
+                            <button
+                              key={view}
+                              type="button"
+                              onClick={() => setReadingMobileView(view)}
+                              className={`rounded-xl px-4 py-2 text-xs font-black uppercase tracking-widest transition-all ${
+                                readingMobileView === view ? 'bg-blue-600 text-white shadow-lg' : 'text-blue-700'
+                              }`}
+                            >
+                              {view}
+                            </button>
+                          ))}
+                        </div>
                       </div>
                       <div className="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(420px,1.05fr)] lg:items-start">
-                        <Card className="rounded-[34px] shadow-2xl border-none overflow-hidden bg-white lg:sticky lg:top-28 lg:max-h-[calc(100vh-16rem)] lg:overflow-y-auto">
+                        <Card className={`rounded-[34px] shadow-2xl border-none overflow-hidden bg-white lg:sticky lg:top-28 lg:max-h-[calc(100vh-16rem)] lg:overflow-y-auto ${readingMobileView === 'questions' ? 'hidden lg:block' : ''}`}>
                           <div className="bg-slate-50 p-6 sm:p-8 border-b border-slate-100">
                             <h2 className="text-2xl font-black mb-5 flex items-center gap-3 text-slate-800">
                               <BookOpen className="h-7 w-7 text-blue-500 flex-shrink-0" />
@@ -2575,9 +2642,18 @@ export default function FullMockTestPage() {
                             <div className="prose prose-base max-w-none text-slate-600 leading-[1.85] font-medium whitespace-pre-line" dangerouslySetInnerHTML={{ __html: sanitizeHtml(passage.textContent) }} />
                           </div>
                         </Card>
-                        <Card className="rounded-[34px] shadow-2xl border-none overflow-hidden bg-white lg:max-h-[calc(100vh-16rem)] lg:overflow-y-auto">
-                          <CardContent className="p-6 sm:p-8 space-y-8">
-                           <h3 className="text-xl font-black uppercase tracking-widest text-slate-400">Questions</h3>
+                        <Card className={`rounded-[34px] shadow-2xl border-none overflow-hidden bg-white lg:max-h-[calc(100vh-16rem)] lg:overflow-y-auto ${readingMobileView === 'passage' ? 'hidden lg:block' : ''}`}>
+                          <CardContent className="p-0">
+                           <div className="sticky top-0 z-10 border-b border-slate-100 bg-white/95 px-6 py-4 backdrop-blur sm:px-8">
+                             <p className="text-[10px] font-black uppercase tracking-[0.24em] text-blue-500">Passage {pi + 1}</p>
+                             <div className="mt-1 flex items-center justify-between gap-4">
+                               <h3 className="text-lg font-black uppercase tracking-widest text-slate-500">Questions {readingPassageNav[pi]?.range}</h3>
+                               <Badge className="rounded-full bg-blue-100 px-3 py-1 text-blue-700">
+                                 {readingPassageNav[pi]?.answered ?? 0}/{readingPassageNav[pi]?.total ?? 0}
+                               </Badge>
+                             </div>
+                           </div>
+                           <div className="space-y-8 p-6 sm:p-8">
                            {Array.isArray(passage.questions) && passage.questions.map((q: any) => {
                              const key = `r_${qIdx++}`;
                              return (
@@ -2623,6 +2699,7 @@ export default function FullMockTestPage() {
                                </div>
                              );
                            })}
+                           </div>
                           </CardContent>
                         </Card>
                       </div>
@@ -2940,18 +3017,24 @@ export default function FullMockTestPage() {
       </div>
 
       {navKeys.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t-2 border-border p-4 sm:p-6 shadow-[0_-10px_50px_rgba(0,0,0,0.1)] z-50 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t-2 border-border p-3 sm:p-4 shadow-[0_-10px_50px_rgba(0,0,0,0.1)] z-50 flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
           {phase === 'reading' && readingPassageNav.length > 0 && (
             <div className="flex gap-2 overflow-x-auto no-scrollbar px-1 lg:max-w-[360px]">
               {readingPassageNav.map(item => (
                 <button
                   key={item.id}
                   type="button"
-                  onClick={() => scrollToPassage(item.id, item.firstQuestionKey)}
-                  className="flex-shrink-0 rounded-2xl border-2 border-blue-100 bg-blue-50 px-4 py-2 text-left font-black text-blue-700 hover:border-blue-300 hover:bg-blue-100 transition-all"
+                  onClick={() => scrollToPassage(item)}
+                  className={`flex-shrink-0 rounded-2xl border-2 px-4 py-2 text-left font-black transition-all ${
+                    activeReadingPassage === item.index
+                      ? 'border-blue-600 bg-blue-600 text-white shadow-lg'
+                      : 'border-blue-100 bg-blue-50 text-blue-700 hover:border-blue-300 hover:bg-blue-100'
+                  }`}
                 >
                   <span className="block text-xs uppercase tracking-widest">{item.label}</span>
-                  <span className="block text-[11px] text-blue-500">{item.range}</span>
+                  <span className={`block text-[11px] ${activeReadingPassage === item.index ? 'text-blue-100' : 'text-blue-500'}`}>
+                    {item.range} | {item.answered}/{item.total}
+                  </span>
                 </button>
               ))}
             </div>
@@ -2960,17 +3043,17 @@ export default function FullMockTestPage() {
             <div className="flex gap-3 min-w-max px-4">
               {navKeys.map((key, i) => (
                 <button key={key} onClick={() => scrollToQuestion(key)}
-                  className={`w-14 h-14 rounded-2xl border-2 flex items-center justify-center font-black text-lg transition-all active:scale-90 ${answers[key] ? 'bg-slate-800 text-white border-slate-800 shadow-xl' : 'bg-white text-slate-400 border-slate-100 hover:border-slate-300'}`}>
+                  className={`h-11 w-11 rounded-xl border-2 flex items-center justify-center font-black text-sm transition-all active:scale-90 sm:h-12 sm:w-12 ${answers[key] ? 'bg-slate-800 text-white border-slate-800 shadow-xl' : 'bg-white text-slate-400 border-slate-100 hover:border-slate-300'}`}>
                   {i + 1}
                 </button>
               ))}
             </div>
           </div>
-          <div className="pl-8 flex-shrink-0 flex items-center gap-8">
+          <div className="flex-shrink-0 flex items-center gap-4 lg:pl-6">
              <div className="text-sm font-black uppercase tracking-widest text-slate-400 hidden xl:block">
                <span className="text-slate-800">{navKeys.filter(k => !!answers[k]).length}</span> / {navKeys.length} Completed
              </div>
-             <Button size="lg" variant="outline" onClick={() => submitSection()} className="border-4 border-slate-800 text-slate-800 font-black rounded-2xl px-8 hover:bg-slate-800 hover:text-white transition-all shadow-xl">
+             <Button size="lg" variant="outline" onClick={() => submitSection()} className="border-4 border-slate-800 text-slate-800 font-black rounded-2xl px-5 py-5 hover:bg-slate-800 hover:text-white transition-all shadow-xl sm:px-7">
                SUBMIT SECTION <ChevronRight className="h-6 w-6 ml-2" />
              </Button>
           </div>
