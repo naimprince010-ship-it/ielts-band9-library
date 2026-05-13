@@ -2647,13 +2647,18 @@ export default function FullMockTestPage() {
                     const sectionPlaybackStatus = audioPlaybackStatus[sectionAudioId];
                     const sectionQuestions = Array.isArray(sec.questions) ? sec.questions : [];
                     const sectionStartNumber = qIdx + 1;
+                    const sectionEndNumber = sectionStartNumber + Math.max(sectionQuestions.length - 1, 0);
                     const answeredInSection = sectionQuestions.reduce((count, _question, index) => {
                       const key = `l_${sectionStartNumber - 1 + index}`;
                       return answers[key]?.trim() ? count + 1 : count;
                     }, 0);
                     return (
-                    <div key={sec.sectionNumber} className="grid gap-5 scroll-mt-32 lg:grid-cols-[minmax(280px,0.72fr)_minmax(420px,1.28fr)] lg:items-start">
-                      <Card className="sticky top-[88px] z-30 rounded-[24px] border-2 border-violet-100 bg-white shadow-xl lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto">
+                    <div
+                      key={sec.sectionNumber}
+                      id={`listening-section-${sec.sectionNumber}`}
+                      className="relative grid min-h-[calc(100vh-13rem)] gap-5 scroll-mt-32 lg:grid-cols-[minmax(280px,0.72fr)_minmax(420px,1.28fr)] lg:items-start"
+                    >
+                      <Card className="sticky top-[88px] z-30 self-start rounded-[24px] border-2 border-violet-100 bg-white shadow-xl lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto">
                         <CardContent className="space-y-4 p-4 sm:p-5">
                       <div className="flex flex-col gap-4">
                         <div className="flex items-center justify-between gap-3">
@@ -2662,6 +2667,12 @@ export default function FullMockTestPage() {
                             <h4 className="truncate font-black text-violet-600 uppercase tracking-widest text-sm">{displayText(sec.title, `Part ${sec.sectionNumber}`)}</h4>
                           </div>
                           <Badge variant="outline" className="rounded-full">{answeredInSection}/{sectionQuestions.length}</Badge>
+                        </div>
+                        <div className="rounded-2xl border border-violet-100 bg-violet-50 px-4 py-3">
+                          <p className="text-[10px] font-black uppercase tracking-[0.22em] text-violet-500">Audio scope</p>
+                          <p className="mt-1 text-sm font-black text-violet-950">
+                            Questions {sectionStartNumber}-{sectionEndNumber}
+                          </p>
                         </div>
                         {/* Per-section audio — prefers real MP3, falls back to TTS.
                             Show whenever section has its own audio/transcript and there is no single global audio. */}
