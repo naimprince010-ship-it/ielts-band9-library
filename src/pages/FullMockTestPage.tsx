@@ -287,10 +287,17 @@ function countReadingQuestions(testData: Record<string, unknown> | undefined): n
   }, 0);
 }
 
+function countReadingPassages(testData: Record<string, unknown> | undefined): number {
+  const passages = Array.isArray(testData?.passages) ? testData.passages : (testData?.passage ? [testData.passage] : []);
+  return passages.filter(isRecord).length;
+}
+
 function isUsableFullMockTest(test: MockTest | undefined, module: ModuleType): boolean {
   if (!test?.test_data) return false;
   if (module === 'listening') return countListeningQuestions(test.test_data) >= 10;
-  if (module === 'reading') return countReadingQuestions(test.test_data) >= 10;
+  if (module === 'reading') {
+    return countReadingPassages(test.test_data) >= 3 && countReadingQuestions(test.test_data) === 40;
+  }
   if (module === 'writing') return Array.isArray(test.test_data.tasks) && test.test_data.tasks.length >= 2;
   if (module === 'speaking') return Array.isArray(test.test_data.parts) && test.test_data.parts.length >= 3;
   return false;
