@@ -2332,7 +2332,7 @@ export default function FullMockTestPage() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
+      <div className={`container mx-auto px-4 ${phase === 'reading' ? 'py-6 max-w-[1280px]' : 'py-12 max-w-4xl'}`}>
         {!test ? (
           <Card className="border-dashed border-4 border-muted py-32 text-center rounded-[40px]">
             <div className="bg-muted w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6"><AlertCircle className="h-10 w-10 text-muted-foreground" /></div>
@@ -2536,7 +2536,7 @@ export default function FullMockTestPage() {
               const passages = Array.isArray(td?.passages) ? td.passages : (td?.passage ? [td.passage] : []);
               let qIdx = 0;
               return (
-                <div className="space-y-16">
+                <div className="space-y-10">
                   {passages.map((passage: any, pi: number) => (
                     <div key={pi} className="space-y-6">
                       <div className="flex items-center gap-4 px-4">
@@ -2544,7 +2544,7 @@ export default function FullMockTestPage() {
                         <h4 className="font-black text-blue-600 uppercase tracking-[0.2em] text-sm">Passage {pi + 1}</h4>
                       </div>
                       <div className="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(420px,1.05fr)] lg:items-start">
-                        <Card className="rounded-[34px] shadow-2xl border-none overflow-hidden bg-white lg:sticky lg:top-28 lg:max-h-[calc(100vh-13rem)] lg:overflow-y-auto">
+                        <Card className="rounded-[34px] shadow-2xl border-none overflow-hidden bg-white lg:sticky lg:top-28 lg:max-h-[calc(100vh-16rem)] lg:overflow-y-auto">
                           <div className="bg-slate-50 p-6 sm:p-8 border-b border-slate-100">
                             <h2 className="text-2xl font-black mb-5 flex items-center gap-3 text-slate-800">
                               <BookOpen className="h-7 w-7 text-blue-500 flex-shrink-0" />
@@ -2553,7 +2553,7 @@ export default function FullMockTestPage() {
                             <div className="prose prose-base max-w-none text-slate-600 leading-[1.85] font-medium whitespace-pre-line" dangerouslySetInnerHTML={{ __html: sanitizeHtml(passage.textContent) }} />
                           </div>
                         </Card>
-                        <Card className="rounded-[34px] shadow-2xl border-none overflow-hidden bg-white">
+                        <Card className="rounded-[34px] shadow-2xl border-none overflow-hidden bg-white lg:max-h-[calc(100vh-16rem)] lg:overflow-y-auto">
                           <CardContent className="p-6 sm:p-8 space-y-8">
                            <h3 className="text-xl font-black uppercase tracking-widest text-slate-400">Questions</h3>
                            {Array.isArray(passage.questions) && passage.questions.map((q: any) => {
