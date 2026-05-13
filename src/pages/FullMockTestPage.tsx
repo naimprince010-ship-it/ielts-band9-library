@@ -2883,7 +2883,7 @@ export default function FullMockTestPage() {
               const task2Title = displayText(task2?.title, 'Essay (min. 250 words)').replace(/^Task\s*2\s*[:—-]\s*/i, '');
               return (
                 <div className="space-y-8 lg:space-y-10">
-                   <div className="bg-emerald-600 text-white p-6 sm:p-8 lg:p-10 rounded-[28px] lg:rounded-[40px] shadow-2xl flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-6"><div className="w-16 h-16 bg-white/20 rounded-3xl flex items-center justify-center lg:w-20 lg:h-20"><PenTool className="h-8 w-8 lg:h-10 lg:w-10" /></div><div><h2 className="text-2xl lg:text-3xl font-black mb-1">Writing Assessment</h2><p className="text-sm sm:text-base text-emerald-100 font-medium">Complete both tasks. Your word count is tracked automatically.</p></div></div>
+                   <div className="bg-emerald-600 text-white px-5 py-4 sm:px-6 rounded-3xl shadow-xl flex items-center gap-4"><div className="w-11 h-11 bg-white/20 rounded-2xl flex items-center justify-center"><PenTool className="h-6 w-6" /></div><div><h2 className="text-xl font-black leading-tight">Writing Assessment</h2><p className="text-xs sm:text-sm text-emerald-100 font-medium">Complete both tasks. Word count is tracked automatically.</p></div></div>
                   {/* Task 1 */}
                   <Card className="rounded-[28px] lg:rounded-[40px] shadow-3xl overflow-hidden border-none">
                     <CardHeader className="bg-emerald-50 p-6 sm:p-8 lg:p-10 border-b border-emerald-100">
