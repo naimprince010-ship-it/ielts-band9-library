@@ -224,6 +224,56 @@ function sectionAudioKey(sectionNumber?: number): string {
   return `section-${sectionNumber ?? 'unknown'}`;
 }
 
+type ListeningSectionView = {
+  sectionNumber?: number;
+  title?: string;
+  questions?: Question[];
+  transcript?: string;
+  sectionAudioUrl?: string;
+};
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return !!value && typeof value === 'object' && !Array.isArray(value);
+}
+
+function normalizeListeningSections(testData: Record<string, unknown> | undefined): ListeningSectionView[] {
+  if (!testData) return [];
+
+  const rawSections = testData.sections;
+  const candidates = Array.isArray(rawSections)
+    ? rawSections
+    : isRecord(rawSections)
+      ? Object.values(rawSections)
+      : [];
+
+  const sections = candidates
+    .filter(isRecord)
+    .map((section, index) => {
+      const questions = Array.isArray(section.questions) ? (section.questions as Question[]) : [];
+      return {
+        sectionNumber: typeof section.sectionNumber === 'number' ? section.sectionNumber : index + 1,
+        title: typeof section.title === 'string' ? section.title : `Section ${index + 1}`,
+        questions,
+        transcript: typeof section.transcript === 'string' ? section.transcript : '',
+        sectionAudioUrl: typeof section.sectionAudioUrl === 'string' ? section.sectionAudioUrl : '',
+      };
+    });
+
+  if (sections.length > 0) return sections;
+
+  if (Array.isArray(testData.questions)) {
+    return [{
+      sectionNumber: 1,
+      title: typeof testData.title === 'string' ? testData.title : 'Section 1',
+      questions: testData.questions as Question[],
+      transcript: typeof testData.transcript === 'string' ? testData.transcript : '',
+      sectionAudioUrl: typeof testData.sectionAudioUrl === 'string' ? testData.sectionAudioUrl : '',
+    }];
+  }
+
+  return [];
+}
+
 function normalizeAnswer(value: unknown): string {
   return String(value ?? '')
     .trim()
@@ -578,9 +628,7 @@ export default function FullMockTestPage() {
     if (phase !== 'listening') return;
     const td = tests.listening?.test_data as Record<string, unknown> | undefined;
     if (!td) return;
-    const sections = Array.isArray(td.sections)
-      ? (td.sections as Array<{ sectionNumber?: number; sectionAudioUrl?: string }>)
-      : [];
+    const sections = normalizeListeningSections(td);
     sections.forEach((section) => {
       if (!section.sectionAudioUrl) return;
       const id = sectionAudioKey(section.sectionNumber);
@@ -1317,9 +1365,7 @@ export default function FullMockTestPage() {
     const td = tests.listening?.test_data as Record<string, unknown> | undefined;
     if (!td) return;
 
-    const sections = Array.isArray(td.sections)
-      ? (td.sections as Array<{ sectionNumber?: number; sectionAudioUrl?: string }>)
-      : [];
+    const sections = normalizeListeningSections(td);
     const globalUrl = td.audioUrl as string | undefined;
 
     const targets: { id: string; url: string }[] = [];
@@ -1409,7 +1455,7 @@ export default function FullMockTestPage() {
           sectionReview = buildObjectiveReview(qs, answers, 'r');
           band = sectionReview.total > 0 ? bandFromScore(sectionReview.correct, sectionReview.total) : null;
         } else if (sec.module === 'listening') {
-          const sections = Array.isArray(td.sections) ? td.sections : [];
+          const sections = normalizeListeningSections(td);
           const qs = sections.flatMap((s: any) => s.questions || []);
           console.log(`Scoring Listening: ${qs.length} questions found`);
           sectionReview = buildObjectiveReview(qs, answers, 'l');
@@ -2313,12 +2359,10 @@ export default function FullMockTestPage() {
   }> = [];
 
   if (phase === 'listening') {
-    const sections = Array.isArray(td?.sections)
-      ? (td.sections as Array<{ questions?: unknown }>)
-      : [];
+    const sections = normalizeListeningSections(td);
     let i = 0;
     sections.forEach(s => {
-      const questions = s && typeof s === 'object' && Array.isArray(s.questions) ? s.questions : [];
+      const questions = Array.isArray(s.questions) ? s.questions : [];
       questions.forEach(() => navKeys.push(`l_${i++}`));
     });
   } else if (phase === 'reading') {
@@ -2371,6 +2415,8 @@ export default function FullMockTestPage() {
     }
   };
 
+  const objectiveSectionMissingQuestions = !!test && (phase === 'listening' || phase === 'reading') && navKeys.length === 0;
+
   return (
     <div className="min-h-screen bg-background pt-[88px] pb-40">
       <div className="fixed top-0 left-0 right-0 z-50 bg-foreground/95 backdrop-blur-lg text-white px-6 py-4 flex items-center justify-between shadow-2xl border-b border-white/10">
@@ -2416,9 +2462,7 @@ export default function FullMockTestPage() {
         ) : (
           <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
             {phase === 'listening' && (() => {
-              const sections = Array.isArray(td?.sections)
-                ? (td.sections as Array<{ sectionNumber: number; title: string; questions: Question[], transcript?: string; sectionAudioUrl?: string }>)
-                : [];
+              const sections = normalizeListeningSections(td);
               const globalTranscript = typeof td?.transcript === 'string' ? td.transcript : '';
               const rawGlobalAudioUrl = typeof (td as any)?.audioUrl === 'string' ? (td as any).audioUrl as string : '';
               // If any section has its own audio URL, use per-section mode and ignore the global audioUrl.
@@ -2428,6 +2472,19 @@ export default function FullMockTestPage() {
               let qIdx = 0;
               return (
                 <div className="space-y-12">
+                  {sections.length === 0 && (
+                    <Card className="rounded-[34px] border-2 border-amber-200 bg-amber-50 shadow-xl">
+                      <CardContent className="flex flex-col items-center gap-4 p-10 text-center">
+                        <AlertCircle className="h-12 w-12 text-amber-600" />
+                        <div>
+                          <h3 className="text-2xl font-black text-amber-900">Listening questions are missing</h3>
+                          <p className="mt-2 max-w-2xl text-sm font-semibold text-amber-800">
+                            This mock test loaded, but its listening content is not in the expected IELTS section format. Please choose another listening mock or regenerate this one from the admin panel.
+                          </p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
                   {/* Audio availability notice for unsupported browsers */}
                   {!audioSupported && (
                     <div className="flex items-center gap-3 bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 text-amber-800">
@@ -3067,7 +3124,7 @@ export default function FullMockTestPage() {
         </div>
       )}
 
-      {navKeys.length === 0 && test && (
+      {navKeys.length === 0 && test && !objectiveSectionMissingQuestions && (
         <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t-2 border-border p-8 shadow-[0_-10px_50px_rgba(0,0,0,0.1)] z-50 flex justify-center">
           <Button size="lg" onClick={() => submitSection()}
             className={`min-w-[320px] ${currentSection.bg} text-white hover:opacity-90 font-black text-2xl py-10 rounded-[40px] shadow-2xl shadow-indigo-500/30 scale-110 active:scale-100 transition-all`}>
