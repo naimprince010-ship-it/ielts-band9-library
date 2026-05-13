@@ -14,6 +14,7 @@ interface GenerateRequest {
   difficulty?: 'easy' | 'medium' | 'hard';
   testType?: 'academic' | 'general';
   provider?: AIProvider;
+  repairInstructions?: string;
   passageNumber?: number; // 1, 2, or 3 for reading
   sectionNumber?: number; // 1, 2, 3, or 4 for listening
   taskNumber?: number;    // 1 or 2 for writing
@@ -727,6 +728,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const sectionNumber = body.sectionNumber;
     const taskNumber = body.taskNumber;
     const partNumber = body.partNumber;
+    const repairInstructions = typeof body.repairInstructions === 'string' ? body.repairInstructions.trim() : '';
 
     // Auto-select available provider
     let provider = requestedProvider;
@@ -784,6 +786,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         break;
       default:
         return res.status(400).json({ error: 'Invalid module type' });
+    }
+
+    if (repairInstructions) {
+      prompt += `\n\nREPAIR INSTRUCTIONS FROM VALIDATION:\n${repairInstructions}\n\nRegenerate the JSON from scratch. Do not explain. Return ONLY the corrected JSON object.`;
     }
 
     const rawResponse = provider === 'gemini'

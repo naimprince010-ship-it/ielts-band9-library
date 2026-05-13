@@ -1433,6 +1433,40 @@ function repairWritingTest(test: WritingTest, topic: string): WritingTest {
   return { ...test, tasks: tasks as WritingTest['tasks'] };
 }
 
+function summarizeGeneratedQuestionProblems(
+  questions: AIQuestion[] | undefined,
+  expectedCount: number,
+): string[] {
+  const problems: string[] = [];
+  const list = Array.isArray(questions) ? questions : [];
+  if (list.length !== expectedCount) problems.push(`must contain exactly ${expectedCount} questions, found ${list.length}`);
+  list.forEach((q, index) => {
+    const number = index + 1;
+    if (!String(q.correctAnswer ?? '').trim()) problems.push(`Q${number} is missing correctAnswer`);
+    if (!String(q.questionText ?? '').trim()) problems.push(`Q${number} is missing questionText`);
+    if (q.groupId && !q.tableData && !q.summaryData) {
+      const hasMaster = list.some(other => other.groupId === q.groupId && (other.tableData || other.summaryData));
+      if (!hasMaster) problems.push(`group ${q.groupId} has no master question with tableData or summaryData`);
+    }
+    if (q.tableData) {
+      const table = q.tableData as { headers?: unknown; rows?: unknown };
+      if (!Array.isArray(table.headers) || table.headers.length === 0) problems.push(`Q${number} tableData needs headers`);
+      if (!Array.isArray(table.rows) || table.rows.length === 0) problems.push(`Q${number} tableData needs rows`);
+    }
+  });
+  return [...new Set(problems)].slice(0, 8);
+}
+
+function summarizeWritingTaskProblems(task: Record<string, unknown>, taskNumber: number): string[] {
+  const problems: string[] = [];
+  if (!String(task.prompt ?? '').trim()) problems.push(`Task ${taskNumber} is missing prompt`);
+  if (!String(task.sampleAnswer ?? '').trim()) problems.push(`Task ${taskNumber} is missing sampleAnswer`);
+  if (taskNumber === 1 && !extractTask1Visuals(task)) {
+    problems.push('Academic Task 1 must include exactly one renderable visual field: chartData, tableData, processData, or mapData');
+  }
+  return problems;
+}
+
 function getAIReadingPassages(content: unknown): Array<Record<string, unknown> & { questions?: AIQuestion[] }> {
   const aiContent = content as {
     passages?: Array<Record<string, unknown> & { questions?: AIQuestion[] }>;
@@ -3448,7 +3482,7 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
   const [progress, setProgress] = useState<string>('');
   const [error, setError] = useState<string>('');
 
-  const generateModule = async (moduleType: string, index?: number) => {
+  const generateModule = async (moduleType: string, index?: number, repairInstructions?: string) => {
     let label = moduleType;
     if (index) {
       if (moduleType === 'reading') label = `reading (Passage ${index})`;
@@ -3457,7 +3491,7 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
       else if (moduleType === 'speaking') label = `speaking (Part ${index})`;
     }
     
-    setProgress(`Generating ${label} module... \n(This may take 15-30 seconds)`);
+    setProgress(`${repairInstructions ? 'Repairing' : 'Generating'} ${label} module... \n(This may take 15-30 seconds)`);
     const response = await fetch('/api/generate-content', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -3470,7 +3504,8 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
         passageNumber: moduleType === 'reading' ? index : undefined,
         sectionNumber: moduleType === 'listening' ? index : undefined,
         taskNumber: moduleType === 'writing' ? index : undefined,
-        partNumber: moduleType === 'speaking' ? index : undefined
+        partNumber: moduleType === 'speaking' ? index : undefined,
+        repairInstructions
       })
     });
     const rawText = await response.text();
@@ -3488,6 +3523,46 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
     return data.content;
   };
 
+  const generateReadingPassage = async (passageNumber: number) => {
+    const expected = passageNumber === 3 ? 14 : 13;
+    let content = await generateModule('reading', passageNumber);
+    const problems = summarizeGeneratedQuestionProblems((content as { questions?: AIQuestion[] }).questions, expected);
+    if (problems.length > 0) {
+      content = await generateModule(
+        'reading',
+        passageNumber,
+        `Passage ${passageNumber} failed validation: ${problems.join('; ')}. Generate exactly ${expected} source-based questions with non-empty correctAnswer for every question. For grouped completion questions, include a master question containing tableData or summaryData with [Qn] placeholders.`,
+      );
+    }
+    return content;
+  };
+
+  const generateListeningSection = async (sectionNumber: number) => {
+    let content = await generateModule('listening', sectionNumber);
+    const problems = summarizeGeneratedQuestionProblems((content as { questions?: AIQuestion[] }).questions, 10);
+    if (problems.length > 0) {
+      content = await generateModule(
+        'listening',
+        sectionNumber,
+        `Section ${sectionNumber} failed validation: ${problems.join('; ')}. Generate exactly 10 transcript-based questions with non-empty correctAnswer for every question. For grouped completion questions, include a master question containing tableData or summaryData with [Qn] placeholders.`,
+      );
+    }
+    return content;
+  };
+
+  const generateWritingTask = async (taskNumber: number) => {
+    let content = await generateModule('writing', taskNumber);
+    const problems = summarizeWritingTaskProblems(content as Record<string, unknown>, taskNumber);
+    if (problems.length > 0) {
+      content = await generateModule(
+        'writing',
+        taskNumber,
+        `Writing Task ${taskNumber} failed validation: ${problems.join('; ')}. Generate a complete IELTS Academic writing task. Task 1 must include a renderable visual and a 160-200 word sample answer; Task 2 must include a 280-320 word sample answer.`,
+      );
+    }
+    return content;
+  };
+
   const handleGenerate = async () => {
     if (!topic.trim()) { setError('Please enter a topic'); return; }
     setIsGenerating(true); setError('');
@@ -3497,7 +3572,7 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const readingPassagesData: any[] = [];
       for (let i = 1; i <= 3; i++) {
-        const pData = await generateModule('reading', i);
+        const pData = await generateReadingPassage(i);
         readingPassagesData.push(pData);
       }
       
@@ -3568,7 +3643,7 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
       // 2. Listening (Generate 4 sections one by one)
       const listeningSectionsData = [];
       for (let i = 1; i <= 4; i++) {
-        const sData = await generateModule('listening', i);
+        const sData = await generateListeningSection(i);
         listeningSectionsData.push(sData);
       }
       
@@ -3636,7 +3711,7 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
       // 3. Writing (Generate 2 tasks one by one)
       const writingTasksData = [];
       for (let i = 1; i <= 2; i++) {
-        const tData = await generateModule('writing', i);
+        const tData = await generateWritingTask(i);
         writingTasksData.push(tData);
       }
       
