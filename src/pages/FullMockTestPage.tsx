@@ -2891,7 +2891,7 @@ export default function FullMockTestPage() {
                     </CardHeader>
                     <CardContent className="p-6 sm:p-8">
                       <div className="grid gap-6 lg:grid-cols-[minmax(280px,0.95fr)_minmax(360px,1.05fr)] xl:grid-cols-[minmax(360px,0.95fr)_minmax(520px,1.05fr)] 2xl:grid-cols-[minmax(420px,0.9fr)_minmax(620px,1.1fr)] lg:items-start">
-                        <div className="space-y-6 lg:sticky lg:top-28 lg:self-start lg:pr-2">
+                        <div className="space-y-6 lg:sticky lg:top-28 lg:max-h-[calc(100vh-12rem)] lg:self-start lg:overflow-y-auto lg:overscroll-contain lg:rounded-[28px] lg:pb-3 lg:pr-3 [scrollbar-gutter:stable]">
                       {/* Task prompt */}
                       <div className="bg-emerald-50/50 border-2 border-emerald-100 rounded-3xl p-6 text-base font-medium text-emerald-900/80 leading-relaxed">
                         {task1?.prompt
@@ -2941,7 +2941,7 @@ export default function FullMockTestPage() {
                     </CardHeader>
                     <CardContent className="p-6 sm:p-8">
                       <div className="grid gap-6 lg:grid-cols-[minmax(280px,0.95fr)_minmax(360px,1.05fr)] xl:grid-cols-[minmax(360px,0.95fr)_minmax(520px,1.05fr)] 2xl:grid-cols-[minmax(420px,0.9fr)_minmax(620px,1.1fr)] lg:items-start">
-                        <div className="lg:sticky lg:top-28 lg:self-start lg:pr-2">
+                        <div className="lg:sticky lg:top-28 lg:max-h-[calc(100vh-12rem)] lg:self-start lg:overflow-y-auto lg:overscroll-contain lg:rounded-[28px] lg:pb-3 lg:pr-3 [scrollbar-gutter:stable]">
                       <div className="bg-emerald-50/50 border-2 border-emerald-100 rounded-3xl p-6 text-base font-medium text-emerald-900/80 leading-relaxed">
                         {task2?.prompt
                           ? <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(displayText(task2.prompt)) }} />
