@@ -24,7 +24,7 @@ function choiceQuestion(questionNumber, questionText, options, correctAnswer, ex
   return {
     id: `q-${slug}-${questionNumber}`,
     questionNumber,
-    type: 'multiple-choice',
+    type: 'mcq',
     questionText,
     options,
     correctAnswer,

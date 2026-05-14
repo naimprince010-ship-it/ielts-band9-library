@@ -55,6 +55,12 @@ function wordCount(value: string): number {
   return stripHtml(value).split(/\s+/).filter(Boolean).length;
 }
 
+function canonicalQuestionType(type: string | undefined): string {
+  const normalized = (type ?? '').toLowerCase().replace(/[\s_]/g, '-');
+  if (normalized === 'multiple-choice' || normalized === 'multiple-choice-question') return 'mcq';
+  return normalized;
+}
+
 function validateGroupedQuestions(
   questions: Array<ReadingQuestion | ListeningQuestion>,
   path: string,
@@ -105,13 +111,14 @@ function validateQuestion(
   validTypes: Set<string>,
   issues: ValidationIssue[],
 ) {
+  const canonicalType = canonicalQuestionType(q.type);
   if (!q.questionText?.trim()) issues.push(issue('error', `${path}.questionText`, 'Question text is missing.'));
   if (!q.correctAnswer?.trim()) issues.push(issue('error', `${path}.correctAnswer`, 'Correct answer is missing.'));
-  if (!validTypes.has(q.type)) issues.push(issue('error', `${path}.type`, `Unsupported question type: ${q.type || 'blank'}.`));
-  if (q.type === 'mcq' && (!Array.isArray(q.options) || q.options.length < 3)) {
+  if (!validTypes.has(canonicalType)) issues.push(issue('error', `${path}.type`, `Unsupported question type: ${q.type || 'blank'}.`));
+  if (canonicalType === 'mcq' && (!Array.isArray(q.options) || q.options.length < 3)) {
     issues.push(issue('error', `${path}.options`, 'MCQ needs at least 3 answer options.'));
   }
-  if ((q.type === 'table-completion' || q.type === 'summary-completion') && !q.groupId) {
+  if ((canonicalType === 'table-completion' || canonicalType === 'summary-completion') && !q.groupId) {
     issues.push(issue('warning', `${path}.groupId`, 'Completion question should use groupId so frontend can render it as a group.'));
   }
 }

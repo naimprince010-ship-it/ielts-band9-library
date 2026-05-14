@@ -177,6 +177,15 @@ function normalizeQuestionType(
   return validTypes[0];
 }
 
+function isQuestionTypeInvalid(
+  rawType: string | undefined,
+  questionText: string | undefined,
+  validTypes: string[],
+): boolean {
+  if (!rawType?.trim()) return true;
+  return !validTypes.includes(normalizeQuestionType(rawType, questionText ?? '', validTypes));
+}
+
 // ── Question-text fix utilities ───────────────────────────────────────────────
 
 /** Returns true if the question text is a generic instruction rather than a specific question. */
@@ -800,7 +809,8 @@ export function MockTestManagement() {
     if (test.module_type === 'listening') {
       const lData = data as ListeningTest;
       const hasPerSectionAudio = Array.isArray(lData.sections) && lData.sections.some(s => s.sectionAudioUrl);
-      if (!lData.audioUrl && !hasPerSectionAudio) return { status: 'incomplete', message: 'Missing Audio' };
+      const hasTranscriptFallback = Array.isArray(lData.sections) && lData.sections.some(s => s.transcript?.trim());
+      if (!lData.audioUrl && !hasPerSectionAudio && !hasTranscriptFallback) return { status: 'incomplete', message: 'Missing Audio' };
     }
     if (test.module_type === 'writing') {
       const wData = normalizeWritingTestFromDb(data);
@@ -823,14 +833,14 @@ export function MockTestManagement() {
         const passages = Array.isArray(rData.passages) ? rData.passages : [];
         const validValues = READING_QUESTION_TYPES.map(t => t.value);
         return passages.reduce((sum, p) =>
-          sum + (Array.isArray(p.questions) ? p.questions : []).filter(q => !q.type || !validValues.includes(q.type as string)).length, 0);
+          sum + (Array.isArray(p.questions) ? p.questions : []).filter(q => isQuestionTypeInvalid(q.type as string | undefined, q.questionText, validValues)).length, 0);
       }
       if (test.module_type === 'listening') {
         const lData = data as ListeningTest;
         const sections = Array.isArray(lData.sections) ? lData.sections : [];
         const validValues = LISTENING_QUESTION_TYPES.map(t => t.value);
         return sections.reduce((sum, s) =>
-          sum + (Array.isArray(s.questions) ? s.questions : []).filter(q => !q.type || !validValues.includes(q.type as string)).length, 0);
+          sum + (Array.isArray(s.questions) ? s.questions : []).filter(q => isQuestionTypeInvalid(q.type as string | undefined, q.questionText, validValues)).length, 0);
       }
       return 0;
     } catch {
@@ -1973,7 +1983,7 @@ function ReadingTestBuilder({
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-medium">Questions ({passage.questions.length})</h4>
                       <div className="flex gap-2">
-                        {passage.questions.some(q => !q.type || !READING_QUESTION_TYPES.some(t => t.value === q.type)) && (
+                        {passage.questions.some(q => isQuestionTypeInvalid(q.type as string | undefined, q.questionText, READING_QUESTION_TYPES.map(t => t.value))) && (
                           <Button
                             variant="outline"
                             size="sm"
@@ -2481,7 +2491,7 @@ function ListeningTestBuilder({
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-medium">Questions ({section.questions.length})</h4>
                       <div className="flex gap-2">
-                        {section.questions.some(q => !q.type || !LISTENING_QUESTION_TYPES.some(t => t.value === q.type)) && (
+                        {section.questions.some(q => isQuestionTypeInvalid(q.type as string | undefined, q.questionText, LISTENING_QUESTION_TYPES.map(t => t.value))) && (
                           <Button
                             variant="outline"
                             size="sm"
