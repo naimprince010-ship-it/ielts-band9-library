@@ -1328,6 +1328,10 @@ function fallbackAnswer(questionNumber: number): string {
   return `answer ${questionNumber}`;
 }
 
+function countWords(value: unknown): number {
+  return String(value ?? '').trim().split(/\s+/).filter(Boolean).length;
+}
+
 function normalizeCompletionTableRows(rows: unknown): { cells: string[] }[] {
   if (!Array.isArray(rows)) return [];
   return rows
@@ -1438,9 +1442,31 @@ function repairWritingTest(test: WritingTest, topic: string): WritingTest {
     task1.mapData = undefined;
   }
   if (task1 && (!task1.sampleAnswer || task1.sampleAnswer.split(/\s+/).filter(Boolean).length < 140)) {
-    task1.sampleAnswer = `The bar chart compares survey responses about ${topic || 'the topic'} among young adults, working adults, and older adults. Overall, young adults report the strongest impact, while older adults are less likely to describe the issue as highly influential. For young adults, 68 percent selected high impact, compared with 54 percent of working adults and 39 percent of older adults. Moderate impact responses show the opposite pattern, rising from 22 percent among young adults to 31 percent for working adults and 36 percent for older adults. This suggests that the issue is recognised across all age groups, but its perceived intensity declines with age. A further point is that the combined share of high and moderate responses remains substantial in every group, indicating that the topic has broad relevance rather than being limited to a single demographic.`;
+    task1.sampleAnswer = `The bar chart compares survey responses about ${topic || 'the topic'} among young adults, working adults, and older adults. Overall, young adults report the strongest impact, while older adults are less likely to describe the issue as highly influential. For young adults, 68 percent selected high impact, compared with 54 percent of working adults and 39 percent of older adults. Moderate impact responses show the opposite pattern, rising from 22 percent among young adults to 31 percent for working adults and 36 percent for older adults. This suggests that the issue is recognised across all age groups, but its perceived intensity declines with age. A further point is that the combined share of high and moderate responses remains substantial in every group, indicating that the topic has broad relevance rather than being limited to a single demographic. The difference between high and moderate responses is also widest among younger people, at 46 percentage points, whereas it narrows to only three points among older adults. This pattern indicates a gradual shift from strong enthusiasm to more cautious interest.`;
+  }
+  const task2 = tasks.find(task => task.taskNumber === 2);
+  if (task2 && (!task2.sampleAnswer || task2.sampleAnswer.split(/\s+/).filter(Boolean).length < 240)) {
+    task2.sampleAnswer = `The role of ${topic || 'this issue'} in modern society is often debated because it affects access, quality, and long-term opportunity. Some people argue that new systems can deliver services as effectively as traditional approaches, especially when they are cheaper, flexible, and available to people who live far from major institutions. In education, for example, digital platforms allow learners to review material repeatedly, practise independently, and receive immediate feedback. These advantages can be especially important for adults with jobs or students who need extra support outside normal class hours.
+
+However, traditional face-to-face support still has clear strengths. Teachers, mentors, and community institutions can respond to confusion, encourage participation, and judge complex work in a way that automated systems often cannot. Human interaction also builds confidence and communication skills, which are difficult to develop through isolated online study. In addition, not every learner has a reliable device, a quiet place to work, or strong internet access, so a purely digital model may widen inequality.
+
+In my view, the best solution is a balanced one. Technology should expand access and provide useful practice, but it should not replace expert guidance or social learning. A carefully designed blended approach can combine flexibility with personal support, making the overall experience more effective than either model alone.`;
   }
   return { ...test, tasks: tasks as WritingTest['tasks'] };
+}
+
+function summarizeReadingPassageProblems(
+  passage: Record<string, unknown> & { questions?: AIQuestion[] },
+  expectedCount: number,
+  passageNumber: number,
+): string[] {
+  const problems = summarizeGeneratedQuestionProblems(passage.questions, expectedCount);
+  const text = String(passage.textContent ?? passage.content ?? '');
+  const words = countWords(text);
+  if (words < 650) {
+    problems.push(`Passage ${passageNumber} must be 650-900 words for IELTS Academic Reading, found ${words}`);
+  }
+  return [...new Set(problems)].slice(0, 8);
 }
 
 function summarizeGeneratedQuestionProblems(
@@ -1471,6 +1497,9 @@ function summarizeWritingTaskProblems(task: Record<string, unknown>, taskNumber:
   const problems: string[] = [];
   if (!String(task.prompt ?? '').trim()) problems.push(`Task ${taskNumber} is missing prompt`);
   if (!String(task.sampleAnswer ?? '').trim()) problems.push(`Task ${taskNumber} is missing sampleAnswer`);
+  const sampleWords = countWords(task.sampleAnswer);
+  if (taskNumber === 1 && sampleWords > 0 && sampleWords < 160) problems.push(`Task 1 sampleAnswer must be 160-200 words, found ${sampleWords}`);
+  if (taskNumber === 2 && sampleWords > 0 && sampleWords < 280) problems.push(`Task 2 sampleAnswer must be 280-320 words, found ${sampleWords}`);
   if (taskNumber === 1 && !extractTask1Visuals(task)) {
     problems.push('Academic Task 1 must include exactly one renderable visual field: chartData, tableData, processData, or mapData');
   }
@@ -3536,13 +3565,25 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
   const generateReadingPassage = async (passageNumber: number) => {
     const expected = passageNumber === 3 ? 14 : 13;
     let content = await generateModule('reading', passageNumber);
-    const problems = summarizeGeneratedQuestionProblems((content as { questions?: AIQuestion[] }).questions, expected);
+    let problems = summarizeReadingPassageProblems(
+      content as Record<string, unknown> & { questions?: AIQuestion[] },
+      expected,
+      passageNumber,
+    );
     if (problems.length > 0) {
       content = await generateModule(
         'reading',
         passageNumber,
-        `Passage ${passageNumber} failed validation: ${problems.join('; ')}. Generate exactly ${expected} source-based questions with non-empty correctAnswer for every question. For grouped completion questions, include a master question containing tableData or summaryData with [Qn] placeholders.`,
+        `Passage ${passageNumber} failed validation: ${problems.join('; ')}. Generate one IELTS Academic Reading passage of 650-900 words with exactly ${expected} source-based questions and non-empty correctAnswer for every question. For grouped completion questions, include a master question containing tableData or summaryData with [Qn] placeholders.`,
       );
+      problems = summarizeReadingPassageProblems(
+        content as Record<string, unknown> & { questions?: AIQuestion[] },
+        expected,
+        passageNumber,
+      );
+      if (problems.length > 0) {
+        throw new Error(`Reading Passage ${passageNumber} still failed IELTS quality checks: ${problems.join('; ')}`);
+      }
     }
     return content;
   };
@@ -3562,15 +3603,39 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
 
   const generateWritingTask = async (taskNumber: number) => {
     let content = await generateModule('writing', taskNumber);
-    const problems = summarizeWritingTaskProblems(content as Record<string, unknown>, taskNumber);
+    let problems = summarizeWritingTaskProblems(content as Record<string, unknown>, taskNumber);
     if (problems.length > 0) {
       content = await generateModule(
         'writing',
         taskNumber,
         `Writing Task ${taskNumber} failed validation: ${problems.join('; ')}. Generate a complete IELTS Academic writing task. Task 1 must include a renderable visual and a 160-200 word sample answer; Task 2 must include a 280-320 word sample answer.`,
       );
+      problems = summarizeWritingTaskProblems(content as Record<string, unknown>, taskNumber);
+      if (problems.length > 0) {
+        throw new Error(`Writing Task ${taskNumber} still failed IELTS quality checks: ${problems.join('; ')}`);
+      }
     }
     return content;
+  };
+
+  const generateSectionAudioUrl = async (section: ListeningSection): Promise<string | undefined> => {
+    const text = section.transcript?.trim();
+    if (!text || text.length > 4000) return undefined;
+    try {
+      const response = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, voice: 'alloy', provider: 'openai' }),
+      });
+      if (!response.ok) return undefined;
+      const result = await response.json();
+      return typeof result.audioUrl === 'string' && result.audioUrl.trim()
+        ? result.audioUrl.trim()
+        : undefined;
+    } catch (err) {
+      console.warn(`Could not generate audio for listening section ${section.sectionNumber}`, err);
+      return undefined;
+    }
   };
 
   const handleGenerate = async () => {
@@ -3717,6 +3782,17 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
         };
       });
       listeningTest.totalQuestions = listeningTest.sections.reduce((sum, section) => sum + section.questions.length, 0);
+      setProgress('Generating listening audio files...');
+      listeningTest.sections = await Promise.all(
+        listeningTest.sections.map(async (section) => {
+          const sectionAudioUrl = await generateSectionAudioUrl(section as ListeningSection);
+          return sectionAudioUrl ? { ...section, sectionAudioUrl } : section;
+        }),
+      );
+      listeningTest.audioDuration = listeningTest.sections.reduce(
+        (sum, section) => sum + Math.ceil((section.transcript?.length ?? 0) / 15),
+        0,
+      );
 
       // 3. Writing (Generate 2 tasks one by one)
       const writingTasksData = [];
