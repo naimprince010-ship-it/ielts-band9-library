@@ -1,7 +1,18 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+const CANONICAL_SUPABASE_URL = 'https://fjzqtzqflsqjevrurgbm.supabase.co';
+const CANONICAL_SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_iMlIYFK8PPf4o6s-wjN79w_VWL-bFRG';
+const LEGACY_SUPABASE_PROJECT_REF = 'yzeiloqctrgpzuzkciiv';
+
+const envSupabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+const envSupabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+const shouldUseCanonicalProject =
+  !envSupabaseUrl || envSupabaseUrl.includes(LEGACY_SUPABASE_PROJECT_REF);
+
+const supabaseUrl = shouldUseCanonicalProject ? CANONICAL_SUPABASE_URL : envSupabaseUrl;
+const supabaseAnonKey = shouldUseCanonicalProject
+  ? CANONICAL_SUPABASE_PUBLISHABLE_KEY
+  : envSupabaseAnonKey;
 
 export const isSupabaseConfigured = () => {
   return supabaseUrl !== '' && supabaseAnonKey !== '';
