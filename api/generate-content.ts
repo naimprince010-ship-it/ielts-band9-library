@@ -21,6 +21,27 @@ interface GenerateRequest {
   partNumber?: number;    // 1, 2, or 3 for speaking
 }
 
+const IELTS_ENGINE_QUALITY_SPEC = `
+PRODUCTION IELTS QUALITY CONTRACT:
+- Output must be a single JSON object matching the requested schema.
+- Use canonical question types only: mcq, fill-blank, true-false-not-given, yes-no-not-given, matching-headings, matching-information, matching-features, matching, map-labeling, table-completion, summary-completion, sentence-completion, short-answer.
+- Every question must have a specific questionText, non-empty correctAnswer, and source-grounded explanation when possible.
+- MCQ questions must include 4 plausible options and correctAnswer must exactly match one option.
+- Reading single passage output must contain 650-900 words and the exact requested question count.
+- Listening single section output must contain exactly 10 questions, a natural transcript, and IELTS section-appropriate context.
+- Writing Task 1 sample answers must be 160-200 words; Writing Task 2 sample answers must be 280-320 words.
+- Speaking Part 1 needs at least 4 familiar-topic questions; Part 2 needs one cue card with 4 bullets; Part 3 needs at least 3 abstract follow-up questions.
+
+IELTS PATTERN BANK:
+- Reading Passage 1: easier factual/information matching mix, 13 questions.
+- Reading Passage 2: analytical passage with summary/table completion, 13 questions.
+- Reading Passage 3: harder academic argument with inference/detail questions, 14 questions.
+- Listening Section 1: social transaction, forms/notes and simple MCQ.
+- Listening Section 2: public service monologue, notes/map/table.
+- Listening Section 3: academic discussion between 2-3 speakers.
+- Listening Section 4: academic lecture with note/summary completion.
+`;
+
 const WRITING_TASK_PROMPT = (topic: string, testType: string, taskNumber: number) => `
 You are an IELTS exam content creator. Generate Task ${taskNumber} for an IELTS ${testType} writing test.
 
@@ -31,6 +52,17 @@ Generate a JSON response with this exact structure:
   "taskNumber": ${taskNumber},
   "title": "Task ${taskNumber}: ${taskNumber === 1 ? (testType === 'academic' ? 'Report Writing' : 'Letter Writing') : 'Essay Writing'}",
   "prompt": "<p class='mb-4'>Task prompt here...</p><p class='mb-4'><strong>Instruction in bold.</strong></p><p class='text-gray-600'>Write at least ${taskNumber === 1 ? '150' : '250'} words.</p>",
+  ${taskNumber === 1 && testType === 'academic' ? `"chartData": {
+    "type": "line",
+    "title": "A clear IELTS Task 1 visual title",
+    "description": "What the visual shows",
+    "labels": ["2010", "2015", "2020", "2025"],
+    "unit": "%",
+    "datasets": [
+      { "label": "Category A", "data": [20, 35, 48, 62] },
+      { "label": "Category B", "data": [55, 50, 42, 33] }
+    ]
+  },` : ''}
   "tips": [
     "Tip 1",
     "Tip 2",
@@ -40,10 +72,13 @@ Generate a JSON response with this exact structure:
 }
 
 Requirements:
-- Task 1 Academic: Chart, graph, table, or process.
+- Task 1 Academic: include EXACTLY ONE renderable visual field: chartData, tableData, processData, or mapData. The visual data must match the prompt.
 - Task 1 General: Formal/Informal letter.
 - Task 2: Opinion/Discussion essay.
+- Task 1 sampleAnswer must be 160-200 words.
+- Task 2 sampleAnswer must be 280-320 words.
 Return ONLY valid JSON.
+${IELTS_ENGINE_QUALITY_SPEC}
 `;
 
 const SPEAKING_PART_PROMPT = (topic: string, difficulty: string, partNumber: number) => `
@@ -565,6 +600,7 @@ async function callOpenAI(prompt: string): Promise<string> {
           ],
           temperature: 0.7,
           max_tokens: 8000,
+          response_format: { type: 'json_object' },
         }),
       });
 
@@ -693,6 +729,110 @@ function parseAiJson(rawResponse: string): unknown {
   }
 }
 
+function stripHtml(value: unknown): string {
+  return String(value ?? '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function countWords(value: unknown): number {
+  const text = stripHtml(value);
+  return text ? text.split(/\s+/).filter(Boolean).length : 0;
+}
+
+function canonicalQuestionType(value: unknown): string {
+  const type = String(value ?? '').toLowerCase().replace(/[\s_]/g, '-');
+  if (type === 'multiple-choice' || type === 'multiple-choice-question') return 'mcq';
+  if (type === 'note-completion' || type === 'form-completion' || type === 'flow-chart-completion') return 'fill-blank';
+  return type;
+}
+
+function questionsFrom(content: unknown): Array<Record<string, unknown>> {
+  const obj = content as Record<string, unknown>;
+  return Array.isArray(obj?.questions) ? obj.questions as Array<Record<string, unknown>> : [];
+}
+
+function validateQuestions(
+  questions: Array<Record<string, unknown>>,
+  expectedCount: number,
+  validTypes: Set<string>,
+): string[] {
+  const issues: string[] = [];
+  if (questions.length !== expectedCount) issues.push(`expected exactly ${expectedCount} questions, found ${questions.length}`);
+  questions.forEach((q, index) => {
+    const label = `Q${index + 1}`;
+    const type = canonicalQuestionType(q.type);
+    if (!validTypes.has(type)) issues.push(`${label} has invalid type "${String(q.type ?? '')}"`);
+    if (!String(q.questionText ?? '').trim()) issues.push(`${label} missing questionText`);
+    if (!String(q.correctAnswer ?? '').trim()) issues.push(`${label} missing correctAnswer`);
+    if (type === 'mcq') {
+      const options = Array.isArray(q.options) ? q.options.map(String) : [];
+      if (options.length < 4) issues.push(`${label} MCQ needs at least 4 options`);
+      if (options.length >= 4 && !options.includes(String(q.correctAnswer ?? ''))) {
+        issues.push(`${label} MCQ correctAnswer must exactly match an option`);
+      }
+    }
+  });
+  return issues;
+}
+
+function validateGeneratedContent(content: unknown, request: Partial<GenerateRequest>): string[] {
+  const moduleType = request.moduleType;
+  const issues: string[] = [];
+  const readingTypes = new Set(['mcq', 'fill-blank', 'true-false-not-given', 'yes-no-not-given', 'matching-headings', 'matching-information', 'matching-features', 'sentence-completion', 'summary-completion', 'diagram-labeling', 'short-answer']);
+  const listeningTypes = new Set(['mcq', 'fill-blank', 'matching', 'map-labeling', 'table-completion', 'summary-completion', 'sentence-completion', 'short-answer']);
+  const obj = content as Record<string, unknown>;
+
+  if (moduleType === 'reading') {
+    if (request.passageNumber) {
+      const expected = request.passageNumber === 3 ? 14 : 13;
+      const words = countWords(obj.textContent ?? obj.content);
+      if (words < 650 || words > 900) issues.push(`reading passage must be 650-900 words, found ${words}`);
+      issues.push(...validateQuestions(questionsFrom(content), expected, readingTypes));
+    } else {
+      const passages = Array.isArray(obj.passages) ? obj.passages as Array<Record<string, unknown>> : [];
+      if (passages.length !== 3) issues.push(`reading test needs 3 passages, found ${passages.length}`);
+    }
+  }
+
+  if (moduleType === 'listening') {
+    if (request.sectionNumber) {
+      const transcriptWords = countWords(obj.transcript);
+      if (transcriptWords < 120) issues.push(`listening section transcript looks short, found ${transcriptWords} words`);
+      issues.push(...validateQuestions(questionsFrom(content), 10, listeningTypes));
+    } else {
+      const sections = Array.isArray(obj.sections) ? obj.sections as Array<Record<string, unknown>> : [];
+      if (sections.length !== 4) issues.push(`listening test needs 4 sections, found ${sections.length}`);
+    }
+  }
+
+  if (moduleType === 'writing') {
+    if (request.taskNumber) {
+      const sampleWords = countWords(obj.sampleAnswer);
+      if (!String(obj.prompt ?? '').trim()) issues.push(`writing task ${request.taskNumber} missing prompt`);
+      if (request.taskNumber === 1) {
+        const hasVisual = Boolean(obj.chartData || obj.tableData || obj.processData || obj.mapData || obj.imageUrl);
+        if (request.testType !== 'general' && !hasVisual) issues.push('academic writing task 1 needs one renderable visual');
+        if (sampleWords < 160 || sampleWords > 220) issues.push(`task 1 sampleAnswer should be 160-200 words, found ${sampleWords}`);
+      }
+      if (request.taskNumber === 2 && (sampleWords < 280 || sampleWords > 340)) {
+        issues.push(`task 2 sampleAnswer should be 280-320 words, found ${sampleWords}`);
+      }
+    }
+  }
+
+  if (moduleType === 'speaking') {
+    if (request.partNumber === 1 && questionsFrom(content).length < 4) issues.push('speaking part 1 needs at least 4 questions');
+    if (request.partNumber === 2) {
+      const cueCard = obj.cueCard as Record<string, unknown> | undefined;
+      if (!cueCard?.topic || !Array.isArray(cueCard.bulletPoints) || cueCard.bulletPoints.length < 4) {
+        issues.push('speaking part 2 needs cueCard topic and 4 bullet points');
+      }
+    }
+    if (request.partNumber === 3 && questionsFrom(content).length < 3) issues.push('speaking part 3 needs at least 3 questions');
+  }
+
+  return [...new Set(issues)].slice(0, 10);
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Always return JSON
   res.setHeader('Content-Type', 'application/json');
@@ -788,11 +928,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(400).json({ error: 'Invalid module type' });
     }
 
+    prompt += `\n\n${IELTS_ENGINE_QUALITY_SPEC}`;
+
     if (repairInstructions) {
       prompt += `\n\nREPAIR INSTRUCTIONS FROM VALIDATION:\n${repairInstructions}\n\nRegenerate the JSON from scratch. Do not explain. Return ONLY the corrected JSON object.`;
     }
 
-    const rawResponse = provider === 'gemini'
+    let rawResponse = provider === 'gemini'
       ? await callGemini(prompt)
       : await callOpenAI(prompt);
     let parsedContent;
@@ -802,6 +944,55 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(500).json({
         error: 'Failed to parse AI response',
         rawResponse: cleanJsonResponse(rawResponse).substring(0, 500)
+      });
+    }
+
+    let qualityIssues = validateGeneratedContent(parsedContent, {
+      moduleType,
+      topic,
+      difficulty,
+      testType,
+      passageNumber,
+      sectionNumber,
+      taskNumber,
+      partNumber,
+    });
+
+    if (qualityIssues.length > 0) {
+      const retryPrompt = `${prompt}
+
+QUALITY VALIDATION FAILED:
+- ${qualityIssues.join('\n- ')}
+
+Regenerate the same requested JSON object from scratch. Fix every issue. Return ONLY valid JSON.`;
+      rawResponse = provider === 'gemini'
+        ? await callGemini(retryPrompt)
+        : await callOpenAI(retryPrompt);
+      try {
+        parsedContent = parseAiJson(rawResponse);
+        qualityIssues = validateGeneratedContent(parsedContent, {
+          moduleType,
+          topic,
+          difficulty,
+          testType,
+          passageNumber,
+          sectionNumber,
+          taskNumber,
+          partNumber,
+        });
+      } catch {
+        return res.status(500).json({
+          error: 'Failed to parse AI repair response',
+          rawResponse: cleanJsonResponse(rawResponse).substring(0, 500)
+        });
+      }
+    }
+
+    if (qualityIssues.length > 0) {
+      return res.status(422).json({
+        success: false,
+        error: 'AI content failed IELTS quality validation after retry',
+        qualityIssues,
       });
     }
 
