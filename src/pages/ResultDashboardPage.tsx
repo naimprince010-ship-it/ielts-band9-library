@@ -167,6 +167,7 @@ export default function ResultDashboardPage() {
   const [testSession, setTestSession] = useState<TestSession | null>(null);
   const [fullMockAttempts, setFullMockAttempts] = useState<FullMockAttempt[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [visibleHistoryCount, setVisibleHistoryCount] = useState(5);
 
   const loadFullMockAttempts = useCallback(async () => {
@@ -196,9 +197,11 @@ export default function ResultDashboardPage() {
 
       if (error) throw error;
       setFullMockAttempts((data || []) as FullMockAttempt[]);
+      setLoadError(false);
     } catch (err) {
       console.error('Failed to load full mock attempts:', err);
       setFullMockAttempts([]);
+      setLoadError(true);
     }
   }, [user]);
 
@@ -380,21 +383,27 @@ export default function ResultDashboardPage() {
   const pendingModules = testSession?.modules.filter(m => m.status === 'pending').length || 0;
   const latestFullMock = fullMockAttempts[0];
   const orderedFullMocks = [...fullMockAttempts].reverse();
-  const trendData = orderedFullMocks.map((attempt, index) => ({
-    name: `A${index + 1}`,
-    date: formatShortDate(attempt.completed_at),
-    overall: Number(attempt.overall_band || 0),
-    listening: attempt.listening_band ?? null,
-    reading: attempt.reading_band ?? null,
-    writing: attempt.writing_band ?? null,
-    speaking: attempt.speaking_band ?? null,
-  }));
+  // Exclude attempts with null/non-finite overall_band from the trend chart.
+  // Explicit null check is required: Number(null)===0 which is finite.
+  const trendData = orderedFullMocks
+    .filter(attempt => attempt.overall_band != null && Number.isFinite(Number(attempt.overall_band)))
+    .map((attempt, index) => ({
+      name: `A${index + 1}`,
+      date: formatShortDate(attempt.completed_at),
+      overall: Number(attempt.overall_band),
+      listening: attempt.listening_band ?? null,
+      reading: attempt.reading_band ?? null,
+      writing: attempt.writing_band ?? null,
+      speaking: attempt.speaking_band ?? null,
+    }));
   const bestFullMock = fullMockAttempts.reduce<FullMockAttempt | null>((best, attempt) => {
     if (!best) return attempt;
     return Number(attempt.overall_band) > Number(best.overall_band) ? attempt : best;
   }, null);
-  const averageOverall = fullMockAttempts.length
-    ? fullMockAttempts.reduce((sum, attempt) => sum + Number(attempt.overall_band || 0), 0) / fullMockAttempts.length
+  // Exclude null/non-finite overall_band values from the average
+  const validBandAttempts = fullMockAttempts.filter(a => a.overall_band != null && Number.isFinite(Number(a.overall_band)));
+  const averageOverall = validBandAttempts.length
+    ? validBandAttempts.reduce((sum, attempt) => sum + Number(attempt.overall_band), 0) / validBandAttempts.length
     : null;
   const previousFullMock = fullMockAttempts[1];
   const latestDelta = latestFullMock && previousFullMock
@@ -416,7 +425,9 @@ export default function ResultDashboardPage() {
     return Number(section.value) > Number(strongest.value) ? section : strongest;
   }, null);
   const targetBand = latestFullMock && Number(latestFullMock.overall_band) >= 7 ? 8 : 7;
-  const targetGap = latestFullMock ? Math.max(0, targetBand - Number(latestFullMock.overall_band || 0)) : null;
+  const targetGap = latestFullMock && latestFullMock.overall_band != null
+    ? Math.max(0, targetBand - Number(latestFullMock.overall_band))
+    : null;
   const visibleHistory = fullMockAttempts.slice(0, visibleHistoryCount);
 
   if (loading) {
@@ -426,6 +437,25 @@ export default function ResultDashboardPage() {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading results...</p>
         </div>
+      </div>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardContent className="p-8 text-center">
+            <AlertCircle className="mx-auto mb-4 h-10 w-10 text-rose-500" />
+            <h2 className="text-xl font-bold text-gray-900 mb-2">Could not load results</h2>
+            <p className="text-gray-600 mb-6">
+              There was a problem connecting to the database. Check your connection and try again.
+            </p>
+            <Button onClick={() => { setLoadError(false); loadAllResults(); }} className="w-full">
+              Retry
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -511,7 +541,11 @@ export default function ResultDashboardPage() {
                   <p className="text-sm font-semibold text-indigo-100">Latest Overall</p>
                   <Award className="h-5 w-5 text-indigo-100" />
                 </div>
-                <div className="mt-4 text-5xl font-bold">{formatBandScore(Number(latestFullMock.overall_band))}</div>
+                <div className="mt-4 text-5xl font-bold">
+                  {latestFullMock.overall_band != null && Number.isFinite(Number(latestFullMock.overall_band))
+                    ? formatBandScore(Number(latestFullMock.overall_band))
+                    : '--'}
+                </div>
                 <p className="mt-2 text-sm text-indigo-100">{formatShortDate(latestFullMock.completed_at)} attempt</p>
               </CardContent>
             </Card>
@@ -521,8 +555,10 @@ export default function ResultDashboardPage() {
                   <p className="text-sm font-semibold text-slate-500">Best Score</p>
                   <Target className="h-5 w-5 text-emerald-500" />
                 </div>
-                <div className={`mt-4 text-4xl font-bold ${bandTextClass(bestFullMock?.overall_band)}`}>
-                  {bestFullMock ? formatBandScore(Number(bestFullMock.overall_band)) : '--'}
+                <div className={`mt-4 text-4xl font-bold ${bandTextClass(bestFullMock?.overall_band ?? null)}`}>
+                  {bestFullMock && bestFullMock.overall_band != null && Number.isFinite(Number(bestFullMock.overall_band))
+                    ? formatBandScore(Number(bestFullMock.overall_band))
+                    : '--'}
                 </div>
                 <p className="mt-2 text-sm text-slate-500">{bestFullMock ? formatShortDate(bestFullMock.completed_at) : 'No best yet'}</p>
               </CardContent>
@@ -647,7 +683,7 @@ export default function ResultDashboardPage() {
           </Card>
         )}
 
-        {fullMockAttempts.length > 1 && (
+        {fullMockAttempts.length >= 1 && (
           <Card className="mb-8">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -673,8 +709,12 @@ export default function ResultDashboardPage() {
                           <div className="flex flex-wrap items-center gap-2">
                             <p className="font-bold text-slate-900">Attempt {fullMockAttempts.length - index}</p>
                             {index === 0 && <Badge variant="outline">Latest</Badge>}
-                            <Badge className={getBandScoreColor(Number(attempt.overall_band))}>
-                              Overall {formatBandScore(Number(attempt.overall_band))}
+                            <Badge className={attempt.overall_band != null && Number.isFinite(Number(attempt.overall_band))
+                              ? getBandScoreColor(Number(attempt.overall_band))
+                              : 'text-slate-500 bg-slate-100'}>
+                              Overall {attempt.overall_band != null && Number.isFinite(Number(attempt.overall_band))
+                                ? formatBandScore(Number(attempt.overall_band))
+                                : '--'}
                             </Badge>
                           </div>
                           <p className="mt-1 text-sm text-slate-500">{new Date(attempt.completed_at).toLocaleString()}</p>

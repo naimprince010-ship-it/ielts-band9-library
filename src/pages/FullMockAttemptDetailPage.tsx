@@ -116,7 +116,24 @@ const parseWritingFeedback = (value: unknown): WritingFeedback | null => {
   return {
     estimatedBand: typeof value.estimatedBand === 'number' ? value.estimatedBand : undefined,
     summary: typeof value.summary === 'string' ? value.summary : undefined,
-    criteria: Array.isArray(value.criteria) ? (value.criteria as WritingFeedbackCriterion[]) : [],
+    // Only include criteria that carry a valid finite band — guards against
+    // missing, null, or NaN band values that would render as "NaN" or "0.0".
+    criteria: Array.isArray(value.criteria)
+      ? (value.criteria as unknown[]).reduce<WritingFeedbackCriterion[]>((acc, c) => {
+          if (!isRecord(c)) return acc;
+          // Explicit null/undefined guard before Number() — Number(null)===0
+          // which is finite, so the isFinite check alone is not sufficient.
+          if (c.band == null) return acc;
+          const band = Number(c.band);
+          if (!Number.isFinite(band)) return acc;
+          acc.push({
+            name: typeof c.name === 'string' ? c.name : '',
+            band,
+            feedback: typeof c.feedback === 'string' ? c.feedback : '',
+          });
+          return acc;
+        }, [])
+      : [],
     strengths: Array.isArray(value.strengths) ? (value.strengths as string[]) : [],
     improvements: Array.isArray(value.improvements) ? (value.improvements as string[]) : [],
     task1Notes: typeof value.task1Notes === 'string' ? value.task1Notes : undefined,
@@ -262,7 +279,11 @@ export default function FullMockAttemptDetailPage() {
           <Card className="border-indigo-100 bg-indigo-600 text-white">
             <CardContent className="p-6">
               <p className="text-sm font-semibold text-indigo-100">Overall Band</p>
-              <p className="mt-4 text-6xl font-bold">{formatBandScore(Number(attempt.overall_band))}</p>
+              <p className="mt-4 text-6xl font-bold">
+                {attempt.overall_band != null && Number.isFinite(Number(attempt.overall_band))
+                  ? formatBandScore(Number(attempt.overall_band))
+                  : '--'}
+              </p>
               <p className="mt-3 text-sm text-indigo-100">Saved full mock result</p>
             </CardContent>
           </Card>

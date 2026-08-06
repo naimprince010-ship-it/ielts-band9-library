@@ -1648,6 +1648,13 @@ export default function FullMockTestPage() {
   };
 
   const startSection = (idx: number) => {
+    // Starting section 0 always means a brand-new attempt.
+    // Clear the previous attempt's result ID so feedback from this run
+    // cannot be persisted to an old row even if the new save fails.
+    if (idx === 0) {
+      savedResultIdRef.current = null;
+      setResultSaved('idle');
+    }
     setSectionIndex(idx);
     setAnswers({});
     setFlaggedQuestions({});
@@ -1771,31 +1778,20 @@ export default function FullMockTestPage() {
       setWritingFeedback(feedback);
       setWritingFeedbackStatus('ready');
 
-      if (user && supabase && isSupabaseConfigured()) {
+      // Only persist if we have a confirmed row ID from this session's save.
+      // Never query for the latest result by user_id — that risks writing to a
+      // previous attempt when the current save is still in-flight or has failed.
+      const resultId = savedResultIdRef.current;
+      if (resultId && user && supabase && isSupabaseConfigured()) {
         try {
-          let resultId = savedResultIdRef.current;
-          if (!resultId) {
-            const latest = await supabase
-              .from('mock_test_results')
-              .select('id')
-              .eq('user_id', user.id)
-              .order('completed_at', { ascending: false })
-              .limit(1)
-              .maybeSingle();
-            resultId = latest.data?.id ?? null;
-            savedResultIdRef.current = resultId;
-          }
+          const { error: updateError } = await supabase
+            .from('mock_test_results')
+            .update({ writing_feedback: feedback })
+            .eq('id', resultId)
+            .eq('user_id', user.id);
 
-          if (resultId) {
-            const { error: updateError } = await supabase
-              .from('mock_test_results')
-              .update({ writing_feedback: feedback })
-              .eq('id', resultId)
-              .eq('user_id', user.id);
-
-            if (updateError && !/writing_feedback|column/i.test(updateError.message || '')) {
-              console.error('Failed to persist writing feedback:', updateError);
-            }
+          if (updateError && !/writing_feedback|column/i.test(updateError.message || '')) {
+            console.error('Failed to persist writing feedback:', updateError);
           }
         } catch (persistError) {
           console.error('Error persisting writing feedback:', persistError);
@@ -1860,31 +1856,19 @@ export default function FullMockTestPage() {
       setSpeakingFeedback(feedback);
       setSpeakingFeedbackStatus('ready');
 
-      if (user && supabase && isSupabaseConfigured()) {
+      // Same ownership guard as writing: only update the confirmed row ID from
+      // this save. Skip if the result save has not yet resolved successfully.
+      const resultId = savedResultIdRef.current;
+      if (resultId && user && supabase && isSupabaseConfigured()) {
         try {
-          let resultId = savedResultIdRef.current;
-          if (!resultId) {
-            const latest = await supabase
-              .from('mock_test_results')
-              .select('id')
-              .eq('user_id', user.id)
-              .order('completed_at', { ascending: false })
-              .limit(1)
-              .maybeSingle();
-            resultId = latest.data?.id ?? null;
-            savedResultIdRef.current = resultId;
-          }
+          const { error: updateError } = await supabase
+            .from('mock_test_results')
+            .update({ speaking_feedback: feedback })
+            .eq('id', resultId)
+            .eq('user_id', user.id);
 
-          if (resultId) {
-            const { error: updateError } = await supabase
-              .from('mock_test_results')
-              .update({ speaking_feedback: feedback })
-              .eq('id', resultId)
-              .eq('user_id', user.id);
-
-            if (updateError && !/speaking_feedback|column/i.test(updateError.message || '')) {
-              console.error('Failed to persist speaking feedback:', updateError);
-            }
+          if (updateError && !/speaking_feedback|column/i.test(updateError.message || '')) {
+            console.error('Failed to persist speaking feedback:', updateError);
           }
         } catch (persistError) {
           console.error('Error persisting speaking feedback:', persistError);
@@ -2394,10 +2378,12 @@ export default function FullMockTestPage() {
                 <Button
                   type="button"
                   onClick={requestWritingFeedback}
-                  disabled={writingFeedbackStatus === 'loading'}
+                  disabled={writingFeedbackStatus === 'loading' || resultSaved === 'saving'}
                   className="bg-emerald-500 hover:bg-emerald-400 text-white rounded-2xl font-black px-7 py-6 gap-2"
                 >
-                  {writingFeedbackStatus === 'loading'
+                  {resultSaved === 'saving'
+                    ? <><Loader2 className="h-5 w-5 animate-spin" /> SAVING RESULT…</>
+                    : writingFeedbackStatus === 'loading'
                     ? <><Loader2 className="h-5 w-5 animate-spin" /> ANALYZING</>
                     : writingFeedback
                     ? <><Sparkles className="h-5 w-5" /> REGENERATE FEEDBACK</>
@@ -2406,6 +2392,11 @@ export default function FullMockTestPage() {
               </div>
 
               <div className="p-6 sm:p-8">
+                {resultSaved === 'error' && (
+                  <div className="mb-4 rounded-2xl border border-amber-400/25 bg-amber-500/10 p-4 text-amber-200 text-sm font-semibold">
+                    Your result could not be saved. Feedback is available on this screen but will not be stored to your profile.
+                  </div>
+                )}
                 {writingFeedbackStatus === 'error' && (
                   <div className="mb-6 rounded-2xl border border-red-400/25 bg-red-500/10 p-4 text-red-100 font-bold">
                     {writingFeedbackError}
@@ -2507,10 +2498,12 @@ export default function FullMockTestPage() {
                 <Button
                   type="button"
                   onClick={requestSpeakingFeedback}
-                  disabled={speakingFeedbackStatus === 'loading'}
+                  disabled={speakingFeedbackStatus === 'loading' || resultSaved === 'saving'}
                   className="bg-orange-500 hover:bg-orange-400 text-white rounded-2xl font-black px-7 py-6 gap-2"
                 >
-                  {speakingFeedbackStatus === 'loading'
+                  {resultSaved === 'saving'
+                    ? <><Loader2 className="h-5 w-5 animate-spin" /> SAVING RESULT…</>
+                    : speakingFeedbackStatus === 'loading'
                     ? <><Loader2 className="h-5 w-5 animate-spin" /> ANALYZING</>
                     : speakingFeedback
                     ? <><Sparkles className="h-5 w-5" /> REGENERATE FEEDBACK</>
@@ -2519,6 +2512,11 @@ export default function FullMockTestPage() {
               </div>
 
               <div className="p-6 sm:p-8">
+                {resultSaved === 'error' && (
+                  <div className="mb-4 rounded-2xl border border-amber-400/25 bg-amber-500/10 p-4 text-amber-200 text-sm font-semibold">
+                    Your result could not be saved. Feedback is available on this screen but will not be stored to your profile.
+                  </div>
+                )}
                 {speakingFeedbackStatus === 'error' && (
                   <div className="mb-6 rounded-2xl border border-red-400/25 bg-red-500/10 p-4 text-red-100 font-bold">
                     {speakingFeedbackError}
@@ -2613,6 +2611,10 @@ export default function FullMockTestPage() {
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button size="lg" onClick={() => { 
                 clearSession(); // Wipe persisted session for a clean retake
+                // Reset result tracking so feedback from the new attempt cannot
+                // be persisted to this attempt's row even if the upcoming save fails.
+                savedResultIdRef.current = null;
+                setResultSaved('idle');
                 setPhase('intro'); 
                 setSectionIndex(0); 
                 setScores({ listening: null, reading: null, writing: null, speaking: null }); 
