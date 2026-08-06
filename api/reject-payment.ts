@@ -1,15 +1,13 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
 import { checkRateLimit } from './_rateLimit.js';
+import { cleanEnv } from './_env.js';
 
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || '';
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+const SUPABASE_URL = cleanEnv(process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL);
+const SUPABASE_SERVICE_KEY = cleanEnv(process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  const rl = checkRateLimit(req, { max: 30, windowSec: 60, label: 'reject-payment' });
-  if (!rl.allowed) {
-    return res.status(429).json({ error: 'Too many requests' });
-  }
+  if (!checkRateLimit(req, res, { max: 30, windowSec: 60, label: 'reject-payment' }, 'reject-payment')) return;
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });

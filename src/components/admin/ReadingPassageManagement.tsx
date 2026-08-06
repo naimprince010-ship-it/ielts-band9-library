@@ -37,6 +37,7 @@ import {
   Wand2
 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { authenticatedJsonHeaders } from '@/lib/authenticatedApi';
 import { cn } from '@/lib/utils';
 
 interface ReadingPassage {
@@ -181,7 +182,7 @@ export function ReadingPassageManagement() {
     try {
       const response = await fetch('/api/generate-content', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: await authenticatedJsonHeaders(),
         body: JSON.stringify({
           moduleType: 'reading',
           topic: aiTopic,

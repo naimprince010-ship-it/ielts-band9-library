@@ -2,11 +2,17 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 import { checkRateLimit, LIMITS } from './_rateLimit.js';
+import { cleanEnv } from './_env.js';
 
 const GOOGLE_TTS_API_KEY = process.env.GOOGLE_TTS_API_KEY;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const CANONICAL_SUPABASE_URL = 'https://fjzqtzqflsqjevrurgbm.supabase.co';
+const LEGACY_SUPABASE_PROJECT_REF = 'yzeiloqctrgpzuzkciiv';
+const configuredSupabaseUrl = cleanEnv(process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL);
+const SUPABASE_URL = !configuredSupabaseUrl || configuredSupabaseUrl.includes(LEGACY_SUPABASE_PROJECT_REF)
+  ? CANONICAL_SUPABASE_URL
+  : configuredSupabaseUrl;
+const SUPABASE_SERVICE_KEY = cleanEnv(process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 interface TTSRequest {
   text: string;
@@ -24,6 +30,39 @@ function generateCacheKey(text: string, voice: string, languageCode: string): st
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  if (!SUPABASE_SERVICE_KEY) {
+    return res.status(500).json({ error: 'TTS storage is not configured on the server.' });
+  }
+
+  const authHeader = req.headers.authorization;
+  if (!authHeader?.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const adminClient = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+  const token = authHeader.slice('Bearer '.length);
+  const { data: { user }, error: authError } = await adminClient.auth.getUser(token);
+  if (authError || !user) return res.status(401).json({ error: 'Invalid token' });
+
+  const { data: callerRow, error: callerError } = await adminClient
+    .from('users')
+    .select('role')
+    .eq('id', user.id)
+    .single();
+  if (callerError || !callerRow || !['admin', 'instructor'].includes(callerRow.role)) {
+    return res.status(403).json({ error: 'Admin access required' });
+  }
+
+  const { data: audioBucket, error: bucketError } = await adminClient.storage.getBucket('audio');
+  if (bucketError || !audioBucket) {
+    return res.status(503).json({ error: 'Supabase Storage bucket "audio" is unavailable.' });
+  }
+  if (!audioBucket.public) {
+    return res.status(503).json({ error: 'Supabase Storage bucket "audio" must be public for persisted mock-test audio URLs.' });
   }
 
   // TTS is admin-only heavy generation — allow up to 50 per hour per IP
@@ -157,6 +196,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   // ── Step 4: Fallback — return raw base64 if Supabase not configured or failed ─
-  return res.status(200).json({ audioContent: audioBuffer.toString('base64'), cached: false });
+  return res.status(503).json({
+    error: 'Audio was generated but could not be persisted to Supabase Storage.',
+    details: 'Verify the audio bucket and SUPABASE_SERVICE_ROLE_KEY configuration, then retry.',
+  });
 }
 

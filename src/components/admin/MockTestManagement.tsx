@@ -42,6 +42,13 @@ import {
   Wrench
 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { authenticatedJsonHeaders } from '@/lib/authenticatedApi';
+import {
+  assessFullMockBundle,
+  MINIMUM_PUBLISH_QUALITY_SCORE,
+  type BundleQualityReport,
+  type ExistingQualityTest,
+} from '@/lib/mockGenerationQuality';
 import {
   extractTask1Visuals,
   normalizeMockTestRow,
@@ -91,6 +98,43 @@ interface MockTest {
   updated_at: string;
 }
 
+interface FullMockBundle {
+  id: string;
+  title: string;
+  theme: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  listening_test_id: string;
+  reading_test_id: string;
+  writing_test_id: string;
+  speaking_test_id: string;
+  review_status: 'draft' | 'in_review' | 'approved' | 'rejected';
+  quality_score: number | null;
+  is_published: boolean;
+  created_at: string;
+}
+
+interface AIGenerationRun {
+  id: string;
+  topic: string;
+  difficulty: string;
+  provider: string;
+  status: 'succeeded' | 'failed' | 'blocked_duplicate' | 'blocked_quality';
+  quality_score: number | null;
+  error_message: string;
+  created_at: string;
+}
+
+interface QuestionReview {
+  id: string;
+  bundle_id: string;
+  mock_test_id: string;
+  module_type: ModuleType;
+  question_key: string;
+  question_text_snapshot: string;
+  status: 'pending' | 'approved' | 'rejected';
+  review_notes: string;
+}
+
 const READING_QUESTION_TYPES: { value: ReadingQuestionType; label: string }[] = [
   { value: 'mcq', label: 'Multiple Choice' },
   { value: 'fill-blank', label: 'Fill in the Blank' },
@@ -101,6 +145,7 @@ const READING_QUESTION_TYPES: { value: ReadingQuestionType; label: string }[] = 
   { value: 'matching-features', label: 'Matching Features' },
   { value: 'sentence-completion', label: 'Sentence Completion' },
   { value: 'summary-completion', label: 'Summary Completion' },
+  { value: 'table-completion', label: 'Table Completion' },
   { value: 'diagram-labeling', label: 'Diagram Labeling' },
   { value: 'short-answer', label: 'Short Answer' },
 ];
@@ -335,6 +380,12 @@ function formatSupabaseError(err: unknown): string {
 
 export function MockTestManagement() {
   const [mockTests, setMockTests] = useState<MockTest[]>([]);
+  const [fullMockBundles, setFullMockBundles] = useState<FullMockBundle[]>([]);
+  const [generationHistory, setGenerationHistory] = useState<AIGenerationRun[]>([]);
+  const [reviewingBundleId, setReviewingBundleId] = useState<string | null>(null);
+  const [questionReviewBundle, setQuestionReviewBundle] = useState<FullMockBundle | null>(null);
+  const [questionReviews, setQuestionReviews] = useState<QuestionReview[]>([]);
+  const [loadingQuestionReviews, setLoadingQuestionReviews] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [isFullTestModalOpen, setIsFullTestModalOpen] = useState(false);
@@ -385,12 +436,123 @@ export function MockTestManagement() {
 
       if (error) throw error;
       setMockTests((data || []).map((row) => normalizeMockTestRow(row as MockTest)));
+
+      const { data: bundles, error: bundlesError } = await supabase
+        .from('full_mock_bundles')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (bundlesError && !/full_mock_bundles|does not exist/i.test(bundlesError.message || '')) throw bundlesError;
+      setFullMockBundles((bundles || []) as FullMockBundle[]);
+
+      const { data: history, error: historyError } = await supabase
+        .from('ai_generation_runs')
+        .select('id, topic, difficulty, provider, status, quality_score, error_message, created_at')
+        .order('created_at', { ascending: false })
+        .limit(12);
+      if (historyError && !/ai_generation_runs|does not exist/i.test(historyError.message || '')) throw historyError;
+      setGenerationHistory((history || []) as AIGenerationRun[]);
     } catch (err) {
       console.error('Error fetching mock tests:', err);
       setError('Failed to load mock tests. Make sure you have run the SQL setup.');
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleBundleReview = async (bundle: FullMockBundle, action: 'publish' | 'reject') => {
+    if (!supabase) return;
+    setReviewingBundleId(bundle.id);
+    setError('');
+    try {
+      const moduleIds = [bundle.listening_test_id, bundle.reading_test_id, bundle.writing_test_id, bundle.speaking_test_id];
+
+      if (action === 'reject') {
+        const { error: rejectError } = await supabase
+          .from('full_mock_bundles')
+          .update({ review_status: 'rejected', is_published: false })
+          .eq('id', bundle.id);
+        if (rejectError) throw rejectError;
+        await supabase.from('mock_tests').update({ is_published: false }).in('id', moduleIds);
+        setSuccess(`${bundle.title} was rejected and kept offline.`);
+      } else {
+        const { count: totalReviews, error: totalReviewError } = await supabase
+          .from('ai_question_reviews').select('id', { count: 'exact', head: true }).eq('bundle_id', bundle.id);
+        const { count: approvedReviews, error: approvedReviewError } = await supabase
+          .from('ai_question_reviews').select('id', { count: 'exact', head: true }).eq('bundle_id', bundle.id).eq('status', 'approved');
+        if (totalReviewError || approvedReviewError) throw totalReviewError || approvedReviewError;
+        if (!totalReviews || approvedReviews !== totalReviews) {
+          throw new Error(`Approve every review item first (${approvedReviews || 0}/${totalReviews || 0} approved).`);
+        }
+        const modules = moduleIds.map(id => mockTests.find(test => test.id === id)).filter(Boolean) as MockTest[];
+        if (modules.length !== 4) throw new Error('One or more linked modules are missing.');
+        if (bundle.quality_score === null || bundle.quality_score < MINIMUM_PUBLISH_QUALITY_SCORE) {
+          throw new Error(`Bundle quality must be at least ${MINIMUM_PUBLISH_QUALITY_SCORE}% before publishing.`);
+        }
+        const issues = modules.flatMap(test => getValidationIssuesForModule(test.module_type, test.test_data));
+        if (hasBlockingIssues(issues)) {
+          throw new Error(`Bundle cannot be published:\n${formatValidationIssues(issues)}`);
+        }
+
+        const { error: modulePublishError } = await supabase
+          .from('mock_tests')
+          .update({ is_published: true })
+          .in('id', moduleIds);
+        if (modulePublishError) throw modulePublishError;
+
+        const { error: bundlePublishError } = await supabase
+          .from('full_mock_bundles')
+          .update({ review_status: 'approved', is_published: true })
+          .eq('id', bundle.id);
+        if (bundlePublishError) {
+          await supabase.from('mock_tests').update({ is_published: false }).in('id', moduleIds);
+          throw bundlePublishError;
+        }
+        setSuccess(`${bundle.title} passed review and is now published as one linked test.`);
+      }
+      await fetchMockTests();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Bundle review failed.');
+    } finally {
+      setReviewingBundleId(null);
+    }
+  };
+
+  const openQuestionReview = async (bundle: FullMockBundle) => {
+    if (!supabase) return;
+    setQuestionReviewBundle(bundle);
+    setLoadingQuestionReviews(true);
+    const { data, error: reviewError } = await supabase
+      .from('ai_question_reviews')
+      .select('*')
+      .eq('bundle_id', bundle.id)
+      .order('module_type')
+      .order('question_key');
+    if (reviewError) setError(`Could not load question reviews: ${reviewError.message}`);
+    else setQuestionReviews((data || []) as QuestionReview[]);
+    setLoadingQuestionReviews(false);
+  };
+
+  const updateQuestionReview = async (reviewIds: string[], status: QuestionReview['status']) => {
+    if (!supabase || reviewIds.length === 0) return;
+    const { error: updateError } = await supabase
+      .from('ai_question_reviews')
+      .update({ status })
+      .in('id', reviewIds);
+    if (updateError) {
+      setError(`Review update failed: ${updateError.message}`);
+      return;
+    }
+    setQuestionReviews(current => current.map(review => reviewIds.includes(review.id) ? { ...review, status } : review));
+  };
+
+  const editReviewedModule = (mockTestId: string) => {
+    const test = mockTests.find(item => item.id === mockTestId);
+    if (!test) {
+      setError('Linked module could not be found.');
+      return;
+    }
+    setQuestionReviewBundle(null);
+    handleEditTest(test);
   };
 
   /** Fix generic question texts (e.g. "Complete the table below.") across ALL tests. */
@@ -731,7 +893,13 @@ export function MockTestManagement() {
       testType: data.testType || 'academic',
       totalQuestions: (Array.isArray(data.passages) ? data.passages : []).reduce((sum, p) => sum + (Array.isArray(p.questions) ? p.questions.length : 0), 0),
       timeLimit: data.timeLimit || 3600,
-      passages: data.passages || [],
+      passages: (data.passages || []).map(p => ({
+        ...p,
+        questions: fixQuestions(p.questions || []).map(q => ({
+          ...q,
+          type: normalizeQuestionType(q.type, q.questionText, READING_QUESTION_TYPES) as any
+        }))
+      })),
       instructions: data.instructions,
       is_premium: formData.is_premium,
       created_at: new Date().toISOString()
@@ -743,11 +911,17 @@ export function MockTestManagement() {
     return {
       id: editingTest?.id || `listening-${Date.now()}`,
       title: formData.title,
-      totalQuestions: data.sections?.reduce((sum, s) => sum + (s.questions?.length || 0), 0) || 0,
+      totalQuestions: (Array.isArray(data.sections) ? data.sections : []).reduce((sum, s) => sum + (Array.isArray(s.questions) ? s.questions.length : 0), 0),
       audioUrl: data.audioUrl || '',
       audioDuration: data.audioDuration || 0,
       transferTime: data.transferTime || 600,
-      sections: data.sections || [],
+      sections: (data.sections || []).map(s => ({
+        ...s,
+        questions: fixQuestions(s.questions || []).map(q => ({
+          ...q,
+          type: normalizeQuestionType(q.type, q.questionText, LISTENING_QUESTION_TYPES) as any
+        }))
+      })),
       instructions: data.instructions,
       is_premium: formData.is_premium,
       created_at: new Date().toISOString()
@@ -890,6 +1064,118 @@ export function MockTestManagement() {
           <AlertCircle className="h-4 w-4" />
           <AlertDescription className="font-bold">{error}</AlertDescription>
         </Alert>
+      )}
+
+      {fullMockBundles.length > 0 && (
+        <Card className="border-none shadow-sm rounded-[2rem] overflow-hidden">
+          <CardHeader className="p-8 pb-4">
+            <CardTitle className="text-xl font-black text-slate-900 flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-indigo-600" />
+              Full Mock Review Queue
+            </CardTitle>
+            <CardDescription>Review and publish all four linked IELTS modules together.</CardDescription>
+          </CardHeader>
+          <CardContent className="px-8 pb-8 grid gap-3">
+            {fullMockBundles.map(bundle => {
+              const isBusy = reviewingBundleId === bundle.id;
+              return (
+                <div key={bundle.id} className="rounded-2xl border border-slate-200 p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="font-bold text-slate-900">{bundle.title}</h3>
+                      <Badge className={cn(
+                        'rounded-lg font-bold',
+                        bundle.is_published ? 'bg-emerald-100 text-emerald-800' :
+                        bundle.review_status === 'rejected' ? 'bg-rose-100 text-rose-800' :
+                        'bg-amber-100 text-amber-800',
+                      )}>
+                        {bundle.is_published ? 'Published bundle' : bundle.review_status.replace('_', ' ')}
+                      </Badge>
+                      {bundle.quality_score !== null && <Badge variant="outline">Quality {bundle.quality_score}%</Badge>}
+                    </div>
+                    <p className="text-xs text-slate-500 mt-2">
+                      Theme: {bundle.theme || 'General'} · {bundle.difficulty} · Created {new Date(bundle.created_at).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => openQuestionReview(bundle)}
+                      disabled={isBusy}
+                      className="rounded-xl font-bold"
+                    >
+                      <Eye className="h-4 w-4 mr-2" /> Review Questions
+                    </Button>
+                    {!bundle.is_published && (
+                      <Button
+                        onClick={() => handleBundleReview(bundle, 'publish')}
+                        disabled={isBusy || bundle.quality_score === null || bundle.quality_score < MINIMUM_PUBLISH_QUALITY_SCORE}
+                        title={bundle.quality_score !== null && bundle.quality_score < MINIMUM_PUBLISH_QUALITY_SCORE ? `Minimum quality is ${MINIMUM_PUBLISH_QUALITY_SCORE}%` : undefined}
+                        className="bg-emerald-600 hover:bg-emerald-700 rounded-xl font-bold"
+                      >
+                        {isBusy ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <CheckCircle className="h-4 w-4 mr-2" />}
+                        Approve & Publish
+                      </Button>
+                    )}
+                    {bundle.review_status !== 'rejected' && !bundle.is_published && (
+                      <Button
+                        variant="outline"
+                        onClick={() => handleBundleReview(bundle, 'reject')}
+                        disabled={isBusy}
+                        className="rounded-xl font-bold text-rose-700 border-rose-200"
+                      >
+                        Reject
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </CardContent>
+        </Card>
+      )}
+
+      {generationHistory.length > 0 && (
+        <Card className="border-none shadow-sm rounded-[2rem] overflow-hidden">
+          <CardHeader className="p-8 pb-4">
+            <CardTitle className="text-xl font-black text-slate-900">AI Generation History</CardTitle>
+            <CardDescription>Recent successes, validation blocks, duplicate blocks, and generation failures.</CardDescription>
+          </CardHeader>
+          <CardContent className="px-8 pb-8 overflow-x-auto">
+            <table className="w-full min-w-[720px] text-sm">
+              <thead>
+                <tr className="border-b text-left text-xs uppercase tracking-wider text-slate-500">
+                  <th className="py-3 pr-4">Topic</th>
+                  <th className="py-3 pr-4">Status</th>
+                  <th className="py-3 pr-4">Quality</th>
+                  <th className="py-3 pr-4">Provider</th>
+                  <th className="py-3">Created</th>
+                </tr>
+              </thead>
+              <tbody>
+                {generationHistory.map(run => (
+                  <tr key={run.id} className="border-b border-slate-100 last:border-0">
+                    <td className="py-3 pr-4 font-semibold text-slate-800">
+                      {run.topic}
+                      {run.error_message && <p className="text-xs font-normal text-rose-600 mt-1 max-w-xl truncate" title={run.error_message}>{run.error_message}</p>}
+                    </td>
+                    <td className="py-3 pr-4">
+                      <Badge className={cn(
+                        'rounded-lg',
+                        run.status === 'succeeded' ? 'bg-emerald-100 text-emerald-800' :
+                        run.status === 'blocked_duplicate' ? 'bg-amber-100 text-amber-800' :
+                        'bg-rose-100 text-rose-800',
+                      )}>{run.status.replace('_', ' ')}</Badge>
+                    </td>
+                    <td className="py-3 pr-4 font-bold">{run.quality_score === null ? '—' : `${run.quality_score}%`}</td>
+                    <td className="py-3 pr-4">{run.provider}</td>
+                    <td className="py-3 text-slate-500">{new Date(run.created_at).toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </CardContent>
+        </Card>
       )}
 
       <Card className="border-none shadow-sm rounded-[2rem] overflow-hidden">
@@ -1040,6 +1326,78 @@ export function MockTestManagement() {
         </CardContent>
       </Card>
 
+      <Dialog open={!!questionReviewBundle} onOpenChange={(open) => { if (!open) setQuestionReviewBundle(null); }}>
+        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto bg-white">
+          <DialogHeader>
+            <DialogTitle>Question-level Review</DialogTitle>
+            <DialogDescription>
+              Approve or reject every question/task. Use Edit Module to correct content before approval.
+            </DialogDescription>
+          </DialogHeader>
+          {loadingQuestionReviews ? (
+            <div className="py-16 flex justify-center"><Loader2 className="h-8 w-8 animate-spin text-indigo-600" /></div>
+          ) : (
+            <div className="space-y-5">
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-slate-50 p-4">
+                <div className="font-bold text-slate-800">
+                  Approved {questionReviews.filter(review => review.status === 'approved').length} / {questionReviews.length}
+                </div>
+                <Button
+                  onClick={() => updateQuestionReview(questionReviews.map(review => review.id), 'approved')}
+                  disabled={questionReviews.length === 0}
+                  className="rounded-xl bg-emerald-600 hover:bg-emerald-700 font-bold"
+                >
+                  <CheckCircle className="h-4 w-4 mr-2" /> Approve All
+                </Button>
+              </div>
+              {(['listening', 'reading', 'writing', 'speaking'] as ModuleType[]).map(moduleType => {
+                const moduleReviews = questionReviews.filter(review => review.module_type === moduleType);
+                if (moduleReviews.length === 0) return null;
+                return (
+                  <section key={moduleType} className="rounded-2xl border border-slate-200 overflow-hidden">
+                    <div className="flex items-center justify-between gap-3 bg-slate-50 px-5 py-4">
+                      <div className="flex items-center gap-2 font-black capitalize text-slate-900">
+                        {getModuleIcon(moduleType)} {moduleType}
+                        <Badge variant="outline">{moduleReviews.filter(review => review.status === 'approved').length}/{moduleReviews.length}</Badge>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button size="sm" variant="outline" className="rounded-lg" onClick={() => editReviewedModule(moduleReviews[0].mock_test_id)}>
+                          <Edit className="h-3.5 w-3.5 mr-1.5" /> Edit Module
+                        </Button>
+                        <Button size="sm" className="rounded-lg bg-emerald-600 hover:bg-emerald-700" onClick={() => updateQuestionReview(moduleReviews.map(review => review.id), 'approved')}>
+                          Approve Module
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="divide-y divide-slate-100">
+                      {moduleReviews.map(review => (
+                        <div key={review.id} className="p-4 flex flex-col md:flex-row md:items-center gap-3">
+                          <div className="min-w-0 flex-1">
+                            <div className="text-[10px] uppercase tracking-wider font-bold text-slate-400">{review.question_key}</div>
+                            <p className="text-sm text-slate-800 mt-1 line-clamp-2">
+                              {review.question_text_snapshot.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() || 'No question text snapshot'}
+                            </p>
+                          </div>
+                          <Badge className={cn(
+                            'rounded-lg w-fit',
+                            review.status === 'approved' ? 'bg-emerald-100 text-emerald-800' :
+                            review.status === 'rejected' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800',
+                          )}>{review.status}</Badge>
+                          <div className="flex gap-1">
+                            <Button size="sm" variant="ghost" className="text-emerald-700" onClick={() => updateQuestionReview([review.id], 'approved')}>Approve</Button>
+                            <Button size="sm" variant="ghost" className="text-rose-700" onClick={() => updateQuestionReview([review.id], 'rejected')}>Reject</Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                );
+              })}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
       <Dialog
         open={isEditorOpen}
         onOpenChange={(open) => {
@@ -1179,7 +1537,12 @@ export function MockTestManagement() {
         </DialogContent>
       </Dialog>
       
-      <FullTestGeneratorDialog open={isFullTestModalOpen} onOpenChange={setIsFullTestModalOpen} onComplete={fetchMockTests} />
+      <FullTestGeneratorDialog
+        open={isFullTestModalOpen}
+        onOpenChange={setIsFullTestModalOpen}
+        onComplete={fetchMockTests}
+        existingTests={mockTests}
+      />
     </div>
   );
 }
@@ -1404,18 +1767,6 @@ function repairGroupedQuestionData<T extends ReadingQuestion | ListeningQuestion
   return fixQuestions(questions);
 }
 
-function fitQuestionCount<T extends ReadingQuestion | ListeningQuestion>(
-  questions: T[],
-  target: number,
-  makeQuestion: (questionNumber: number, index: number) => T,
-): T[] {
-  const fitted = questions.slice(0, target);
-  while (fitted.length < target) {
-    fitted.push(makeQuestion(fitted.length + 1, fitted.length));
-  }
-  return fitted.map((q, index) => ({ ...q, questionNumber: index + 1 }));
-}
-
 function createFallbackWritingVisual(topic: string): WritingChartData {
   return {
     type: 'bar',
@@ -1500,6 +1851,15 @@ function summarizeWritingTaskProblems(task: Record<string, unknown>, taskNumber:
   const sampleWords = countWords(task.sampleAnswer);
   if (taskNumber === 1 && sampleWords > 0 && sampleWords < 160) problems.push(`Task 1 sampleAnswer must be 160-200 words, found ${sampleWords}`);
   if (taskNumber === 2 && sampleWords > 0 && sampleWords < 280) problems.push(`Task 2 sampleAnswer must be 280-320 words, found ${sampleWords}`);
+  if (taskNumber === 1 && !extractTask1Visuals(task)) {
+    problems.push('Academic Task 1 must include exactly one renderable visual field: chartData, tableData, processData, or mapData');
+  }
+  return problems;
+}
+
+function summarizeWritingDefinitionProblems(task: Record<string, unknown>, taskNumber: number): string[] {
+  const problems: string[] = [];
+  if (!String(task.prompt ?? '').trim()) problems.push(`Task ${taskNumber} is missing prompt`);
   if (taskNumber === 1 && !extractTask1Visuals(task)) {
     problems.push('Academic Task 1 must include exactly one renderable visual field: chartData, tableData, processData, or mapData');
   }
@@ -1608,7 +1968,7 @@ function AIContentGenerator({ moduleType, testType = 'academic', onGenerated }: 
     try {
       const response = await fetch('/api/generate-content', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: await authenticatedJsonHeaders(),
         body: JSON.stringify({
           moduleType,
           topic: topic.trim(),
@@ -2111,9 +2471,14 @@ function ListeningTestBuilder({
       const text = section.transcript!.trim();
 
       try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session?.access_token) throw new Error('Admin session expired. Please sign in again.');
         const response = await fetch('/api/tts', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${session.access_token}`,
+          },
           body: JSON.stringify({ text, voice: 'alloy', provider: 'openai' }),
         });
 
@@ -2125,15 +2490,8 @@ function ListeningTestBuilder({
         const result = await response.json();
         const idx = updatedSections.findIndex(s => s.id === section.id);
         if (idx !== -1) {
-          if (result.audioUrl) {
-            updatedSections[idx].sectionAudioUrl = result.audioUrl;
-          } else if (result.audioContent) {
-            const blob = new Blob(
-              [Uint8Array.from(atob(result.audioContent), c => c.charCodeAt(0))],
-              { type: 'audio/mpeg' }
-            );
-            updatedSections[idx].sectionAudioUrl = URL.createObjectURL(blob);
-          }
+          if (!result.audioUrl) throw new Error('TTS completed without a persistent audio URL.');
+          updatedSections[idx].sectionAudioUrl = result.audioUrl;
         }
         // Clear any previous error for this section on success
         setSectionErrors(prev => { const s = { ...prev }; delete s[section.sectionNumber]; return s; });
@@ -2654,7 +3012,7 @@ function WritingTestBuilder({
     try {
       const response = await fetch('/api/generate-content', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: await authenticatedJsonHeaders(),
         body: JSON.stringify({
           moduleType: 'writing',
           topic: contextText.substring(0, 400), // use prompt text as rich context
@@ -3514,14 +3872,35 @@ function QuestionBuilder({
   );
 }
 
-function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boolean, onOpenChange: (open: boolean) => void, onComplete: () => void }) {
+function FullTestGeneratorDialog({
+  open,
+  onOpenChange,
+  onComplete,
+  existingTests,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onComplete: () => void;
+  existingTests: MockTest[];
+}) {
   const [topic, setTopic] = useState('');
   const [difficulty, setDifficulty] = useState<'easy'|'medium'|'hard'>('medium');
   const [isGenerating, setIsGenerating] = useState(false);
   const [progress, setProgress] = useState<string>('');
   const [error, setError] = useState<string>('');
 
-  const generateModule = async (moduleType: string, index?: number, repairInstructions?: string) => {
+  const generateModule = async (
+    moduleType: string,
+    index?: number,
+    repairInstructions?: string,
+    repairContent?: unknown,
+    readingStage?: 'passage' | 'questions',
+    lockedPassage?: { title?: string; textContent?: string },
+    writingStage?: 'task' | 'answer',
+    lockedWritingTask?: Record<string, unknown>,
+    listeningStage?: 'transcript' | 'questions',
+    lockedListeningSection?: { title?: string; transcript?: string },
+  ) => {
     let label = moduleType;
     if (index) {
       if (moduleType === 'reading') label = `reading (Passage ${index})`;
@@ -3533,7 +3912,7 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
     setProgress(`${repairInstructions ? 'Repairing' : 'Generating'} ${label} module... \n(This may take 15-30 seconds)`);
     const response = await fetch('/api/generate-content', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: await authenticatedJsonHeaders(),
       body: JSON.stringify({ 
         moduleType, 
         topic: topic.trim(), 
@@ -3544,87 +3923,223 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
         sectionNumber: moduleType === 'listening' ? index : undefined,
         taskNumber: moduleType === 'writing' ? index : undefined,
         partNumber: moduleType === 'speaking' ? index : undefined,
-        repairInstructions
+        repairInstructions,
+        repairContent,
+        readingStage,
+        lockedPassage,
+        writingStage,
+        lockedWritingTask,
+        listeningStage,
+        lockedListeningSection,
       })
     });
     const rawText = await response.text();
     let data;
     try { 
       data = JSON.parse(rawText); 
-    } catch (e) { 
+    } catch {
       console.error(`Raw response for ${label}:`, rawText);
       if (rawText.includes('<!DOCTYPE html>')) {
         throw new Error(`Server error (504/500) during ${label} generation. This usually means the AI took too long to respond. Try again or use a simpler topic.`);
       }
       throw new Error(`Invalid AI response for ${label}. The AI output was not valid JSON.`); 
     }
-    if (!response.ok || !data.success || !data.content) throw new Error(data.error || `Failed to generate ${label}`);
+    if (response.status === 422 && data.content) return data.content;
+    if (!response.ok || !data.success || !data.content) {
+      const qualityDetail = Array.isArray(data.qualityIssues) && data.qualityIssues.length
+        ? `: ${data.qualityIssues.join('; ')}`
+        : '';
+      const apiError = typeof data.error === 'string'
+        ? data.error
+        : typeof data.details === 'string'
+          ? data.details
+          : `Failed to generate ${label}`;
+      throw new Error(`${apiError}${qualityDetail}`);
+    }
     return data.content;
   };
 
   const generateReadingPassage = async (passageNumber: number) => {
     const expected = passageNumber === 3 ? 14 : 13;
-    let content = await generateModule('reading', passageNumber);
-    let problems = summarizeReadingPassageProblems(
-      content as Record<string, unknown> & { questions?: AIQuestion[] },
-      expected,
-      passageNumber,
-    );
-    if (problems.length > 0) {
-      content = await generateModule(
+    let passage = await generateModule('reading', passageNumber, undefined, undefined, 'passage') as Record<string, unknown>;
+    let passageWords = countWords(passage.textContent ?? passage.content);
+    for (let repairAttempt = 1; (passageWords < 650 || passageWords > 900 || !String(passage.title ?? '').trim()) && repairAttempt <= 2; repairAttempt += 1) {
+      passage = await generateModule(
         'reading',
         passageNumber,
-        `Passage ${passageNumber} failed validation: ${problems.join('; ')}. Generate one IELTS Academic Reading passage of 650-900 words with exactly ${expected} source-based questions and non-empty correctAnswer for every question. For grouped completion questions, include a master question containing tableData or summaryData with [Qn] placeholders.`,
+        `Repair passage text only. Current word count is ${passageWords}. Preserve the title and valid paragraphs, then expand or trim coherently to 650-900 words, targeting 760 words. Return no questions.`,
+        passage,
+        'passage',
       );
-      problems = summarizeReadingPassageProblems(
-        content as Record<string, unknown> & { questions?: AIQuestion[] },
-        expected,
-        passageNumber,
-      );
-      if (problems.length > 0) {
-        throw new Error(`Reading Passage ${passageNumber} still failed IELTS quality checks: ${problems.join('; ')}`);
-      }
+      passageWords = countWords(passage.textContent ?? passage.content);
     }
-    return content;
+    if (passageWords < 650 || passageWords > 900 || !String(passage.title ?? '').trim()) {
+      throw new Error(`Reading Passage ${passageNumber} source stage failed after bounded repairs: found ${passageWords} words or missing title.`);
+    }
+
+    const lockedPassage = {
+      title: String(passage.title),
+      textContent: String(passage.textContent ?? passage.content ?? ''),
+    };
+    let questionSet = await generateModule('reading', passageNumber, undefined, undefined, 'questions', lockedPassage) as Record<string, unknown>;
+    let questionProblems = summarizeGeneratedQuestionProblems(questionSet.questions as AIQuestion[] | undefined, expected);
+    for (let repairAttempt = 1; questionProblems.length > 0 && repairAttempt <= 2; repairAttempt += 1) {
+      questionSet = await generateModule(
+        'reading',
+        passageNumber,
+        `Repair the question set only: ${questionProblems.join('; ')}. Keep exactly ${expected} questions grounded in the locked passage. Use only mcq, true-false-not-given, fill-blank, matching-headings or short-answer. Every question needs questionText, correctAnswer and explanation.`,
+        questionSet,
+        'questions',
+        lockedPassage,
+      ) as Record<string, unknown>;
+      questionProblems = summarizeGeneratedQuestionProblems(questionSet.questions as AIQuestion[] | undefined, expected);
+    }
+    if (Array.isArray(questionSet.questions) && questionSet.questions.length > expected) {
+      questionSet = { ...questionSet, questions: questionSet.questions.slice(0, expected) };
+      questionProblems = summarizeGeneratedQuestionProblems(questionSet.questions as AIQuestion[], expected);
+    }
+    if (questionProblems.length > 0) {
+      throw new Error(`Reading Passage ${passageNumber} question stage failed after bounded repairs: ${questionProblems.join('; ')}`);
+    }
+
+    return { ...passage, ...lockedPassage, questions: questionSet.questions };
   };
 
   const generateListeningSection = async (sectionNumber: number) => {
-    let content = await generateModule('listening', sectionNumber);
-    const problems = summarizeGeneratedQuestionProblems((content as { questions?: AIQuestion[] }).questions, 10);
-    if (problems.length > 0) {
-      content = await generateModule(
+    let transcriptStage = await generateModule(
+      'listening', sectionNumber, undefined, undefined, undefined, undefined, undefined, undefined, 'transcript',
+    ) as Record<string, unknown>;
+    let transcriptWords = countWords(transcriptStage.transcript);
+    for (let repairAttempt = 1; (transcriptWords < 180 || transcriptWords > 320 || !String(transcriptStage.title ?? '').trim()) && repairAttempt <= 2; repairAttempt += 1) {
+      transcriptStage = await generateModule(
         'listening',
         sectionNumber,
-        `Section ${sectionNumber} failed validation: ${problems.join('; ')}. Generate exactly 10 transcript-based questions with non-empty correctAnswer for every question. For grouped completion questions, include a master question containing tableData or summaryData with [Qn] placeholders.`,
-      );
+        `Repair the transcript only. It currently has ${transcriptWords} words; produce a coherent 180-320 word transcript with a title, named speakers and enough precise details for ten questions. Return no questions.`,
+        transcriptStage,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        'transcript',
+      ) as Record<string, unknown>;
+      transcriptWords = countWords(transcriptStage.transcript);
+    }
+    if (transcriptWords < 180 || transcriptWords > 320 || !String(transcriptStage.title ?? '').trim()) {
+      throw new Error(`Listening Section ${sectionNumber} transcript stage failed after bounded repairs: found ${transcriptWords} words or missing title.`);
+    }
+
+    const lockedSection = { title: String(transcriptStage.title), transcript: String(transcriptStage.transcript) };
+    let questionStage = await generateModule(
+      'listening', sectionNumber, undefined, undefined, undefined, undefined, undefined, undefined, 'questions', lockedSection,
+    ) as Record<string, unknown>;
+    let problems = summarizeGeneratedQuestionProblems(questionStage.questions as AIQuestion[] | undefined, 10);
+    for (let repairAttempt = 1; problems.length > 0 && repairAttempt <= 2; repairAttempt += 1) {
+      questionStage = await generateModule(
+        'listening',
+        sectionNumber,
+        `Repair the question set only: ${problems.join('; ')}. Keep exactly 10 questions grounded in the locked transcript. Use only mcq, fill-blank, sentence-completion or short-answer. Every question needs questionText, correctAnswer and explanation.`,
+        questionStage,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        'questions',
+        lockedSection,
+      ) as Record<string, unknown>;
+      problems = summarizeGeneratedQuestionProblems(questionStage.questions as AIQuestion[] | undefined, 10);
+    }
+    if (Array.isArray(questionStage.questions) && questionStage.questions.length > 10) {
+      questionStage = { ...questionStage, questions: questionStage.questions.slice(0, 10) };
+      problems = summarizeGeneratedQuestionProblems(questionStage.questions as AIQuestion[], 10);
+    }
+    if (problems.length > 0) {
+      throw new Error(`Listening Section ${sectionNumber} question stage failed after bounded repairs: ${problems.join('; ')}`);
+    }
+    return { ...transcriptStage, ...lockedSection, questions: questionStage.questions };
+  };
+
+  const generateSpeakingPart = async (partNumber: number) => {
+    const validate = (content: Record<string, unknown>) => {
+      const questions = Array.isArray(content.questions) ? content.questions as Array<Record<string, unknown>> : [];
+      if (partNumber === 1 && questions.filter(q => String(q.text ?? q.questionText ?? '').trim()).length < 4) return ['Part 1 needs at least 4 complete questions'];
+      if (partNumber === 2) {
+        const cueCard = content.cueCard as Record<string, unknown> | undefined;
+        const bullets = Array.isArray(cueCard?.bulletPoints) ? cueCard.bulletPoints.filter(item => String(item ?? '').trim()) : [];
+        if (!String(cueCard?.topic ?? '').trim() || bullets.length !== 4) return ['Part 2 needs a cue-card topic and exactly 4 bullet points'];
+      }
+      if (partNumber === 3 && questions.filter(q => String(q.text ?? q.questionText ?? '').trim()).length < 4) return ['Part 3 needs at least 4 complete questions'];
+      return [];
+    };
+
+    let content = await generateModule('speaking', partNumber) as Record<string, unknown>;
+    let problems = validate(content);
+    if (problems.length > 0) {
+      content = await generateModule('speaking', partNumber, `Speaking Part ${partNumber} failed validation: ${problems.join('; ')}. Regenerate a complete IELTS Speaking part with no empty or placeholder content.`, content) as Record<string, unknown>;
+      problems = validate(content);
+      if (problems.length > 0) throw new Error(`Speaking Part ${partNumber} still failed IELTS quality checks: ${problems.join('; ')}`);
     }
     return content;
   };
 
   const generateWritingTask = async (taskNumber: number) => {
-    let content = await generateModule('writing', taskNumber);
-    let problems = summarizeWritingTaskProblems(content as Record<string, unknown>, taskNumber);
-    if (problems.length > 0) {
-      content = await generateModule(
+    let lockedTask = await generateModule(
+      'writing', taskNumber, undefined, undefined, undefined, undefined, 'task',
+    ) as Record<string, unknown>;
+    let taskProblems = summarizeWritingDefinitionProblems(lockedTask, taskNumber);
+    for (let repairAttempt = 1; taskProblems.length > 0 && repairAttempt <= 2; repairAttempt += 1) {
+      lockedTask = await generateModule(
         'writing',
         taskNumber,
-        `Writing Task ${taskNumber} failed validation: ${problems.join('; ')}. Generate a complete IELTS Academic writing task. Task 1 must include a renderable visual and a 160-200 word sample answer; Task 2 must include a 280-320 word sample answer.`,
-      );
-      problems = summarizeWritingTaskProblems(content as Record<string, unknown>, taskNumber);
-      if (problems.length > 0) {
-        throw new Error(`Writing Task ${taskNumber} still failed IELTS quality checks: ${problems.join('; ')}`);
-      }
+        `Repair the locked task definition only: ${taskProblems.join('; ')}. Preserve valid fields. Include a complete prompt${taskNumber === 1 ? ' and exactly one matching renderable visual' : ''}. Return no sampleAnswer.`,
+        lockedTask,
+        undefined,
+        undefined,
+        'task',
+      ) as Record<string, unknown>;
+      taskProblems = summarizeWritingDefinitionProblems(lockedTask, taskNumber);
     }
-    return content;
+    if (taskProblems.length > 0) {
+      throw new Error(`Writing Task ${taskNumber} definition stage failed after bounded repairs: ${taskProblems.join('; ')}`);
+    }
+
+    let answer = await generateModule(
+      'writing', taskNumber, undefined, undefined, undefined, undefined, 'answer', lockedTask,
+    ) as Record<string, unknown>;
+    let answerWords = countWords(answer.sampleAnswer);
+    const minimum = taskNumber === 1 ? 160 : 280;
+    const maximum = taskNumber === 1 ? 200 : 320;
+    for (let repairAttempt = 1; (answerWords < minimum || answerWords > maximum) && repairAttempt <= 2; repairAttempt += 1) {
+      answer = await generateModule(
+        'writing',
+        taskNumber,
+        `Repair the sample answer only. It currently has ${answerWords} words; it must contain ${minimum}-${maximum} words. Preserve its relevance to the locked task. ${taskNumber === 1 ? 'Target 180 words.' : 'Use exactly five prose paragraphs: 40-45 word introduction, three 60-65 word body/evaluation paragraphs, and a 40-45 word conclusion; total 285-315 words.'} Count before returning and return only sampleAnswer.`,
+        answer,
+        undefined,
+        undefined,
+        'answer',
+        lockedTask,
+      ) as Record<string, unknown>;
+      answerWords = countWords(answer.sampleAnswer);
+    }
+    if (answerWords < minimum || answerWords > maximum) {
+      throw new Error(`Writing Task ${taskNumber} answer stage failed after bounded repairs: found ${answerWords} words.`);
+    }
+
+    return { ...lockedTask, sampleAnswer: answer.sampleAnswer };
   };
 
   const generateSectionAudioUrl = async (section: ListeningSection): Promise<string | undefined> => {
     const text = section.transcript?.trim();
     if (!text || text.length > 4000) return undefined;
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) throw new Error('Admin session expired. Please sign in again.');
       const response = await fetch('/api/tts', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}`,
+        },
         body: JSON.stringify({ text, voice: 'alloy', provider: 'openai' }),
       });
       if (!response.ok) return undefined;
@@ -3641,6 +4156,8 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
   const handleGenerate = async () => {
     if (!topic.trim()) { setError('Please enter a topic'); return; }
     setIsGenerating(true); setError('');
+    let qualityReport: BundleQualityReport | null = null;
+    let createdBundleId: string | null = null;
     try {
       const now = Date.now();
       // 1. Reading (Generate 3 passages one by one)
@@ -3687,23 +4204,10 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
         }),
         totalQuestions: totalReadingQuestions
       };
-      const readingTargets = [13, 13, 14];
       let repairedReadingNumber = 1;
-      readingTest.passages = readingTest.passages.map((passage, pIndex) => {
-        const target = readingTargets[pIndex] ?? 13;
-        const fitted = fitQuestionCount<ReadingQuestion>(
-          passage.questions as ReadingQuestion[],
-          target,
-          (_questionNumber, qIndex) => ({
-            id: `q-${now}-${pIndex}-repair-${qIndex}`,
-            questionNumber: qIndex + 1,
-            type: 'short-answer',
-            questionText: `Write one key detail from Passage ${pIndex + 1}.`,
-            correctAnswer: fallbackAnswer(qIndex + 1),
-            explanation: 'Auto-repaired placeholder question. Regenerate this passage for richer source-based content.',
-          }),
-        ).map((q) => ({ ...q, questionNumber: repairedReadingNumber++ }));
-        const repairedQuestions = repairGroupedQuestionData(fitted, topic);
+      readingTest.passages = readingTest.passages.map((passage) => {
+        const numbered = (passage.questions as ReadingQuestion[]).map(q => ({ ...q, questionNumber: repairedReadingNumber++ }));
+        const repairedQuestions = repairGroupedQuestionData(numbered, topic);
         return {
           ...passage,
           questions: repairedQuestions,
@@ -3758,20 +4262,9 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
         audioUrl: '', audioDuration: 0, transferTime: 600, sections: listeningSections, instructions: 'Listen to the audio and answer.'
       };
       let repairedListeningNumber = 1;
-      listeningTest.sections = listeningTest.sections.map((section, sIndex) => {
-        const fitted = fitQuestionCount<ListeningQuestion>(
-          section.questions as ListeningQuestion[],
-          10,
-          (_questionNumber, qIndex) => ({
-            id: `lq-${now}-${sIndex}-repair-${qIndex}`,
-            questionNumber: qIndex + 1,
-            type: 'short-answer',
-            questionText: `Write one detail mentioned in Section ${sIndex + 1}.`,
-            correctAnswer: fallbackAnswer(qIndex + 1),
-            explanation: 'Auto-repaired placeholder question. Regenerate this section for richer transcript-based content.',
-          }),
-        ).map((q) => ({ ...q, questionNumber: repairedListeningNumber++ }));
-        const repairedQuestions = repairGroupedQuestionData(fitted, topic);
+      listeningTest.sections = listeningTest.sections.map((section) => {
+        const numbered = (section.questions as ListeningQuestion[]).map(q => ({ ...q, questionNumber: repairedListeningNumber++ }));
+        const repairedQuestions = repairGroupedQuestionData(numbered, topic);
         return {
           ...section,
           questions: repairedQuestions,
@@ -3837,7 +4330,7 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
       // 4. Speaking (Generate 3 parts one by one)
       const speakingPartsData = [];
       for (let i = 1; i <= 3; i++) {
-        const spData = await generateModule('speaking', i);
+        const spData = await generateSpeakingPart(i);
         speakingPartsData.push(spData);
       }
 
@@ -3904,21 +4397,97 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
         throw new Error(`AI generated content did not pass IELTS validation:\n${formatValidationIssues(validationIssues)}`);
       }
 
+      qualityReport = assessFullMockBundle(
+        {
+          listening: listeningTest as ListeningTest,
+          reading: readingTest as ReadingTest,
+          writing: writingTest as WritingTest,
+          speaking: speakingTest as SpeakingTest,
+        },
+        existingTests as ExistingQualityTest[],
+      );
+      if (!qualityReport.passed) {
+        throw new Error(`AI generation blocked by quality gate:\n${qualityReport.blockingReasons.join('\n')}`);
+      }
+
       setProgress('Saving to database...');
       if (!isSupabaseConfigured() || !supabase) throw new Error("Supabase is not configured");
       const insertData = [
-        { title: readingTest.title, module_type: 'reading', test_data: jsonbSafe(readingTest), is_published: true, is_premium: false },
-        { title: listeningTest.title, module_type: 'listening', test_data: jsonbSafe(listeningTest), is_published: true, is_premium: false },
-        { title: writingTest.title, module_type: 'writing', test_data: jsonbSafe(writingTest), is_published: true, is_premium: false },
-        { title: speakingTest.title, module_type: 'speaking', test_data: jsonbSafe(speakingTest), is_published: true, is_premium: false }
+        { title: readingTest.title, module_type: 'reading', test_data: jsonbSafe(readingTest), is_published: false, is_premium: false },
+        { title: listeningTest.title, module_type: 'listening', test_data: jsonbSafe(listeningTest), is_published: false, is_premium: false },
+        { title: writingTest.title, module_type: 'writing', test_data: jsonbSafe(writingTest), is_published: false, is_premium: false },
+        { title: speakingTest.title, module_type: 'speaking', test_data: jsonbSafe(speakingTest), is_published: false, is_premium: false }
       ];
-      const { error: insertError } = await supabase.from('mock_tests').insert(insertData);
+      const { data: insertedModules, error: insertError } = await supabase
+        .from('mock_tests')
+        .insert(insertData)
+        .select('id, module_type');
       if (insertError) throw insertError;
+
+      const moduleIds = Object.fromEntries(
+        (insertedModules || []).map(row => [row.module_type, row.id]),
+      ) as Record<string, string>;
+      if (!moduleIds.listening || !moduleIds.reading || !moduleIds.writing || !moduleIds.speaking) {
+        throw new Error('The four modules were saved, but their bundle could not be created.');
+      }
+
+      const { data: createdBundle, error: bundleError } = await supabase
+        .from('full_mock_bundles')
+        .insert({
+          title: `Full Mock Test: ${topic}`,
+          theme: topic.trim(),
+          difficulty,
+          listening_test_id: moduleIds.listening,
+          reading_test_id: moduleIds.reading,
+          writing_test_id: moduleIds.writing,
+          speaking_test_id: moduleIds.speaking,
+          review_status: 'draft',
+          quality_score: qualityReport.score,
+          generation_metadata: {
+            source: 'ai-full-test-generator',
+            provider: 'openai',
+            generated_at: new Date().toISOString(),
+            validation: 'passed-client-and-api',
+            quality_report: qualityReport,
+          },
+        })
+        .select('id')
+        .single();
+      if (bundleError) {
+        await supabase.from('mock_tests').delete().in('id', Object.values(moduleIds));
+        throw new Error(`Bundle creation failed; generated drafts were rolled back: ${bundleError.message}`);
+      }
+      createdBundleId = createdBundle.id;
+      const { error: historyError } = await supabase.from('ai_generation_runs').insert({
+        bundle_id: createdBundleId,
+        topic: topic.trim(),
+        difficulty,
+        provider: 'openai',
+        status: 'succeeded',
+        quality_score: qualityReport.score,
+        quality_report: qualityReport,
+      });
+      if (historyError) console.warn('Generation succeeded but history logging failed:', historyError);
       
-      setProgress('Done! Refreshing list...');
+      setProgress('Done! One linked Full Mock bundle and four draft modules were saved for review.');
       setTimeout(() => { onComplete(); onOpenChange(false); setTopic(''); setProgress(''); }, 1500);
     } catch (err: any) {
-      setError(err.message || 'An error occurred during generation');
+      const message = err.message || 'An error occurred during generation';
+      setError(message);
+      if (supabase && !createdBundleId) {
+        const hasDuplicate = qualityReport?.modules.some(module => module.duplicateMatch);
+        const status = hasDuplicate ? 'blocked_duplicate' : qualityReport ? 'blocked_quality' : 'failed';
+        const { error: historyError } = await supabase.from('ai_generation_runs').insert({
+          topic: topic.trim(),
+          difficulty,
+          provider: 'openai',
+          status,
+          quality_score: qualityReport?.score ?? null,
+          quality_report: qualityReport ?? {},
+          error_message: message.slice(0, 2000),
+        });
+        if (historyError) console.warn('Failed to log generation failure:', historyError);
+      }
     } finally {
       setIsGenerating(false);
     }
@@ -3929,7 +4498,7 @@ function FullTestGeneratorDialog({ open, onOpenChange, onComplete }: { open: boo
       <DialogContent className="max-w-md bg-white">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl"><Sparkles className="h-5 w-5 text-indigo-500" /> AI Full Test Generator</DialogTitle>
-          <DialogDescription>Generates **Reading, Listening, Writing, and Speaking** completely from scratch on any topic, instantly publishing them together for a full mock test run.</DialogDescription>
+          <DialogDescription>Generates Reading, Listening, Writing, and Speaking from scratch, validates them, and saves all four as drafts for staff review.</DialogDescription>
         </DialogHeader>
         <div className="space-y-5 pt-2">
           {error && <Alert className="bg-red-50 text-red-800 border-red-200"><AlertCircle className="h-4 w-4 text-red-600"/><AlertDescription>{error}</AlertDescription></Alert>}

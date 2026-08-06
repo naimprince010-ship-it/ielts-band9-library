@@ -1,10 +1,11 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
 import { checkRateLimit, LIMITS } from './_rateLimit.js';
+import { cleanEnv } from './_env.js';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const SUPABASE_URL = cleanEnv(process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL);
+const SUPABASE_SERVICE_KEY = cleanEnv(process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 type FunctionalCategory = 'OPINION' | 'EMOTION' | 'TRANSACTIONAL' | 'SOCIAL' | 'DESCRIPTIVE' | 'ACADEMIC';
 
@@ -252,7 +253,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 }
 
-async function getCategoryCounts(supabase: ReturnType<typeof createClient>) {
+async function getCategoryCounts(supabase: any) {
   const categories = ['OPINION', 'EMOTION', 'TRANSACTIONAL', 'SOCIAL', 'DESCRIPTIVE', 'ACADEMIC'];
   const counts: Record<string, number> = {};
 

@@ -97,6 +97,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ success: false, error: 'Please write enough text before requesting AI feedback.' });
     }
 
+    const MAX_CHARS = 6000;
+    if (task1Response.length > MAX_CHARS || task2Response.length > MAX_CHARS) {
+      return res.status(400).json({ success: false, error: 'Response text is too long. Please keep each task response under 6000 characters.' });
+    }
+
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {

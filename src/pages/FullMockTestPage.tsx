@@ -1,13 +1,14 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { unlockIOSAudio, toBlobUrl, createNativeAudioElement, getAudioContext } from '@/lib/iosAudio';
 import { sanitizeHtml } from '@/lib/sanitize';
+import { calculateBandScore } from '@/utils/scoring';
 import { useNavigate } from 'react-router-dom';
 import {
   Clock, Headphones, BookOpen, PenTool, Mic, ChevronRight,
   CheckCircle, AlertCircle, Award, Play, RotateCcw,
   Loader2, Target, Crown, Timer, Check, Volume2,
   Shield, Zap, Wifi, Lock, ArrowRight, Square, MicOff, Trash2,
-  Sparkles
+  Sparkles, Flag
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,7 +18,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { normalizeMockTestRow, normalizeWritingTestFromDb, findWritingTask1 } from '@/lib/writingVisualNormalize';
+import { isUsableFullMockTest } from '@/lib/fullMockReadiness';
+import { buildObjectiveReview } from '@/lib/fullMockScoring';
 import { WritingTask1Renderer } from '@/components/test/WritingTask1Renderer';
+import { FullMockListeningPaper, type ListeningPaperSection } from '@/components/test/FullMockListeningPaper';
+import { FullMockReadingPaper, type ReadingPaperPassage } from '@/components/test/FullMockReadingPaper';
+import { FullMockWritingPaper } from '@/components/test/FullMockWritingPaper';
+import { FullMockSpeakingPaper, type SpeakingPaperPart } from '@/components/test/FullMockSpeakingPaper';
 import { FULL_MOCK_FALLBACK_TESTS } from '@/data/fullMockFallback';
 import type { WritingTask } from '@/types';
 
@@ -35,6 +42,7 @@ interface Question {
   questionText: string;
   options?: string[];
   correctAnswer: string;
+  acceptedAnswers?: string[];
   explanation?: string;
   tableData?: {
     headers?: string[];
@@ -47,6 +55,15 @@ interface MockTest {
   title: string;
   module_type: ModuleType;
   test_data: Record<string, unknown>;
+}
+
+interface FullMockBundleRow {
+  id: string;
+  listening_test_id: string;
+  reading_test_id: string;
+  writing_test_id: string;
+  speaking_test_id: string;
+  created_at: string;
 }
 
 interface SectionScores {
@@ -192,8 +209,23 @@ const preTestChecklist = [
   { id: 4, icon: Timer, label: '3+ hours available', description: 'Complete test without rushing' },
 ];
 
-function bandFromScore(correct: number, total: number): number {
+/**
+ * Convert raw correct count to IELTS band using official lookup tables.
+ * Falls back to a percentage approximation for non-standard question counts.
+ */
+function bandFromScore(
+  correct: number,
+  total: number,
+  moduleType?: 'reading' | 'listening',
+): number {
   if (total === 0) return 4.0;
+  // Use official IELTS raw-score tables when the module type is known
+  if (moduleType === 'reading' || moduleType === 'listening') {
+    // Normalise to 40-question equivalent for non-standard test lengths
+    const raw40 = total === 40 ? correct : Math.round((correct / total) * 40);
+    return calculateBandScore(raw40, moduleType);
+  }
+  // Generic percentage fallback (writing/speaking rough estimate path)
   const pct = correct / total;
   if (pct >= 0.97) return 9.0;
   if (pct >= 0.93) return 8.5;
@@ -275,34 +307,6 @@ function normalizeListeningSections(testData: Record<string, unknown> | undefine
   return [];
 }
 
-function countListeningQuestions(testData: Record<string, unknown> | undefined): number {
-  return normalizeListeningSections(testData).reduce((sum, section) => sum + (section.questions?.length ?? 0), 0);
-}
-
-function countReadingQuestions(testData: Record<string, unknown> | undefined): number {
-  const passages = Array.isArray(testData?.passages) ? testData.passages : (testData?.passage ? [testData.passage] : []);
-  return passages.reduce((sum, passage) => {
-    if (!isRecord(passage)) return sum;
-    return sum + (Array.isArray(passage.questions) ? passage.questions.length : 0);
-  }, 0);
-}
-
-function countReadingPassages(testData: Record<string, unknown> | undefined): number {
-  const passages = Array.isArray(testData?.passages) ? testData.passages : (testData?.passage ? [testData.passage] : []);
-  return passages.filter(isRecord).length;
-}
-
-function isUsableFullMockTest(test: MockTest | undefined, module: ModuleType): boolean {
-  if (!test?.test_data) return false;
-  if (module === 'listening') return countListeningQuestions(test.test_data) >= 10;
-  if (module === 'reading') {
-    return countReadingPassages(test.test_data) >= 3 && countReadingQuestions(test.test_data) === 40;
-  }
-  if (module === 'writing') return Array.isArray(test.test_data.tasks) && test.test_data.tasks.length >= 2;
-  if (module === 'speaking') return Array.isArray(test.test_data.parts) && test.test_data.parts.length >= 3;
-  return false;
-}
-
 function getFallbackMockTest(module: ModuleType): MockTest {
   return FULL_MOCK_FALLBACK_TESTS[module] as MockTest;
 }
@@ -319,52 +323,6 @@ function displayText(value: unknown, fallback = ''): string {
     }
   }
   return fallback;
-}
-
-function normalizeAnswer(value: unknown): string {
-  return String(value ?? '')
-    .trim()
-    .toLowerCase()
-    .replace(/&/g, ' and ')
-    .replace(/[.,!?;:()[\]{}"']/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-function getAcceptedAnswers(correctAnswer: unknown): string[] {
-  if (Array.isArray(correctAnswer)) return correctAnswer.map(normalizeAnswer).filter(Boolean);
-  return String(correctAnswer ?? '')
-    .split(/\s*(?:\/|\||;|,|\bor\b)\s*/i)
-    .map(normalizeAnswer)
-    .filter(Boolean);
-}
-
-function isAnswerCorrect(userAnswer: string, correctAnswer: unknown): boolean {
-  const normalizedUser = normalizeAnswer(userAnswer);
-  if (!normalizedUser) return false;
-  return getAcceptedAnswers(correctAnswer).some(answer => answer === normalizedUser);
-}
-
-function buildObjectiveReview(questions: Question[], answers: Record<string, string>, keyPrefix: 'l' | 'r'): SectionReview {
-  const items = questions.map((q, index) => {
-    const key = `${keyPrefix}_${index}`;
-    const acceptedAnswers = getAcceptedAnswers(q.correctAnswer);
-    const userAnswer = answers[key] ?? '';
-    return {
-      questionNumber: index + 1,
-      questionText: displayText(q.questionText, `Question ${index + 1}`),
-      userAnswer,
-      acceptedAnswers,
-      correct: isAnswerCorrect(userAnswer, q.correctAnswer),
-      explanation: q.explanation,
-    };
-  });
-
-  return {
-    correct: items.filter(item => item.correct).length,
-    total: items.length,
-    items,
-  };
 }
 
 function bandFromWritingWordCounts(task1: number, task2: number): number {
@@ -453,9 +411,13 @@ interface TestSession {
   speakingSubmission: SpeakingSubmission | null;
   speakingFeedback: SpeakingFeedback | null;
   selectedMode: 'practice' | 'exam';
-  tests: Partial<Record<ModuleType, MockTest>>;
+  bundleId?: string | null;
+  tests?: Partial<Record<ModuleType, MockTest>>;
   playedAudios: string[];
   timerRemaining: number;
+  activeReadingPassage?: number;
+  activeListeningSection?: number;
+  flaggedQuestions?: Record<string, boolean>;
   savedAt: number;
 }
 
@@ -476,20 +438,33 @@ function loadSession(): TestSession | null {
 function saveSession(session: Partial<TestSession>) {
   try {
     const existing = loadSession() ?? {} as TestSession;
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ ...existing, ...session, savedAt: Date.now() }));
+    // Full mock payloads can exceed the browser's sessionStorage quota. Keep
+    // only lightweight progress and reload module data by bundleId on resume.
+    const { tests: _existingTests, ...existingProgress } = existing;
+    const { tests: _nextTests, ...nextProgress } = session;
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ ...existingProgress, ...nextProgress, savedAt: Date.now() }));
   } catch { /* sessionStorage might be blocked in private mode */ }
 }
 
 function clearSession() {
   sessionStorage.removeItem(SESSION_KEY);
+  Object.keys(sessionStorage).filter(key => key.startsWith('readingPaperHighlights:')).forEach(key => sessionStorage.removeItem(key));
+  sessionStorage.removeItem('fullMockWritingActiveTask');
+  sessionStorage.removeItem('fullMockWritingStarted');
+  sessionStorage.removeItem('fullMockSpeakingPart');
   localStorage.removeItem('mockTestAnswers_v1');
 }
 
 export default function FullMockTestPage() {
+  const legacyListeningEnabled = false;
+  const legacyReadingEnabled = false;
+  const legacyWritingEnabled = false;
+  const legacySpeakingEnabled = false;
   const navigate = useNavigate();
-  const { user, isPremium } = useAuth();
+  const { user, isPremium, isAdmin } = useAuth();
 
   const [resultSaved, setResultSaved] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [selectedBundleId, setSelectedBundleId] = useState<string | null>(null);
   const savedResultIdRef = useRef<string | null>(null);
 
   const saveResultToDb = useCallback(async (
@@ -519,29 +494,84 @@ export default function FullMockTestPage() {
         reading_test_id:   usedTests.reading?.id   ?? null,
         writing_test_id:   usedTests.writing?.id   ?? null,
         speaking_test_id:  usedTests.speaking?.id  ?? null,
+        full_mock_bundle_id: selectedBundleId,
         review_data: finalReviewData,
         writing_feedback: finalWritingFeedback,
         speaking_feedback: finalSpeakingFeedback,
+        // Legacy production schemas require a non-null section summary. Keep
+        // this alongside the dedicated band columns for backward compatibility.
+        sections: SECTIONS.map(section => ({
+          module: section.module,
+          label: section.label,
+          band: finalScores[section.module],
+        })),
       };
+      // Helper: only retry when PostgREST/Postgres reports an *unknown* column.
+      // Deliberately narrow so NOT NULL violations like
+      // "null value in column "sections" violates not-null constraint"
+      // do NOT trigger a retry (they would fail on every attempt anyway).
+      const isMissingColumnError = (e: { code?: string; message?: string } | null): boolean => {
+        if (!e) return false;
+        // PostgREST "relationship/column not found" codes
+        if (e.code === 'PGRST204' || e.code === 'PGRST200') return true;
+        const msg = e.message || '';
+        return (
+          /column .+ does not exist/i.test(msg) ||
+          /could not find .+ column/i.test(msg)
+        );
+      };
+
+      // Attempt 1 — canonical schema: all fields including review_data, writing_feedback,
+      // speaking_feedback; legacy schemas keep sections for the NOT NULL constraint.
       let { data: savedResult, error } = await supabase
         .from('mock_test_results')
         .insert(insertData)
         .select('id')
         .single();
 
-      if (error && /review_data|writing_feedback|speaking_feedback|column/i.test(error.message || '')) {
+      // Attempt 2 — old schema without review_data / writing_feedback / speaking_feedback
+      // but with sections (sections may be NOT NULL on legacy production tables).
+      if (isMissingColumnError(error)) {
         const legacyInsertData: Record<string, unknown> = { ...insertData };
         delete legacyInsertData.review_data;
         delete legacyInsertData.writing_feedback;
         delete legacyInsertData.speaking_feedback;
-        const retry = await supabase
+        const r2 = await supabase
           .from('mock_test_results')
           .insert(legacyInsertData)
           .select('id')
           .single();
-        savedResult = retry.data;
-        error = retry.error;
+        savedResult = r2.data;
+        error = r2.error;
+
+        // Attempt 3 — canonical migration schema (no sections column):
+        // preserve review_data / writing_feedback / speaking_feedback, drop sections only.
+        if (isMissingColumnError(r2.error)) {
+          const withoutSectionsData: Record<string, unknown> = { ...insertData };
+          delete withoutSectionsData.sections;
+          const r3 = await supabase
+            .from('mock_test_results')
+            .insert(withoutSectionsData)
+            .select('id')
+            .single();
+          savedResult = r3.data;
+          error = r3.error;
+
+          // Attempt 4 — partial/old schema: neither sections nor JSON feedback columns.
+          if (isMissingColumnError(r3.error)) {
+            const minimalData: Record<string, unknown> = { ...legacyInsertData };
+            delete minimalData.sections;
+            const r4 = await supabase
+              .from('mock_test_results')
+              .insert(minimalData)
+              .select('id')
+              .single();
+            savedResult = r4.data;
+            error = r4.error;
+          }
+        }
       }
+
       if (error) {
         console.error('Failed to save result:', error);
         setResultSaved('error');
@@ -553,7 +583,7 @@ export default function FullMockTestPage() {
       console.error('Error saving result:', err);
       setResultSaved('error');
     }
-  }, [user]);
+  }, [selectedBundleId, user]);
 
   // Restore from session on first render
   const savedSession = loadSession();
@@ -575,8 +605,10 @@ export default function FullMockTestPage() {
   );
   const [speakingFeedbackError, setSpeakingFeedbackError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [usingFallback, setUsingFallback] = useState(false);
   const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [activeReadingPassage, setActiveReadingPassage] = useState(0);
+  const [activeReadingPassage, setActiveReadingPassage] = useState(savedSession?.activeReadingPassage ?? 0);
+  const [activeListeningSection, setActiveListeningSection] = useState(savedSession?.activeListeningSection ?? 0);
   const [readingMobileView, setReadingMobileView] = useState<'passage' | 'questions'>('passage');
   const [playingAudioId, setPlayingAudioId] = useState<string | null>(null);
   const [playedAudios, setPlayedAudios] = useState<Set<string>>(
@@ -1046,12 +1078,37 @@ export default function FullMockTestPage() {
     }
   }, []);
 
+  const [isSavedIndicator, setIsSavedIndicator] = useState(false);
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const [flaggedQuestions, setFlaggedQuestions] = useState<Record<string, boolean>>(savedSession?.flaggedQuestions ?? {});
+  const toggleFlag = (key: string) => setFlaggedQuestions(prev => ({ ...prev, [key]: !prev[key] }));
+
+  useEffect(() => {
+    saveSession({ activeReadingPassage, activeListeningSection, flaggedQuestions });
+  }, [activeReadingPassage, activeListeningSection, flaggedQuestions]);
+
   // Persist answers whenever they change
   useEffect(() => {
     if (Object.keys(answers).length > 0) {
       localStorage.setItem('mockTestAnswers_v1', JSON.stringify(answers));
+      setIsSavedIndicator(true);
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+      saveTimeoutRef.current = setTimeout(() => setIsSavedIndicator(false), 2000);
     }
   }, [answers]);
+
+  // Prevent accidental reload/close during active test
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (phase !== 'intro' && phase !== 'results') {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [phase]);
 
   // ─── AUDIO SYSTEM (Mobile-resilient) ────────────────────────────────────────
   // Strategy: split long transcripts into ≤40-word chunks played sequentially
@@ -1245,7 +1302,6 @@ export default function FullMockTestPage() {
   // Wrap setters to auto-persist session
   const setTests = (next: Partial<Record<ModuleType, MockTest>>) => {
     setTestsRaw(next);
-    saveSession({ tests: next });
   };
 
   const setScores = (updater: SectionScores | ((prev: SectionScores) => SectionScores)) => {
@@ -1353,6 +1409,8 @@ export default function FullMockTestPage() {
 
   useEffect(() => {
     if (!isSupabaseConfigured() || !supabase) {
+      console.warn('[FullMockTest] Supabase not configured — using fallback sample data');
+      setUsingFallback(true);
       setTests({
         listening: getFallbackMockTest('listening'),
         reading: getFallbackMockTest('reading'),
@@ -1370,18 +1428,89 @@ export default function FullMockTestPage() {
           const restoredModule = SECTIONS[initialSession.sectionIndex]?.module;
           const restoredTest = restoredModule ? initialSession.tests[restoredModule] : undefined;
           if (restoredModule && isUsableFullMockTest(restoredTest, restoredModule)) {
+            setSelectedBundleId(initialSession.bundleId ?? null);
             setTestsRaw(initialSession.tests);
             return;
           }
 
-          clearSession();
-          savedSessionRef.current = null;
-          setPhaseRaw('intro');
-          setSectionIndexRaw(0);
-          setScoresRaw({ listening: null, reading: null, writing: null, speaking: null });
+          // Older sessions may contain incomplete/oversized test payloads.
+          // Keep their lightweight progress and reload the same bundle below.
         }
 
         // ── 1. Fetch user's already-attempted test IDs per module ────────────
+        // Prefer one reviewed/published bundle so all four modules belong together.
+        const { data: publishedBundles, error: bundleError } = await supabase!
+          .from('full_mock_bundles')
+          .select('id, listening_test_id, reading_test_id, writing_test_id, speaking_test_id, created_at')
+          .eq('is_published', true)
+          .eq('review_status', 'approved')
+          .order('created_at', { ascending: false });
+
+        if (bundleError && !/full_mock_bundles|does not exist/i.test(bundleError.message || '')) {
+          throw bundleError;
+        }
+
+        if (publishedBundles?.length) {
+          let attemptedBundleIds = new Set<string>();
+          if (user) {
+            const { data: bundleHistory } = await supabase!
+              .from('mock_test_results')
+              .select('full_mock_bundle_id')
+              .eq('user_id', user.id)
+              .not('full_mock_bundle_id', 'is', null)
+              .order('completed_at', { ascending: false })
+              .limit(20);
+            attemptedBundleIds = new Set(
+              (bundleHistory || []).map(row => row.full_mock_bundle_id).filter(Boolean) as string[],
+            );
+          }
+
+          const resumeBundleId = initialSession?.phase !== 'intro' && initialSession?.phase !== 'results'
+            ? initialSession.bundleId
+            : null;
+          const orderedBundles = [
+            ...publishedBundles.filter(bundle => bundle.id === resumeBundleId),
+            ...publishedBundles.filter(bundle => bundle.id !== resumeBundleId && !attemptedBundleIds.has(bundle.id)),
+            ...publishedBundles.filter(bundle => bundle.id !== resumeBundleId && attemptedBundleIds.has(bundle.id)).reverse(),
+          ] as FullMockBundleRow[];
+
+          for (const bundle of orderedBundles) {
+            const expectedIds: Record<ModuleType, string> = {
+              listening: bundle.listening_test_id,
+              reading: bundle.reading_test_id,
+              writing: bundle.writing_test_id,
+              speaking: bundle.speaking_test_id,
+            };
+            const { data: bundleTests, error: bundleTestsError } = await supabase!
+              .from('mock_tests')
+              .select('*')
+              .in('id', Object.values(expectedIds))
+              .eq('is_published', true);
+            if (bundleTestsError) throw bundleTestsError;
+
+            const bundledResult: Partial<Record<ModuleType, MockTest>> = {};
+            for (const module of Object.keys(expectedIds) as ModuleType[]) {
+              const row = (bundleTests || []).find(test => test.id === expectedIds[module]);
+              if (!row) continue;
+              const normalized = normalizeMockTestRow(row as MockTest);
+              if (normalized.module_type === module && isUsableFullMockTest(normalized as MockTest, module)) {
+                bundledResult[module] = normalized as MockTest;
+              }
+            }
+
+            if (Object.keys(bundledResult).length === 4) {
+              setSelectedBundleId(bundle.id);
+              saveSession({ bundleId: bundle.id });
+              setUsingFallback(false);
+              setTests(bundledResult);
+              return;
+            }
+          }
+        }
+
+        // Legacy fallback for published module tests that predate bundles.
+        setSelectedBundleId(null);
+        saveSession({ bundleId: null });
         const attemptedIds: Partial<Record<ModuleType, Set<string>>> = {};
         if (user) {
           const { data: history } = await supabase!
@@ -1410,12 +1539,14 @@ export default function FullMockTestPage() {
         const result: Partial<Record<ModuleType, MockTest>> = {};
 
         for (const s of SECTIONS) {
-          const { data: allTests } = await supabase!
+          const { data: allTests, error: testsError } = await supabase!
             .from('mock_tests')
             .select('*')
             .eq('module_type', s.module)
             .eq('is_published', true)
             .order('created_at', { ascending: false });
+
+          if (testsError) throw testsError;
 
           const usableTests = (allTests || [])
             .map(t => normalizeMockTestRow(t as MockTest))
@@ -1424,7 +1555,12 @@ export default function FullMockTestPage() {
           const tried = attemptedIds[s.module] ?? new Set<string>();
 
           // Prefer a test the user hasn't seen; fall back to least-recently-used
-          const candidates = usableTests.length > 0 ? usableTests : [getFallbackMockTest(s.module)];
+          const isFallback = usableTests.length === 0;
+          if (isFallback) {
+            console.warn(`[FullMockTest] No published ${s.module} test found — using fallback sample data`);
+            setUsingFallback(true);
+          }
+          const candidates = isFallback ? [getFallbackMockTest(s.module)] : usableTests;
           const fresh = candidates.find(t => !tried.has(t.id));
           const chosen = fresh ?? candidates[candidates.length - 1]; // oldest if all tried
 
@@ -1434,6 +1570,13 @@ export default function FullMockTestPage() {
         setTests(result);
       } catch (err) {
         console.error('FullMockTestPage fetch error:', err);
+        setUsingFallback(true);
+        setTests({
+          listening: getFallbackMockTest('listening'),
+          reading: getFallbackMockTest('reading'),
+          writing: getFallbackMockTest('writing'),
+          speaking: getFallbackMockTest('speaking'),
+        });
       } finally {
         setLoading(false);
       }
@@ -1507,10 +1650,14 @@ export default function FullMockTestPage() {
   const startSection = (idx: number) => {
     setSectionIndex(idx);
     setAnswers({});
+    setFlaggedQuestions({});
+    localStorage.removeItem('mockTestAnswers_v1');
+    setActiveReadingPassage(0);
+    setActiveListeningSection(0);
     setPhase(SECTIONS[idx].phase);
     restoredTimerRef.current = null; // Clear restored timer — use fresh duration
     resetTimerRef.current?.(SECTIONS[idx].duration);
-    saveSession({ timerRemaining: SECTIONS[idx].duration, sectionIndex: idx, phase: SECTIONS[idx].phase, selectedMode, tests });
+    saveSession({ timerRemaining: SECTIONS[idx].duration, sectionIndex: idx, phase: SECTIONS[idx].phase, selectedMode });
     setTimeout(() => startTimerRef.current?.(), 100);
   };
 
@@ -1539,13 +1686,13 @@ export default function FullMockTestPage() {
           const qs = passages.flatMap((p: any) => p.questions || []);
           console.log(`Scoring Reading: ${qs.length} questions found`);
           sectionReview = buildObjectiveReview(qs, answers, 'r');
-          band = sectionReview.total > 0 ? bandFromScore(sectionReview.correct, sectionReview.total) : null;
+          band = sectionReview.total > 0 ? bandFromScore(sectionReview.correct, sectionReview.total, 'reading') : null;
         } else if (sec.module === 'listening') {
           const sections = normalizeListeningSections(td);
           const qs = sections.flatMap((s: any) => s.questions || []);
           console.log(`Scoring Listening: ${qs.length} questions found`);
           sectionReview = buildObjectiveReview(qs, answers, 'l');
-          band = sectionReview.total > 0 ? bandFromScore(sectionReview.correct, sectionReview.total) : null;
+          band = sectionReview.total > 0 ? bandFromScore(sectionReview.correct, sectionReview.total, 'listening') : null;
         } else if (sec.module === 'writing') {
           const task1 = (answers['w_task1'] ?? '').split(/\s+/).filter(Boolean).length;
           const task2 = (answers['w_task2'] ?? '').split(/\s+/).filter(Boolean).length;
@@ -1764,9 +1911,9 @@ export default function FullMockTestPage() {
     if (!isFirstSection) { // Mid-test intro screen
       const nextSection = SECTIONS[sectionIndex];
       return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white flex items-center justify-center animate-in fade-in slide-in-from-bottom-8 duration-700">
+        <div className="full-mock-paper min-h-screen flex items-center justify-center animate-in fade-in duration-500">
           <div className="container mx-auto px-4 py-12 max-w-lg">
-            <Card className="bg-white/10 border-white/20 text-white">
+            <Card className="exam-transition-card rounded-none border-[#c7cbd8] bg-[#f8f8f5] text-[#182644]">
               <CardHeader className="text-center">
                 <div className={`w-16 h-16 rounded-full ${nextSection.bg} flex items-center justify-center mx-auto mb-4`}>
                    {nextSection.icon}
@@ -1775,15 +1922,15 @@ export default function FullMockTestPage() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="flex justify-between items-center bg-white/5 p-4 rounded-xl">
-                  <span className="text-indigo-300">Section</span>
+                  <span className="text-[#3c4a6b]">Section</span>
                   <span className="font-bold">{sectionIndex + 1} of 4</span>
                 </div>
                 <div className="flex justify-between items-center bg-white/5 p-4 rounded-xl">
-                  <span className="text-indigo-300">Duration</span>
+                  <span className="text-[#3c4a6b]">Duration</span>
                   <span className="font-bold">{Math.floor(nextSection.duration / 60)} minutes</span>
                 </div>
                 <Button 
-                  className="w-full bg-indigo-500 hover:bg-indigo-400 text-white py-6 rounded-xl font-bold text-lg"
+                  className="w-full rounded-none bg-[#182644] py-6 text-lg font-semibold text-white hover:bg-[#0f1930]"
                   onClick={() => startSectionWithPreload(sectionIndex)}
                   disabled={audioPreloading}
                 >
@@ -1795,11 +1942,11 @@ export default function FullMockTestPage() {
                   <div className="space-y-1">
                     <div className="w-full bg-white/20 rounded-full h-1.5 overflow-hidden">
                       <div
-                        className="h-full bg-indigo-400 rounded-full transition-all duration-300"
+                        className="h-full bg-[#d98e2b] rounded-full transition-all duration-300"
                         style={{ width: `${Math.round((audioPreloadProgress.done / audioPreloadProgress.total) * 100)}%` }}
                       />
                     </div>
-                    <p className="text-xs text-indigo-300 text-center">
+                    <p className="text-xs text-[#3c4a6b] text-center">
                       Audio {audioPreloadProgress.done}/{audioPreloadProgress.total} downloaded
                     </p>
                   </div>
@@ -1808,7 +1955,7 @@ export default function FullMockTestPage() {
                   <p className={`text-xs text-center font-bold ${
                     audioPreloadStatus === 'ready' ? 'text-emerald-300' :
                     audioPreloadStatus === 'partial' ? 'text-amber-300' :
-                    audioPreloadStatus === 'failed' ? 'text-red-300' : 'text-indigo-300'
+                    audioPreloadStatus === 'failed' ? 'text-red-600' : 'text-[#3c4a6b]'
                   }`}>
                     {audioPreloadMessage}
                   </p>
@@ -1821,10 +1968,82 @@ export default function FullMockTestPage() {
     }
 
     // Main landing page intro
+    const paperIntro = true;
+    if (paperIntro) {
+      return (
+        <div className="full-mock-paper min-h-screen flex items-center justify-center px-4 py-10">
+          <main className="exam-start-cover w-full max-w-3xl bg-[#f8f8f5] border border-[#c7cbd8] p-6 sm:p-10 md:p-12">
+            <div className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[#d98e2b]">Official practice paper · Full mock</div>
+            <h1 className="mt-4 font-serif text-4xl font-semibold leading-tight text-[#182644] sm:text-5xl">IELTS Full Mock Test</h1>
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-[#3c4a6b] sm:text-base">
+              Complete Listening, Reading, Writing and Speaking in sequence under timed exam conditions.
+            </p>
+
+            <div className="mt-8 grid grid-cols-2 border border-[#c7cbd8] bg-[#c7cbd8] sm:grid-cols-4 gap-px">
+              {[
+                ['04', 'Modules'], ['2h 45m', 'Duration'], ['80', 'Objective Qs'], ['9.0', 'Band scale'],
+              ].map(([value, label]) => (
+                <div key={label} className="bg-[#f8f8f5] px-4 py-4">
+                  <div className="font-mono text-xl font-semibold text-[#182644]">{value}</div>
+                  <div className="mt-1 text-xs text-[#3c4a6b]">{label}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 grid gap-8 md:grid-cols-[1fr_280px]">
+              <div>
+                <h2 className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-[#3c4a6b]">Test order</h2>
+                <ol className="mt-3 border-t-2 border-[#182644]">
+                  {testModules.map((module, index) => (
+                    <li key={module.id} className="flex items-center gap-4 border-b border-[#c7cbd8] py-3">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#182644] font-mono text-xs font-semibold text-white">{index + 1}</span>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-semibold text-[#182644]">{module.name}</p>
+                        <p className="text-xs text-[#3c4a6b]">{module.duration} · {module.questions}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+
+              <div>
+                <h2 className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-[#3c4a6b]">Pre-test check</h2>
+                <div className="mt-3 space-y-2">
+                  {preTestChecklist.map((item) => (
+                    <button key={item.id} type="button" onClick={() => toggleCheckItem(item.id)}
+                      className={`flex w-full items-center gap-3 border px-3 py-3 text-left text-sm transition-colors ${checkedItems.includes(item.id) ? 'border-[#2f7d5d] bg-[#dceee5]' : 'border-[#c7cbd8] bg-white hover:border-[#3c4a6b]'}`}>
+                      <span className={`flex h-5 w-5 items-center justify-center rounded-full border ${checkedItems.includes(item.id) ? 'border-[#2f7d5d] bg-[#2f7d5d] text-white' : 'border-[#c7cbd8]'}`}>
+                        {checkedItems.includes(item.id) && <Check className="h-3 w-3" />}
+                      </span>
+                      <span>{item.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 border-t border-dashed border-[#c7cbd8] pt-6">
+              {user && isPremium ? (
+                <Button onClick={() => startSectionWithPreload(0)} disabled={!allChecked || audioPreloading}
+                  className="w-full rounded-none bg-[#182644] py-7 text-base font-semibold text-white hover:bg-[#0f1930]">
+                  {audioPreloading ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Preparing audio…</> : <><Play className="mr-2 h-5 w-5" /> Start full mock test</>}
+                </Button>
+              ) : user ? (
+                <Button onClick={() => navigate('/pricing')} className="w-full rounded-none bg-[#d98e2b] py-7 text-base font-semibold text-[#182644]">Upgrade to start</Button>
+              ) : (
+                <Button onClick={() => navigate('/login')} className="w-full rounded-none bg-[#182644] py-7 text-base font-semibold text-white">Sign in to start</Button>
+              )}
+              <p className="mt-3 text-center text-xs text-[#3c4a6b]">Use headphones. Listening recordings can be played once only.</p>
+            </div>
+          </main>
+        </div>
+      );
+    }
+
     return (
-      <div className="min-h-screen bg-background animate-in fade-in slide-in-from-bottom-8 duration-700">
+      <div className="full-mock-paper full-mock-intro min-h-screen animate-in fade-in duration-500">
         {/* Hero Section */}
-        <section className="relative bg-foreground text-background overflow-hidden">
+        <section className="exam-cover relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-foreground via-foreground to-accent/20" />
           <div className="absolute inset-0 opacity-5">
             <div className="absolute top-20 left-10 w-72 h-72 bg-accent rounded-full blur-3xl" />
@@ -2026,14 +2245,14 @@ export default function FullMockTestPage() {
     const bandColor = overall >= 7 ? 'text-green-400' : overall >= 5.5 ? 'text-yellow-400' : 'text-red-400';
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white animate-in fade-in slide-in-from-bottom-8 duration-700">
-        <div className="container mx-auto px-4 py-20 max-w-5xl">
-          <div className="text-center mb-16">
-            <div className="w-28 h-28 bg-amber-400 rounded-[40px] flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-amber-400/40 rotate-12">
-              <Award className="h-14 w-14 text-amber-900" />
+      <div className="full-mock-paper exam-results min-h-screen animate-in fade-in duration-500">
+        <div className="container mx-auto px-4 py-12 max-w-5xl">
+          <div className="text-center mb-10">
+            <div className="w-16 h-16 bg-[#d98e2b] rounded-full flex items-center justify-center mx-auto mb-5">
+              <Award className="h-8 w-8 text-[#182644]" />
             </div>
-            <h1 className="text-5xl font-black mb-4 tracking-tight">Test Complete!</h1>
-            <p className="text-indigo-300 text-lg font-medium">Your global IELTS performance report</p>
+            <h1 className="font-serif text-4xl font-semibold mb-2 tracking-tight text-[#182644]">Test complete</h1>
+            <p className="text-[#3c4a6b] text-base font-medium">Your IELTS performance report</p>
             {/* Save status indicator */}
             {resultSaved === 'saving' && (
               <div className="mt-4 inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-sm font-semibold">
@@ -2055,7 +2274,7 @@ export default function FullMockTestPage() {
             )}
           </div>
 
-          <div className="bg-white/10 backdrop-blur-2xl rounded-[50px] p-12 text-center mb-12 border border-white/20 shadow-3xl">
+          <div className="exam-result-hero p-10 text-center mb-8">
             <p className="text-indigo-300 text-sm font-black uppercase tracking-[0.3em] mb-4">Overall Predicted Band</p>
             <p className={`text-9xl font-black ${bandColor} mb-6 tracking-tighter`}>{overall.toFixed(1)}</p>
             <div className="h-2 w-24 bg-white/20 mx-auto rounded-full mb-6" />
@@ -2064,13 +2283,13 @@ export default function FullMockTestPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-6 mb-12">
+          <div className="grid grid-cols-2 gap-px mb-10 border border-[#c7cbd8] bg-[#c7cbd8]">
             {SECTIONS.map(s => {
               const band = scores[s.module];
               const bc = band && band >= 7 ? 'text-green-400' : band && band >= 5.5 ? 'text-yellow-400' : 'text-red-400';
               const review = reviewData[s.module];
               return (
-                <div key={s.phase} className="bg-white/5 rounded-3xl p-8 border border-white/10 transition-transform hover:scale-105">
+                <div key={s.phase} className="exam-result-module bg-[#f8f8f5] p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <div className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center text-white`}>{s.icon}</div>
                     <span className="font-black text-sm uppercase tracking-wider">{s.label}</span>
@@ -2100,7 +2319,7 @@ export default function FullMockTestPage() {
                 const wrongCount = review.total - review.correct;
 
                 return (
-                  <div key={module} className="bg-white/10 border border-white/15 rounded-[36px] overflow-hidden">
+                  <div key={module} className="exam-report-section overflow-hidden">
                     <div className="px-8 py-6 bg-white/5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                       <div className="flex items-center gap-3">
                         <div className={`w-11 h-11 rounded-2xl ${section?.bg ?? 'bg-indigo-500'} flex items-center justify-center`}>
@@ -2159,7 +2378,7 @@ export default function FullMockTestPage() {
           )}
 
           {writingSubmission && (
-            <div className="mb-12 bg-white/10 border border-white/15 rounded-[36px] overflow-hidden">
+            <div className="exam-report-section mb-12 overflow-hidden">
               <div className="px-8 py-6 bg-white/5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center">
@@ -2272,7 +2491,7 @@ export default function FullMockTestPage() {
           )}
 
           {speakingSubmission && (
-            <div className="mb-12 bg-white/10 border border-white/15 rounded-[36px] overflow-hidden">
+            <div className="exam-report-section mb-12 overflow-hidden">
               <div className="px-8 py-6 bg-white/5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-2xl bg-orange-500 flex items-center justify-center">
@@ -2411,12 +2630,12 @@ export default function FullMockTestPage() {
                 setAnswers({}); 
                 setPlayedAudios(new Set());
               }}
-              className="bg-indigo-500 hover:bg-indigo-400 text-white font-black px-12 py-8 rounded-[30px] shadow-2xl shadow-indigo-500/40 gap-4"
+              className="rounded-none bg-[#d98e2b] px-12 py-8 font-black text-[#182644] shadow-xl hover:bg-[#c67f21] gap-4"
             >
               <RotateCcw className="h-6 w-6" /> RETAKE FULL EXAM
             </Button>
             <Button size="lg" variant="outline" onClick={() => navigate('/mock-test')}
-              className="bg-transparent border-white/20 text-white hover:bg-white/10 hover:text-white px-12 py-8 rounded-[30px] font-black"
+              className="rounded-none border-white/40 bg-transparent px-12 py-8 font-black text-white hover:bg-white hover:text-[#182644]"
             >
               MODULE PRACTICE
             </Button>
@@ -2476,6 +2695,15 @@ export default function FullMockTestPage() {
   }
 
   const scrollToQuestion = (key: string) => {
+    if (phase === 'listening') {
+      const questionIndex = Number(key.split('_')[1]);
+      setActiveListeningSection(Math.max(0, Math.min(3, Math.floor(questionIndex / 10))));
+      setTimeout(() => {
+        const target = document.getElementById(key);
+        target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 0);
+      return;
+    }
     if (phase === 'reading') {
       const questionIndex = Number(key.split('_')[1]);
       const passage = readingPassageNav.find(item => questionIndex >= item.startIndex && questionIndex <= item.endIndex);
@@ -2510,19 +2738,30 @@ export default function FullMockTestPage() {
       : 'py-12 max-w-4xl';
 
   return (
-    <div className="min-h-screen bg-background pt-[88px] pb-40">
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-2xl text-slate-900 px-6 py-4 flex items-center justify-between shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-b border-slate-200/50 transition-all duration-500">
+    <div className={`full-mock-paper phase-${phase} min-h-screen pt-[76px] pb-40`}>
+      {/* Admin warning when using fallback data */}
+      {usingFallback && isAdmin && (
+        <div className="fixed top-0 left-0 right-0 z-[60] bg-amber-500 text-white text-center py-2 px-4 text-xs font-black uppercase tracking-wider">
+          ⚠ Sample data is active because no published test was found. Check Admin Panel → Manage Mock Tests.
+        </div>
+      )}
+      <div className={`exam-topbar fixed ${usingFallback && isAdmin ? 'top-8' : 'top-0'} left-0 right-0 z-50 px-4 sm:px-6 py-3 flex items-center justify-between transition-all duration-300`}>
         <div className="flex items-center gap-4">
-          <div className={`w-10 h-10 ${currentSection.bg} rounded-xl flex items-center justify-center shadow-lg shadow-black/5`}>{currentSection.icon}</div>
+          <div className="exam-section-mark w-9 h-9 flex items-center justify-center">{currentSection.icon}</div>
           <div>
             <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] mb-0.5">Section {sectionIndex + 1} of 4</p>
-            <p className="font-black text-lg leading-tight text-slate-900">{currentSection.label}</p>
+            <div className="flex items-center gap-2">
+              <p className="exam-title font-semibold text-lg leading-tight">IELTS {currentSection.label}</p>
+              <div className={`flex items-center gap-1 text-[10px] font-black uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100 transition-all duration-500 ${isSavedIndicator ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-1 scale-95 pointer-events-none'}`}>
+                <CheckCircle className="w-3 h-3" /> Saved
+              </div>
+            </div>
           </div>
         </div>
         <div className="flex items-center gap-8">
            <div className="hidden md:flex items-center gap-2">
              {SECTIONS.map((_s, i) => (
-                <div key={i} className={`h-1.5 w-12 rounded-full transition-all duration-500 ${i < sectionIndex ? 'bg-gradient-to-r from-indigo-500 to-purple-500 shadow-md shadow-indigo-500/20' : i === sectionIndex ? 'bg-indigo-600 scale-105' : 'bg-slate-200'}`} />
+                <div key={i} className={`h-1.5 w-12 rounded-full transition-all duration-500 ${i < sectionIndex ? 'bg-[#2f7d5d]' : i === sectionIndex ? 'bg-[#d98e2b] scale-105' : 'bg-slate-200'}`} />
              ))}
            </div>
            {selectedMode === 'practice' && (
@@ -2536,14 +2775,17 @@ export default function FullMockTestPage() {
                {timerRunning ? 'PAUSE' : 'RESUME'}
              </Button>
            )}
-           <div className={`flex items-center gap-3 font-mono font-black text-2xl py-2 px-6 rounded-2xl bg-white border border-slate-200 shadow-sm transition-colors duration-300 ${timeColor}`}>
+           <div className={`exam-timer flex items-center gap-2 font-mono font-semibold text-xl py-2 px-4 transition-colors duration-300 ${timeColor}`}>
             <Clock className="h-6 w-6" />
             {formatTime(remaining)}
           </div>
+          <Button type="button" onClick={() => submitSection()} className="exam-top-submit hidden rounded-none bg-[#d98e2b] px-5 font-semibold text-[#182644] hover:bg-[#c67f21] sm:inline-flex">
+            Submit section
+          </Button>
         </div>
       </div>
 
-      <div className={`w-full mx-auto px-4 sm:px-6 ${pageContainerClass}`}>
+      <div className={`exam-workspace w-full mx-auto px-3 sm:px-6 ${pageContainerClass}`}>
         {!test ? (
           <Card className="border-dashed border-4 border-muted py-32 text-center rounded-[40px]">
             <div className="bg-muted w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6"><AlertCircle className="h-10 w-10 text-muted-foreground" /></div>
@@ -2554,6 +2796,37 @@ export default function FullMockTestPage() {
         ) : (
           <div key={phase}>
             {phase === 'listening' && (() => {
+              const paperSections = normalizeListeningSections(td) as ListeningPaperSection[];
+              const activePaperSection = paperSections[activeListeningSection];
+              const activePaperAudioId = sectionAudioKey(activePaperSection?.sectionNumber);
+              return (
+                <FullMockListeningPaper
+                  sections={paperSections}
+                  answers={answers}
+                  activeSection={activeListeningSection}
+                  setActiveSection={setActiveListeningSection}
+                  setAnswer={(key, value) => setAnswers(prev => ({ ...prev, [key]: value }))}
+                  flaggedQuestions={flaggedQuestions}
+                  toggleFlag={toggleFlag}
+                  playedAudioIds={playedAudios}
+                  playingAudioId={realAudioPlaying ?? playingAudioId}
+                  playSectionAudio={(section, index) => {
+                    const id = sectionAudioKey(section.sectionNumber ?? index + 1);
+                    const transcript = section.transcript ?? '';
+                    if (section.sectionAudioUrl) playRealAudio(id, section.sectionAudioUrl, transcript);
+                    else toggleAudio(id, transcript);
+                  }}
+                  audioMessage={audioPlaybackStatus[activePaperAudioId]?.message}
+                  audioSupported={audioSupported}
+                  timeDisplay={formatTime(remaining)}
+                  timeWarning={remaining < 300}
+                  savedIndicator={isSavedIndicator}
+                  onSubmit={() => submitSection()}
+                />
+              );
+            })()}
+
+            {phase === 'listening' && legacyListeningEnabled && (() => {
               const sections = normalizeListeningSections(td);
               const globalTranscript = typeof td?.transcript === 'string' ? td.transcript : '';
               const rawGlobalAudioUrl = typeof (td as any)?.audioUrl === 'string' ? (td as any).audioUrl as string : '';
@@ -2563,7 +2836,7 @@ export default function FullMockTestPage() {
               const globalAudioUrl = hasPerSectionAudio ? '' : rawGlobalAudioUrl;
               let qIdx = 0;
               return (
-                <div className="space-y-12">
+                <div className="exam-listening space-y-10">
                   {sections.length === 0 && (
                     <Card className="rounded-[34px] border-2 border-amber-200 bg-amber-50 shadow-xl">
                       <CardContent className="flex flex-col items-center gap-4 p-10 text-center">
@@ -2586,7 +2859,7 @@ export default function FullMockTestPage() {
                   )}
                   {/* Global audio player — only shown when there is ONE recording for all sections */}
                   {(globalAudioUrl || (!hasPerSectionAudio && globalTranscript)) && (
-                    <Card className="sticky top-[88px] z-30 border-violet-100 shadow-xl rounded-[24px] overflow-hidden lg:top-28">
+                    <Card className="exam-audio-card sticky top-[76px] z-30 overflow-hidden lg:top-24 animate-in fade-in duration-500">
                       <div className="bg-violet-600 p-4 sm:p-5 flex flex-col gap-4 text-white sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex items-center gap-3"><Headphones className="h-6 w-6" /><h3 className="font-black uppercase tracking-wider">Audio Interface</h3></div>
                         <Button
@@ -2644,7 +2917,7 @@ export default function FullMockTestPage() {
                       </CardContent>
                     </Card>
                   )}
-                  {sections.map((sec) => {
+                  {sections.map((sec, listeningSectionIndex) => {
                     const sectionAudioId = sectionAudioKey(sec.sectionNumber);
                     const sectionTranscript = typeof sec.transcript === 'string' ? sec.transcript : '';
                     const sectionUrl = sec.sectionAudioUrl ?? '';
@@ -2663,9 +2936,9 @@ export default function FullMockTestPage() {
                     <div
                       key={sec.sectionNumber}
                       id={`listening-section-${sec.sectionNumber}`}
-                      className="relative grid min-h-[calc(100vh-13rem)] gap-5 scroll-mt-32 lg:grid-cols-[minmax(280px,0.72fr)_minmax(420px,1.28fr)] lg:items-start"
+                      className={`exam-section-grid relative min-h-[calc(100vh-11rem)] gap-5 scroll-mt-28 lg:grid-cols-[260px_minmax(420px,1fr)] lg:items-start ${listeningSectionIndex === activeListeningSection ? 'grid' : 'hidden'}`}
                     >
-                      <Card className="sticky top-[88px] z-30 self-start rounded-[24px] border border-violet-100 bg-white/95 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto">
+                      <Card className="exam-section-brief sticky top-[76px] z-30 self-start lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto animate-in fade-in duration-500">
                         <CardContent className="space-y-4 p-4 sm:p-5">
                       <div className="flex flex-col gap-4">
                         <div className="flex items-center justify-between gap-3">
@@ -2728,7 +3001,7 @@ export default function FullMockTestPage() {
                           />
                         </div>
                       )}
-                      <div className="grid grid-cols-5 gap-1">
+                      <div className="exam-local-question-grid grid grid-cols-5 gap-1">
                         {sectionQuestions.map((_question, index) => {
                           const number = sectionStartNumber + index;
                           const key = `l_${number - 1}`;
@@ -2746,15 +3019,29 @@ export default function FullMockTestPage() {
                           );
                         })}
                       </div>
+                      <div className="flex gap-2 border-t border-[#c7cbd8] pt-4">
+                        <Button type="button" variant="outline" disabled={listeningSectionIndex === 0}
+                          onClick={() => { setActiveListeningSection(Math.max(0, listeningSectionIndex - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                          className="flex-1 rounded-none border-[#182644] text-[#182644]">Previous</Button>
+                        <Button type="button" disabled={listeningSectionIndex === sections.length - 1}
+                          onClick={() => { setActiveListeningSection(Math.min(sections.length - 1, listeningSectionIndex + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                          className="flex-1 rounded-none bg-[#182644] text-white">Next section</Button>
+                      </div>
                         </CardContent>
                       </Card>
-                      <Card className="rounded-[26px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden bg-white/60 backdrop-blur-sm">
+                      <Card className="exam-question-sheet overflow-hidden animate-in fade-in duration-500">
                       <CardContent className="p-4 sm:p-8 space-y-6">
                         {Array.isArray(sec.questions) && sec.questions.map((q) => {
                           const key = `l_${qIdx++}`;
                           return (
-                            <div key={key} id={key} className="scroll-mt-32 p-5 sm:p-6 rounded-[24px] bg-white hover:bg-slate-50 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg border border-slate-100 hover:border-violet-200">
-                              <div className="flex items-start gap-4 mb-5"><span className="bg-slate-900 shadow-md text-white rounded-xl w-10 h-10 flex items-center justify-center flex-shrink-0 font-black text-sm">{qIdx}</span><p className="font-bold text-base sm:text-lg pt-1.5 leading-relaxed text-slate-800">{displayText(q.questionText, `Question ${qIdx}`)}</p></div>
+                            <div key={key} id={key} className="exam-question-card scroll-mt-28 p-5 sm:p-6 transition-colors duration-200">
+                              <div className="flex items-start gap-4 mb-5">
+                                <span className="exam-question-number w-8 h-8 flex items-center justify-center flex-shrink-0 font-bold text-sm">{qIdx}</span>
+                                <p className="font-bold text-base sm:text-lg pt-1.5 leading-relaxed text-slate-800 flex-1">{displayText(q.questionText, `Question ${qIdx}`)}</p>
+                                <button type="button" onClick={() => toggleFlag(key)} className={`flex-shrink-0 p-2 rounded-xl transition-all ${flaggedQuestions[key] ? 'bg-amber-100 text-amber-600 shadow-inner' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}`} title={flaggedQuestions[key] ? "Remove Flag" : "Flag for review"}>
+                                  <Flag className={`h-5 w-5 ${flaggedQuestions[key] ? 'fill-current' : ''}`} />
+                                </button>
+                              </div>
                               {q.tableData ? (
                                 <div className="overflow-x-auto border-2 border-slate-100 rounded-2xl my-4 bg-white overflow-hidden shadow-inner">
                                   <table className="w-full text-sm text-left">
@@ -2804,16 +3091,35 @@ export default function FullMockTestPage() {
             })()}
 
             {phase === 'reading' && (() => {
+              const paperPassages = (Array.isArray(td?.passages) ? td.passages : (td?.passage ? [td.passage] : [])) as ReadingPaperPassage[];
+              return (
+                <FullMockReadingPaper
+                  passages={paperPassages}
+                  answers={answers}
+                  activePassage={activeReadingPassage}
+                  setActivePassage={setActiveReadingPassage}
+                  setAnswer={(key, value) => setAnswers(previous => ({ ...previous, [key]: value }))}
+                  flaggedQuestions={flaggedQuestions}
+                  toggleFlag={toggleFlag}
+                  timeDisplay={formatTime(remaining)}
+                  timeWarning={remaining < 300}
+                  savedIndicator={isSavedIndicator}
+                  onSubmit={() => submitSection()}
+                />
+              );
+            })()}
+
+            {phase === 'reading' && legacyReadingEnabled && (() => {
               const passages = Array.isArray(td?.passages) ? td.passages : (td?.passage ? [td.passage] : []);
               let qIdx = 0;
               return (
-                <div className="space-y-10">
+                <div className="exam-reading space-y-8">
                   {passages.map((passage: any, pi: number) => (
                     <div
                       key={pi}
                       id={`reading-passage-${pi + 1}`}
                       data-reading-passage-index={pi}
-                      className="space-y-6 scroll-mt-28"
+                      className={`space-y-6 scroll-mt-28 ${pi === activeReadingPassage ? 'block' : 'hidden'}`}
                     >
                       <div className="flex flex-col gap-3 px-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex items-center gap-4">
@@ -2836,7 +3142,7 @@ export default function FullMockTestPage() {
                         </div>
                       </div>
                       <div className="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(420px,1.05fr)] lg:items-start">
-                        <Card className={`rounded-[34px] shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-100 overflow-hidden bg-white/95 backdrop-blur-xl lg:sticky lg:top-28 lg:max-h-[calc(100vh-16rem)] lg:overflow-y-auto ${readingMobileView === 'questions' ? 'hidden lg:block' : ''}`}>
+                        <Card className={`exam-reading-passage lg:sticky lg:top-24 lg:max-h-[calc(100vh-12rem)] lg:overflow-y-auto ${readingMobileView === 'questions' ? 'hidden lg:block' : ''} animate-in fade-in duration-500`}>
                           <div className="bg-slate-50 p-6 sm:p-8 border-b border-slate-100">
                             <h2 className="text-2xl font-black mb-5 flex items-center gap-3 text-slate-800">
                               <BookOpen className="h-7 w-7 text-blue-500 flex-shrink-0" />
@@ -2845,7 +3151,7 @@ export default function FullMockTestPage() {
                             <div className="prose prose-base max-w-none text-slate-600 leading-[1.85] font-medium whitespace-pre-line" dangerouslySetInnerHTML={{ __html: sanitizeHtml(displayText(passage.textContent)) }} />
                           </div>
                         </Card>
-                        <Card className={`rounded-[34px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden bg-white/60 backdrop-blur-sm lg:max-h-[calc(100vh-16rem)] lg:overflow-y-auto ${readingMobileView === 'passage' ? 'hidden lg:block' : ''}`}>
+                        <Card className={`exam-reading-questions lg:max-h-[calc(100vh-12rem)] lg:overflow-y-auto ${readingMobileView === 'passage' ? 'hidden lg:block' : ''} animate-in fade-in duration-500`}>
                           <CardContent className="p-0">
                            <div className="sticky top-0 z-10 border-b border-slate-100 bg-white/95 px-6 py-4 backdrop-blur sm:px-8">
                              <p className="text-[10px] font-black uppercase tracking-[0.24em] text-blue-500">Passage {pi + 1}</p>
@@ -2860,10 +3166,13 @@ export default function FullMockTestPage() {
                            {Array.isArray(passage.questions) && passage.questions.map((q: any) => {
                              const key = `r_${qIdx++}`;
                              return (
-                               <div key={key} id={key} className="p-5 sm:p-6 rounded-[24px] bg-white hover:bg-slate-50 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg border border-slate-100 hover:border-blue-200 scroll-mt-28">
+                               <div key={key} id={key} className="exam-question-card p-5 sm:p-6 transition-colors duration-200 scroll-mt-28">
                                  <div className="flex items-start gap-4 mb-5">
-                                   <span className="bg-slate-900 shadow-md text-white rounded-xl w-10 h-10 flex items-center justify-center flex-shrink-0 font-black text-sm">{qIdx}</span>
-                                   <p className="font-bold text-base sm:text-lg pt-1.5 leading-relaxed text-slate-800">{displayText(q.questionText, `Question ${qIdx}`)}</p>
+                                   <span className="exam-question-number w-8 h-8 flex items-center justify-center flex-shrink-0 font-bold text-sm">{qIdx}</span>
+                                   <p className="font-bold text-base sm:text-lg pt-1.5 leading-relaxed text-slate-800 flex-1">{displayText(q.questionText, `Question ${qIdx}`)}</p>
+                                   <button type="button" onClick={() => toggleFlag(key)} className={`flex-shrink-0 p-2 rounded-xl transition-all ${flaggedQuestions[key] ? 'bg-amber-100 text-amber-600 shadow-inner' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}`} title={flaggedQuestions[key] ? "Remove Flag" : "Flag for review"}>
+                                     <Flag className={`h-5 w-5 ${flaggedQuestions[key] ? 'fill-current' : ''}`} />
+                                   </button>
                                  </div>
                                  {q.tableData ? (
                                    <div className="overflow-x-auto border-2 border-slate-100 rounded-[24px] my-4 bg-white overflow-hidden shadow-inner">
@@ -2908,6 +3217,10 @@ export default function FullMockTestPage() {
                           </CardContent>
                         </Card>
                       </div>
+                      <div className="flex justify-between gap-3 border-t border-[#c7cbd8] pt-4">
+                        <Button type="button" variant="outline" disabled={pi === 0} onClick={() => setActiveReadingPassage(Math.max(0, pi - 1))} className="rounded-none border-[#182644]">Previous passage</Button>
+                        <Button type="button" disabled={pi === passages.length - 1} onClick={() => setActiveReadingPassage(Math.min(passages.length - 1, pi + 1))} className="rounded-none bg-[#182644] text-white">Next passage</Button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -2915,6 +3228,26 @@ export default function FullMockTestPage() {
             })()}
 
             {phase === 'writing' && (() => {
+              const writingData = normalizeWritingTestFromDb(td);
+              const writingTask1 = findWritingTask1(writingData);
+              const writingTask2 = writingData.tasks?.find(
+                task => task.taskType === 'task2' || (task as Record<string, unknown>).task_type === 'task2' || task.taskNumber === 2,
+              ) ?? writingData.tasks?.[1];
+              return <FullMockWritingPaper
+                task1={writingTask1 as WritingTask | undefined}
+                task2={writingTask2 as WritingTask | undefined}
+                answers={answers}
+                setAnswer={(key, value) => setAnswers(previous => ({ ...previous, [key]: value }))}
+                timeDisplay={formatTime(remaining)}
+                timeWarning={remaining < 300}
+                savedIndicator={isSavedIndicator}
+                pauseTimer={pauseTimer}
+                startTimer={startTimer}
+                onSubmit={() => submitSection()}
+              />;
+            })()}
+
+            {phase === 'writing' && legacyWritingEnabled && (() => {
               const wData = normalizeWritingTestFromDb(td);
               const task1 = findWritingTask1(wData);
               const task2 =
@@ -2934,10 +3267,10 @@ export default function FullMockTestPage() {
               const task1Title = displayText(task1?.title, 'Report / Letter (min. 150 words)').replace(/^Task\s*1\s*[:—-]\s*/i, '');
               const task2Title = displayText(task2?.title, 'Essay (min. 250 words)').replace(/^Task\s*2\s*[:—-]\s*/i, '');
               return (
-                <div className="space-y-8 lg:space-y-10">
-                   <div className="bg-emerald-600 text-white px-5 py-4 sm:px-6 rounded-3xl shadow-xl flex items-center gap-4"><div className="w-11 h-11 bg-white/20 rounded-2xl flex items-center justify-center"><PenTool className="h-6 w-6" /></div><div><h2 className="text-xl font-black leading-tight">Writing Assessment</h2><p className="text-xs sm:text-sm text-emerald-100 font-medium">Complete both tasks. Word count is tracked automatically.</p></div></div>
+                <div className="exam-writing space-y-8">
+                   <div className="exam-module-banner flex items-center gap-4 px-5 py-4 sm:px-6"><div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#d98e2b]"><PenTool className="h-5 w-5" /></div><div><h2 className="font-serif text-xl font-semibold leading-tight">Writing Assessment</h2><p className="text-xs text-[#3c4a6b] font-medium">Complete both tasks. Word count is tracked automatically.</p></div></div>
                   {/* Task 1 */}
-                  <Card className="rounded-[28px] lg:rounded-[40px] shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden border border-emerald-100 bg-white/95 backdrop-blur-xl">
+                  <Card className="exam-writing-task overflow-hidden animate-in fade-in duration-500">
                     <CardHeader className="bg-emerald-50/80 backdrop-blur p-6 sm:p-8 lg:p-10 border-b border-emerald-100/50">
                       <CardTitle className="text-xl lg:text-2xl font-black text-emerald-900">Task 1 — {task1Title}</CardTitle>
                     </CardHeader>
@@ -2993,7 +3326,7 @@ export default function FullMockTestPage() {
                   </Card>
 
                   {/* Task 2 */}
-                  <Card className="rounded-[28px] lg:rounded-[40px] shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden border border-emerald-100 bg-white/95 backdrop-blur-xl">
+                  <Card className="exam-writing-task overflow-hidden animate-in fade-in duration-500">
                     <CardHeader className="bg-emerald-50/80 backdrop-blur p-6 sm:p-8 lg:p-10 border-b border-emerald-100/50">
                       <CardTitle className="text-xl lg:text-2xl font-black text-emerald-900">Task 2 — {task2Title}</CardTitle>
                     </CardHeader>
@@ -3030,6 +3363,26 @@ export default function FullMockTestPage() {
 
 
             {phase === 'speaking' && (() => {
+              const speakingParts = (Array.isArray(td?.parts) ? td.parts : []) as SpeakingPaperPart[];
+              return <FullMockSpeakingPaper
+                parts={speakingParts}
+                typedResponse={answers.sp_answers ?? ''}
+                setTypedResponse={(value) => setAnswers(previous => ({ ...previous, sp_answers: value }))}
+                clips={recordedClips}
+                isRecording={isRecording}
+                recordingSeconds={recordingSeconds}
+                recordingError={recordingError}
+                timeDisplay={formatTime(remaining)}
+                timeWarning={remaining < 120}
+                savedIndicator={isSavedIndicator}
+                startRecording={startRecording}
+                stopRecording={stopRecording}
+                deleteClip={deleteClip}
+                onSubmit={() => submitSection()}
+              />;
+            })()}
+
+            {phase === 'speaking' && legacySpeakingEnabled && (() => {
               // Speaking data may be stored as parts[] or part1/part2/part3 directly
               const parts = (td?.parts as Array<{ title: string; partType?: string;
                 questions?: Array<{ text: string }>;
@@ -3051,9 +3404,9 @@ export default function FullMockTestPage() {
                   ];
 
               return (
-                <div className="space-y-10">
+                <div className="exam-speaking space-y-8">
                   {/* Header */}
-                  <div className="bg-gradient-to-r from-orange-500 to-amber-500 text-white p-8 sm:p-10 rounded-[40px] shadow-[0_8px_30px_rgb(249,115,22,0.3)] flex items-center gap-6 relative overflow-hidden">
+                  <div className="exam-module-banner p-6 sm:p-8 flex items-center gap-5 relative overflow-hidden animate-in fade-in duration-500">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
                     <div className={`p-4 bg-white/20 rounded-[25px] relative z-10 ${isRecording ? 'animate-pulse' : ''}`}><Mic className="h-10 w-10" /></div>
                     <div>
@@ -3127,7 +3480,7 @@ export default function FullMockTestPage() {
 
                   {/* Part Questions + Record per part */}
                   {displayParts.map((part, pi) => (
-                    <Card key={pi} className="rounded-[35px] shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden border border-orange-100 bg-white/95 backdrop-blur-xl">
+                    <Card key={pi} className="exam-speaking-part overflow-hidden animate-in fade-in duration-500">
                       <CardHeader className="bg-orange-50/80 backdrop-blur px-8 sm:px-10 py-6 sm:py-7 border-b border-orange-100/50 flex flex-row items-center justify-between gap-4">
                         <CardTitle className="text-xl font-black text-orange-900">{displayText(part.label, `Part ${pi + 1}`)}</CardTitle>
                         <Button
@@ -3259,7 +3612,7 @@ export default function FullMockTestPage() {
       </div>
 
       {navKeys.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t-2 border-border p-3 sm:p-4 shadow-[0_-10px_50px_rgba(0,0,0,0.1)] z-50 flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+        <div className="exam-answer-sheet fixed bottom-0 left-0 right-0 p-3 z-50 flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
           {phase === 'reading' && readingPassageNav.length > 0 && (
             <div className="flex gap-2 overflow-x-auto no-scrollbar px-1 lg:max-w-[360px]">
               {readingPassageNav.map(item => (
@@ -3281,15 +3634,41 @@ export default function FullMockTestPage() {
               ))}
             </div>
           )}
-          <div className="flex-1 overflow-x-auto no-scrollbar">
-            <div className="flex gap-3 min-w-max px-4">
-              {navKeys.map((key, i) => (
-                <button key={key} onClick={() => scrollToQuestion(key)}
-                  className={`h-11 w-11 rounded-xl border-2 flex items-center justify-center font-black text-sm transition-all active:scale-90 sm:h-12 sm:w-12 ${answers[key] ? 'bg-slate-800 text-white border-slate-800 shadow-xl' : 'bg-white text-slate-400 border-slate-100 hover:border-slate-300'}`}>
-                  {i + 1}
-                </button>
-              ))}
-            </div>
+          <div className="exam-omr flex-1 overflow-x-auto no-scrollbar">
+            {phase === 'listening' && <h2 className="exam-omr-title">Answer sheet</h2>}
+            {phase === 'listening' ? (
+              <div className="exam-omr-groups">
+                {Array.from({ length: 4 }, (_unused, sectionNumber) => {
+                  const sectionKeys = navKeys.slice(sectionNumber * 10, sectionNumber * 10 + 10);
+                  return (
+                    <section key={sectionNumber} className="exam-omr-group">
+                      <div className="exam-omr-group-label"><span>Section {sectionNumber + 1}</span><span>{sectionNumber * 10 + 1}–{sectionNumber * 10 + sectionKeys.length}</span></div>
+                      <div className="exam-omr-grid">
+                        {sectionKeys.map((key, offset) => {
+                          const number = sectionNumber * 10 + offset + 1;
+                          return (
+                            <button key={key} onClick={() => scrollToQuestion(key)} aria-label={`Go to question ${number}`}
+                              className={`exam-answer-bubble relative h-9 w-9 flex items-center justify-center font-semibold text-xs transition-all active:scale-90 ${activeListeningSection === sectionNumber ? 'current-section' : ''} ${flaggedQuestions[key] ? 'flagged' : answers[key] ? 'answered' : ''}`}>
+                              {number}
+                              {flaggedQuestions[key] && <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-[#d98e2b] border border-white" />}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </section>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="flex gap-3 min-w-max px-4">
+                {navKeys.map((key, i) => (
+                  <button key={key} onClick={() => scrollToQuestion(key)} aria-label={`Go to question ${i + 1}`}
+                    className={`exam-answer-bubble relative h-10 w-10 flex items-center justify-center font-semibold text-xs transition-all active:scale-90 ${flaggedQuestions[key] ? 'flagged' : answers[key] ? 'answered' : ''}`}>
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
           <div className="flex-shrink-0 flex items-center gap-4 lg:pl-6">
              <div className="text-sm font-black uppercase tracking-widest text-slate-400 hidden xl:block">
@@ -3302,7 +3681,7 @@ export default function FullMockTestPage() {
         </div>
       )}
 
-      {navKeys.length === 0 && test && !objectiveSectionMissingQuestions && (
+      {navKeys.length === 0 && test && !objectiveSectionMissingQuestions && phase !== 'writing' && phase !== 'speaking' && (
         <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t-2 border-border p-3 sm:p-4 shadow-[0_-10px_50px_rgba(0,0,0,0.1)] z-50 flex justify-center lg:justify-end">
           <Button size="lg" onClick={() => submitSection()}
             className={`w-full max-w-[420px] ${currentSection.bg} text-white hover:opacity-90 font-black text-base sm:text-lg py-6 rounded-2xl shadow-xl active:scale-95 transition-all lg:w-auto lg:px-8`}>

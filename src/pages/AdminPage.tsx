@@ -121,7 +121,7 @@ const menuGroups: MenuGroup[] = [
       { id: 'instructor-dashboard', label: 'Overview', icon: <GraduationCap className="h-4 w-4" /> },
       { id: 'course-management', label: 'Manage Courses', icon: <Plus className="h-4 w-4" /> },
       { id: 'lessons', label: 'Course Lessons', icon: <BookOpen className="h-4 w-4" /> },
-      { id: 'reading', label: 'Mock Test Content', icon: <FileText className="h-4 w-4" /> },
+      { id: 'reading', label: 'Reading Practice (Legacy)', icon: <FileText className="h-4 w-4" /> },
       { id: 'mock-tests', label: 'Manage Mock Tests', icon: <CheckCircle className="h-4 w-4" /> },
     ],
   },
@@ -908,7 +908,18 @@ export function AdminPage() {
           </div>
         );
 
-      case 'reading': return <ReadingPassageManagement />;
+      case 'reading': return (
+        <div>
+          <div className="mb-6 flex items-start gap-3 rounded-2xl border-2 border-amber-200 bg-amber-50 p-4 text-amber-800">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 flex-shrink-0 mt-0.5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <div>
+              <p className="font-black text-sm">এই সেকশনটি শুধু Reading Practice পেজের জন্য (Legacy)</p>
+              <p className="text-xs mt-1 text-amber-700">Full Mock Test তৈরি/এডিট করতে পাশের মেনু থেকে <strong>"Manage Mock Tests"</strong> ট্যাব ব্যবহার করুন। সেখানে Listening, Reading, Writing, Speaking — সব মডিউল একসাথে ম্যানেজ করা যায়।</p>
+            </div>
+          </div>
+          <ReadingPassageManagement />
+        </div>
+      );
       case 'course-management': return <CourseManagement />;
       case 'mock-tests': return <MockTestManagement />;
       case 'page-content': return <PageContentManagement />;

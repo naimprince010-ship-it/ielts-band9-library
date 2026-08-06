@@ -85,6 +85,7 @@ interface WritingChartRendererProps {
 export function WritingChartRenderer({ chartData, className = '', compact = false }: WritingChartRendererProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const chartRef = useRef<Chart | null>(null);
+  const chartDataSignature = JSON.stringify(chartData);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -141,8 +142,8 @@ export function WritingChartRenderer({ chartData, className = '', compact = fals
 
     const options: ChartOptions = {
       responsive: true,
-      maintainAspectRatio: true,
-      animation: { duration: 600, easing: 'easeInOutQuart' },
+      maintainAspectRatio: false,
+      animation: compact ? false : { duration: 600, easing: 'easeInOutQuart' },
       plugins: {
         legend: {
           position: isPie ? 'right' : 'bottom',
@@ -209,7 +210,10 @@ export function WritingChartRenderer({ chartData, className = '', compact = fals
         chartRef.current = null;
       }
     };
-  }, [chartData, compact]);
+    // The parent timer renders every second. Rebuild only when chart content changes,
+    // not when an equivalent chartData object gets a new identity.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chartDataSignature, compact]);
 
   return (
     <div className={`bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden ${className}`}>
@@ -229,8 +233,8 @@ export function WritingChartRenderer({ chartData, className = '', compact = fals
           <p className="text-xs text-slate-500 mt-0.5">{chartData.description}</p>
         )}
       </div>
-      <div className="p-4">
-        <canvas ref={canvasRef} style={{ maxHeight: compact ? '220px' : '340px' }} />
+      <div className={`p-4 ${compact ? 'h-[250px] sm:h-[270px]' : 'h-[360px]'}`}>
+        <canvas ref={canvasRef} className="h-full w-full" />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { checkRateLimit, LIMITS } from './_rateLimit.js';
 import { jsonrepair } from 'jsonrepair';
+import { requireStaff } from './_staffAuth.js';
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
@@ -15,6 +16,13 @@ interface GenerateRequest {
   testType?: 'academic' | 'general';
   provider?: AIProvider;
   repairInstructions?: string;
+  repairContent?: unknown;
+  readingStage?: 'passage' | 'questions';
+  lockedPassage?: { title?: string; textContent?: string };
+  writingStage?: 'task' | 'answer';
+  lockedWritingTask?: Record<string, unknown>;
+  listeningStage?: 'transcript' | 'questions';
+  lockedListeningSection?: { title?: string; transcript?: string };
   passageNumber?: number; // 1, 2, or 3 for reading
   sectionNumber?: number; // 1, 2, 3, or 4 for listening
   taskNumber?: number;    // 1 or 2 for writing
@@ -30,7 +38,7 @@ PRODUCTION IELTS QUALITY CONTRACT:
 - Reading single passage output must contain 650-900 words and the exact requested question count.
 - Listening single section output must contain exactly 10 questions, a natural transcript, and IELTS section-appropriate context.
 - Writing Task 1 sample answers must be 160-200 words; Writing Task 2 sample answers must be 280-320 words.
-- Speaking Part 1 needs at least 4 familiar-topic questions; Part 2 needs one cue card with 4 bullets; Part 3 needs at least 3 abstract follow-up questions.
+- Speaking Part 1 needs at least 4 familiar-topic questions; Part 2 needs one cue card with exactly 4 bullets; Part 3 needs at least 4 abstract follow-up questions.
 
 IELTS PATTERN BANK:
 - Reading Passage 1: easier factual/information matching mix, 13 questions.
@@ -232,6 +240,193 @@ CRITICAL RULES FOR questionText:
 
 IMPORTANT: If using table-completion or summary-completion, use "groupId" to group them. The first question MUST include "tableData" or "summaryData".
 Return ONLY valid JSON.
+`;
+
+const LISTENING_TRANSCRIPT_ONLY_PROMPT = (topic: string, difficulty: string, sectionNumber: number) => `
+You are an IELTS Listening script writer. Create ONLY the source transcript for Section ${sectionNumber}.
+
+Topic theme: ${topic}
+Difficulty: ${difficulty}
+Context: ${sectionNumber === 1 ? 'a social transaction between two speakers' : sectionNumber === 2 ? 'a public-service monologue' : sectionNumber === 3 ? 'an academic discussion between two or three named speakers' : 'an academic lecture by one named speaker'}.
+
+Return exactly this JSON shape:
+{
+  "sectionNumber": ${sectionNumber},
+  "title": "A specific section title",
+  "transcript": "A natural 180-320 word transcript with named speakers and enough precise details for ten questions"
+}
+
+Hard requirements:
+- Transcript must be 180-320 words and contain concrete names, numbers, places, reasons and contrasts.
+- Use real speaker names; never use Speaker 1 or Speaker 2.
+- Do not include questions, answers, markdown or commentary.
+- Return ONLY the JSON object.
+`;
+
+const LISTENING_QUESTIONS_ONLY_PROMPT = (
+  topic: string,
+  sectionNumber: number,
+  lockedSection: { title?: string; transcript?: string },
+) => `
+You are an IELTS Listening question writer. The transcript below is LOCKED. Do not rewrite or return it.
+
+Topic theme: ${topic}
+Section number: ${sectionNumber}
+Question numbers: ${((sectionNumber - 1) * 10) + 1}-${sectionNumber * 10}
+
+LOCKED TITLE: ${lockedSection.title || `Section ${sectionNumber}`}
+LOCKED TRANSCRIPT:
+${lockedSection.transcript || ''}
+
+Return exactly this JSON shape:
+{
+  "questions": [
+    {
+      "questionNumber": ${((sectionNumber - 1) * 10) + 1},
+      "type": "mcq",
+      "questionText": "A unique source-grounded question?",
+      "options": ["A. First option", "B. Second option", "C. Third option", "D. Fourth option"],
+      "correctAnswer": "A. First option",
+      "explanation": "Brief transcript-grounded explanation"
+    }
+  ]
+}
+
+Hard requirements:
+- Return exactly 10 questions with consecutive questionNumber values in the stated range.
+- Use only structurally reliable types: mcq, fill-blank, sentence-completion, short-answer.
+- Every question requires unique questionText, non-empty correctAnswer and explanation.
+- Every MCQ needs exactly four options and correctAnswer must exactly equal one option.
+- Do not use grouped table-completion or summary-completion.
+- Return no transcript, markdown or commentary; ONLY the JSON object.
+`;
+
+const WRITING_TASK_ONLY_PROMPT = (topic: string, testType: string, taskNumber: number) => `
+You are an IELTS ${testType} writing-test designer. Create ONLY the Task ${taskNumber} prompt${taskNumber === 1 && testType === 'academic' ? ' and its renderable visual data' : ''}.
+
+Topic theme: ${topic}
+
+Return this exact JSON structure:
+${taskNumber === 1 && testType === 'academic' ? `{
+  "taskNumber": 1,
+  "title": "Task 1: Report Writing",
+  "prompt": "<p class='mb-4'>The chart shows...</p><p class='mb-4'><strong>Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</strong></p><p class='text-gray-600'>Write at least 150 words.</p>",
+  "chartData": {
+    "type": "line",
+    "title": "A specific title matching the prompt",
+    "description": "What the chart measures",
+    "labels": ["2010", "2015", "2020", "2025"],
+    "unit": "%",
+    "yMin": 0,
+    "yMax": 100,
+    "datasets": [
+      { "label": "Category A", "data": [24, 39, 53, 68] },
+      { "label": "Category B", "data": [18, 31, 47, 59] }
+    ]
+  },
+  "tips": ["Identify the overview", "Compare key trends", "Support comparisons with figures"]
+}` : `{
+  "taskNumber": ${taskNumber},
+  "title": "Task ${taskNumber}: ${taskNumber === 1 ? 'Letter Writing' : 'Essay Writing'}",
+  "prompt": "<p class='mb-4'>A complete IELTS task prompt...</p><p class='text-gray-600'>Write at least ${taskNumber === 1 ? 150 : 250} words.</p>",
+  "tips": ["Plan before writing", "Organise clear paragraphs", "Check language and task coverage"]
+}`}
+
+${taskNumber === 1 && testType === 'academic' ? '- You MUST include chartData exactly as an object with type, title, labels, unit and at least two valid datasets. Do not substitute imageUrl or omit the visual.' : ''}
+- Replace example values and wording with coherent content grounded in the topic theme.
+- Do not include sampleAnswer. Do not include markdown or commentary. Return ONLY the JSON object.
+${IELTS_ENGINE_QUALITY_SPEC}
+`;
+
+const WRITING_ANSWER_ONLY_PROMPT = (
+  topic: string,
+  testType: string,
+  taskNumber: number,
+  lockedTask: Record<string, unknown>,
+) => `
+You are an IELTS Band 8-9 sample-answer writer. The task below is LOCKED. Do not rewrite or return its prompt, title, tips or visual data.
+
+Topic theme: ${topic}
+Test type: ${testType}
+Task number: ${taskNumber}
+
+LOCKED TASK JSON:
+${JSON.stringify(lockedTask)}
+
+Return exactly this JSON shape:
+{
+  "sampleAnswer": "The complete answer only"
+}
+
+Hard requirements:
+- Task 1 sampleAnswer must be 160-200 words; target 180 words.
+- Task 2 sampleAnswer must be 280-320 words. Use exactly five prose paragraphs with these budgets: introduction 40-45 words, body paragraph 1 60-65 words, body paragraph 2 60-65 words, evaluation/position paragraph 60-65 words, conclusion 40-45 words. Total target: 285-315 words.
+- Count words before returning.
+- The answer must respond precisely to the locked prompt and accurately describe its visual when present.
+- Return no other fields, markdown or commentary.
+`;
+
+const READING_TEXT_ONLY_PROMPT = (topic: string, difficulty: string, testType: string, passageNumber: number) => `
+You are an IELTS Academic Reading passage writer. Create ONLY the source passage for Passage ${passageNumber}.
+
+Topic Theme: ${topic}
+Difficulty: ${difficulty}
+Test Type: ${testType}
+
+Return exactly this JSON shape:
+{
+  "passageNumber": ${passageNumber},
+  "title": "A specific academic title",
+  "textContent": "650-900 words of original source text in 7-10 labelled HTML paragraphs, using <p class='mb-4'><strong>A</strong> ...</p>"
+}
+
+Hard requirements:
+- textContent must contain 650-900 words; target 760 words and count before returning.
+- Use 7-10 coherent paragraphs labelled A, B, C and so on.
+- Include enough concrete facts, contrasts, causes, examples and viewpoints to support ${passageNumber === 3 ? 14 : 13} later questions.
+- Do not include questions, answers, placeholders, markdown or commentary.
+- Return ONLY the complete JSON object.
+`;
+
+const READING_QUESTIONS_ONLY_PROMPT = (
+  topic: string,
+  difficulty: string,
+  passageNumber: number,
+  lockedPassage: { title?: string; textContent?: string },
+) => `
+You are an IELTS Academic Reading question writer. The passage below is LOCKED. Do not rewrite, shorten or return it.
+
+Topic Theme: ${topic}
+Difficulty: ${difficulty}
+Passage Number: ${passageNumber}
+Required Question Count: ${passageNumber === 3 ? 14 : 13}
+
+LOCKED PASSAGE TITLE:
+${lockedPassage.title || `Passage ${passageNumber}`}
+
+LOCKED PASSAGE HTML:
+${lockedPassage.textContent || ''}
+
+Return exactly this JSON shape:
+{
+  "questions": [
+    {
+      "type": "true-false-not-given",
+      "questionText": "A specific statement grounded in the locked passage.",
+      "options": ["TRUE", "FALSE", "NOT GIVEN"],
+      "correctAnswer": "TRUE",
+      "explanation": "A brief source-grounded explanation."
+    }
+  ]
+}
+
+Hard requirements:
+- Return exactly ${passageNumber === 3 ? 14 : 13} questions and no passage text.
+- Every question needs unique questionText, non-empty correctAnswer and source-grounded explanation.
+- Prefer structurally reliable types: mcq, true-false-not-given, fill-blank, matching-headings, short-answer.
+- Every MCQ needs exactly 4 options and correctAnswer must exactly equal one option.
+- Do not use table-completion or summary-completion in this stage.
+- Return ONLY the complete JSON object.
 `;
 
 const READING_PROMPT = (topic: string, difficulty: string, testType: string) => `
@@ -598,7 +793,7 @@ async function callOpenAI(prompt: string): Promise<string> {
               content: prompt
             }
           ],
-          temperature: 0.7,
+          temperature: 0.3,
           max_tokens: 8000,
           response_format: { type: 'json_object' },
         }),
@@ -777,16 +972,24 @@ function validateQuestions(
 function validateGeneratedContent(content: unknown, request: Partial<GenerateRequest>): string[] {
   const moduleType = request.moduleType;
   const issues: string[] = [];
-  const readingTypes = new Set(['mcq', 'fill-blank', 'true-false-not-given', 'yes-no-not-given', 'matching-headings', 'matching-information', 'matching-features', 'sentence-completion', 'summary-completion', 'diagram-labeling', 'short-answer']);
+  const readingTypes = new Set(['mcq', 'fill-blank', 'true-false-not-given', 'yes-no-not-given', 'matching-headings', 'matching-information', 'matching-features', 'sentence-completion', 'summary-completion', 'table-completion', 'diagram-labeling', 'short-answer']);
   const listeningTypes = new Set(['mcq', 'fill-blank', 'matching', 'map-labeling', 'table-completion', 'summary-completion', 'sentence-completion', 'short-answer']);
   const obj = content as Record<string, unknown>;
 
   if (moduleType === 'reading') {
     if (request.passageNumber) {
       const expected = request.passageNumber === 3 ? 14 : 13;
-      const words = countWords(obj.textContent ?? obj.content);
-      if (words < 650 || words > 900) issues.push(`reading passage must be 650-900 words, found ${words}`);
-      issues.push(...validateQuestions(questionsFrom(content), expected, readingTypes));
+      if (request.readingStage === 'passage') {
+        const words = countWords(obj.textContent ?? obj.content);
+        if (!String(obj.title ?? '').trim()) issues.push('reading passage missing title');
+        if (words < 650 || words > 900) issues.push(`reading passage must be 650-900 words, found ${words}`);
+      } else if (request.readingStage === 'questions') {
+        issues.push(...validateQuestions(questionsFrom(content), expected, readingTypes));
+      } else {
+        const words = countWords(obj.textContent ?? obj.content);
+        if (words < 650 || words > 900) issues.push(`reading passage must be 650-900 words, found ${words}`);
+        issues.push(...validateQuestions(questionsFrom(content), expected, readingTypes));
+      }
     } else {
       const passages = Array.isArray(obj.passages) ? obj.passages as Array<Record<string, unknown>> : [];
       if (passages.length !== 3) issues.push(`reading test needs 3 passages, found ${passages.length}`);
@@ -795,9 +998,17 @@ function validateGeneratedContent(content: unknown, request: Partial<GenerateReq
 
   if (moduleType === 'listening') {
     if (request.sectionNumber) {
-      const transcriptWords = countWords(obj.transcript);
-      if (transcriptWords < 120) issues.push(`listening section transcript looks short, found ${transcriptWords} words`);
-      issues.push(...validateQuestions(questionsFrom(content), 10, listeningTypes));
+      if (request.listeningStage === 'transcript') {
+        const transcriptWords = countWords(obj.transcript);
+        if (!String(obj.title ?? '').trim()) issues.push('listening section missing title');
+        if (transcriptWords < 180 || transcriptWords > 320) issues.push(`listening transcript must be 180-320 words, found ${transcriptWords}`);
+      } else if (request.listeningStage === 'questions') {
+        issues.push(...validateQuestions(questionsFrom(content), 10, listeningTypes));
+      } else {
+        const transcriptWords = countWords(obj.transcript);
+        if (transcriptWords < 120) issues.push(`listening section transcript looks short, found ${transcriptWords} words`);
+        issues.push(...validateQuestions(questionsFrom(content), 10, listeningTypes));
+      }
     } else {
       const sections = Array.isArray(obj.sections) ? obj.sections as Array<Record<string, unknown>> : [];
       if (sections.length !== 4) issues.push(`listening test needs 4 sections, found ${sections.length}`);
@@ -807,14 +1018,23 @@ function validateGeneratedContent(content: unknown, request: Partial<GenerateReq
   if (moduleType === 'writing') {
     if (request.taskNumber) {
       const sampleWords = countWords(obj.sampleAnswer);
-      if (!String(obj.prompt ?? '').trim()) issues.push(`writing task ${request.taskNumber} missing prompt`);
-      if (request.taskNumber === 1) {
+      if (request.writingStage === 'answer') {
+        if (request.taskNumber === 1 && (sampleWords < 160 || sampleWords > 200)) {
+          issues.push(`task 1 sampleAnswer must be 160-200 words, found ${sampleWords}`);
+        }
+        if (request.taskNumber === 2 && (sampleWords < 280 || sampleWords > 320)) {
+          issues.push(`task 2 sampleAnswer must be 280-320 words, found ${sampleWords}`);
+        }
+      } else {
+        if (!String(obj.prompt ?? '').trim()) issues.push(`writing task ${request.taskNumber} missing prompt`);
+      }
+      if (request.taskNumber === 1 && request.writingStage !== 'answer') {
         const hasVisual = Boolean(obj.chartData || obj.tableData || obj.processData || obj.mapData || obj.imageUrl);
         if (request.testType !== 'general' && !hasVisual) issues.push('academic writing task 1 needs one renderable visual');
-        if (sampleWords < 160 || sampleWords > 220) issues.push(`task 1 sampleAnswer should be 160-200 words, found ${sampleWords}`);
+        if (request.writingStage !== 'task' && (sampleWords < 160 || sampleWords > 200)) issues.push(`task 1 sampleAnswer must be 160-200 words, found ${sampleWords}`);
       }
-      if (request.taskNumber === 2 && (sampleWords < 280 || sampleWords > 340)) {
-        issues.push(`task 2 sampleAnswer should be 280-320 words, found ${sampleWords}`);
+      if (request.taskNumber === 2 && request.writingStage !== 'task' && request.writingStage !== 'answer' && (sampleWords < 280 || sampleWords > 320)) {
+        issues.push(`task 2 sampleAnswer must be 280-320 words, found ${sampleWords}`);
       }
     }
   }
@@ -827,7 +1047,7 @@ function validateGeneratedContent(content: unknown, request: Partial<GenerateReq
         issues.push('speaking part 2 needs cueCard topic and 4 bullet points');
       }
     }
-    if (request.partNumber === 3 && questionsFrom(content).length < 3) issues.push('speaking part 3 needs at least 3 questions');
+    if (request.partNumber === 3 && questionsFrom(content).length < 4) issues.push('speaking part 3 needs at least 4 questions');
   }
 
   return [...new Set(issues)].slice(0, 10);
@@ -836,19 +1056,30 @@ function validateGeneratedContent(content: unknown, request: Partial<GenerateReq
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Always return JSON
   res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+    const origin = typeof req.headers.origin === 'string' ? req.headers.origin : '';
+    const allowedOrigins = new Set([
+      'https://ieltstree.com',
+      'https://www.ieltstree.com',
+      ...(process.env.NODE_ENV !== 'production' ? ['http://127.0.0.1:5173', 'http://localhost:5173'] : []),
+    ]);
+    if (origin && !allowedOrigins.has(origin)) return res.status(403).json({ error: 'Origin not allowed' });
+    if (origin) res.setHeader('Access-Control-Allow-Origin', origin);
+    return res.status(204).end();
   }
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  if (!checkRateLimit(req, res, LIMITS.heavy, 'generate-content')) return;
+  if (!(await requireStaff(req, res))) return;
+
+  // This endpoint is staff-authenticated above. A validated full mock uses many
+  // small stage requests, so it needs a workflow-aware allowance.
+  if (!checkRateLimit(req, res, LIMITS.staffAi, 'generate-content-staff')) return;
 
   try {
     // Explicit body parsing fallback
@@ -869,6 +1100,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const taskNumber = body.taskNumber;
     const partNumber = body.partNumber;
     const repairInstructions = typeof body.repairInstructions === 'string' ? body.repairInstructions.trim() : '';
+    const repairContent = body.repairContent;
+    const readingStage = body.readingStage;
+    const lockedPassage = body.lockedPassage;
+    const writingStage = body.writingStage;
+    const lockedWritingTask = body.lockedWritingTask;
+    const listeningStage = body.listeningStage;
+    const lockedListeningSection = body.lockedListeningSection;
 
     // Auto-select available provider
     let provider = requestedProvider;
@@ -905,17 +1143,29 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     switch (moduleType) {
       case 'reading':
-        prompt = passageNumber 
+        prompt = passageNumber && readingStage === 'passage'
+          ? READING_TEXT_ONLY_PROMPT(topic, difficulty, testType, passageNumber)
+          : passageNumber && readingStage === 'questions'
+            ? READING_QUESTIONS_ONLY_PROMPT(topic, difficulty, passageNumber, lockedPassage || {})
+          : passageNumber
           ? READING_PASSAGE_PROMPT(topic, difficulty, testType, passageNumber)
           : READING_PROMPT(topic, difficulty, testType);
         break;
       case 'listening':
-        prompt = sectionNumber 
+        prompt = sectionNumber && listeningStage === 'transcript'
+          ? LISTENING_TRANSCRIPT_ONLY_PROMPT(topic, difficulty, sectionNumber)
+          : sectionNumber && listeningStage === 'questions'
+            ? LISTENING_QUESTIONS_ONLY_PROMPT(topic, sectionNumber, lockedListeningSection || {})
+          : sectionNumber
           ? LISTENING_SECTION_PROMPT(topic, difficulty, testType, sectionNumber)
           : LISTENING_PROMPT(topic, difficulty);
         break;
       case 'writing':
-        prompt = taskNumber
+        prompt = taskNumber && writingStage === 'task'
+          ? WRITING_TASK_ONLY_PROMPT(topic, testType, taskNumber)
+          : taskNumber && writingStage === 'answer'
+            ? WRITING_ANSWER_ONLY_PROMPT(topic, testType, taskNumber, lockedWritingTask || {})
+          : taskNumber
           ? WRITING_TASK_PROMPT(topic, testType, taskNumber)
           : WRITING_PROMPT(topic, testType);
         break;
@@ -931,7 +1181,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     prompt += `\n\n${IELTS_ENGINE_QUALITY_SPEC}`;
 
     if (repairInstructions) {
-      prompt += `\n\nREPAIR INSTRUCTIONS FROM VALIDATION:\n${repairInstructions}\n\nRegenerate the JSON from scratch. Do not explain. Return ONLY the corrected JSON object.`;
+      const exactContent = repairContent && typeof repairContent === 'object'
+        ? `\n\nEXACT JSON TO REPAIR:\n${JSON.stringify(repairContent)}`
+        : '';
+      prompt += `\n\nREPAIR INSTRUCTIONS FROM VALIDATION:\n${repairInstructions}${exactContent}\n\nRepair the exact JSON when supplied. Preserve valid content, fix every listed issue, count words and array items before responding, and return ONLY the complete corrected JSON object.`;
     }
 
     let rawResponse = provider === 'gemini'
@@ -953,18 +1206,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       difficulty,
       testType,
       passageNumber,
+      readingStage,
+      writingStage,
+      listeningStage,
       sectionNumber,
       taskNumber,
       partNumber,
     });
 
-    if (qualityIssues.length > 0) {
+    for (let repairAttempt = 1; qualityIssues.length > 0 && repairAttempt <= 1; repairAttempt += 1) {
       const retryPrompt = `${prompt}
 
 QUALITY VALIDATION FAILED:
 - ${qualityIssues.join('\n- ')}
 
-Regenerate the same requested JSON object from scratch. Fix every issue. Return ONLY valid JSON.`;
+INVALID JSON TO REPAIR:
+${JSON.stringify(parsedContent)}
+
+Repair this exact JSON object instead of starting over. Preserve valid source-grounded content, fix every listed issue, count words and array items before responding, and return ONLY the complete corrected JSON object.`;
       rawResponse = provider === 'gemini'
         ? await callGemini(retryPrompt)
         : await callOpenAI(retryPrompt);
@@ -976,6 +1235,9 @@ Regenerate the same requested JSON object from scratch. Fix every issue. Return 
           difficulty,
           testType,
           passageNumber,
+          readingStage,
+          writingStage,
+          listeningStage,
           sectionNumber,
           taskNumber,
           partNumber,
@@ -993,6 +1255,7 @@ Regenerate the same requested JSON object from scratch. Fix every issue. Return 
         success: false,
         error: 'AI content failed IELTS quality validation after retry',
         qualityIssues,
+        content: parsedContent,
       });
     }
 

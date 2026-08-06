@@ -28,6 +28,7 @@ const READING_TYPES = new Set([
   'matching-features',
   'sentence-completion',
   'summary-completion',
+  'table-completion',
   'diagram-labeling',
   'short-answer',
 ]);
@@ -57,8 +58,25 @@ function wordCount(value: string): number {
 
 function canonicalQuestionType(type: string | undefined): string {
   const normalized = (type ?? '').toLowerCase().replace(/[\s_]/g, '-');
-  if (normalized === 'multiple-choice' || normalized === 'multiple-choice-question') return 'mcq';
-  return normalized;
+  const aliases: Record<string, string> = {
+    'table-completion': 'fill-blank',
+    'note-completion': 'fill-blank',
+    'flow-chart-completion': 'fill-blank',
+    'flowchart-completion': 'fill-blank',
+    'form-completion': 'fill-blank',
+    'matching-names': 'matching-features',
+    'matching-endings': 'sentence-completion',
+    'diagram-labelling': 'diagram-labeling',
+    'map-labelling': 'map-labeling',
+    'plan-labeling': 'map-labeling',
+    'multiple-choice': 'mcq',
+    'multiple-choice-question': 'mcq',
+    'true/false/not-given': 'true-false-not-given',
+    'true-false': 'true-false-not-given',
+    'yes/no/not-given': 'yes-no-not-given',
+    'yes-no': 'yes-no-not-given',
+  };
+  return aliases[normalized] || normalized;
 }
 
 function validateGroupedQuestions(

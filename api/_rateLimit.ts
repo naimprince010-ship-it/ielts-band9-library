@@ -8,6 +8,7 @@ export interface RateLimitOptions {
 
 export const LIMITS = {
   heavy: { max: 20, windowSec: 3600, label: 'AI generation' },
+  staffAi: { max: 120, windowSec: 3600, label: 'staff AI generation' },
   tts:   { max: 60, windowSec: 3600, label: 'TTS generation' },
   medium:{ max: 30, windowSec: 3600, label: 'AI request' },
   light: { max: 60, windowSec: 3600, label: 'request' },

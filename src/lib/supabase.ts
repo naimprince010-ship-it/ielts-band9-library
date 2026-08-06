@@ -4,8 +4,9 @@ const CANONICAL_SUPABASE_URL = 'https://fjzqtzqflsqjevrurgbm.supabase.co';
 const CANONICAL_SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_iMlIYFK8PPf4o6s-wjN79w_VWL-bFRG';
 const LEGACY_SUPABASE_PROJECT_REF = 'yzeiloqctrgpzuzkciiv';
 
-const envSupabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const envSupabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+const cleanEnv = (value: string | undefined) => (value ?? '').replace(/^\uFEFF/, '').trim();
+const envSupabaseUrl = cleanEnv(import.meta.env.VITE_SUPABASE_URL);
+const envSupabaseAnonKey = cleanEnv(import.meta.env.VITE_SUPABASE_ANON_KEY);
 const shouldUseCanonicalProject =
   !envSupabaseUrl || envSupabaseUrl.includes(LEGACY_SUPABASE_PROJECT_REF);
 

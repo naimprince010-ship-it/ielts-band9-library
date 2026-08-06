@@ -104,6 +104,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
     }
 
+    const MAX_CHARS = 6000;
+    if (typedResponse.length > MAX_CHARS) {
+      return res.status(400).json({ success: false, error: 'Response text is too long. Please keep your speaking response under 6000 characters.' });
+    }
+
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
