@@ -28,6 +28,8 @@ interface Props {
   stopRecording: () => void;
   deleteClip: (id: string) => void;
   onSubmit: () => void;
+  /** Override the submit-button label. Defaults to "Submit full mock test". */
+  submitLabel?: string;
 }
 
 type ResponseMap = Record<string, string>;
@@ -42,7 +44,7 @@ type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
 const textOf = (q: SpeakingPaperQuestion, fallback: string) => q.text || q.questionText || fallback;
 const clock = (seconds: number) => `${Math.floor(Math.max(seconds, 0) / 60).toString().padStart(2, '0')}:${(Math.max(seconds, 0) % 60).toString().padStart(2, '0')}`;
 
-export function FullMockSpeakingPaper({ parts, typedResponse, setTypedResponse, clips, isRecording, recordingSeconds, recordingError, timeDisplay, timeWarning, savedIndicator, startRecording, stopRecording, deleteClip, onSubmit }: Props) {
+export function FullMockSpeakingPaper({ parts, typedResponse, setTypedResponse, clips, isRecording, recordingSeconds, recordingError, timeDisplay, timeWarning, savedIndicator, startRecording, stopRecording, deleteClip, onSubmit, submitLabel = 'Submit full mock test' }: Props) {
   const [partIndex, setPartIndex] = useState(() => Number(sessionStorage.getItem('fullMockSpeakingPart') || 0));
   const [responses, setResponses] = useState<ResponseMap>(() => typedResponse ? { legacy: typedResponse } : {});
   const [activeKey, setActiveKey] = useState<string | null>(null);
@@ -60,8 +62,8 @@ export function FullMockSpeakingPaper({ parts, typedResponse, setTypedResponse, 
   const requestSubmit = () => {
     const incomplete = Math.max(tasks.length - completed, 0);
     const message = incomplete
-      ? `You still have ${incomplete} incomplete speaking prompt${incomplete === 1 ? '' : 's'}. Submit the full mock test anyway?`
-      : 'Submit the full mock test for evaluation?';
+      ? `You still have ${incomplete} incomplete speaking prompt${incomplete === 1 ? '' : 's'}. Submit anyway?`
+      : `Submit ${submitLabel.replace(/^Submit\s*/i, '').trim() || 'the speaking test'} for evaluation?`;
     if (window.confirm(message)) onSubmit();
   };
 
@@ -151,7 +153,7 @@ export function FullMockSpeakingPaper({ parts, typedResponse, setTypedResponse, 
         {parts.map((_, index) => <button key={index} type="button" disabled={isRecording} className={index === safePartIndex ? 'active' : ''} onClick={() => setPartIndex(index)}>Part {index + 1}</button>)}
       </nav>
       <div className={`speaking-paper__timer ${timeWarning ? 'warning' : ''}`}><small>Time left</small><strong>{timeDisplay}</strong></div>
-      <button type="button" className="speaking-paper__submit" disabled={isRecording} onClick={requestSubmit}>Submit full mock test</button>
+      <button type="button" className="speaking-paper__submit" disabled={isRecording} onClick={requestSubmit}>{submitLabel}</button>
     </header>
 
     <div className="speaking-paper__layout">
@@ -187,7 +189,7 @@ export function FullMockSpeakingPaper({ parts, typedResponse, setTypedResponse, 
 
         <footer className="speaking-paper__nav">
           <button type="button" disabled={safePartIndex === 0 || isRecording} onClick={() => setPartIndex(safePartIndex - 1)}>← Part {Math.max(safePartIndex, 1)}</button>
-          {safePartIndex === parts.length - 1 ? <button type="button" className="submit-action" disabled={isRecording} onClick={requestSubmit}>Submit full mock test →</button> : <button type="button" disabled={isRecording} onClick={() => setPartIndex(safePartIndex + 1)}>Part {safePartIndex + 2} →</button>}
+          {safePartIndex === parts.length - 1 ? <button type="button" className="submit-action" disabled={isRecording} onClick={requestSubmit}>{submitLabel} →</button> : <button type="button" disabled={isRecording} onClick={() => setPartIndex(safePartIndex + 1)}>Part {safePartIndex + 2} →</button>}
         </footer>
       </main>
     </div>

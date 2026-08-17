@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useNavConfig } from '@/contexts/NavContext';
 import {
   Volume2,
   VolumeX,
@@ -42,6 +43,7 @@ import {
   getBandScoreLevel
 } from '@/utils/scoring';
 import { GroupedQuestionRenderer } from '@/components/test/GroupedQuestionRenderer';
+import { FullMockListeningPaper } from '@/components/test/FullMockListeningPaper';
 
 // ============================================
 // Sample Listening Test Data
@@ -194,9 +196,13 @@ export default function ListeningTestPage() {
   const [showCheatingWarning, setShowCheatingWarning] = useState(false);
   // Per-section audio: tracks which section is currently playing when sectionAudioUrl is used
   const [currentSectionIdx, setCurrentSectionIdx] = useState(0);
+  const [playedAudioIds, setPlayedAudioIds] = useState<Set<string>>(new Set());
+  const [playingAudioId, setPlayingAudioId] = useState<string | null>(null);
+  const [audioMessage, setAudioMessage] = useState('');
 
   const audioRef = useRef<HTMLAudioElement>(null);
   const questionRefs = useRef<Record<number, HTMLDivElement | null>>({});
+  const skipInitialSaveRef = useRef(true);
 
   // Detect per-section audio mode (each section has its own TTS-generated audio URL)
   const usesPerSectionAudio = Array.isArray(test.sections) && test.sections.some(s => s.sectionAudioUrl);
@@ -216,6 +222,8 @@ export default function ListeningTestPage() {
           setAudioState(session.audioState);
           setTransferTimeRemaining(session.transferTimeRemaining);
           setStartedAt(session.startedAt);
+          setCurrentSectionIdx(Math.max(0, Math.min((session.currentSection || 1) - 1, test.sections.length - 1)));
+          setPlayedAudioIds(new Set(session.playedAudioIds ?? []));
 
           // If audio was playing, we can't resume it (IELTS rule - no replay)
           // So we move to transfer time if audio was in progress
@@ -223,7 +231,7 @@ export default function ListeningTestPage() {
             setAudioState('transfer-time');
           }
         }
-      } catch (e) {
+    } catch (e) {
         console.error('Failed to load session:', e);
       }
     }
@@ -242,13 +250,18 @@ export default function ListeningTestPage() {
       audioCurrentTime,
       transferTimeRemaining,
       answers,
-      currentSection: 1,
+      currentSection: currentSectionIdx + 1,
+      playedAudioIds: Array.from(playedAudioIds),
       isSubmitted: false
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
-  }, [test.id, startedAt, audioState, audioCurrentTime, transferTimeRemaining, answers, isSubmitted]);
+  }, [test.id, startedAt, audioState, audioCurrentTime, transferTimeRemaining, answers, currentSectionIdx, playedAudioIds, isSubmitted]);
 
   useEffect(() => {
+    if (skipInitialSaveRef.current) {
+      skipInitialSaveRef.current = false;
+      return;
+    }
     saveSession();
   }, [saveSession]);
 
@@ -291,33 +304,35 @@ export default function ListeningTestPage() {
   const handleAudioTimeUpdate = () => {
     if (audioRef.current) {
       setAudioCurrentTime(audioRef.current.currentTime);
+      if (!usesPerSectionAudio) {
+        const matchingSection = test.sections.findIndex(section =>
+          audioRef.current!.currentTime >= section.audioStartTime && audioRef.current!.currentTime < section.audioEndTime
+        );
+        if (matchingSection >= 0 && matchingSection !== currentSectionIdx) setCurrentSectionIdx(matchingSection);
+      }
     }
   };
 
   const handleAudioEnded = () => {
+    const completedAudioId = usesPerSectionAudio
+      ? `section-${test.sections[currentSectionIdx]?.sectionNumber ?? currentSectionIdx + 1}`
+      : 'global';
+    setPlayedAudioIds(prev => new Set(prev).add(completedAudioId));
+    setPlayingAudioId(null);
     if (usesPerSectionAudio) {
       const nextIdx = currentSectionIdx + 1;
       if (nextIdx < test.sections.length && test.sections[nextIdx].sectionAudioUrl) {
         setCurrentSectionIdx(nextIdx);
-        // The effect below loads and plays the next section's audio
+        setAudioMessage('Section complete. Select the next section when you are ready to continue.');
       } else {
         setAudioState('transfer-time');
+        setAudioMessage('Recording complete. Use the remaining transfer time to check your answers.');
       }
     } else {
       setAudioState('transfer-time');
+      setAudioMessage('Recording complete. Use the remaining transfer time to check your answers.');
     }
   };
-
-  // Load and auto-play next section's audio when currentSectionIdx changes (per-section mode)
-  useEffect(() => {
-    if (!usesPerSectionAudio || audioState !== 'playing' || !audioRef.current) return;
-    const src = test.sections[currentSectionIdx]?.sectionAudioUrl;
-    if (src) {
-      audioRef.current.src = src;
-      audioRef.current.load();
-      audioRef.current.play().catch(console.error);
-    }
-  }, [currentSectionIdx]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ============================================
   // Start test after sound check
@@ -325,9 +340,46 @@ export default function ListeningTestPage() {
   const handleStartTest = () => {
     setAudioState('playing');
     setStartedAt(Date.now());
-    if (audioRef.current) {
-      audioRef.current.play();
+    setAudioMessage('Select the play control to begin the one-time recording.');
+  };
+
+  const playSectionAudio = (sectionIndex: number) => {
+    const section = test.sections[sectionIndex];
+    if (!section || !audioRef.current) return;
+    const audioId = usesPerSectionAudio ? `section-${section.sectionNumber}` : 'global';
+
+    if (playingAudioId === audioId) {
+      audioRef.current.pause();
+      setPlayingAudioId(null);
+      setAudioMessage('Recording paused. It cannot be replayed after you leave this point.');
+      return;
     }
+    if (playedAudioIds.has(audioId)) {
+      setAudioMessage('This recording has already been played and cannot be replayed.');
+      return;
+    }
+
+    if (usesPerSectionAudio) {
+      audioRef.current.src = section.sectionAudioUrl ?? '';
+      audioRef.current.currentTime = 0;
+      audioRef.current.load();
+    } else {
+      audioRef.current.src = test.audioUrl;
+      audioRef.current.currentTime = 0;
+    }
+    setCurrentSectionIdx(sectionIndex);
+    setPlayingAudioId(audioId);
+    setPlayedAudioIds(prev => new Set(prev).add(audioId));
+    setAudioMessage('Audio is playing. Answer questions as you listen.');
+    audioRef.current.play().catch(() => {
+      setPlayingAudioId(null);
+      setPlayedAudioIds(previous => {
+        const next = new Set(previous);
+        next.delete(audioId);
+        return next;
+      });
+      setAudioMessage('Audio could not start. Check your browser sound settings and try once more.');
+    });
   };
 
   // ============================================
@@ -468,7 +520,8 @@ export default function ListeningTestPage() {
       audioCurrentTime,
       transferTimeRemaining,
       answers,
-      currentSection: 1,
+      currentSection: currentSectionIdx + 1,
+      playedAudioIds: Array.from(playedAudioIds),
       isSubmitted: true,
       submittedAt: Date.now()
     };
@@ -487,10 +540,26 @@ export default function ListeningTestPage() {
     setStartedAt(null);
     setIsSubmitted(false);
     setResult(null);
+    setCurrentSectionIdx(0);
+    setPlayedAudioIds(new Set());
+    setPlayingAudioId(null);
+    setAudioMessage('');
     if (audioRef.current) {
       audioRef.current.currentTime = 0;
     }
   };
+
+  // ── Nav context / exit guard ──────────────────────────────────────────────
+  // mode: 'exam' matches what the route already sets via <Layout mode="exam">
+  // — Navbar/Footer/MobileNav are already hidden, this doesn't change the
+  // visible chrome. What it adds: Layout's useNavExitGuard now catches the
+  // browser Back button and tab close/refresh while the test is in progress.
+  const handleExitAttempt = useCallback(() => {
+    if (isSubmitted) return true;
+    return window.confirm('Leave the Listening test? Your progress on this section will be lost.');
+  }, [isSubmitted]);
+
+  useNavConfig({ mode: 'exam', title: test.title, onExitAttempt: handleExitAttempt });
 
   // ============================================
   // Toggle mute & Volume change
@@ -697,6 +766,41 @@ export default function ListeningTestPage() {
   // ============================================
   if (audioState === 'not-started' || audioState === 'test-sound') {
     return (
+      <div className="min-h-screen bg-[#eceef3] text-[#182644]">
+        <header className="sticky top-0 z-20 flex min-h-16 items-center border-b border-[#263757] bg-[#182644] px-4 text-[#f8f8f5] sm:px-7">
+          <div className="flex items-center gap-3 font-serif text-lg font-semibold"><span className="h-2 w-2 rounded-full bg-[#d98e2b]" /> IELTS Listening — Mock</div>
+        </header>
+        <main className="mx-auto grid max-w-5xl gap-5 px-4 py-7 md:grid-cols-[.9fr_1.35fr] md:px-7 md:py-12">
+          <section className="border-b-2 border-[#182644] pb-6 md:border-b-0 md:border-r-2 md:pr-9">
+            <p className="mb-3 font-mono text-xs font-semibold uppercase tracking-[.16em] text-[#d98e2b]">Listening test</p>
+            <h1 className="font-serif text-4xl font-semibold leading-tight">Ready to begin?</h1>
+            <p className="mt-4 max-w-md text-[15px] leading-7 text-[#3c4a6b]">You will hear four sections and answer 40 questions. The recording can be played once only.</p>
+            <dl className="mt-7 grid grid-cols-2 gap-px border border-[#c7cbd8] bg-[#c7cbd8]">
+              <div className="bg-[#f8f8f5] p-4"><dt className="font-mono text-[10px] uppercase tracking-wider text-[#67718b]">Sections</dt><dd className="mt-1 text-xl font-semibold">4</dd></div>
+              <div className="bg-[#f8f8f5] p-4"><dt className="font-mono text-[10px] uppercase tracking-wider text-[#67718b]">Questions</dt><dd className="mt-1 text-xl font-semibold">{allQuestions.length}</dd></div>
+              <div className="bg-[#f8f8f5] p-4"><dt className="font-mono text-[10px] uppercase tracking-wider text-[#67718b]">Audio</dt><dd className="mt-1 text-xl font-semibold">Once</dd></div>
+              <div className="bg-[#f8f8f5] p-4"><dt className="font-mono text-[10px] uppercase tracking-wider text-[#67718b]">Review</dt><dd className="mt-1 text-xl font-semibold">{formatTime(test.transferTime)}</dd></div>
+            </dl>
+          </section>
+
+          <section className="border border-[#c7cbd8] bg-[#f8f8f5] p-5 shadow-sm sm:p-7">
+            <div className="flex items-start gap-3 border-b border-[#c7cbd8] pb-5"><Settings2 className="mt-0.5 h-5 w-5 text-[#d98e2b]" /><div><h2 className="font-serif text-2xl font-semibold">Sound check</h2><p className="mt-1 text-sm leading-6 text-[#3c4a6b]">Set a comfortable volume before starting the recording.</p></div></div>
+            <div className="mt-6 border border-[#c7cbd8] bg-white p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3"><div className="flex items-center gap-2 font-medium"><Volume2 className="h-5 w-5 text-[#d98e2b]" /> Test your sound</div><button type="button" onClick={handleTestSound} className="border border-[#182644] px-4 py-2 text-sm font-semibold hover:bg-[#182644] hover:text-[#f8f8f5]"><Play className="mr-2 inline h-4 w-4" />Play sample</button></div>
+              <div className="mt-5 flex items-center gap-3"><VolumeX className="h-4 w-4 text-[#67718b]" /><input aria-label="Audio volume" type="range" min="0" max="1" step="0.01" value={volume} onChange={handleVolumeChange} className="h-1 flex-1 accent-[#d98e2b]" /><Volume2 className="h-4 w-4 text-[#182644]" /></div>
+            </div>
+            <div className="mt-6 grid gap-3 sm:grid-cols-2"><div className="border-l-4 border-[#2f7d5d] bg-[#eef8f2] p-3 text-sm"><b className="block">Use headphones</b><span className="text-[#3c4a6b]">Recommended for clear audio.</span></div><div className="border-l-4 border-[#d98e2b] bg-[#fff6e7] p-3 text-sm"><b className="block">No replay</b><span className="text-[#3c4a6b]">Each recording is available once.</span></div></div>
+            <button type="button" onClick={handleStartTest} className="mt-7 w-full bg-[#d98e2b] px-5 py-4 text-sm font-bold uppercase tracking-wide text-[#182644] hover:bg-[#c67f21]">Start listening test →</button>
+            <p className="mt-4 text-center font-mono text-[10px] uppercase tracking-wider text-[#67718b]">Your answers save automatically during the test</p>
+          </section>
+        </main>
+        <audio ref={audioRef} src={usesPerSectionAudio ? (test.sections[0]?.sectionAudioUrl ?? '') : test.audioUrl} onTimeUpdate={handleAudioTimeUpdate} onEnded={handleAudioEnded} preload="auto" />
+      </div>
+    );
+  }
+
+  if (audioState === 'not-started' || audioState === 'test-sound') {
+    return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 md:p-8">
         <div className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           
@@ -837,6 +941,64 @@ export default function ListeningTestPage() {
   // ============================================
   // Main Test Interface
   // ============================================
+  const paperAnswers = allQuestions.reduce<Record<string, string>>((mapped, question, index) => {
+    mapped[`l_${index}`] = answers[question.id]?.answer ?? '';
+    return mapped;
+  }, {});
+  const flaggedQuestions = allQuestions.reduce<Record<string, boolean>>((mapped, question, index) => {
+    if (answers[question.id]?.status === 'flagged') mapped[`l_${index}`] = true;
+    return mapped;
+  }, {});
+
+  return (
+    <>
+      <audio
+        ref={audioRef}
+        src={usesPerSectionAudio ? (test.sections[currentSectionIdx]?.sectionAudioUrl ?? '') : test.audioUrl}
+        onTimeUpdate={handleAudioTimeUpdate}
+        onEnded={handleAudioEnded}
+        preload="auto"
+      />
+      <FullMockListeningPaper
+        sections={test.sections}
+        answers={paperAnswers}
+        activeSection={currentSectionIdx}
+        setActiveSection={setCurrentSectionIdx}
+        setAnswer={(key, value) => {
+          const question = allQuestions[Number(key.replace('l_', ''))];
+          if (question) handleAnswerChange(question.id, question.questionNumber, value);
+        }}
+        flaggedQuestions={flaggedQuestions}
+        toggleFlag={(key) => {
+          const question = allQuestions[Number(key.replace('l_', ''))];
+          if (question) toggleFlag(question.id, question.questionNumber);
+        }}
+        playedAudioIds={playedAudioIds}
+        playingAudioId={playingAudioId}
+        playSectionAudio={(_section, index) => playSectionAudio(index)}
+        usesGlobalAudio={!usesPerSectionAudio}
+        audioMessage={audioMessage}
+        audioSupported={typeof HTMLAudioElement !== 'undefined'}
+        timeDisplay={formatTime(audioState === 'transfer-time' ? transferTimeRemaining : Math.max(0, test.audioDuration - audioCurrentTime))}
+        timeWarning={audioState === 'transfer-time' && transferTimeRemaining <= 60}
+        savedIndicator={Boolean(startedAt)}
+        onSubmit={handleSubmit}
+      />
+      {showCheatingWarning && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-red-900/90">
+          <Card className="mx-4 w-full max-w-md border-red-200">
+            <CardContent className="rounded-lg bg-white p-8 text-center">
+              <AlertCircle className="mx-auto mb-4 h-16 w-16 text-red-600 animate-bounce" />
+              <h2 className="mb-2 text-2xl font-bold text-gray-900">Stay in the test window</h2>
+              <p className="mb-6 text-gray-600">In a real IELTS environment, leaving the test screen or tab may result in disqualification.</p>
+              <Button onClick={() => setShowCheatingWarning(false)} className="w-full bg-red-600 text-white hover:bg-red-700">I Understand, Return to Test</Button>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+    </>
+  );
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
       {/* Fixed Header */}

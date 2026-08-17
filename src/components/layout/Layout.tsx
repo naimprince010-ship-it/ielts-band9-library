@@ -1,20 +1,49 @@
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { MobileNav } from './MobileNav';
 import { getRouteSeoConfig, resolveRouteTitle } from '@/hooks/useSiteSettings';
+import { useNavContext, useNavExitGuard, type NavMode } from '@/contexts/NavContext';
 
 interface LayoutProps {
   children: ReactNode;
-  hideNavFooter?: boolean;
-  hideFooter?: boolean;
+  /**
+   * Replaces the old `hideNavFooter` / `hideFooter` booleans. Defaults to
+   * 'browse' (full chrome — Navbar, Footer, MobileNav all shown).
+   *
+   * A page rendered inside this Layout can still go further and override
+   * the active mode — plus add a title/actions/centerContent — by calling
+   * useNavConfig() itself (see src/contexts/NavContext.tsx). That override
+   * always wins over whatever this prop says.
+   */
+  mode?: NavMode;
 }
 
-export function Layout({ children, hideNavFooter = false, hideFooter = false }: LayoutProps) {
+export function Layout({ children, mode = 'browse' }: LayoutProps) {
   const { pathname } = useLocation();
   const [settingsVersion, setSettingsVersion] = useState(0);
-  const showFooter = !hideNavFooter && !hideFooter;
+  const { navConfig, setNavConfig } = useNavContext();
+
+  // Publish this route's default mode into context. useLayoutEffect (not
+  // useEffect) matters here: React runs every layout effect in the tree —
+  // parents included — before any passive effect fires, regardless of
+  // nesting order. So this always lands before a nested page's
+  // useNavConfig() call (a passive effect), which means the page's richer
+  // config always wins, never gets clobbered back to the route default.
+  useLayoutEffect(() => {
+    setNavConfig({ mode });
+  }, [mode, setNavConfig]);
+
+  const activeMode = navConfig.mode;
+  const hideNavFooter = activeMode === 'exam';
+  const showFooter = activeMode === 'browse';
+
+  // Any page that sets onExitAttempt via useNavConfig gets browser-level
+  // back-button/refresh/close protection automatically — see the comment
+  // on useNavExitGuard for why this lives here instead of in each page.
+  useNavExitGuard(navConfig.onExitAttempt);
+
   useEffect(() => {
     const onSettingsUpdated = () => setSettingsVersion((v) => v + 1);
     window.addEventListener('site-settings-updated', onSettingsUpdated);

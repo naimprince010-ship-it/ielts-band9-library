@@ -15,6 +15,8 @@ interface Props {
   pauseTimer?: () => void;
   startTimer?: () => void;
   onSubmit: () => void;
+  /** Keeps the single-test draft separate from a Full Mock attempt. */
+  storagePrefix?: string;
 }
 
 function text(value: unknown, fallback = ''): string {
@@ -37,9 +39,11 @@ function hasTask1Visual(task?: WritingTask): boolean {
   return !!(task && (task.imageUrl || task.chartData || task.tableData || task.processData || task.mapData));
 }
 
-export function FullMockWritingPaper({ task1, task2, answers, setAnswer, timeDisplay, timeWarning, savedIndicator, pauseTimer, startTimer, onSubmit }: Props) {
-  const [started, setStarted] = useState(() => sessionStorage.getItem('fullMockWritingStarted') === '1');
-  const [activeTask, setActiveTask] = useState<0 | 1>(() => sessionStorage.getItem('fullMockWritingActiveTask') === '1' ? 1 : 0);
+export function FullMockWritingPaper({ task1, task2, answers, setAnswer, timeDisplay, timeWarning, savedIndicator, pauseTimer, startTimer, onSubmit, storagePrefix = 'fullMockWriting' }: Props) {
+  const startedKey = `${storagePrefix}Started`;
+  const activeTaskKey = `${storagePrefix}ActiveTask`;
+  const [started, setStarted] = useState(() => sessionStorage.getItem(startedKey) === '1');
+  const [activeTask, setActiveTask] = useState<0 | 1>(() => sessionStorage.getItem(activeTaskKey) === '1' ? 1 : 0);
   const responses = [answers.w_task1 ?? '', answers.w_task2 ?? ''];
   const counts = responses.map(wordCount);
   const minimums = [150, 250];
@@ -52,15 +56,15 @@ export function FullMockWritingPaper({ task1, task2, answers, setAnswer, timeDis
     : 'Write an essay in response to the statement. Discuss the relevant views and give your own opinion.');
 
   useEffect(() => {
-    sessionStorage.setItem('fullMockWritingActiveTask', String(activeTask));
-  }, [activeTask]);
+    sessionStorage.setItem(activeTaskKey, String(activeTask));
+  }, [activeTask, activeTaskKey]);
 
   useEffect(() => {
     if (!started) pauseTimer?.();
   }, [pauseTimer, started]);
 
   const beginTest = () => {
-    sessionStorage.setItem('fullMockWritingStarted', '1');
+    sessionStorage.setItem(startedKey, '1');
     setStarted(true);
     startTimer?.();
   };
@@ -71,8 +75,8 @@ export function FullMockWritingPaper({ task1, task2, answers, setAnswer, timeDis
       ? `Task 1 needs ${missing[0]} more words and Task 2 needs ${missing[1]} more words. Submit Writing anyway?`
       : 'Submit the Writing section for evaluation?';
     if (window.confirm(message)) {
-      sessionStorage.removeItem('fullMockWritingActiveTask');
-      sessionStorage.removeItem('fullMockWritingStarted');
+      sessionStorage.removeItem(activeTaskKey);
+      sessionStorage.removeItem(startedKey);
       onSubmit();
     }
   };

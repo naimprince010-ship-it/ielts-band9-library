@@ -1,28 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { 
-  CheckCircle, 
-  XCircle, 
-  Clock, 
-  Trophy, 
-  ArrowRight, 
-  ArrowLeft,
-  RotateCcw,
-  Lightbulb,
-  BookOpen,
-  Target,
-  Zap,
-  Lock,
-  AlertCircle,
-  Flame,
-  Star,
-  Keyboard
-} from 'lucide-react';
+import { BookOpen, Lock, Zap } from 'lucide-react';
 import { ALL_QUIZZES, getQuizById, Quiz } from '@/data/quizData';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProgress, WrongQuestion } from '@/contexts/ProgressContext';
@@ -30,6 +10,12 @@ import { useQuizKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useConfetti } from '@/hooks/useConfetti';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { checkAnswerWithSynonyms } from '@/utils/scoring';
+import { QuizBrowseHero } from '@/components/quiz/QuizBrowseHero';
+import { QuizWrongReviewBanner } from '@/components/quiz/QuizWrongReviewBanner';
+import { QuizCard } from '@/components/quiz/QuizCard';
+import { QuizSessionIntro } from '@/components/quiz/QuizSessionIntro';
+import { QuizSession } from '@/components/quiz/QuizSession';
+import { QuizResults } from '@/components/quiz/QuizResults';
 
 interface QuizResult {
   questionId: string;
@@ -44,7 +30,7 @@ export function QuizPage() {
   const { addQuizAttempt, getAllWrongQuestions, streakData, getTodayProgress } = useProgress();
   const { fireStars } = useConfetti();
   const { playCorrect, playIncorrect, playComplete } = useSoundEffects();
-  
+
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState('');
@@ -55,29 +41,29 @@ export function QuizPage() {
   const [timeLeft, setTimeLeft] = useState(0);
   const [quizStarted, setQuizStarted] = useState(false);
   const [quizCompleted, setQuizCompleted] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
-    useQuizKeyboardShortcuts({
-      onSubmit: () => {
-        if (userAnswer.trim() && !showFeedback) {
-          checkAnswer();
-        }
-      },
-      onNext: () => {
-        if (showFeedback) {
-          nextQuestion();
-        }
-      },
-      onHint: () => {
-        if (!showFeedback) {
-          setShowHint(prev => !prev);
-        }
-      },
-      enabled: quizStarted && !quizCompleted,
-    });
+  useQuizKeyboardShortcuts({
+    onSubmit: () => {
+      if (userAnswer.trim() && !showFeedback) {
+        checkAnswer();
+      }
+    },
+    onNext: () => {
+      if (showFeedback) {
+        nextQuestion();
+      }
+    },
+    onHint: () => {
+      if (!showFeedback) {
+        setShowHint((prev) => !prev);
+      }
+    },
+    enabled: quizStarted && !quizCompleted,
+  });
 
-    useEffect(() => {
-      if (quizId) {
+  useEffect(() => {
+    if (quizId) {
       const foundQuiz = getQuizById(quizId);
       if (foundQuiz) {
         setQuiz(foundQuiz);
@@ -90,7 +76,7 @@ export function QuizPage() {
     let timer: NodeJS.Timeout;
     if (quizStarted && !quizCompleted && timeLeft > 0) {
       timer = setInterval(() => {
-        setTimeLeft(prev => {
+        setTimeLeft((prev) => {
           if (prev <= 1) {
             handleQuizComplete();
             return 0;
@@ -105,15 +91,15 @@ export function QuizPage() {
   const handleQuizComplete = useCallback(() => {
     setQuizCompleted(true);
     setQuizStarted(false);
-    
+
     fireStars();
     playComplete();
-    
+
     if (quiz && results.length > 0) {
       const wrongQuestions: WrongQuestion[] = results
-        .filter(r => !r.isCorrect)
-        .map(r => {
-          const question = quiz.questions.find(q => q.id === r.questionId);
+        .filter((r) => !r.isCorrect)
+        .map((r) => {
+          const question = quiz.questions.find((q) => q.id === r.questionId);
           return {
             questionId: r.questionId,
             question: question?.sentence || '',
@@ -122,32 +108,26 @@ export function QuizPage() {
             hint: question?.hint,
           };
         });
-      
+
       addQuizAttempt({
         quizId: quiz.id,
-        score: results.filter(r => r.isCorrect).length,
+        score: results.filter((r) => r.isCorrect).length,
         total: results.length,
         wrongQuestions,
       });
     }
   }, [quiz, results, addQuizAttempt, fireStars, playComplete]);
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
   const checkAnswer = async () => {
     if (!quiz) return;
-    
+
     const currentQuestion = quiz.questions[currentQuestionIndex];
     const normalizedUserAnswer = userAnswer.trim().toLowerCase();
     const normalizedCorrectAnswer = currentQuestion.answer.toLowerCase();
-    
+
     // First, do a quick direct comparison
     let correct = normalizedUserAnswer === normalizedCorrectAnswer;
-    
+
     // If not a direct match, try synonym lookup from vocabulary database
     if (!correct && normalizedUserAnswer) {
       try {
@@ -158,29 +138,32 @@ export function QuizPage() {
         // Keep correct as false if synonym check fails
       }
     }
-    
+
     setIsCorrect(correct);
     setShowFeedback(true);
-    
+
     if (correct) {
       playCorrect();
     } else {
       playIncorrect();
     }
-    
-    setResults(prev => [...prev, {
-      questionId: currentQuestion.id,
-      userAnswer: userAnswer.trim(),
-      correctAnswer: currentQuestion.answer,
-      isCorrect: correct
-    }]);
+
+    setResults((prev) => [
+      ...prev,
+      {
+        questionId: currentQuestion.id,
+        userAnswer: userAnswer.trim(),
+        correctAnswer: currentQuestion.answer,
+        isCorrect: correct,
+      },
+    ]);
   };
 
   const nextQuestion = () => {
     if (!quiz) return;
-    
+
     if (currentQuestionIndex < quiz.questions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
+      setCurrentQuestionIndex((prev) => prev + 1);
       setUserAnswer('');
       setShowFeedback(false);
       setShowHint(false);
@@ -211,42 +194,7 @@ export function QuizPage() {
     setTimeLeft(quiz.timeLimit);
   };
 
-  const getScorePercentage = () => {
-    if (results.length === 0) return 0;
-    const correct = results.filter(r => r.isCorrect).length;
-    return Math.round((correct / results.length) * 100);
-  };
-
-  const getScoreMessage = () => {
-    const percentage = getScorePercentage();
-    if (percentage >= 90) return { message: 'Excellent! Band 9 level!', color: 'text-green-600' };
-    if (percentage >= 70) return { message: 'Great job! Band 7-8 level!', color: 'text-blue-600' };
-    if (percentage >= 50) return { message: 'Good effort! Keep practicing!', color: 'text-yellow-600' };
-    return { message: 'Keep studying! You\'ll improve!', color: 'text-orange-600' };
-  };
-
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case 'vocabulary': return 'bg-accent/10 text-accent';
-      case 'grammar': return 'bg-foreground/10 text-foreground';
-      case 'writing': return 'bg-green-100 text-green-700';
-      case 'speaking': return 'bg-orange-100 text-orange-700';
-      default: return 'bg-muted text-muted-foreground';
-    }
-  };
-
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'beginner': return 'bg-green-100 text-green-700';
-      case 'intermediate': return 'bg-yellow-100 text-yellow-700';
-      case 'advanced': return 'bg-red-100 text-red-700';
-      default: return 'bg-gray-100 text-gray-700';
-    }
-  };
-
-    const filteredQuizzes = selectedCategory === 'all' 
-      ? ALL_QUIZZES 
-      : ALL_QUIZZES.filter(q => q.category === selectedCategory);
+  const filteredQuizzes = selectedCategory === 'all' ? ALL_QUIZZES : ALL_QUIZZES.filter((q) => q.category === selectedCategory);
 
   const wrongQuestionsList = getAllWrongQuestions();
   const todayProgress = getTodayProgress();
@@ -263,147 +211,61 @@ export function QuizPage() {
 
   if (!quizId) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-muted/50 to-background">
-        <div className="bg-gradient-to-r from-foreground to-foreground/90 text-white py-12">
-          <div className="container mx-auto px-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-3 mb-4">
-                  <Target className="h-8 w-8" />
-                  <h1 className="text-3xl font-bold">Interactive Quiz</h1>
-                </div>
-                <p className="text-muted-foreground max-w-2xl">
-                  Test your IELTS knowledge with interactive fill-in-the-blank quizzes. 
-                  Get instant feedback, track your score, and improve your Band score!
-                </p>
-              </div>
-              <div className="hidden md:flex items-center gap-6">
-                {streakData.currentStreak > 0 && (
-                  <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full">
-                    <Flame className="h-5 w-5 text-orange-300" />
-                    <span className="font-semibold">{streakData.currentStreak} day streak</span>
-                  </div>
-                )}
-                <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full">
-                  <Star className="h-5 w-5 text-yellow-300" />
-                  <span className="font-semibold">{todayProgress.questions}/{todayProgress.goal} today</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="min-h-screen bg-slate-50">
+        <QuizBrowseHero
+          currentStreak={streakData.currentStreak}
+          todayQuestions={todayProgress.questions}
+          todayGoal={todayProgress.goal}
+        />
 
         <div className="container mx-auto px-4 py-8">
           {wrongQuestionsList.length > 0 && (
-            <Card className="mb-8 border-2 border-orange-200 bg-orange-50">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="p-3 bg-orange-100 rounded-full">
-                      <AlertCircle className="h-6 w-6 text-orange-600" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-lg text-orange-800">Review Your Mistakes</CardTitle>
-                      <CardDescription className="text-orange-600">
-                        You have {wrongQuestionsList.length} questions to review from previous quizzes
-                      </CardDescription>
-                    </div>
-                  </div>
-                  <Button 
-                    onClick={startReviewMode}
-                    className="bg-orange-600 hover:bg-orange-700"
-                  >
-                    <RotateCcw className="h-4 w-4 mr-2" />
-                    Start Review ({Math.min(10, wrongQuestionsList.length)} questions)
-                  </Button>
-                </div>
-              </CardHeader>
-            </Card>
+            <QuizWrongReviewBanner count={wrongQuestionsList.length} onStartReview={startReviewMode} />
           )}
 
-          <div className="flex flex-wrap gap-2 mb-8">
+          <div className="mb-8 flex flex-wrap gap-2">
             <Button
               variant={selectedCategory === 'all' ? 'default' : 'outline'}
               onClick={() => setSelectedCategory('all')}
-              className="rounded-full"
+              className={selectedCategory === 'all' ? 'rounded-full bg-blue-600 hover:bg-blue-700' : 'rounded-full'}
             >
               All Quizzes
             </Button>
             <Button
               variant={selectedCategory === 'vocabulary' ? 'default' : 'outline'}
               onClick={() => setSelectedCategory('vocabulary')}
-              className="rounded-full"
+              className={selectedCategory === 'vocabulary' ? 'rounded-full bg-blue-600 hover:bg-blue-700' : 'rounded-full'}
             >
-              <BookOpen className="h-4 w-4 mr-2" />
+              <BookOpen className="mr-2 h-4 w-4" />
               Vocabulary
             </Button>
             <Button
               variant={selectedCategory === 'grammar' ? 'default' : 'outline'}
               onClick={() => setSelectedCategory('grammar')}
-              className="rounded-full"
+              className={selectedCategory === 'grammar' ? 'rounded-full bg-blue-600 hover:bg-blue-700' : 'rounded-full'}
             >
-              <Zap className="h-4 w-4 mr-2" />
+              <Zap className="mr-2 h-4 w-4" />
               Grammar
             </Button>
             <Button
               variant={selectedCategory === 'writing' ? 'default' : 'outline'}
               onClick={() => setSelectedCategory('writing')}
-              className="rounded-full"
+              className={selectedCategory === 'writing' ? 'rounded-full bg-blue-600 hover:bg-blue-700' : 'rounded-full'}
             >
               Writing
             </Button>
             <Button
               variant={selectedCategory === 'speaking' ? 'default' : 'outline'}
               onClick={() => setSelectedCategory('speaking')}
-              className="rounded-full"
+              className={selectedCategory === 'speaking' ? 'rounded-full bg-blue-600 hover:bg-blue-700' : 'rounded-full'}
             >
               Speaking
             </Button>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredQuizzes.map(q => (
-              <Card key={q.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge className={getCategoryColor(q.category)}>
-                      {q.category}
-                    </Badge>
-                    <Badge className={getDifficultyColor(q.difficulty)}>
-                      {q.difficulty}
-                    </Badge>
-                  </div>
-                  <CardTitle className="text-lg">{q.title}</CardTitle>
-                  <CardDescription>{q.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                    <span className="flex items-center gap-1">
-                      <Target className="h-4 w-4" />
-                      {q.questions.length} questions
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-4 w-4" />
-                      {Math.floor(q.timeLimit / 60)} min
-                    </span>
-                  </div>
-                  {q.is_premium && !isPremium ? (
-                    <Link to="/pricing">
-                      <Button className="w-full" variant="outline">
-                        <Lock className="h-4 w-4 mr-2" />
-                        Premium Quiz
-                      </Button>
-                    </Link>
-                  ) : (
-                    <Link to={`/quiz/${q.id}`}>
-                      <Button className="w-full bg-accent hover:bg-accent/90">
-                        Start Quiz
-                        <ArrowRight className="h-4 w-4 ml-2" />
-                      </Button>
-                    </Link>
-                  )}
-                </CardContent>
-              </Card>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filteredQuizzes.map((q) => (
+              <QuizCard key={q.id} quiz={q} isPremiumUser={isPremium} />
             ))}
           </div>
         </div>
@@ -413,11 +275,11 @@ export function QuizPage() {
 
   if (!quiz) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="p-8 text-center">
-          <h2 className="text-xl font-semibold mb-4">Quiz not found</h2>
+      <div className="flex min-h-screen items-center justify-center bg-slate-50">
+        <Card className="border-blue-100 p-8 text-center shadow-sm">
+          <h2 className="mb-4 text-xl font-semibold text-slate-950">Quiz not found</h2>
           <Link to="/quiz">
-            <Button>Back to Quizzes</Button>
+            <Button className="bg-blue-600 hover:bg-blue-700">Back to Quizzes</Button>
           </Link>
         </Card>
       </div>
@@ -426,18 +288,18 @@ export function QuizPage() {
 
   if (quiz.is_premium && !isPremium) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-muted/50 to-background">
-        <Card className="p-8 text-center max-w-md">
-          <Lock className="h-16 w-16 mx-auto text-accent mb-4" />
-          <h2 className="text-2xl font-bold mb-2">Premium Quiz</h2>
-          <p className="text-gray-600 mb-6">
+      <div className="flex min-h-screen items-center justify-center bg-slate-50">
+        <Card className="max-w-md border-amber-200 p-8 text-center shadow-sm">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-100">
+            <Lock className="h-8 w-8 text-amber-600" />
+          </div>
+          <h2 className="mb-2 text-2xl font-bold text-slate-950">Premium Quiz</h2>
+          <p className="mb-6 text-slate-600">
             This quiz is available for premium members only. Upgrade to access all quizzes and features!
           </p>
           <div className="space-y-3">
             <Link to="/pricing">
-              <Button className="w-full bg-accent hover:bg-accent/90">
-                Upgrade to Premium
-              </Button>
+              <Button className="w-full bg-blue-600 hover:bg-blue-700">Upgrade to Premium</Button>
             </Link>
             <Link to="/quiz">
               <Button variant="outline" className="w-full">
@@ -451,329 +313,27 @@ export function QuizPage() {
   }
 
   if (quizCompleted) {
-    const scoreMessage = getScoreMessage();
-    const correctCount = results.filter(r => r.isCorrect).length;
-    
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-muted/50 to-background py-12">
-        <div className="container mx-auto px-4 max-w-2xl">
-          <Card className="overflow-hidden">
-            <div className="bg-gradient-to-r from-foreground to-foreground/90 text-white p-8 text-center">
-              <Trophy className="h-16 w-16 mx-auto mb-4" />
-              <h2 className="text-3xl font-bold mb-2">Quiz Complete!</h2>
-              <p className={`text-xl ${scoreMessage.color.replace('text-', 'text-white/')}`}>
-                {scoreMessage.message}
-              </p>
-            </div>
-            
-            <CardContent className="p-8">
-              <div className="text-center mb-8">
-                <div className="text-6xl font-bold text-accent mb-2">
-                  {getScorePercentage()}%
-                </div>
-                <p className="text-gray-600">
-                  {correctCount} out of {results.length} correct
-                </p>
-              </div>
-
-              <div className="space-y-4 mb-8">
-                <h3 className="font-semibold text-lg">Review Your Answers:</h3>
-                {results.map((result, index) => {
-                  const question = quiz.questions.find(q => q.id === result.questionId);
-                  return (
-                    <div 
-                      key={result.questionId}
-                      className={`p-4 rounded-lg border ${
-                        result.isCorrect 
-                          ? 'bg-green-50 border-green-200' 
-                          : 'bg-red-50 border-red-200'
-                      }`}
-                    >
-                      <div className="flex items-start gap-3">
-                        {result.isCorrect ? (
-                          <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                        ) : (
-                          <XCircle className="h-5 w-5 text-red-600 mt-0.5" />
-                        )}
-                        <div className="flex-1">
-                          <p className="font-medium mb-1">Q{index + 1}: {question?.sentence}</p>
-                          <p className="text-sm">
-                            Your answer: <span className={result.isCorrect ? 'text-green-600' : 'text-red-600'}>
-                              {result.userAnswer || '(no answer)'}
-                            </span>
-                          </p>
-                          {!result.isCorrect && (
-                            <p className="text-sm text-green-600">
-                              Correct answer: {result.correctAnswer}
-                            </p>
-                          )}
-                          {question?.explanation && (
-                            <p className="text-sm text-gray-600 mt-2 italic">
-                              {question.explanation}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <div className="flex gap-4">
-                <Button 
-                  onClick={restartQuiz}
-                  variant="outline"
-                  className="flex-1"
-                >
-                  <RotateCcw className="h-4 w-4 mr-2" />
-                  Try Again
-                </Button>
-                <Link to="/quiz" className="flex-1">
-                  <Button className="w-full bg-accent hover:bg-accent/90">
-                    More Quizzes
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    );
+    return <QuizResults quiz={quiz} results={results} onRestart={restartQuiz} />;
   }
 
   if (!quizStarted) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-muted/50 to-background py-12">
-        <div className="container mx-auto px-4 max-w-2xl">
-          <Card>
-            <CardHeader className="text-center">
-              <div className="flex justify-center gap-2 mb-4">
-                <Badge className={getCategoryColor(quiz.category)}>
-                  {quiz.category}
-                </Badge>
-                <Badge className={getDifficultyColor(quiz.difficulty)}>
-                  {quiz.difficulty}
-                </Badge>
-              </div>
-              <CardTitle className="text-2xl">{quiz.title}</CardTitle>
-              <CardDescription className="text-base">{quiz.description}</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-2 gap-4 text-center">
-                <div className="p-4 bg-muted rounded-lg">
-                  <Target className="h-8 w-8 mx-auto text-accent mb-2" />
-                  <p className="font-semibold text-lg">{quiz.questions.length}</p>
-                  <p className="text-sm text-gray-600">Questions</p>
-                </div>
-                <div className="p-4 bg-muted rounded-lg">
-                  <Clock className="h-8 w-8 mx-auto text-accent mb-2" />
-                  <p className="font-semibold text-lg">{Math.floor(quiz.timeLimit / 60)} min</p>
-                  <p className="text-sm text-gray-600">Time Limit</p>
-                </div>
-              </div>
-
-                            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                              <h4 className="font-semibold text-yellow-800 mb-2">Instructions:</h4>
-                              <ul className="text-sm text-yellow-700 space-y-1">
-                                <li>• Fill in the blank with the correct word</li>
-                                <li>• Answers are case-insensitive</li>
-                                <li>• Use the hint button if you need help</li>
-                                <li>• Complete before the timer runs out</li>
-                              </ul>
-                            </div>
-
-                            <div className="bg-muted border border-accent/20 rounded-lg p-4">
-                              <div className="flex items-center gap-2 mb-2">
-                                <Keyboard className="h-4 w-4 text-accent" />
-                                <h4 className="font-semibold text-foreground">Keyboard Shortcuts:</h4>
-                              </div>
-                              <ul className="text-sm text-muted-foreground space-y-1">
-                                <li>• <kbd className="px-1.5 py-0.5 bg-muted rounded text-xs font-mono">Enter</kbd> - Submit answer / Next question</li>
-                                <li>• <kbd className="px-1.5 py-0.5 bg-muted rounded text-xs font-mono">H</kbd> - Toggle hint</li>
-                              </ul>
-                            </div>
-
-              <div className="flex gap-4">
-                <Link to="/quiz" className="flex-1">
-                  <Button variant="outline" className="w-full">
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    Back
-                  </Button>
-                </Link>
-                <Button 
-                  onClick={startQuiz}
-                  className="flex-1 bg-accent hover:bg-accent/90"
-                >
-                  Start Quiz
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    );
+    return <QuizSessionIntro quiz={quiz} onStart={startQuiz} />;
   }
 
-  const currentQuestion = quiz.questions[currentQuestionIndex];
-  const progress = ((currentQuestionIndex + 1) / quiz.questions.length) * 100;
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-muted/50 to-background py-8">
-      <div className="container mx-auto px-4 max-w-2xl">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <Badge className={getCategoryColor(quiz.category)}>
-              {quiz.category}
-            </Badge>
-            <span className="text-sm text-gray-600">
-              Question {currentQuestionIndex + 1} of {quiz.questions.length}
-            </span>
-          </div>
-          <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${
-            timeLeft < 60 ? 'bg-red-100 text-red-700' : 'bg-accent/10 text-accent'
-          }`}>
-            <Clock className="h-4 w-4" />
-            <span className="font-mono font-semibold">{formatTime(timeLeft)}</span>
-          </div>
-        </div>
-
-        <Progress value={progress} className="mb-6 h-2" />
-
-        <Card>
-          <CardContent className="p-8">
-            <div className="mb-8">
-              <p className="text-lg leading-relaxed">
-                {currentQuestion.sentence.split(currentQuestion.blank).map((part, index, array) => (
-                  <span key={index}>
-                    {part}
-                    {index < array.length - 1 && (
-                      <span className="inline-block min-w-[120px] border-b-2 border-accent mx-1 text-center">
-                        {showFeedback ? (
-                          <span className={isCorrect ? 'text-green-600' : 'text-red-600'}>
-                            {userAnswer || '___'}
-                          </span>
-                        ) : (
-                          <span className="text-gray-400">___</span>
-                        )}
-                      </span>
-                    )}
-                  </span>
-                ))}
-              </p>
-            </div>
-
-            {!showFeedback ? (
-              <div className="space-y-4">
-                <div className="flex gap-2">
-                  <Input
-                    type="text"
-                    value={userAnswer}
-                    onChange={(e) => setUserAnswer(e.target.value)}
-                    placeholder="Type your answer..."
-                    className="text-lg"
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter' && userAnswer.trim()) {
-                        checkAnswer();
-                      }
-                    }}
-                    autoFocus
-                  />
-                  <Button
-                    onClick={() => setShowHint(!showHint)}
-                    variant="outline"
-                    className="shrink-0"
-                  >
-                    <Lightbulb className="h-4 w-4" />
-                  </Button>
-                </div>
-
-                {showHint && currentQuestion.hint && (
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-sm text-yellow-800">
-                    <span className="font-semibold">Hint:</span> {currentQuestion.hint}
-                  </div>
-                )}
-
-                <Button
-                  onClick={checkAnswer}
-                  disabled={!userAnswer.trim()}
-                  className="w-full bg-accent hover:bg-accent/90"
-                >
-                  Check Answer
-                </Button>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <div className={`p-4 rounded-lg ${
-                  isCorrect ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'
-                }`}>
-                  <div className="flex items-center gap-3 mb-2">
-                    {isCorrect ? (
-                      <>
-                        <CheckCircle className="h-6 w-6 text-green-600" />
-                        <span className="font-semibold text-green-700">Correct!</span>
-                      </>
-                    ) : (
-                      <>
-                        <XCircle className="h-6 w-6 text-red-600" />
-                        <span className="font-semibold text-red-700">Incorrect</span>
-                      </>
-                    )}
-                  </div>
-                  {!isCorrect && (
-                    <p className="text-sm mb-2">
-                      The correct answer is: <span className="font-semibold text-green-600">{currentQuestion.answer}</span>
-                    </p>
-                  )}
-                  {currentQuestion.explanation && (
-                    <p className="text-sm text-gray-600 italic">
-                      {currentQuestion.explanation}
-                    </p>
-                  )}
-                </div>
-
-                <Button
-                  onClick={nextQuestion}
-                  className="w-full bg-accent hover:bg-accent/90"
-                >
-                  {currentQuestionIndex < quiz.questions.length - 1 ? (
-                    <>
-                      Next Question
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </>
-                  ) : (
-                    <>
-                      See Results
-                      <Trophy className="h-4 w-4 ml-2" />
-                    </>
-                  )}
-                </Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        <div className="mt-6 flex justify-center gap-2">
-          {quiz.questions.map((_, index) => {
-            const result = results.find((_, i) => i === index);
-            return (
-              <div
-                key={index}
-                className={`w-3 h-3 rounded-full ${
-                  index === currentQuestionIndex
-                    ? 'bg-accent'
-                    : result
-                    ? result.isCorrect
-                      ? 'bg-green-500'
-                      : 'bg-red-500'
-                    : 'bg-gray-300'
-                }`}
-              />
-            );
-          })}
-        </div>
-      </div>
-    </div>
+    <QuizSession
+      quiz={quiz}
+      currentQuestionIndex={currentQuestionIndex}
+      userAnswer={userAnswer}
+      onUserAnswerChange={setUserAnswer}
+      showFeedback={showFeedback}
+      isCorrect={isCorrect}
+      showHint={showHint}
+      onToggleHint={() => setShowHint(!showHint)}
+      timeLeft={timeLeft}
+      results={results}
+      onCheckAnswer={checkAnswer}
+      onNextQuestion={nextQuestion}
+    />
   );
 }

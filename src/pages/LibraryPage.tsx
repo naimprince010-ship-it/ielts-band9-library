@@ -18,6 +18,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useProgress } from '@/contexts/ProgressContext';
 import { LessonType, LessonLevel } from '@/types';
 import { GRAMMAR_TOPICS, VOCABULARY_TOPICS, WRITING_TOPICS, SPEAKING_TOPICS, SAMPLE_LESSONS } from '@/data/sampleLessons';
+import { hasDeepVocabularyLesson } from '@/data/deepVocabularyLessons';
 import { LessonGridSkeleton } from '@/components/ui/PageSkeleton';
 
 interface LibraryPageProps {
@@ -34,13 +35,45 @@ const isBandUpgradeLesson = (topic: string): boolean => {
 };
 
 type SortOption = 'newest' | 'oldest' | 'popular' | 'az' | 'za';
+type VocabularyPathTab = 'all' | 'deep' | 'band-upgrade' | 'collocations' | 'writing' | 'speaking';
 const ITEMS_PER_PAGE = 12;
+
+const VOCABULARY_PATH_TABS: Array<{ value: VocabularyPathTab; label: string }> = [
+  { value: 'all', label: 'All Lessons' },
+  { value: 'deep', label: 'Interactive Deep' },
+  { value: 'band-upgrade', label: 'Band Upgrade' },
+  { value: 'collocations', label: 'Collocations' },
+  { value: 'writing', label: 'Writing Vocabulary' },
+  { value: 'speaking', label: 'Speaking Vocabulary' },
+];
+
+const getVocabularyTabMatch = (lesson: { slug: string; title: string; description: string; topic: string }, tab: VocabularyPathTab): boolean => {
+  const haystack = `${lesson.slug} ${lesson.title} ${lesson.description} ${lesson.topic}`.toLowerCase();
+
+  switch (tab) {
+    case 'all':
+      return true;
+    case 'deep':
+      return hasDeepVocabularyLesson(lesson.slug);
+    case 'band-upgrade':
+      return haystack.includes('band') || haystack.includes('upgrade');
+    case 'collocations':
+      return haystack.includes('collocation');
+    case 'writing':
+      return haystack.includes('academic writing') || haystack.includes('writing');
+    case 'speaking':
+      return haystack.includes('speaking') || haystack.includes('phrase') || haystack.includes('phrases');
+    default:
+      return true;
+  }
+};
 
 export function LibraryPage({ type }: LibraryPageProps) {
   const [searchParams, setSearchParams] = useSearchParams();
     const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
     const [levelFilter, setLevelFilter] = useState<LessonLevel | 'all'>('all');
     const [topicFilter, setTopicFilter] = useState<string>(searchParams.get('topic') || 'all');
+  const [vocabularyTab, setVocabularyTab] = useState<VocabularyPathTab>('all');
   const [sortBy, setSortBy] = useState<SortOption>('newest');
   const [currentPage, setCurrentPage] = useState(1);
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -54,6 +87,19 @@ export function LibraryPage({ type }: LibraryPageProps) {
 
   const topics = type === 'vocabulary' ? VOCABULARY_TOPICS : type === 'writing' ? WRITING_TOPICS : type === 'speaking' ? SPEAKING_TOPICS : GRAMMAR_TOPICS;
   const filteredLessons = lessons.filter(l => l.type === type);
+  const vocabularyTabCounts = useMemo(() => {
+    if (type !== 'vocabulary') return null;
+
+    const vocabularyLessons = SAMPLE_LESSONS.filter((lesson) => lesson.type === 'vocabulary');
+    const counts = VOCABULARY_PATH_TABS.reduce((acc, tab) => {
+      acc[tab.value] = tab.value === 'all'
+        ? vocabularyLessons.length
+        : vocabularyLessons.filter((lesson) => getVocabularyTabMatch(lesson, tab.value)).length;
+      return acc;
+    }, {} as Record<VocabularyPathTab, number>);
+
+    return counts;
+  }, [type]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -75,12 +121,13 @@ export function LibraryPage({ type }: LibraryPageProps) {
     setSearchQuery('');
     setLevelFilter('all');
     setTopicFilter('all');
+    setVocabularyTab('all');
     setSortBy('newest');
     setCurrentPage(1);
     setSearchParams({});
   }, [setSearchParams]);
 
-  const hasActiveFilters = searchQuery || levelFilter !== 'all' || topicFilter !== 'all' || sortBy !== 'newest';
+  const hasActiveFilters = searchQuery || levelFilter !== 'all' || topicFilter !== 'all' || sortBy !== 'newest' || vocabularyTab !== 'all';
 
   const topicCounts = useMemo(() => {
     const allLessonsOfType = SAMPLE_LESSONS.filter(l => l.type === type);
@@ -96,6 +143,13 @@ export function LibraryPage({ type }: LibraryPageProps) {
   const completionPercent = getCompletionPercentage(type);
   const completedCount = getCompletedCount(type);
   const totalLessons = SAMPLE_LESSONS.filter(l => l.type === type).length;
+  const featuredDeepVocabularyLessons = useMemo(
+    () =>
+      type === 'vocabulary'
+        ? filteredLessons.filter((lesson) => hasDeepVocabularyLesson(lesson.slug))
+        : [],
+    [type, filteredLessons]
+  );
 
   useEffect(() => {
     const level = levelFilter === 'all' ? undefined : levelFilter;
@@ -120,9 +174,15 @@ export function LibraryPage({ type }: LibraryPageProps) {
   };
 
   const sortedAndFilteredLessons = useMemo(() => {
-    let result = topicFilter === 'all' 
-      ? filteredLessons 
-      : filteredLessons.filter(l => l.topic.toLowerCase() === topicFilter.toLowerCase());
+    let result = filteredLessons;
+
+    if (type === 'vocabulary') {
+      result = result.filter((lesson) => getVocabularyTabMatch(lesson, vocabularyTab));
+    }
+
+    result = topicFilter === 'all'
+      ? result
+      : result.filter(l => l.topic.toLowerCase() === topicFilter.toLowerCase());
     
     switch (sortBy) {
       case 'newest':
@@ -143,7 +203,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
     }
     
     return result;
-  }, [filteredLessons, topicFilter, sortBy]);
+  }, [filteredLessons, topicFilter, sortBy, type, vocabularyTab]);
 
   const totalPages = Math.ceil(sortedAndFilteredLessons.length / ITEMS_PER_PAGE);
   const displayLessons = sortedAndFilteredLessons.slice(
@@ -153,7 +213,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, levelFilter, topicFilter, sortBy]);
+  }, [searchQuery, levelFilter, topicFilter, sortBy, vocabularyTab]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -217,6 +277,42 @@ export function LibraryPage({ type }: LibraryPageProps) {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {type === 'vocabulary' && (
+          <div className="mb-4 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
+            <div className="overflow-x-auto pb-1">
+              <div className="flex min-w-max gap-2">
+                {VOCABULARY_PATH_TABS.map((tab) => {
+                  const active = vocabularyTab === tab.value;
+                  const count = vocabularyTabCounts?.[tab.value] ?? 0;
+
+                  return (
+                    <Button
+                      key={tab.value}
+                      type="button"
+                      variant={active ? 'default' : 'outline'}
+                      onClick={() => setVocabularyTab(tab.value)}
+                      className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                        active
+                          ? 'border-indigo-600 bg-indigo-600 text-white hover:bg-indigo-700'
+                          : 'border-slate-200 bg-white text-slate-700 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700'
+                      }`}
+                      aria-pressed={active}
+                    >
+                      <span>{tab.label}</span>
+                      <span className={`ml-2 rounded-full px-2 py-0.5 text-xs ${active ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'}`}>
+                        {count}
+                      </span>
+                    </Button>
+                  );
+                })}
+              </div>
+            </div>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Choose a path, then use search or topic filters to narrow your lessons.
+            </p>
+          </div>
+        )}
+
         <div 
           ref={filterRef}
           className={`bg-card rounded-lg shadow-sm p-4 mb-6 transition-all ${isFilterSticky ? 'sticky top-0 z-40 shadow-md' : ''}`}
@@ -384,13 +480,44 @@ export function LibraryPage({ type }: LibraryPageProps) {
           </div>
         ) : (
           <>
-            <p className="text-muted-foreground mb-4">{displayLessons.length} lessons found</p>
+            {type === 'vocabulary' && featuredDeepVocabularyLessons.length > 0 && (
+              <section className="mb-6 rounded-xl border border-indigo-200 bg-gradient-to-r from-indigo-50 via-blue-50 to-violet-50 p-4 sm:p-5">
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <div>
+                    <h2 className="text-base sm:text-lg font-semibold text-foreground">Featured Interactive Vocabulary Lessons</h2>
+                    <p className="text-xs sm:text-sm text-muted-foreground">4-word mastery lessons with deeper comparisons and guided checks.</p>
+                  </div>
+                  <Badge variant="outline" className="shrink-0 border-indigo-300 bg-indigo-50 text-indigo-700">Featured</Badge>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {featuredDeepVocabularyLessons.map((lesson) => (
+                    <Link key={`featured-${lesson.id}`} to={`/lesson/${lesson.slug}`} className="group">
+                      <Card className="h-full border-indigo-200 bg-background/90 transition-colors group-hover:border-violet-400">
+                        <CardHeader className="pb-3">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <Badge variant="secondary" className="bg-indigo-100 text-xs text-indigo-700">Interactive</Badge>
+                            <Badge variant="outline" className="border-violet-300 bg-violet-50 text-xs text-violet-700">4-word Mastery</Badge>
+                          </div>
+                          <CardTitle className="text-sm sm:text-base leading-snug transition-colors group-hover:text-indigo-700">{lesson.title}</CardTitle>
+                        </CardHeader>
+                        <CardContent className="pt-0">
+                          <span className="inline-flex items-center text-sm font-medium text-indigo-700 transition-colors group-hover:text-violet-700">Start Interactive Lesson</span>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            <p className="text-muted-foreground mb-4">{sortedAndFilteredLessons.length} lessons found</p>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {displayLessons.map((lesson) => {
                 const estimatedTime = lesson.estimated_time || getEstimatedTime(lesson);
                 const lessonProgress = getLessonProgress(lesson.id);
                 const isCompleted = lessonProgress === 'completed';
                 const isBandUpgrade = isBandUpgradeLesson(lesson.topic);
+                const isDeepVocabularyLesson = type === 'vocabulary' && hasDeepVocabularyLesson(lesson.slug);
                 
                 return (
                   <Link key={lesson.id} to={`/lesson/${lesson.slug}`}>
@@ -450,6 +577,12 @@ export function LibraryPage({ type }: LibraryPageProps) {
                             {lesson.title}
                           </CardTitle>
                         </div>
+                        {isDeepVocabularyLesson && (
+                          <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                            <Badge variant="secondary" className="bg-indigo-100 text-[11px] text-indigo-700 sm:text-xs">Interactive</Badge>
+                            <Badge variant="outline" className="border-violet-300 bg-violet-50 text-[11px] text-violet-700 sm:text-xs">Deep Lesson</Badge>
+                          </div>
+                        )}
                         <CardDescription className="line-clamp-2">
                           {lesson.description}
                         </CardDescription>
@@ -467,6 +600,11 @@ export function LibraryPage({ type }: LibraryPageProps) {
                           </div>
                           <span>{lesson.view_count.toLocaleString()} views</span>
                         </div>
+                        {isDeepVocabularyLesson && (
+                          <div className="mt-3">
+                            <span className="inline-flex items-center text-sm font-medium text-indigo-700">Start Interactive Lesson</span>
+                          </div>
+                        )}
                       </CardContent>
                     </Card>
                   </Link>

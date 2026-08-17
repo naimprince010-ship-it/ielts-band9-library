@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { List, ChevronDown, CheckCircle2 } from 'lucide-react';
+import { List, ChevronDown, CheckCircle2, Circle } from 'lucide-react';
 import { Button } from './button';
 
 interface TOCItem {
@@ -24,9 +24,9 @@ function groupItems(items: TOCItem[]): { learning: TOCItem[]; practice: TOCItem[
 
   items.forEach((item) => {
     const id = item.id.toLowerCase();
-    if (id.includes('learn') || id.includes('explanation') || id.includes('grammar') || id.includes('use')) {
+    if (id.includes('overview') || id.includes('what-you-will-learn') || id.includes('compare') || id.includes('learn') || id.includes('explanation') || id.includes('grammar') || id.includes('use')) {
       learning.push({ ...item, group: 'learning' });
-    } else if (id.includes('example') || id.includes('practice') || id.includes('collocation') || id.includes('synonym') || id.includes('speaking') || id.includes('sentence')) {
+    } else if (id.includes('example') || id.includes('check') || id.includes('practice') || id.includes('collocation') || id.includes('synonym') || id.includes('speaking') || id.includes('sentence') || id.includes('apply')) {
       practice.push({ ...item, group: 'practice' });
     } else {
       review.push({ ...item, group: 'review' });
@@ -87,6 +87,7 @@ export function TableOfContents({ items, className, completedSections = [] }: Ta
     practice: 'Practice',
     review: 'Review'
   };
+  const progress = items.length ? Math.round((viewedSections.size / items.length) * 100) : 0;
 
   const renderItem = (item: TOCItem) => {
     const isActive = activeId === item.id;
@@ -97,51 +98,46 @@ export function TableOfContents({ items, className, completedSections = [] }: Ta
         key={item.id}
         onClick={() => scrollToSection(item.id)}
         className={cn(
-          "group w-full text-left py-2.5 px-3 text-sm rounded-lg transition-all duration-200 flex items-center gap-3 relative",
-          // Active state with left border
-          isActive && "bg-accent/10 border-l-[3px] border-accent font-semibold text-accent rounded-l-none",
-          // Viewed/completed state
-          isViewed && "text-muted-foreground",
-          // Default state
-          !isActive && !isViewed && "text-foreground/70 hover:bg-muted/50 hover:text-foreground"
+          'group flex min-h-10 w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-[13px] transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2',
+          isActive && 'bg-indigo-50/80 text-indigo-700 shadow-[inset_2px_0_0_#4f46e5]',
+          isViewed && 'text-slate-500 hover:bg-slate-50 hover:text-slate-700',
+          !isActive && !isViewed && 'text-slate-600 hover:bg-slate-50 hover:text-slate-900',
         )}
       >
-        {/* Icon with color states */}
         <span className={cn(
-          "flex-shrink-0 transition-colors duration-200",
-          isActive ? "text-accent" : "text-muted-foreground group-hover:text-foreground/70"
+          'grid h-6 w-6 shrink-0 place-items-center rounded-md transition-colors duration-200',
+          isActive ? 'bg-white text-indigo-700' : 'bg-slate-50 text-slate-500 group-hover:text-slate-700',
         )}>
-          {item.icon}
+          {item.icon || <Circle className="h-3 w-3" />}
         </span>
-        
-        {/* Title */}
-        <span className="flex-1 truncate">{item.title}</span>
-        
-        {/* Viewed indicator */}
-        {isViewed && (
-          <CheckCircle2 className="h-4 w-4 text-green-500 flex-shrink-0" />
-        )}
-        
-        {/* Active indicator dot */}
-        {isActive && (
-          <span className="w-2 h-2 bg-accent rounded-full flex-shrink-0 animate-pulse" />
-        )}
+
+        <span className="min-w-0 flex-1 truncate">{item.title}</span>
+
+        <span className="grid h-4 w-4 shrink-0 place-items-center">
+          {isViewed && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />}
+          {isActive && <span className="h-1.5 w-1.5 rounded-full bg-indigo-600" />}
+        </span>
       </button>
     );
   };
 
   return (
-    <nav className={cn("space-y-1", className)}>
-      {/* Header */}
-      <div className="flex items-center gap-2 mb-4 pb-2 border-b border-border">
-        <List className="h-4 w-4 text-muted-foreground" />
-        <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Contents</span>
+    <nav className={cn('rounded-xl border border-slate-200 bg-white p-2.5 shadow-sm', className)} aria-label="Lesson contents">
+      <div className="mb-3 flex items-center justify-between border-b border-slate-100 pb-2.5">
+        <div className="flex items-center gap-2">
+          <span className="grid h-7 w-7 place-items-center rounded-lg bg-indigo-50 text-indigo-700">
+            <List className="h-3.5 w-3.5" />
+          </span>
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Contents</p>
+            <p className="min-w-16 text-[11px] font-medium tabular-nums text-slate-400">{progress}% viewed</p>
+          </div>
+        </div>
       </div>
 
-      {/* Learning Section */}
       {grouped.learning.length > 0 && (
-        <div className="mb-4">
-          <div className="text-[10px] font-semibold text-muted-foreground/70 uppercase tracking-wider px-3 mb-1.5">
+        <div className="mb-3.5">
+          <div className="mb-1 px-2.5 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
             {groupLabels.learning}
           </div>
           <div className="space-y-0.5">
@@ -150,10 +146,9 @@ export function TableOfContents({ items, className, completedSections = [] }: Ta
         </div>
       )}
 
-      {/* Practice Section */}
       {grouped.practice.length > 0 && (
-        <div className="mb-4 pt-2 border-t border-border/50">
-          <div className="text-[10px] font-semibold text-muted-foreground/70 uppercase tracking-wider px-3 mb-1.5">
+        <div className="mb-3.5 border-t border-slate-100 pt-2.5">
+          <div className="mb-1 px-2.5 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
             {groupLabels.practice}
           </div>
           <div className="space-y-0.5">
@@ -162,10 +157,9 @@ export function TableOfContents({ items, className, completedSections = [] }: Ta
         </div>
       )}
 
-      {/* Review Section */}
       {grouped.review.length > 0 && (
-        <div className="pt-2 border-t border-border/50">
-          <div className="text-[10px] font-semibold text-muted-foreground/70 uppercase tracking-wider px-3 mb-1.5">
+        <div className="border-t border-slate-100 pt-2.5">
+          <div className="mb-1 px-2.5 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
             {groupLabels.review}
           </div>
           <div className="space-y-0.5">
@@ -174,16 +168,15 @@ export function TableOfContents({ items, className, completedSections = [] }: Ta
         </div>
       )}
 
-      {/* Progress indicator */}
-      <div className="mt-4 pt-3 border-t border-border">
-        <div className="flex items-center justify-between text-xs text-muted-foreground px-2">
-          <span>Progress</span>
-          <span className="font-medium">{viewedSections.size}/{items.length}</span>
+      <div className="mt-3.5 border-t border-slate-100 px-2 pt-2.5">
+        <div className="flex items-center justify-between text-xs font-medium text-slate-500">
+          <span>Viewed</span>
+          <span className="min-w-8 text-right tabular-nums">{viewedSections.size}/{items.length}</span>
         </div>
-        <div className="mt-2 h-1.5 bg-muted rounded-full overflow-hidden mx-2">
+        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100">
           <div 
-            className="h-full bg-accent rounded-full transition-all duration-500"
-            style={{ width: `${(viewedSections.size / items.length) * 100}%` }}
+            className="h-full rounded-full bg-indigo-600 transition-all duration-500"
+            style={{ width: `${progress}%` }}
           />
         </div>
       </div>
@@ -243,20 +236,25 @@ export function MobileTableOfContents({ items, className }: MobileTableOfContent
   };
 
   const activeItem = items.find(item => item.id === activeId);
+  const progress = items.length ? Math.round((viewedSections.size / items.length) * 100) : 0;
 
   return (
     <div className={cn("relative", className)}>
       <Button
         variant="outline"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full justify-between shadow-sm"
+        className="h-12 w-full justify-between border-slate-200 bg-white shadow-sm"
       >
-        <span className="flex items-center gap-2">
-          <List className="h-4 w-4" />
+        <span className="flex min-w-0 items-center gap-2">
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-indigo-50 text-indigo-700">
+            <List className="h-4 w-4" />
+          </span>
+          <span className="truncate">
           {activeItem ? activeItem.title : 'Jump to section'}
+          </span>
         </span>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground">{viewedSections.size}/{items.length}</span>
+          <span className="text-xs text-slate-500">{progress}%</span>
           <ChevronDown className={cn(
             "h-4 w-4 transition-transform duration-200",
             isOpen && "rotate-180"
@@ -265,7 +263,7 @@ export function MobileTableOfContents({ items, className }: MobileTableOfContent
       </Button>
       
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-card border rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto">
+        <div className="absolute left-0 right-0 top-full z-50 mt-2 max-h-80 overflow-y-auto rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
           {items.map((item) => {
             const isActive = activeId === item.id;
             const isViewed = viewedSections.has(item.id) && !isActive;
@@ -275,21 +273,21 @@ export function MobileTableOfContents({ items, className }: MobileTableOfContent
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
                 className={cn(
-                  "w-full text-left px-4 py-3 text-sm transition-all duration-200 flex items-center gap-3 border-b last:border-0",
-                  isActive && "bg-accent/10 border-l-[3px] border-l-accent font-semibold text-accent",
-                  isViewed && "text-muted-foreground",
-                  !isActive && !isViewed && "text-foreground hover:bg-muted/50"
+                  'flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors duration-150',
+                  isActive && 'bg-indigo-50 text-indigo-700',
+                  isViewed && 'text-slate-500',
+                  !isActive && !isViewed && 'text-slate-700 hover:bg-slate-50',
                 )}
               >
                 <span className={cn(
-                  "flex-shrink-0",
-                  isActive ? "text-accent" : "text-muted-foreground"
+                  'grid h-7 w-7 shrink-0 place-items-center rounded-md',
+                  isActive ? 'bg-white text-indigo-700' : 'bg-slate-50 text-slate-500',
                 )}>
-                  {item.icon}
+                  {item.icon || <Circle className="h-3.5 w-3.5" />}
                 </span>
-                <span className="flex-1">{item.title}</span>
-                {isViewed && <CheckCircle2 className="h-4 w-4 text-green-500" />}
-                {isActive && <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />}
+                <span className="min-w-0 flex-1 truncate">{item.title}</span>
+                {isViewed && <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-500" />}
+                {isActive && <span className="h-2 w-2 shrink-0 rounded-full bg-indigo-600" />}
               </button>
             );
           })}

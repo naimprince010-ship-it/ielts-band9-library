@@ -531,6 +531,7 @@ export interface ListeningTestSession {
   transferTimeRemaining: number; // Remaining transfer time in seconds
   answers: Record<string, UserAnswer>;  // questionId -> UserAnswer
   currentSection: number;        // Current section being viewed (1-4)
+  playedAudioIds?: string[];     // Recordings already started; IELTS audio must not be replayed after refresh
   isSubmitted: boolean;
   submittedAt?: number;
 }

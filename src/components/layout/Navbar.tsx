@@ -6,10 +6,13 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/contexts/AuthContext';
+import { useNavContext } from '@/contexts/NavContext';
+import { StudentAppHeader } from './StudentAppHeader';
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -17,6 +20,8 @@ export function Navbar() {
   const { user, signOut, isAdmin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { navConfig } = useNavContext();
+  const { mode, title, centerContent, actions, headerVariant } = navConfig;
 
   // Handle scroll effect
   useEffect(() => {
@@ -61,11 +66,20 @@ export function Navbar() {
     navigate('/');
   };
 
+  // 'focused' mode covers both the deep-vocabulary lesson experience (its
+  // own dedicated StudentAppHeader, opted into via headerVariant: 'studentApp')
+  // and any other focused page that hasn't opted into a custom variant —
+  // those fall through to the standard bar below, just with the Footer
+  // hidden (that part is Layout's job, not Navbar's).
+  if (mode === 'focused' && headerVariant === 'studentApp') {
+    return <StudentAppHeader user={user} isAdmin={isAdmin} onSignOut={signOut} />;
+  }
+
   return (
     <>
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled 
-          ? 'bg-background/95 backdrop-blur-md border-b border-border shadow-sm' 
+        scrolled
+          ? 'bg-background/95 backdrop-blur-md border-b border-border shadow-sm'
           : 'bg-background/80 backdrop-blur-sm border-b border-transparent'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -75,107 +89,126 @@ export function Navbar() {
               <img loading="eager" src="/icon.png" alt="IELTS Tree Logo" className="h-8 w-8 object-contain" />
               <span className="text-lg font-semibold text-foreground tracking-tight">IELTS Tree</span>
             </Link>
+            {title && (
+              <span className="hidden md:inline-block ml-3 pl-3 border-l border-border text-sm font-semibold text-foreground/80 truncate max-w-xs">
+                {title}
+              </span>
+            )}
 
-            {/* Desktop Navigation - Simplified */}
-            <div className="hidden lg:flex items-center gap-1">
-              {/* Learn Dropdown */}
-              <DropdownMenu>
-                <DropdownMenuTrigger className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors rounded-lg hover:bg-muted ${
-                  isActive('/vocabulary') || isActive('/grammar') || isActive('/writing') || isActive('/speaking')
-                    ? 'text-foreground'
-                    : 'text-foreground/70 hover:text-foreground'
-                }`}>
-                  Learn
-                  <ChevronDown className="h-4 w-4" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="w-56">
-                  <DropdownMenuItem onClick={() => navigate('/vocabulary')} className="gap-3 py-2.5">
-                    <BookOpen className="h-4 w-4 text-muted-foreground" />
-                    <div>
-                      <div className="font-medium">Vocabulary</div>
-                      <div className="text-xs text-muted-foreground">Build your word bank</div>
-                    </div>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/grammar')} className="gap-3 py-2.5">
-                    <GraduationCap className="h-4 w-4 text-muted-foreground" />
-                    <div>
-                      <div className="font-medium">Grammar</div>
-                      <div className="text-xs text-muted-foreground">Master grammar rules</div>
-                    </div>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/writing')} className="gap-3 py-2.5">
-                    <PenLine className="h-4 w-4 text-muted-foreground" />
-                    <div>
-                      <div className="font-medium">Writing</div>
-                      <div className="text-xs text-muted-foreground">Essay techniques</div>
-                    </div>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/speaking')} className="gap-3 py-2.5">
-                    <Mic className="h-4 w-4 text-muted-foreground" />
-                    <div>
-                      <div className="font-medium">Speaking</div>
-                      <div className="text-xs text-muted-foreground">Fluency practice</div>
-                    </div>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+            {/* Desktop Navigation — a page-provided centerContent (e.g. a
+                lesson progress bar) replaces the generic browsing links;
+                otherwise this is the same Learn/Courses/Quiz/Practice nav
+                as always. */}
+            <div className="hidden lg:flex items-center gap-1 flex-1 justify-center">
+              {centerContent ? (
+                <div className="flex items-center">{centerContent}</div>
+              ) : (
+                <>
+                  {/* Learn Dropdown */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors rounded-lg hover:bg-muted ${
+                      isActive('/vocabulary') || isActive('/grammar') || isActive('/writing') || isActive('/speaking')
+                        ? 'text-foreground'
+                        : 'text-foreground/70 hover:text-foreground'
+                    }`}>
+                      Learn
+                      <ChevronDown className="h-4 w-4" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" className="w-56">
+                      <DropdownMenuItem onClick={() => navigate('/vocabulary')} className="gap-3 py-2.5">
+                        <BookOpen className="h-4 w-4 text-muted-foreground" />
+                        <div>
+                          <div className="font-medium">Vocabulary</div>
+                          <div className="text-xs text-muted-foreground">Build your word bank</div>
+                        </div>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate('/grammar')} className="gap-3 py-2.5">
+                        <GraduationCap className="h-4 w-4 text-muted-foreground" />
+                        <div>
+                          <div className="font-medium">Grammar</div>
+                          <div className="text-xs text-muted-foreground">Master grammar rules</div>
+                        </div>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate('/writing')} className="gap-3 py-2.5">
+                        <PenLine className="h-4 w-4 text-muted-foreground" />
+                        <div>
+                          <div className="font-medium">Writing</div>
+                          <div className="text-xs text-muted-foreground">Essay techniques</div>
+                        </div>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate('/speaking')} className="gap-3 py-2.5">
+                        <Mic className="h-4 w-4 text-muted-foreground" />
+                        <div>
+                          <div className="font-medium">Speaking</div>
+                          <div className="text-xs text-muted-foreground">Fluency practice</div>
+                        </div>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
 
-              <Link to="/courses" className={navLinkClass('/courses')}>
-                <span className="px-3 py-2 rounded-lg hover:bg-muted transition-colors inline-block">Courses</span>
-              </Link>
-              
-              <Link to="/quiz" className={navLinkClass('/quiz')}>
-                <span className="px-3 py-2 rounded-lg hover:bg-muted transition-colors inline-block">Quiz</span>
-              </Link>
-              
-              {/* Practice Dropdown */}
-              <DropdownMenu>
-                <DropdownMenuTrigger className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors rounded-lg hover:bg-muted ${
-                  isActive('/grammar-exercises') || isActive('/essay-bank') || isActive('/daily-plan') || isActive('/collections')
-                    ? 'text-foreground'
-                    : 'text-foreground/70 hover:text-foreground'
-                }`}>
-                  Practice
-                  <ChevronDown className="h-4 w-4" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="w-52">
-                  <DropdownMenuItem onClick={() => navigate('/daily-plan')} className="gap-2.5 py-2">
-                    <Calendar className="h-4 w-4 text-muted-foreground" />
-                    Daily Study Plan
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/grammar-exercises')} className="gap-2.5 py-2">
-                    <PenTool className="h-4 w-4 text-muted-foreground" />
-                    Grammar Exercises
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/essay-bank')} className="gap-2.5 py-2">
-                    <FileText className="h-4 w-4 text-muted-foreground" />
-                    Essay Bank
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/collections')} className="gap-2.5 py-2">
-                    <Sparkles className="h-4 w-4 text-muted-foreground" />
-                    Collections
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/practice/typing')} className="gap-2.5 py-2">
-                    <Keyboard className="h-4 w-4 text-muted-foreground" />
-                    Typing Practice
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => navigate('/full-mock-test')} className="gap-2.5 py-2 font-semibold text-indigo-600">
-                    <Target className="h-4 w-4 text-indigo-500" />
-                    🎯 Full Mock Test
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              
-              {!user && (
-                <Link to="/pricing" className={navLinkClass('/pricing')}>
-                  <span className="px-3 py-2 rounded-lg hover:bg-muted transition-colors inline-block">Pricing</span>
-                </Link>
+                  <Link to="/courses" className={navLinkClass('/courses')}>
+                    <span className="px-3 py-2 rounded-lg hover:bg-muted transition-colors inline-block">Courses</span>
+                  </Link>
+
+                  <Link to="/quiz" className={navLinkClass('/quiz')}>
+                    <span className="px-3 py-2 rounded-lg hover:bg-muted transition-colors inline-block">Quiz</span>
+                  </Link>
+
+                  {/* Practice Dropdown */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors rounded-lg hover:bg-muted ${
+                      isActive('/grammar-exercises') || isActive('/essay-bank') || isActive('/daily-plan') || isActive('/collections')
+                        ? 'text-foreground'
+                        : 'text-foreground/70 hover:text-foreground'
+                    }`}>
+                      Practice
+                      <ChevronDown className="h-4 w-4" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" className="w-52">
+                      <DropdownMenuItem onClick={() => navigate('/daily-plan')} className="gap-2.5 py-2">
+                        <Calendar className="h-4 w-4 text-muted-foreground" />
+                        Daily Study Plan
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate('/grammar-exercises')} className="gap-2.5 py-2">
+                        <PenTool className="h-4 w-4 text-muted-foreground" />
+                        Grammar Exercises
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate('/essay-bank')} className="gap-2.5 py-2">
+                        <FileText className="h-4 w-4 text-muted-foreground" />
+                        Essay Bank
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate('/collections')} className="gap-2.5 py-2">
+                        <Sparkles className="h-4 w-4 text-muted-foreground" />
+                        Collections
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate('/practice/typing')} className="gap-2.5 py-2">
+                        <Keyboard className="h-4 w-4 text-muted-foreground" />
+                        Typing Practice
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => navigate('/full-mock-test')} className="gap-2.5 py-2 font-semibold text-indigo-600">
+                        <Target className="h-4 w-4 text-indigo-500" />
+                        🎯 Full Mock Test
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  {!user && (
+                    <Link to="/pricing" className={navLinkClass('/pricing')}>
+                      <span className="px-3 py-2 rounded-lg hover:bg-muted transition-colors inline-block">Pricing</span>
+                    </Link>
+                  )}
+                </>
               )}
             </div>
 
-            {/* Right Side - Auth */}
+            {/* Right Side - contextual actions (if any), then Auth */}
             <div className="hidden lg:flex items-center gap-2">
+              {actions && (
+                <div className="flex items-center gap-2 pr-2 mr-1 border-r border-border">
+                  {actions}
+                </div>
+              )}
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -192,7 +225,7 @@ export function Navbar() {
                       <p className="text-sm font-medium">{user.name}</p>
                       <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                     </div>
-                    
+                    <DropdownMenuLabel className="px-2 pt-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Tests & assessment</DropdownMenuLabel>
                     <DropdownMenuItem onClick={() => navigate('/diagnostic')} className="gap-2.5 py-2">
                       <Brain className="h-4 w-4 text-muted-foreground" />
                       Diagnostic Test
@@ -201,6 +234,8 @@ export function Navbar() {
                       <BookOpen className="h-4 w-4 text-muted-foreground" />
                       Flashcards
                     </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuLabel className="px-2 pt-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Progress</DropdownMenuLabel>
                     <DropdownMenuItem onClick={() => navigate('/progress')} className="gap-2.5 py-2">
                       <BarChart3 className="h-4 w-4 text-muted-foreground" />
                       Progress
@@ -213,6 +248,8 @@ export function Navbar() {
                       <Target className="h-4 w-4 text-muted-foreground" />
                       Mock Test (Modules)
                     </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuLabel className="px-2 pt-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">IELTS exams</DropdownMenuLabel>
                     <DropdownMenuItem onClick={() => navigate('/full-mock-test')} className="gap-2.5 py-2 font-semibold text-indigo-600">
                       <Target className="h-4 w-4 text-indigo-500" />
                       🎯 Full Mock Test
@@ -221,9 +258,9 @@ export function Navbar() {
                       <Award className="h-4 w-4 text-muted-foreground" />
                       Certificate
                     </DropdownMenuItem>
-                    
+
                     <DropdownMenuSeparator />
-                    
+                    <DropdownMenuLabel className="px-2 pt-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Account</DropdownMenuLabel>
                     <DropdownMenuItem onClick={() => navigate('/profile')} className="gap-2.5 py-2">
                       <Crown className="h-4 w-4 text-muted-foreground" />
                       My Profile
@@ -232,7 +269,7 @@ export function Navbar() {
                       <Bookmark className="h-4 w-4 text-muted-foreground" />
                       My Bookmarks
                     </DropdownMenuItem>
-                    
+
                     {isAdmin && (
                       <>
                         <DropdownMenuSeparator />
@@ -242,9 +279,9 @@ export function Navbar() {
                         </DropdownMenuItem>
                       </>
                     )}
-                    
+
                     <DropdownMenuSeparator />
-                    
+
                     <DropdownMenuItem onClick={handleSignOut} className="gap-2.5 py-2 text-destructive focus:text-destructive">
                       <LogOut className="h-4 w-4" />
                       Sign Out
@@ -300,7 +337,7 @@ export function Navbar() {
           tabIndex={mobileMenuOpen ? 0 : -1}
           aria-label="Close navigation menu"
         />
-        
+
         {/* Menu Panel */}
         <div
           id="mobile-nav-panel"
@@ -384,7 +421,7 @@ export function Navbar() {
                 </Link>
               )}
             </div>
-            
+
             {/* Practice Section */}
             <div className="border-t border-border pt-4 pb-4">
               <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">

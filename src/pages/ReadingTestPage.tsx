@@ -1,40 +1,23 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { sanitizeHtml } from '@/lib/sanitize';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import {
-  Clock,
-  Flag,
-  ChevronLeft,
-  ChevronRight,
-  AlertCircle,
-  CheckCircle2,
-  Send,
-  RotateCcw,
-  Home,
-  Eye,
-  EyeOff
-} from 'lucide-react';
+import { AlertCircle, CheckCircle2, RotateCcw, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
 import {
   ReadingTest,
   ReadingQuestion,
-  ReadingTestSession,
-  UserAnswer,
-  QuestionStatus,
-  ReadingTestResult
+  ReadingTestResult,
 } from '@/types';
 import {
   gradeObjectiveTest,
   formatBandScore,
   getBandScoreColor,
-  getBandScoreLevel
+  getBandScoreLevel,
 } from '@/utils/scoring';
-import { GroupedQuestionRenderer } from '@/components/test/GroupedQuestionRenderer';
+import { FullMockReadingPaper } from '@/components/test/FullMockReadingPaper';
+import type { ReadingPaperPassage } from '@/components/test/FullMockReadingPaper';
+import { useExamTimer, formatTimerDisplay } from '@/hooks/useExamTimer';
+import { useNavConfig } from '@/contexts/NavContext';
 
 // ============================================
 // Sample Reading Test Data
@@ -203,32 +186,18 @@ const SAMPLE_READING_TEST: ReadingTest = {
 };
 
 // ============================================
-// localStorage Keys
+// localStorage Key
 // ============================================
 const STORAGE_KEY = 'reading_test_session';
 
 // ============================================
-// Helper Functions
+// Helper
 // ============================================
-const formatTime = (seconds: number): string => {
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-};
+const formatTime = (seconds: number): string => formatTimerDisplay(seconds);
 
-const getStatusColor = (status: QuestionStatus): string => {
-  switch (status) {
-    case 'unseen':
-      return 'bg-gray-200 text-gray-600 hover:bg-gray-300';
-    case 'seen':
-      return 'bg-gray-300 text-gray-700 hover:bg-gray-400';
-    case 'answered':
-      return 'bg-emerald-500 text-white hover:bg-emerald-600';
-    case 'flagged':
-      return 'bg-amber-400 text-amber-900 hover:bg-amber-500';
-    default:
-      return 'bg-gray-200 text-gray-600';
-  }
+const getStatusColor = (correct: boolean | null): string => {
+  if (correct === null) return 'bg-gray-100 border-gray-200';
+  return correct ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
 };
 
 
@@ -272,6 +241,10 @@ function normalizeReadingTest(
           : undefined,
         explanation: (q.explanation as string) || undefined,
         passageRef: (q.passageRef as string) || undefined,
+        // Pass-through for grouped/table question types used by FullMockReadingPaper
+        groupId: (q.groupId as string) || undefined,
+        summaryData: (q.summaryData as string) || undefined,
+        tableData: q.tableData as ReadingQuestion['tableData'] | undefined,
       };
     });
 
@@ -319,189 +292,158 @@ export default function ReadingTestPage() {
   const [test] = useState<ReadingTest>(
     hasDbData
       ? normalizeReadingTest(stateData!.testData as Record<string, unknown>, stateData?.testId, stateData?.testTitle)
-      : SAMPLE_READING_TEST
+      : SAMPLE_READING_TEST,
   );
-  const [currentPassageIndex, setCurrentPassageIndex] = useState(0);
-  const [timeRemaining, setTimeRemaining] = useState(test.timeLimit);
-  const [answers, setAnswers] = useState<Record<string, UserAnswer>>({});
+
+  // Flat ordered question list — used to map r_N ↔ question ID at grade time.
+  const allQuestions = test.passages.flatMap(p => p.questions ?? []);
+
+  // Convert ReadingTest passages → ReadingPaperPassage[] for FullMockReadingPaper.
+  const passages: ReadingPaperPassage[] = test.passages.map(p => ({
+    title: p.title,
+    textContent: p.textContent,
+    paragraphs: p.paragraphs,
+    questions: (p.questions ?? []).map(q => ({
+      id: q.id,
+      questionNumber: q.questionNumber,
+      type: q.type,
+      questionText: q.questionText,
+      options: q.options,
+      groupId: q.groupId,
+      summaryData: q.summaryData,
+      tableData: q.tableData,
+    })),
+  }));
+
+  // ── Exam state ──────────────────────────────────────────────────────────────
+  // Load any saved session once on mount (single localStorage read).
+  const [initialSession] = useState<{
+    answers?: Record<string, string>;
+    timeRemaining?: number;
+    activePassage?: number;
+    flaggedQuestions?: Record<string, boolean>;
+  } | null>(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      const s = JSON.parse(raw) as { testId?: string; answers?: Record<string, string>; timeRemaining?: number; activePassage?: number; flaggedQuestions?: Record<string, boolean> };
+      return s.testId === test.id ? s : null;
+    } catch { return null; }
+  });
+
+  // Answers keyed by r_N (global question index) — matches FullMockReadingPaper.
+  const [answers, setAnswers] = useState<Record<string, string>>(initialSession?.answers ?? {});
+  const [flaggedQuestions, setFlaggedQuestions] = useState<Record<string, boolean>>(initialSession?.flaggedQuestions ?? {});
+  const [activePassage, setActivePassage] = useState(initialSession?.activePassage ?? 0);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [result, setResult] = useState<ReadingTestResult | null>(null);
-  const [showConfirmSubmit, setShowConfirmSubmit] = useState(false);
-  const [startedAt] = useState<number>(Date.now());
-  const [showPassage, setShowPassage] = useState(true);
+  const [savedIndicator, setSavedIndicator] = useState(false);
+  const savedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const questionRefs = useRef<Record<number, HTMLDivElement | null>>({});
-  const passagePaneRef = useRef<HTMLDivElement>(null);
-  const questionPaneRef = useRef<HTMLDivElement>(null);
+  // ── Timer ─────────────────────────────────────────────────────────────────
+  // onExpire ref lets us call handleSubmit after it is defined below.
+  const onExpireRef = useRef<(() => void) | null>(null);
+  const timer = useExamTimer({
+    initialSeconds: initialSession?.timeRemaining ?? test.timeLimit,
+    onExpire: () => onExpireRef.current?.(),
+  });
 
-  const currentPassage = Array.isArray(test?.passages) ? (test!.passages[currentPassageIndex] || test!.passages[0]) : undefined;
-  const allQuestions = Array.isArray(test?.passages) ? test!.passages.flatMap(p => p?.questions || []) : [];
+  // ── Session persistence ───────────────────────────────────────────────────
+  // Refs let each effect read the latest version of the other's values
+  // without including them as dependencies — which would collapse both effects
+  // into the same trigger cadence and re-introduce the throttle-suppression bug.
+  const answersRef = useRef(answers);
+  answersRef.current = answers;
+  const activePassageRef = useRef(activePassage);
+  activePassageRef.current = activePassage;
+  const flaggedQuestionsRef = useRef(flaggedQuestions);
+  flaggedQuestionsRef.current = flaggedQuestions;
+  const timerSecondsRef = useRef(timer.seconds);
+  timerSecondsRef.current = timer.seconds;
 
-  // ============================================
-  // Load session from localStorage on mount
-  // ============================================
+  // Single timestamp ref shared by both effects.  When Effect 1 writes on an
+  // answer/flag/passage change it stamps this ref, so Effect 2 correctly waits
+  // the full 10 s before issuing its own timer-driven write.
+  const lastSaveRef = useRef(0);
+
+  // Effect 1 — IMMEDIATE: fires whenever the student changes an answer,
+  // switches passage, or toggles a flag.  Never throttled.  Reads the current
+  // timer seconds from a ref so it captures the right remaining time without
+  // re-running every second.
   useEffect(() => {
-    const savedSession = localStorage.getItem(STORAGE_KEY);
-    if (savedSession) {
-      try {
-        const session: ReadingTestSession = JSON.parse(savedSession);
-        if (session.testId === test.id && !session.isSubmitted) {
-          setAnswers(session.answers);
-          setTimeRemaining(session.timeRemaining);
-          setCurrentPassageIndex(session.currentPassage - 1);
-        }
-      } catch (e) {
-        console.error('Failed to load session:', e);
-      }
-    }
-  }, [test.id]);
-
-  // ============================================
-  // Save session to localStorage on every change
-  // ============================================
-  const saveSession = useCallback(() => {
     if (isSubmitted) return;
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
+          testId: test.id,
+          answers,
+          timeRemaining: timerSecondsRef.current,
+          activePassage,
+          flaggedQuestions,
+        }),
+      );
+      lastSaveRef.current = Date.now();
+    } catch { /* storage quota */ }
+  }, [answers, activePassage, flaggedQuestions, isSubmitted, test.id]);
 
-    const session: ReadingTestSession = {
-      testId: test.id,
-      startedAt,
-      timeRemaining,
-      answers,
-      currentPassage: currentPassageIndex + 1,
-      currentQuestion: 1,
-      isSubmitted: false
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
-  }, [test.id, startedAt, timeRemaining, answers, currentPassageIndex, isSubmitted]);
-
+  // Effect 2 — THROTTLED: fires every second with the timer but only writes
+  // every ~10 s.  Uses the same lastSaveRef that Effect 1 updates, so an
+  // immediate user-state save resets the window and prevents a double-write.
   useEffect(() => {
-    saveSession();
-  }, [saveSession]);
+    if (isSubmitted) return;
+    const now = Date.now();
+    if (lastSaveRef.current !== 0 && now - lastSaveRef.current < 10_000) return;
+    lastSaveRef.current = now;
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
+          testId: test.id,
+          answers: answersRef.current,
+          timeRemaining: timer.seconds,
+          activePassage: activePassageRef.current,
+          flaggedQuestions: flaggedQuestionsRef.current,
+        }),
+      );
+    } catch { /* storage quota */ }
+  }, [timer.seconds, isSubmitted, test.id]);
 
-  // ============================================
-  // Timer countdown
-  // ============================================
-  useEffect(() => {
-    if (isSubmitted || timeRemaining <= 0) return;
+  // ── Answer and flag handlers ──────────────────────────────────────────────
+  const setAnswer = useCallback((key: string, value: string) => {
+    setAnswers(prev => ({ ...prev, [key]: value }));
+    if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
+    setSavedIndicator(true);
+    savedTimerRef.current = setTimeout(() => setSavedIndicator(false), 2000);
+  }, []);
 
-    const timer = setInterval(() => {
-      setTimeRemaining(prev => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          handleSubmit();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+  const toggleFlag = useCallback((key: string) => {
+    setFlaggedQuestions(prev => ({ ...prev, [key]: !prev[key] }));
+  }, []);
 
-    return () => clearInterval(timer);
-  }, [isSubmitted]);
+  // ── Submit ────────────────────────────────────────────────────────────────
+  const handleSubmit = useCallback(() => {
+    timer.stop();
+    localStorage.removeItem(STORAGE_KEY);
 
-  // ============================================
-  // Handle answer change
-  // ============================================
-  const handleAnswerChange = (questionId: string, questionNumber: number, value: string) => {
-    setAnswers(prev => ({
-      ...prev,
-      [questionId]: {
-        questionId,
-        questionNumber,
-        answer: value,
-        status: value ? 'answered' : 'seen',
-        answeredAt: Date.now()
-      }
-    }));
-  };
-
-  // ============================================
-  // Toggle flag for review
-  // ============================================
-  const toggleFlag = (questionId: string, questionNumber: number) => {
-    setAnswers(prev => {
-      const current = prev[questionId];
-      const newStatus: QuestionStatus = current?.status === 'flagged'
-        ? (current.answer ? 'answered' : 'seen')
-        : 'flagged';
-
-      return {
-        ...prev,
-        [questionId]: {
-          questionId,
-          questionNumber,
-          answer: current?.answer || '',
-          status: newStatus,
-          answeredAt: Date.now()
-        }
-      };
+    // Convert r_N answers → question-ID keyed map for gradeObjectiveTest.
+    const answersById: Record<string, { answer: string }> = {};
+    allQuestions.forEach((q, idx) => {
+      answersById[q.id] = { answer: answers[`r_${idx}`] ?? '' };
     });
-  };
 
-  // ============================================
-  // Get question status
-  // ============================================
-  const getQuestionStatus = (questionId: string): QuestionStatus => {
-    return answers[questionId]?.status || 'unseen';
-  };
-
-  // ============================================
-  // Scroll to question
-  // ============================================
-  const scrollToQuestion = (questionNumber: number) => {
-    const question = allQuestions.find(q => q.questionNumber === questionNumber);
-    if (!question) return;
-
-    // Find which passage this question belongs to
-    const passageIndex = (test?.passages || []).findIndex(p =>
-      p?.questionRange && questionNumber >= p.questionRange.start && questionNumber <= p.questionRange.end
-    );
-
-    if (passageIndex !== currentPassageIndex) {
-      setCurrentPassageIndex(passageIndex);
-    }
-
-    // Scroll to question after a short delay to allow passage change
-    setTimeout(() => {
-      const ref = questionRefs.current[questionNumber];
-      if (ref) {
-        ref.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }, 100);
-
-    // Mark as seen if unseen
-    if (!answers[question.id]) {
-      setAnswers(prev => ({
-        ...prev,
-        [question.id]: {
-          questionId: question.id,
-          questionNumber,
-          answer: '',
-          status: 'seen',
-          answeredAt: Date.now()
-        }
-      }));
-    }
-  };
-
-  // ============================================
-  // Submit test
-  // ============================================
-  const handleSubmit = () => {
-    const timeTaken = test.timeLimit - timeRemaining;
-
-    // Use the new grading utility for proper IELTS band score calculation
     const gradingResult = gradeObjectiveTest(
-      answers,
+      answersById,
       allQuestions.map(q => ({
         id: q.id,
         questionNumber: q.questionNumber,
         correctAnswer: q.correctAnswer,
-        acceptedAnswers: q.acceptedAnswers
+        acceptedAnswers: q.acceptedAnswers,
       })),
-      'reading'
+      'reading',
     );
 
-    const testResult: ReadingTestResult = {
+    setResult({
       testId: test.id,
       totalQuestions: gradingResult.totalQuestions,
       correctAnswers: gradingResult.correctAnswers,
@@ -509,122 +451,36 @@ export default function ReadingTestPage() {
       unanswered: gradingResult.unanswered,
       score: gradingResult.percentage,
       bandScore: gradingResult.bandScore,
-      timeTaken,
+      timeTaken: test.timeLimit - timer.seconds,
       answers: gradingResult.gradedAnswers.map(ga => ({
         questionNumber: ga.questionNumber,
         userAnswer: ga.userAnswer,
         correctAnswer: ga.correctAnswer,
-        isCorrect: ga.isCorrect
-      }))
-    };
-
-    setResult(testResult);
+        isCorrect: ga.isCorrect,
+      })),
+    });
     setIsSubmitted(true);
-    setShowConfirmSubmit(false);
+  }, [allQuestions, answers, test.id, test.timeLimit, timer]);
 
-    // Update localStorage with submitted status
-    const session: ReadingTestSession = {
-      testId: test.id,
-      startedAt,
-      timeRemaining,
-      answers,
-      currentPassage: currentPassageIndex + 1,
-      currentQuestion: 1,
-      isSubmitted: true,
-      submittedAt: Date.now()
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
-  };
+  // Keep ref current so the timer's onExpire always calls the latest version.
+  onExpireRef.current = handleSubmit;
 
-  // ============================================
-  // Reset test
-  // ============================================
-  const handleReset = () => {
-    localStorage.removeItem(STORAGE_KEY);
-    setAnswers({});
-    setTimeRemaining(test.timeLimit);
-    setCurrentPassageIndex(0);
-    setIsSubmitted(false);
-    setResult(null);
-  };
+  // ── Nav context / exit guard ──────────────────────────────────────────────
+  // mode: 'exam' here matches what the route already sets via
+  // <Layout mode="exam">, so this isn't changing anything about the visible
+  // chrome — Navbar/Footer/MobileNav are already hidden. What this call
+  // actually does: publishes onExitAttempt so Layout's useNavExitGuard can
+  // catch the browser Back button and tab close/refresh while the test is
+  // still in progress. Once submitted, there's nothing left to lose, so the
+  // guard steps aside.
+  const handleExitAttempt = useCallback(() => {
+    if (isSubmitted) return true;
+    return window.confirm('Leave the Reading test? Your progress on this section will be lost.');
+  }, [isSubmitted]);
 
-  // ============================================
-  // Render Question Input
-  // ============================================
-  const renderQuestionInput = (question: ReadingQuestion) => {
-    const currentAnswer = answers[question.id]?.answer || '';
+  useNavConfig({ mode: 'exam', title: test.title, onExitAttempt: handleExitAttempt });
 
-    switch (question.type) {
-      case 'mcq':
-      case 'true-false-not-given':
-      case 'yes-no-not-given':
-      case 'matching-headings':
-        return (
-          <RadioGroup
-            value={currentAnswer}
-            onValueChange={(value) => handleAnswerChange(question.id, question.questionNumber, value)}
-            className="space-y-2"
-            disabled={isSubmitted}
-          >
-            {question.options?.map((option, idx) => (
-              <div key={idx} className="flex items-center space-x-2">
-                <RadioGroupItem value={option} id={`${question.id}-${idx}`} />
-                <Label
-                  htmlFor={`${question.id}-${idx}`}
-                  className={`cursor-pointer ${isSubmitted && option === question.correctAnswer
-                    ? 'text-green-600 font-medium'
-                    : isSubmitted && currentAnswer === option && option !== question.correctAnswer
-                      ? 'text-red-600 line-through'
-                      : ''
-                    }`}
-                >
-                  {option}
-                </Label>
-              </div>
-            ))}
-          </RadioGroup>
-        );
-
-      case 'fill-blank':
-      case 'sentence-completion':
-      case 'short-answer':
-        return (
-          <div className="space-y-2">
-            <Input
-              value={currentAnswer}
-              onChange={(e) => handleAnswerChange(question.id, question.questionNumber, e.target.value)}
-              placeholder="Type your answer..."
-              disabled={isSubmitted}
-              className={`max-w-md ${isSubmitted
-                ? (question.acceptedAnswers?.includes(currentAnswer) || currentAnswer.toLowerCase() === question.correctAnswer.toLowerCase())
-                  ? 'border-green-500 bg-green-50'
-                  : 'border-red-500 bg-red-50'
-                : ''
-                }`}
-            />
-            {isSubmitted && (
-              <p className="text-sm text-green-600">
-                Correct answer: {question.correctAnswer}
-              </p>
-            )}
-          </div>
-        );
-
-      default:
-        return (
-          <Input
-            value={currentAnswer}
-            onChange={(e) => handleAnswerChange(question.id, question.questionNumber, e.target.value)}
-            placeholder="Type your answer..."
-            disabled={isSubmitted}
-          />
-        );
-    }
-  };
-
-  // ============================================
-  // Results Screen
-  // ============================================
+  // ── Results screen ────────────────────────────────────────────────────────
   if (isSubmitted && result) {
     return (
       <div className="min-h-screen bg-gray-50 p-4 md:p-8">
@@ -650,7 +506,7 @@ export default function ReadingTestPage() {
                   <div className="text-sm text-gray-700">Unanswered</div>
                 </div>
                 <div className="bg-amber-50 rounded-lg p-4 text-center">
-                  <div className="text-3xl font-bold text-amber-600">{result.correctAnswers}/40</div>
+                  <div className="text-3xl font-bold text-amber-600">{result.correctAnswers}/{result.totalQuestions}</div>
                   <div className="text-sm text-amber-700">Raw Score</div>
                 </div>
                 <div className={`rounded-lg p-4 text-center ${getBandScoreColor(result.bandScore ?? 0)}`}>
@@ -672,7 +528,20 @@ export default function ReadingTestPage() {
               </div>
 
               <div className="flex justify-center gap-4">
-                <Button onClick={handleReset} variant="outline" className="gap-2">
+                <Button
+                  onClick={() => {
+                    localStorage.removeItem(STORAGE_KEY);
+                    setAnswers({});
+                    setFlaggedQuestions({});
+                    setActivePassage(0);
+                    setIsSubmitted(false);
+                    setResult(null);
+                    timer.reset();
+                    timer.start();
+                  }}
+                  variant="outline"
+                  className="gap-2"
+                >
                   <RotateCcw className="h-4 w-4" />
                   Try Again
                 </Button>
@@ -690,13 +559,10 @@ export default function ReadingTestPage() {
             <CardContent className="p-6">
               <h2 className="text-xl font-bold mb-4">Answer Review</h2>
               <div className="space-y-4">
-                {result.answers.map((answer) => (
+                {result.answers.map(answer => (
                   <div
                     key={answer.questionNumber}
-                    className={`p-4 rounded-lg border ${answer.isCorrect
-                      ? 'bg-green-50 border-green-200'
-                      : 'bg-red-50 border-red-200'
-                      }`}
+                    className={`p-4 rounded-lg border ${getStatusColor(answer.isCorrect)}`}
                   >
                     <div className="flex items-start gap-3">
                       {answer.isCorrect ? (
@@ -707,7 +573,8 @@ export default function ReadingTestPage() {
                       <div className="flex-1">
                         <div className="font-medium">Question {answer.questionNumber}</div>
                         <div className="text-sm text-gray-600 mt-1">
-                          Your answer: <span className={answer.isCorrect ? 'text-green-700' : 'text-red-700'}>
+                          Your answer:{' '}
+                          <span className={answer.isCorrect ? 'text-green-700' : 'text-red-700'}>
                             {answer.userAnswer || '(No answer)'}
                           </span>
                         </div>
@@ -728,240 +595,20 @@ export default function ReadingTestPage() {
     );
   }
 
-  // ============================================
-  // Main Test Interface
-  // ============================================
+  // ── Exam interface (delegated entirely to FullMockReadingPaper) ───────────
   return (
-    <div className="h-screen flex flex-col bg-gray-100">
-      {/* Fixed Header */}
-      <header className="bg-white border-b shadow-sm px-4 py-3 flex items-center justify-between z-10">
-        <div className="flex items-center gap-4">
-          <Link to="/" className="text-gray-600 hover:text-gray-900">
-            <Home className="h-5 w-5" />
-          </Link>
-          <h1 className="text-lg font-semibold text-gray-900">{test.title}</h1>
-        </div>
-
-        <div className="flex items-center gap-4">
-          {/* Timer */}
-          <div className={`flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-lg ${timeRemaining < 300 ? 'bg-red-100 text-red-700' : 'bg-indigo-100 text-indigo-700'
-            }`}>
-            <Clock className="h-5 w-5" />
-            <span>{formatTime(timeRemaining)}</span>
-          </div>
-
-          {/* Submit Button */}
-          <Button
-            onClick={() => setShowConfirmSubmit(true)}
-            className="bg-indigo-600 hover:bg-indigo-700 gap-2"
-          >
-            <Send className="h-4 w-4" />
-            Submit Test
-          </Button>
-        </div>
-      </header>
-
-      {/* Confirm Submit Modal */}
-      {showConfirmSubmit && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <Card className="w-full max-w-md mx-4">
-            <CardContent className="p-6">
-              <h2 className="text-xl font-bold mb-4">Submit Test?</h2>
-              <p className="text-gray-600 mb-4">
-                Are you sure you want to submit? You have answered {Object.values(answers).filter(a => a.answer).length} out of {allQuestions.length} questions.
-              </p>
-              <div className="flex gap-3">
-                <Button variant="outline" onClick={() => setShowConfirmSubmit(false)} className="flex-1">
-                  Cancel
-                </Button>
-                <Button onClick={handleSubmit} className="flex-1 bg-indigo-600 hover:bg-indigo-700">
-                  Submit
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
-
-      {/* Split Screen Layout */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Left Pane - Passage */}
-        <div
-          ref={passagePaneRef}
-          className={`${showPassage ? 'w-1/2' : 'w-0'} transition-all duration-300 border-r bg-white overflow-y-auto`}
-        >
-          <div className="p-6">
-            {/* Passage Navigation */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                {test.passages.map((_, idx) => (
-                  <Button
-                    key={idx}
-                    variant={idx === currentPassageIndex ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setCurrentPassageIndex(idx)}
-                  >
-                    Passage {idx + 1}
-                  </Button>
-                ))}
-              </div>
-              <Badge variant="secondary">
-                Questions {currentPassage?.questionRange?.start || 1}-{currentPassage?.questionRange?.end || currentPassage?.questions?.length || 0}
-              </Badge>
-            </div>
-
-            {/* Passage Title */}
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">{currentPassage?.title || 'Passage'}</h2>
-
-            {/* Passage Content */}
-            <div
-              className="prose prose-lg max-w-none text-gray-700 leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: sanitizeHtml(currentPassage?.textContent) }}
-            />
-          </div>
-        </div>
-
-        {/* Toggle Passage Button (Mobile) */}
-        <button
-          onClick={() => setShowPassage(!showPassage)}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-indigo-600 text-white p-2 rounded-r-lg shadow-lg md:hidden"
-        >
-          {showPassage ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-        </button>
-
-        {/* Right Pane - Questions */}
-        <div
-          ref={questionPaneRef}
-          className={`${showPassage ? 'w-1/2' : 'w-full'} transition-all duration-300 bg-gray-50 overflow-y-auto`}
-        >
-          <div className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Questions {currentPassage?.questionRange?.start || 1}-{currentPassage?.questionRange?.end || currentPassage?.questions?.length || 0}
-            </h3>
-
-            <div className="space-y-6">
-              {(() => {
-                if (!currentPassage?.questions) return null;
-                const questions = currentPassage.questions;
-                const elements = [];
-                const processedGroups = new Set<string>();
-
-                for (let i = 0; i < questions.length; i++) {
-                  const q = questions[i];
-                  if (q.groupId) {
-                    if (processedGroups.has(q.groupId)) continue;
-                    processedGroups.add(q.groupId);
-                    const groupQuestions = questions.filter((x) => x.groupId === q.groupId);
-                    elements.push(
-                      <GroupedQuestionRenderer
-                        key={q.groupId}
-                        firstQuestion={q}
-                        groupQuestions={groupQuestions}
-                        answers={answers}
-                        isSubmitted={isSubmitted}
-                        onAnswerChange={handleAnswerChange}
-                        questionRefs={questionRefs}
-                      />
-                    );
-                  } else {
-                    elements.push(
-                      <div
-                        key={q.id}
-                        ref={(el) => { questionRefs.current[q.questionNumber] = el; }}
-                        className="bg-white rounded-lg border p-4 shadow-sm"
-                      >
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex items-center gap-2">
-                            <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${getStatusColor(getQuestionStatus(q.id))}`}>
-                              {q.questionNumber}
-                            </span>
-                            <Badge variant="outline" className="text-xs">
-                              {q.type.replace(/-/g, ' ')}
-                            </Badge>
-                          </div>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => toggleFlag(q.id, q.questionNumber)}
-                            className={getQuestionStatus(q.id) === 'flagged' ? 'text-amber-600' : 'text-gray-400'}
-                          >
-                            <Flag className="h-4 w-4" />
-                          </Button>
-                        </div>
-
-                        <p className="text-gray-800 mb-4">{q.questionText}</p>
-
-                        {q.passageRef && (
-                          <p className="text-sm text-indigo-600 mb-3">Reference: {q.passageRef}</p>
-                        )}
-
-                        {renderQuestionInput(q)}
-                      </div>
-                    );
-                  }
-                }
-                return elements;
-              })()}
-            </div>
-
-            {/* Passage Navigation at Bottom */}
-            <div className="flex justify-between mt-6">
-              <Button
-                variant="outline"
-                onClick={() => setCurrentPassageIndex(prev => Math.max(0, prev - 1))}
-                disabled={currentPassageIndex === 0}
-                className="gap-2"
-              >
-                <ChevronLeft className="h-4 w-4" />
-                Previous Passage
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => setCurrentPassageIndex(prev => Math.min(test.passages.length - 1, prev + 1))}
-                disabled={currentPassageIndex === test.passages.length - 1}
-                className="gap-2"
-              >
-                Next Passage
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Question Palette (Footer) */}
-      <footer className="bg-white border-t shadow-lg px-4 py-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <span className="flex items-center gap-1">
-              <span className="w-4 h-4 rounded bg-gray-200"></span> Unseen
-            </span>
-            <span className="flex items-center gap-1">
-              <span className="w-4 h-4 rounded bg-emerald-500"></span> Answered
-            </span>
-            <span className="flex items-center gap-1">
-              <span className="w-4 h-4 rounded bg-amber-400"></span> Flagged
-            </span>
-          </div>
-
-          <div className="flex flex-wrap gap-1 justify-center max-w-2xl">
-            {allQuestions.map((question) => (
-              <button
-                key={question.questionNumber}
-                onClick={() => scrollToQuestion(question.questionNumber)}
-                className={`w-8 h-8 rounded text-sm font-medium transition-colors ${getStatusColor(getQuestionStatus(question.id))
-                  }`}
-              >
-                {question.questionNumber}
-              </button>
-            ))}
-          </div>
-
-          <div className="text-sm text-gray-600">
-            {Object.values(answers).filter(a => a.answer).length} / {allQuestions.length} answered
-          </div>
-        </div>
-      </footer>
-    </div>
+    <FullMockReadingPaper
+      passages={passages}
+      answers={answers}
+      activePassage={activePassage}
+      setActivePassage={setActivePassage}
+      setAnswer={setAnswer}
+      flaggedQuestions={flaggedQuestions}
+      toggleFlag={toggleFlag}
+      timeDisplay={timer.display}
+      timeWarning={timer.warning}
+      savedIndicator={savedIndicator}
+      onSubmit={handleSubmit}
+    />
   );
 }

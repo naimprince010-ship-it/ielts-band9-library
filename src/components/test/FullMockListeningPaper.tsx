@@ -34,6 +34,8 @@ interface Props {
   playedAudioIds: Set<string>;
   playingAudioId: string | null;
   playSectionAudio: (section: ListeningPaperSection, index: number) => void;
+  /** A single recording serves every section, so its one-play state is shared. */
+  usesGlobalAudio?: boolean;
   audioMessage?: string;
   audioSupported: boolean;
   timeDisplay: string;
@@ -65,6 +67,7 @@ export function FullMockListeningPaper({
   playedAudioIds,
   playingAudioId,
   playSectionAudio,
+  usesGlobalAudio = false,
   audioMessage,
   audioSupported,
   timeDisplay,
@@ -83,7 +86,7 @@ export function FullMockListeningPaper({
       : 'Submit the Listening section?';
     if (window.confirm(message)) onSubmit();
   };
-  const audioId = `section-${section?.sectionNumber ?? activeSection + 1}`;
+  const audioId = usesGlobalAudio ? 'global' : `section-${section?.sectionNumber ?? activeSection + 1}`;
   const isPlaying = playingAudioId === audioId;
   const wasPlayed = playedAudioIds.has(audioId);
 

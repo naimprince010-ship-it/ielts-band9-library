@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,10 +7,11 @@ import { Badge } from '@/components/ui/badge';
 import { useProgress } from '@/contexts/ProgressContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
-import { 
-  RotateCcw, 
-  ThumbsUp, 
-  ThumbsDown, 
+import { useNavConfig } from '@/contexts/NavContext';
+import {
+  RotateCcw,
+  ThumbsUp,
+  ThumbsDown,
   Brain,
   Flame,
   Clock,
@@ -18,8 +19,59 @@ import {
   ArrowRight,
   Sparkles,
   Cloud,
-  CloudOff
+  CloudOff,
+  Shuffle,
+  FlipHorizontal
 } from 'lucide-react';
+
+/**
+ * The Shuffle/Flip/Reset buttons this page publishes into NavContext as
+ * `actions` while a review session is active. Styled for the light Navbar
+ * background (unlike LessonHeaderActions, which is styled for the navy
+ * LessonWorkspaceHeader) — same idea, different skin, because this page
+ * renders through the plain Navbar, not a lesson template.
+ */
+function FlashcardsHeaderActions({
+  onShuffle,
+  onFlip,
+  onReset,
+}: {
+  onShuffle: () => void;
+  onFlip: () => void;
+  onReset: () => void;
+}) {
+  return (
+    <div className="flex items-center gap-1">
+      <button
+        type="button"
+        onClick={onShuffle}
+        aria-label="Shuffle remaining cards"
+        className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium text-foreground/70 transition hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+      >
+        <Shuffle className="h-4 w-4" />
+        <span className="hidden sm:inline">Shuffle</span>
+      </button>
+      <button
+        type="button"
+        onClick={onFlip}
+        aria-label="Flip the current card"
+        className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium text-foreground/70 transition hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+      >
+        <FlipHorizontal className="h-4 w-4" />
+        <span className="hidden sm:inline">Flip</span>
+      </button>
+      <button
+        type="button"
+        onClick={onReset}
+        aria-label="Restart this review session"
+        className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium text-foreground/70 transition hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+      >
+        <RotateCcw className="h-4 w-4" />
+        <span className="hidden sm:inline">Reset</span>
+      </button>
+    </div>
+  );
+}
 
 interface Flashcard {
   id: string;
@@ -234,7 +286,11 @@ export default function FlashcardsPage() {
       }
     };
 
-  const startReview = () => {
+  // Wrapped in useCallback (it wasn't before) so it has a stable identity —
+  // it's now also used as the Reset action published into NavContext, and
+  // an identity that changes every render would republish that action (and
+  // re-render whichever header renders it) on every unrelated re-render.
+  const startReview = useCallback(() => {
     const due = getDueCards(flashcards);
     if (due.length === 0) {
       setMode('complete');
@@ -245,7 +301,7 @@ export default function FlashcardsPage() {
     setIsFlipped(false);
     setSessionStats({ correct: 0, incorrect: 0, total: 0 });
     setMode('review');
-  };
+  }, [flashcards]);
 
     const handleResponse = useCallback(async (quality: number) => {
       const currentCard = dueCards[currentIndex];
@@ -383,6 +439,38 @@ export default function FlashcardsPage() {
 
   const currentCard = dueCards[currentIndex];
   const progress = dueCards.length > 0 ? ((currentIndex + 1) / dueCards.length) * 100 : 0;
+
+  // ── Nav context — 'tool' mode ─────────────────────────────────────────────
+  // Shuffle re-orders the remaining due cards in place (Fisher–Yates) and
+  // jumps back to the first one, unflipped. Flip toggles the current card —
+  // named "Flip", not "Flip All", since only one card is ever on screen at
+  // a time here; "All" would misdescribe what actually happens. Reset reuses
+  // startReview() itself, so it's the same "start a fresh session" logic the
+  // menu's Start Review button already uses — no separate reset code path.
+  const shuffleDueCards = useCallback(() => {
+    setDueCards(prev => {
+      const shuffled = [...prev];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    });
+    setCurrentIndex(0);
+    setIsFlipped(false);
+  }, []);
+
+  const flipCurrentCard = useCallback(() => setIsFlipped(f => !f), []);
+
+  const navActions = useMemo(
+    () =>
+      mode === 'review' ? (
+        <FlashcardsHeaderActions onShuffle={shuffleDueCards} onFlip={flipCurrentCard} onReset={startReview} />
+      ) : undefined,
+    [mode, shuffleDueCards, flipCurrentCard, startReview]
+  );
+
+  useNavConfig({ mode: 'tool', title: 'Flashcards', actions: navActions });
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white py-8">

@@ -3,6 +3,7 @@ import { unlockIOSAudio, toBlobUrl, createNativeAudioElement, getAudioContext } 
 import { sanitizeHtml } from '@/lib/sanitize';
 import { calculateBandScore } from '@/utils/scoring';
 import { useNavigate } from 'react-router-dom';
+import { useNavConfig } from '@/contexts/NavContext';
 import {
   Clock, Headphones, BookOpen, PenTool, Mic, ChevronRight,
   CheckCircle, AlertCircle, Award, Play, RotateCcw,
@@ -20,6 +21,7 @@ import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { normalizeMockTestRow, normalizeWritingTestFromDb, findWritingTask1 } from '@/lib/writingVisualNormalize';
 import { isUsableFullMockTest } from '@/lib/fullMockReadiness';
 import { buildObjectiveReview } from '@/lib/fullMockScoring';
+import { saveResultWithFallback } from '@/lib/fullMockResultSave';
 import { WritingTask1Renderer } from '@/components/test/WritingTask1Renderer';
 import { FullMockListeningPaper, type ListeningPaperSection } from '@/components/test/FullMockListeningPaper';
 import { FullMockReadingPaper, type ReadingPaperPassage } from '@/components/test/FullMockReadingPaper';
@@ -506,71 +508,22 @@ export default function FullMockTestPage() {
           band: finalScores[section.module],
         })),
       };
-      // Helper: only retry when PostgREST/Postgres reports an *unknown* column.
-      // Deliberately narrow so NOT NULL violations like
-      // "null value in column "sections" violates not-null constraint"
-      // do NOT trigger a retry (they would fail on every attempt anyway).
-      const isMissingColumnError = (e: { code?: string; message?: string } | null): boolean => {
-        if (!e) return false;
-        // PostgREST "relationship/column not found" codes
-        if (e.code === 'PGRST204' || e.code === 'PGRST200') return true;
-        const msg = e.message || '';
-        return (
-          /column .+ does not exist/i.test(msg) ||
-          /could not find .+ column/i.test(msg)
-        );
-      };
-
-      // Attempt 1 — canonical schema: all fields including review_data, writing_feedback,
-      // speaking_feedback; legacy schemas keep sections for the NOT NULL constraint.
-      let { data: savedResult, error } = await supabase
-        .from('mock_test_results')
-        .insert(insertData)
-        .select('id')
-        .single();
-
-      // Attempt 2 — old schema without review_data / writing_feedback / speaking_feedback
-      // but with sections (sections may be NOT NULL on legacy production tables).
-      if (isMissingColumnError(error)) {
-        const legacyInsertData: Record<string, unknown> = { ...insertData };
-        delete legacyInsertData.review_data;
-        delete legacyInsertData.writing_feedback;
-        delete legacyInsertData.speaking_feedback;
-        const r2 = await supabase
-          .from('mock_test_results')
-          .insert(legacyInsertData)
-          .select('id')
-          .single();
-        savedResult = r2.data;
-        error = r2.error;
-
-        // Attempt 3 — canonical migration schema (no sections column):
-        // preserve review_data / writing_feedback / speaking_feedback, drop sections only.
-        if (isMissingColumnError(r2.error)) {
-          const withoutSectionsData: Record<string, unknown> = { ...insertData };
-          delete withoutSectionsData.sections;
-          const r3 = await supabase
+      // saveResultWithFallback tries up to four insert payloads (canonical →
+      // legacy → migration → minimal) and stops as soon as one succeeds or a
+      // non-missing-column error (RLS, NOT NULL, auth, network) is returned.
+      // PGRST200 is intentionally NOT treated as a missing-column error; see
+      // src/lib/fullMockResultSave.ts for the full rationale.
+      const { data: savedResult, error } = await saveResultWithFallback(
+        async (data) => {
+          const { data: row, error: err } = await supabase
             .from('mock_test_results')
-            .insert(withoutSectionsData)
+            .insert(data)
             .select('id')
             .single();
-          savedResult = r3.data;
-          error = r3.error;
-
-          // Attempt 4 — partial/old schema: neither sections nor JSON feedback columns.
-          if (isMissingColumnError(r3.error)) {
-            const minimalData: Record<string, unknown> = { ...legacyInsertData };
-            delete minimalData.sections;
-            const r4 = await supabase
-              .from('mock_test_results')
-              .insert(minimalData)
-              .select('id')
-              .single();
-            savedResult = r4.data;
-            error = r4.error;
-          }
-        }
-      }
+          return { data: row, error: err };
+        },
+        insertData,
+      );
 
       if (error) {
         console.error('Failed to save result:', error);
@@ -1879,6 +1832,22 @@ export default function FullMockTestPage() {
       setSpeakingFeedbackError(err instanceof Error ? err.message : 'Failed to generate speaking feedback.');
     }
   };
+
+  // ── Nav context / exit guard ──────────────────────────────────────────────
+  // This page already has its own beforeunload listener further up (guarded
+  // by the same phase !== 'intro' && phase !== 'results' condition) that
+  // catches tab close/refresh — that's untouched. What it never had is
+  // back-button protection, which is what this adds: Layout's
+  // useNavExitGuard listens for popstate and calls handleExitAttempt before
+  // letting a Back press through. mode: 'exam' matches what the route
+  // already sets via <Layout mode="exam">, so the visible chrome (Navbar/
+  // Footer/MobileNav already hidden) doesn't change.
+  const handleExitAttempt = useCallback(() => {
+    if (phase === 'intro' || phase === 'results') return true;
+    return window.confirm('Leave the Full Mock Test? Your progress on this section will be lost.');
+  }, [phase]);
+
+  useNavConfig({ mode: 'exam', title: 'IELTS Full Mock Test', onExitAttempt: handleExitAttempt });
 
   if (loading) {
     return (

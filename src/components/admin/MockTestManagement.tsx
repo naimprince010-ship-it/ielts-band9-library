@@ -43,6 +43,18 @@ import {
 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { authenticatedJsonHeaders } from '@/lib/authenticatedApi';
+import { isGenericQuestionText, isQuestionTypeInvalid, normalizeQuestionType } from '@/lib/mockQuestionNormalization';
+import type {
+  AIGenerationRun,
+  FullMockBundle,
+  MockTest,
+  ModuleType,
+  QuestionReview,
+} from './mockTestAdminTypes';
+import {
+  bulkMaintenanceEligibility,
+  findBundleForModule,
+} from '@/lib/mockTestAdminGuards';
 import {
   assessFullMockBundle,
   MINIMUM_PUBLISH_QUALITY_SCORE,
@@ -85,56 +97,6 @@ import {
   SpeakingCueCard
 } from '@/types';
 
-type ModuleType = 'reading' | 'listening' | 'writing' | 'speaking';
-
-interface MockTest {
-  id: string;
-  title: string;
-  module_type: ModuleType;
-  test_data: ReadingTest | ListeningTest | WritingTest | SpeakingTest;
-  is_published: boolean;
-  is_premium: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-interface FullMockBundle {
-  id: string;
-  title: string;
-  theme: string;
-  difficulty: 'easy' | 'medium' | 'hard';
-  listening_test_id: string;
-  reading_test_id: string;
-  writing_test_id: string;
-  speaking_test_id: string;
-  review_status: 'draft' | 'in_review' | 'approved' | 'rejected';
-  quality_score: number | null;
-  is_published: boolean;
-  created_at: string;
-}
-
-interface AIGenerationRun {
-  id: string;
-  topic: string;
-  difficulty: string;
-  provider: string;
-  status: 'succeeded' | 'failed' | 'blocked_duplicate' | 'blocked_quality';
-  quality_score: number | null;
-  error_message: string;
-  created_at: string;
-}
-
-interface QuestionReview {
-  id: string;
-  bundle_id: string;
-  mock_test_id: string;
-  module_type: ModuleType;
-  question_key: string;
-  question_text_snapshot: string;
-  status: 'pending' | 'approved' | 'rejected';
-  review_notes: string;
-}
-
 const READING_QUESTION_TYPES: { value: ReadingQuestionType; label: string }[] = [
   { value: 'mcq', label: 'Multiple Choice' },
   { value: 'fill-blank', label: 'Fill in the Blank' },
@@ -166,7 +128,7 @@ const LISTENING_QUESTION_TYPES: { value: ListeningQuestionType; label: string }[
  * value from READING_QUESTION_TYPES or LISTENING_QUESTION_TYPES.
  * Falls back to inferring from the question text when the type is unknown.
  */
-function normalizeQuestionType(
+function legacyNormalizeQuestionType(
   rawType: string,
   questionText: string,
   validTypes: string[],
@@ -222,19 +184,19 @@ function normalizeQuestionType(
   return validTypes[0];
 }
 
-function isQuestionTypeInvalid(
+function legacyIsQuestionTypeInvalid(
   rawType: string | undefined,
   questionText: string | undefined,
   validTypes: string[],
 ): boolean {
   if (!rawType?.trim()) return true;
-  return !validTypes.includes(normalizeQuestionType(rawType, questionText ?? '', validTypes));
+  return !validTypes.includes(legacyNormalizeQuestionType(rawType, questionText ?? '', validTypes));
 }
 
 // ── Question-text fix utilities ───────────────────────────────────────────────
 
 /** Returns true if the question text is a generic instruction rather than a specific question. */
-function isGenericQuestionText(text: string): boolean {
+function legacyIsGenericQuestionText(text: string): boolean {
   const t = (text ?? '').trim().toLowerCase();
   if (!t) return true;
   // Starts with a generic "complete the X" or "fill in" instruction
@@ -461,57 +423,27 @@ export function MockTestManagement() {
 
   const handleBundleReview = async (bundle: FullMockBundle, action: 'publish' | 'reject') => {
     if (!supabase) return;
+    const actionLabel = action === 'publish' ? 'approve and publish' : 'reject';
+    const message = action === 'publish'
+      ? `Publish “${bundle.title}”? Every question must already be approved. All four linked modules will become available to students.`
+      : `Reject “${bundle.title}”? The full mock and all four linked modules will remain offline.`;
+    if (!window.confirm(message)) return;
     setReviewingBundleId(bundle.id);
     setError('');
     try {
-      const moduleIds = [bundle.listening_test_id, bundle.reading_test_id, bundle.writing_test_id, bundle.speaking_test_id];
-
-      if (action === 'reject') {
-        const { error: rejectError } = await supabase
-          .from('full_mock_bundles')
-          .update({ review_status: 'rejected', is_published: false })
-          .eq('id', bundle.id);
-        if (rejectError) throw rejectError;
-        await supabase.from('mock_tests').update({ is_published: false }).in('id', moduleIds);
-        setSuccess(`${bundle.title} was rejected and kept offline.`);
-      } else {
-        const { count: totalReviews, error: totalReviewError } = await supabase
-          .from('ai_question_reviews').select('id', { count: 'exact', head: true }).eq('bundle_id', bundle.id);
-        const { count: approvedReviews, error: approvedReviewError } = await supabase
-          .from('ai_question_reviews').select('id', { count: 'exact', head: true }).eq('bundle_id', bundle.id).eq('status', 'approved');
-        if (totalReviewError || approvedReviewError) throw totalReviewError || approvedReviewError;
-        if (!totalReviews || approvedReviews !== totalReviews) {
-          throw new Error(`Approve every review item first (${approvedReviews || 0}/${totalReviews || 0} approved).`);
-        }
-        const modules = moduleIds.map(id => mockTests.find(test => test.id === id)).filter(Boolean) as MockTest[];
-        if (modules.length !== 4) throw new Error('One or more linked modules are missing.');
-        if (bundle.quality_score === null || bundle.quality_score < MINIMUM_PUBLISH_QUALITY_SCORE) {
-          throw new Error(`Bundle quality must be at least ${MINIMUM_PUBLISH_QUALITY_SCORE}% before publishing.`);
-        }
-        const issues = modules.flatMap(test => getValidationIssuesForModule(test.module_type, test.test_data));
-        if (hasBlockingIssues(issues)) {
-          throw new Error(`Bundle cannot be published:\n${formatValidationIssues(issues)}`);
-        }
-
-        const { error: modulePublishError } = await supabase
-          .from('mock_tests')
-          .update({ is_published: true })
-          .in('id', moduleIds);
-        if (modulePublishError) throw modulePublishError;
-
-        const { error: bundlePublishError } = await supabase
-          .from('full_mock_bundles')
-          .update({ review_status: 'approved', is_published: true })
-          .eq('id', bundle.id);
-        if (bundlePublishError) {
-          await supabase.from('mock_tests').update({ is_published: false }).in('id', moduleIds);
-          throw bundlePublishError;
-        }
-        setSuccess(`${bundle.title} passed review and is now published as one linked test.`);
-      }
+      const response = await fetch('/api/review-full-mock-bundle', {
+        method: 'POST',
+        headers: await authenticatedJsonHeaders(),
+        body: JSON.stringify({ bundleId: bundle.id, action }),
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(typeof payload.error === 'string' ? payload.error : 'Bundle review failed.');
+      setSuccess(action === 'publish'
+        ? `${bundle.title} passed review and is now published as one linked test.`
+        : `${bundle.title} was rejected and kept offline.`);
       await fetchMockTests();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Bundle review failed.');
+      setError(err instanceof Error ? err.message : `Could not ${actionLabel} this bundle.`);
     } finally {
       setReviewingBundleId(null);
     }
@@ -534,6 +466,10 @@ export function MockTestManagement() {
 
   const updateQuestionReview = async (reviewIds: string[], status: QuestionReview['status']) => {
     if (!supabase || reviewIds.length === 0) return;
+    if (reviewIds.length > 1) {
+      const action = status === 'approved' ? 'approve' : 'reject';
+      if (!window.confirm(`${action[0].toUpperCase()}${action.slice(1)} ${reviewIds.length} review items? This confirms a batch decision.`)) return;
+    }
     const { error: updateError } = await supabase
       .from('ai_question_reviews')
       .update({ status })
@@ -558,11 +494,17 @@ export function MockTestManagement() {
   /** Fix generic question texts (e.g. "Complete the table below.") across ALL tests. */
   const handleBulkFixQuestionTexts = async () => {
     if (!isSupabaseConfigured() || !supabase) return;
-    const testsToFix = mockTests.filter(t => countGenericTexts(t) > 0);
+    const candidates = mockTests.filter(t => countGenericTexts(t) > 0);
+    const { eligible: testsToFix, protected: protectedTests } = bulkMaintenanceEligibility(candidates, fullMockBundles);
     if (testsToFix.length === 0) {
-      setSuccess('All tests already have specific question texts!');
+      if (protectedTests.length > 0) {
+        setError('Bulk repair does not change published or bundle-managed modules. Open the module, make the correction, then repeat its review workflow.');
+      } else {
+        setSuccess('All tests already have specific question texts!');
+      }
       return;
     }
+    if (!window.confirm(`Repair generic question text in ${testsToFix.length} draft standalone test(s)? ${protectedTests.length} published or bundle-managed test(s) will not be changed.`)) return;
     setBulkFixing(true);
     setError('');
     let fixed = 0, failed = 0;
@@ -610,11 +552,17 @@ export function MockTestManagement() {
   /** Apply normalizeQuestionType to ALL questions across ALL reading/listening tests. */
   const handleBulkFixTypes = async () => {
     if (!isSupabaseConfigured() || !supabase) return;
-    const testsToFix = mockTests.filter(t => countBlankTypes(t) > 0);
+    const candidates = mockTests.filter(t => countBlankTypes(t) > 0);
+    const { eligible: testsToFix, protected: protectedTests } = bulkMaintenanceEligibility(candidates, fullMockBundles);
     if (testsToFix.length === 0) {
-      setSuccess('All question types are already set!');
+      if (protectedTests.length > 0) {
+        setError('Bulk repair does not change published or bundle-managed modules. Correct those modules through their edit and review workflow.');
+      } else {
+        setSuccess('All question types are already set!');
+      }
       return;
     }
+    if (!window.confirm(`Repair blank or invalid question types in ${testsToFix.length} draft standalone test(s)? ${protectedTests.length} published or bundle-managed test(s) will not be changed.`)) return;
     setBulkFixingTypes(true);
     setError('');
     let fixed = 0, failed = 0;
@@ -842,7 +790,12 @@ export function MockTestManagement() {
   };
 
   const handleDeleteTest = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this mock test?')) return;
+    const linkedBundle = findBundleForModule(fullMockBundles, id);
+    if (linkedBundle) {
+      setError(`This module belongs to “${linkedBundle.title}” and cannot be deleted separately. Reject or delete the bundle through its dedicated workflow first.`);
+      return;
+    }
+    if (!window.confirm('Delete this standalone mock test? This cannot be undone.')) return;
     if (!isSupabaseConfigured() || !supabase) return;
 
     try {
@@ -863,6 +816,11 @@ export function MockTestManagement() {
 
   const handleTogglePublish = async (test: MockTest) => {
     if (!isSupabaseConfigured() || !supabase) return;
+    const linkedBundle = findBundleForModule(fullMockBundles, test.id);
+    if (linkedBundle) {
+      setError(`This module belongs to “${linkedBundle.title}”. Publish or unpublish it through the Full Mock Review Queue so all four modules stay in sync.`);
+      return;
+    }
 
     try {
       if (!test.is_published) {
@@ -873,6 +831,7 @@ export function MockTestManagement() {
         }
       }
 
+      if (!window.confirm(`${test.is_published ? 'Unpublish' : 'Publish'} “${test.title}” as a standalone test?`)) return;
       const { error } = await supabase
         .from('mock_tests')
         .update({ is_published: !test.is_published })
@@ -1066,6 +1025,32 @@ export function MockTestManagement() {
         </Alert>
       )}
 
+      <Tabs defaultValue="full-mocks" className="space-y-6">
+        <div className="flex flex-col gap-4 rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <h2 className="text-xl font-black text-slate-900">Mock Test Control Center</h2>
+            <p className="mt-1 text-sm text-slate-500">Create content, review linked full mocks, and publish safely.</p>
+          </div>
+          <TabsList className="grid h-auto w-full grid-cols-3 bg-slate-100 p-1 lg:w-[420px]">
+            <TabsTrigger value="full-mocks" className="rounded-xl py-2.5 font-bold">Full Mocks ({fullMockBundles.length})</TabsTrigger>
+            <TabsTrigger value="modules" className="rounded-xl py-2.5 font-bold">Modules ({mockTests.length})</TabsTrigger>
+            <TabsTrigger value="history" className="rounded-xl py-2.5 font-bold">Activity</TabsTrigger>
+          </TabsList>
+        </div>
+
+        <TabsContent value="full-mocks" className="mt-0 space-y-6">
+          <Card className="border-none bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-sm rounded-[2rem] overflow-hidden">
+            <CardContent className="flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-indigo-100">Release workflow</p>
+                <h3 className="mt-1 text-xl font-black">Generate a complete IELTS Full Mock</h3>
+                <p className="mt-1 text-sm text-indigo-100">Creates all four modules as drafts. Review every item before publishing.</p>
+              </div>
+              <Button onClick={() => setIsFullTestModalOpen(true)} className="h-11 shrink-0 rounded-xl bg-white px-5 font-bold text-indigo-700 hover:bg-indigo-50">
+                <Sparkles className="mr-2 h-4 w-4" /> Generate Full Mock
+              </Button>
+            </CardContent>
+          </Card>
       {fullMockBundles.length > 0 && (
         <Card className="border-none shadow-sm rounded-[2rem] overflow-hidden">
           <CardHeader className="p-8 pb-4">
@@ -1135,7 +1120,10 @@ export function MockTestManagement() {
         </Card>
       )}
 
-      {generationHistory.length > 0 && (
+        </TabsContent>
+
+        <TabsContent value="history" className="mt-0">
+      {generationHistory.length > 0 ? (
         <Card className="border-none shadow-sm rounded-[2rem] overflow-hidden">
           <CardHeader className="p-8 pb-4">
             <CardTitle className="text-xl font-black text-slate-900">AI Generation History</CardTitle>
@@ -1176,7 +1164,12 @@ export function MockTestManagement() {
             </table>
           </CardContent>
         </Card>
+      ) : (
+        <Card className="rounded-[2rem] border-dashed shadow-none"><CardContent className="p-10 text-center text-sm font-medium text-slate-500">No AI generation activity yet.</CardContent></Card>
       )}
+        </TabsContent>
+
+        <TabsContent value="modules" className="mt-0">
 
       <Card className="border-none shadow-sm rounded-[2rem] overflow-hidden">
         <CardHeader className="p-8">
@@ -1191,10 +1184,6 @@ export function MockTestManagement() {
               </CardDescription>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Button onClick={() => setIsFullTestModalOpen(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white gap-2 h-11 rounded-xl font-bold">
-                <Sparkles className="h-4 w-4" />
-                AI Generate Full Test
-              </Button>
               {mockTests.some(t => countBlankTypes(t) > 0) && (
                 <Button
                   onClick={handleBulkFixTypes}
@@ -1325,6 +1314,8 @@ export function MockTestManagement() {
           )}
         </CardContent>
       </Card>
+        </TabsContent>
+      </Tabs>
 
       <Dialog open={!!questionReviewBundle} onOpenChange={(open) => { if (!open) setQuestionReviewBundle(null); }}>
         <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto bg-white">

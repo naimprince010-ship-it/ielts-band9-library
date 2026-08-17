@@ -1,9 +1,44 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Keyboard, RotateCcw, Zap, Target, Clock, CheckCircle2, XCircle, Loader2, Trophy, ChevronRight } from 'lucide-react';
+import { useNavConfig } from '@/contexts/NavContext';
 
 interface WordStatus {
   text: string;
   status: 'pending' | 'current' | 'correct' | 'incorrect';
+}
+
+const LOCAL_FALLBACK_WORDS = [
+  'academic', 'accurate', 'achieve', 'adapt', 'adequate', 'affect', 'analysis', 'approach',
+  'benefit', 'capacity', 'challenge', 'coherent', 'complex', 'consequence', 'considerable',
+  'context', 'contrast', 'criteria', 'crucial', 'demonstrate', 'derive', 'develop', 'distinct',
+  'dominate', 'effective', 'efficient', 'emphasize', 'enhance', 'evidence', 'factor', 'flexible',
+  'framework', 'impact', 'implement', 'implication', 'indicate', 'influence', 'interpret',
+  'maintain', 'method', 'objective', 'outcome', 'policy', 'precise', 'process', 'relevant',
+  'significant', 'strategy', 'structure', 'sufficient', 'sustain', 'therefore', 'trend',
+];
+
+function shuffleWords(words: string[]) {
+  return [...words].sort(() => Math.random() - 0.5);
+}
+
+/** Navbar-styled contextual action for the Typing Practice tool page — mirrors
+ * FlashcardsPage's HeaderActions pattern: light-Navbar classes, icon + label.
+ * The page itself renders on a dark, fully custom (inline-styled) canvas, but
+ * this component is styled for the light Navbar it actually mounts into. */
+function TypingPracticeHeaderActions({ onRestart }: { onRestart: () => void }) {
+  return (
+    <div className="flex items-center gap-1">
+      <button
+        type="button"
+        onClick={onRestart}
+        aria-label="Restart typing practice"
+        className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium text-foreground/70 transition hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+      >
+        <RotateCcw className="h-4 w-4" />
+        <span className="hidden sm:inline">Restart</span>
+      </button>
+    </div>
+  );
 }
 
 export default function TypingPracticePage() {
@@ -39,6 +74,12 @@ export default function TypingPracticePage() {
 
     try {
       const response = await fetch('/api/typing-words');
+      const contentType = response.headers.get('content-type') || '';
+
+      if (!contentType.includes('application/json')) {
+        throw new Error('Typing API is not available in local Vite dev mode');
+      }
+
       const data = await response.json();
 
       if (!response.ok) {
@@ -64,7 +105,13 @@ export default function TypingPracticePage() {
     } catch (err) {
       console.error('Error fetching words:', err);
       if (!append) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch words');
+        const fallbackWords: WordStatus[] = shuffleWords(LOCAL_FALLBACK_WORDS).map((word) => ({
+          text: word,
+          status: 'pending' as const,
+        }));
+        fallbackWords[0].status = 'current';
+        setWords(fallbackWords);
+        setError(null);
       }
     } finally {
       if (append) {
@@ -155,7 +202,7 @@ export default function TypingPracticePage() {
     }
   };
 
-  const resetPractice = () => {
+  const resetPractice = useCallback(() => {
     setWords([]);
     setCurrentIndex(0);
     setInputValue('');
@@ -168,7 +215,7 @@ export default function TypingPracticePage() {
     if (timerRef.current) clearInterval(timerRef.current);
     fetchWords();
     inputRef.current?.focus();
-  };
+  }, [fetchWords]);
 
   const calculateWPM = () => {
     if (!startTime || elapsedTime === 0) return 0;
@@ -190,6 +237,13 @@ export default function TypingPracticePage() {
   const progress = words.length > 0 ? (currentIndex / words.length) * 100 : 0;
   const wpm = calculateWPM();
   const accuracy = calculateAccuracy();
+
+  const navActions = useMemo(
+    () => <TypingPracticeHeaderActions onRestart={resetPractice} />,
+    [resetPractice]
+  );
+
+  useNavConfig({ mode: 'tool', title: 'Typing Practice', actions: navActions });
 
   if (isLoading) {
     return (

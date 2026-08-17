@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Mail, Lock, AlertCircle, Eye, EyeOff, CheckCircle, Star, Users, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,6 +17,16 @@ export function LoginPage() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const { signIn, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const redirectAfterLogin = (() => {
+    const state = location.state as { from?: { pathname?: string; search?: string; hash?: string } } | null;
+    const path = state?.from?.pathname;
+    if (!path) return '/';
+    const search = state?.from?.search || '';
+    const hash = state?.from?.hash || '';
+    return `${path}${search}${hash}`;
+  })();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +43,7 @@ export function LoginPage() {
       }
       setLoading(false);
     } else {
-      navigate('/');
+      navigate(redirectAfterLogin, { replace: true });
     }
   };
 

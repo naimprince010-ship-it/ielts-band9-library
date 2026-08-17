@@ -481,11 +481,7 @@ This lesson focuses on words that help you express nuanced views - not just "tec
         'I believe the digital divide remains a significant challenge in many developing countries.'
       ]
     }
-  },
-  ...NEW_VOCABULARY_LESSONS,
-  ...NEW_GRAMMAR_LESSONS,
-  ...WRITING_LESSONS,
-  ...SPEAKING_LESSONS
+  }
 ];
 
 export const GRAMMAR_TOPICS = [

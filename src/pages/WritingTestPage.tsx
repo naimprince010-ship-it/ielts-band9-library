@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { sanitizeHtml } from '@/lib/sanitize';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavConfig } from '@/contexts/NavContext';
 import {
   Clock,
   FileText,
@@ -25,6 +26,7 @@ import {
   WritingTaskType
 } from '@/types';
 import { WritingTask1Renderer, writingTask1RendererWouldShow } from '@/components/test/WritingTask1Renderer';
+import { FullMockWritingPaper } from '@/components/test/FullMockWritingPaper';
 import {
   normalizeWritingTestFromDb,
   findWritingTask1,
@@ -109,6 +111,7 @@ In conclusion, rather than viewing academic and vocational education as mutually
 // localStorage Keys
 // ============================================
 const STORAGE_KEY = 'writing_test_session';
+const writingPaperStartedKey = (testId: string) => `singleWriting:${testId}:Started`;
 
 // ============================================
 // Helper Functions
@@ -178,8 +181,11 @@ export default function WritingTestPage() {
   const [startedAt] = useState<number>(Date.now());
   const [pasteAttempted, setPasteAttempted] = useState(false);
   const [testLoadError, setTestLoadError] = useState<string | null>(null);
+  const [timerRunning, setTimerRunning] = useState(() => sessionStorage.getItem(writingPaperStartedKey(test.id)) === '1');
+  const [savedIndicator, setSavedIndicator] = useState(false);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const skipInitialSessionSaveRef = useRef(true);
 
   useEffect(() => {
     if (!needsMockSelection) return;
@@ -310,6 +316,10 @@ export default function WritingTestPage() {
 
   useEffect(() => {
     if (needsMockSelection) return;
+    if (skipInitialSessionSaveRef.current) {
+      skipInitialSessionSaveRef.current = false;
+      return;
+    }
     saveSession();
   }, [saveSession, needsMockSelection]);
 
@@ -317,7 +327,7 @@ export default function WritingTestPage() {
   // Timer countdown
   // ============================================
   useEffect(() => {
-    if (needsMockSelection || isSubmitted || timeRemaining <= 0) return;
+    if (needsMockSelection || isSubmitted || !timerRunning || timeRemaining <= 0) return;
 
     const timer = setInterval(() => {
       setTimeRemaining(prev => {
@@ -331,7 +341,14 @@ export default function WritingTestPage() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isSubmitted]);
+  }, [isSubmitted, needsMockSelection, timerRunning]);
+
+  useEffect(() => {
+    if (!responses.task1.content && !responses.task2.content) return;
+    setSavedIndicator(true);
+    const timeout = setTimeout(() => setSavedIndicator(false), 1500);
+    return () => clearTimeout(timeout);
+  }, [responses]);
 
   // ============================================
   // Handle text change with word count
@@ -409,6 +426,8 @@ export default function WritingTestPage() {
     const t1 = findWritingTask1(test) ?? test.tasks[0];
     const t2 = findWritingTask2(test) ?? test.tasks[1];
     localStorage.removeItem(STORAGE_KEY);
+    sessionStorage.removeItem(writingPaperStartedKey(test.id));
+    sessionStorage.removeItem(`singleWriting:${test.id}:ActiveTask`);
     setResponses({
       task1: {
         taskId: t1.id,
@@ -429,6 +448,7 @@ export default function WritingTestPage() {
     setCurrentTask('task1');
     setIsSubmitted(false);
     setResult(null);
+    setTimerRunning(false);
   };
 
   // ============================================
@@ -442,6 +462,18 @@ export default function WritingTestPage() {
     }
     return 'text-red-600 bg-red-50 border-red-200';
   };
+
+  // ── Nav context / exit guard ──────────────────────────────────────────────
+  // mode: 'exam' matches what the route already sets via <Layout mode="exam">
+  // — Navbar/Footer/MobileNav are already hidden, this doesn't change the
+  // visible chrome. What it adds: Layout's useNavExitGuard now catches the
+  // browser Back button and tab close/refresh while the test is in progress.
+  const handleExitAttempt = useCallback(() => {
+    if (isSubmitted || needsMockSelection) return true;
+    return window.confirm('Leave the Writing test? Your progress on this section will be lost.');
+  }, [isSubmitted, needsMockSelection]);
+
+  useNavConfig({ mode: 'exam', title: test.title, onExitAttempt: handleExitAttempt });
 
   // ============================================
   // Results Screen
@@ -553,6 +585,40 @@ export default function WritingTestPage() {
   // ============================================
   // Main Test Interface
   // ============================================
+  const writingAnswers = {
+    w_task1: responses.task1.content,
+    w_task2: responses.task2.content,
+  };
+
+  const setWritingAnswer = (key: 'w_task1' | 'w_task2', value: string) => {
+    const responseKey = key === 'w_task1' ? 'task1' : 'task2';
+    setResponses(previous => ({
+      ...previous,
+      [responseKey]: {
+        ...previous[responseKey],
+        content: value,
+        wordCount: countWords(value),
+        lastUpdatedAt: Date.now(),
+      },
+    }));
+  };
+
+  return (
+    <FullMockWritingPaper
+      task1={task1}
+      task2={task2}
+      answers={writingAnswers}
+      setAnswer={setWritingAnswer}
+      timeDisplay={formatTime(timeRemaining)}
+      timeWarning={timeRemaining <= 300}
+      savedIndicator={savedIndicator}
+      pauseTimer={() => setTimerRunning(false)}
+      startTimer={() => setTimerRunning(true)}
+      onSubmit={handleSubmit}
+      storagePrefix={`singleWriting:${test.id}:`}
+    />
+  );
+
   return (
     <div className="h-screen flex flex-col bg-gray-100">
       {/* Fixed Header */}

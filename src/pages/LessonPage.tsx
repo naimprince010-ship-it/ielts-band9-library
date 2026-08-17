@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { 
-  ArrowLeft, BookOpen, GraduationCap, Star, Bookmark, BookmarkCheck, 
+import {
+  ArrowLeft, ArrowRight, BookOpen, GraduationCap, Star, Bookmark, BookmarkCheck,
   CheckCircle, XCircle, AlertTriangle, Lightbulb,
   Lock, CheckCircle2, Circle, FileText, MessageSquare, Zap, BookMarked
 } from 'lucide-react';
@@ -16,6 +16,10 @@ import { InteractivePractice } from '@/components/ui/InteractivePractice';
 import { CopyableBadge } from '@/components/ui/CopyButton';
 import { SpeakButton } from '@/components/ui/SpeakButton';
 import { PieChartCoreExplanation } from '@/components/ui/PieChartVisuals';
+import { DeepVocabularyLesson } from '@/components/lesson/DeepVocabularyLesson';
+import { GrammarLessonTemplate } from '@/components/lesson/grammar/GrammarLessonTemplate';
+import { WritingLessonTemplate } from '@/components/lesson/writing/WritingLessonTemplate';
+import { VocabularyLessonTemplate } from '@/components/lesson/vocabulary/VocabularyLessonTemplate';
 import { useLessons } from '@/contexts/LessonContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
@@ -23,10 +27,10 @@ import { supabase } from '@/lib/supabase';
 // Helper function to parse markdown-style text and render properly
 function parseMarkdownText(text: string): React.ReactNode {
   if (!text) return null;
-  
+
   // Split by **text** pattern for bold
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
-  
+
   return parts.map((part, index) => {
     if (part.startsWith('**') && part.endsWith('**')) {
       const boldText = part.slice(2, -2);
@@ -36,95 +40,34 @@ function parseMarkdownText(text: string): React.ReactNode {
   });
 }
 
-// Helper to parse Writing Task examples (Model Answer format)
-function parseWritingExample(text: string): React.ReactNode {
-  if (!text) return null;
-  
-  // Check for Writing Task format: BAND 9 MODEL ANSWER, Task:, Why Band 9:
-  const hasWritingFormat = text.includes('MODEL ANSWER') || text.includes('BAND 9:') || text.includes('Task:');
-  
-  if (!hasWritingFormat) return null;
-  
-  // Extract task/question if present
-  const taskMatch = text.match(/(?:\*\*)?Task:?\*?\*?\s*(.+?)(?=(?:\*\*)?(?:BAND|Model|$))/i);
-  
-  // Extract model answer
-  const modelAnswerMatch = text.match(/BAND 9 MODEL ANSWER[^:]*:\s*"?([^"]+)"?(?=(?:Why Band|$))/i) ||
-                           text.match(/BAND 9:\s*"?([^"]+)"?/i);
-  
-  // Extract explanation
-  const whyBandMatch = text.match(/Why Band 9:\s*(.+?)$/i);
-  
-  return (
-    <div className="space-y-4">
-      {taskMatch && (
-        <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <FileText className="h-4 w-4 text-blue-600" />
-            <span className="font-semibold text-blue-700 dark:text-blue-300 text-sm uppercase tracking-wide">Task</span>
-          </div>
-          <p className="text-blue-900 dark:text-blue-100">{taskMatch[1].trim()}</p>
-        </div>
-      )}
-      
-      {modelAnswerMatch && (
-        <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg p-4">
-          <div className="flex items-center gap-2 mb-3">
-            <Badge className="bg-green-600 text-white">Band 9</Badge>
-            <span className="text-sm text-green-700 dark:text-green-300 font-medium">Model Answer</span>
-          </div>
-          <p className="text-green-900 dark:text-green-100 leading-relaxed italic border-l-4 border-green-400 pl-4">
-            "{modelAnswerMatch[1].trim()}"
-          </p>
-        </div>
-      )}
-      
-      {whyBandMatch && (
-        <div className="border-l-4 border-accent pl-4 py-2">
-          <div className="flex items-center gap-2 mb-1">
-            <Lightbulb className="h-4 w-4 text-accent" />
-            <span className="text-xs font-semibold text-accent uppercase">Why Band 9</span>
-          </div>
-          <p className="text-muted-foreground leading-relaxed">{whyBandMatch[1].trim()}</p>
-        </div>
-      )}
-    </div>
-  );
-}
-
 // Helper to parse Speaking examples with Question/Band format
 function parseExampleContent(text: string): React.ReactNode {
   if (!text) return null;
-  
-  // First check for Writing Task format
-  if (text.includes('MODEL ANSWER') || text.includes('BAND 9:')) {
-    return parseWritingExample(text);
-  }
-  
+
   // Check if it has Question/Band format (Speaking)
   const hasQuestionFormat = text.includes('**Question:') || text.includes('**Band');
-  
+
   if (!hasQuestionFormat) {
     return <p className="text-muted-foreground leading-relaxed">{parseMarkdownText(text)}</p>;
   }
-  
+
   // Parse Question - handles both formats:
   // Format 1: **Question: What's the weather?**
   // Format 2: **Question:** What's the weather?
   let questionText = '';
   const questionMatch1 = text.match(/\*\*Question:\s*([^*]+?)\*\*/);
   const questionMatch2 = text.match(/\*\*Question:\*\*\s*([^*]+?)(?=\*\*Band|$)/);
-  
+
   if (questionMatch1) {
     questionText = questionMatch1[1].trim();
   } else if (questionMatch2) {
     questionText = questionMatch2[1].trim();
   }
-  
+
   // Parse Band 6 and Band 9 responses
   const band6Match = text.match(/\*\*Band 6:\*\*\s*"([^"]+)"/);
   const band9Match = text.match(/\*\*Band 9:\*\*\s*"([^"]+)"/);
-  
+
   return (
     <div className="space-y-4">
       {questionText && (
@@ -136,7 +79,7 @@ function parseExampleContent(text: string): React.ReactNode {
           <p className="text-foreground font-medium text-lg">{questionText}</p>
         </div>
       )}
-      
+
       {(band6Match || band9Match) && (
         <div className="grid gap-4 md:grid-cols-2">
           {band6Match && (
@@ -150,7 +93,7 @@ function parseExampleContent(text: string): React.ReactNode {
               <p className="text-amber-900 dark:text-amber-100 text-sm leading-relaxed italic">"{band6Match[1]}"</p>
             </div>
           )}
-          
+
           {band9Match && (
             <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg p-4">
               <div className="flex items-center gap-2 mb-2">
@@ -171,17 +114,17 @@ function parseExampleContent(text: string): React.ReactNode {
 // Helper to parse vocabulary sections in examples
 function parseVocabularySection(text: string): React.ReactNode {
   if (!text) return null;
-  
+
   // Check for vocabulary format **WEATHER VOCABULARY:** etc.
   const vocabMatch = text.match(/\*\*([A-Z\s]+VOCABULARY[^:]*|[A-Z\s]+):\*\*/);
-  
+
   if (!vocabMatch) {
     return <p className="text-muted-foreground leading-relaxed">{parseMarkdownText(text)}</p>;
   }
-  
+
   // Parse into structured format
   const sections = text.split(/\*\*([^*]+):\*\*/g).filter(Boolean);
-  
+
   return (
     <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4 space-y-3">
       <div className="flex items-center gap-2">
@@ -220,7 +163,7 @@ export function LessonPage() {
       document.title = `${lesson.title} | IELTS Band 9 Materials Library`;
     }
   }, [lesson?.title]);
-  
+
   const lessonProgress = lesson ? getLessonProgress(lesson.id) : 'not_started';
   const isCompleted = lessonProgress === 'completed';
 
@@ -231,7 +174,7 @@ export function LessonPage() {
     setLesson(foundLesson);
     if (foundLesson) {
       incrementViewCount(foundLesson.id);
-      
+
       // Check course enrollment if this lesson belongs to a course
       const checkEnrollment = async () => {
         if (user && foundLesson.courseId) {
@@ -242,13 +185,13 @@ export function LessonPage() {
             .eq('course_id', foundLesson.courseId)
             .eq('access_status', 'active')
             .maybeSingle();
-            
+
           if (data && !error) {
             setIsCourseEnrolled(true);
           }
         }
       };
-      
+
       if (user && foundLesson.courseId) {
         checkEnrollment();
       }
@@ -271,13 +214,15 @@ export function LessonPage() {
   // They can access if it's NOT premium, OR they are a global premium user, OR they bought the specific course
   const canAccessContent = !lesson.is_premium || isPremium || isCourseEnrolled;
   const content = lesson.content;
+  const isDeepVocabularyLesson = lesson.slug === 'influence-impact-vocabulary';
+  const estimatedTime = Math.max(5, Math.ceil((content.examples.length + content.miniPractice.length + content.commonMistakes.length) * 2));
 
   const handleBookmarkToggle = async () => {
     if (!user) {
       navigate('/login');
       return;
     }
-    
+
     if (isBookmarked(lesson.id)) {
       await removeBookmark(lesson.id);
     } else {
@@ -290,37 +235,128 @@ export function LessonPage() {
       navigate('/login');
       return;
     }
-    
+
     if (!lesson) return;
-    
+
     setLessonProgress(lesson.id, isCompleted ? 'not_started' : 'completed');
   };
 
+  if (lesson.type === 'grammar') {
+    return (
+      <GrammarLessonTemplate
+        lesson={lesson}
+        content={content}
+        estimatedTime={estimatedTime}
+        canAccessContent={canAccessContent}
+        isBookmarked={isBookmarked(lesson.id)}
+        onBookmarkToggle={handleBookmarkToggle}
+        showCompletionCard={canAccessContent}
+        isCompleted={isCompleted}
+        onProgressToggle={handleProgressToggle}
+      />
+    );
+  }
+
+  // Writing lessons render through their own fully isolated, data-driven
+  // template for the same reason grammar lessons do: this early return
+  // applies to every current and future lesson with type 'writing'
+  // automatically — nothing here is keyed off `slug`.
+  if (lesson.type === 'writing') {
+    return (
+      <WritingLessonTemplate
+        lesson={lesson}
+        content={content}
+        estimatedTime={estimatedTime}
+        canAccessContent={canAccessContent}
+        isBookmarked={isBookmarked(lesson.id)}
+        onBookmarkToggle={handleBookmarkToggle}
+        showCompletionCard={canAccessContent}
+        isCompleted={isCompleted}
+        onProgressToggle={handleProgressToggle}
+      />
+    );
+  }
+
+  // Vocabulary lessons render through their own fully isolated,
+  // data-driven template for the same reason grammar and writing lessons
+  // do — with one deliberate exception: `influence-impact-vocabulary` is
+  // excluded and falls through to the generic branch below, unchanged,
+  // because its content comes from the hand-authored `DeepVocabularyLesson`
+  // component rather than from `lesson.content`. Nothing else here is
+  // keyed off `slug`.
+  if (lesson.type === 'vocabulary' && lesson.slug !== 'influence-impact-vocabulary') {
+    return (
+      <VocabularyLessonTemplate
+        lesson={lesson}
+        content={content}
+        estimatedTime={estimatedTime}
+        canAccessContent={canAccessContent}
+        isBookmarked={isBookmarked(lesson.id)}
+        onBookmarkToggle={handleBookmarkToggle}
+        showCompletionCard={canAccessContent}
+        isCompleted={isCompleted}
+        onProgressToggle={handleProgressToggle}
+      />
+    );
+  }
+
+  const deepLessonTocItems = [
+    { id: 'what-you-will-learn', title: 'Overview', icon: <Lightbulb className="h-4 w-4" /> },
+    { id: 'compare-four-words', title: 'Compare the 4 words', icon: <BookMarked className="h-4 w-4" /> },
+    { id: 'core-explanation', title: 'Learn', icon: <FileText className="h-4 w-4" /> },
+    { id: 'examples', title: 'Check', icon: <CheckCircle className="h-4 w-4" /> },
+    { id: 'mini-practice', title: 'Apply', icon: <AlertTriangle className="h-4 w-4" /> },
+    { id: 'review', title: 'Review', icon: <Circle className="h-4 w-4" /> },
+  ];
+
+  const standardTocItems = [
+    { id: 'what-you-will-learn', title: 'What You Will Learn', icon: <Lightbulb className="h-4 w-4" /> },
+    { id: 'core-explanation', title: 'Core Explanation', icon: <FileText className="h-4 w-4" /> },
+    ...(lesson.type === 'grammar' && (content.grammarForm || content.grammarFormItems?.length)
+      ? [{ id: 'grammar-form', title: 'Grammar Form', icon: <BookMarked className="h-4 w-4" /> }]
+      : []),
+    ...(lesson.type === 'grammar' && content.grammarUse
+      ? [{ id: 'grammar-use', title: 'When to Use', icon: <Zap className="h-4 w-4" /> }]
+      : []),
+    { id: 'examples', title: `Examples (${content.examples.length})`, icon: <CheckCircle className="h-4 w-4" /> },
+    { id: 'common-mistakes', title: `Common Mistakes (${content.commonMistakes.length})`, icon: <XCircle className="h-4 w-4" /> },
+    ...(lesson.type === 'vocabulary' && content.collocations
+      ? [{ id: 'collocations', title: 'Collocations', icon: <MessageSquare className="h-4 w-4" /> }]
+      : []),
+    ...(lesson.type === 'vocabulary' && content.synonyms ? [{ id: 'synonyms', title: 'Synonyms' }] : []),
+    ...(lesson.type === 'vocabulary' && content.speakingLines ? [{ id: 'speaking-phrases', title: 'Speaking Phrases' }] : []),
+    ...(lesson.type === 'grammar' && content.sentenceUpgrade ? [{ id: 'sentence-upgrades', title: 'Sentence Upgrades' }] : []),
+    { id: 'mini-practice', title: `Mini Practice (${content.miniPractice.length})`, icon: <AlertTriangle className="h-4 w-4" /> },
+    { id: 'quick-recap', title: 'Quick Recap' },
+  ];
+
+  const tocItems = isDeepVocabularyLesson ? deepLessonTocItems : standardTocItems;
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-slate-50">
       <ReadingProgressBar estimatedMinutes={5} />
-      <div className="py-8 bg-foreground text-background mt-1">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link 
-            to={`/${lesson.type}`} 
-            className="inline-flex items-center text-white/80 hover:text-white mb-4"
+      <div className={isDeepVocabularyLesson ? 'mt-1 border-b border-indigo-100 bg-white py-8 text-slate-950' : 'mt-1 border-b border-indigo-100 bg-gradient-to-br from-slate-950 via-indigo-950 to-violet-950 py-8 text-background'}>
+        <div className={isDeepVocabularyLesson ? 'mx-auto max-w-[88rem] px-4 sm:px-6 lg:px-8' : 'max-w-4xl mx-auto px-4 sm:px-6 lg:px-8'}>
+          <Link
+            to={`/${lesson.type}`}
+            className={isDeepVocabularyLesson ? 'mb-4 inline-flex items-center text-slate-500 hover:text-indigo-700' : 'inline-flex items-center text-white/80 hover:text-white mb-4'}
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to {lesson.type} library
           </Link>
-          
-          <div className="flex items-start justify-between">
+
+          <div className={isDeepVocabularyLesson ? 'grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-center' : 'flex items-start justify-between'}>
             <div className="flex-1">
-              <div className="flex items-center gap-2 mb-3">
+              <div className="mb-3 flex flex-wrap items-center gap-2">
                 {lesson.type === 'vocabulary' ? (
-                  <BookOpen className="h-6 w-6" />
+                  <BookOpen className={isDeepVocabularyLesson ? 'h-6 w-6 text-indigo-700' : 'h-6 w-6'} />
                 ) : (
                   <GraduationCap className="h-6 w-6" />
                 )}
-                <Badge variant="secondary" className="capitalize">
+                <Badge variant="secondary" className={isDeepVocabularyLesson ? 'capitalize bg-indigo-50 text-indigo-700' : 'capitalize'}>
                   {lesson.type}
                 </Badge>
-                <Badge variant="outline" className="capitalize bg-white/10 border-white/30">
+                <Badge variant="outline" className={isDeepVocabularyLesson ? 'capitalize border-slate-200 bg-white text-slate-600' : 'capitalize bg-white/10 border-white/30'}>
                   {lesson.level}
                 </Badge>
                 {lesson.is_premium && (
@@ -329,66 +365,70 @@ export function LessonPage() {
                   </Badge>
                 )}
               </div>
-              <h1 className="text-3xl font-bold mb-2">{content.title}</h1>
-              <p className="text-white/80">{lesson.description}</p>
-            </div>
-            
-            <Button
-              variant="secondary"
-              size="icon"
-              onClick={handleBookmarkToggle}
-              className="ml-4"
-            >
-              {isBookmarked(lesson.id) ? (
-                <BookmarkCheck className="h-5 w-5" />
-              ) : (
-                <Bookmark className="h-5 w-5" />
+              <h1 className={isDeepVocabularyLesson ? 'mb-3 max-w-3xl text-4xl font-black tracking-tight text-slate-950 sm:text-5xl' : 'mb-2 max-w-3xl text-3xl font-bold tracking-tight sm:text-4xl'}>{content.title}</h1>
+              <p className={isDeepVocabularyLesson ? 'max-w-2xl text-base leading-8 text-slate-600' : 'max-w-2xl text-white/80 leading-7'}>{lesson.description}</p>
+              {isDeepVocabularyLesson && (
+                <div className="mt-6 flex flex-wrap items-center gap-5 text-sm font-medium text-slate-700">
+                  <span className="inline-flex items-center gap-2"><BookOpen className="h-4 w-4 text-indigo-700" />4 key words</span>
+                  <span className="inline-flex items-center gap-2"><Zap className="h-4 w-4 text-indigo-700" />8-12 min</span>
+                  <span className="inline-flex items-center gap-2"><GraduationCap className="h-4 w-4 text-indigo-700" />{content.targetLevel}</span>
+                </div>
               )}
-            </Button>
+            </div>
+
+            {isDeepVocabularyLesson ? (
+              <div className="relative overflow-hidden rounded-2xl border border-indigo-100 bg-white p-5 shadow-sm">
+                <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-indigo-100/70" />
+                <div className="pointer-events-none absolute -bottom-12 right-12 h-24 w-24 rounded-full bg-sky-100/70" />
+                <div className="flex items-start gap-4">
+                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-rose-50 text-rose-500">
+                    <Zap className="h-6 w-6" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-black text-indigo-700">By the end of this lesson</p>
+                    <p className="mt-2 text-sm leading-6 text-slate-600">
+                      You will confidently use influence, impact, affect and effect in the correct form and context.
+                    </p>
+                    <Badge className="mt-3 bg-indigo-50 text-indigo-700 hover:bg-indigo-50">IELTS Writing + Speaking</Badge>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700" onClick={() => document.getElementById('compare-four-words')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+                        Start with Compare <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                      <Button size="sm" variant="outline" className="border-indigo-200 text-indigo-700 hover:bg-indigo-50" onClick={() => document.getElementById('core-explanation')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+                        Jump to Learn
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Button
+                variant="secondary"
+                size="icon"
+                onClick={handleBookmarkToggle}
+                className="ml-4"
+              >
+                {isBookmarked(lesson.id) ? (
+                  <BookmarkCheck className="h-5 w-5" />
+                ) : (
+                  <Bookmark className="h-5 w-5" />
+                )}
+              </Button>
+            )}
           </div>
         </div>
       </div>
 
-      <div className="flex gap-8">
-        <div className="hidden lg:block w-64 flex-shrink-0">
-          <div className="sticky top-24">
-            <TableOfContents
-              items={[
-                { id: 'what-you-will-learn', title: 'What You Will Learn', icon: <Lightbulb className="h-4 w-4" /> },
-                { id: 'core-explanation', title: 'Core Explanation', icon: <FileText className="h-4 w-4" /> },
-                ...(lesson.type === 'grammar' && (content.grammarForm || content.grammarFormItems?.length) ? [{ id: 'grammar-form', title: 'Grammar Form', icon: <BookMarked className="h-4 w-4" /> }] : []),
-                ...(lesson.type === 'grammar' && content.grammarUse ? [{ id: 'grammar-use', title: 'When to Use', icon: <Zap className="h-4 w-4" /> }] : []),
-                { id: 'examples', title: `Examples (${content.examples.length})`, icon: <CheckCircle className="h-4 w-4" /> },
-                { id: 'common-mistakes', title: `Common Mistakes (${content.commonMistakes.length})`, icon: <XCircle className="h-4 w-4" /> },
-                ...(lesson.type === 'vocabulary' && content.collocations ? [{ id: 'collocations', title: 'Collocations', icon: <MessageSquare className="h-4 w-4" /> }] : []),
-                ...(lesson.type === 'vocabulary' && content.synonyms ? [{ id: 'synonyms', title: 'Synonyms' }] : []),
-                ...(lesson.type === 'vocabulary' && content.speakingLines ? [{ id: 'speaking-phrases', title: 'Speaking Phrases' }] : []),
-                ...(lesson.type === 'grammar' && content.sentenceUpgrade ? [{ id: 'sentence-upgrades', title: 'Sentence Upgrades' }] : []),
-                { id: 'mini-practice', title: `Mini Practice (${content.miniPractice.length})`, icon: <AlertTriangle className="h-4 w-4" /> },
-                { id: 'quick-recap', title: 'Quick Recap' },
-              ]}
-            />
+      <div className={isDeepVocabularyLesson ? 'mx-auto grid max-w-[88rem] gap-6 px-4 sm:px-6 lg:grid-cols-[224px_minmax(0,1fr)] lg:px-8 xl:grid-cols-[224px_minmax(0,1fr)_300px] xl:gap-8' : 'mx-auto flex max-w-[88rem] gap-6 px-4 sm:px-6 lg:px-8 xl:gap-8'}>
+        <div className={isDeepVocabularyLesson ? 'hidden w-56 flex-shrink-0 lg:block' : 'hidden w-52 flex-shrink-0 lg:block xl:w-56'}>
+          <div className="sticky top-24 py-8">
+            <TableOfContents items={tocItems} />
           </div>
         </div>
 
-        <div className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className={isDeepVocabularyLesson ? 'min-w-0 py-8' : 'mx-auto max-w-5xl flex-1 py-8'}>
           <div className="lg:hidden mb-4 sticky top-16 z-40 bg-background py-2">
-            <MobileTableOfContents
-              items={[
-                { id: 'what-you-will-learn', title: 'What You Will Learn' },
-                { id: 'core-explanation', title: 'Core Explanation' },
-                ...(lesson.type === 'grammar' && (content.grammarForm || content.grammarFormItems?.length) ? [{ id: 'grammar-form', title: 'Grammar Form' }] : []),
-                ...(lesson.type === 'grammar' && content.grammarUse ? [{ id: 'grammar-use', title: 'When to Use' }] : []),
-                { id: 'examples', title: `Examples (${content.examples.length})` },
-                { id: 'common-mistakes', title: `Common Mistakes (${content.commonMistakes.length})` },
-                ...(lesson.type === 'vocabulary' && content.collocations ? [{ id: 'collocations', title: 'Collocations' }] : []),
-                ...(lesson.type === 'vocabulary' && content.synonyms ? [{ id: 'synonyms', title: 'Synonyms' }] : []),
-                ...(lesson.type === 'vocabulary' && content.speakingLines ? [{ id: 'speaking-phrases', title: 'Speaking Phrases' }] : []),
-                ...(lesson.type === 'grammar' && content.sentenceUpgrade ? [{ id: 'sentence-upgrades', title: 'Sentence Upgrades' }] : []),
-                { id: 'mini-practice', title: `Mini Practice (${content.miniPractice.length})` },
-                { id: 'quick-recap', title: 'Quick Recap' },
-              ]}
-            />
+            <MobileTableOfContents items={tocItems} />
           </div>
 
           {!canAccessContent && (
@@ -410,6 +450,11 @@ export function LessonPage() {
             </Card>
           )}
 
+          {isDeepVocabularyLesson ? (
+            <div className={!canAccessContent ? 'blur-sm pointer-events-none select-none' : ''}>
+              <DeepVocabularyLesson title={content.title} targetLevel={content.targetLevel} learningPoints={content.whatYouWillLearn} />
+            </div>
+          ) : (
           <Card className="mb-6" id="what-you-will-learn">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -429,9 +474,10 @@ export function LessonPage() {
               </ul>
             </CardContent>
           </Card>
+          )}
 
           <div className={!canAccessContent ? 'blur-sm pointer-events-none select-none' : ''}>
-            <Card className="mb-6" id="core-explanation">
+            {!isDeepVocabularyLesson && <Card className="mb-6" id="core-explanation">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <FileText className="h-5 w-5 text-accent" />
@@ -449,7 +495,7 @@ export function LessonPage() {
                       const hasNumberedList = lines.some(line => /^\d+\./.test(line.trim()));
                       const isBoldHeader = paragraph.startsWith('**') && paragraph.includes('**');
                       const isKeyPrinciple = paragraph.toLowerCase().includes('key principle');
-                      
+
                       // Handle bold headers like **Top 10 error categories:**
                       if (isBoldHeader && !hasNumberedList) {
                         const cleanText = paragraph.replace(/\*\*/g, '');
@@ -459,7 +505,7 @@ export function LessonPage() {
                           </div>
                         );
                       }
-                      
+
                       // Handle key principle callout
                       if (isKeyPrinciple) {
                         const cleanText = paragraph.replace(/\*\*/g, '');
@@ -470,7 +516,7 @@ export function LessonPage() {
                           </div>
                         );
                       }
-                      
+
                       // Handle numbered list with visual styling
                       if (hasNumberedList) {
                         return (
@@ -501,7 +547,7 @@ export function LessonPage() {
                           </div>
                         );
                       }
-                      
+
                       // Regular paragraph with bold text parsing
                       const parts = paragraph.split(/(\*\*[^*]+\*\*)/g);
                       return (
@@ -519,6 +565,7 @@ export function LessonPage() {
                 )}
               </CardContent>
             </Card>
+            }
 
                         {lesson.type === 'grammar' && content.grammarFormItems && content.grammarFormItems.length > 0 ? (
                           <Card className="mb-6 border-accent/30 bg-accent/5" id="grammar-form">
@@ -529,8 +576,8 @@ export function LessonPage() {
                             <CardContent>
                               <Accordion type="single" collapsible className="w-full space-y-2">
                                 {content.grammarFormItems.map((item, index) => (
-                                  <AccordionItem 
-                                    key={index} 
+                                  <AccordionItem
+                                    key={index}
                                     value={`grammar-form-${index}`}
                                     className="border border-border rounded-lg bg-card overflow-hidden"
                                   >
@@ -595,7 +642,7 @@ export function LessonPage() {
                   <div className="prose prose-sm max-w-none">
                     {content.grammarUse.split('\n\n').map((section, sectionIndex) => {
                       const lines = section.split('\n');
-                      
+
                       return (
                         <div key={sectionIndex} className={sectionIndex > 0 ? 'mt-4 pt-4 border-t border-border' : ''}>
                           {lines.map((line, lineIndex) => {
@@ -634,7 +681,7 @@ export function LessonPage() {
               </Card>
             )}
 
-            <Card className="mb-6" id="examples">
+            {!isDeepVocabularyLesson && <Card className="mb-6" id="examples">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <CheckCircle className="h-5 w-5 text-green-500" />
@@ -651,16 +698,16 @@ export function LessonPage() {
                     const hasErrorFormat = example.sentence.includes('Error:') && example.sentence.includes('Correct:');
                     const hasQuestionFormat = example.sentence.includes('**Question:') || example.sentence.includes('**Band');
                     const hasVocabFormat = example.sentence.includes('VOCABULARY:') || example.explanation?.includes('VOCABULARY:');
-                    
+
                     let errorPart = '';
                     let correctPart = '';
-                    
+
                     if (hasErrorFormat) {
                       const parts = example.sentence.split('→');
                       errorPart = parts[0]?.replace('Error:', '').trim() || '';
                       correctPart = parts[1]?.replace('Correct:', '').trim() || '';
                     }
-                    
+
                     return (
                       <div key={index} className="border border-border rounded-xl overflow-hidden bg-card">
                         {/* Example Header */}
@@ -672,7 +719,7 @@ export function LessonPage() {
                             <SpeakButton text={example.sentence.replace(/\*\*/g, '')} size="sm" />
                           </div>
                         </div>
-                        
+
                         {/* Example Content */}
                         <div className="p-4 space-y-4">
                           {hasErrorFormat ? (
@@ -702,7 +749,7 @@ export function LessonPage() {
                               <p className="text-foreground leading-relaxed">{parseMarkdownText(example.sentence)}</p>
                             </div>
                           )}
-                          
+
                           {/* Explanation */}
                           {example.explanation && (
                             hasVocabFormat || example.explanation.includes('**') ? (
@@ -724,8 +771,29 @@ export function LessonPage() {
                 </div>
               </CardContent>
             </Card>
+            }
 
-            <Card className="mb-6 border-red-200" id="common-mistakes">
+            <Accordion
+              type="single"
+              collapsible
+              defaultValue={isDeepVocabularyLesson ? undefined : 'extra-practice'}
+              className="mb-6"
+            >
+              <AccordionItem value="extra-practice" id={isDeepVocabularyLesson ? 'review' : undefined} className="scroll-mt-28 rounded-xl border border-slate-200 bg-white px-4 shadow-sm">
+                <AccordionTrigger className="py-4 text-left hover:no-underline">
+                  <div>
+                    <p className="text-base font-semibold text-slate-900">
+                      {isDeepVocabularyLesson ? 'Extra practice library' : 'Lesson resources'}
+                    </p>
+                    <p className="mt-1 text-sm font-normal text-slate-500">
+                      {isDeepVocabularyLesson
+                        ? 'Open this after the guided Learn, Check, and Apply steps.'
+                        : 'Review mistakes, collocations, phrases, and recap.'}
+                    </p>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="pt-2">
+                  <Card className="mb-6 border-red-200" id="common-mistakes">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-red-700">
                   <XCircle className="h-5 w-5" />
@@ -815,7 +883,7 @@ export function LessonPage() {
                     {content.sentenceUpgrade.map((upgrade, index) => {
                       // Clean up "Error-filled:" prefix
                       const basicText = upgrade.basic.replace(/^Error-filled:\s*/i, '').replace(/^Basic:\s*/i, '');
-                      
+
                       return (
                         <div key={index} className="relative">
                           <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-red-300 to-green-400" />
@@ -843,7 +911,7 @@ export function LessonPage() {
               </Card>
             )}
 
-            <InteractivePractice 
+            <InteractivePractice
               questions={content.miniPractice.map((q, index) => ({
                 ...q,
                 correctAnswer: content.answerKey[index] || ''
@@ -859,6 +927,9 @@ export function LessonPage() {
                 <p className="text-foreground">{content.quickRecap}</p>
               </CardContent>
             </Card>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </div>
 
           {user && canAccessContent && (
@@ -909,7 +980,7 @@ export function LessonPage() {
                 Back to Library
               </Button>
             </Link>
-            
+
             {!canAccessContent && (
               <Link to="/pricing">
                 <Button>
@@ -920,6 +991,37 @@ export function LessonPage() {
             )}
           </div>
         </div>
+
+        {isDeepVocabularyLesson && (
+          <aside className="hidden py-8 xl:block">
+            <div className="sticky top-24 space-y-4">
+              <div className="rounded-2xl border border-blue-100 bg-blue-50/60 p-5 shadow-sm">
+                <p className="text-xs font-black uppercase tracking-[0.14em] text-blue-700">Step 1 - Learn</p>
+                <h3 className="mt-2 font-bold text-slate-950">Understand each word</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">Explore meanings, patterns, examples and common mistakes.</p>
+                <Button size="sm" className="mt-4 bg-blue-600 hover:bg-blue-700" onClick={() => document.getElementById('core-explanation')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+                  Go to Learn <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+              <div className="rounded-2xl border border-violet-100 bg-violet-50/70 p-5 shadow-sm">
+                <p className="text-xs font-black uppercase tracking-[0.14em] text-violet-700">Step 2 - Check</p>
+                <h3 className="mt-2 font-bold text-slate-950">Test yourself</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">Answer quick questions and learn why each choice works.</p>
+                <Button size="sm" className="mt-4 bg-violet-600 hover:bg-violet-700" onClick={() => document.getElementById('examples')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+                  Start Quiz <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+              <div className="rounded-2xl border border-emerald-100 bg-emerald-50/70 p-5 shadow-sm">
+                <p className="text-xs font-black uppercase tracking-[0.14em] text-emerald-700">Step 3 - Apply</p>
+                <h3 className="mt-2 font-bold text-slate-950">Use in IELTS Writing</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">Write 2-3 sentences and compare with a Band 8 model.</p>
+                <Button size="sm" className="mt-4 bg-emerald-600 hover:bg-emerald-700" onClick={() => document.getElementById('mini-practice')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>
+                  Start Writing <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </aside>
+        )}
       </div>
     </div>
   );

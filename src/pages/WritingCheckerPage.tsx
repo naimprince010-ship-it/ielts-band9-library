@@ -1,12 +1,13 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
-import { 
-  PenTool, 
-  Clock, 
-  CheckCircle2, 
+import { useNavConfig } from '@/contexts/NavContext';
+import {
+  PenTool,
+  Clock,
+  CheckCircle2,
   FileText,
   Target,
   Lightbulb,
@@ -157,6 +158,48 @@ const CHECKLIST_ITEMS = [
 
 const STORAGE_KEY = 'ielts_writing_drafts';
 
+/** Navbar-styled contextual actions for the Writing Checker tool page — mirrors
+ * FlashcardsPage's HeaderActions pattern: light-Navbar classes, icon + label,
+ * swapped based on which stage the person is in. */
+function WritingCheckerHeaderActions({
+  stage,
+  onAnalyze,
+  onEdit,
+  onRestart,
+}: {
+  stage: 'write' | 'check';
+  onAnalyze: () => void;
+  onEdit: () => void;
+  onRestart: () => void;
+}) {
+  const buttonClass =
+    'inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium text-foreground/70 transition hover:bg-muted hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50';
+
+  if (stage === 'write') {
+    return (
+      <div className="flex items-center gap-1">
+        <button type="button" onClick={onAnalyze} className={buttonClass} aria-label="Submit essay for self-check">
+          <CheckCircle2 className="h-4 w-4" />
+          <span className="hidden sm:inline">Analyze</span>
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-1">
+      <button type="button" onClick={onEdit} className={buttonClass} aria-label="Continue editing essay">
+        <PenTool className="h-4 w-4" />
+        <span className="hidden sm:inline">Edit</span>
+      </button>
+      <button type="button" onClick={onRestart} className={buttonClass} aria-label="Start a new essay">
+        <RotateCcw className="h-4 w-4" />
+        <span className="hidden sm:inline">Restart</span>
+      </button>
+    </div>
+  );
+}
+
 export default function WritingCheckerPage() {
   const [selectedPrompt, setSelectedPrompt] = useState<WritingPrompt | null>(null);
   const [stage, setStage] = useState<'select' | 'plan' | 'write' | 'check'>('select');
@@ -166,7 +209,7 @@ export default function WritingCheckerPage() {
   const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
   const [selectedTemplate, setSelectedTemplate] = useState<keyof typeof ESSAY_TEMPLATES>('discussBoth');
   const [showDescriptors, setShowDescriptors] = useState(false);
-  
+
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -182,7 +225,7 @@ export default function WritingCheckerPage() {
     setTimeLeft(selectedPrompt.timeLimit);
     setIsTimerRunning(true);
     setStage('write');
-    
+
     timerRef.current = setInterval(() => {
       setTimeLeft(prev => {
         if (prev <= 1) {
@@ -195,12 +238,12 @@ export default function WritingCheckerPage() {
     }, 1000);
   };
 
-  const pauseTimer = () => {
+  const pauseTimer = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
     setIsTimerRunning(false);
-  };
+  }, []);
 
-  const resumeTimer = () => {
+  const resumeTimer = useCallback(() => {
     setIsTimerRunning(true);
     timerRef.current = setInterval(() => {
       setTimeLeft(prev => {
@@ -212,12 +255,24 @@ export default function WritingCheckerPage() {
         return prev - 1;
       });
     }, 1000);
-  };
+  }, []);
 
-  const submitForCheck = () => {
+  const submitForCheck = useCallback(() => {
     pauseTimer();
     setStage('check');
-  };
+  }, [pauseTimer]);
+
+  const continueEditing = useCallback(() => {
+    setStage('write');
+    resumeTimer();
+  }, [resumeTimer]);
+
+  const startNewEssay = useCallback(() => {
+    setSelectedPrompt(null);
+    setEssay('');
+    setCheckedItems(new Set());
+    setStage('select');
+  }, []);
 
   const toggleCheckItem = (id: string) => {
     setCheckedItems(prev => {
@@ -253,7 +308,7 @@ export default function WritingCheckerPage() {
       const total = CHECKLIST_ITEMS.length;
       const checked = checkedItems.size;
       const percentage = (checked / total) * 100;
-    
+
       if (percentage >= 90) return { band: '7.5-8.0', color: 'text-green-600' };
       if (percentage >= 75) return { band: '7.0', color: 'text-green-600' };
       if (percentage >= 60) return { band: '6.5', color: 'text-blue-600' };
@@ -264,13 +319,13 @@ export default function WritingCheckerPage() {
     const calculateCriterionScores = () => {
       const categories = ['Task Response', 'Coherence', 'Lexical Resource', 'Grammar'];
       const scores: { [key: string]: { checked: number; total: number; band: number } } = {};
-    
+
       categories.forEach(category => {
         const categoryItems = CHECKLIST_ITEMS.filter(item => item.category === category);
         const checkedCount = categoryItems.filter(item => checkedItems.has(item.id)).length;
         const total = categoryItems.length;
         const percentage = total > 0 ? (checkedCount / total) * 100 : 0;
-      
+
         let band = 5.0;
         if (percentage >= 100) band = 8.0;
         else if (percentage >= 80) band = 7.5;
@@ -278,17 +333,17 @@ export default function WritingCheckerPage() {
         else if (percentage >= 40) band = 6.5;
         else if (percentage >= 20) band = 6.0;
         else band = 5.5;
-      
+
         scores[category] = { checked: checkedCount, total, band };
       });
-    
+
       return scores;
     };
 
   const getWordCountStatus = () => {
     if (!selectedPrompt) return { status: 'neutral', message: '' };
     const { min, max } = selectedPrompt.wordLimit;
-    
+
     if (wordCount < min) {
       return { status: 'warning', message: `${min - wordCount} more words needed` };
     }
@@ -297,6 +352,32 @@ export default function WritingCheckerPage() {
     }
     return { status: 'success', message: 'Good length!' };
   };
+
+  const navActions = useMemo(() => {
+    if (stage === 'write') {
+      return (
+        <WritingCheckerHeaderActions
+          stage="write"
+          onAnalyze={submitForCheck}
+          onEdit={continueEditing}
+          onRestart={startNewEssay}
+        />
+      );
+    }
+    if (stage === 'check') {
+      return (
+        <WritingCheckerHeaderActions
+          stage="check"
+          onAnalyze={submitForCheck}
+          onEdit={continueEditing}
+          onRestart={startNewEssay}
+        />
+      );
+    }
+    return undefined;
+  }, [stage, submitForCheck, continueEditing, startNewEssay]);
+
+  useNavConfig({ mode: 'tool', title: 'Writing Checker', actions: navActions });
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white py-8">
@@ -331,16 +412,16 @@ export default function WritingCheckerPage() {
                     <p className="text-sm text-gray-500">Self-assessment</p>
                   </div>
                 </div>
-                
+
                 <div>
                   <h3 className="font-medium mb-3">Select a Topic</h3>
                   <div className="space-y-3">
                     {WRITING_PROMPTS.map(prompt => (
-                      <Card 
+                      <Card
                         key={prompt.id}
                         className={`cursor-pointer transition-colors ${
-                          selectedPrompt?.id === prompt.id 
-                            ? 'border-emerald-500 bg-emerald-50' 
+                          selectedPrompt?.id === prompt.id
+                            ? 'border-emerald-500 bg-emerald-50'
                             : 'hover:border-emerald-300'
                         }`}
                         onClick={() => setSelectedPrompt(prompt)}
@@ -348,8 +429,8 @@ export default function WritingCheckerPage() {
                         <CardContent className="p-4">
                           <div className="flex items-start gap-3">
                             <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                              selectedPrompt?.id === prompt.id 
-                                ? 'border-emerald-500 bg-emerald-500' 
+                              selectedPrompt?.id === prompt.id
+                                ? 'border-emerald-500 bg-emerald-500'
                                 : 'border-gray-300'
                             }`}>
                               {selectedPrompt?.id === prompt.id && (
@@ -366,8 +447,8 @@ export default function WritingCheckerPage() {
                     ))}
                   </div>
                 </div>
-                
-                <Button 
+
+                <Button
                   onClick={() => setStage('plan')}
                   disabled={!selectedPrompt}
                   className="w-full"
@@ -396,16 +477,16 @@ export default function WritingCheckerPage() {
                   <Badge variant="outline" className="mb-2">{selectedPrompt.topic}</Badge>
                   <p className="font-medium">{selectedPrompt.question}</p>
                 </div>
-                
+
                 <div>
                   <h3 className="font-medium mb-3">Select Essay Template</h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     {Object.entries(ESSAY_TEMPLATES).map(([key, template]) => (
-                      <Card 
+                      <Card
                         key={key}
                         className={`cursor-pointer transition-colors ${
-                          selectedTemplate === key 
-                            ? 'border-blue-500 bg-blue-50' 
+                          selectedTemplate === key
+                            ? 'border-blue-500 bg-blue-50'
                             : 'hover:border-blue-300'
                         }`}
                         onClick={() => setSelectedTemplate(key as keyof typeof ESSAY_TEMPLATES)}
@@ -417,7 +498,7 @@ export default function WritingCheckerPage() {
                     ))}
                   </div>
                 </div>
-                
+
                 <div className="border rounded-lg overflow-hidden">
                   <div className="bg-gray-100 px-4 py-2 font-medium">
                     Essay Structure: {ESSAY_TEMPLATES[selectedTemplate].name}
@@ -434,16 +515,16 @@ export default function WritingCheckerPage() {
                     ))}
                   </div>
                 </div>
-                
+
                 <div className="flex gap-3">
-                  <Button 
+                  <Button
                     variant="outline"
                     onClick={() => setStage('select')}
                     className="flex-1"
                   >
                     Back
                   </Button>
-                  <Button 
+                  <Button
                     onClick={startWriting}
                     className="flex-1"
                   >
@@ -474,7 +555,7 @@ export default function WritingCheckerPage() {
                       {isTimerRunning ? 'Pause' : 'Resume'}
                     </Button>
                   </div>
-                  
+
                   <div className="flex items-center gap-4">
                     <div className={`font-medium ${
                       getWordCountStatus().status === 'success' ? 'text-green-600' :
@@ -490,7 +571,7 @@ export default function WritingCheckerPage() {
                 </div>
               </CardContent>
             </Card>
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               <div className="lg:col-span-2">
                 <Card>
@@ -508,7 +589,7 @@ export default function WritingCheckerPage() {
                   </CardContent>
                 </Card>
               </div>
-              
+
               <div className="space-y-4">
                 <Card>
                   <CardHeader className="pb-2">
@@ -523,7 +604,7 @@ export default function WritingCheckerPage() {
                     ))}
                   </CardContent>
                 </Card>
-                
+
                 <Card>
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm">Quick Tips</CardTitle>
@@ -538,9 +619,9 @@ export default function WritingCheckerPage() {
                 </Card>
               </div>
             </div>
-            
+
             <div className="flex gap-3">
-              <Button 
+              <Button
                 variant="outline"
                 onClick={() => {
                   pauseTimer();
@@ -549,7 +630,7 @@ export default function WritingCheckerPage() {
               >
                 Exit
               </Button>
-              <Button 
+              <Button
                 onClick={submitForCheck}
                 className="flex-1"
                 disabled={wordCount < 200}
@@ -594,7 +675,7 @@ export default function WritingCheckerPage() {
                                     <p className="text-sm text-gray-500">Est. Band</p>
                                   </div>
                                 </div>
-                
+
                                 <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-4">
                                   <h3 className="font-medium mb-3 text-center">Individual Criterion Scores</h3>
                                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -602,8 +683,8 @@ export default function WritingCheckerPage() {
                                       <div key={criterion} className="bg-white rounded-lg p-3 text-center shadow-sm">
                                         <p className="text-xs text-gray-500 mb-1">{criterion}</p>
                                         <p className={`text-xl font-bold ${
-                                          data.band >= 7.0 ? 'text-green-600' : 
-                                          data.band >= 6.5 ? 'text-blue-600' : 
+                                          data.band >= 7.0 ? 'text-green-600' :
+                                          data.band >= 6.5 ? 'text-blue-600' :
                                           data.band >= 6.0 ? 'text-amber-600' : 'text-red-600'
                                         }`}>
                                           {data.band.toFixed(1)}
@@ -613,7 +694,7 @@ export default function WritingCheckerPage() {
                                     ))}
                                   </div>
                                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <h3 className="font-medium mb-3">Your Essay</h3>
@@ -621,7 +702,7 @@ export default function WritingCheckerPage() {
                       <p className="whitespace-pre-wrap text-sm">{essay}</p>
                     </div>
                   </div>
-                  
+
                   <div>
                     <h3 className="font-medium mb-3">Checklist</h3>
                     <div className="space-y-4 max-h-[300px] overflow-y-auto">
@@ -630,7 +711,7 @@ export default function WritingCheckerPage() {
                           <p className="text-sm font-medium text-gray-500 mb-2">{category}</p>
                           <div className="space-y-2">
                             {CHECKLIST_ITEMS.filter(item => item.category === category).map(item => (
-                              <label 
+                              <label
                                 key={item.id}
                                 className="flex items-center gap-3 p-2 bg-gray-50 rounded cursor-pointer hover:bg-gray-100"
                               >
@@ -649,7 +730,7 @@ export default function WritingCheckerPage() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div>
                   <button
                     onClick={() => setShowDescriptors(!showDescriptors)}
@@ -659,7 +740,7 @@ export default function WritingCheckerPage() {
                     {showDescriptors ? 'Hide' : 'Show'} Band Descriptors
                     {showDescriptors ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
                   </button>
-                  
+
                   {showDescriptors && (
                     <div className="mt-4 border rounded-lg overflow-hidden">
                       <table className="w-full text-sm">
@@ -687,26 +768,18 @@ export default function WritingCheckerPage() {
                     </div>
                   )}
                 </div>
-                
+
                 <div className="flex gap-3">
-                  <Button 
+                  <Button
                     variant="outline"
-                    onClick={() => {
-                      setStage('write');
-                      resumeTimer();
-                    }}
+                    onClick={continueEditing}
                     className="flex-1"
                   >
                     <RotateCcw className="mr-2 h-4 w-4" />
                     Continue Editing
                   </Button>
-                  <Button 
-                    onClick={() => {
-                      setSelectedPrompt(null);
-                      setEssay('');
-                      setCheckedItems(new Set());
-                      setStage('select');
-                    }}
+                  <Button
+                    onClick={startNewEssay}
                     className="flex-1"
                   >
                     <ChevronRight className="mr-2 h-4 w-4" />
