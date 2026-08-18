@@ -105,7 +105,7 @@ export function Navbar() {
               ) : (
                 <>
                   {/* Learn Dropdown */}
-                  <DropdownMenu>
+                  <DropdownMenu modal={false}>
                     <DropdownMenuTrigger className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors rounded-lg hover:bg-muted ${
                       isActive('/vocabulary') || isActive('/grammar') || isActive('/writing') || isActive('/speaking')
                         ? 'text-foreground'
@@ -155,7 +155,7 @@ export function Navbar() {
                   </Link>
 
                   {/* Practice Dropdown */}
-                  <DropdownMenu>
+                  <DropdownMenu modal={false}>
                     <DropdownMenuTrigger className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors rounded-lg hover:bg-muted ${
                       isActive('/grammar-exercises') || isActive('/essay-bank') || isActive('/daily-plan') || isActive('/collections')
                         ? 'text-foreground'
@@ -210,7 +210,7 @@ export function Navbar() {
                 </div>
               )}
               {user ? (
-                <DropdownMenu>
+                <DropdownMenu modal={false}>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="sm" className="flex items-center gap-2 h-10 px-3">
                       <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">

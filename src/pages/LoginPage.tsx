@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Mail, Lock, AlertCircle, Eye, EyeOff, CheckCircle, Star, Users, Award } from 'lucide-react';
+import { Mail, Lock, AlertCircle, Eye, EyeOff, CheckCircle, Star, Users, Award, BookOpen, GraduationCap, Globe, Quote } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -71,78 +71,91 @@ export function LoginPage() {
   return (
     <div className="min-h-screen flex">
       {/* Left Panel - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-foreground text-background p-12 flex-col justify-between relative overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute top-0 left-0 w-72 h-72 bg-background/5 rounded-full -translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-background/5 rounded-full translate-x-1/3 translate-y-1/3" />
-        <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-accent/20 rounded-full" />
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-indigo-950 via-slate-900 to-indigo-950 text-white p-12 flex-col justify-between relative overflow-hidden">
+        {/* Study Vibe Decorative Elements */}
+        <div className="absolute top-0 left-0 w-full h-full opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '32px 32px' }} />
+        <div className="absolute -top-32 -right-32 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl pointer-events-none" />
+        
+        {/* Floating Background Icons */}
+        <BookOpen className="absolute top-32 right-20 w-32 h-32 text-indigo-400/5 -rotate-12 pointer-events-none" />
+        <GraduationCap className="absolute bottom-40 left-12 w-40 h-40 text-blue-400/5 rotate-12 pointer-events-none" />
 
         {/* Logo */}
         <div className="relative z-10">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center p-2">
+          <Link to="/" className="flex items-center gap-3 w-fit hover:opacity-90 transition-opacity">
+            <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center p-2 shadow-lg shadow-indigo-500/20">
               <img loading="eager" src="/icon.png" alt="IELTS Tree" className="h-full w-full object-contain" />
             </div>
-            <span className="text-2xl font-bold">IELTS Tree</span>
+            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-indigo-200">IELTS Tree</span>
           </Link>
         </div>
 
         {/* Main Content */}
-        <div className="relative z-10 space-y-8">
+        <div className="relative z-10 space-y-10 mt-8">
           <div>
-            <h1 className="text-4xl font-bold mb-4 leading-tight">
-              Master IELTS with<br />Band 9 Materials
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/20 text-indigo-200 text-sm font-medium mb-6">
+              <Award className="h-4 w-4" />
+              #1 IELTS Prep Platform
+            </div>
+            <h1 className="text-4xl lg:text-5xl font-bold mb-6 leading-tight">
+              Master IELTS with<br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-300">Band 9 Materials</span>
             </h1>
-            <p className="text-background/70 text-lg">
-              Access premium vocabulary and grammar lessons designed by IELTS experts to help you achieve your target score.
+            <p className="text-indigo-100/80 text-lg max-w-md leading-relaxed">
+              Access premium vocabulary and grammar lessons designed by IELTS examiners to help you achieve your target score faster.
             </p>
           </div>
 
-          <div className="space-y-4">
-            <div className="flex items-center gap-3 text-background/90">
-              <div className="w-10 h-10 bg-background/10 rounded-lg flex items-center justify-center">
-                <CheckCircle className="h-5 w-5" />
+          <div className="space-y-4 max-w-md">
+            <div className="flex items-start gap-4 bg-white/[0.03] p-4 rounded-2xl border border-white/10 hover:bg-white/[0.06] hover:border-indigo-500/30 transition-all group cursor-default">
+              <div className="w-12 h-12 bg-indigo-500/20 text-indigo-300 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                <BookOpen className="h-6 w-6" />
               </div>
-              <span>280+ Expert-crafted lessons</span>
+              <div>
+                <h3 className="font-semibold text-lg text-white">280+ Expert Lessons</h3>
+                <p className="text-indigo-200/70 text-sm mt-0.5">Comprehensive, structured study materials</p>
+              </div>
             </div>
-            <div className="flex items-center gap-3 text-background/90">
-              <div className="w-10 h-10 bg-background/10 rounded-lg flex items-center justify-center">
-                <Star className="h-5 w-5" />
+            
+            <div className="flex items-start gap-4 bg-white/[0.03] p-4 rounded-2xl border border-white/10 hover:bg-white/[0.06] hover:border-emerald-500/30 transition-all group cursor-default">
+              <div className="w-12 h-12 bg-emerald-500/20 text-emerald-300 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                <GraduationCap className="h-6 w-6" />
               </div>
-              <span>Band 9 vocabulary & grammar</span>
+              <div>
+                <h3 className="font-semibold text-lg text-white">Band 9 Strategies</h3>
+                <p className="text-indigo-200/70 text-sm mt-0.5">Proven frameworks for writing and speaking</p>
+              </div>
             </div>
-            <div className="flex items-center gap-3 text-background/90">
-              <div className="w-10 h-10 bg-background/10 rounded-lg flex items-center justify-center">
-                <Users className="h-5 w-5" />
+
+            <div className="flex items-start gap-4 bg-white/[0.03] p-4 rounded-2xl border border-white/10 hover:bg-white/[0.06] hover:border-blue-500/30 transition-all group cursor-default">
+              <div className="w-12 h-12 bg-blue-500/20 text-blue-300 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                <Globe className="h-6 w-6" />
               </div>
-              <span>Join thousands of successful students</span>
+              <div>
+                <h3 className="font-semibold text-lg text-white">Global Community</h3>
+                <p className="text-indigo-200/70 text-sm mt-0.5">Join thousands of successful students worldwide</p>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Social Proof */}
-        <div className="relative z-10">
-          <div className="flex items-center gap-4">
-            <div className="flex -space-x-3">
-              {[1, 2, 3, 4].map((i) => (
-                <div
-                  key={i}
-                  className="w-10 h-10 rounded-full bg-background/20 border-2 border-foreground overflow-hidden"
-                >
-                  <img
-                    src={`https://i.pravatar.cc/150?u=${i + 20}`}
-                    alt="Student"
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-              ))}
+        {/* Social Proof / Quote */}
+        <div className="relative z-10 mt-8 pt-8 border-t border-white/10">
+          <Quote className="h-8 w-8 text-indigo-500/40 mb-3" />
+          <p className="text-indigo-100/90 italic mb-4 max-w-lg">
+            "The vocabulary lessons were a game-changer. I finally achieved my 8.0 in Writing after struggling for months."
+          </p>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-300 font-bold">
+              S
             </div>
-            <div className="text-background/90">
-              <div className="flex items-center gap-1">
-                <Award className="h-4 w-4 text-accent" />
-                <span className="font-semibold">4.9/5</span>
+            <div>
+              <div className="font-semibold text-white">Sarah Jenkins</div>
+              <div className="text-xs text-indigo-300 flex items-center gap-1">
+                <Award className="h-3 w-3" />
+                Band 8.0 Achiever
               </div>
-              <p className="text-sm text-background/60">from 2,000+ reviews</p>
             </div>
           </div>
         </div>
