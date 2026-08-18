@@ -21,7 +21,20 @@ import {
   Cloud,
   CloudOff,
   Shuffle,
-  FlipHorizontal
+  FlipHorizontal,
+  Calendar,
+  TrendingUp,
+  Settings,
+  Layers,
+  Target,
+  Star,
+  RefreshCw,
+  ClipboardList,
+  Lightbulb,
+  Bookmark,
+  ChevronLeft,
+  ChevronRight,
+  MousePointerClick
 } from 'lucide-react';
 
 /**
@@ -168,6 +181,7 @@ export default function FlashcardsPage() {
   const [sessionStats, setSessionStats] = useState({ correct: 0, incorrect: 0, total: 0 });
   const [isSynced, setIsSynced] = useState(false);
   const [syncing, setSyncing] = useState(false);
+  const [bookmarkAdded, setBookmarkAdded] = useState(false);
 
   useEffect(() => {
     loadFlashcards();
@@ -440,6 +454,23 @@ export default function FlashcardsPage() {
   const currentCard = dueCards[currentIndex];
   const progress = dueCards.length > 0 ? ((currentIndex + 1) / dueCards.length) * 100 : 0;
 
+  const goToPreviousCard = useCallback(() => {
+    setCurrentIndex(prev => {
+      if (prev === 0) return 0;
+      return prev - 1;
+    });
+    setIsFlipped(false);
+  }, []);
+
+  const goToNextCard = useCallback(() => {
+    if (currentIndex < dueCards.length - 1) {
+      setCurrentIndex(prev => prev + 1);
+      setIsFlipped(false);
+      return;
+    }
+    setMode('complete');
+  }, [currentIndex, dueCards.length]);
+
   // ── Nav context — 'tool' mode ─────────────────────────────────────────────
   // Shuffle re-orders the remaining due cards in place (Fisher–Yates) and
   // jumps back to the first one, unflipped. Flip toggles the current card —
@@ -473,217 +504,376 @@ export default function FlashcardsPage() {
   useNavConfig({ mode: 'tool', title: 'Flashcards', actions: navActions });
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white py-8">
-      <div className="container mx-auto px-4 max-w-2xl">
+    <div className="min-h-screen bg-[#f8f9fc] py-8 font-sans">
+      <div className="container mx-auto px-4 max-w-4xl">
         {mode === 'menu' && (
-          <div className="space-y-6">
-            <Card className="border-2 border-amber-100">
-                            <CardHeader className="text-center">
-                              <div className="mx-auto w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mb-4">
-                                <Brain className="h-8 w-8 text-amber-600" />
-                              </div>
-                              <CardTitle className="text-2xl">Spaced Repetition Flashcards</CardTitle>
-                              <CardDescription>
-                                Review vocabulary with scientifically-proven spaced repetition
-                              </CardDescription>
-                              {user && (
-                                <div className="flex items-center justify-center gap-2 mt-2">
-                                  {syncing ? (
-                                    <span className="text-xs text-gray-500 flex items-center gap-1">
-                                      <Cloud className="h-3 w-3 animate-pulse" /> Syncing...
-                                    </span>
-                                  ) : isSynced ? (
-                                    <span className="text-xs text-green-600 flex items-center gap-1">
-                                      <Cloud className="h-3 w-3" /> Synced to cloud
-                                    </span>
-                                  ) : (
-                                    <span className="text-xs text-gray-400 flex items-center gap-1">
-                                      <CloudOff className="h-3 w-3" /> Local only
-                                    </span>
-                                  )}
-                                </div>
-                              )}
-                            </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 bg-blue-50 rounded-lg text-center">
-                    <p className="text-3xl font-bold text-blue-600">{dueCards.length}</p>
-                    <p className="text-sm text-gray-600">Cards Due Today</p>
+          <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 lg:p-12">
+            
+            {/* Hero Section */}
+            <div className="flex flex-col lg:flex-row justify-between items-start gap-12 mb-12">
+              <div className="lg:w-1/2">
+                <div className="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mb-6">
+                  <Brain className="h-8 w-8 text-indigo-600" />
+                </div>
+                <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4 leading-tight">
+                  Spaced Repetition<br />Flashcards
+                </h1>
+                <p className="text-slate-500 text-lg mb-6 max-w-md">
+                  Review vocabulary with scientifically-proven spaced repetition
+                </p>
+                {user && (
+                  <div className="flex items-center gap-2">
+                    {syncing ? (
+                      <div className="flex items-center gap-1.5 text-sm font-medium text-slate-500 bg-slate-50 px-3 py-1.5 rounded-full">
+                        <RefreshCw className="h-4 w-4 animate-spin" /> Syncing...
+                      </div>
+                    ) : isSynced ? (
+                      <div className="flex items-center gap-1.5 text-sm font-medium text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-full">
+                        <Cloud className="h-4 w-4" /> Synced to cloud
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-1.5 text-sm font-medium text-slate-500 bg-slate-50 px-3 py-1.5 rounded-full">
+                        <CloudOff className="h-4 w-4" /> Local only
+                      </div>
+                    )}
                   </div>
-                  <div className="p-4 bg-green-50 rounded-lg text-center">
-                    <p className="text-3xl font-bold text-green-600">{reviewedToday}</p>
-                    <p className="text-sm text-gray-600">Reviewed Today</p>
+                )}
+              </div>
+
+              {/* Stacked Cards Graphic */}
+              <div className="lg:w-1/2 relative h-64 w-full max-w-sm mx-auto lg:mx-0 flex items-center justify-center">
+                {/* Decorative dots background */}
+                <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #6366f1 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
+                
+                {/* Bottom Card (Yellowish) */}
+                <div className="absolute w-48 h-56 bg-[#fde68a] rounded-2xl shadow-sm rotate-[15deg] translate-x-12 translate-y-4"></div>
+                
+                {/* Middle Card (Greenish) */}
+                <div className="absolute w-48 h-56 bg-[#bbf7d0] rounded-2xl shadow-md rotate-[5deg] translate-x-6 translate-y-2"></div>
+                
+                {/* Top Card (White) */}
+                <div className="absolute w-48 h-56 bg-white rounded-2xl shadow-xl flex flex-col items-center justify-center p-6 -rotate-[-5deg] -translate-x-2 border border-slate-100 z-10">
+                  <div className="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mb-3">
+                    <Star className="h-5 w-5 fill-indigo-600" />
+                  </div>
+                  <div className="font-semibold text-slate-800 mb-4">Vocabulary</div>
+                  <div className="w-full space-y-2">
+                    <div className="w-full h-2 bg-slate-100 rounded-full"></div>
+                    <div className="w-4/5 h-2 bg-slate-100 rounded-full"></div>
+                    <div className="w-2/3 h-2 bg-slate-100 rounded-full"></div>
                   </div>
                 </div>
-                
-                <div className="flex items-center justify-center gap-2 p-3 bg-orange-50 rounded-lg">
-                  <Flame className="h-5 w-5 text-orange-500" />
-                  <span className="font-medium">{streakData.currentStreak} day streak</span>
+
+                <div className="absolute -right-4 bottom-8 w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/30 z-20">
+                  <RefreshCw className="h-5 w-5 text-white" />
+                </div>
+              </div>
+            </div>
+
+            {/* Metrics */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div className="bg-[#f0f4ff] rounded-2xl p-6 flex flex-col items-center justify-center text-center">
+                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-blue-500 mb-3 shadow-sm">
+                  <Calendar className="h-6 w-6" />
+                </div>
+                <div className="text-3xl font-bold text-blue-600 mb-1">{dueCards.length}</div>
+                <div className="text-slate-700 font-medium">Cards Due Today</div>
+                <div className="text-sm text-slate-500 mt-1">Ready for review</div>
+              </div>
+              <div className="bg-[#f0fdf4] rounded-2xl p-6 flex flex-col items-center justify-center text-center">
+                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-green-500 mb-3 shadow-sm">
+                  <CheckCircle2 className="h-6 w-6" />
+                </div>
+                <div className="text-3xl font-bold text-green-600 mb-1">{reviewedToday}</div>
+                <div className="text-slate-700 font-medium">Reviewed Today</div>
+                <div className="text-sm text-slate-500 mt-1">Keep it up!</div>
+              </div>
+            </div>
+
+            {/* Streak */}
+            <div className="bg-[#fff7ed] rounded-xl p-4 flex items-center justify-between mb-8 border border-orange-100">
+              <div className="flex items-center gap-3">
+                <Flame className="h-6 w-6 text-orange-500" />
+                <div>
+                  <span className="font-bold text-orange-700">{streakData.currentStreak} day streak</span>
                   {streakData.longestStreak > 0 && (
-                    <span className="text-sm text-gray-500">
-                      (Best: {streakData.longestStreak})
-                    </span>
+                    <span className="text-sm text-orange-500/70 ml-2">(Best: {streakData.longestStreak})</span>
                   )}
                 </div>
-                
-                <div className="space-y-3">
-                  <Button 
-                    onClick={startReview} 
-                    className="w-full" 
-                    size="lg"
-                    disabled={dueCards.length === 0}
-                  >
-                    <Brain className="mr-2 h-5 w-5" />
-                    {dueCards.length > 0 
-                      ? `Start Review (${dueCards.length} cards)`
-                      : 'No Cards Due'}
-                  </Button>
-                  
-                  <Button 
-                    onClick={addWrongQuestionsAsFlashcards} 
-                    variant="outline"
-                    className="w-full"
-                  >
-                    <Sparkles className="mr-2 h-5 w-5" />
-                    Add Quiz Mistakes as Flashcards
-                  </Button>
-                </div>
-                
-                <div className="border-t pt-4">
-                  <h3 className="font-medium mb-3">Your Flashcard Stats</h3>
-                  <div className="grid grid-cols-3 gap-3 text-center">
-                    <div className="p-3 bg-gray-50 rounded-lg">
-                      <p className="text-xl font-bold">{flashcards.length}</p>
-                      <p className="text-xs text-gray-500">Total Cards</p>
-                    </div>
-                    <div className="p-3 bg-green-50 rounded-lg">
-                      <p className="text-xl font-bold text-green-600">
-                        {flashcards.filter(c => c.difficulty === 'easy').length}
-                      </p>
-                      <p className="text-xs text-gray-500">Mastered</p>
-                    </div>
-                    <div className="p-3 bg-red-50 rounded-lg">
-                      <p className="text-xl font-bold text-red-600">
-                        {flashcards.filter(c => c.difficulty === 'hard').length}
-                      </p>
-                      <p className="text-xs text-gray-500">Needs Work</p>
-                    </div>
+              </div>
+              <button className="text-sm font-semibold text-orange-600 hover:text-orange-700 flex items-center gap-1">
+                View Streaks <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* Actions */}
+            <div className="space-y-4 mb-12">
+              <Button 
+                onClick={startReview} 
+                className="w-full bg-[#5b21b6] hover:bg-[#4c1d95] text-white rounded-full h-14 text-lg font-medium shadow-lg shadow-purple-900/20" 
+                disabled={dueCards.length === 0}
+              >
+                <Brain className="mr-2 h-5 w-5" />
+                {dueCards.length > 0 ? `Start Review (${dueCards.length} cards)` : 'No Cards Due'}
+                {dueCards.length > 0 && <ArrowRight className="ml-2 h-5 w-5" />}
+              </Button>
+              
+              <Button 
+                onClick={addWrongQuestionsAsFlashcards} 
+                variant="outline"
+                className="w-full rounded-full h-14 text-indigo-600 border-indigo-200 hover:bg-indigo-50 text-base font-medium"
+              >
+                <Sparkles className="mr-2 h-5 w-5" />
+                Add Quiz Mistakes as Flashcards
+              </Button>
+            </div>
+
+            {/* Stats */}
+            <div className="mb-12">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-slate-800">Your Flashcard Stats</h3>
+                <button className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 flex items-center gap-1">
+                  <TrendingUp className="h-4 w-4" /> View All Stats
+                </button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-[#f8fafc] rounded-2xl p-5 border border-slate-100 flex items-center gap-4">
+                  <div className="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-500 shrink-0">
+                    <Layers className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-indigo-600">{flashcards.length}</div>
+                    <div className="text-sm font-medium text-slate-700">Total Cards</div>
+                    <div className="text-xs text-slate-500 mt-0.5">All flashcards created</div>
                   </div>
                 </div>
-                
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-                  <h4 className="font-medium text-amber-800 mb-2">How Spaced Repetition Works</h4>
-                  <ul className="text-sm text-amber-700 space-y-1">
-                    <li>• Cards you know well appear less frequently</li>
-                    <li>• Difficult cards appear more often</li>
-                    <li>• Review daily for best results</li>
-                    <li>• Your quiz mistakes are automatically added</li>
-                  </ul>
+                <div className="bg-[#f0fdf4] rounded-2xl p-5 border border-green-50 flex items-center gap-4">
+                  <div className="w-12 h-12 bg-green-100/50 rounded-xl flex items-center justify-center text-green-600 shrink-0">
+                    <Target className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-green-600">{flashcards.filter(c => c.difficulty === 'easy').length}</div>
+                    <div className="text-sm font-medium text-slate-700">Mastered</div>
+                    <div className="text-xs text-slate-500 mt-0.5">Cards you know well</div>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
+                <div className="bg-[#fff1f2] rounded-2xl p-5 border border-rose-50 flex items-center gap-4">
+                  <div className="w-12 h-12 bg-rose-100/50 rounded-xl flex items-center justify-center text-rose-500 shrink-0">
+                    <TrendingUp className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-rose-600">{flashcards.filter(c => c.difficulty === 'hard').length}</div>
+                    <div className="text-sm font-medium text-slate-700">Needs Work</div>
+                    <div className="text-xs text-slate-500 mt-0.5">Keep reviewing</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* How it works */}
+            <div className="bg-[#f8fafc] rounded-2xl p-8 border border-slate-100">
+              <h3 className="text-lg font-bold text-indigo-900 mb-6">How Spaced Repetition Works</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-indigo-500 shadow-sm mb-4">
+                    <Calendar className="h-5 w-5" />
+                  </div>
+                  <h4 className="font-bold text-slate-800 text-sm mb-2">Smart Scheduling</h4>
+                  <p className="text-xs text-slate-500 leading-relaxed">Cards you know well appear less frequently</p>
+                </div>
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-blue-500 shadow-sm mb-4">
+                    <TrendingUp className="h-5 w-5" />
+                  </div>
+                  <h4 className="font-bold text-slate-800 text-sm mb-2">Focus on Difficult</h4>
+                  <p className="text-xs text-slate-500 leading-relaxed">Hard cards appear more often</p>
+                </div>
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-green-500 shadow-sm mb-4">
+                    <Clock className="h-5 w-5" />
+                  </div>
+                  <h4 className="font-bold text-slate-800 text-sm mb-2">Daily Review</h4>
+                  <p className="text-xs text-slate-500 leading-relaxed">Quick daily reviews give the best results</p>
+                </div>
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-orange-500 shadow-sm mb-4">
+                    <Settings className="h-5 w-5" />
+                  </div>
+                  <h4 className="font-bold text-slate-800 text-sm mb-2">Automatic Learning</h4>
+                  <p className="text-xs text-slate-500 leading-relaxed">Your quiz mistakes are automatically added</p>
+                </div>
+              </div>
+            </div>
+
           </div>
         )}
 
         {mode === 'review' && currentCard && (
-          <div className="flex flex-col" style={{ minHeight: 'calc(100vh - 9rem)' }}>
-            {/* Header: category + counter */}
-            <div className="flex items-center justify-between mb-3">
-              <Badge variant="outline">{currentCard.category}</Badge>
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-gray-500" />
-                <span className="text-sm text-gray-600">
-                  {currentIndex + 1} / {dueCards.length}
-                </span>
+          <div className="mx-auto w-full max-w-[1100px]">
+            <div className="mb-4 flex items-center justify-between">
+              <span className="inline-flex items-center rounded-full border border-violet-200 bg-violet-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-violet-700">
+                {currentCard.category}
+              </span>
+
+              <div className="flex items-center gap-2 text-sm font-medium text-slate-500">
+                <Clock className="h-4 w-4" />
+                <span>{currentIndex + 1} / {dueCards.length}</span>
               </div>
             </div>
 
-            <Progress value={progress} className="h-2 mb-4" />
-
-            {/* Card — fills remaining vertical space and centers content */}
-            <div className="flex-1 flex flex-col justify-center">
+            <div className="mb-6 h-2.5 w-full overflow-hidden rounded-full bg-slate-200/80">
               <div
-                className="perspective-1000 cursor-pointer"
-                onClick={() => setIsFlipped(!isFlipped)}
-              >
-                <Card className={`min-h-[260px] ${isFlipped ? 'hidden' : ''}`}>
-                  <CardContent className="flex flex-col items-center justify-center h-full min-h-[260px] p-8">
-                    <Badge className="mb-4" variant={
-                      currentCard.difficulty === 'easy' ? 'default' :
-                      currentCard.difficulty === 'medium' ? 'secondary' : 'destructive'
-                    }>
-                      {currentCard.difficulty}
-                    </Badge>
-                    <h2 className="text-2xl font-bold text-center mb-4">{currentCard.front}</h2>
-                    {currentCard.hint && (
-                      <p className="text-sm text-gray-500 italic">Hint: {currentCard.hint}</p>
-                    )}
-                    <p className="text-sm text-gray-400 mt-6">Tap to reveal answer</p>
-                  </CardContent>
-                </Card>
-
-                <Card className={`min-h-[260px] ${!isFlipped ? 'hidden' : ''}`}>
-                  <CardContent className="flex flex-col items-center justify-center h-full min-h-[260px] p-8">
-                    <CheckCircle2 className="h-8 w-8 text-green-500 mb-4" />
-                    <h2 className="text-xl font-medium text-center text-green-700">{currentCard.back}</h2>
-                    <p className="text-sm text-gray-400 mt-6">How well did you know this?</p>
-                  </CardContent>
-                </Card>
-              </div>
+                className="h-full rounded-full bg-gradient-to-r from-violet-400 via-violet-500 to-violet-600 transition-all duration-250 ease-out"
+                style={{ width: `${progress}%` }}
+              />
             </div>
 
-            {/* Bottom actions — always at the bottom of the viewport */}
-            <div className="mt-6 space-y-3">
-              {isFlipped ? (
-                <div className="space-y-3">
-                  <p className="text-center text-sm text-gray-500 font-medium">Rate your recall:</p>
-                  <div className="grid grid-cols-4 gap-2">
-                    <Button
-                      variant="outline"
-                      className="flex flex-col h-auto py-4 border-red-200 hover:bg-red-50 hover:border-red-300"
-                      onClick={() => handleResponse(1)}
+            <div className="rounded-[30px] border border-violet-200/90 bg-[radial-gradient(circle_at_top,_rgba(139,92,246,0.12),_transparent_40%)] p-4 shadow-[0_30px_80px_rgba(106,93,154,0.12)] sm:p-6 lg:p-8">
+              <div className="rounded-[28px] border border-violet-200/80 bg-white p-5 shadow-[0_18px_40px_rgba(124,92,255,0.08)] sm:p-7 lg:p-10">
+                {!isFlipped ? (
+                  <>
+                    <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-violet-100 text-violet-600 shadow-inner shadow-violet-200/60">
+                      <ClipboardList className="h-7 w-7" />
+                    </div>
+
+                    <div className="flex justify-center">
+                      <span className="inline-flex rounded-full bg-orange-100 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-orange-600">
+                        {currentCard.difficulty.toUpperCase()}
+                      </span>
+                    </div>
+
+                    <h2 className="mt-7 text-center text-3xl font-black tracking-[-0.06em] text-slate-900 sm:text-4xl lg:text-[4rem] lg:leading-[1.02]">
+                      Complete the collocation:
+                    </h2>
+
+                    <div className="mt-6 flex items-center justify-center gap-3 text-3xl font-black tracking-[-0.05em] text-slate-800 sm:text-4xl lg:text-[4.3rem] lg:leading-none">
+                      <span className="text-slate-900">“</span>
+                      <span className="inline-block min-w-[92px] border-b-[3px] border-violet-300 bg-violet-50/80 px-2 py-1 text-violet-600 shadow-[inset_0_-2px_0_rgba(139,92,246,0.18)] sm:min-w-[120px]">
+                        &nbsp;
+                      </span>
+                      <span className="text-slate-900">diet”</span>
+                    </div>
+
+                    {currentCard.hint && (
+                      <div className="mt-8 flex justify-center">
+                        <div className="inline-flex max-w-2xl items-center justify-center gap-2 rounded-full bg-violet-50 px-4 py-2 text-center text-sm text-slate-600 sm:text-base">
+                          <Lightbulb className="h-4 w-4 flex-shrink-0 text-violet-500" />
+                          <span>
+                            Hint: This is a common IELTS collocation related to{' '}
+                            <span className="font-semibold text-violet-600">Health</span>
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={() => setIsFlipped(true)}
+                      className="mt-8 flex w-full items-center justify-center gap-3 rounded-2xl border border-dashed border-violet-200 bg-violet-50/60 px-4 py-5 text-violet-700 transition-all duration-200 hover:border-violet-300 hover:bg-violet-100/80 hover:shadow-[0_8px_20px_rgba(139,92,246,0.08)] focus:outline-none focus:ring-2 focus:ring-violet-300"
                     >
-                      <ThumbsDown className="h-5 w-5 text-red-500 mb-1" aria-hidden="true" />
-                      <span className="text-xs font-semibold text-red-600">Again</span>
-                    </Button>
+                      <MousePointerClick className="h-5 w-5" />
+                      <span className="flex flex-col items-center text-left">
+                        <span className="text-lg font-semibold sm:text-xl">Tap to reveal answer</span>
+                        <span className="text-sm text-violet-600/80">Test your knowledge first!</span>
+                      </span>
+                    </button>
+                  </>
+                ) : (
+                  <div className="flex min-h-[420px] flex-col items-center justify-center text-center">
+                    <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 shadow-inner shadow-emerald-200/60">
+                      <CheckCircle2 className="h-7 w-7" />
+                    </div>
+
+                    <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.22em] text-emerald-600">
+                      Answer
+                    </p>
+                    <h3 className="text-3xl font-black tracking-[-0.05em] text-slate-900 sm:text-4xl lg:text-[4rem] lg:leading-none">
+                      {currentCard.back}
+                    </h3>
+                    <p className="mt-5 text-sm text-slate-500 sm:text-base">How well did you know this?</p>
+                  </div>
+                )}
+
+                <div className="mt-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                  <button
+                    type="button"
+                    className="inline-flex items-center justify-center rounded-xl border border-violet-200 bg-violet-50 px-4 py-2.5 text-sm font-semibold text-violet-700 transition-all duration-200 hover:bg-violet-100 focus:outline-none focus:ring-2 focus:ring-violet-300"
+                    onClick={() => setIsFlipped(!isFlipped)}
+                  >
+                    Need a hint?
+                  </button>
+
+                  <div className="grid w-full gap-3 sm:grid-cols-3 lg:max-w-[560px]">
                     <Button
                       variant="outline"
-                      className="flex flex-col h-auto py-4 border-orange-200 hover:bg-orange-50 hover:border-orange-300"
-                      onClick={() => handleResponse(2)}
-                    >
-                      <span className="text-lg mb-1" aria-hidden="true">😕</span>
-                      <span className="text-xs font-semibold text-orange-600">Hard</span>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="flex flex-col h-auto py-4 border-blue-200 hover:bg-blue-50 hover:border-blue-300"
-                      onClick={() => handleResponse(3)}
-                    >
-                      <span className="text-lg mb-1" aria-hidden="true">🙂</span>
-                      <span className="text-xs font-semibold text-blue-600">Good</span>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="flex flex-col h-auto py-4 border-green-200 hover:bg-green-50 hover:border-green-300"
+                      className="h-12 border-emerald-200 bg-emerald-50 text-sm font-semibold text-emerald-700 transition-all duration-200 hover:bg-emerald-100 hover:border-emerald-300"
                       onClick={() => handleResponse(5)}
                     >
-                      <ThumbsUp className="h-5 w-5 text-green-500 mb-1" aria-hidden="true" />
-                      <span className="text-xs font-semibold text-green-600">Easy</span>
+                      <span className="mr-2 text-base">✓</span>
+                      I knew this
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="h-12 border-amber-200 bg-amber-50 text-sm font-semibold text-amber-700 transition-all duration-200 hover:bg-amber-100 hover:border-amber-300"
+                      onClick={() => handleResponse(3)}
+                    >
+                      <span className="mr-2 text-base">−</span>
+                      Not sure
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="h-12 border-rose-200 bg-rose-50 text-sm font-semibold text-rose-700 transition-all duration-200 hover:bg-rose-100 hover:border-rose-300"
+                      onClick={() => handleResponse(1)}
+                    >
+                      <span className="mr-2 text-base">✕</span>
+                      I didn't know
                     </Button>
                   </div>
                 </div>
-              ) : (
-                /* Placeholder so Exit Review stays at consistent position */
-                <div className="h-[88px]" />
-              )}
+              </div>
+            </div>
 
-              <Button
-                variant="ghost"
-                className="w-full text-gray-500 hover:text-gray-700"
+            <div className="mt-6 flex items-center justify-between gap-3 rounded-[26px] border border-violet-100 bg-white/70 px-4 py-4 shadow-[0_12px_35px_rgba(107,93,160,0.06)] backdrop-blur-sm sm:px-6">
+              <button
+                type="button"
+                onClick={goToPreviousCard}
+                className="inline-flex items-center gap-2 rounded-xl border border-violet-200 bg-violet-50 px-4 py-3 text-base font-semibold text-violet-700 transition-all duration-200 hover:bg-violet-100 focus:outline-none focus:ring-2 focus:ring-violet-300"
+              >
+                <ChevronLeft className="h-4 w-4" />
+                Previous
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setBookmarkAdded(prev => !prev)}
+                className={`inline-flex items-center gap-2 rounded-xl px-4 py-3 text-base font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-violet-300 ${
+                  bookmarkAdded
+                    ? 'bg-violet-50 text-violet-700 ring-1 ring-violet-200'
+                    : 'text-slate-600 hover:bg-slate-50'
+                }`}
+              >
+                <Bookmark className={`h-4 w-4 ${bookmarkAdded ? 'fill-violet-600 text-violet-600' : ''}`} />
+                Bookmark
+              </button>
+
+              <button
+                type="button"
+                onClick={goToNextCard}
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-500 to-violet-600 px-5 py-3 text-base font-semibold text-white shadow-[0_12px_24px_rgba(124,92,255,0.28)] transition-all duration-200 hover:from-violet-600 hover:to-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-300"
+              >
+                Next
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="mt-4 flex justify-center">
+              <button
+                type="button"
+                className="text-sm font-medium text-slate-400 transition-colors duration-200 hover:text-slate-600"
                 onClick={() => setMode('menu')}
               >
                 Exit Review
-              </Button>
+              </button>
             </div>
           </div>
         )}
