@@ -507,10 +507,10 @@ export default function FlashcardsPage() {
     <div className="min-h-screen bg-[#f8f9fc] py-8 font-sans">
       <div className="container mx-auto px-4 max-w-4xl">
         {mode === 'menu' && (
-          <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 lg:p-12">
+          <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 lg:p-8">
             
             {/* Hero Section */}
-            <div className="flex flex-col lg:flex-row justify-between items-center lg:items-start gap-12 mb-12">
+            <div className="flex flex-col lg:flex-row justify-between items-center lg:items-start gap-8 mb-8">
               <div className="lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left w-full">
                 <div className="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mb-6">
                   <Brain className="h-8 w-8 text-indigo-600" />
@@ -541,7 +541,7 @@ export default function FlashcardsPage() {
               </div>
 
               {/* Stacked Cards Graphic */}
-              <div className="lg:w-1/2 relative h-56 sm:h-64 w-full max-w-[280px] sm:max-w-sm mx-auto flex items-center justify-center mt-4 lg:mt-0 transform scale-90 sm:scale-100">
+              <div className="lg:w-1/2 relative h-48 sm:h-56 w-full max-w-[280px] sm:max-w-[320px] mx-auto flex items-center justify-center mt-4 lg:mt-0 transform scale-75 sm:scale-90 lg:scale-100 lg:origin-right">
                 {/* Decorative dots background */}
                 <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #6366f1 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
                 
@@ -571,8 +571,8 @@ export default function FlashcardsPage() {
             </div>
 
             {/* Metrics */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <div className="bg-[#f0f4ff] rounded-2xl p-6 flex flex-col items-center justify-center text-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+              <div className="bg-[#f0f4ff] rounded-2xl p-5 flex flex-col items-center justify-center text-center">
                 <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-blue-500 mb-3 shadow-sm">
                   <Calendar className="h-6 w-6" />
                 </div>
@@ -580,7 +580,7 @@ export default function FlashcardsPage() {
                 <div className="text-slate-700 font-medium">Cards Due Today</div>
                 <div className="text-sm text-slate-500 mt-1">Ready for review</div>
               </div>
-              <div className="bg-[#f0fdf4] rounded-2xl p-6 flex flex-col items-center justify-center text-center">
+              <div className="bg-[#f0fdf4] rounded-2xl p-5 flex flex-col items-center justify-center text-center">
                 <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-green-500 mb-3 shadow-sm">
                   <CheckCircle2 className="h-6 w-6" />
                 </div>
@@ -591,7 +591,7 @@ export default function FlashcardsPage() {
             </div>
 
             {/* Streak */}
-            <div className="bg-[#fff7ed] rounded-xl p-4 flex items-center justify-between mb-8 border border-orange-100">
+            <div className="bg-[#fff7ed] rounded-xl p-4 flex items-center justify-between mb-6 border border-orange-100">
               <div className="flex items-center gap-3">
                 <Flame className="h-6 w-6 text-orange-500" />
                 <div>
@@ -607,10 +607,10 @@ export default function FlashcardsPage() {
             </div>
 
             {/* Actions */}
-            <div className="space-y-4 mb-12">
+            <div className="space-y-3 mb-8">
               <Button 
                 onClick={startReview} 
-                className="w-full bg-[#5b21b6] hover:bg-[#4c1d95] text-white rounded-full h-14 text-lg font-medium shadow-lg shadow-purple-900/20" 
+                className="w-full bg-[#5b21b6] hover:bg-[#4c1d95] text-white rounded-full h-12 sm:h-14 text-base sm:text-lg font-medium shadow-lg shadow-purple-900/20" 
                 disabled={dueCards.length === 0}
               >
                 <Brain className="mr-2 h-5 w-5" />
@@ -621,7 +621,7 @@ export default function FlashcardsPage() {
               <Button 
                 onClick={addWrongQuestionsAsFlashcards} 
                 variant="outline"
-                className="w-full rounded-full h-14 text-indigo-600 border-indigo-200 hover:bg-indigo-50 text-base font-medium"
+                className="w-full rounded-full h-12 sm:h-14 text-indigo-600 border-indigo-200 hover:bg-indigo-50 text-sm sm:text-base font-medium"
               >
                 <Sparkles className="mr-2 h-5 w-5" />
                 Add Quiz Mistakes as Flashcards
@@ -629,8 +629,8 @@ export default function FlashcardsPage() {
             </div>
 
             {/* Stats */}
-            <div className="mb-12">
-              <div className="flex items-center justify-between mb-6">
+            <div className="mb-8">
+              <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-bold text-slate-800">Your Flashcard Stats</h3>
                 <button className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 flex items-center gap-1">
                   <TrendingUp className="h-4 w-4" /> View All Stats
