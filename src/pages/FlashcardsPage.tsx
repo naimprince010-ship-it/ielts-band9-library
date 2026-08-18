@@ -510,30 +510,30 @@ export default function FlashcardsPage() {
           <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 lg:p-12">
             
             {/* Hero Section */}
-            <div className="flex flex-col lg:flex-row justify-between items-start gap-12 mb-12">
-              <div className="lg:w-1/2">
+            <div className="flex flex-col lg:flex-row justify-between items-center lg:items-start gap-12 mb-12">
+              <div className="lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left w-full">
                 <div className="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mb-6">
                   <Brain className="h-8 w-8 text-indigo-600" />
                 </div>
-                <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4 leading-tight">
-                  Spaced Repetition<br />Flashcards
+                <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4 leading-tight">
+                  Spaced Repetition<br className="hidden sm:block" /> Flashcards
                 </h1>
-                <p className="text-slate-500 text-lg mb-6 max-w-md">
+                <p className="text-slate-500 text-base sm:text-lg mb-6 max-w-md">
                   Review vocabulary with scientifically-proven spaced repetition
                 </p>
                 {user && (
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-center lg:justify-start gap-2">
                     {syncing ? (
-                      <div className="flex items-center gap-1.5 text-sm font-medium text-slate-500 bg-slate-50 px-3 py-1.5 rounded-full">
-                        <RefreshCw className="h-4 w-4 animate-spin" /> Syncing...
+                      <div className="flex items-center gap-1.5 text-xs sm:text-sm font-medium text-slate-500 bg-slate-50 px-3 py-1.5 rounded-full">
+                        <RefreshCw className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" /> Syncing...
                       </div>
                     ) : isSynced ? (
-                      <div className="flex items-center gap-1.5 text-sm font-medium text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-full">
-                        <Cloud className="h-4 w-4" /> Synced to cloud
+                      <div className="flex items-center gap-1.5 text-xs sm:text-sm font-medium text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-full">
+                        <Cloud className="h-3 w-3 sm:h-4 sm:w-4" /> Synced to cloud
                       </div>
                     ) : (
-                      <div className="flex items-center gap-1.5 text-sm font-medium text-slate-500 bg-slate-50 px-3 py-1.5 rounded-full">
-                        <CloudOff className="h-4 w-4" /> Local only
+                      <div className="flex items-center gap-1.5 text-xs sm:text-sm font-medium text-slate-500 bg-slate-50 px-3 py-1.5 rounded-full">
+                        <CloudOff className="h-3 w-3 sm:h-4 sm:w-4" /> Local only
                       </div>
                     )}
                   </div>
@@ -541,31 +541,31 @@ export default function FlashcardsPage() {
               </div>
 
               {/* Stacked Cards Graphic */}
-              <div className="lg:w-1/2 relative h-64 w-full max-w-sm mx-auto lg:mx-0 flex items-center justify-center">
+              <div className="lg:w-1/2 relative h-56 sm:h-64 w-full max-w-[280px] sm:max-w-sm mx-auto flex items-center justify-center mt-4 lg:mt-0 transform scale-90 sm:scale-100">
                 {/* Decorative dots background */}
                 <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #6366f1 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
                 
                 {/* Bottom Card (Yellowish) */}
-                <div className="absolute w-48 h-56 bg-[#fde68a] rounded-2xl shadow-sm rotate-[15deg] translate-x-12 translate-y-4"></div>
+                <div className="absolute w-40 sm:w-48 h-48 sm:h-56 bg-[#fde68a] rounded-2xl shadow-sm rotate-[15deg] translate-x-8 sm:translate-x-12 translate-y-4"></div>
                 
                 {/* Middle Card (Greenish) */}
-                <div className="absolute w-48 h-56 bg-[#bbf7d0] rounded-2xl shadow-md rotate-[5deg] translate-x-6 translate-y-2"></div>
+                <div className="absolute w-40 sm:w-48 h-48 sm:h-56 bg-[#bbf7d0] rounded-2xl shadow-md rotate-[5deg] translate-x-4 sm:translate-x-6 translate-y-2"></div>
                 
                 {/* Top Card (White) */}
-                <div className="absolute w-48 h-56 bg-white rounded-2xl shadow-xl flex flex-col items-center justify-center p-6 -rotate-[-5deg] -translate-x-2 border border-slate-100 z-10">
-                  <div className="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mb-3">
-                    <Star className="h-5 w-5 fill-indigo-600" />
+                <div className="absolute w-40 sm:w-48 h-48 sm:h-56 bg-white rounded-2xl shadow-xl flex flex-col items-center justify-center p-4 sm:p-6 -rotate-[-5deg] -translate-x-2 border border-slate-100 z-10">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mb-2 sm:mb-3">
+                    <Star className="h-4 w-4 sm:h-5 sm:w-5 fill-indigo-600" />
                   </div>
-                  <div className="font-semibold text-slate-800 mb-4">Vocabulary</div>
-                  <div className="w-full space-y-2">
-                    <div className="w-full h-2 bg-slate-100 rounded-full"></div>
-                    <div className="w-4/5 h-2 bg-slate-100 rounded-full"></div>
-                    <div className="w-2/3 h-2 bg-slate-100 rounded-full"></div>
+                  <div className="font-semibold text-slate-800 text-sm sm:text-base mb-3 sm:mb-4">Vocabulary</div>
+                  <div className="w-full space-y-1.5 sm:space-y-2">
+                    <div className="w-full h-1.5 sm:h-2 bg-slate-100 rounded-full"></div>
+                    <div className="w-4/5 h-1.5 sm:h-2 bg-slate-100 rounded-full"></div>
+                    <div className="w-2/3 h-1.5 sm:h-2 bg-slate-100 rounded-full"></div>
                   </div>
                 </div>
 
-                <div className="absolute -right-4 bottom-8 w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/30 z-20">
-                  <RefreshCw className="h-5 w-5 text-white" />
+                <div className="absolute -right-2 sm:-right-4 bottom-4 sm:bottom-8 w-10 h-10 sm:w-12 sm:h-12 bg-purple-500 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/30 z-20">
+                  <RefreshCw className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                 </div>
               </div>
             </div>
