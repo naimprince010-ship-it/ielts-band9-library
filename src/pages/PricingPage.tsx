@@ -6,13 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/contexts/AuthContext';
-
-const COUPON_CODES: Record<string, { discount: number; type: 'percent' | 'fixed'; description: string }> = {
-  'WELCOME20': { discount: 20, type: 'percent', description: '20% off your first purchase' },
-  'IELTS50': { discount: 50, type: 'fixed', description: '50 off any plan' },
-  'STUDENT15': { discount: 15, type: 'percent', description: '15% student discount' },
-  'NEWYEAR25': { discount: 25, type: 'percent', description: '25% New Year special' },
-};
+import { buildAuthPath, captureFunnelAttribution, trackFunnelEvent } from '@/lib/funnel';
+import { COUPON_CODES } from '@/lib/pricing';
 
 const REFERRAL_STORAGE_KEY = 'ielts_referral_code';
 
@@ -33,6 +28,7 @@ export function PricingPage() {
   const isYearlyUser = isPremium && userPackageType === 'yearly';
 
   useEffect(() => {
+    captureFunnelAttribution(window.location.search, window.location.pathname);
     const ref = searchParams.get('ref');
     if (ref) {
       localStorage.setItem(REFERRAL_STORAGE_KEY, ref);
@@ -76,12 +72,17 @@ export function PricingPage() {
   };
 
   const handleUpgrade = (packageType: 'monthly' | 'yearly') => {
+    const couponParam = appliedCoupon ? `&coupon=${appliedCoupon}` : '';
+    const paymentPath = `/payment?package=${packageType}${couponParam}`;
+    trackFunnelEvent('plan_selected', { package: packageType, offer: searchParams.get('offer') });
     if (!user) {
-      navigate('/login');
+      navigate(buildAuthPath('/signup', paymentPath, {
+        offer: searchParams.get('offer') || undefined,
+        plan: packageType,
+      }));
       return;
     }
-    const couponParam = appliedCoupon ? `&coupon=${appliedCoupon}` : '';
-    navigate(`/payment?package=${packageType}${couponParam}`);
+    navigate(paymentPath);
   };
 
   const plans = [

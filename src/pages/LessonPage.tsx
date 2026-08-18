@@ -23,6 +23,7 @@ import { VocabularyLessonTemplate } from '@/components/lesson/vocabulary/Vocabul
 import { useLessons } from '@/contexts/LessonContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
+import { trackFunnelEvent } from '@/lib/funnel';
 
 // Helper function to parse markdown-style text and render properly
 function parseMarkdownText(text: string): React.ReactNode {
@@ -161,8 +162,9 @@ export function LessonPage() {
   useEffect(() => {
     if (lesson?.title) {
       document.title = `${lesson.title} | IELTS Band 9 Materials Library`;
+      trackFunnelEvent('lesson_started', { lessonId: lesson.id, slug });
     }
-  }, [lesson?.title]);
+  }, [lesson?.id, lesson?.title, slug]);
 
   const lessonProgress = lesson ? getLessonProgress(lesson.id) : 'not_started';
   const isCompleted = lessonProgress === 'completed';

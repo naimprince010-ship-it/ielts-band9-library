@@ -9,6 +9,7 @@ import { NavProvider } from '@/contexts/NavContext';
 import { Layout } from '@/components/layout/Layout';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
 import { PageTitleManager } from '@/components/layout/PageTitleManager';
+import { MarketingConsent } from '@/components/analytics/MarketingConsent';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import './App.css';
 
@@ -58,6 +59,9 @@ const FullMockAttemptDetailPage = lazy(() => import('@/pages/FullMockAttemptDeta
 const CoursesPage = lazy(() => import('@/pages/CoursesPage').then(module => ({ default: module.CoursesPage })));
 const CourseDetailPage = lazy(() => import('@/pages/CourseDetailPage').then(module => ({ default: module.CourseDetailPage })));
 const TypingPracticePage = lazy(() => import('@/pages/TypingPracticePage'));
+const CampaignLandingPage = lazy(() => import('@/pages/CampaignLandingPage'));
+const PaymentStatusPage = lazy(() => import('@/pages/PaymentStatusPage'));
+const OnboardingPage = lazy(() => import('@/pages/OnboardingPage'));
 const ReadingPaperPreviewPage = import.meta.env.DEV ? lazy(() => import('@/pages/ReadingPaperPreviewPage')) : null;
 const ListeningPaperPreviewPage = import.meta.env.DEV ? lazy(() => import('@/pages/ListeningPaperPreviewPage')) : null;
 const WritingPaperPreviewPage = import.meta.env.DEV ? lazy(() => import('@/pages/WritingPaperPreviewPage')) : null;
@@ -136,6 +140,11 @@ function App() {
                       <PaymentPage />
                     </ProtectedRoute>
                   } />
+                  <Route path="/payment/status/:requestId" element={
+                    <ProtectedRoute requireAuth>
+                      <Layout mode="focused"><PaymentStatusPage /></Layout>
+                    </ProtectedRoute>
+                  } />
                   <Route path="/admin" element={
                     <ProtectedRoute requireAdmin>
                       <AdminPage />
@@ -146,9 +155,15 @@ function App() {
                       <ProfilePage />
                     </ProtectedRoute>
                   } />
+                  <Route path="/onboarding" element={
+                    <ProtectedRoute requireAuth>
+                      <Layout mode="focused"><OnboardingPage /></Layout>
+                    </ProtectedRoute>
+                  } />
 
                   {/* Main pages with Layout */}
                   <Route path="/" element={<Layout><HomePage /></Layout>} />
+                  <Route path="/offer/:campaign" element={<Layout><CampaignLandingPage /></Layout>} />
                   <Route path="/dashboard" element={
                     <ProtectedRoute requireAuth>
                       <Layout mode="focused"><DashboardPage /></Layout>
@@ -314,6 +329,7 @@ function App() {
         </ProgressProvider>
       </AuthProvider>
       <Toaster position="bottom-center" richColors />
+      <MarketingConsent />
     </Router>
   );
 }

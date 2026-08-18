@@ -29,6 +29,7 @@ import { FullMockWritingPaper } from '@/components/test/FullMockWritingPaper';
 import { FullMockSpeakingPaper, type SpeakingPaperPart } from '@/components/test/FullMockSpeakingPaper';
 import { FULL_MOCK_FALLBACK_TESTS } from '@/data/fullMockFallback';
 import type { WritingTask } from '@/types';
+import { trackFunnelEvent } from '@/lib/funnel';
 
 type Phase = 'intro' | 'listening' | 'reading' | 'writing' | 'speaking' | 'results';
 type ModuleType = 'reading' | 'listening' | 'writing' | 'speaking';
@@ -1607,6 +1608,7 @@ export default function FullMockTestPage() {
     if (idx === 0) {
       savedResultIdRef.current = null;
       setResultSaved('idle');
+      trackFunnelEvent('mock_test_started', { mode: selectedMode });
     }
     setSectionIndex(idx);
     setAnswers({});

@@ -8,6 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { getFunnelAttribution, trackFunnelEvent } from '@/lib/funnel';
+import { calculateDiscountedPrice } from '@/lib/pricing';
 
 interface PaymentSettings {
   bkash_number: string;
@@ -29,6 +31,7 @@ export function PaymentPage() {
   const courseId = searchParams.get('courseId');
   const courseName = searchParams.get('name');
   const coursePrice = searchParams.get('price');
+  const couponCode = searchParams.get('coupon');
 
   const [settings, setSettings] = useState<PaymentSettings>(DEFAULT_SETTINGS);
   const [loadingSettings, setLoadingSettings] = useState(true);
@@ -36,10 +39,10 @@ export function PaymentPage() {
   const [senderNumber, setSenderNumber] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
+  const success = false;
   const [copied, setCopied] = useState(false);
   
-  const { user } = useAuth();
+  const { user, session } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -66,18 +69,20 @@ export function PaymentPage() {
           yearly_price: data.yearly_price || DEFAULT_SETTINGS.yearly_price,
         });
       }
-    } catch (err) {
+    } catch {
       console.log('Using default payment settings');
     } finally {
       setLoadingSettings(false);
     }
   };
 
-  const selectedPackage = {
+  const basePackage = {
     name: packageType === 'course' ? (courseName || 'Course') : (packageType === 'yearly' ? 'Premium Yearly' : 'Premium Monthly'),
     price: packageType === 'course' ? (coursePrice ? parseInt(coursePrice) : 0) : (packageType === 'yearly' ? settings.yearly_price : settings.monthly_price),
     duration: packageType === 'course' ? 'Lifetime' : (packageType === 'yearly' ? '1 Year' : '1 Month'),
   };
+  const discount = calculateDiscountedPrice(basePackage.price, couponCode);
+  const selectedPackage = { ...basePackage, price: discount.finalAmount };
 
   const copyToClipboard = async () => {
     try {
@@ -124,13 +129,19 @@ export function PaymentPage() {
       return;
     }
 
-    if (selectedPackage.price <= 0) {
+    if (basePackage.price <= 0) {
       setError('Invalid package price. Please go back and select a valid package.');
       setLoading(false);
       return;
     }
 
-    if (!isSupabaseConfigured() || !supabase) {
+    if (!discount.isValidCoupon) {
+      setError('Invalid coupon code. Please return to pricing and apply a valid coupon.');
+      setLoading(false);
+      return;
+    }
+
+    if (!isSupabaseConfigured() || !supabase || !session?.access_token) {
       setError('Payment system is not configured. Please contact support.');
       setLoading(false);
       return;
@@ -143,32 +154,35 @@ export function PaymentPage() {
     }
 
     try {
-      const { error: insertError } = await supabase
-        .from('payment_requests')
-        .insert({
-          user_id: user.id,
-          user_email: user.email,
-          package_type: packageType,
-          package_name: selectedPackage.name,
-          course_id: courseId || null,
-          amount: selectedPackage.price,
-          transaction_id: trimmedTrxId,
-          sender_number: trimmedPhone,
-          status: 'pending',
-        });
-
-      if (insertError) {
-        if (insertError.code === '23505') {
-          setError('This Transaction ID has already been submitted. Please check your payment status or contact support.');
-        } else {
-          setError(`Database Error: ${insertError.message || JSON.stringify(insertError)}`);
-        }
+      trackFunnelEvent('payment_started', { package: packageType, amount: selectedPackage.price });
+      const attribution = getFunnelAttribution();
+      const response = await fetch('/api/create-payment-request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          packageType,
+          courseId,
+          transactionId: trimmedTrxId,
+          senderNumber: trimmedPhone,
+          offer: attribution?.offer,
+          returnPath: packageType === 'course' && courseId ? `/courses/${courseId}` : '/dashboard?payment=success',
+          attribution,
+          couponCode,
+        }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result?.request?.id) {
+        setError(result?.error || 'Could not submit payment. Please try again.');
         setLoading(false);
         return;
       }
 
-      setSuccess(true);
+      trackFunnelEvent('payment_submitted', { package: packageType, amount: result.request.amount, requestId: result.request.id });
       setLoading(false);
+      navigate(`/payment/status/${result.request.id}`, { replace: true });
     } catch {
       setError('An error occurred. Please try again.');
       setLoading(false);
@@ -279,6 +293,12 @@ export function PaymentPage() {
                   <h3 className="text-2xl font-bold">{selectedPackage.name}</h3>
                   <p className="text-4xl font-bold mt-2">৳{selectedPackage.price}</p>
                   <p className="text-pink-100 text-sm mt-1">{selectedPackage.duration} access</p>
+                  {discount.couponCode && (
+                    <p className="mt-2 text-sm text-white">
+                      <span className="line-through opacity-75">৳{discount.baseAmount}</span>
+                      <span className="ml-2 rounded-full bg-white/20 px-2 py-1">{discount.couponCode}: save ৳{discount.discountAmount}</span>
+                    </p>
+                  )}
                 </div>
               </div>
 

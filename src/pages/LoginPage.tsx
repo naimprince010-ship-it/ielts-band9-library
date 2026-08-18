@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Mail, Lock, AlertCircle, Eye, EyeOff, CheckCircle, Star, Users, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuth } from '@/contexts/AuthContext';
 import { isSupabaseConfigured } from '@/lib/supabase';
+import { buildAuthPath, captureFunnelAttribution, readNextPath, sanitizeInternalPath, trackFunnelEvent } from '@/lib/funnel';
 
 export function LoginPage() {
   const [email, setEmail] = useState('');
@@ -20,6 +21,8 @@ export function LoginPage() {
   const location = useLocation();
 
   const redirectAfterLogin = (() => {
+    const queryNext = new URLSearchParams(location.search).get('next');
+    if (queryNext) return readNextPath(location.search, '/dashboard');
     const state = location.state as { from?: { pathname?: string; search?: string; hash?: string } } | null;
     const path = state?.from?.pathname;
     if (!path) return '/';
@@ -27,6 +30,11 @@ export function LoginPage() {
     const hash = state?.from?.hash || '';
     return `${path}${search}${hash}`;
   })();
+  const offer = new URLSearchParams(location.search).get('offer') || undefined;
+
+  useEffect(() => {
+    captureFunnelAttribution(location.search, location.pathname);
+  }, [location.pathname, location.search]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,6 +51,7 @@ export function LoginPage() {
       }
       setLoading(false);
     } else {
+      trackFunnelEvent('login_completed', { offer, destination: redirectAfterLogin, method: 'email' });
       navigate(redirectAfterLogin, { replace: true });
     }
   };
@@ -51,7 +60,7 @@ export function LoginPage() {
     setError('');
     setGoogleLoading(true);
 
-    const { error } = await signInWithGoogle();
+    const { error } = await signInWithGoogle(redirectAfterLogin);
 
     if (error) {
       setError(error.message);
@@ -273,7 +282,7 @@ export function LoginPage() {
 
           <p className="text-center text-muted-foreground">
             {"Don't have an account?"}{' '}
-            <Link to="/signup" className="text-foreground hover:text-accent font-semibold transition-colors">
+            <Link to={buildAuthPath('/signup', sanitizeInternalPath(redirectAfterLogin, '/dashboard'), { offer })} className="text-foreground hover:text-accent font-semibold transition-colors">
               Create account
             </Link>
           </p>

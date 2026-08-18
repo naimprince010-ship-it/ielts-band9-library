@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, AlertCircle, CheckCircle, Eye, EyeOff, Star, Users, Target } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuth } from '@/contexts/AuthContext';
 import { isSupabaseConfigured } from '@/lib/supabase';
+import { buildAuthPath, captureFunnelAttribution, readNextPath, trackFunnelEvent } from '@/lib/funnel';
 
 export function SignupPage() {
   const [name, setName] = useState('');
@@ -20,6 +21,13 @@ export function SignupPage() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const { signUp, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const nextPath = readNextPath(location.search, '/dashboard?welcome=1');
+  const offer = new URLSearchParams(location.search).get('offer') || undefined;
+
+  useEffect(() => {
+    captureFunnelAttribution(location.search, location.pathname);
+  }, [location.pathname, location.search]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,7 +52,8 @@ export function SignupPage() {
       setLoading(false);
     } else {
       setSuccess(true);
-      setTimeout(() => navigate('/login'), 4000);
+      trackFunnelEvent('signup_completed', { offer, destination: nextPath, method: 'email' });
+      setTimeout(() => navigate(buildAuthPath('/login', nextPath, { offer })), 4000);
     }
   };
 
@@ -52,7 +61,7 @@ export function SignupPage() {
     setError('');
     setGoogleLoading(true);
 
-    const { error } = await signInWithGoogle();
+    const { error } = await signInWithGoogle(nextPath);
 
     if (error) {
       setError(error.message);
@@ -287,7 +296,7 @@ export function SignupPage() {
 
           <p className="text-center text-muted-foreground">
             Already have an account?{' '}
-            <Link to="/login" className="text-foreground hover:text-accent font-semibold transition-colors">
+            <Link to={buildAuthPath('/login', nextPath, { offer })} className="text-foreground hover:text-accent font-semibold transition-colors">
               Sign in
             </Link>
           </p>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { consumeOAuthReturnPath, trackFunnelEvent } from '@/lib/funnel';
 
 export function AuthCallbackPage() {
   const navigate = useNavigate();
@@ -39,15 +40,18 @@ export function AuthCallbackPage() {
         }
 
         if (session) {
-          // Successfully authenticated, redirect to home
-          navigate('/', { replace: true });
+          const destination = consumeOAuthReturnPath();
+          trackFunnelEvent('login_completed', { destination, method: 'google' });
+          navigate(destination, { replace: true });
         } else {
           // No session yet, wait a bit and try again
           setTimeout(async () => {
             if (!supabase) return;
             const { data: { session: retrySession } } = await supabase.auth.getSession();
             if (retrySession) {
-              navigate('/', { replace: true });
+              const destination = consumeOAuthReturnPath();
+              trackFunnelEvent('login_completed', { destination, method: 'google' });
+              navigate(destination, { replace: true });
             } else {
               setError('Authentication failed. Please try again.');
               setTimeout(() => navigate('/login'), 3000);

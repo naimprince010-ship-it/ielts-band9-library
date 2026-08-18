@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import { User as SupabaseUser, Session } from '@supabase/supabase-js';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { User, UserRole, SubscriptionStatus } from '@/types';
+import { storeOAuthReturnPath } from '@/lib/funnel';
 
 interface AuthContextType {
   user: User | null;
@@ -10,7 +11,7 @@ interface AuthContextType {
   loading: boolean;
   signUp: (email: string, password: string, name: string) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
-  signInWithGoogle: () => Promise<{ error: Error | null }>;
+  signInWithGoogle: (returnPath?: string) => Promise<{ error: Error | null }>;
   resetPassword: (email: string) => Promise<{ error: Error | null }>;
   updatePassword: (newPassword: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
@@ -275,11 +276,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error: error as Error | null };
   };
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = async (returnPath = '/dashboard') => {
     if (!isSupabaseConfigured() || !supabase) {
       return { error: new Error('Google sign-in requires Supabase configuration') };
     }
 
+    storeOAuthReturnPath(returnPath);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
