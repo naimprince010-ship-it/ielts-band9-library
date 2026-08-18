@@ -505,7 +505,7 @@ export default function FlashcardsPage() {
 
   return (
     <div className="min-h-screen bg-[#f8f9fc] py-8 font-sans">
-      <div className="container mx-auto px-4 max-w-4xl">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
         {mode === 'menu' && (
           <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 lg:p-8">
             
