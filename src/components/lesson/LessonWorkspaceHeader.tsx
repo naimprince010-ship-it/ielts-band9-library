@@ -1,5 +1,14 @@
-import { Bell, Search, User } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Bell, ChevronDown, LogOut, Search, Settings, User } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { useNavContext } from '@/contexts/NavContext';
 
 const NAV_ITEMS = [
@@ -27,6 +36,13 @@ const NAV_ITEMS = [
 export function LessonWorkspaceHeader() {
   const { navConfig } = useNavContext();
   const { title, actions } = navConfig;
+  const { user, isAdmin, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   return (
     <header className="fixed inset-x-0 top-0 z-[70] border-b border-white/10 bg-[linear-gradient(90deg,#08102f_0%,#101944_55%,#17205a_100%)] text-white shadow-lg shadow-slate-950/20">
@@ -82,12 +98,48 @@ export function LessonWorkspaceHeader() {
           >
             <Bell className="h-5 w-5" />
           </button>
-          <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/7 px-2 py-1.5">
-            <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-indigo-400 to-blue-600">
-              <User className="h-4 w-4 text-white" />
-            </span>
-            <span className="hidden max-w-28 truncate text-sm font-semibold sm:inline">Hello, Student</span>
-          </div>
+          {user ? (
+            <DropdownMenu modal={false}>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  aria-label="Open profile menu"
+                  className="inline-flex h-11 items-center gap-2 rounded-full border border-white/10 bg-white/7 px-2 py-1.5 text-white transition hover:bg-white/12 hover:text-white focus:outline-none focus:ring-2 focus:ring-white/60"
+                >
+                  <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-indigo-400 to-blue-600">
+                    <User className="h-4 w-4 text-white" />
+                  </span>
+                  <span className="hidden max-w-28 truncate text-sm font-semibold sm:inline">Hello, {user.name || 'Student'}</span>
+                  <ChevronDown className="hidden h-4 w-4 text-white/65 sm:inline" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <div className="border-b border-border px-2 py-2">
+                  <p className="truncate text-sm font-medium">{user.name || 'Student'}</p>
+                  {user.email && <p className="truncate text-xs text-muted-foreground">{user.email}</p>}
+                </div>
+                <DropdownMenuItem onClick={() => navigate('/profile')} className="gap-2.5 py-2">
+                  <User className="h-4 w-4" />
+                  My Profile
+                </DropdownMenuItem>
+                {isAdmin && (
+                  <DropdownMenuItem onClick={() => navigate('/admin')} className="gap-2.5 py-2">
+                    <Settings className="h-4 w-4" />
+                    Admin Panel
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleSignOut} className="gap-2.5 py-2 text-destructive focus:text-destructive">
+                  <LogOut className="h-4 w-4" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Link to="/login" className="rounded-full border border-white/10 bg-white/7 px-3 py-2 text-sm font-semibold text-white/90 transition hover:bg-white/12 hover:text-white">
+              Sign In
+            </Link>
+          )}
         </div>
       </div>
     </header>

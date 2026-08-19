@@ -346,6 +346,15 @@ export function Navbar() {
           }`}
         >
           <div className="px-4 py-6 space-y-1 max-w-lg mx-auto">
+            {actions && (
+              <div className="pb-4 border-b border-border mb-4">
+                <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  Quick actions
+                </p>
+                <div className="flex items-center gap-2 flex-wrap">{actions}</div>
+              </div>
+            )}
+
             {/* Learn Section */}
             <div className="pb-4">
               <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">

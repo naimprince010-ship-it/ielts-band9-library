@@ -782,8 +782,6 @@ const styles: Record<string, React.CSSProperties> = {
 };
 
 const globalStyles = `
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
-
   @keyframes spin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }

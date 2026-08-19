@@ -76,12 +76,10 @@ export default function CertificatePage() {
       <head>
         <title>IELTS Tree Certificate - ${certificateData.name}</title>
         <style>
-          @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600&display=swap');
-          
           * { margin: 0; padding: 0; box-sizing: border-box; }
           
           body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Segoe UI', 'Inter', system-ui, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
@@ -123,7 +121,7 @@ export default function CertificatePage() {
           }
           
           .title {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Georgia', 'Times New Roman', serif;
             font-size: 36px;
             color: #1a1a1a;
             margin-bottom: 10px;
@@ -146,7 +144,7 @@ export default function CertificatePage() {
           }
           
           .recipient-name {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Georgia', 'Times New Roman', serif;
             font-size: 42px;
             color: #1a1a1a;
             border-bottom: 2px solid #667eea;

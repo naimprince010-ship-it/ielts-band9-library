@@ -63,6 +63,14 @@ const FEATURES = [
   { icon: Mic, title: "Speaking", desc: "Fluency & pronunciation", href: "/speaking", color: "bg-foreground" },
 ];
 
+const SOCIAL_PROOF_AVATARS = [
+  { initials: 'RA', bg: 'from-violet-500 to-indigo-500' },
+  { initials: 'SK', bg: 'from-cyan-500 to-blue-500' },
+  { initials: 'TH', bg: 'from-emerald-500 to-teal-500' },
+  { initials: 'NM', bg: 'from-amber-500 to-orange-500' },
+  { initials: 'FI', bg: 'from-rose-500 to-pink-500' },
+];
+
 export function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
@@ -146,16 +154,12 @@ export function HomePage() {
             {/* Social Proof */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <div className="flex -space-x-2">
-                {[1, 2, 3, 4, 5].map((i) => (
+                {SOCIAL_PROOF_AVATARS.map((avatar, i) => (
                   <div 
                     key={i} 
-                    className="h-10 w-10 rounded-full border-2 border-background bg-muted overflow-hidden"
+                    className={`h-10 w-10 rounded-full border-2 border-background bg-gradient-to-br ${avatar.bg} text-white overflow-hidden flex items-center justify-center text-[11px] font-bold tracking-wide`}
                   >
-                    <img loading="lazy" 
-                      src={`https://i.pravatar.cc/150?u=${i + 10}`} 
-                      alt="Student" 
-                      className="h-full w-full object-cover"
-                    />
+                    {avatar.initials}
                   </div>
                 ))}
               </div>

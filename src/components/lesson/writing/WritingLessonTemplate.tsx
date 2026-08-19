@@ -268,17 +268,17 @@ export function WritingLessonTemplate({
             </Card>
           )}
 
-          <div className="mt-8 flex items-center justify-between">
-            <Link to="/writing">
-              <Button variant="outline">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <Link to="/writing" className="w-full sm:w-auto">
+              <Button variant="outline" className="w-full sm:w-auto">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Library
               </Button>
             </Link>
 
             {!canAccessContent && (
-              <Link to="/pricing">
-                <Button>
+              <Link to="/pricing" className="w-full sm:w-auto">
+                <Button className="w-full sm:w-auto">
                   <Star className="mr-2 h-4 w-4" />
                   Upgrade to Premium
                 </Button>
