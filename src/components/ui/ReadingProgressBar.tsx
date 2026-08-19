@@ -52,10 +52,10 @@ export function ReadingProgressBar({
         <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500" style={{ width: `${progress}%` }} />
       </div>
       {showEstimate && (
-        <div className="absolute right-4 top-2 flex h-8 min-w-[178px] items-center justify-end gap-2 rounded-full border bg-white/90 px-3 py-1.5 text-xs text-gray-600 shadow-sm backdrop-blur-sm">
+        <div className="absolute right-3 top-2 flex h-8 min-w-[148px] items-center justify-end gap-1.5 rounded-full border bg-white/90 px-2.5 py-1.5 text-xs text-gray-600 shadow-sm backdrop-blur-sm sm:right-4 sm:min-w-[178px] sm:gap-2 sm:px-3">
           <Clock className="h-3 w-3 shrink-0" />
-          <span className="min-w-[76px] tabular-nums">{roundedProgress}% complete</span>
-          <span className="min-w-[68px] text-gray-400 tabular-nums">
+          <span className="min-w-[62px] tabular-nums sm:min-w-[76px]">{roundedProgress}% complete</span>
+          <span className="min-w-[56px] text-gray-400 tabular-nums sm:min-w-[68px]">
             {progress < 100 ? `- ~${minutesLeft} min left` : 'complete'}
           </span>
         </div>

@@ -279,7 +279,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {type === 'vocabulary' && (
           <div className="mb-4 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
-            <div className="overflow-x-auto pb-1">
+            <div className="overflow-x-visible pb-1">
               <div className="flex flex-wrap gap-2">
                 {VOCABULARY_PATH_TABS.map((tab) => {
                   const active = vocabularyTab === tab.value;
@@ -613,11 +613,13 @@ export function LibraryPage({ type }: LibraryPageProps) {
             </div>
 
             {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-2 mt-8">
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-2 px-2">
                 <Button
                   variant="outline"
                   onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
+                  size="sm"
+                  className="px-2.5 text-xs sm:px-4 sm:text-sm"
                 >
                   Previous
                 </Button>
@@ -639,7 +641,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
                         variant={currentPage === pageNum ? 'default' : 'outline'}
                         size="sm"
                         onClick={() => setCurrentPage(pageNum)}
-                        className="w-10"
+                        className="w-8 px-0 text-xs sm:w-10 sm:text-sm"
                       >
                         {pageNum}
                       </Button>
@@ -650,6 +652,8 @@ export function LibraryPage({ type }: LibraryPageProps) {
                   variant="outline"
                   onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
+                  size="sm"
+                  className="px-2.5 text-xs sm:px-4 sm:text-sm"
                 >
                   Next
                 </Button>

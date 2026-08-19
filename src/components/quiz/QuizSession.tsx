@@ -97,7 +97,7 @@ export function QuizSession({
                   <span key={index}>
                     {part}
                     {index < array.length - 1 && (
-                      <span className="mx-1 inline-block min-w-[120px] border-b-2 border-blue-500 text-center">
+                      <span className="mx-1 inline-block min-w-[84px] border-b-2 border-blue-500 text-center sm:min-w-[120px]">
                         {showFeedback ? (
                           <span className={isCorrect ? 'text-emerald-600' : 'text-rose-600'}>{userAnswer || '___'}</span>
                         ) : (
