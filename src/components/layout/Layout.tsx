@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useLayoutEffect, useMemo, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigationType } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { MobileNav } from './MobileNav';
@@ -22,6 +22,7 @@ interface LayoutProps {
 
 export function Layout({ children, mode = 'browse' }: LayoutProps) {
   const { pathname } = useLocation();
+  const navigationType = useNavigationType();
   const [settingsVersion, setSettingsVersion] = useState(0);
   const { navConfig, setNavConfig } = useNavContext();
 
@@ -49,6 +50,15 @@ export function Layout({ children, mode = 'browse' }: LayoutProps) {
     window.addEventListener('site-settings-updated', onSettingsUpdated);
     return () => window.removeEventListener('site-settings-updated', onSettingsUpdated);
   }, []);
+
+  // Ensure forward navigations open from the top. Without this, SPA route
+  // changes can keep the previous page's scroll position, which makes short
+  // pages appear to jump straight to the footer.
+  useEffect(() => {
+    if (navigationType !== 'POP') {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }
+  }, [pathname, navigationType]);
 
   const seoHeadings = useMemo(() => {
     const routeSeo = getRouteSeoConfig(pathname);
