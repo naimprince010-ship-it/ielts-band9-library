@@ -318,7 +318,7 @@ export default function FlashcardsPage() {
     setMode('review');
   }, [flashcards]);
 
-    const handleResponse = useCallback(async (quality: number) => {
+    const handleResponse = useCallback((quality: number) => {
       const currentCard = dueCards[currentIndex];
       const updatedCard = calculateNextReview(currentCard, quality);
     
@@ -327,38 +327,6 @@ export default function FlashcardsPage() {
       );
       setFlashcards(updatedCards);
       saveFlashcardsToStorage(updatedCards);
-    
-      if (user && isSupabaseConfigured() && supabase) {
-        try {
-          const newLevel = quality >= 3 ? Math.min((currentCard.repetitions || 0) + 1, 5) : 0;
-          const intervals = [0, 1, 3, 7, 14, 30];
-          const newDueDate = new Date();
-          newDueDate.setDate(newDueDate.getDate() + intervals[newLevel]);
-          const dueDateStr = `${newDueDate.getFullYear()}-${String(newDueDate.getMonth() + 1).padStart(2, '0')}-${String(newDueDate.getDate()).padStart(2, '0')}`;
-        
-          await supabase.from('srs_items').update({
-            level: newLevel,
-            due_date: dueDateStr,
-            ease_factor: updatedCard.easeFactor,
-            interval_days: updatedCard.interval,
-            repetitions: updatedCard.repetitions,
-            last_reviewed_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          }).eq('id', currentCard.id);
-        
-          await supabase.from('srs_reviews').insert({
-            srs_item_id: currentCard.id,
-            user_id: user.id,
-            quality: quality,
-            prev_level: currentCard.repetitions || 0,
-            next_level: newLevel,
-            prev_interval: currentCard.interval,
-            next_interval: updatedCard.interval
-          });
-        } catch (err) {
-          console.log('Error syncing review to Supabase:', err);
-        }
-      }
     
       setSessionStats(prev => ({
         correct: quality >= 3 ? prev.correct + 1 : prev.correct,
@@ -378,6 +346,41 @@ export default function FlashcardsPage() {
         setIsFlipped(false);
       } else {
         setMode('complete');
+      }
+
+      // Sync to Supabase in the background
+      if (user && isSupabaseConfigured() && supabase) {
+        (async () => {
+          try {
+            const newLevel = quality >= 3 ? Math.min((currentCard.repetitions || 0) + 1, 5) : 0;
+            const intervals = [0, 1, 3, 7, 14, 30];
+            const newDueDate = new Date();
+            newDueDate.setDate(newDueDate.getDate() + intervals[newLevel]);
+            const dueDateStr = `${newDueDate.getFullYear()}-${String(newDueDate.getMonth() + 1).padStart(2, '0')}-${String(newDueDate.getDate()).padStart(2, '0')}`;
+          
+            await supabase.from('srs_items').update({
+              level: newLevel,
+              due_date: dueDateStr,
+              ease_factor: updatedCard.easeFactor,
+              interval_days: updatedCard.interval,
+              repetitions: updatedCard.repetitions,
+              last_reviewed_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            }).eq('id', currentCard.id);
+          
+            await supabase.from('srs_reviews').insert({
+              srs_item_id: currentCard.id,
+              user_id: user.id,
+              quality: quality,
+              prev_level: currentCard.repetitions || 0,
+              next_level: newLevel,
+              prev_interval: currentCard.interval,
+              next_interval: updatedCard.interval
+            });
+          } catch (err) {
+            console.log('Error syncing review to Supabase:', err);
+          }
+        })();
       }
     }, [currentIndex, dueCards, flashcards, user]);
 
