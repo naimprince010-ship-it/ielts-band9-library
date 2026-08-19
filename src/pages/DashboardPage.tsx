@@ -87,14 +87,17 @@ export default function DashboardPage() {
             accents (indigo vs amber) so the two primary actions don't
             visually compete, plus a lift + glow on hover so the whole card
             reads as clickable, not just the button. */}
-        <section>
+        <section className="rounded-3xl border border-indigo-100/80 bg-white/70 p-4 shadow-sm backdrop-blur-sm sm:p-6">
           <p className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-indigo-600">
             <Zap className="h-3.5 w-3.5" />
             Jump back in
           </p>
           <div className="grid gap-6 lg:grid-cols-3">
-            <Card className="group rounded-2xl border-indigo-100 bg-gradient-to-br from-indigo-50/90 to-violet-50/90 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-200/40 lg:col-span-2">
+            <Card className="group rounded-2xl border-2 border-indigo-200 bg-gradient-to-br from-indigo-50/95 to-violet-50/90 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-200/40 lg:col-span-2">
               <CardHeader>
+                <p className="inline-flex w-fit items-center rounded-full bg-indigo-100 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-indigo-700">
+                  Primary Action
+                </p>
                 <CardTitle className="text-slate-900">Continue Learning</CardTitle>
                 <CardDescription>Resume your main lesson track from where you left off.</CardDescription>
               </CardHeader>
@@ -115,8 +118,11 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="group rounded-2xl border-amber-100 bg-gradient-to-br from-amber-50/90 to-orange-50/90 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-200/40">
+            <Card className="group rounded-2xl border-2 border-amber-200 bg-gradient-to-br from-amber-50/95 to-orange-50/90 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-200/40">
               <CardHeader>
+                <p className="inline-flex w-fit items-center rounded-full bg-amber-100 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-amber-700">
+                  High Focus
+                </p>
                 <CardTitle className="text-slate-900">Full Mock Test</CardTitle>
                 <CardDescription>Simulate test day and measure your readiness.</CardDescription>
               </CardHeader>
@@ -143,7 +149,7 @@ export default function DashboardPage() {
             background tint, lift, and a sliding arrow all confirm
             clickability on hover, addressing the "no click affordance"
             complaint directly. */}
-        <section>
+        <section className="rounded-3xl border border-indigo-100/80 bg-white/70 p-4 shadow-sm backdrop-blur-sm sm:p-6">
           <p className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-indigo-600">
             <Zap className="h-3.5 w-3.5" />
             Quick Practice
@@ -158,6 +164,9 @@ export default function DashboardPage() {
                   to={item.path}
                   className={`group relative overflow-hidden rounded-2xl border p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${accent.bg} ${accent.border} ${accent.glow}`}
                 >
+                  <span className="mb-3 inline-flex rounded-full bg-white/75 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-slate-600">
+                    Quick Task
+                  </span>
                   <div className={`grid h-10 w-10 place-items-center rounded-xl transition-transform duration-300 group-hover:scale-110 ${accent.iconBox}`}>
                     <Icon className="h-5 w-5" />
                   </div>
@@ -178,23 +187,26 @@ export default function DashboardPage() {
             sections above. The one real action inside each card (the
             "View full progress" link) still gets its own hover affordance
             so it doesn't get lost in an otherwise static card. */}
-        <section>
+        <section className="rounded-3xl border border-slate-200/90 bg-white/70 p-4 shadow-sm backdrop-blur-sm sm:p-6">
           <p className="mb-3 text-xs font-black uppercase tracking-[0.18em] text-slate-400">Your overview</p>
           <div className="grid gap-6 lg:grid-cols-3">
-            <Card className="rounded-2xl border-slate-200 bg-white/70 shadow-sm backdrop-blur-sm">
+            <Card className="rounded-2xl border border-slate-200 bg-white/85 shadow-sm backdrop-blur-sm">
               <CardHeader>
+                <p className="inline-flex w-fit items-center rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-slate-600">
+                  Info Card
+                </p>
                 <CardTitle className="text-slate-900">Progress Summary</CardTitle>
                 <CardDescription>Track your momentum at a glance.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="flex items-center justify-between rounded-xl bg-slate-50 p-3">
+                <div className="flex items-center justify-between rounded-xl border border-indigo-100 bg-indigo-50/50 p-3">
                   <span className="flex items-center gap-2 text-sm font-medium text-slate-700">
                     <BookOpen className="h-4 w-4 text-indigo-600" />
                     Lessons completed
                   </span>
                   <span className="text-sm font-semibold text-slate-900">{completedLessons}</span>
                 </div>
-                <div className="flex items-center justify-between rounded-xl bg-slate-50 p-3">
+                <div className="flex items-center justify-between rounded-xl border border-violet-100 bg-violet-50/50 p-3">
                   <span className="flex items-center gap-2 text-sm font-medium text-slate-700">
                     <TrendingUp className="h-4 w-4 text-indigo-600" />
                     Momentum
@@ -211,8 +223,11 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="rounded-2xl border-slate-200 bg-white/70 shadow-sm backdrop-blur-sm lg:col-span-2">
+            <Card className="rounded-2xl border border-slate-200 bg-white/85 shadow-sm backdrop-blur-sm lg:col-span-2">
               <CardHeader>
+                <p className="inline-flex w-fit items-center rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-slate-600">
+                  Timeline
+                </p>
                 <CardTitle className="text-slate-900">Recent Activity</CardTitle>
                 <CardDescription>Your latest completed lessons, tests, and milestones will appear here.</CardDescription>
               </CardHeader>
