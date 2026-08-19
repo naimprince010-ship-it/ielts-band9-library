@@ -504,8 +504,8 @@ export default function FlashcardsPage() {
   useNavConfig({ mode: 'tool', title: 'Flashcards', actions: navActions });
 
   return (
-    <div className="min-h-screen bg-[#f8f9fc] py-8 font-sans">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
+    <div className="min-h-screen bg-[#f8f9fc] py-4 sm:py-8 font-sans">
+      <div className="container mx-auto px-2 sm:px-6 lg:px-8 max-w-[1100px]">
         {mode === 'menu' && (
           <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 lg:p-8">
             
@@ -718,12 +718,12 @@ export default function FlashcardsPage() {
               />
             </div>
 
-            <div className="rounded-[22px] border border-violet-200/90 bg-[radial-gradient(circle_at_top,_rgba(139,92,246,0.12),_transparent_40%)] p-3 shadow-[0_30px_80px_rgba(106,93,154,0.12)] sm:rounded-[30px] sm:p-4 lg:p-8">
-              <div className="rounded-[18px] border border-violet-200/80 bg-white p-4 shadow-[0_18px_40px_rgba(124,92,255,0.08)] sm:rounded-[28px] sm:p-6 lg:p-10">
+            <div className="mx-auto max-w-[1000px] rounded-[22px] border border-violet-200/90 bg-[radial-gradient(circle_at_top,_rgba(139,92,246,0.12),_transparent_40%)] p-2 shadow-[0_30px_80px_rgba(106,93,154,0.12)] sm:rounded-[30px] sm:p-3 lg:p-5">
+              <div className="rounded-[18px] border border-violet-200/80 bg-white p-4 shadow-[0_18px_40px_rgba(124,92,255,0.08)] sm:rounded-[28px] sm:p-5 lg:p-6">
                 {!isFlipped ? (
                   <>
-                    <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-violet-100 text-violet-600 shadow-inner shadow-violet-200/60 sm:mb-6 sm:h-16 sm:w-16">
-                      <ClipboardList className="h-6 w-6 sm:h-7 sm:w-7" />
+                    <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-violet-100 text-violet-600 shadow-inner shadow-violet-200/60 sm:mb-4 sm:h-14 sm:w-14">
+                      <ClipboardList className="h-5 w-5 sm:h-6 sm:w-6" />
                     </div>
 
                     <div className="flex justify-center">
@@ -732,11 +732,11 @@ export default function FlashcardsPage() {
                       </span>
                     </div>
 
-                    <h2 className="mt-5 text-center text-[clamp(1.9rem,5vw,4rem)] font-black tracking-[-0.06em] text-slate-900 leading-[1.05] sm:mt-7">
+                    <h2 className="mt-3 text-center text-[clamp(1.5rem,4vw,3.2rem)] font-black tracking-[-0.06em] text-slate-900 leading-[1.05] sm:mt-5">
                       Complete the collocation:
                     </h2>
 
-                    <div className="mt-5 flex items-center justify-center gap-2 text-[clamp(2.1rem,7vw,4.3rem)] font-black tracking-[-0.05em] text-slate-800 leading-none sm:mt-6 sm:gap-3">
+                    <div className="mt-4 flex items-center justify-center gap-2 text-[clamp(1.8rem,6vw,3.6rem)] font-black tracking-[-0.05em] text-slate-800 leading-none sm:mt-5 sm:gap-3">
                       <span className="text-slate-900">“</span>
                       <span className="inline-block min-w-[72px] border-b-[3px] border-violet-300 bg-violet-50/80 px-2 py-1 text-violet-600 shadow-[inset_0_-2px_0_rgba(139,92,246,0.18)] sm:min-w-[120px]">
                         &nbsp;
@@ -745,7 +745,7 @@ export default function FlashcardsPage() {
                     </div>
 
                     {currentCard.hint && (
-                      <div className="mt-6 flex justify-center sm:mt-8">
+                      <div className="mt-5 flex justify-center sm:mt-6">
                         <div className="inline-flex max-w-2xl items-center justify-center gap-2 rounded-full bg-violet-50 px-3 py-2 text-center text-[11px] text-slate-600 sm:px-4 sm:text-sm md:text-base">
                           <Lightbulb className="h-4 w-4 flex-shrink-0 text-violet-500" />
                           <span>
@@ -759,7 +759,7 @@ export default function FlashcardsPage() {
                     <button
                       type="button"
                       onClick={() => setIsFlipped(true)}
-                      className="mt-7 flex w-full items-center justify-center gap-3 rounded-2xl border border-dashed border-violet-200 bg-violet-50/60 px-4 py-4 text-violet-700 transition-all duration-200 hover:border-violet-300 hover:bg-violet-100/80 hover:shadow-[0_8px_20px_rgba(139,92,246,0.08)] focus:outline-none focus:ring-2 focus:ring-violet-300 sm:mt-8 sm:py-5"
+                      className="mt-5 flex w-full items-center justify-center gap-3 rounded-2xl border border-dashed border-violet-200 bg-violet-50/60 px-4 py-3 text-violet-700 transition-all duration-200 hover:border-violet-300 hover:bg-violet-100/80 hover:shadow-[0_8px_20px_rgba(139,92,246,0.08)] focus:outline-none focus:ring-2 focus:ring-violet-300 sm:mt-6 sm:py-4"
                     >
                       <MousePointerClick className="h-5 w-5" />
                       <span className="flex flex-col items-center text-left">
@@ -769,22 +769,22 @@ export default function FlashcardsPage() {
                     </button>
                   </>
                 ) : (
-                  <div className="flex min-h-[280px] flex-col items-center justify-center text-center sm:min-h-[360px] md:min-h-[420px]">
-                    <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 shadow-inner shadow-emerald-200/60 sm:h-16 sm:w-16">
-                      <CheckCircle2 className="h-6 w-6 sm:h-7 sm:w-7" />
+                  <div className="flex min-h-[220px] flex-col items-center justify-center text-center sm:min-h-[280px] md:min-h-[320px]">
+                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 shadow-inner shadow-emerald-200/60 sm:h-14 sm:w-14">
+                      <CheckCircle2 className="h-5 w-5 sm:h-6 sm:w-6" />
                     </div>
 
-                    <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.22em] text-emerald-600 sm:text-[11px]">
+                    <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.22em] text-emerald-600 sm:text-[11px]">
                       Answer
                     </p>
-                    <h3 className="text-[clamp(1.8rem,6vw,4rem)] font-black tracking-[-0.05em] text-slate-900 leading-none">
+                    <h3 className="text-[clamp(1.6rem,5vw,3.6rem)] font-black tracking-[-0.05em] text-slate-900 leading-none">
                       {currentCard.back}
                     </h3>
-                    <p className="mt-4 text-sm text-slate-500 sm:mt-5 sm:text-base">How well did you know this?</p>
+                    <p className="mt-3 text-sm text-slate-500 sm:mt-4 sm:text-base">How well did you know this?</p>
                   </div>
                 )}
 
-                <div className="mt-7 flex flex-col gap-4 lg:mt-8 lg:flex-row lg:items-center lg:justify-between">
+                <div className="mt-5 flex flex-col gap-3 lg:mt-6 lg:flex-row lg:items-center lg:justify-between">
                   <button
                     type="button"
                     className="inline-flex items-center justify-center rounded-xl border border-violet-200 bg-violet-50 px-4 py-2.5 text-sm font-semibold text-violet-700 transition-all duration-200 hover:bg-violet-100 focus:outline-none focus:ring-2 focus:ring-violet-300"
@@ -823,7 +823,7 @@ export default function FlashcardsPage() {
               </div>
             </div>
 
-            <div className="mt-6 flex items-center justify-between gap-2 rounded-[20px] border border-violet-100 bg-white/70 px-3 py-3 shadow-[0_12px_35px_rgba(107,93,160,0.06)] backdrop-blur-sm sm:gap-3 sm:rounded-[26px] sm:px-6 sm:py-4">
+            <div className="mt-4 flex items-center justify-between gap-2 rounded-[20px] border border-violet-100 bg-white/70 px-3 py-2.5 shadow-[0_12px_35px_rgba(107,93,160,0.06)] backdrop-blur-sm sm:gap-3 sm:rounded-[26px] sm:px-6 sm:py-3.5">
               <button
                 type="button"
                 onClick={goToPreviousCard}
