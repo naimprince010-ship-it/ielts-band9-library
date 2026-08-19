@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "bradlc.vscode-tailwindcss",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "usernamehw.errorlens",
+    "eamodio.gitlens",
+    "naumovs.color-highlight",
+    "csstools.postcss",
+    "streetsidesoftware.code-spell-checker",
+    "figma.figma-vscode-extension"
+  ]
+}
