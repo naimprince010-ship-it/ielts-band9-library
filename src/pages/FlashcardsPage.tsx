@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -622,9 +623,9 @@ export default function FlashcardsPage() {
             <div className="mb-8">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-bold text-slate-800">Your Flashcard Stats</h3>
-                <button className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 flex items-center gap-1">
+                <Link to="/profile" className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 flex items-center gap-1">
                   <TrendingUp className="h-4 w-4" /> View All Stats
-                </button>
+                </Link>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-[#f8fafc] rounded-2xl p-5 border border-slate-100 flex items-center gap-4">
