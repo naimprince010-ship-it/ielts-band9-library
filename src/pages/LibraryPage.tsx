@@ -280,7 +280,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
         {type === 'vocabulary' && (
           <div className="mb-4 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
             <div className="overflow-x-auto pb-1">
-              <div className="flex min-w-max gap-2">
+              <div className="flex flex-wrap gap-2">
                 {VOCABULARY_PATH_TABS.map((tab) => {
                   const active = vocabularyTab === tab.value;
                   const count = vocabularyTabCounts?.[tab.value] ?? 0;
@@ -291,7 +291,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
                       type="button"
                       variant={active ? 'default' : 'outline'}
                       onClick={() => setVocabularyTab(tab.value)}
-                      className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                      className={`shrink-0 rounded-full px-3 py-2 text-xs font-medium transition-colors sm:px-4 sm:text-sm ${
                         active
                           ? 'border-indigo-600 bg-indigo-600 text-white hover:bg-indigo-700'
                           : 'border-slate-200 bg-white text-slate-700 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700'

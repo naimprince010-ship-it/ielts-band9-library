@@ -41,9 +41,9 @@ const quickPracticeItems = [
 ] as const;
 
 const QUICK_PRACTICE_ACCENTS = {
-  indigo: { iconBox: 'bg-indigo-100 text-indigo-600', border: 'hover:border-indigo-300', glow: 'hover:shadow-indigo-100', arrow: 'text-indigo-600' },
-  violet: { iconBox: 'bg-violet-100 text-violet-600', border: 'hover:border-violet-300', glow: 'hover:shadow-violet-100', arrow: 'text-violet-600' },
-  blue: { iconBox: 'bg-blue-100 text-blue-600', border: 'hover:border-blue-300', glow: 'hover:shadow-blue-100', arrow: 'text-blue-600' },
+  indigo: { bg: 'bg-gradient-to-br from-indigo-50/80 to-blue-50/80', iconBox: 'bg-white text-indigo-600 shadow-sm', border: 'border-indigo-100 hover:border-indigo-300', glow: 'hover:shadow-indigo-200/50', arrow: 'text-indigo-600' },
+  violet: { bg: 'bg-gradient-to-br from-violet-50/80 to-purple-50/80', iconBox: 'bg-white text-violet-600 shadow-sm', border: 'border-violet-100 hover:border-violet-300', glow: 'hover:shadow-violet-200/50', arrow: 'text-violet-600' },
+  blue: { bg: 'bg-gradient-to-br from-blue-50/80 to-cyan-50/80', iconBox: 'bg-white text-blue-600 shadow-sm', border: 'border-blue-100 hover:border-blue-300', glow: 'hover:shadow-blue-200/50', arrow: 'text-blue-600' },
 } as const;
 
 export default function DashboardPage() {
@@ -93,13 +93,13 @@ export default function DashboardPage() {
             Jump back in
           </p>
           <div className="grid gap-6 lg:grid-cols-3">
-            <Card className="group rounded-2xl border-indigo-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-100 lg:col-span-2">
+            <Card className="group rounded-2xl border-indigo-100 bg-gradient-to-br from-indigo-50/90 to-violet-50/90 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-200/40 lg:col-span-2">
               <CardHeader>
                 <CardTitle className="text-slate-900">Continue Learning</CardTitle>
                 <CardDescription>Resume your main lesson track from where you left off.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="rounded-xl border border-indigo-100 bg-indigo-50 p-4 transition-colors duration-300 group-hover:bg-indigo-100/70">
+                <div className="rounded-xl border border-indigo-100/50 bg-white/60 p-4 backdrop-blur-sm transition-colors duration-300 group-hover:bg-white/80">
                   <p className="text-sm font-semibold text-indigo-900">Vocabulary Sprint</p>
                   <p className="mt-1 text-sm text-indigo-800">Pick up your vocabulary lessons and reinforce with a quick quiz.</p>
                 </div>
@@ -115,13 +115,13 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="group rounded-2xl border-amber-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-100">
+            <Card className="group rounded-2xl border-amber-100 bg-gradient-to-br from-amber-50/90 to-orange-50/90 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-200/40">
               <CardHeader>
                 <CardTitle className="text-slate-900">Full Mock Test</CardTitle>
                 <CardDescription>Simulate test day and measure your readiness.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center gap-3 rounded-xl bg-amber-50 p-3 transition-colors duration-300 group-hover:bg-amber-100/70">
+                <div className="flex items-center gap-3 rounded-xl border border-amber-100/50 bg-white/60 p-3 backdrop-blur-sm transition-colors duration-300 group-hover:bg-white/80">
                   <Target className="h-5 w-5 flex-shrink-0 text-amber-600" />
                   <p className="text-sm text-amber-900">Timed sections and instant result analysis.</p>
                 </div>
@@ -156,7 +156,7 @@ export default function DashboardPage() {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${accent.border} ${accent.glow}`}
+                  className={`group relative overflow-hidden rounded-2xl border p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${accent.bg} ${accent.border} ${accent.glow}`}
                 >
                   <div className={`grid h-10 w-10 place-items-center rounded-xl transition-transform duration-300 group-hover:scale-110 ${accent.iconBox}`}>
                     <Icon className="h-5 w-5" />
