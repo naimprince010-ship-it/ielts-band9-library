@@ -77,20 +77,26 @@ export function Navbar() {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-x-0 top-0 z-[49] h-24 bg-background"
+      />
+      <nav className={`fixed top-3 left-1/2 z-50 w-[calc(100%-1.5rem)] max-w-[1480px] -translate-x-1/2 transition-all duration-300 ${
         scrolled
-          ? 'bg-background/95 backdrop-blur-md border-b border-border shadow-sm'
-          : 'bg-background/80 backdrop-blur-sm border-b border-transparent'
-      }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 lg:h-18">
+          ? 'bg-white shadow-[0_18px_45px_-22px_rgba(15,23,42,0.35)] ring-1 ring-slate-200/80'
+          : 'bg-white shadow-[0_10px_28px_-22px_rgba(15,23,42,0.25)] ring-1 ring-slate-200/60'
+      } rounded-[22px]`}>
+        <div className="mx-auto px-4 sm:px-6 lg:px-7">
+          <div className="flex items-center justify-between h-16 lg:h-[72px]">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2.5 shrink-0">
-              <img loading="eager" src="/icon.png" alt="IELTS Tree Logo" className="h-8 w-8 object-contain" />
-              <span className="text-lg font-semibold text-foreground tracking-tight">IELTS Tree</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-500 shadow-lg shadow-indigo-500/25">
+                <img loading="eager" src="/icon.png" alt="IELTS Tree Logo" className="h-6 w-6 object-contain" />
+              </div>
+              <span className="text-lg font-black tracking-tight text-slate-900">IELTS Tree</span>
             </Link>
             {title && (
-              <span className="hidden md:inline-block ml-3 pl-3 border-l border-border text-sm font-semibold text-foreground/80 truncate max-w-xs">
+              <span className="hidden md:inline-block ml-3 pl-3 border-l border-slate-200 text-sm font-semibold text-slate-600 truncate max-w-xs">
                 {title}
               </span>
             )}
@@ -106,10 +112,10 @@ export function Navbar() {
                 <>
                   {/* Learn Dropdown */}
                   <DropdownMenu modal={false}>
-                    <DropdownMenuTrigger className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors rounded-lg hover:bg-muted ${
+                    <DropdownMenuTrigger className={`flex items-center gap-1 rounded-xl px-3 py-2 text-sm font-semibold transition-all ${
                       isActive('/vocabulary') || isActive('/grammar') || isActive('/writing') || isActive('/speaking')
-                        ? 'text-foreground'
-                        : 'text-foreground/70 hover:text-foreground'
+                        ? 'bg-indigo-50 text-indigo-700'
+                        : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                     }`}>
                       Learn
                       <ChevronDown className="h-4 w-4" />
@@ -147,19 +153,19 @@ export function Navbar() {
                   </DropdownMenu>
 
                   <Link to="/courses" className={navLinkClass('/courses')}>
-                    <span className="px-3 py-2 rounded-lg hover:bg-muted transition-colors inline-block">Courses</span>
+                    <span className="inline-block rounded-xl px-3 py-2 transition-colors hover:bg-slate-100">Courses</span>
                   </Link>
 
                   <Link to="/quiz" className={navLinkClass('/quiz')}>
-                    <span className="px-3 py-2 rounded-lg hover:bg-muted transition-colors inline-block">Quiz</span>
+                    <span className="inline-block rounded-xl px-3 py-2 transition-colors hover:bg-slate-100">Quiz</span>
                   </Link>
 
                   {/* Practice Dropdown */}
                   <DropdownMenu modal={false}>
-                    <DropdownMenuTrigger className={`flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors rounded-lg hover:bg-muted ${
+                    <DropdownMenuTrigger className={`flex items-center gap-1 rounded-xl px-3 py-2 text-sm font-semibold transition-all ${
                       isActive('/grammar-exercises') || isActive('/essay-bank') || isActive('/daily-plan') || isActive('/collections')
-                        ? 'text-foreground'
-                        : 'text-foreground/70 hover:text-foreground'
+                        ? 'bg-violet-50 text-violet-700'
+                        : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                     }`}>
                       Practice
                       <ChevronDown className="h-4 w-4" />
@@ -195,7 +201,7 @@ export function Navbar() {
 
                   {!user && (
                     <Link to="/pricing" className={navLinkClass('/pricing')}>
-                      <span className="px-3 py-2 rounded-lg hover:bg-muted transition-colors inline-block">Pricing</span>
+                      <span className="inline-block rounded-xl px-3 py-2 transition-colors hover:bg-slate-100">Pricing</span>
                     </Link>
                   )}
                 </>

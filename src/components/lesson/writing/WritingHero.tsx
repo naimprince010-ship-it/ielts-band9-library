@@ -86,17 +86,31 @@ export function WritingHero({
                 <Badge variant="outline" className="border-white/20 bg-white/10 text-white/80">
                   <Zap className="mr-1 h-3.5 w-3.5" /> {estimatedTime} min
                 </Badge>
+                <Badge variant="outline" className="border-rose-300/35 bg-rose-400/15 text-rose-100">
+                  Essay sprint
+                </Badge>
               </div>
               <h1 className="max-w-3xl text-3xl font-black tracking-tight sm:text-4xl lg:text-[2.9rem] lg:leading-[1.05]">{title}</h1>
               <p className="mt-2 max-w-2xl text-base leading-6 text-indigo-100 sm:text-lg">{description}</p>
 
+              <div className="mt-4 rounded-2xl border border-white/15 bg-white/10 p-3 backdrop-blur-sm">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-indigo-100">Today&apos;s writing focus</p>
+                  <div className="flex flex-wrap gap-2 text-[10px] font-bold uppercase tracking-[0.12em] text-indigo-100">
+                    <span className="rounded-full border border-white/15 bg-white/10 px-2.5 py-1">Task response</span>
+                    <span className="rounded-full border border-white/15 bg-white/10 px-2.5 py-1">Clear structure</span>
+                    <span className="rounded-full border border-white/15 bg-white/10 px-2.5 py-1">Band 8 polish</span>
+                  </div>
+                </div>
+              </div>
+
               <div className="mt-4 flex flex-wrap gap-3">
-                <Button className="h-10 rounded-xl bg-white px-5 font-black text-slate-950 hover:bg-indigo-50" onClick={() => onScrollToSection('what-you-will-learn')}>
+                <Button className="h-10 rounded-xl bg-white px-5 font-black text-slate-950 shadow-sm shadow-slate-950/20 hover:bg-indigo-50" onClick={() => onScrollToSection('what-you-will-learn')}>
                   Resume lesson
                 </Button>
                 <Button
                   variant="outline"
-                  className="h-10 rounded-xl border-white/25 bg-white/10 px-5 font-black text-white hover:bg-white/15 hover:text-white"
+                  className="h-10 rounded-xl border-white/25 bg-white/10 px-5 font-black text-white shadow-sm shadow-slate-950/20 hover:bg-white/15 hover:text-white"
                   onClick={() => onScrollToSection('examples')}
                 >
                   Study model answers <ChevronDown className="ml-2 h-4 w-4" />
@@ -104,7 +118,7 @@ export function WritingHero({
                 <Button
                   variant="outline"
                   onClick={onBookmarkToggle}
-                  className="h-10 rounded-xl border-white/20 bg-white/10 px-5 text-white hover:bg-white/15 hover:text-white"
+                  className="h-10 rounded-xl border-white/20 bg-white/10 px-5 text-white shadow-sm shadow-slate-950/20 hover:bg-white/15 hover:text-white"
                 >
                   {isBookmarked ? <BookmarkCheck className="mr-2 h-4 w-4" /> : <Bookmark className="mr-2 h-4 w-4" />}
                   {isBookmarked ? 'Bookmarked' : 'Bookmark'}

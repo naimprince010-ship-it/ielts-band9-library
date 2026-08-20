@@ -72,7 +72,7 @@ export function Layout({ children, mode = 'browse' }: LayoutProps) {
   }, [pathname, settingsVersion]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-transparent text-foreground">
       {/* Skip navigation for keyboard/screen reader users */}
       <a
         href="#main-content"
@@ -85,11 +85,11 @@ export function Layout({ children, mode = 'browse' }: LayoutProps) {
       <main
         id="main-content"
         tabIndex={-1}
-        className={`flex-1 ${!hideNavFooter ? 'pt-16 pb-16 md:pb-0' : 'h-screen overflow-y-auto'}`}
+        className={`flex-1 ${!hideNavFooter ? 'pt-24 pb-20 md:pb-0' : 'h-screen overflow-y-auto'}`}
       >
         <h1 className="sr-only">{seoHeadings.h1}</h1>
         <h2 className="sr-only">{seoHeadings.h2}</h2>
-        {children}
+        <div className="mx-auto w-full max-w-[1600px] px-3 sm:px-5 lg:px-8">{children}</div>
       </main>
       {showFooter && <Footer />}
       {!hideNavFooter && <MobileNav />}

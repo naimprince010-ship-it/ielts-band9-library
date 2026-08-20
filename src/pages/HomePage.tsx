@@ -104,32 +104,37 @@ export function HomePage() {
   const featuredLessons = SAMPLE_LESSONS.filter(l => l.is_published).slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.14),_transparent_32%),radial-gradient(circle_at_85%_12%,_rgba(16,185,129,0.12),_transparent_30%),linear-gradient(180deg,_#f8fbff_0%,_#ffffff_40%,_#f7fafc_100%)]">
       {user && <ContinueLearning />}
       
       {/* Hero Section - Modern Minimal */}
-      <section className="relative pt-20 pb-16 md:pt-28 md:pb-24 lg:pt-32 lg:pb-32">
+      <section className="relative overflow-hidden pb-12 pt-16 sm:pb-16 sm:pt-20 md:pb-24 md:pt-28 lg:pb-32 lg:pt-32">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -top-16 left-[-8%] h-72 w-72 rounded-full bg-cyan-200/35 blur-3xl" />
+          <div className="absolute top-24 right-[-10%] h-80 w-80 rounded-full bg-emerald-200/35 blur-3xl" />
+          <div className="absolute bottom-8 left-1/2 h-40 w-[70%] -translate-x-1/2 rounded-full bg-white/60 blur-2xl" />
+        </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-12 lg:mb-16">
+          <div className="relative mx-auto mb-10 max-w-4xl rounded-[2rem] border border-white/70 bg-white/80 px-4 py-7 text-center shadow-[0_28px_90px_rgba(15,23,42,0.12)] backdrop-blur sm:px-8 sm:py-10 lg:mb-16 lg:px-12 lg:py-14">
             <Badge 
               variant="secondary" 
-              className="mb-6 px-4 py-1.5 text-sm font-medium bg-muted text-muted-foreground border-0"
+              className="mb-6 border-0 bg-gradient-to-r from-cyan-100 to-emerald-100 px-4 py-1.5 text-sm font-medium text-slate-700"
             >
               Trusted by 2,000+ students worldwide
             </Badge>
             
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground tracking-tight leading-[1.1] mb-6">
+            <h1 className="mb-5 text-3xl font-bold leading-[1.08] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
               Master IELTS with{' '}
-              <span className="text-accent">expert-crafted</span>{' '}
+              <span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-emerald-600 bg-clip-text text-transparent">expert-crafted</span>{' '}
               lessons
             </h1>
             
-            <p className="text-lg lg:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
+            <p className="mx-auto mb-7 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg lg:text-xl">
               Premium vocabulary, advanced grammar, and proven strategies designed by experts to help you reach Band 7.0 to 9.0.
             </p>
             
             {/* Search Bar */}
-            <form onSubmit={handleSearch} className="max-w-xl mx-auto mb-8">
+            <form onSubmit={handleSearch} className="mx-auto mb-7 max-w-xl rounded-2xl border border-slate-200/80 bg-white/95 p-2.5 shadow-lg shadow-slate-200/60 sm:p-3">
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="relative flex-1">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground h-5 w-5" />
@@ -138,13 +143,13 @@ export function HomePage() {
                     placeholder="What do you want to learn today?"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-12 h-14 bg-background border-border text-foreground text-base placeholder:text-muted-foreground rounded-xl"
+                    className="h-12 rounded-xl border-slate-200 bg-slate-50 pl-12 text-sm text-foreground placeholder:text-muted-foreground sm:h-14 sm:text-base"
                   />
                 </div>
                 <Button 
                   type="submit" 
                   size="lg" 
-                  className="h-14 px-8 bg-foreground hover:bg-foreground/90 text-background font-semibold rounded-xl"
+                  className="h-12 rounded-xl bg-slate-900 px-6 font-semibold text-white hover:bg-slate-800 sm:h-14 sm:px-8"
                 >
                   Find Lessons
                 </Button>
@@ -175,23 +180,28 @@ export function HomePage() {
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 max-w-4xl mx-auto">
+          <div className="mx-auto grid max-w-5xl grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4 lg:gap-6">
             {STATS.map((stat, index) => (
               <div 
                 key={index}
-                className={`p-6 rounded-2xl text-center transition-all ${
-                  index === 0 
-                    ? 'bg-foreground text-background' 
-                    : 'bg-muted'
+                className={`rounded-2xl border p-4 text-center transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg sm:p-5 ${
+                  index === 0
+                    ? 'border-slate-900/10 bg-slate-900 text-white shadow-slate-400/40'
+                    : 'border-slate-200/80 bg-white/85 shadow-sm shadow-slate-200/70 backdrop-blur'
                 }`}
               >
-                <div className={`text-3xl lg:text-4xl font-bold mb-1 ${
-                  index === 0 ? 'text-background' : 'text-foreground'
+                <div className={`mx-auto mb-2 flex h-9 w-9 items-center justify-center rounded-xl sm:mb-3 sm:h-10 sm:w-10 ${
+                  index === 0 ? 'bg-white/15 text-white' : 'bg-slate-100 text-slate-700'
                 }`}>
+                  <stat.icon className="h-5 w-5" />
+                </div>
+                <div className={`text-3xl lg:text-4xl font-bold mb-1 ${
+                  index === 0 ? 'text-white' : 'text-foreground'
+                } text-2xl sm:text-3xl lg:text-4xl`}>
                   {stat.value}
                 </div>
                 <div className={`text-sm ${
-                  index === 0 ? 'text-background/70' : 'text-muted-foreground'
+                  index === 0 ? 'text-white/70' : 'text-muted-foreground'
                 }`}>
                   {stat.label}
                 </div>
@@ -202,22 +212,22 @@ export function HomePage() {
       </section>
 
       {/* Quick Access Features */}
-      <section className="py-16 lg:py-20 bg-muted/50">
+      <section className="bg-gradient-to-b from-slate-50/60 to-white py-12 sm:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
             {FEATURES.map((feature, index) => (
               <Link 
                 key={index} 
                 to={feature.href}
-                className="group p-6 bg-background rounded-2xl border border-border hover:border-foreground/20 hover:shadow-lg transition-all duration-300"
+                className="group rounded-2xl border border-slate-200/80 bg-white/90 p-4 shadow-sm shadow-slate-200/60 transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg sm:p-6"
               >
-                <div className={`w-12 h-12 ${feature.color} rounded-xl flex items-center justify-center mb-4 ${
+                <div className={`mb-3 flex h-11 w-11 items-center justify-center rounded-xl sm:mb-4 sm:h-12 sm:w-12 ${feature.color} ${
                   feature.color === 'bg-foreground' ? 'text-background' : 
                   feature.color === 'bg-accent' ? 'text-accent-foreground' : 'text-foreground'
                 }`}>
                   <feature.icon className="h-6 w-6" />
                 </div>
-                <h3 className="font-semibold text-lg text-foreground mb-1">{feature.title}</h3>
+                <h3 className="mb-1 text-base font-semibold text-foreground sm:text-lg">{feature.title}</h3>
                 <p className="text-sm text-muted-foreground mb-4">{feature.desc}</p>
                 <div className="flex items-center text-sm font-medium text-foreground group-hover:text-accent transition-colors">
                   Explore
@@ -230,7 +240,7 @@ export function HomePage() {
       </section>
 
       {/* Categories Section - Detailed Cards */}
-      <section className="py-16 lg:py-24 bg-background">
+      <section className="bg-gradient-to-b from-white to-slate-50/40 py-12 sm:py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-12 gap-6">
             <div className="max-w-xl">
@@ -255,21 +265,21 @@ export function HomePage() {
             </Link>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
             {/* Vocabulary Card - Large */}
             <Link to="/vocabulary" className="group md:row-span-2">
-              <Card className="h-full border-border bg-foreground text-background overflow-hidden transition-all duration-300 hover:shadow-xl">
-                <CardHeader className="pb-4 p-8">
+              <Card className="h-full overflow-hidden border-0 bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-900 text-background shadow-xl shadow-slate-300/70 transition-all duration-300 hover:shadow-2xl">
+                <CardHeader className="p-6 pb-4 sm:p-8">
                   <div className="w-14 h-14 bg-background/10 rounded-xl flex items-center justify-center mb-6">
                     <BookOpen className="h-7 w-7" />
                   </div>
-                  <CardTitle className="text-2xl lg:text-3xl font-bold mb-3">Vocabulary</CardTitle>
-                  <CardDescription className="text-background/70 text-base lg:text-lg">
+                  <CardTitle className="mb-3 text-xl font-bold sm:text-2xl lg:text-3xl">Vocabulary</CardTitle>
+                  <CardDescription className="text-sm text-background/70 sm:text-base lg:text-lg">
                     Band 8.0+ academic words, collocations, and idiomatic expressions for all IELTS modules.
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="p-8 pt-0">
-                  <div className="space-y-3 mb-8">
+                <CardContent className="p-6 pt-0 sm:p-8 sm:pt-0">
+                  <div className="mb-6 space-y-3 sm:mb-8">
                     {['Topic-based Lessons', 'Smart Flashcards', 'Speaking Phrases', 'Writing Vocabulary', 'Collocations'].map((item) => (
                       <div key={item} className="flex items-center gap-3 text-background/80">
                         <CheckCircle className="h-5 w-5 text-accent flex-shrink-0" />
@@ -287,8 +297,8 @@ export function HomePage() {
 
             {/* Grammar Card */}
             <Link to="/grammar" className="group">
-              <Card className="h-full border-border bg-background transition-all duration-300 hover:shadow-lg hover:border-foreground/20">
-                <CardHeader className="pb-4 p-6">
+                <Card className="h-full border-indigo-200/70 bg-gradient-to-br from-white to-indigo-50/40 transition-all duration-300 hover:shadow-lg hover:border-indigo-300/60">
+                <CardHeader className="p-5 pb-4 sm:p-6">
                   <div className="flex items-start justify-between">
                     <div className="w-12 h-12 bg-accent rounded-xl flex items-center justify-center">
                       <GraduationCap className="h-6 w-6 text-accent-foreground" />
@@ -310,10 +320,10 @@ export function HomePage() {
             </Link>
 
             {/* Writing & Speaking Row */}
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
               <Link to="/writing" className="group">
-                <Card className="h-full border-border bg-muted/50 transition-all duration-300 hover:shadow-lg hover:border-foreground/20">
-                  <CardHeader className="p-5">
+                <Card className="h-full border-cyan-200/70 bg-gradient-to-br from-white to-cyan-50/45 transition-all duration-300 hover:shadow-lg hover:border-cyan-300/60">
+                  <CardHeader className="p-4 sm:p-5">
                     <div className="w-10 h-10 bg-background rounded-lg flex items-center justify-center mb-3">
                       <PenTool className="h-5 w-5 text-foreground" />
                     </div>
@@ -325,8 +335,8 @@ export function HomePage() {
                 </Card>
               </Link>
               <Link to="/speaking" className="group">
-                <Card className="h-full border-border bg-muted/50 transition-all duration-300 hover:shadow-lg hover:border-foreground/20">
-                  <CardHeader className="p-5">
+                <Card className="h-full border-emerald-200/70 bg-gradient-to-br from-white to-emerald-50/45 transition-all duration-300 hover:shadow-lg hover:border-emerald-300/60">
+                  <CardHeader className="p-4 sm:p-5">
                     <div className="w-10 h-10 bg-background rounded-lg flex items-center justify-center mb-3">
                       <Mic className="h-5 w-5 text-foreground" />
                     </div>
@@ -344,7 +354,7 @@ export function HomePage() {
 
       {/* Featured Courses Section */}
       {courses.length > 0 && (
-        <section className="py-16 lg:py-24 bg-background">
+        <section className="bg-background py-12 sm:py-16 lg:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12 gap-6">
               <div className="max-w-xl">
@@ -369,7 +379,7 @@ export function HomePage() {
               </Link>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid gap-6 md:grid-cols-2 md:gap-8">
               {courses.map((course) => (
                 <Link key={course.id} to={`/courses/${course.id}`} className="group">
                   <Card className="h-full border-0 bg-muted/30 overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-accent/5 hover:-translate-y-1 rounded-[2.5rem]">
@@ -423,7 +433,7 @@ export function HomePage() {
       )}
 
       {/* Featured Lessons */}
-      <section className="py-16 lg:py-24 bg-muted/30">
+      <section className="bg-gradient-to-b from-slate-50/70 to-white py-12 sm:py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <p className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">
@@ -437,10 +447,10 @@ export function HomePage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
             {featuredLessons.map((lesson) => (
               <Link key={lesson.id} to={`/lesson/${lesson.slug}`} className="group">
-                <Card className="h-full border-border bg-background transition-all duration-300 hover:shadow-lg hover:border-foreground/20">
+                <Card className="h-full border-slate-200/80 bg-white/90 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:border-slate-300">
                   <CardHeader className="pb-3 p-6">
                     <div className="flex items-center justify-between mb-4">
                       <Badge 
@@ -494,7 +504,7 @@ export function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-16 lg:py-24 bg-background">
+      <section className="bg-gradient-to-b from-white to-slate-50/50 py-12 sm:py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <p className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">
@@ -508,11 +518,11 @@ export function HomePage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
             {TESTIMONIALS.map((testimonial, index) => (
               <Card 
                 key={index} 
-                className="border-border bg-muted/30 transition-all duration-300 hover:shadow-lg"
+                className="border-slate-200/80 bg-white/90 shadow-sm shadow-slate-200/60 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
               >
                 <CardContent className="p-6">
                   <div className="flex gap-1 text-accent mb-4">
@@ -548,7 +558,7 @@ export function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 lg:py-24 bg-foreground">
+      <section className="bg-foreground py-12 sm:py-16 lg:py-24">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-background/10 text-background mb-6">
             <Target className="h-8 w-8" />
@@ -566,7 +576,7 @@ export function HomePage() {
             <Link to="/signup">
               <Button 
                 size="lg" 
-                className="h-14 px-10 bg-accent hover:bg-accent/90 text-accent-foreground font-semibold rounded-xl w-full sm:w-auto"
+                className="h-12 w-full rounded-xl bg-accent px-8 font-semibold text-accent-foreground hover:bg-accent/90 sm:h-14 sm:w-auto sm:px-10"
               >
                 Get Started Free
               </Button>
@@ -575,7 +585,7 @@ export function HomePage() {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="h-14 px-10 border-2 border-white/30 text-white bg-white/10 hover:bg-white/20 font-semibold rounded-xl w-full sm:w-auto"
+                className="h-12 w-full rounded-xl border-2 border-white/30 bg-white/10 px-8 font-semibold text-white hover:bg-white/20 sm:h-14 sm:w-auto sm:px-10"
               >
                 View Pricing
               </Button>

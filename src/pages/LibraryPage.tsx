@@ -79,11 +79,15 @@ export function LibraryPage({ type }: LibraryPageProps) {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [isFilterSticky, setIsFilterSticky] = useState(false);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [heroReady, setHeroReady] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
   
   const { lessons, loading, fetchLessons, addBookmark, removeBookmark, isBookmarked, getLessonProgress, getCompletionPercentage, getCompletedCount } = useLessons();
   const { user } = useAuth();
   useProgress();
+  const isVocabulary = type === 'vocabulary';
+  const isGrammar = type === 'grammar';
+  const isWriting = type === 'writing';
 
   const topics = type === 'vocabulary' ? VOCABULARY_TOPICS : type === 'writing' ? WRITING_TOPICS : type === 'speaking' ? SPEAKING_TOPICS : GRAMMAR_TOPICS;
   const filteredLessons = lessons.filter(l => l.type === type);
@@ -112,6 +116,12 @@ export function LibraryPage({ type }: LibraryPageProps) {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    setHeroReady(false);
+    const rafId = window.requestAnimationFrame(() => setHeroReady(true));
+    return () => window.cancelAnimationFrame(rafId);
+  }, [type]);
 
   const scrollToTop = useCallback(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -216,33 +226,60 @@ export function LibraryPage({ type }: LibraryPageProps) {
   }, [searchQuery, levelFilter, topicFilter, sortBy, vocabularyTab]);
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="py-12 bg-foreground text-background">
+    <div className={`min-h-screen ${isVocabulary ? 'bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.16),_transparent_32%),linear-gradient(180deg,_#f8fbff_0%,_#ffffff_42%,_#f8fafc_100%)]' : isGrammar ? 'bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.15),_transparent_30%),linear-gradient(180deg,_#f8faff_0%,_#ffffff_42%,_#f8fafc_100%)]' : isWriting ? 'bg-[radial-gradient(circle_at_top,_rgba(244,114,182,0.16),_transparent_32%),linear-gradient(180deg,_#fffaf8_0%,_#ffffff_42%,_#fdf7f4_100%)]' : 'bg-background'}`}>
+      <div className={`${isVocabulary ? 'border-b border-indigo-200/70 bg-[linear-gradient(135deg,#0f1b3d_0%,#1d2d64_55%,#1f4e7a_100%)] py-9 text-white sm:py-11' : isGrammar ? 'border-b border-indigo-200/70 bg-[linear-gradient(135deg,#0d1437_0%,#1b1d54_52%,#36228d_100%)] py-9 text-white sm:py-11' : isWriting ? 'border-b border-rose-200/70 bg-[linear-gradient(135deg,#311225_0%,#5a213f_52%,#7c2f4b_100%)] py-9 text-white sm:py-11' : 'bg-foreground py-12 text-background'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3 mb-4">
-            {type === 'vocabulary' ? (
-              <BookOpen className="h-10 w-10" />
-            ) : type === 'writing' ? (
-              <PenTool className="h-10 w-10" />
-            ) : type === 'speaking' ? (
-              <Mic className="h-10 w-10" />
-            ) : (
-              <GraduationCap className="h-10 w-10" />
-            )}
-            <h1 className="text-3xl font-bold capitalize">{type} Library</h1>
-          </div>
-          <p className="text-lg opacity-90 max-w-2xl">
-            {type === 'vocabulary' 
-              ? 'Master academic vocabulary, collocations, and speaking phrases for IELTS Band 7+.'
-              : type === 'writing'
-              ? 'Master IELTS Writing with Band 9 model answers, Band Upgrade Ladder, and examiner insights.'
-              : type === 'speaking'
-              ? 'Master IELTS Speaking with Band 9 model answers, fluency techniques, and Part 1-2-3 strategies.'
-              : 'Learn essential grammar structures with clear explanations, examples, and practice exercises.'}
-          </p>
+          <div className="overflow-hidden rounded-[1.6rem] border border-white/10 bg-white/5 p-4 shadow-[0_28px_65px_-30px_rgba(15,23,42,0.75)] backdrop-blur-sm sm:p-5">
+            <div className={`mb-4 flex items-center gap-3 transition-all duration-500 ease-out ${heroReady ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'}`}>
+              <div className={`flex h-11 w-11 items-center justify-center rounded-2xl ${isVocabulary ? 'bg-cyan-400/15 text-cyan-100' : isGrammar ? 'bg-indigo-400/15 text-indigo-100' : isWriting ? 'bg-rose-400/15 text-rose-100' : 'bg-white/10 text-white'} ring-1 ring-white/15`}>
+                {type === 'vocabulary' ? (
+                  <BookOpen className="h-5 w-5" />
+                ) : type === 'writing' ? (
+                  <PenTool className="h-5 w-5" />
+                ) : type === 'speaking' ? (
+                  <Mic className="h-5 w-5" />
+                ) : (
+                  <GraduationCap className="h-5 w-5" />
+                )}
+              </div>
+              <h1 className="text-3xl font-black capitalize tracking-tight sm:text-4xl">{type} Library</h1>
+            </div>
+            <p className={`max-w-2xl text-base transition-all delay-75 duration-500 ease-out sm:text-lg ${isVocabulary ? 'text-blue-100' : isGrammar ? 'text-indigo-100' : isWriting ? 'text-rose-100' : 'opacity-90'} ${heroReady ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'}`}>
+              {type === 'vocabulary' 
+                ? 'Master academic vocabulary, collocations, and speaking phrases for IELTS Band 7+.'
+                : type === 'writing'
+                ? 'Master IELTS Writing with Band 9 model answers, Band Upgrade Ladder, and examiner insights.'
+                : type === 'speaking'
+                ? 'Master IELTS Speaking with Band 9 model answers, fluency techniques, and Part 1-2-3 strategies.'
+                : 'Learn essential grammar structures with clear explanations, examples, and practice exercises.'}
+            </p>
+
+          {isVocabulary && (
+            <div className={`mt-5 flex flex-wrap items-center gap-2 transition-all delay-100 duration-500 ease-out ${heroReady ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'}`}>
+              <Badge className="border border-white/20 bg-white/10 text-white hover:bg-white/15">{totalLessons} total lessons</Badge>
+              <Badge className="border border-cyan-300/40 bg-cyan-400/15 text-cyan-100 hover:bg-cyan-400/20">Band 7+ roadmap</Badge>
+              <Badge className="border border-emerald-300/40 bg-emerald-400/15 text-emerald-100 hover:bg-emerald-400/20">Collocations + speaking focus</Badge>
+            </div>
+          )}
+
+          {isGrammar && (
+            <div className={`mt-5 flex flex-wrap items-center gap-2 transition-all delay-100 duration-500 ease-out ${heroReady ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'}`}>
+              <Badge className="border border-white/20 bg-white/10 text-white hover:bg-white/15">{totalLessons} grammar lessons</Badge>
+              <Badge className="border border-indigo-300/40 bg-indigo-400/15 text-indigo-100 hover:bg-indigo-400/20">Band 8 control</Badge>
+              <Badge className="border border-emerald-300/40 bg-emerald-400/15 text-emerald-100 hover:bg-emerald-400/20">Upgrade ladder</Badge>
+            </div>
+          )}
+
+          {isWriting && (
+            <div className={`mt-5 flex flex-wrap items-center gap-2 transition-all delay-100 duration-500 ease-out ${heroReady ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'}`}>
+              <Badge className="border border-white/20 bg-white/10 text-white hover:bg-white/15">{totalLessons} writing lessons</Badge>
+              <Badge className="border border-rose-300/40 bg-rose-400/15 text-rose-100 hover:bg-rose-400/20">Band 8+ structure</Badge>
+              <Badge className="border border-amber-300/40 bg-amber-400/15 text-amber-100 hover:bg-amber-400/20">Exam-ready argument flow</Badge>
+            </div>
+          )}
           
                     {user && (
-                      <div className="mt-6 bg-white/10 rounded-lg p-4 max-w-md">
+                      <div className={`mt-6 max-w-md rounded-xl p-4 transition-all delay-150 duration-500 ease-out ${isVocabulary || isWriting ? 'border border-white/20 bg-white/10 shadow-lg shadow-slate-950/20 backdrop-blur-sm' : 'bg-white/10'} ${heroReady ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'}`}>
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-sm font-medium">Your Progress</span>
                           <span className="text-sm">{completedCount} / {totalLessons} lessons completed</span>
@@ -255,17 +292,17 @@ export function LibraryPage({ type }: LibraryPageProps) {
                     )}
           
                     {type === 'grammar' && (
-                      <div className="mt-6">
-                        <p className="text-sm opacity-80 mb-3">Choose your learning style:</p>
+                      <div className="mt-6 rounded-2xl border border-white/15 bg-white/10 p-4 shadow-lg shadow-slate-950/10 backdrop-blur-sm">
+                        <p className="mb-3 text-sm font-medium text-indigo-100">Choose your learning style:</p>
                         <div className="flex flex-wrap gap-3">
                           <Link to="/grammar-exercises">
-                            <Button className="bg-accent hover:bg-accent/90 text-white gap-2">
+                            <Button className="gap-2 bg-white text-slate-950 hover:bg-indigo-50">
                               <ListChecks className="h-4 w-4" />
                               Traditional Exercises
                             </Button>
                           </Link>
                           <Link to="/grammar/natural">
-                            <Button variant="outline" className="bg-white/10 hover:bg-white/20 text-white gap-2 border border-white/30">
+                            <Button variant="outline" className="gap-2 border-white/25 bg-white/10 text-white hover:bg-white/15 hover:text-white">
                               <Sparkles className="h-4 w-4" />
                               Natural Approach
                             </Button>
@@ -273,14 +310,15 @@ export function LibraryPage({ type }: LibraryPageProps) {
                         </div>
                       </div>
                     )}
+          </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {type === 'vocabulary' && (
-          <div className="mb-4 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
+          <div className="mb-3 rounded-2xl border border-indigo-200/70 bg-gradient-to-r from-white via-indigo-50/60 to-cyan-50/45 p-2.5 shadow-sm shadow-slate-200/70 sm:mb-4 sm:p-4">
             <div className="overflow-x-visible pb-1">
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2">
                 {VOCABULARY_PATH_TABS.map((tab) => {
                   const active = vocabularyTab === tab.value;
                   const count = vocabularyTabCounts?.[tab.value] ?? 0;
@@ -291,7 +329,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
                       type="button"
                       variant={active ? 'default' : 'outline'}
                       onClick={() => setVocabularyTab(tab.value)}
-                      className={`shrink-0 rounded-full px-3 py-2 text-xs font-medium transition-colors sm:px-4 sm:text-sm ${
+                      className={`shrink-0 rounded-full px-2.5 py-1.5 text-[11px] font-medium transition-colors sm:px-4 sm:py-2 sm:text-sm ${
                         active
                           ? 'border-indigo-600 bg-indigo-600 text-white hover:bg-indigo-700'
                           : 'border-slate-200 bg-white text-slate-700 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700'
@@ -299,7 +337,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
                       aria-pressed={active}
                     >
                       <span>{tab.label}</span>
-                      <span className={`ml-2 rounded-full px-2 py-0.5 text-xs ${active ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'}`}>
+                      <span className={`ml-1.5 rounded-full px-1.5 py-0.5 text-[10px] sm:ml-2 sm:px-2 sm:text-xs ${active ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'}`}>
                         {count}
                       </span>
                     </Button>
@@ -307,7 +345,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
                 })}
               </div>
             </div>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="mt-1.5 text-xs text-slate-600 sm:mt-2 sm:text-sm">
               Choose a path, then use search or topic filters to narrow your lessons.
             </p>
           </div>
@@ -315,7 +353,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
 
         <div 
           ref={filterRef}
-          className={`bg-card rounded-lg shadow-sm p-4 mb-6 transition-all ${isFilterSticky ? 'sticky top-0 z-40 shadow-md' : ''}`}
+          className={`mb-5 rounded-[1.35rem] border p-3 transition-all sm:mb-6 sm:p-4 ${isVocabulary ? 'border-indigo-200/80 bg-white/85 shadow-[0_18px_40px_-28px_rgba(59,130,246,0.45)] backdrop-blur' : isGrammar ? 'border-indigo-200/80 bg-white/85 shadow-[0_18px_40px_-28px_rgba(99,102,241,0.45)] backdrop-blur' : isWriting ? 'border-rose-200/80 bg-white/85 shadow-[0_18px_40px_-28px_rgba(244,114,182,0.42)] backdrop-blur' : 'bg-card shadow-sm'} ${isFilterSticky ? 'sticky top-3 z-40 shadow-lg' : ''}`}
         >
           {/* Mobile: Search + Filter Toggle */}
           <div className="flex gap-2 md:hidden">
@@ -326,7 +364,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
                 placeholder={`Search...`}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 h-10"
+                className={`h-10 pl-9 ${isGrammar ? 'border-indigo-200 focus-visible:ring-indigo-200' : isWriting ? 'border-rose-200 focus-visible:ring-rose-200' : ''}`}
               />
             </form>
             <Button 
@@ -343,8 +381,8 @@ export function LibraryPage({ type }: LibraryPageProps) {
 
           {/* Mobile: Collapsible Filters */}
           {showMobileFilters && (
-            <div className="mt-3 pt-3 border-t border-border md:hidden space-y-3">
-              <div className="grid grid-cols-2 gap-2">
+            <div className="mt-2.5 space-y-2.5 border-t border-border pt-2.5 md:hidden">
+              <div className="grid grid-cols-2 gap-1.5">
                 <Select value={levelFilter} onValueChange={(v) => setLevelFilter(v as LessonLevel | 'all')}>
                   <SelectTrigger className="h-9 text-sm">
                     <SelectValue placeholder="Level" />
@@ -407,7 +445,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
                 placeholder={`Search ${type} lessons...`}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className={`pl-10 ${isGrammar ? 'border-indigo-200 focus-visible:ring-indigo-200' : isWriting ? 'border-rose-200 focus-visible:ring-rose-200' : ''}`}
               />
             </div>
             
@@ -481,7 +519,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
         ) : (
           <>
             {type === 'vocabulary' && featuredDeepVocabularyLessons.length > 0 && (
-              <section className="mb-6 rounded-xl border border-indigo-200 bg-gradient-to-r from-indigo-50 via-blue-50 to-violet-50 p-4 sm:p-5">
+              <section className={`mb-6 rounded-2xl border p-4 sm:p-5 ${isGrammar ? 'border-indigo-200 bg-gradient-to-r from-indigo-50 via-white to-violet-50 shadow-sm shadow-indigo-100/60' : 'border-indigo-200 bg-gradient-to-r from-indigo-50 via-blue-50 to-violet-50'}`}>
                 <div className="mb-3 flex items-center justify-between gap-3">
                   <div>
                     <h2 className="text-base sm:text-lg font-semibold text-foreground">Featured Interactive Vocabulary Lessons</h2>
@@ -510,7 +548,7 @@ export function LibraryPage({ type }: LibraryPageProps) {
               </section>
             )}
 
-            <p className="text-muted-foreground mb-4">{sortedAndFilteredLessons.length} lessons found</p>
+            <p className="mb-4 text-sm font-medium text-slate-600">{sortedAndFilteredLessons.length} lessons found</p>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {displayLessons.map((lesson) => {
                 const estimatedTime = lesson.estimated_time || getEstimatedTime(lesson);
@@ -521,59 +559,59 @@ export function LibraryPage({ type }: LibraryPageProps) {
                 
                 return (
                   <Link key={lesson.id} to={`/lesson/${lesson.slug}`}>
-                    <Card className={`h-full hover:shadow-lg transition-shadow cursor-pointer group ${isCompleted ? 'ring-2 ring-green-500 ring-opacity-50' : ''}`}>
-                      <CardHeader>
-                        <div className="flex items-center justify-between mb-2">
+                    <Card className={`group h-full cursor-pointer overflow-hidden border transition-all ${isVocabulary ? 'border-indigo-200/70 bg-gradient-to-br from-white via-white to-indigo-50/45 shadow-[0_18px_40px_-28px_rgba(99,102,241,0.55)] hover:-translate-y-1 hover:border-indigo-300 hover:shadow-[0_22px_50px_-24px_rgba(99,102,241,0.64)]' : isGrammar ? 'border-indigo-200/70 bg-gradient-to-br from-white via-white to-indigo-50/50 shadow-[0_18px_40px_-28px_rgba(79,70,229,0.55)] hover:-translate-y-1 hover:border-indigo-300 hover:shadow-[0_22px_50px_-24px_rgba(79,70,229,0.64)]' : isWriting ? 'border-rose-200/70 bg-gradient-to-br from-white via-white to-rose-50/45 shadow-[0_18px_40px_-28px_rgba(244,114,182,0.52)] hover:-translate-y-1 hover:border-rose-300 hover:shadow-[0_22px_50px_-24px_rgba(244,114,182,0.62)]' : 'hover:shadow-lg'} ${isCompleted ? 'ring-2 ring-green-500 ring-opacity-50' : ''}`}>
+                      <CardHeader className="space-y-3 pb-3">
+                        <div className="mb-1 flex items-center justify-between gap-2">
                           <div className="flex items-center gap-2">
                             <Badge 
                               variant="outline" 
-                              className={`capitalize ${
-                                lesson.level === 'beginner' ? 'text-green-600 border-green-600' :
-                                lesson.level === 'intermediate' ? 'text-foreground border-foreground' :
-                                'text-accent border-accent'
+                              className={`px-2 py-0.5 text-[11px] uppercase tracking-wide ${
+                                lesson.level === 'beginner' ? 'border-emerald-600 text-emerald-700 bg-emerald-50' :
+                                lesson.level === 'intermediate' ? 'border-slate-700 text-slate-700 bg-slate-100' :
+                                'border-violet-600 text-violet-700 bg-violet-50'
                               }`}
                             >
                               {lesson.level}
                             </Badge>
                             {isBandUpgrade && lesson.recommended_order && (
-                              <Badge variant="outline" className="text-orange-600 border-orange-600">
+                              <Badge variant="outline" className="border-orange-500 bg-orange-50 px-2 py-0.5 text-[11px] text-orange-700">
                                 <TrendingUp className="h-3 w-3 mr-1" /> Step {lesson.recommended_order}
                               </Badge>
                             )}
                           </div>
                           <div className="flex items-center gap-2">
                             {lesson.is_premium ? (
-                              <Badge variant="outline" className="text-amber-600 border-amber-600">
+                              <Badge variant="outline" className="border-amber-500 bg-amber-50 px-2 py-0.5 text-[11px] text-amber-700">
                                 <Star className="h-3 w-3 mr-1" /> Premium
                               </Badge>
                             ) : (
-                              <Badge variant="outline" className="text-green-600 border-green-600">
+                              <Badge variant="outline" className="border-emerald-500 bg-emerald-50 px-2 py-0.5 text-[11px] text-emerald-700">
                                 Free
                               </Badge>
                             )}
                             {user && (
                               <button
                                 onClick={(e) => handleBookmarkToggle(lesson.id, e)}
-                                className="p-1 hover:bg-muted rounded"
+                                className="rounded-full p-1.5 transition hover:bg-slate-100"
                               >
                                 {isBookmarked(lesson.id) ? (
-                                  <BookmarkCheck className="h-5 w-5 text-accent" />
+                                  <BookmarkCheck className="h-4 w-4 text-rose-600" />
                                 ) : (
-                                  <Bookmark className="h-5 w-5 text-muted-foreground group-hover:text-foreground" />
+                                  <Bookmark className="h-4 w-4 text-slate-500 group-hover:text-slate-700" />
                                 )}
                               </button>
                             )}
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-start gap-2">
                           {user && (
                             isCompleted ? (
-                              <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0" />
+                              <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-500" />
                             ) : (
-                              <Circle className="h-5 w-5 text-muted-foreground/50 flex-shrink-0" />
+                              <Circle className="mt-0.5 h-4 w-4 flex-shrink-0 text-muted-foreground/50" />
                             )
                           )}
-                          <CardTitle className="text-lg group-hover:text-accent transition-colors">
+                          <CardTitle className="text-base leading-snug transition-colors group-hover:text-accent sm:text-lg">
                             {lesson.title}
                           </CardTitle>
                         </div>
@@ -583,14 +621,14 @@ export function LibraryPage({ type }: LibraryPageProps) {
                             <Badge variant="outline" className="border-violet-300 bg-violet-50 text-[11px] text-violet-700 sm:text-xs">Deep Lesson</Badge>
                           </div>
                         )}
-                        <CardDescription className="line-clamp-2">
+                        <CardDescription className="line-clamp-2 text-sm leading-relaxed">
                           {lesson.description}
                         </CardDescription>
                       </CardHeader>
-                      <CardContent>
-                        <div className="flex items-center justify-between text-sm text-muted-foreground">
+                      <CardContent className="pt-0">
+                        <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground sm:text-sm">
                           <div className="flex items-center gap-2">
-                            <Badge variant="secondary" className="capitalize">
+                            <Badge variant="secondary" className={`h-6 capitalize text-[11px] ${isVocabulary ? 'bg-indigo-100 text-indigo-700' : isGrammar ? 'bg-indigo-100 text-indigo-700' : isWriting ? 'bg-rose-100 text-rose-700' : ''}`}>
                               {lesson.topic}
                             </Badge>
                             <span className="flex items-center gap-1">
@@ -613,17 +651,18 @@ export function LibraryPage({ type }: LibraryPageProps) {
             </div>
 
             {totalPages > 1 && (
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-2 px-2">
-                <Button
-                  variant="outline"
-                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                  size="sm"
-                  className="px-2.5 text-xs sm:px-4 sm:text-sm"
-                >
-                  Previous
-                </Button>
-                <div className="flex items-center gap-1">
+              <div className="mt-8 flex flex-col items-center gap-3 px-2">
+                <div className="rounded-full border border-slate-200 bg-white/90 p-1.5 shadow-sm shadow-slate-200/70 backdrop-blur">
+                  <div className="flex flex-wrap items-center justify-center gap-1">
+                    <Button
+                      variant="ghost"
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                      size="sm"
+                      className="rounded-full px-3 text-xs text-slate-700 hover:bg-slate-100 hover:text-slate-900 disabled:opacity-40 sm:px-4 sm:text-sm"
+                    >
+                      Previous
+                    </Button>
                   {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                     let pageNum;
                     if (totalPages <= 5) {
@@ -638,25 +677,31 @@ export function LibraryPage({ type }: LibraryPageProps) {
                     return (
                       <Button
                         key={pageNum}
-                        variant={currentPage === pageNum ? 'default' : 'outline'}
+                        variant="ghost"
                         size="sm"
                         onClick={() => setCurrentPage(pageNum)}
-                        className="w-8 px-0 text-xs sm:w-10 sm:text-sm"
+                        className={`w-8 rounded-full px-0 text-xs sm:w-10 sm:text-sm ${
+                          currentPage === pageNum
+                            ? 'bg-indigo-600 text-white hover:bg-indigo-600'
+                            : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+                        }`}
                       >
                         {pageNum}
                       </Button>
                     );
                   })}
+                    <Button
+                      variant="ghost"
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                      size="sm"
+                      className="rounded-full px-3 text-xs text-slate-700 hover:bg-slate-100 hover:text-slate-900 disabled:opacity-40 sm:px-4 sm:text-sm"
+                    >
+                      Next
+                    </Button>
+                  </div>
                 </div>
-                <Button
-                  variant="outline"
-                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                  disabled={currentPage === totalPages}
-                  size="sm"
-                  className="px-2.5 text-xs sm:px-4 sm:text-sm"
-                >
-                  Next
-                </Button>
+                <p className="text-xs text-slate-500 sm:text-sm">Page {currentPage} of {totalPages}</p>
               </div>
             )}
           </>

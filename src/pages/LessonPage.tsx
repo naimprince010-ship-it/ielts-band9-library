@@ -17,6 +17,7 @@ import { CopyableBadge } from '@/components/ui/CopyButton';
 import { SpeakButton } from '@/components/ui/SpeakButton';
 import { PieChartCoreExplanation } from '@/components/ui/PieChartVisuals';
 import { DeepVocabularyLesson } from '@/components/lesson/DeepVocabularyLesson';
+import { deepVocabularyLessons } from '@/data/deepVocabularyLessons';
 import { GrammarLessonTemplate } from '@/components/lesson/grammar/GrammarLessonTemplate';
 import { WritingLessonTemplate } from '@/components/lesson/writing/WritingLessonTemplate';
 import { VocabularyLessonTemplate } from '@/components/lesson/vocabulary/VocabularyLessonTemplate';
@@ -216,7 +217,7 @@ export function LessonPage() {
   // They can access if it's NOT premium, OR they are a global premium user, OR they bought the specific course
   const canAccessContent = !lesson.is_premium || isPremium || isCourseEnrolled;
   const content = lesson.content;
-  const isDeepVocabularyLesson = lesson.slug === 'influence-impact-vocabulary';
+  const isDeepVocabularyLesson = lesson.type === 'vocabulary' && lesson.slug in deepVocabularyLessons;
   const estimatedTime = Math.max(5, Math.ceil((content.examples.length + content.miniPractice.length + content.commonMistakes.length) * 2));
 
   const handleBookmarkToggle = async () => {
@@ -454,7 +455,7 @@ export function LessonPage() {
 
           {isDeepVocabularyLesson ? (
             <div className={!canAccessContent ? 'blur-sm pointer-events-none select-none' : ''}>
-              <DeepVocabularyLesson title={content.title} targetLevel={content.targetLevel} learningPoints={content.whatYouWillLearn} />
+              <DeepVocabularyLesson title={content.title} targetLevel={content.targetLevel} learningPoints={content.whatYouWillLearn} data={deepVocabularyLessons[lesson.slug]} />
             </div>
           ) : (
           <Card className="mb-6" id="what-you-will-learn">
