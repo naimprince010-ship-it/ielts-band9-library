@@ -44,6 +44,8 @@ export interface LessonContent {
   grammarFormItems?: GrammarFormItem[];
   grammarUse?: string;
   sentenceUpgrade?: { basic: string; upgraded: string }[];
+  /** Rich, reviewable vocabulary workspace content generated from the admin panel. */
+  deepVocabulary?: import('@/data/deepVocabularyLessons').DeepVocabularyLessonData;
 }
 
 export interface Lesson {

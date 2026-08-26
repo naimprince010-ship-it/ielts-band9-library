@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams, Link as RouterLink } from 'react-router-dom';
 import { 
   Settings, Plus, Edit, Trash2, Eye, EyeOff, BookOpen, GraduationCap,
@@ -66,6 +66,7 @@ import { Lesson, LessonType, LessonLevel, LessonContent } from '@/types';
 import { GRAMMAR_TOPICS, VOCABULARY_TOPICS } from '@/data/sampleLessons';
 import { generateLessonWithAI } from '@/services/aiLessonGenerator';
 import { cn } from '@/lib/utils';
+import { authenticatedJsonHeaders } from '@/lib/authenticatedApi';
 
 interface QualityChecklist {
   naturalCollocations: boolean;
@@ -155,9 +156,10 @@ const menuGroups: MenuGroup[] = [
 
 export function AdminPage() {
   const { user, isAdmin, isInstructor, loading, supabaseUser, signOut } = useAuth();
-  const { lessons, createLesson, updateLesson, deleteLesson } = useLessons();
+  const { lessons, fetchLessons, createLesson, updateLesson, deleteLesson } = useLessons();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const loadedAdminLessonsFor = useRef<string | null>(null);
 
   const defaultSection = isInstructor ? 'instructor-dashboard' : 'dashboard';
   const sectionFromUrl = searchParams.get('section');
@@ -218,6 +220,13 @@ export function AdminPage() {
       navigate('/');
     }
   }, [user, isAdmin, isInstructor, loading, supabaseUser, navigate]);
+
+  useEffect(() => {
+    if (user && (isAdmin || isInstructor) && loadedAdminLessonsFor.current !== user.id) {
+      loadedAdminLessonsFor.current = user.id;
+      void fetchLessons(undefined, undefined, undefined, true);
+    }
+  }, [user, isAdmin, isInstructor, fetchLessons]);
 
   const fetchPayments = async () => {
     if (!isSupabaseConfigured() || !supabase) return;
@@ -445,9 +454,65 @@ export function AdminPage() {
     }
   };
 
+  const handleGenerateDeepVocabulary = async () => {
+    if (!formData.topic) {
+      setError('Please select a topic first');
+      return;
+    }
+    setIsGenerating(true);
+    setError('');
+    setSuccess('');
+    try {
+      const response = await fetch('/api/generate-deep-vocabulary-lesson', {
+        method: 'POST',
+        headers: await authenticatedJsonHeaders(),
+        body: JSON.stringify({ topic: formData.topic, level: formData.level }),
+      });
+      const generated = await response.json();
+      if (!response.ok) throw new Error(generated.error || 'Failed to generate deep vocabulary lesson');
+
+      const content: LessonContent = {
+        title: generated.title,
+        targetLevel: generated.targetLevel,
+        whatYouWillLearn: generated.whatYouWillLearn,
+        coreExplanation: generated.description,
+        examples: [],
+        commonMistakes: [],
+        miniPractice: [],
+        answerKey: [],
+        quickRecap: generated.deepVocabulary.memoryTip?.text || '',
+        deepVocabulary: generated.deepVocabulary,
+      };
+      setFormData(prev => ({
+        ...prev,
+        title: generated.title,
+        description: generated.description,
+        content,
+        is_published: false,
+      }));
+      setQualityChecklist({
+        naturalCollocations: false,
+        ieltsSafeUsage: false,
+        noRareWords: false,
+        examplesReviewed: false,
+        mistakesAccurate: false,
+      });
+      setSuccess('Deep vocabulary draft generated. Review every section before publishing.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to generate deep vocabulary lesson');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   const handleSaveLesson = async () => {
     if (!formData.title || !formData.topic || !formData.content) {
       setError('Please fill in all required fields and generate content');
+      return;
+    }
+    const deepLessonIsApproved = Object.values(qualityChecklist).every(Boolean);
+    if (formData.content.deepVocabulary && formData.is_published && !deepLessonIsApproved) {
+      setError('Complete every Content Quality Guard check before publishing a deep vocabulary lesson.');
       return;
     }
     setIsSaving(true);
@@ -1262,6 +1327,17 @@ export function AdminPage() {
                 <Button onClick={handleGenerateWithAI} disabled={isGenerating || !formData.topic} className="w-full h-12 rounded-xl bg-indigo-600 hover:bg-indigo-700 font-bold shadow-lg shadow-indigo-100">
                   {isGenerating ? <><Loader2 className="h-5 w-5 mr-2 animate-spin" /> Generating...</> : <><Sparkles className="h-5 w-5 mr-2" /> Generate Draft with AI</>}
                 </Button>
+                {formData.type === 'vocabulary' && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleGenerateDeepVocabulary}
+                    disabled={isGenerating || !formData.topic}
+                    className="mt-3 w-full h-12 rounded-xl border-violet-300 bg-white font-bold text-violet-700 hover:bg-violet-50"
+                  >
+                    {isGenerating ? <><Loader2 className="h-5 w-5 mr-2 animate-spin" /> Generating...</> : <><Sparkles className="h-5 w-5 mr-2" /> Generate Deep Vocabulary Lesson</>}
+                  </Button>
+                )}
               </CardContent>
             </Card>
 
@@ -1295,6 +1371,19 @@ export function AdminPage() {
                         ))}
                       </ul>
                     </div>
+                    {formData.content.deepVocabulary && (
+                      <div className="rounded-xl border border-violet-100 bg-violet-50/60 p-4">
+                        <span className="mb-2 block text-[10px] font-black uppercase tracking-widest text-violet-500">Deep lesson words</span>
+                        <div className="flex flex-wrap gap-2">
+                          {formData.content.deepVocabulary.words.map((word) => (
+                            <Badge key={word.word} className="bg-violet-600">{word.word}</Badge>
+                          ))}
+                        </div>
+                        <p className="mt-3 text-xs text-violet-700">
+                          {formData.content.deepVocabulary.checks.length} checks · review examples, corrections and answer keys before publishing.
+                        </p>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               )}
@@ -1335,7 +1424,12 @@ export function AdminPage() {
                     <Label htmlFor="is_premium" className="font-bold text-slate-700">Premium</Label>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Switch id="is_published" checked={formData.is_published} onCheckedChange={(checked) => setFormData(prev => ({ ...prev, is_published: checked }))} />
+                    <Switch
+                      id="is_published"
+                      checked={formData.is_published}
+                      disabled={Boolean(formData.content?.deepVocabulary) && !Object.values(qualityChecklist).every(Boolean)}
+                      onCheckedChange={(checked) => setFormData(prev => ({ ...prev, is_published: checked }))}
+                    />
                     <Label htmlFor="is_published" className="font-bold text-slate-700">Published</Label>
                   </div>
                 </div>

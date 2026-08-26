@@ -217,7 +217,10 @@ export function LessonPage() {
   // They can access if it's NOT premium, OR they are a global premium user, OR they bought the specific course
   const canAccessContent = !lesson.is_premium || isPremium || isCourseEnrolled;
   const content = lesson.content;
-  const isDeepVocabularyLesson = lesson.type === 'vocabulary' && lesson.slug in deepVocabularyLessons;
+  const deepVocabularyData = lesson.type === 'vocabulary'
+    ? content.deepVocabulary ?? (lesson.slug === 'influence-impact-vocabulary' ? deepVocabularyLessons[lesson.slug] : undefined)
+    : undefined;
+  const isDeepVocabularyLesson = Boolean(deepVocabularyData);
   const estimatedTime = Math.max(5, Math.ceil((content.examples.length + content.miniPractice.length + content.commonMistakes.length) * 2));
 
   const handleBookmarkToggle = async () => {
@@ -287,7 +290,7 @@ export function LessonPage() {
   // because its content comes from the hand-authored `DeepVocabularyLesson`
   // component rather than from `lesson.content`. Nothing else here is
   // keyed off `slug`.
-  if (lesson.type === 'vocabulary' && lesson.slug !== 'influence-impact-vocabulary') {
+  if (lesson.type === 'vocabulary' && !isDeepVocabularyLesson) {
     return (
       <VocabularyLessonTemplate
         lesson={lesson}
@@ -372,8 +375,8 @@ export function LessonPage() {
               <p className={isDeepVocabularyLesson ? 'max-w-2xl text-base leading-8 text-slate-600' : 'max-w-2xl text-white/80 leading-7'}>{lesson.description}</p>
               {isDeepVocabularyLesson && (
                 <div className="mt-6 flex flex-wrap items-center gap-5 text-sm font-medium text-slate-700">
-                  <span className="inline-flex items-center gap-2"><BookOpen className="h-4 w-4 text-indigo-700" />4 key words</span>
-                  <span className="inline-flex items-center gap-2"><Zap className="h-4 w-4 text-indigo-700" />8-12 min</span>
+                  <span className="inline-flex items-center gap-2"><BookOpen className="h-4 w-4 text-indigo-700" />{deepVocabularyData?.words.length ?? 0} key words</span>
+                  <span className="inline-flex items-center gap-2"><Zap className="h-4 w-4 text-indigo-700" />{deepVocabularyData?.estimatedTime || `${estimatedTime} min`}</span>
                   <span className="inline-flex items-center gap-2"><GraduationCap className="h-4 w-4 text-indigo-700" />{content.targetLevel}</span>
                 </div>
               )}
@@ -390,7 +393,7 @@ export function LessonPage() {
                   <div>
                     <p className="text-sm font-black text-indigo-700">By the end of this lesson</p>
                     <p className="mt-2 text-sm leading-6 text-slate-600">
-                      You will confidently use influence, impact, affect and effect in the correct form and context.
+                      {deepVocabularyData?.learningOutcomes?.[0] || content.whatYouWillLearn[0] || 'Use the target vocabulary accurately in IELTS contexts.'}
                     </p>
                     <Badge className="mt-3 bg-indigo-50 text-indigo-700 hover:bg-indigo-50">IELTS Writing + Speaking</Badge>
                     <div className="mt-4 flex flex-wrap gap-2">
@@ -455,7 +458,7 @@ export function LessonPage() {
 
           {isDeepVocabularyLesson ? (
             <div className={!canAccessContent ? 'blur-sm pointer-events-none select-none' : ''}>
-              <DeepVocabularyLesson title={content.title} targetLevel={content.targetLevel} learningPoints={content.whatYouWillLearn} data={deepVocabularyLessons[lesson.slug]} />
+              {deepVocabularyData && <DeepVocabularyLesson title={content.title} targetLevel={content.targetLevel} learningPoints={content.whatYouWillLearn} data={deepVocabularyData} />}
             </div>
           ) : (
           <Card className="mb-6" id="what-you-will-learn">

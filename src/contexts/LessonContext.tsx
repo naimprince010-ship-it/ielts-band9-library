@@ -9,7 +9,7 @@ interface LessonContextType {
   bookmarks: Bookmark[];
   progress: UserLessonProgress[];
   loading: boolean;
-  fetchLessons: (type?: LessonType, level?: LessonLevel, search?: string) => Promise<void>;
+  fetchLessons: (type?: LessonType, level?: LessonLevel, search?: string, includeDrafts?: boolean) => Promise<void>;
   getLessonBySlug: (slug: string) => Lesson | undefined;
   getLessonById: (id: string) => Lesson | undefined;
   addBookmark: (lessonId: string) => Promise<void>;
@@ -72,7 +72,7 @@ export function LessonProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const fetchLessons = async (type?: LessonType, level?: LessonLevel, search?: string) => {
+  const fetchLessons = async (type?: LessonType, level?: LessonLevel, search?: string, includeDrafts = false) => {
     setLoading(true);
 
     if (!isSupabaseConfigured() || !supabase) {
@@ -101,8 +101,11 @@ export function LessonProvider({ children }: { children: ReactNode }) {
     let query = supabase
       .from('lessons')
       .select('*')
-      .eq('is_published', true)
       .order('created_at', { ascending: false });
+
+    if (!includeDrafts) {
+      query = query.eq('is_published', true);
+    }
 
     if (type) {
       query = query.eq('type', type);
