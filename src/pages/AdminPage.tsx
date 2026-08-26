@@ -505,14 +505,54 @@ export function AdminPage() {
     }
   };
 
+  const handleGenerateDeepGrammar = async () => {
+    if (!formData.topic) {
+      setError('Please select a topic first');
+      return;
+    }
+    setIsGenerating(true);
+    setError('');
+    setSuccess('');
+    try {
+      const response = await fetch('/api/generate-deep-grammar-lesson', {
+        method: 'POST',
+        headers: await authenticatedJsonHeaders(),
+        body: JSON.stringify({ topic: formData.topic, level: formData.level }),
+      });
+      const generated = await response.json();
+      if (!response.ok) throw new Error(generated.error || 'Failed to generate deep grammar lesson');
+
+      const content: LessonContent = { ...generated.content, deepGrammar: true };
+      setFormData(prev => ({
+        ...prev,
+        title: generated.title,
+        description: generated.description,
+        content,
+        is_published: false,
+      }));
+      setQualityChecklist({
+        naturalCollocations: false,
+        ieltsSafeUsage: false,
+        noRareWords: false,
+        examplesReviewed: false,
+        mistakesAccurate: false,
+      });
+      setSuccess('Deep grammar draft generated. Review every rule, example and answer before publishing.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to generate deep grammar lesson');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   const handleSaveLesson = async () => {
     if (!formData.title || !formData.topic || !formData.content) {
       setError('Please fill in all required fields and generate content');
       return;
     }
     const deepLessonIsApproved = Object.values(qualityChecklist).every(Boolean);
-    if (formData.content.deepVocabulary && formData.is_published && !deepLessonIsApproved) {
-      setError('Complete every Content Quality Guard check before publishing a deep vocabulary lesson.');
+    if ((formData.content.deepVocabulary || formData.content.deepGrammar) && formData.is_published && !deepLessonIsApproved) {
+      setError('Complete every Content Quality Guard check before publishing this deep lesson.');
       return;
     }
     setIsSaving(true);
@@ -1338,6 +1378,17 @@ export function AdminPage() {
                     {isGenerating ? <><Loader2 className="h-5 w-5 mr-2 animate-spin" /> Generating...</> : <><Sparkles className="h-5 w-5 mr-2" /> Generate Deep Vocabulary Lesson</>}
                   </Button>
                 )}
+                {formData.type === 'grammar' && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleGenerateDeepGrammar}
+                    disabled={isGenerating || !formData.topic}
+                    className="mt-3 w-full h-12 rounded-xl border-violet-300 bg-white font-bold text-violet-700 hover:bg-violet-50"
+                  >
+                    {isGenerating ? <><Loader2 className="h-5 w-5 mr-2 animate-spin" /> Generating...</> : <><Sparkles className="h-5 w-5 mr-2" /> Generate Deep Grammar Lesson</>}
+                  </Button>
+                )}
               </CardContent>
             </Card>
 
@@ -1397,13 +1448,19 @@ export function AdminPage() {
                     <CardDescription className="text-amber-700 font-medium">Review and confirm before publishing.</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    {[
+                    {(formData.content.deepGrammar ? [
+                      { id: 'naturalCollocations', label: 'Grammar forms and rules are accurate' },
+                      { id: 'ieltsSafeUsage', label: 'IELTS usage guidance is appropriate' },
+                      { id: 'noRareWords', label: 'Explanations are clear for the target level' },
+                      { id: 'examplesReviewed', label: 'Examples and sentence upgrades are natural' },
+                      { id: 'mistakesAccurate', label: 'Corrections and answer keys are accurate' }
+                    ] : [
                       { id: 'naturalCollocations', label: 'Collocations are natural and commonly used' },
                       { id: 'ieltsSafeUsage', label: 'Vocabulary is IELTS-safe and appropriate' },
                       { id: 'noRareWords', label: 'No over-advanced or rare words' },
                       { id: 'examplesReviewed', label: 'Example sentences are natural' },
                       { id: 'mistakesAccurate', label: 'Mistakes and corrections are accurate' }
-                    ].map((check) => (
+                    ]).map((check) => (
                       <div 
                         key={check.id}
                         className="flex items-center gap-3 cursor-pointer hover:bg-amber-100/50 p-3 rounded-xl transition-colors"
@@ -1427,7 +1484,7 @@ export function AdminPage() {
                     <Switch
                       id="is_published"
                       checked={formData.is_published}
-                      disabled={Boolean(formData.content?.deepVocabulary) && !Object.values(qualityChecklist).every(Boolean)}
+                      disabled={Boolean(formData.content?.deepVocabulary || formData.content?.deepGrammar) && !Object.values(qualityChecklist).every(Boolean)}
                       onCheckedChange={(checked) => setFormData(prev => ({ ...prev, is_published: checked }))}
                     />
                     <Label htmlFor="is_published" className="font-bold text-slate-700">Published</Label>

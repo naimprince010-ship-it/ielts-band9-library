@@ -46,6 +46,8 @@ export interface LessonContent {
   sentenceUpgrade?: { basic: string; upgraded: string }[];
   /** Rich, reviewable vocabulary workspace content generated from the admin panel. */
   deepVocabulary?: import('@/data/deepVocabularyLessons').DeepVocabularyLessonData;
+  /** Marks a complete AI-generated grammar draft that requires staff review. */
+  deepGrammar?: boolean;
 }
 
 export interface Lesson {
