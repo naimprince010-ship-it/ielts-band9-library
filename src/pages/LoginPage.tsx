@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Mail, Lock, AlertCircle, Eye, EyeOff, CheckCircle, Star, Users, Award, BookOpen, GraduationCap, Globe, Quote } from 'lucide-react';
+import { Mail, Lock, AlertCircle, Eye, EyeOff, Star, Users, Award, BookOpen, ShieldCheck, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -16,6 +16,7 @@ export function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const { signIn, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -68,246 +69,169 @@ export function LoginPage() {
     }
   };
 
+  const stats = [
+    { icon: BookOpen, value: '280+', label: 'Expert Lessons' },
+    { icon: Award, value: 'Band 9', label: 'Strategies' },
+    { icon: Users, value: '10K+', label: 'Active Students' },
+    { icon: Star, value: '4.9/5', label: 'Student Rating' },
+  ];
+
   return (
-    <div className="min-h-screen flex">
-      {/* Left Panel - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-indigo-950 via-slate-900 to-indigo-950 text-white p-12 flex-col justify-between relative overflow-hidden">
-        {/* Study Vibe Decorative Elements */}
-        <div className="absolute top-0 left-0 w-full h-full opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '32px 32px' }} />
-        <div className="absolute -top-32 -right-32 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl pointer-events-none" />
-        
-        {/* Floating Background Icons */}
-        <BookOpen className="absolute top-32 right-20 w-32 h-32 text-indigo-400/5 -rotate-12 pointer-events-none" />
-        <GraduationCap className="absolute bottom-40 left-12 w-40 h-40 text-blue-400/5 rotate-12 pointer-events-none" />
+    <main className="min-h-[100svh] bg-[#f7f7fb] lg:grid lg:h-[100svh] lg:min-h-[620px] lg:grid-cols-[minmax(0,1.04fr)_minmax(520px,0.96fr)] lg:overflow-hidden">
+      <section className="relative hidden overflow-hidden bg-gradient-to-br from-[#080b24] via-[#171044] to-[#090d2b] text-white lg:flex lg:min-h-0 lg:flex-col">
+        <div className="pointer-events-none absolute inset-0 opacity-20 [background-image:radial-gradient(circle_at_1px_1px,rgba(129,140,248,.35)_1px,transparent_0)] [background-size:30px_30px]" />
+        <BookOpen className="pointer-events-none absolute right-[10%] top-[11%] h-36 w-36 -rotate-12 text-violet-300/[0.045]" />
+        <Award className="pointer-events-none absolute right-[6%] top-[43%] h-24 w-24 text-indigo-300/[0.045]" />
 
-        {/* Logo */}
-        <div className="relative z-10">
-          <Link to="/" className="flex items-center gap-3 w-fit hover:opacity-90 transition-opacity">
-            <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center p-2 shadow-lg shadow-indigo-500/20">
+        <div className="relative z-10 flex flex-1 flex-col px-[clamp(2rem,4vw,4rem)] pt-[clamp(1.5rem,4vh,3rem)]">
+          <Link to="/" className="flex w-fit items-center gap-3 transition-opacity hover:opacity-90">
+            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white p-2 shadow-xl shadow-violet-950/30">
               <img loading="eager" src="/icon.png" alt="IELTS Tree" className="h-full w-full object-contain" />
-            </div>
-            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-indigo-200">IELTS Tree</span>
+            </span>
+            <span className="text-2xl font-black tracking-tight">IELTS Tree</span>
           </Link>
-        </div>
 
-        {/* Main Content */}
-        <div className="relative z-10 space-y-10 mt-8">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/20 text-indigo-200 text-sm font-medium mb-6">
-              <Award className="h-4 w-4" />
-              #1 IELTS Prep Platform
+          <div className="mt-[clamp(1rem,3vh,2rem)] max-w-2xl">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-violet-400/25 bg-violet-500/15 px-3 py-1.5 text-xs font-semibold text-violet-100">
+              <Star className="h-3.5 w-3.5" /> #1 IELTS Prep Platform
             </div>
-            <h1 className="text-4xl lg:text-5xl font-bold mb-6 leading-tight">
-              Master IELTS with<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-300">Band 9 Materials</span>
+            <h1 className="text-[clamp(2.5rem,4.3vw,4.5rem)] font-black leading-[0.98] tracking-[-0.04em]">
+              Study Smarter.<br />
+              Score <span className="bg-gradient-to-r from-indigo-300 via-violet-400 to-fuchsia-400 bg-clip-text text-transparent">Band 9.</span>
             </h1>
-            <p className="text-indigo-100/80 text-lg max-w-md leading-relaxed">
-              Access premium vocabulary and grammar lessons designed by IELTS examiners to help you achieve your target score faster.
+            <p className="mt-4 max-w-xl text-[clamp(.9rem,1.2vw,1.1rem)] leading-relaxed text-indigo-100/75">
+              Real exam materials, expert strategies and proven techniques designed to help you achieve your target band.
             </p>
           </div>
 
-          <div className="space-y-4 max-w-md">
-            <div className="flex items-start gap-4 bg-white/[0.03] p-4 rounded-2xl border border-white/10 hover:bg-white/[0.06] hover:border-indigo-500/30 transition-all group cursor-default">
-              <div className="w-12 h-12 bg-indigo-500/20 text-indigo-300 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                <BookOpen className="h-6 w-6" />
+          <div className="mt-[clamp(1rem,2.5vh,1.75rem)] grid max-w-2xl grid-cols-4 divide-x divide-white/10 rounded-2xl border border-white/10 bg-white/[0.045] p-3 shadow-xl shadow-slate-950/15">
+            {stats.map(({ icon: Icon, value, label }) => (
+              <div key={label} className="px-3 first:pl-1 last:pr-1">
+                <Icon className="mb-1.5 h-5 w-5 text-violet-300" />
+                <div className="text-xl font-black leading-none">{value}</div>
+                <div className="mt-1 text-[11px] leading-tight text-indigo-100/65">{label}</div>
               </div>
-              <div>
-                <h3 className="font-semibold text-lg text-white">280+ Expert Lessons</h3>
-                <p className="text-indigo-200/70 text-sm mt-0.5">Comprehensive, structured study materials</p>
-              </div>
-            </div>
-            
-            <div className="flex items-start gap-4 bg-white/[0.03] p-4 rounded-2xl border border-white/10 hover:bg-white/[0.06] hover:border-emerald-500/30 transition-all group cursor-default">
-              <div className="w-12 h-12 bg-emerald-500/20 text-emerald-300 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                <GraduationCap className="h-6 w-6" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg text-white">Band 9 Strategies</h3>
-                <p className="text-indigo-200/70 text-sm mt-0.5">Proven frameworks for writing and speaking</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 bg-white/[0.03] p-4 rounded-2xl border border-white/10 hover:bg-white/[0.06] hover:border-blue-500/30 transition-all group cursor-default">
-              <div className="w-12 h-12 bg-blue-500/20 text-blue-300 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                <Globe className="h-6 w-6" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg text-white">Global Community</h3>
-                <p className="text-indigo-200/70 text-sm mt-0.5">Join thousands of successful students worldwide</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
-        {/* Social Proof / Quote */}
-        <div className="relative z-10 mt-8 pt-8 border-t border-white/10">
-          <Quote className="h-8 w-8 text-indigo-500/40 mb-3" />
-          <p className="text-indigo-100/90 italic mb-4 max-w-lg">
-            "The vocabulary lessons were a game-changer. I finally achieved my 8.0 in Writing after struggling for months."
-          </p>
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-300 font-bold">
-              S
-            </div>
-            <div>
-              <div className="font-semibold text-white">Sarah Jenkins</div>
-              <div className="text-xs text-indigo-300 flex items-center gap-1">
-                <Award className="h-3 w-3" />
-                Band 8.0 Achiever
-              </div>
-            </div>
-          </div>
+        <div className="relative z-10 mt-auto h-[clamp(250px,34vh,360px)] w-full overflow-hidden">
+          <img
+            src="/images/ielts-study-desk-login.png"
+            alt="IELTS Tree study books, Band 9 notebook, pen, mug and desk plant"
+            className="h-full w-full object-cover object-center"
+          />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#111039] to-transparent" />
         </div>
-      </div>
+      </section>
 
-      {/* Right Panel - Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8 bg-background">
-        <div className="w-full max-w-md space-y-8">
-          {/* Mobile Logo */}
-          <div className="lg:hidden flex justify-center mb-8">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center p-1.5 border border-border">
-                <img loading="eager" src="/icon.png" alt="IELTS Tree" className="h-full w-full object-contain" />
-              </div>
-              <span className="text-xl font-bold text-foreground">IELTS Tree</span>
-            </Link>
-          </div>
+      <section className="flex min-h-[100svh] items-center justify-center bg-[radial-gradient(circle_at_top_right,rgba(124,58,237,.08),transparent_28%),linear-gradient(180deg,#fbfbfe_0%,#f5f3ff_100%)] px-4 py-5 sm:px-8 lg:min-h-0 lg:py-4">
+        <div className="w-full max-w-[560px] rounded-[28px] border border-slate-200/80 bg-white/95 p-5 shadow-[0_30px_80px_-38px_rgba(30,41,59,.35)] sm:p-7 lg:p-[clamp(1.5rem,3vh,2.25rem)]">
+          <Link to="/" className="mb-4 flex items-center justify-center gap-2 lg:hidden">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-violet-100 bg-white p-1.5 shadow-sm">
+              <img loading="eager" src="/icon.png" alt="IELTS Tree" className="h-full w-full object-contain" />
+            </span>
+            <span className="text-xl font-black text-slate-950">IELTS Tree</span>
+          </Link>
 
-          <div className="text-center lg:text-left">
-            <h2 className="text-3xl font-bold text-foreground">Welcome back</h2>
-            <p className="mt-2 text-muted-foreground">Sign in to continue your IELTS journey</p>
+          <div className="text-center">
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-50 text-violet-600 ring-1 ring-violet-100">
+              <ShieldCheck className="h-6 w-6" />
+            </div>
+            <h2 className="text-3xl font-black tracking-tight text-slate-950">Welcome back!</h2>
+            <p className="mt-1 text-sm text-slate-500 sm:text-base">Sign in to continue your IELTS journey</p>
           </div>
 
           {!isSupabaseConfigured() && (
-            <Alert className="bg-muted border-border">
-              <AlertCircle className="h-4 w-4 text-foreground" />
-              <AlertDescription className="text-foreground">
-                <strong>Demo Mode:</strong> Use these credentials:
-                <br />
-                <code className="text-xs bg-background px-1.5 py-0.5 rounded border border-border">admin@ielts.com</code>
-                {' / '}
-                <code className="text-xs bg-background px-1.5 py-0.5 rounded border border-border">demo123</code>
+            <Alert className="mt-4 border-amber-200 bg-amber-50 py-2">
+              <AlertCircle className="h-4 w-4 text-amber-700" />
+              <AlertDescription className="text-xs text-amber-900">
+                Demo: <strong>admin@ielts.com</strong> / <strong>demo123</strong>
               </AlertDescription>
             </Alert>
           )}
 
           {error && (
-            <Alert variant="destructive">
+            <Alert variant="destructive" className="mt-4 py-2">
               <AlertCircle className="h-4 w-4" />
-              <AlertDescription>{error}</AlertDescription>
+              <AlertDescription className="text-sm">{error}</AlertDescription>
             </Alert>
           )}
 
-          {isSupabaseConfigured() && (
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full h-12 text-base border-2 border-border hover:bg-muted transition-all"
-              onClick={handleGoogleSignIn}
-              disabled={googleLoading}
-            >
-              <svg className="mr-3 h-5 w-5" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-              </svg>
-              {googleLoading ? 'Connecting...' : 'Continue with Google'}
-            </Button>
-          )}
-
-          {isSupabaseConfigured() && (
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-border" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-background text-muted-foreground">or continue with email</span>
-              </div>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-foreground font-medium">Email address</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 h-12 text-base border-2 border-border focus:border-foreground"
-                  required
-                  autoFocus
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="text-foreground font-medium">Password</Label>
-                <Link to="/forgot-password" className="text-sm text-muted-foreground hover:text-foreground font-medium transition-colors">
-                  Forgot password?
-                </Link>
-              </div>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
-                <Input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 pr-10 h-12 text-base border-2 border-border focus:border-foreground"
-                  required
-                />
-                <button
+          <div className="mt-5 space-y-4">
+            {isSupabaseConfigured() && (
+              <>
+                <Button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  aria-pressed={showPassword}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  variant="outline"
+                  className="h-11 w-full rounded-xl border-slate-200 bg-white text-sm font-semibold text-slate-800 shadow-sm hover:bg-slate-50"
+                  onClick={handleGoogleSignIn}
+                  disabled={googleLoading}
                 >
-                  {showPassword ? <EyeOff className="h-5 w-5" aria-hidden="true" /> : <Eye className="h-5 w-5" aria-hidden="true" />}
-                </button>
+                  <svg className="mr-3 h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 0 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                  </svg>
+                  {googleLoading ? 'Connecting...' : 'Continue with Google'}
+                </Button>
+                <div className="flex items-center gap-3 text-xs text-slate-400">
+                  <span className="h-px flex-1 bg-slate-200" /> or continue with email <span className="h-px flex-1 bg-slate-200" />
+                </div>
+              </>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-3.5">
+              <div className="space-y-1.5">
+                <Label htmlFor="email" className="text-sm font-semibold text-slate-800">Email address</Label>
+                <div className="relative">
+                  <Mail className="absolute left-3.5 top-1/2 h-4.5 w-4.5 -translate-y-1/2 text-slate-400" />
+                  <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} className="h-11 rounded-xl border-slate-200 bg-slate-50/60 pl-10 text-sm focus-visible:ring-violet-500" required autoFocus />
+                </div>
               </div>
+
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password" className="text-sm font-semibold text-slate-800">Password</Label>
+                  <Link to="/forgot-password" className="text-xs font-semibold text-violet-600 hover:text-violet-700">Forgot password?</Link>
+                </div>
+                <div className="relative">
+                  <Lock className="absolute left-3.5 top-1/2 h-4.5 w-4.5 -translate-y-1/2 text-slate-400" />
+                  <Input id="password" type={showPassword ? 'text' : 'password'} placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} className="h-11 rounded-xl border-slate-200 bg-slate-50/60 pl-10 pr-10 text-sm focus-visible:ring-violet-500" required />
+                  <button type="button" onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? 'Hide password' : 'Show password'} aria-pressed={showPassword} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700">
+                    {showPassword ? <EyeOff className="h-4.5 w-4.5" /> : <Eye className="h-4.5 w-4.5" />}
+                  </button>
+                </div>
+              </div>
+
+              <label className="flex w-fit cursor-pointer items-center gap-2 text-xs font-medium text-slate-600">
+                <input type="checkbox" checked={rememberMe} onChange={(event) => setRememberMe(event.target.checked)} className="h-4 w-4 rounded border-slate-300 accent-violet-600" />
+                Remember me
+              </label>
+
+              <Button type="submit" className="h-11 w-full rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-sm font-bold text-white shadow-lg shadow-violet-500/20 hover:from-indigo-700 hover:to-violet-700" disabled={loading}>
+                {loading ? 'Signing in...' : 'Sign in'}
+              </Button>
+            </form>
+
+            <p className="text-center text-sm text-slate-500">
+              Don&apos;t have an account?{' '}
+              <Link to={buildAuthPath('/signup', sanitizeInternalPath(redirectAfterLogin, '/dashboard'), { offer })} className="font-bold text-violet-600 hover:text-violet-700">Create account</Link>
+            </p>
+
+            <div className="grid grid-cols-3 divide-x divide-violet-100 rounded-2xl border border-violet-100 bg-violet-50/60 px-2 py-3">
+              <div className="flex items-center justify-center gap-2 px-1 text-center text-[10px] font-bold leading-tight text-slate-700 sm:text-xs"><BookOpen className="h-4 w-4 shrink-0 text-violet-600" /> Real IELTS<br />Materials</div>
+              <div className="flex items-center justify-center gap-2 px-1 text-center text-[10px] font-bold leading-tight text-slate-700 sm:text-xs"><ShieldCheck className="h-4 w-4 shrink-0 text-violet-600" /> Expert<br />Curated</div>
+              <div className="flex items-center justify-center gap-2 px-1 text-center text-[10px] font-bold leading-tight text-slate-700 sm:text-xs"><TrendingUp className="h-4 w-4 shrink-0 text-violet-600" /> Results<br />Driven</div>
             </div>
 
-            <Button
-              type="submit"
-              className="w-full h-12 text-base bg-foreground hover:bg-foreground/90 text-background font-medium"
-              disabled={loading}
-            >
-              {loading ? (
-                <span className="flex items-center">
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Signing in...
-                </span>
-              ) : 'Sign in'}
-            </Button>
-          </form>
-
-          <p className="text-center text-muted-foreground">
-            {"Don't have an account?"}{' '}
-            <Link to={buildAuthPath('/signup', sanitizeInternalPath(redirectAfterLogin, '/dashboard'), { offer })} className="text-foreground hover:text-accent font-semibold transition-colors">
-              Create account
-            </Link>
-          </p>
-
-          <p className="text-center text-xs text-muted-foreground">
-            By signing in, you agree to our{' '}
-            <Link to="/terms" className="text-foreground hover:text-accent transition-colors">Terms of Service</Link>
-            {' '}and{' '}
-            <Link to="/privacy" className="text-foreground hover:text-accent transition-colors">Privacy Policy</Link>
-          </p>
+            <p className="text-center text-[11px] text-slate-400">
+              By signing in, you agree to our <Link to="/terms" className="font-semibold text-violet-600 hover:underline">Terms of Service</Link> and <Link to="/privacy" className="font-semibold text-violet-600 hover:underline">Privacy Policy</Link>.
+            </p>
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }

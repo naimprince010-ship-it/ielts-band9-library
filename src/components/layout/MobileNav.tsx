@@ -20,35 +20,41 @@ export function MobileNav() {
   ];
 
   return (
-    <nav className="lg:hidden fixed bottom-3 left-1/2 z-50 w-[calc(100%-1rem)] max-w-md -translate-x-1/2 rounded-[20px] border border-slate-200/80 bg-white/80 p-2 shadow-[0_18px_40px_-24px_rgba(15,23,42,0.45)] backdrop-blur-xl safe-area-bottom">
-      <div className="flex items-center justify-around h-16 max-w-lg mx-auto">
-        {navItems.map(({ path, icon: Icon, label }) => (
-          <Link
-            key={path}
-            to={path}
-            className={`flex flex-col items-center justify-center flex-1 h-full min-w-[64px] rounded-xl py-2 transition-all duration-200 touch-target ${
-              isActive(path)
-                ? 'bg-indigo-50 text-indigo-700'
-                : 'text-slate-500 active:scale-95 hover:bg-slate-50'
-            }`}
-          >
-            <div className="relative flex items-center justify-center h-7 w-7">
-              <Icon className={`h-5 w-5 transition-all ${
-                isActive(path) 
-                  ? 'stroke-[2.5]' 
-                  : 'stroke-[1.5]'
-              }`} />
-            </div>
-            <span className={`text-[11px] mt-1 font-semibold transition-colors ${
-              isActive(path) 
-                ? 'text-indigo-700' 
-                : 'text-slate-500'
-            }`}>
-              {label}
-            </span>
-          </Link>
-        ))}
-      </div>
-    </nav>
+    <>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-x-0 bottom-0 z-[39] h-24 border-t border-slate-100 bg-white lg:hidden"
+      />
+      <nav className="fixed bottom-3 left-1/2 z-50 w-[calc(100%-1rem)] max-w-md -translate-x-1/2 rounded-[20px] border border-slate-200/80 bg-white p-2 shadow-[0_18px_40px_-24px_rgba(15,23,42,0.45)] safe-area-bottom lg:hidden">
+        <div className="flex h-16 max-w-lg items-center justify-around mx-auto">
+          {navItems.map(({ path, icon: Icon, label }) => (
+            <Link
+              key={path}
+              to={path}
+              className={`flex flex-col items-center justify-center flex-1 h-full min-w-[64px] rounded-xl py-2 transition-all duration-200 touch-target ${
+                isActive(path)
+                  ? 'bg-indigo-50 text-indigo-700'
+                  : 'text-slate-500 active:scale-95 hover:bg-slate-50'
+              }`}
+            >
+              <div className="relative flex items-center justify-center h-7 w-7">
+                <Icon className={`h-5 w-5 transition-all ${
+                  isActive(path)
+                    ? 'stroke-[2.5]'
+                    : 'stroke-[1.5]'
+                }`} />
+              </div>
+              <span className={`text-[11px] mt-1 font-semibold transition-colors ${
+                  isActive(path)
+                    ? 'text-indigo-700'
+                  : 'text-slate-500'
+              }`}>
+                {label}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </nav>
+    </>
   );
 }
