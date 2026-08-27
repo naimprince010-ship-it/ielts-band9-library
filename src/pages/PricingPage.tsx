@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Check, Star, Zap, Crown, Gift, Users, Copy, CheckCircle2, Tag, X } from 'lucide-react';
+import { Check, Star, Zap, Crown, Users, Copy, CheckCircle2, Tag, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -87,29 +87,6 @@ export function PricingPage() {
 
   const plans = [
     {
-      name: 'Free',
-      price: '0',
-      currency: '৳',
-      period: 'forever',
-      description: 'Get started with basic materials',
-      features: [
-        'Access to 20+ free lessons',
-        'Basic vocabulary & grammar',
-        'View examples and explanations',
-        'Mini practice exercises',
-        'Bookmark lessons',
-      ],
-      limitations: [
-        'No premium content',
-        'No advanced lessons',
-      ],
-      cta: user && !isPremium ? 'Current Plan' : user ? 'Free Plan' : 'Get Started',
-      ctaLink: user ? '#' : '/signup',
-      popular: false,
-      disabled: !!user,
-      isCurrent: !!user && !isPremium,
-    },
-    {
       name: 'Premium Monthly',
       price: '299',
       currency: '৳',
@@ -128,7 +105,7 @@ export function PricingPage() {
       limitations: [],
       cta: isMonthlyUser ? 'Current Plan' : isYearlyUser ? 'Switch to Monthly' : 'Upgrade Now',
       ctaLink: '#',
-      popular: true,
+      popular: false,
       disabled: isMonthlyUser,
       isCurrent: isMonthlyUser,
     },
@@ -148,9 +125,9 @@ export function PricingPage() {
       limitations: [],
       cta: isYearlyUser ? 'Current Plan' : isMonthlyUser ? 'Upgrade to Yearly' : 'Get Best Value',
       ctaLink: '#',
-      popular: false,
+      popular: true,
       disabled: isYearlyUser,
-      badge: 'Best Value',
+      badge: 'Recommended',
       isCurrent: isYearlyUser,
     },
   ];
@@ -227,7 +204,7 @@ export function PricingPage() {
         </Card>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+        <div className="mx-auto grid max-w-4xl md:grid-cols-2 gap-6 lg:gap-8">
           {plans.map((plan) => (
             <Card 
               key={plan.name} 
@@ -271,56 +248,40 @@ export function PricingPage() {
                       <span className="text-foreground text-sm">{feature}</span>
                     </li>
                   ))}
-                  {plan.limitations.map((limitation, index) => (
-                    <li key={index} className="flex items-start gap-3 text-muted-foreground">
-                      <div className="flex-shrink-0 mt-0.5">
-                        <X className="h-5 w-5" />
-                      </div>
-                      <span className="text-sm">{limitation}</span>
-                    </li>
-                  ))}
                 </ul>
                 
-                {plan.name === 'Free' ? (
-                  plan.ctaLink === '#' ? (
-                    <Button 
-                      className="w-full h-12 font-medium" 
-                      variant="outline"
-                      disabled={plan.isCurrent}
-                    >
-                      {plan.cta}
-                    </Button>
+                <Button
+                  className={`w-full h-12 font-medium ${
+                    plan.popular
+                      ? 'bg-foreground hover:bg-foreground/90 text-background'
+                      : ''
+                  }`}
+                  variant={plan.popular ? 'default' : 'outline'}
+                  disabled={plan.isCurrent}
+                  onClick={() => !plan.isCurrent && handleUpgrade(plan.name === 'Premium Monthly' ? 'monthly' : 'yearly')}
+                >
+                  {plan.isCurrent ? (
+                    <>
+                      <Crown className="h-4 w-4 mr-2" />
+                      Current Plan
+                    </>
                   ) : (
-                    <Link to={plan.ctaLink}>
-                      <Button className="w-full h-12 font-medium" variant="outline">
-                        {plan.cta}
-                      </Button>
-                    </Link>
-                  )
-                ) : (
-                  <Button 
-                    className={`w-full h-12 font-medium ${
-                      plan.popular 
-                        ? 'bg-foreground hover:bg-foreground/90 text-background' 
-                        : ''
-                    }`}
-                    variant={plan.popular ? 'default' : 'outline'}
-                    disabled={plan.isCurrent}
-                    onClick={() => !plan.isCurrent && handleUpgrade(plan.name === 'Premium Monthly' ? 'monthly' : 'yearly')}
-                  >
-                    {plan.isCurrent ? (
-                      <>
-                        <Crown className="h-4 w-4 mr-2" />
-                        Current Plan
-                      </>
-                    ) : (
-                      plan.cta
-                    )}
-                  </Button>
-                )}
+                    plan.cta
+                  )}
+                </Button>
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        <div className="mx-auto mt-8 flex max-w-4xl flex-col items-center justify-between gap-4 rounded-2xl border border-border bg-muted/30 p-5 text-center sm:flex-row sm:text-left">
+          <div>
+            <h2 className="font-semibold text-foreground">Only need one focused course?</h2>
+            <p className="mt-1 text-sm text-muted-foreground">Browse individual IELTS courses available as a one-time purchase.</p>
+          </div>
+          <Button asChild variant="outline" className="shrink-0">
+            <Link to="/courses">Browse courses <ArrowRight className="ml-2 h-4 w-4" /></Link>
+          </Button>
         </div>
 
         {/* Referral Program Section */}
