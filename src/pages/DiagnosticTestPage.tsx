@@ -1,10 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { useProgress } from '@/contexts/ProgressContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/lib/supabase';
+import { readNextPath, trackFunnelEvent } from '@/lib/funnel';
 import { 
   Target, 
   Clock, 
@@ -324,7 +327,11 @@ function calculateBandScore(vocabScore: number, grammarScore: number, readingSco
 
 export default function DiagnosticTestPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = useAuth();
   const { updateUserPreferences, userPreferences } = useProgress();
+  const destination = readNextPath(location.search, '/dashboard?welcome=1');
+  const isOnboarding = new URLSearchParams(location.search).get('onboarding') === '1';
   
   const [stage, setStage] = useState<'intro' | 'test' | 'results' | 'plan'>('intro');
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -333,6 +340,8 @@ export default function DiagnosticTestPage() {
   const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutes
   const [targetBand, setTargetBand] = useState(userPreferences.targetBand || 7);
   const [studyPlan, setStudyPlan] = useState<StudyPlanItem[]>([]);
+  const [savingPlan, setSavingPlan] = useState(false);
+  const [saveError, setSaveError] = useState('');
   
   const [scores, setScores] = useState({
     vocabulary: 0,
@@ -412,7 +421,9 @@ export default function DiagnosticTestPage() {
     setStage('results');
   }, [answers]);
 
-  const generatePlan = () => {
+  const generatePlan = async () => {
+    setSavingPlan(true);
+    setSaveError('');
     const plan = generateStudyPlan(scores.vocabulary, scores.grammar, scores.reading, targetBand);
     setStudyPlan(plan);
     
@@ -421,14 +432,57 @@ export default function DiagnosticTestPage() {
     if (scores.grammar < 70) focusAreas.push('grammar');
     if (focusAreas.length === 0) focusAreas.push('vocabulary', 'grammar');
     
-    updateUserPreferences({
+    await updateUserPreferences({
       targetBand,
       focusAreas,
       dailyGoalQuestions: targetBand >= 8 ? 15 : 10
     });
+
+    if (user && supabase) {
+      const { error: attemptError } = await supabase.from('diagnostic_attempts').insert({
+        user_id: user.id,
+        vocabulary_score: scores.vocabulary,
+        grammar_score: scores.grammar,
+        reading_score: scores.reading,
+        overall_score: scores.overall,
+        estimated_band: scores.estimatedBand,
+        target_band: targetBand,
+        answers,
+      });
+      if (attemptError) {
+        setSaveError('Your plan was created, but the diagnostic result could not be saved. Please try again.');
+        setSavingPlan(false);
+        return;
+      }
+      if (isOnboarding) {
+        const { error: profileError } = await supabase
+          .from('users')
+          .update({ target_band: targetBand, onboarding_completed_at: new Date().toISOString() })
+          .eq('id', user.id);
+        if (profileError) {
+          setSaveError('Your result was saved, but onboarding could not be completed. Please try again.');
+          setSavingPlan(false);
+          return;
+        }
+      }
+    }
+
+    trackFunnelEvent('diagnostic_completed', {
+      estimatedBand: scores.estimatedBand,
+      targetBand,
+      overallScore: scores.overall,
+      onboarding: isOnboarding,
+    });
     
     setStage('plan');
+    setSavingPlan(false);
   };
+
+  const recommendedStart = [
+    { score: scores.vocabulary, label: 'Start vocabulary practice', link: '/vocabulary' },
+    { score: scores.grammar, label: 'Start grammar practice', link: '/grammar' },
+    { score: scores.reading, label: 'Start reading practice', link: '/reading-practice' },
+  ].sort((a, b) => a.score - b.score)[0];
 
   const question = DIAGNOSTIC_QUESTIONS[currentQuestion];
   const progress = ((currentQuestion + 1) / DIAGNOSTIC_QUESTIONS.length) * 100;
@@ -660,9 +714,10 @@ export default function DiagnosticTestPage() {
                   </p>
                 </div>
                 
-                <Button onClick={generatePlan} className="w-full" size="lg">
+                {saveError && <p role="alert" className="text-sm text-red-600">{saveError}</p>}
+                <Button onClick={generatePlan} disabled={savingPlan} className="w-full" size="lg">
                   <Sparkles className="mr-2 h-5 w-5" />
-                  Generate My Study Plan
+                  {savingPlan ? 'Saving your results...' : 'Generate My Study Plan'}
                 </Button>
               </CardContent>
             </Card>
@@ -745,11 +800,11 @@ export default function DiagnosticTestPage() {
                 ))}
                 
                 <div className="flex gap-4">
-                  <Button variant="outline" onClick={() => navigate('/')} className="flex-1">
-                    Back to Home
+                  <Button variant="outline" onClick={() => navigate(destination, { replace: true })} className="flex-1">
+                    Go to dashboard
                   </Button>
-                  <Button onClick={() => navigate('/vocabulary')} className="flex-1">
-                    Start Learning
+                  <Button onClick={() => navigate(recommendedStart.link)} className="flex-1">
+                    {recommendedStart.label}
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </div>

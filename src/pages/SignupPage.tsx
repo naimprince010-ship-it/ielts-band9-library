@@ -22,7 +22,7 @@ export function SignupPage() {
   const { signUp, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const nextPath = readNextPath(location.search, '/dashboard?welcome=1');
+  const nextPath = readNextPath(location.search, '/onboarding?next=%2Fdashboard%3Fwelcome%3D1');
   const offer = new URLSearchParams(location.search).get('offer') || undefined;
 
   useEffect(() => {

@@ -15,7 +15,7 @@ export default function OnboardingPage() {
   const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const destination = readNextPath(location.search, '/dashboard');
+  const destination = readNextPath(location.search, '/dashboard?welcome=1');
   const [targetBand, setTargetBand] = useState('7.0');
   const [examDate, setExamDate] = useState('');
   const [weakSkill, setWeakSkill] = useState<(typeof SKILLS)[number]>('not_sure');
@@ -35,7 +35,6 @@ export default function OnboardingPage() {
         exam_date: examDate || null,
         weak_skill: weakSkill,
         daily_study_minutes: Number(dailyMinutes),
-        onboarding_completed_at: new Date().toISOString(),
       })
       .eq('id', user.id);
 
@@ -44,8 +43,8 @@ export default function OnboardingPage() {
       setSaving(false);
       return;
     }
-    trackFunnelEvent('onboarding_completed', { targetBand, weakSkill, dailyMinutes: Number(dailyMinutes) });
-    navigate(destination, { replace: true });
+    trackFunnelEvent('onboarding_goals_saved', { targetBand, weakSkill, dailyMinutes: Number(dailyMinutes) });
+    navigate(`/diagnostic?onboarding=1&next=${encodeURIComponent(destination)}`, { replace: true });
   };
 
   return (
@@ -91,7 +90,7 @@ export default function OnboardingPage() {
 
             {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
             <div className="flex flex-col gap-3 sm:flex-row">
-              <Button type="submit" disabled={saving} className="flex-1 bg-indigo-700 hover:bg-indigo-800">{saving ? 'Saving plan…' : 'Create my study plan'}<ArrowRight className="ml-2 h-4 w-4" /></Button>
+              <Button type="submit" disabled={saving} className="flex-1 bg-indigo-700 hover:bg-indigo-800">{saving ? 'Saving goals...' : 'Continue to diagnostic'}<ArrowRight className="ml-2 h-4 w-4" /></Button>
               <Button type="button" variant="ghost" onClick={() => navigate(destination, { replace: true })}>Skip for now</Button>
             </div>
           </form>
