@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import {
   ArrowRight,
   BookOpen,
+  CalendarDays,
   Clock3,
   FileText,
   MessageCircle,
@@ -10,11 +11,13 @@ import {
   TrendingUp,
   Trophy,
   Zap,
+  Flame,
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
-import { useLessons } from '@/contexts/LessonContext';
+import { useProgress } from '@/contexts/ProgressContext';
+import { SAMPLE_LESSONS } from '@/data/sampleLessons';
 
 const quickPracticeItems = [
   {
@@ -48,9 +51,21 @@ const QUICK_PRACTICE_ACCENTS = {
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const { getCompletedCount } = useLessons();
+  const { getCompletedLessonsCount, getRecentLessons, getTodayProgress, streakData, userPreferences } = useProgress();
   const studentName = user?.name || user?.email?.split('@')[0] || 'Student';
-  const completedLessons = getCompletedCount();
+  const completedLessons = getCompletedLessonsCount();
+  const recentProgress = getRecentLessons();
+  const latestLesson = recentProgress[0]
+    ? SAMPLE_LESSONS.find((lesson) => lesson.id === recentProgress[0].lessonId || lesson.slug === recentProgress[0].lessonId)
+    : null;
+  const focusArea = userPreferences.focusAreas[0] || 'vocabulary';
+  const recommendedPath = focusArea === 'reading' ? '/reading-practice' : focusArea === 'grammar' ? '/grammar' : '/vocabulary';
+  const recommendedLabel = focusArea === 'reading' ? 'Reading practice' : focusArea === 'grammar' ? 'Grammar practice' : 'Vocabulary practice';
+  const primaryPath = latestLesson ? `/lesson/${latestLesson.slug}` : recommendedPath;
+  const todayProgress = getTodayProgress();
+  const examDays = user?.exam_date
+    ? Math.max(0, Math.ceil((new Date(`${user.exam_date}T00:00:00`).getTime() - Date.now()) / 86_400_000))
+    : null;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
@@ -71,13 +86,23 @@ export default function DashboardPage() {
                 Stay consistent today and keep building toward your IELTS target band.
               </p>
             </div>
-            <div className="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/10 px-5 py-4 backdrop-blur-sm">
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
+                <Target className="h-5 w-5 text-violet-200" />
+                <div><p className="text-lg font-black">Band {user?.target_band || userPreferences.targetBand}</p><p className="text-[11px] text-indigo-200">Target</p></div>
+              </div>
+              <div className="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
+                <CalendarDays className="h-5 w-5 text-sky-200" />
+                <div><p className="text-lg font-black">{examDays === null ? 'Set date' : `${examDays} days`}</p><p className="text-[11px] text-indigo-200">Until exam</p></div>
+              </div>
+              <div className="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
               <div className="grid h-11 w-11 flex-shrink-0 place-items-center rounded-full bg-emerald-400/20 text-emerald-300">
                 <Trophy className="h-5 w-5" />
               </div>
               <div>
                 <p className="text-2xl font-black leading-none">{completedLessons}</p>
                 <p className="mt-1 text-xs font-semibold text-indigo-200">Lessons completed</p>
+              </div>
               </div>
             </div>
           </div>
@@ -98,20 +123,20 @@ export default function DashboardPage() {
                 <p className="inline-flex w-fit items-center rounded-full bg-indigo-100 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-indigo-700">
                   Primary Action
                 </p>
-                <CardTitle className="text-slate-900">Continue Learning</CardTitle>
-                <CardDescription>Resume your main lesson track from where you left off.</CardDescription>
+                <CardTitle className="text-slate-900">{latestLesson ? 'Continue Learning' : "Today's recommended task"}</CardTitle>
+                <CardDescription>{latestLesson ? 'Resume your latest saved lesson.' : `Start with ${recommendedLabel.toLowerCase()} from your diagnostic focus.`}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="rounded-xl border border-indigo-100/50 bg-white/60 p-4 backdrop-blur-sm transition-colors duration-300 group-hover:bg-white/80">
-                  <p className="text-sm font-semibold text-indigo-900">Vocabulary Sprint</p>
-                  <p className="mt-1 text-sm text-indigo-800">Pick up your vocabulary lessons and reinforce with a quick quiz.</p>
+                  <p className="text-sm font-semibold text-indigo-900">{latestLesson?.title || recommendedLabel}</p>
+                  <p className="mt-1 text-sm text-indigo-800">{latestLesson?.description || `Your current focus area is ${focusArea}. Complete one focused session today.`}</p>
                 </div>
                 <Button
                   asChild
                   className="h-11 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-5 text-white shadow-md transition-all duration-300 hover:scale-105 hover:from-indigo-500 hover:to-violet-500 hover:shadow-lg hover:shadow-indigo-300/50"
                 >
-                  <Link to="/vocabulary">
-                    Continue to Lessons
+                  <Link to={primaryPath}>
+                    {latestLesson ? 'Resume lesson' : 'Start recommended task'}
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                   </Link>
                 </Button>
@@ -209,9 +234,13 @@ export default function DashboardPage() {
                 <div className="flex items-center justify-between rounded-xl border border-violet-100 bg-violet-50/50 p-3">
                   <span className="flex items-center gap-2 text-sm font-medium text-slate-700">
                     <TrendingUp className="h-4 w-4 text-indigo-600" />
-                    Momentum
+                    Today
                   </span>
-                  <span className="text-sm font-semibold text-slate-900">{completedLessons > 0 ? 'Building' : 'Get started'}</span>
+                  <span className="text-sm font-semibold text-slate-900">{todayProgress.percentage}%</span>
+                </div>
+                <div className="flex items-center justify-between rounded-xl border border-orange-100 bg-orange-50/50 p-3">
+                  <span className="flex items-center gap-2 text-sm font-medium text-slate-700"><Flame className="h-4 w-4 text-orange-600" />Current streak</span>
+                  <span className="text-sm font-semibold text-slate-900">{streakData.currentStreak} days</span>
                 </div>
                 <Link
                   to="/progress"
@@ -229,14 +258,21 @@ export default function DashboardPage() {
                   Timeline
                 </p>
                 <CardTitle className="text-slate-900">Recent Activity</CardTitle>
-                <CardDescription>Your latest completed lessons, tests, and milestones will appear here.</CardDescription>
+                <CardDescription>Your latest saved lesson activity.</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/70 p-6 text-center">
+                {latestLesson ? (
+                  <Link to={`/lesson/${latestLesson.slug}`} className="flex items-center justify-between rounded-xl border border-indigo-100 bg-indigo-50/60 p-5 transition hover:border-indigo-300">
+                    <div><p className="font-semibold text-slate-900">{latestLesson.title}</p><p className="mt-1 text-xs text-slate-500">Last opened {new Date(recentProgress[0].lastOpenedAt).toLocaleDateString()}</p></div>
+                    <ArrowRight className="h-4 w-4 text-indigo-600" />
+                  </Link>
+                ) : (
+                  <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/70 p-6 text-center">
                   <Trophy className="mx-auto h-6 w-6 text-slate-400" />
                   <p className="mt-2 text-sm font-medium text-slate-700">No recent activity yet</p>
                   <p className="mt-1 text-xs text-slate-500">Complete a lesson or practice session to start building your timeline.</p>
-                </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>

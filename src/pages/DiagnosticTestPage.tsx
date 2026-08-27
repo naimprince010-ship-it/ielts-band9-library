@@ -427,10 +427,13 @@ export default function DiagnosticTestPage() {
     const plan = generateStudyPlan(scores.vocabulary, scores.grammar, scores.reading, targetBand);
     setStudyPlan(plan);
     
-    const focusAreas: string[] = [];
-    if (scores.vocabulary < 70) focusAreas.push('vocabulary');
-    if (scores.grammar < 70) focusAreas.push('grammar');
-    if (focusAreas.length === 0) focusAreas.push('vocabulary', 'grammar');
+    const rankedAreas = [
+      { name: 'vocabulary', score: scores.vocabulary },
+      { name: 'grammar', score: scores.grammar },
+      { name: 'reading', score: scores.reading },
+    ].sort((a, b) => a.score - b.score);
+    const focusAreas = rankedAreas.filter((area) => area.score < 70).map((area) => area.name);
+    if (focusAreas.length === 0) focusAreas.push(rankedAreas[0].name);
     
     await updateUserPreferences({
       targetBand,

@@ -130,6 +130,30 @@ function saveToStorage<T>(key: string, value: T): void {
   }
 }
 
+function deriveStreak(activities: DailyActivity[]): StreakData {
+  const activeDates = [...new Set(
+    activities
+      .filter((activity) => activity.questionsAnswered > 0 || activity.lessonsCompleted > 0)
+      .map((activity) => activity.date),
+  )].sort().reverse();
+  if (activeDates.length === 0) return DEFAULT_STREAK;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const latest = new Date(`${activeDates[0]}T00:00:00`);
+  const latestGap = Math.round((today.getTime() - latest.getTime()) / 86_400_000);
+  if (latestGap > 1) return { ...DEFAULT_STREAK, lastActivityDate: activeDates[0] };
+
+  let currentStreak = 1;
+  for (let index = 1; index < activeDates.length; index += 1) {
+    const previous = new Date(`${activeDates[index - 1]}T00:00:00`);
+    const current = new Date(`${activeDates[index]}T00:00:00`);
+    if (Math.round((previous.getTime() - current.getTime()) / 86_400_000) !== 1) break;
+    currentStreak += 1;
+  }
+  return { currentStreak, longestStreak: currentStreak, lastActivityDate: activeDates[0] };
+}
+
 export function ProgressProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -171,11 +195,12 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     
     if (user && isSupabaseConfigured() && supabase) {
       try {
-        const { data: dbPrefs } = await supabase
-          .from('user_preferences')
-          .select('*')
-          .eq('user_id', user.id)
-          .maybeSingle();
+        const [preferencesResult, progressResult, activityResult] = await Promise.all([
+          supabase.from('user_preferences').select('*').eq('user_id', user.id).maybeSingle(),
+          supabase.from('student_lesson_progress').select('*').eq('user_id', user.id),
+          supabase.from('student_daily_activity').select('*').eq('user_id', user.id).order('activity_date', { ascending: false }).limit(60),
+        ]);
+        const dbPrefs = preferencesResult.data;
         
         if (dbPrefs) {
           const prefs: UserPreferences = {
@@ -185,6 +210,31 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
           };
           setUserPreferences(prefs);
           saveToStorage(STORAGE_KEYS.userPreferences, prefs);
+        }
+        if (progressResult.data) {
+          const progress = Object.fromEntries(progressResult.data.map((row) => [row.lesson_id, {
+            lessonId: row.lesson_id,
+            status: row.status as LessonProgress['status'],
+            lastOpenedAt: row.last_opened_at,
+            timeSpentSeconds: row.time_spent_seconds,
+            completedAt: row.completed_at || undefined,
+          }])) as Record<string, LessonProgress>;
+          setLessonProgress(progress);
+          saveToStorage(STORAGE_KEYS.lessonProgress, progress);
+        }
+        if (activityResult.data) {
+          const activities: DailyActivity[] = activityResult.data.map((row) => ({
+            date: row.activity_date,
+            questionsAnswered: row.questions_answered,
+            lessonsTimeSeconds: row.lesson_time_seconds,
+            lessonsCompleted: row.lessons_completed,
+          }));
+          const todayActivity = activities.find((activity) => activity.date === today) || { ...DEFAULT_DAILY_ACTIVITY, date: today };
+          const streak = deriveStreak(activities);
+          setDailyActivity(todayActivity);
+          setStreakData(streak);
+          saveToStorage(STORAGE_KEYS.dailyActivity, todayActivity);
+          saveToStorage(STORAGE_KEYS.streakData, streak);
         }
       } catch (e) {
         console.log('Could not load preferences from Supabase, using localStorage');
@@ -223,6 +273,52 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     saveToStorage(STORAGE_KEYS.streakData, streak);
   };
 
+  const persistLessonProgress = useCallback((progress: LessonProgress) => {
+    if (!user || !isSupabaseConfigured() || !supabase) return;
+    void supabase.from('student_lesson_progress').upsert({
+      user_id: user.id,
+      lesson_id: progress.lessonId,
+      status: progress.status,
+      last_opened_at: progress.lastOpenedAt,
+      time_spent_seconds: progress.timeSpentSeconds,
+      completed_at: progress.completedAt || null,
+    }).then(({ error }) => {
+      if (error) console.error('Could not save lesson progress:', error.message);
+    });
+  }, [user]);
+
+  const persistDailyActivity = useCallback((activity: DailyActivity) => {
+    if (!user || !isSupabaseConfigured() || !supabase) return;
+    void supabase.from('student_daily_activity').upsert({
+      user_id: user.id,
+      activity_date: activity.date,
+      questions_answered: activity.questionsAnswered,
+      lesson_time_seconds: activity.lessonsTimeSeconds,
+      lessons_completed: activity.lessonsCompleted,
+      updated_at: new Date().toISOString(),
+    }).then(({ error }) => {
+      if (error) console.error('Could not save daily activity:', error.message);
+    });
+  }, [user]);
+
+  const recordCurrentStreak = useCallback((activity: DailyActivity) => {
+    if (activity.questionsAnswered === 0 && activity.lessonsCompleted === 0) return;
+    setStreakData((previous) => {
+      if (previous.lastActivityDate === activity.date) return previous;
+      const previousDate = previous.lastActivityDate ? new Date(`${previous.lastActivityDate}T00:00:00`) : null;
+      const currentDate = new Date(`${activity.date}T00:00:00`);
+      const gap = previousDate ? Math.round((currentDate.getTime() - previousDate.getTime()) / 86_400_000) : 0;
+      const currentStreak = gap === 1 ? previous.currentStreak + 1 : 1;
+      const next = {
+        currentStreak,
+        longestStreak: Math.max(previous.longestStreak, currentStreak),
+        lastActivityDate: activity.date,
+      };
+      saveToStorage(STORAGE_KEYS.streakData, next);
+      return next;
+    });
+  }, []);
+
   const updateLessonProgress = useCallback((lessonId: string, updates: Partial<LessonProgress>) => {
     setLessonProgress(prev => {
       const existing = prev[lessonId] || {
@@ -240,9 +336,10 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
       
       const newProgress = { ...prev, [lessonId]: updated };
       saveToStorage(STORAGE_KEYS.lessonProgress, newProgress);
+      persistLessonProgress(updated);
       return newProgress;
     });
-  }, []);
+  }, [persistLessonProgress]);
 
   const markLessonCompleted = useCallback((lessonId: string) => {
     updateLessonProgress(lessonId, {
@@ -253,9 +350,11 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     setDailyActivity(prev => {
       const updated = { ...prev, lessonsCompleted: prev.lessonsCompleted + 1 };
       saveToStorage(STORAGE_KEYS.dailyActivity, updated);
+      persistDailyActivity(updated);
+      recordCurrentStreak(updated);
       return updated;
     });
-  }, [updateLessonProgress]);
+  }, [persistDailyActivity, recordCurrentStreak, updateLessonProgress]);
 
   const addQuizAttempt = useCallback((attempt: Omit<QuizAttempt, 'id' | 'completedAt'>) => {
     const newAttempt: QuizAttempt = {
@@ -282,18 +381,19 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     
     if (user && isSupabaseConfigured() && supabase) {
       try {
-        await supabase.from('user_preferences').upsert({
+        const { error } = await supabase.from('user_preferences').upsert({
           user_id: user.id,
-          target_band: prefs.targetBand,
-          daily_goal_questions: prefs.dailyGoalQuestions,
-          focus_areas: prefs.focusAreas,
+          target_band: prefs.targetBand ?? userPreferences.targetBand,
+          daily_goal_questions: prefs.dailyGoalQuestions ?? userPreferences.dailyGoalQuestions,
+          focus_areas: prefs.focusAreas ?? userPreferences.focusAreas,
           updated_at: new Date().toISOString(),
         });
+        if (error) throw error;
       } catch (e) {
         console.log('Could not save preferences to Supabase');
       }
     }
-  }, [user]);
+  }, [user, userPreferences]);
 
   const incrementDailyQuestions = useCallback((count: number = 1) => {
     setDailyActivity(prev => {
@@ -302,17 +402,20 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
         ? { ...prev, questionsAnswered: prev.questionsAnswered + count }
         : { ...DEFAULT_DAILY_ACTIVITY, date: today, questionsAnswered: count };
       saveToStorage(STORAGE_KEYS.dailyActivity, updated);
+      persistDailyActivity(updated);
+      recordCurrentStreak(updated);
       return updated;
     });
-  }, []);
+  }, [persistDailyActivity, recordCurrentStreak]);
 
   const addLessonTime = useCallback((seconds: number) => {
     setDailyActivity(prev => {
       const updated = { ...prev, lessonsTimeSeconds: prev.lessonsTimeSeconds + seconds };
       saveToStorage(STORAGE_KEYS.dailyActivity, updated);
+      persistDailyActivity(updated);
       return updated;
     });
-  }, []);
+  }, [persistDailyActivity]);
 
   const getRecentLessons = useCallback((): LessonProgress[] => {
     return Object.values(lessonProgress)

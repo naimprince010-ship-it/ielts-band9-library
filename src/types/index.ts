@@ -13,6 +13,11 @@ export interface User {
   subscription_status: SubscriptionStatus;
   package_type?: PackageType;
   premium_until?: string;
+  target_band?: number;
+  exam_date?: string;
+  weak_skill?: 'listening' | 'reading' | 'writing' | 'speaking' | 'not_sure';
+  daily_study_minutes?: number;
+  onboarding_completed_at?: string;
   created_at: string;
   updated_at: string;
 }

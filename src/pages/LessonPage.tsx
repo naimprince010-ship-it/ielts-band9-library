@@ -23,6 +23,7 @@ import { WritingLessonTemplate } from '@/components/lesson/writing/WritingLesson
 import { VocabularyLessonTemplate } from '@/components/lesson/vocabulary/VocabularyLessonTemplate';
 import { useLessons } from '@/contexts/LessonContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { useProgress } from '@/contexts/ProgressContext';
 import { supabase } from '@/lib/supabase';
 import { trackFunnelEvent } from '@/lib/funnel';
 
@@ -157,6 +158,7 @@ export function LessonPage() {
   const navigate = useNavigate();
   const { getLessonBySlug, addBookmark, removeBookmark, isBookmarked, incrementViewCount, lessons, getLessonProgress, setLessonProgress } = useLessons();
   const { user, isPremium } = useAuth();
+  const { lessonProgress: savedProgress, updateLessonProgress, markLessonCompleted } = useProgress();
   const [lesson, setLesson] = useState(getLessonBySlug(slug || ''));
 
   // Dynamic page title
@@ -167,7 +169,8 @@ export function LessonPage() {
     }
   }, [lesson?.id, lesson?.title, slug]);
 
-  const lessonProgress = lesson ? getLessonProgress(lesson.id) : 'not_started';
+  const activationProgress = lesson ? savedProgress[lesson.id] || savedProgress[lesson.slug] : undefined;
+  const lessonProgress = activationProgress?.status || (lesson ? getLessonProgress(lesson.id) : 'not_started');
   const isCompleted = lessonProgress === 'completed';
 
   const [isCourseEnrolled, setIsCourseEnrolled] = useState(false);
@@ -200,6 +203,13 @@ export function LessonPage() {
       }
     }
   }, [slug, lessons, user]);
+
+  useEffect(() => {
+    if (!lesson || !user || (lesson.is_premium && !isPremium && !isCourseEnrolled)) return;
+    const current = savedProgress[lesson.id] || savedProgress[lesson.slug];
+    if (current && current.status !== 'not_started') return;
+    updateLessonProgress(lesson.id, { status: 'in_progress' });
+  }, [isCourseEnrolled, isPremium, lesson, savedProgress, updateLessonProgress, user]);
 
   if (!lesson) {
     return (
@@ -244,7 +254,13 @@ export function LessonPage() {
 
     if (!lesson) return;
 
-    setLessonProgress(lesson.id, isCompleted ? 'not_started' : 'completed');
+    const nextStatus = isCompleted ? 'not_started' : 'completed';
+    setLessonProgress(lesson.id, nextStatus);
+    if (isCompleted) {
+      updateLessonProgress(lesson.id, { status: 'not_started', completedAt: undefined });
+    } else {
+      markLessonCompleted(lesson.id);
+    }
   };
 
   if (lesson.type === 'grammar') {
