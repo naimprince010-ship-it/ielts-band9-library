@@ -63,16 +63,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(409).json({ error: `Payment already ${payment.status}` });
   }
 
-  // Calculate premium expiry from DB-side time (not client-provided)
-  let premiumUntil: string | null = null;
-  if (payment.package_type === 'yearly') {
-    premiumUntil = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
-  } else if (payment.package_type === 'monthly') {
-    premiumUntil = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
-  }
-
-  // Mark payment approved — eq on status prevents double-approval race
-  const { error: approveErr } = await adminClient
+  // The database trigger grants subscription/course access atomically with this
+  // status transition. Returning the row also proves this request won the race.
+  const { data: approvedPayment, error: approveErr } = await adminClient
     .from('payment_requests')
     .update({
       status: 'approved',
@@ -80,31 +73,28 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       processed_by: user.id,
     })
     .eq('id', paymentId)
-    .eq('status', 'pending');
+    .eq('status', 'pending')
+    .select('id, package_type')
+    .maybeSingle();
 
   if (approveErr) {
     return res.status(500).json({ error: 'Failed to approve payment' });
   }
+  if (!approvedPayment) {
+    return res.status(409).json({ error: 'Payment is no longer pending' });
+  }
 
-  // Activate premium for subscription packages
-  if (payment.package_type !== 'course' && premiumUntil) {
-    const { error: userErr } = await adminClient
+  let premiumUntil: string | null = null;
+  if (approvedPayment.package_type !== 'course') {
+    const { data: profile, error: profileError } = await adminClient
       .from('users')
-      .update({
-        subscription_status: 'premium',
-        premium_until: premiumUntil,
-        package_type: payment.package_type,
-      })
-      .eq('id', payment.user_id);
-
-    if (userErr) {
-      // Roll back the approval so admin can retry
-      await adminClient
-        .from('payment_requests')
-        .update({ status: 'pending', processed_at: null, processed_by: null })
-        .eq('id', paymentId);
-      return res.status(500).json({ error: 'Failed to activate premium — payment rolled back' });
+      .select('premium_until')
+      .eq('id', payment.user_id)
+      .single();
+    if (profileError) {
+      return res.status(500).json({ error: 'Payment approved, but access status could not be loaded' });
     }
+    premiumUntil = profile.premium_until;
   }
 
   return res.status(200).json({ success: true, premiumUntil });

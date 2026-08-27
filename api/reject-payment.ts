@@ -61,7 +61,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(409).json({ error: `Payment already ${payment.status}` });
   }
 
-  const { error: rejectErr } = await adminClient
+  const { data: rejectedPayment, error: rejectErr } = await adminClient
     .from('payment_requests')
     .update({
       status: 'rejected',
@@ -70,10 +70,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       rejection_reason: reason?.slice(0, 500) ?? null,
     })
     .eq('id', paymentId)
-    .eq('status', 'pending');
+    .eq('status', 'pending')
+    .select('id')
+    .maybeSingle();
 
   if (rejectErr) {
     return res.status(500).json({ error: 'Failed to reject payment' });
+  }
+  if (!rejectedPayment) {
+    return res.status(409).json({ error: 'Payment is no longer pending' });
   }
 
   return res.status(200).json({ success: true });

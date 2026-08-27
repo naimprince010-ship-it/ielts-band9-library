@@ -1,5 +1,6 @@
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { Course, CurriculumModule } from '@/types';
+import { COURSES as FALLBACK_COURSES } from '@/data/courses';
 
 export const courseService = {
   async getCourses(): Promise<Course[]> {
@@ -93,6 +94,7 @@ export const courseService = {
   },
 
   mapDbCourseToCourse(dbCourse: any): Course {
+    const fallbackCourse = FALLBACK_COURSES.find(course => course.id === dbCourse.id);
     return {
       id: dbCourse.id,
       title: dbCourse.title,
@@ -108,7 +110,9 @@ export const courseService = {
       isPopular: dbCourse.is_popular,
       accentColor: dbCourse.accent_color,
       bgGradient: dbCourse.bg_gradient,
-      curriculum: dbCourse.curriculum as CurriculumModule[],
+      curriculum: (Array.isArray(dbCourse.curriculum) && dbCourse.curriculum.length > 0
+        ? dbCourse.curriculum
+        : fallbackCourse?.curriculum) as CurriculumModule[] | undefined,
       created_at: dbCourse.created_at,
       updated_at: dbCourse.updated_at,
     };
