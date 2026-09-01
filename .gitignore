@@ -29,3 +29,8 @@ dist-ssr
 *.sw?
 .vercel
 .env*.local
+
+# Local browser audit profiles can contain session data and are never source files.
+.chrome-audit-local/
+.chrome-audit-profile/
+.chrome-audit-profile-2/

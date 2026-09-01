@@ -67,6 +67,7 @@ import { GRAMMAR_TOPICS, VOCABULARY_TOPICS } from '@/data/sampleLessons';
 import { generateLessonWithAI } from '@/services/aiLessonGenerator';
 import { cn } from '@/lib/utils';
 import { authenticatedJsonHeaders } from '@/lib/authenticatedApi';
+import { validateStudyLessonBlueprint } from '@/lib/lessonBlueprint';
 
 interface QualityChecklist {
   naturalCollocations: boolean;
@@ -196,6 +197,7 @@ export function AdminPage() {
     content: null as LessonContent | null,
     courseId: '',
     moduleName: '',
+    videoUrl: '',
   });
   const [filterCourse, setFilterCourse] = useState<string>('all');
   const [lessonSearch, setLessonSearch] = useState('');
@@ -386,6 +388,7 @@ export function AdminPage() {
       content: null,
       courseId: '',
       moduleName: '',
+      videoUrl: '',
     });
     setQualityChecklist({
       naturalCollocations: false,
@@ -400,6 +403,7 @@ export function AdminPage() {
   };
 
   const handleEditLesson = (lesson: Lesson) => {
+    const savedChecklist = lesson.quality_report?.humanChecklist as Partial<QualityChecklist> | undefined;
     setEditingLesson(lesson);
     setFormData({
       title: lesson.title,
@@ -412,6 +416,14 @@ export function AdminPage() {
       content: lesson.content,
       courseId: lesson.courseId || '',
       moduleName: lesson.moduleName || '',
+      videoUrl: lesson.videoUrl || '',
+    });
+    setQualityChecklist({
+      naturalCollocations: Boolean(savedChecklist?.naturalCollocations),
+      ieltsSafeUsage: Boolean(savedChecklist?.ieltsSafeUsage),
+      noRareWords: Boolean(savedChecklist?.noRareWords),
+      examplesReviewed: Boolean(savedChecklist?.examplesReviewed),
+      mistakesAccurate: Boolean(savedChecklist?.mistakesAccurate),
     });
     setError('');
     setSuccess('');
@@ -427,7 +439,30 @@ export function AdminPage() {
   };
 
   const handleTogglePublish = async (lesson: Lesson) => {
-    await updateLesson(lesson.id, { is_published: !lesson.is_published });
+    const willPublish = !lesson.is_published;
+    if (willPublish && lesson.content.studyBlueprint) {
+      const savedChecklist = lesson.quality_report?.humanChecklist as Partial<QualityChecklist> | undefined;
+      const reviewComplete = savedChecklist && Object.values({
+        naturalCollocations: Boolean(savedChecklist.naturalCollocations),
+        ieltsSafeUsage: Boolean(savedChecklist.ieltsSafeUsage),
+        noRareWords: Boolean(savedChecklist.noRareWords),
+        examplesReviewed: Boolean(savedChecklist.examplesReviewed),
+        mistakesAccurate: Boolean(savedChecklist.mistakesAccurate),
+      }).every(Boolean);
+
+      if (!reviewComplete) {
+        setError('Open this lesson in the editor and complete every Content Quality Guard check before publishing.');
+        return;
+      }
+    }
+
+    const updated = await updateLesson(lesson.id, {
+      is_published: willPublish,
+      content_status: lesson.content.studyBlueprint ? (willPublish ? 'published' : 'draft') : 'legacy',
+    });
+    if (!updated) {
+      setError('Publishing status could not be updated. Please try again.');
+    }
   };
 
   const handleGenerateWithAI = async () => {
@@ -449,6 +484,46 @@ export function AdminPage() {
     } catch (err) {
       setError('Failed to generate lesson. Please try again.');
       console.error(err);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleGenerateStudyLesson = async () => {
+    if (!formData.topic) {
+      setError('Please select a topic first');
+      return;
+    }
+    setIsGenerating(true);
+    setError('');
+    setSuccess('');
+    try {
+      const response = await fetch('/api/generate-study-lesson', {
+        method: 'POST',
+        headers: await authenticatedJsonHeaders(),
+        body: JSON.stringify({ type: formData.type, topic: formData.topic, level: formData.level }),
+      });
+      const generated = await response.json();
+      if (!response.ok) throw new Error(generated.error || 'Failed to generate study lesson');
+      const validation = validateStudyLessonBlueprint(generated.studyBlueprint);
+      if (!validation.success) throw new Error('Generated blueprint did not pass the lesson schema');
+      const content: LessonContent = {
+        title: generated.title,
+        targetLevel: generated.targetLevel,
+        whatYouWillLearn: [validation.data.objective, validation.data.outcome],
+        coreExplanation: validation.data.objective,
+        examples: [],
+        commonMistakes: [],
+        miniPractice: [],
+        answerKey: [],
+        quickRecap: validation.data.outcome,
+        studyBlueprint: validation.data,
+      };
+      setFormData(prev => ({ ...prev, title: generated.title, description: generated.description, content, is_published: false }));
+      setQualityChecklist({ naturalCollocations: false, ieltsSafeUsage: false, noRareWords: false, examplesReviewed: false, mistakesAccurate: false });
+      setSuccess('Validated study-material draft generated. Preview and complete the review guard before publishing.');
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Failed to generate study lesson');
     } finally {
       setIsGenerating(false);
     }
@@ -550,8 +625,19 @@ export function AdminPage() {
       setError('Please fill in all required fields and generate content');
       return;
     }
+    if (formData.videoUrl.trim() && !/^https:\/\/\S+$/i.test(formData.videoUrl.trim())) {
+      setError('Video URL must be a valid HTTPS link.');
+      return;
+    }
+    if (formData.content.studyBlueprint) {
+      const blueprintValidation = validateStudyLessonBlueprint(formData.content.studyBlueprint);
+      if (!blueprintValidation.success) {
+        setError(`Lesson blueprint is incomplete: ${blueprintValidation.error.issues[0]?.message || 'schema validation failed'}`);
+        return;
+      }
+    }
     const deepLessonIsApproved = Object.values(qualityChecklist).every(Boolean);
-    if ((formData.content.deepVocabulary || formData.content.deepGrammar) && formData.is_published && !deepLessonIsApproved) {
+    if ((formData.content.deepVocabulary || formData.content.deepGrammar || formData.content.studyBlueprint) && formData.is_published && !deepLessonIsApproved) {
       setError('Complete every Content Quality Guard check before publishing this deep lesson.');
       return;
     }
@@ -571,12 +657,24 @@ export function AdminPage() {
         is_published: formData.is_published,
         courseId: formData.courseId || undefined,
         moduleName: formData.moduleName || undefined,
+        videoUrl: formData.videoUrl.trim() || undefined,
+        blueprint_version: formData.content.studyBlueprint?.schemaVersion,
+        content_status: formData.content.studyBlueprint
+          ? (formData.is_published ? 'published' : 'draft')
+          : 'legacy',
+        quality_report: formData.content.studyBlueprint ? {
+          schemaValid: true,
+          humanChecklist: qualityChecklist,
+          reviewedForPublication: formData.is_published,
+        } : undefined,
       };
       if (editingLesson) {
-        await updateLesson(editingLesson.id, lessonData);
+        const updated = await updateLesson(editingLesson.id, lessonData);
+        if (!updated) throw new Error('Database update returned false');
         setSuccess('Lesson updated successfully!');
       } else {
-        await createLesson(lessonData);
+        const created = await createLesson(lessonData);
+        if (!created) throw new Error('Database insert returned no lesson');
         setSuccess('Lesson created successfully!');
       }
       setTimeout(() => {
@@ -1354,18 +1452,21 @@ export function AdminPage() {
                   </div>
                   <div className="space-y-2">
                     <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Topic</Label>
-                    <Select value={formData.topic} onValueChange={(v) => setFormData(prev => ({ ...prev, topic: v }))}>
-                      <SelectTrigger className="rounded-xl border-slate-200 bg-white">
-                        <SelectValue placeholder="Select topic" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {topics.map((topic) => <SelectItem key={topic} value={topic}>{topic}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
+                    {formData.type === 'vocabulary' || formData.type === 'grammar' ? (
+                      <Select value={formData.topic} onValueChange={(v) => setFormData(prev => ({ ...prev, topic: v }))}>
+                        <SelectTrigger className="rounded-xl border-slate-200 bg-white"><SelectValue placeholder="Select topic" /></SelectTrigger>
+                        <SelectContent>{topics.map((topic) => <SelectItem key={topic} value={topic}>{topic}</SelectItem>)}</SelectContent>
+                      </Select>
+                    ) : (
+                      <Input value={formData.topic} onChange={(event) => setFormData(prev => ({ ...prev, topic: event.target.value }))} placeholder="e.g. Speaking Part 1 fluency" className="rounded-xl border-slate-200 bg-white" />
+                    )}
                   </div>
                 </div>
-                <Button onClick={handleGenerateWithAI} disabled={isGenerating || !formData.topic} className="w-full h-12 rounded-xl bg-indigo-600 hover:bg-indigo-700 font-bold shadow-lg shadow-indigo-100">
-                  {isGenerating ? <><Loader2 className="h-5 w-5 mr-2 animate-spin" /> Generating...</> : <><Sparkles className="h-5 w-5 mr-2" /> Generate Draft with AI</>}
+                <Button onClick={handleGenerateStudyLesson} disabled={isGenerating || !formData.topic} className="w-full h-12 rounded-xl bg-indigo-600 hover:bg-indigo-700 font-bold shadow-lg shadow-indigo-100">
+                  {isGenerating ? <><Loader2 className="h-5 w-5 mr-2 animate-spin" /> Generating & validating...</> : <><Sparkles className="h-5 w-5 mr-2" /> Generate Complete Study Lesson</>}
+                </Button>
+                <Button type="button" variant="ghost" onClick={handleGenerateWithAI} disabled={isGenerating || !formData.topic} className="mt-2 w-full text-xs text-slate-500">
+                  Generate legacy basic draft
                 </Button>
                 {formData.type === 'vocabulary' && (
                   <Button
@@ -1401,6 +1502,18 @@ export function AdminPage() {
                 <Label htmlFor="description" className="text-xs font-black uppercase tracking-widest text-slate-400">Description</Label>
                 <Textarea id="description" value={formData.description} onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))} placeholder="Brief description of the lesson" rows={2} className="rounded-xl border-slate-200" />
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="videoUrl" className="text-xs font-black uppercase tracking-widest text-slate-400">Video URL (Optional)</Label>
+                <Input
+                  id="videoUrl"
+                  type="url"
+                  value={formData.videoUrl}
+                  onChange={(e) => setFormData(prev => ({ ...prev, videoUrl: e.target.value }))}
+                  placeholder="https://youtube.com/watch?v=..."
+                  className="h-12 rounded-xl border-slate-200"
+                />
+                <p className="text-xs leading-5 text-slate-500">Supports YouTube, Vimeo, and direct HTTPS video links. Premium access rules also protect the player.</p>
+              </div>
 
               {formData.content && (
                 <Card className="rounded-[1.5rem] border-slate-100 shadow-sm">
@@ -1422,6 +1535,15 @@ export function AdminPage() {
                         ))}
                       </ul>
                     </div>
+                    {formData.content.studyBlueprint && (
+                      <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+                        <div className="flex items-center justify-between gap-4">
+                          <span className="font-bold text-emerald-800">Blueprint v{formData.content.studyBlueprint.schemaVersion} validated</span>
+                          <Badge className="bg-emerald-600">{formData.content.studyBlueprint.sections.length} study steps</Badge>
+                        </div>
+                        <p className="mt-2 text-xs leading-5 text-emerald-700">{formData.content.studyBlueprint.outcome}</p>
+                      </div>
+                    )}
                     {formData.content.deepVocabulary && (
                       <div className="rounded-xl border border-violet-100 bg-violet-50/60 p-4">
                         <span className="mb-2 block text-[10px] font-black uppercase tracking-widest text-violet-500">Deep lesson words</span>
@@ -1484,7 +1606,7 @@ export function AdminPage() {
                     <Switch
                       id="is_published"
                       checked={formData.is_published}
-                      disabled={Boolean(formData.content?.deepVocabulary || formData.content?.deepGrammar) && !Object.values(qualityChecklist).every(Boolean)}
+                      disabled={Boolean(formData.content?.deepVocabulary || formData.content?.deepGrammar || formData.content?.studyBlueprint) && !Object.values(qualityChecklist).every(Boolean)}
                       onCheckedChange={(checked) => setFormData(prev => ({ ...prev, is_published: checked }))}
                     />
                     <Label htmlFor="is_published" className="font-bold text-slate-700">Published</Label>

@@ -30,29 +30,28 @@ export const COURSES: Course[] = [
   {
     id: 'ielts-masterclass',
     title: 'IELTS Band 8+ Masterclass',
-    description: 'Our most comprehensive program covering all 4 modules (Reading, Writing, Listening, Speaking) with personal feedback.',
+    description: 'A complete hybrid IELTS program combining 24 structured self-paced lessons with weekly live support, guided practice, and limited individual feedback.',
     instructor: 'Arefin Shovo',
-    nextBatch: 'April 15, 2026',
+    nextBatch: 'Registration open',
     price: 5500,
-    originalPrice: 8000,
     duration: '3 Months',
     level: 'Any',
-    type: 'live',
+    type: 'hybrid',
     isPopular: true,
     accentColor: 'indigo',
     bgGradient: 'from-blue-500 to-indigo-600',
     features: [
-      '24 Interactive Live Classes',
-      'Daily Practice Materials',
-      'Personalized Writing Feedback',
-      '1-on-1 Speaking Mock Tests',
-      'Life-time Access to Recorded Classes'
+      '24 Structured Self-Paced Lessons',
+      'Weekly Live Group Clinic',
+      '4 Personalized Writing Reviews',
+      '2 Individual Speaking Mock Tests',
+      'Guided Practice Materials and Final Mock Review'
     ],
     curriculum: [
       {
         module: "Module 1: Speaking Mastery (6 Classes)",
         lessons: [
-          { title: "Class 01: Part 1 Fluency & Confidence Building", lessonId: "speaking-part1-fluency-confidence" },
+          { title: "Speaking Part 1: Fluency & Confidence", lessonId: "speaking-part1-fluency-confidence" },
           { title: "Class 02: Expanding Answers with Cohesive Devices", lessonId: "speaking-class2-expansion-techniques" },
           { title: "Class 03: Part 2 Cue-Card Storytelling Method (Group A)", lessonId: "speaking-class3-cuecard-storytelling" },
           { title: "Class 04: Part 2 Cue-Card Storytelling Method (Group B)", lessonId: "speaking-class4-part2-logic" },
@@ -97,7 +96,7 @@ export const COURSES: Course[] = [
   },
   {
     id: 'writing-intensive',
-    title: 'Writing Task 1 & 2 Intensive',
+    title: 'IELTS Writing Task 1 & 2 Intensive',
     description: 'Master Task 1 and Task 2 with advanced templates and weekly scoring. Focus on high-band grammar & vocabulary.',
     instructor: 'Sharmin Alam',
     nextBatch: 'April 10, 2026',
@@ -118,7 +117,7 @@ export const COURSES: Course[] = [
   },
   {
     id: 'speaking-club',
-    title: 'IELTS Speaking Confidence Club',
+    title: 'IELTS Speaking Confidence Program',
     description: 'Overcome your speaking fear. Daily 30-minute practice sessions with peers and expert feedback.',
     instructor: 'James Rodger',
     nextBatch: 'Ongoing',
@@ -139,7 +138,7 @@ export const COURSES: Course[] = [
   },
   {
     id: 'reading-listening-suite',
-    title: 'Rapid Reading & Listening Suite',
+    title: 'IELTS Reading & Listening Intensive',
     description: 'Speed up your reading and sharpen your ears. Focused practice on tricky question types and keywords.',
     instructor: 'Sifat Hasan',
     nextBatch: 'Self-paced',

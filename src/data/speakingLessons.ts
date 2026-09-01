@@ -12,7 +12,7 @@ export const SPEAKING_LESSONS: Lesson[] = [
   // ============================================
   {
     id: 'speaking-part1-fluency-confidence',
-    title: 'Class 01: Part 1 Fluency & Confidence Building',
+    title: 'Speaking Part 1: Fluency & Confidence',
     slug: 'speaking-part1-fluency-confidence',
     type: 'speaking',
     level: 'beginner',
@@ -27,10 +27,10 @@ export const SPEAKING_LESSONS: Lesson[] = [
     courseId: 'ielts-masterclass',
     moduleName: 'Module 1: Speaking Mastery',
     content: {
-      title: 'Class 01: Part 1 Fluency & Confidence Building',
+      title: 'Speaking Part 1: Fluency & Confidence',
       targetLevel: 'Band 6.0 - 9.0',
       whatYouWillLearn: [
-        'How to maintain eye contact and natural body language',
+        'How to stay composed and communicate clearly in the exam room',
         'Techniques for eliminating "Umms" and "Errs"',
         'Natural fillers (opening phrases) for thinking time',
         'Standard structure for successful Part 1 answers',
@@ -39,9 +39,9 @@ export const SPEAKING_LESSONS: Lesson[] = [
       coreExplanation: `**Part 1: Fundamentals of Fluency**
       
 In your first class, we focus on the **Triangle of Confidence**:
-1. **Eye Contact**: This indicates transparency and naturally keeps you calm.
+1. **Composure**: Sit comfortably, listen carefully, and focus on clear communication. Eye contact and body language are not scoring criteria.
 2. **Breath Control**: Speaking from your diaphragm, not your throat, produces a more stable voice.
-3. **The 3-Second Rule**: Train yourself to start speaking within 3 seconds of a question.
+3. **The 3-Second Response Drill**: As a practice technique, train yourself to begin naturally after a short pause. This is not an official IELTS rule.
 
 **Natural Fillers (Thinking Time):**
 Instead of saying "Umm...", use these:
@@ -63,18 +63,131 @@ Part 1 asks familiar questions (hometown, childhood, etc.). You don't need to "i
         }
       ],
       commonMistakes: [
-        { mistake: 'Looking at the floor while speaking', correction: 'Maintain soft, natural eye contact with the examiner', explanation: 'Speaking confidence is 50% body language. Looking down reflects nervousness and lowers the "Fluency and Coherence" score.' },
+        { mistake: 'Focusing so much on body language that your answer loses clarity', correction: 'Use comfortable, natural behaviour and focus on speaking clearly', explanation: 'Body language and eye contact are not IELTS Speaking scoring criteria. Fluency and coherence, lexical resource, grammatical range and accuracy, and pronunciation determine the score.' },
         { mistake: 'Correcting yourself mid-sentence', correction: 'If you make a mistake, just keep going or correct it immediately and move on.', explanation: 'Frequent self-correction breaks your fluency. Keep the flow as the #1 priority.' }
       ],
       miniPractice: [
-        { question: 'What is the "3-Second Rule" in IELTS Speaking?', options: ['Speak for only 3 seconds', 'Start your answer within 3 seconds', 'Think for 3 seconds before each word'], type: 'multiple-choice' },
+        { question: 'What is the purpose of the "3-Second Response Drill" in this lesson?', options: ['Speak for only 3 seconds', 'Practise beginning an answer after a short natural pause', 'Think for 3 seconds before each word'], type: 'multiple-choice' },
         { question: 'Fill in the blank: "To be _____, I haven\'t thought much about it..."', type: 'fill-blank' }
       ],
       answerKey: [
-        'Start your answer within 3 seconds',
+        'Practise beginning an answer after a short natural pause',
         'honest'
       ],
-      quickRecap: 'In Class 1, focus on Flow over Accuracy. Use fillers to kill silences. Maintain eye contact. Remember: your goal is to show the examiner you can hold a natural conversation without stopping.',
+      quickRecap: 'In Class 1, practise starting calmly, extending each answer with a clear reason or example, and using thinking phrases sparingly. Your score is based on fluency and coherence, lexical resource, grammatical range and accuracy, and pronunciation.',
+      studyBlueprint: {
+        schemaVersion: 1,
+        objective: 'Build clear, relevant IELTS Speaking Part 1 answers without memorising scripts or forcing advanced vocabulary.',
+        outcome: 'Answer a familiar Part 1 question for 20–30 seconds using Answer → Reason → Detail, with fewer empty pauses and repetitions.',
+        estimatedMinutes: 45,
+        sourceNotes: [
+          'IELTS Speaking is assessed on fluency and coherence, lexical resource, grammatical range and accuracy, and pronunciation.',
+          'Eye contact and body language are not IELTS Speaking band-descriptor criteria.',
+          'Thinking phrases are optional communication tools, not official IELTS rules.'
+        ],
+        sections: [
+          {
+            id: 'understand-fluency',
+            type: 'concept',
+            title: 'What fluency really means',
+            summary: 'Fluency is not speaking as fast as possible. A fluent answer develops a relevant idea at a natural pace and remains easy to follow. Small pauses are normal; repeated hesitation, restarting, or losing the main idea causes difficulty.',
+            points: [
+              'Give a direct answer before adding detail.',
+              'Extend one relevant idea instead of listing unrelated ideas.',
+              'Use natural pauses; do not rush to eliminate every silence.',
+              'Choose familiar language you can control accurately.'
+            ]
+          },
+          {
+            id: 'answer-framework',
+            type: 'worked-example',
+            title: 'Build an answer in three moves',
+            prompt: 'Do you enjoy living in your hometown?',
+            weakAnswer: 'Yes, I do. It is nice and there are many buildings.',
+            strongAnswer: 'Yes, I do, mainly because it has a friendly atmosphere. I grew up there, so I know most parts of the city quite well, and I especially enjoy spending time near the river in the evening.',
+            breakdown: [
+              'Answer: “Yes, I do.” gives an immediate, relevant response.',
+              'Reason: “mainly because…” explains the opinion.',
+              'Detail: a personal example makes the answer specific and natural.'
+            ]
+          },
+          {
+            id: 'language-bank',
+            type: 'phrase-bank',
+            title: 'Natural language bank',
+            groups: [
+              { label: 'Start directly', items: ['Yes, definitely.', 'Not really, to be honest.', 'It depends, but generally…'] },
+              { label: 'Give a reason', items: ['The main reason is that…', 'That is mostly because…', 'I think this is due to…'] },
+              { label: 'Add detail', items: ['For example,…', 'One thing I particularly like is…', 'A good example would be…'] },
+              { label: 'Think naturally', items: ['I have never really thought about that, but…', 'That is an interesting question. I would say…', 'Let me think for a moment…'] }
+            ]
+          },
+          {
+            id: 'guided-answer-building',
+            type: 'guided-practice',
+            title: 'Guided answer building',
+            instructions: 'Read each prompt, create your own three-part answer, and then open the model to compare structure—not memorise wording.',
+            items: [
+              {
+                prompt: 'Do you prefer mornings or evenings?',
+                modelAnswer: 'I definitely prefer mornings because I can concentrate better before the day becomes busy. For instance, I usually do my most important work just after breakfast.',
+                explanation: 'The response answers directly, gives one reason, and supports it with a personal routine.'
+              },
+              {
+                prompt: 'How often do you read books?',
+                modelAnswer: 'I read a few times a week, although it depends on my schedule. I normally read short non-fiction books before bed because they help me relax and learn something useful at the same time.',
+                explanation: 'The answer uses a qualified frequency and then develops one relevant habit.'
+              },
+              {
+                prompt: 'Is your hometown a good place for young people?',
+                modelAnswer: 'Yes, I think it is, mainly because there are several universities and plenty of affordable places to socialise. For example, the city centre has cafés, sports facilities, and a large public library.',
+                explanation: 'The speaker groups supporting details under one clear reason instead of producing an unrelated list.'
+              }
+            ]
+          },
+          {
+            id: 'timed-speaking-drill',
+            type: 'speaking-drill',
+            title: 'Timed speaking drill',
+            instructions: 'Record one answer at a time. Begin after a short natural pause, speak for 20–30 seconds, and do not restart the recording when you make a small mistake.',
+            preparationSeconds: 3,
+            responseSeconds: 30,
+            questions: [
+              'What do you like most about your hometown?',
+              'Do you usually plan your day?',
+              'What kind of weather do you enjoy?',
+              'Do you prefer studying alone or with other people?',
+              'What do you normally do at weekends?'
+            ]
+          },
+          {
+            id: 'self-assessment',
+            type: 'self-check',
+            title: 'Listen back and check',
+            criteria: [
+              'I answered the exact question in my first sentence.',
+              'I gave one clear reason and one useful detail or example.',
+              'My answer lasted roughly 20–30 seconds without rushing.',
+              'I did not repeat the same word or phrase unnecessarily.',
+              'My pauses sounded natural and I continued after small mistakes.',
+              'My pronunciation was clear enough to follow without effort.'
+            ]
+          },
+          {
+            id: 'final-assignment',
+            type: 'assignment',
+            title: 'Final mini mock',
+            task: 'Record three Part 1 answers in one continuous session. Use the three-move framework, but do not read a script.',
+            deliverable: 'One 90-second to 2-minute recording containing answers about your hometown, daily routine, and free time.',
+            successCriteria: [
+              'Each response contains Answer → Reason → Detail.',
+              'The ideas remain relevant and understandable.',
+              'Thinking phrases are used only when genuinely needed.',
+              'The second recording shows fewer repetitions than the first practice attempt.'
+            ]
+          }
+        ]
+      },
       speakingLines: [
         "That's a very interesting question, let me see...",
         "Actually, I'd say I'm quite a morning person.",

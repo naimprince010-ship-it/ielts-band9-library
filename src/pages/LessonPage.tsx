@@ -17,15 +17,9 @@ import { CopyableBadge } from '@/components/ui/CopyButton';
 import { SpeakButton } from '@/components/ui/SpeakButton';
 import { PieChartCoreExplanation } from '@/components/ui/PieChartVisuals';
 import { DeepVocabularyLesson } from '@/components/lesson/DeepVocabularyLesson';
-import { deepVocabularyLessons } from '@/data/deepVocabularyLessons';
-import { GrammarLessonTemplate } from '@/components/lesson/grammar/GrammarLessonTemplate';
-import { WritingLessonTemplate } from '@/components/lesson/writing/WritingLessonTemplate';
-import { VocabularyLessonTemplate } from '@/components/lesson/vocabulary/VocabularyLessonTemplate';
 import { useLessons } from '@/contexts/LessonContext';
 import { useAuth } from '@/contexts/AuthContext';
-import { useProgress } from '@/contexts/ProgressContext';
 import { supabase } from '@/lib/supabase';
-import { trackFunnelEvent } from '@/lib/funnel';
 
 // Helper function to parse markdown-style text and render properly
 function parseMarkdownText(text: string): React.ReactNode {
@@ -43,9 +37,70 @@ function parseMarkdownText(text: string): React.ReactNode {
   });
 }
 
+// Helper to parse Writing Task examples (Model Answer format)
+function parseWritingExample(text: string): React.ReactNode {
+  if (!text) return null;
+
+  // Check for Writing Task format: BAND 9 MODEL ANSWER, Task:, Why Band 9:
+  const hasWritingFormat = text.includes('MODEL ANSWER') || text.includes('BAND 9:') || text.includes('Task:');
+
+  if (!hasWritingFormat) return null;
+
+  // Extract task/question if present
+  const taskMatch = text.match(/(?:\*\*)?Task:?\*?\*?\s*(.+?)(?=(?:\*\*)?(?:BAND|Model|$))/i);
+
+  // Extract model answer
+  const modelAnswerMatch = text.match(/BAND 9 MODEL ANSWER[^:]*:\s*"?([^"]+)"?(?=(?:Why Band|$))/i) ||
+                           text.match(/BAND 9:\s*"?([^"]+)"?/i);
+
+  // Extract explanation
+  const whyBandMatch = text.match(/Why Band 9:\s*(.+?)$/i);
+
+  return (
+    <div className="space-y-4">
+      {taskMatch && (
+        <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <FileText className="h-4 w-4 text-blue-600" />
+            <span className="font-semibold text-blue-700 dark:text-blue-300 text-sm uppercase tracking-wide">Task</span>
+          </div>
+          <p className="text-blue-900 dark:text-blue-100">{taskMatch[1].trim()}</p>
+        </div>
+      )}
+
+      {modelAnswerMatch && (
+        <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Badge className="bg-green-600 text-white">Band 9</Badge>
+            <span className="text-sm text-green-700 dark:text-green-300 font-medium">Model Answer</span>
+          </div>
+          <p className="text-green-900 dark:text-green-100 leading-relaxed italic border-l-4 border-green-400 pl-4">
+            "{modelAnswerMatch[1].trim()}"
+          </p>
+        </div>
+      )}
+
+      {whyBandMatch && (
+        <div className="border-l-4 border-accent pl-4 py-2">
+          <div className="flex items-center gap-2 mb-1">
+            <Lightbulb className="h-4 w-4 text-accent" />
+            <span className="text-xs font-semibold text-accent uppercase">Why Band 9</span>
+          </div>
+          <p className="text-muted-foreground leading-relaxed">{whyBandMatch[1].trim()}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // Helper to parse Speaking examples with Question/Band format
 function parseExampleContent(text: string): React.ReactNode {
   if (!text) return null;
+
+  // First check for Writing Task format
+  if (text.includes('MODEL ANSWER') || text.includes('BAND 9:')) {
+    return parseWritingExample(text);
+  }
 
   // Check if it has Question/Band format (Speaking)
   const hasQuestionFormat = text.includes('**Question:') || text.includes('**Band');
@@ -158,19 +213,16 @@ export function LessonPage() {
   const navigate = useNavigate();
   const { getLessonBySlug, addBookmark, removeBookmark, isBookmarked, incrementViewCount, lessons, getLessonProgress, setLessonProgress } = useLessons();
   const { user, isPremium } = useAuth();
-  const { lessonProgress: savedProgress, updateLessonProgress, markLessonCompleted } = useProgress();
   const [lesson, setLesson] = useState(getLessonBySlug(slug || ''));
 
   // Dynamic page title
   useEffect(() => {
     if (lesson?.title) {
       document.title = `${lesson.title} | IELTS Band 9 Materials Library`;
-      trackFunnelEvent('lesson_started', { lessonId: lesson.id, slug });
     }
-  }, [lesson?.id, lesson?.title, slug]);
+  }, [lesson?.title]);
 
-  const activationProgress = lesson ? savedProgress[lesson.id] || savedProgress[lesson.slug] : undefined;
-  const lessonProgress = activationProgress?.status || (lesson ? getLessonProgress(lesson.id) : 'not_started');
+  const lessonProgress = lesson ? getLessonProgress(lesson.id) : 'not_started';
   const isCompleted = lessonProgress === 'completed';
 
   const [isCourseEnrolled, setIsCourseEnrolled] = useState(false);
@@ -204,13 +256,6 @@ export function LessonPage() {
     }
   }, [slug, lessons, user]);
 
-  useEffect(() => {
-    if (!lesson || !user || (lesson.is_premium && !isPremium && !isCourseEnrolled)) return;
-    const current = savedProgress[lesson.id] || savedProgress[lesson.slug];
-    if (current && current.status !== 'not_started') return;
-    updateLessonProgress(lesson.id, { status: 'in_progress' });
-  }, [isCourseEnrolled, isPremium, lesson, savedProgress, updateLessonProgress, user]);
-
   if (!lesson) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -227,11 +272,7 @@ export function LessonPage() {
   // They can access if it's NOT premium, OR they are a global premium user, OR they bought the specific course
   const canAccessContent = !lesson.is_premium || isPremium || isCourseEnrolled;
   const content = lesson.content;
-  const deepVocabularyData = lesson.type === 'vocabulary'
-    ? content.deepVocabulary ?? (lesson.slug === 'influence-impact-vocabulary' ? deepVocabularyLessons[lesson.slug] : undefined)
-    : undefined;
-  const isDeepVocabularyLesson = Boolean(deepVocabularyData);
-  const estimatedTime = Math.max(5, Math.ceil((content.examples.length + content.miniPractice.length + content.commonMistakes.length) * 2));
+  const isDeepVocabularyLesson = lesson.slug === 'influence-impact-vocabulary';
 
   const handleBookmarkToggle = async () => {
     if (!user) {
@@ -254,73 +295,8 @@ export function LessonPage() {
 
     if (!lesson) return;
 
-    const nextStatus = isCompleted ? 'not_started' : 'completed';
-    setLessonProgress(lesson.id, nextStatus);
-    if (isCompleted) {
-      updateLessonProgress(lesson.id, { status: 'not_started', completedAt: undefined });
-    } else {
-      markLessonCompleted(lesson.id);
-    }
+    setLessonProgress(lesson.id, isCompleted ? 'not_started' : 'completed');
   };
-
-  if (lesson.type === 'grammar') {
-    return (
-      <GrammarLessonTemplate
-        lesson={lesson}
-        content={content}
-        estimatedTime={estimatedTime}
-        canAccessContent={canAccessContent}
-        isBookmarked={isBookmarked(lesson.id)}
-        onBookmarkToggle={handleBookmarkToggle}
-        showCompletionCard={canAccessContent}
-        isCompleted={isCompleted}
-        onProgressToggle={handleProgressToggle}
-      />
-    );
-  }
-
-  // Writing lessons render through their own fully isolated, data-driven
-  // template for the same reason grammar lessons do: this early return
-  // applies to every current and future lesson with type 'writing'
-  // automatically — nothing here is keyed off `slug`.
-  if (lesson.type === 'writing') {
-    return (
-      <WritingLessonTemplate
-        lesson={lesson}
-        content={content}
-        estimatedTime={estimatedTime}
-        canAccessContent={canAccessContent}
-        isBookmarked={isBookmarked(lesson.id)}
-        onBookmarkToggle={handleBookmarkToggle}
-        showCompletionCard={canAccessContent}
-        isCompleted={isCompleted}
-        onProgressToggle={handleProgressToggle}
-      />
-    );
-  }
-
-  // Vocabulary lessons render through their own fully isolated,
-  // data-driven template for the same reason grammar and writing lessons
-  // do — with one deliberate exception: `influence-impact-vocabulary` is
-  // excluded and falls through to the generic branch below, unchanged,
-  // because its content comes from the hand-authored `DeepVocabularyLesson`
-  // component rather than from `lesson.content`. Nothing else here is
-  // keyed off `slug`.
-  if (lesson.type === 'vocabulary' && !isDeepVocabularyLesson) {
-    return (
-      <VocabularyLessonTemplate
-        lesson={lesson}
-        content={content}
-        estimatedTime={estimatedTime}
-        canAccessContent={canAccessContent}
-        isBookmarked={isBookmarked(lesson.id)}
-        onBookmarkToggle={handleBookmarkToggle}
-        showCompletionCard={canAccessContent}
-        isCompleted={isCompleted}
-        onProgressToggle={handleProgressToggle}
-      />
-    );
-  }
 
   const deepLessonTocItems = [
     { id: 'what-you-will-learn', title: 'Overview', icon: <Lightbulb className="h-4 w-4" /> },
@@ -391,8 +367,8 @@ export function LessonPage() {
               <p className={isDeepVocabularyLesson ? 'max-w-2xl text-base leading-8 text-slate-600' : 'max-w-2xl text-white/80 leading-7'}>{lesson.description}</p>
               {isDeepVocabularyLesson && (
                 <div className="mt-6 flex flex-wrap items-center gap-5 text-sm font-medium text-slate-700">
-                  <span className="inline-flex items-center gap-2"><BookOpen className="h-4 w-4 text-indigo-700" />{deepVocabularyData?.words.length ?? 0} key words</span>
-                  <span className="inline-flex items-center gap-2"><Zap className="h-4 w-4 text-indigo-700" />{deepVocabularyData?.estimatedTime || `${estimatedTime} min`}</span>
+                  <span className="inline-flex items-center gap-2"><BookOpen className="h-4 w-4 text-indigo-700" />4 key words</span>
+                  <span className="inline-flex items-center gap-2"><Zap className="h-4 w-4 text-indigo-700" />8-12 min</span>
                   <span className="inline-flex items-center gap-2"><GraduationCap className="h-4 w-4 text-indigo-700" />{content.targetLevel}</span>
                 </div>
               )}
@@ -409,7 +385,7 @@ export function LessonPage() {
                   <div>
                     <p className="text-sm font-black text-indigo-700">By the end of this lesson</p>
                     <p className="mt-2 text-sm leading-6 text-slate-600">
-                      {deepVocabularyData?.learningOutcomes?.[0] || content.whatYouWillLearn[0] || 'Use the target vocabulary accurately in IELTS contexts.'}
+                      You will confidently use influence, impact, affect and effect in the correct form and context.
                     </p>
                     <Badge className="mt-3 bg-indigo-50 text-indigo-700 hover:bg-indigo-50">IELTS Writing + Speaking</Badge>
                     <div className="mt-4 flex flex-wrap gap-2">
@@ -474,7 +450,7 @@ export function LessonPage() {
 
           {isDeepVocabularyLesson ? (
             <div className={!canAccessContent ? 'blur-sm pointer-events-none select-none' : ''}>
-              {deepVocabularyData && <DeepVocabularyLesson title={content.title} targetLevel={content.targetLevel} learningPoints={content.whatYouWillLearn} data={deepVocabularyData} />}
+              <DeepVocabularyLesson targetLevel={content.targetLevel} learningPoints={content.whatYouWillLearn} />
             </div>
           ) : (
           <Card className="mb-6" id="what-you-will-learn">

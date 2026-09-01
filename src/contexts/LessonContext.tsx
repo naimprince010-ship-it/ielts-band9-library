@@ -120,7 +120,17 @@ export function LessonProvider({ children }: { children: ReactNode }) {
     const { data, error } = await query;
 
     if (!error && data) {
-      setLessons(data as Lesson[]);
+      const lessonsWithLocalFallbacks = (data as Lesson[]).map((lesson) => {
+        const localLesson = SAMPLE_LESSONS.find((candidate) => candidate.id === lesson.id);
+        const videoUrl = lesson.videoUrl || localLesson?.videoUrl;
+        const studyBlueprint = lesson.content?.studyBlueprint || localLesson?.content.studyBlueprint;
+        return {
+          ...lesson,
+          ...(videoUrl ? { videoUrl } : {}),
+          content: studyBlueprint ? { ...lesson.content, studyBlueprint } : lesson.content,
+        };
+      });
+      setLessons(lessonsWithLocalFallbacks);
     }
     setLoading(false);
   };

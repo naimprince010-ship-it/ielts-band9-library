@@ -341,7 +341,7 @@ export default function TypingPracticePage() {
               } else if (isCurrent) {
                 wordStyle = {
                   ...wordStyle,
-                  color: '#f1f5f9',
+                  color: '#3730a3',
                   background: 'rgba(167, 139, 250, 0.15)',
                   borderBottom: '2px solid #a78bfa',
                   borderRadius: '4px 4px 0 0',
@@ -465,9 +465,10 @@ export default function TypingPracticePage() {
 const styles: Record<string, React.CSSProperties> = {
   pageWrapper: {
     minHeight: '100vh',
-    background: 'radial-gradient(circle at top, rgba(168, 85, 247, 0.16), transparent 34%), radial-gradient(circle at right, rgba(59, 130, 246, 0.10), transparent 30%), linear-gradient(180deg, #f8fbff 0%, #ffffff 42%, #f5f3ff 100%)',
+    background: 'radial-gradient(circle at top, rgba(99, 102, 241, 0.12), transparent 30%), radial-gradient(circle at right, rgba(168, 85, 247, 0.08), transparent 28%), linear-gradient(180deg, hsl(var(--background)) 0%, rgba(255,255,255,0.96) 40%, hsl(var(--background)) 100%)',
     padding: '40px 20px 80px',
     fontFamily: "'Inter', 'Segoe UI', sans-serif",
+    color: 'hsl(var(--foreground))',
   },
   loadingCenter: {
     display: 'flex',
@@ -511,13 +512,13 @@ const styles: Record<string, React.CSSProperties> = {
   title: {
     fontSize: 30,
     fontWeight: 900,
-    color: '#0f172a',
+    color: 'hsl(var(--foreground))',
     margin: 0,
     letterSpacing: '-0.6px',
   },
   subtitle: {
     fontSize: 14,
-    color: '#52607a',
+    color: 'hsl(var(--muted-foreground))',
     margin: '6px 0 0',
   },
   statsGrid: {
@@ -528,8 +529,8 @@ const styles: Record<string, React.CSSProperties> = {
     margin: '0 auto 20px',
   },
   statCard: {
-    background: 'rgba(255,255,255,0.82)',
-    border: '1px solid rgba(148, 163, 184, 0.18)',
+    background: 'hsl(var(--card))',
+    border: '1px solid hsl(var(--border))',
     borderRadius: 18,
     padding: '16px 12px',
     textAlign: 'center',
@@ -543,8 +544,8 @@ const styles: Record<string, React.CSSProperties> = {
   typingCard: {
     maxWidth: 780,
     margin: '0 auto 20px',
-    background: 'rgba(255,255,255,0.9)',
-    border: '1px solid rgba(148, 163, 184, 0.18)',
+    background: 'hsl(var(--card))',
+    border: '1px solid hsl(var(--border))',
     borderRadius: 24,
     padding: '8px 0 24px',
     overflow: 'hidden',
@@ -603,11 +604,11 @@ const styles: Record<string, React.CSSProperties> = {
     minHeight: 130,
     maxHeight: 180,
     overflowY: 'auto',
-    background: 'linear-gradient(180deg, rgba(248,250,252,0.9), rgba(241,245,249,0.9))',
+    background: 'linear-gradient(180deg, hsl(var(--muted)) 0%, rgba(255,255,255,0.7) 100%)',
     margin: '0 24px',
     borderRadius: 16,
     marginBottom: 20,
-    border: '1px solid rgba(148, 163, 184, 0.18)',
+    border: '1px solid hsl(var(--border))',
     scrollbarWidth: 'thin',
     scrollbarColor: 'rgba(148,163,184,0.6) transparent',
   },
@@ -624,7 +625,7 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: 8,
     transition: 'all 0.15s ease',
     position: 'relative',
-    color: '#334155',
+    color: 'hsl(var(--foreground))',
   },
   cursor: {
     position: 'absolute',
@@ -644,12 +645,12 @@ const styles: Record<string, React.CSSProperties> = {
   },
   input: {
     width: '100%',
-    background: '#ffffff',
-    border: '1.5px solid rgba(148, 163, 184, 0.28)',
+    background: 'hsl(var(--card))',
+    border: '1.5px solid hsl(var(--border))',
     borderRadius: 14,
     padding: '14px 20px',
     fontSize: 17,
-    color: '#0f172a',
+    color: 'hsl(var(--foreground))',
     fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
     outline: 'none',
     transition: 'all 0.2s ease',
@@ -683,11 +684,11 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     alignItems: 'center',
     gap: 6,
-    background: '#f8fafc',
-    border: '1.5px solid rgba(148, 163, 184, 0.25)',
+    background: 'hsl(var(--muted))',
+    border: '1.5px solid hsl(var(--border))',
     borderRadius: 14,
     padding: '13px 18px',
-    color: '#334155',
+    color: 'hsl(var(--foreground))',
     fontSize: 14,
     fontWeight: 700,
     cursor: 'pointer',
@@ -820,17 +821,17 @@ const globalStyles = `
     transform: translateY(-2px);
   }
   .reset-btn:hover {
-    background: rgba(255,255,255,0.1) !important;
-    color: #f1f5f9 !important;
-    border-color: rgba(255,255,255,0.2) !important;
+    background: rgba(99, 102, 241, 0.06) !important;
+    color: hsl(var(--foreground)) !important;
+    border-color: rgba(99, 102, 241, 0.25) !important;
   }
   .typing-input:focus {
-    border-color: rgba(167, 139, 250, 0.6) !important;
-    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.12) !important;
-    background: rgba(167, 139, 250, 0.05) !important;
+    border-color: rgba(99, 102, 241, 0.55) !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12) !important;
+    background: rgba(99, 102, 241, 0.04) !important;
   }
   .typing-input::placeholder {
-    color: #475569;
+    color: hsl(var(--muted-foreground));
   }
   .current-word {
     animation: fadeIn 0.15s ease;

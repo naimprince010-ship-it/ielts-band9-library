@@ -1,317 +1,201 @@
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  Video, 
-  Users, 
-  Calendar, 
-  Star, 
-  Globe, 
-  CheckCircle2, 
+import {
   ArrowRight,
-  PlayCircle,
-  Clock,
   BookOpen,
+  Check,
+  Headphones,
+  Loader2,
   MessageCircle,
-  Phone
+  Mic2,
+  PenLine,
+  Sparkles,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { useState, useEffect } from 'react';
 import { courseService } from '@/services/courseService';
-import { Course } from '@/types';
-import { Loader2 } from 'lucide-react';
+import type { Course } from '@/types';
+
+type Filter = 'all' | 'complete' | 'writing' | 'speaking' | 'reading';
+
+const filters: { id: Filter; label: string }[] = [
+  { id: 'all', label: 'All programs' },
+  { id: 'complete', label: 'Complete IELTS' },
+  { id: 'writing', label: 'Writing' },
+  { id: 'speaking', label: 'Speaking' },
+  { id: 'reading', label: 'Reading & Listening' },
+];
+
+const courseStyle = (course: Course) => {
+  const id = `${course.id} ${course.title}`.toLowerCase();
+  if (id.includes('writing')) return { filter: 'writing' as Filter, label: 'Writing', icon: PenLine, color: 'sky' };
+  if (id.includes('speaking')) return { filter: 'speaking' as Filter, label: 'Speaking', icon: Mic2, color: 'emerald' };
+  if (id.includes('reading') || id.includes('listening')) {
+    return { filter: 'reading' as Filter, label: 'Reading + Listening', icon: Headphones, color: 'amber' };
+  }
+  return { filter: 'complete' as Filter, label: 'Complete IELTS', icon: Sparkles, color: 'violet' };
+};
+
+const colors = {
+  violet: { bar: 'bg-violet-600', icon: 'bg-violet-600', text: 'text-violet-700' },
+  sky: { bar: 'bg-sky-600', icon: 'bg-sky-600', text: 'text-sky-700' },
+  emerald: { bar: 'bg-emerald-600', icon: 'bg-emerald-600', text: 'text-emerald-700' },
+  amber: { bar: 'bg-amber-500', icon: 'bg-amber-500', text: 'text-amber-700' },
+};
 
 export function CoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState<Filter>('all');
 
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const data = await courseService.getCourses();
-        setCourses(data);
-      } catch (err) {
-        console.error('Error fetching courses:', err);
-      } finally {
-        setLoading(false);
-      }
+    let active = true;
+    courseService
+      .getCourses()
+      .then((data) => active && setCourses(data))
+      .catch((error) => console.error('Error fetching courses:', error))
+      .finally(() => active && setLoading(false));
+    return () => {
+      active = false;
     };
-    fetchCourses();
   }, []);
 
+  const visibleCourses = useMemo(
+    () => courses.filter((course) => filter === 'all' || courseStyle(course).filter === filter),
+    [courses, filter],
+  );
+
+  const scrollToCourses = () => document.getElementById('course-list')?.scrollIntoView({ behavior: 'smooth' });
+
   return (
-    <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <section className="relative py-20 md:py-28 overflow-hidden">
-        {/* Subtle background pattern */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(var(--muted))_0%,transparent_50%)]" />
-        
-        <div className="container mx-auto px-4 relative">
-          <div className="max-w-3xl mx-auto text-center">
-            <Badge variant="secondary" className="mb-6 px-4 py-1.5 text-sm font-medium">
-              Enrollment Open for April 2026
-            </Badge>
-            
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
-              Master IELTS with expert guidance
-            </h1>
-            
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-10 max-w-2xl mx-auto text-pretty">
-              Join thousands of successful students who achieved their target band scores with our structured courses and personalized feedback.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Button size="lg" className="h-12 px-8">
-                Browse Courses
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-              <Button size="lg" variant="outline" className="h-12 px-8">
-                Schedule a Call
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Courses Grid */}
-      <section className="py-16 md:py-20">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12 gap-4">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-2">
-                Our Programs
+    <main className="min-h-screen overflow-x-hidden bg-[#f6f7fb] pb-28 text-slate-950 sm:pb-16 lg:pb-12">
+      <section className="mx-auto max-w-[1440px] px-3 pt-4 sm:px-6 sm:pt-6 lg:px-8">
+        <div className="relative isolate overflow-hidden rounded-[26px] bg-[linear-gradient(120deg,#080b25_0%,#18104f_60%,#3b1f91_100%)] px-6 py-9 text-white shadow-[0_24px_70px_rgba(25,17,86,0.18)] sm:px-10 sm:py-12 lg:min-h-[430px] lg:px-16 lg:py-14">
+          <div className="absolute -right-20 top-4 h-72 w-72 rounded-full bg-violet-500/20 blur-3xl" />
+          <div className="relative grid items-center gap-10 lg:grid-cols-[1.55fr_0.75fr]">
+            <div className="max-w-3xl">
+              <p className="mb-4 text-xs font-bold uppercase tracking-[0.18em] text-violet-300">IELTS programs</p>
+              <h1 className="max-w-3xl text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl lg:text-[54px]">
+                Choose the right path to your target band.
+              </h1>
+              <p className="mt-6 max-w-2xl text-base leading-7 text-indigo-100/85 sm:text-lg">
+                Focused courses, practical lessons and expert strategies—built to help you improve the skills that matter most.
               </p>
-              <h2 className="font-sans text-3xl md:text-4xl font-semibold text-foreground">
-                Courses designed for success
-              </h2>
-            </div>
-            <p className="text-muted-foreground max-w-md">
-              From comprehensive masterclasses to focused skill-building programs, find the perfect course for your IELTS journey.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-            {loading ? (
-              <div className="md:col-span-2 flex flex-col items-center justify-center py-20 bg-muted/30 rounded-3xl border-2 border-dashed border-border">
-                <Loader2 className="h-10 w-10 animate-spin text-accent mb-4" />
-                <p className="text-muted-foreground font-medium">Loading our world-class programs...</p>
-              </div>
-            ) : courses.length === 0 ? (
-              <div className="md:col-span-2 text-center py-20 bg-muted/30 rounded-3xl border-2 border-dashed border-border">
-                <h3 className="text-xl font-semibold text-foreground mb-2">No courses available right now</h3>
-                <p className="text-muted-foreground">Please check back later or contact support for updates.</p>
-              </div>
-            ) : (
-              courses.map((course, index) => (
-                <Card 
-                  key={course.id} 
-                  className={`group overflow-hidden transition-all duration-300 hover:shadow-lg border-border hover:border-accent/20 ${
-                    index === 0 && courses.length > 2 ? 'md:col-span-2 lg:col-span-1' : ''
-                  }`}
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <button
+                  type="button"
+                  onClick={scrollToCourses}
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-violet-600 px-6 text-sm font-semibold text-white transition hover:bg-violet-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#18104f]"
                 >
-                  <CardHeader className="pb-4">
-                    <div className="flex items-start justify-between gap-4 mb-4">
-                      <div className="flex items-center gap-2">
-                        <Badge 
-                          variant={course.type === 'live' ? 'default' : 'secondary'}
-                          className="font-medium"
-                        >
-                          {course.type === 'live' ? (
-                            <>
-                              <span className="w-1.5 h-1.5 bg-current rounded-full mr-1.5 animate-pulse" />
-                              Live
-                            </>
-                          ) : (
-                            <>
-                              <PlayCircle className="h-3 w-3 mr-1" />
-                              Recorded
-                            </>
-                          )}
-                        </Badge>
-                        {course.isPopular && (
-                          <Badge variant="outline" className="font-medium text-accent border-accent/30 bg-accent/5">
-                            Popular
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-                    
-                    <h3 className="font-sans text-2xl md:text-3xl font-semibold text-foreground group-hover:text-accent transition-colors leading-tight">
-                      {course.title}
-                    </h3>
-                    
-                    <p className="text-muted-foreground mt-2 line-clamp-2">
-                      {course.description}
-                    </p>
-                  </CardHeader>
-
-                  <CardContent className="space-y-6">
-                    {/* Meta info */}
-                    <div className="flex flex-wrap gap-4 text-sm">
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <Users className="h-4 w-4" />
-                        <span>{course.instructor}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <Calendar className="h-4 w-4" />
-                        <span>{course.nextBatch}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-muted-foreground">
-                        <Clock className="h-4 w-4" />
-                        <span>{course.duration}</span>
-                      </div>
-                    </div>
-
-                    {/* Features */}
-                    <div className="space-y-3">
-                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                        What&apos;s included
-                      </p>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {course.features.slice(0, 4).map((feature, idx) => (
-                          <div key={idx} className="flex items-start gap-2 text-sm text-foreground">
-                            <CheckCircle2 className="h-4 w-4 text-accent mt-0.5 shrink-0" />
-                            <span className="line-clamp-1">{feature}</span>
-                          </div>
-                        ))}
-                      </div>
-                      {course.features.length > 4 && (
-                        <p className="text-sm text-muted-foreground">
-                          +{course.features.length - 4} more features
-                        </p>
-                      )}
-                    </div>
-                  </CardContent>
-
-                  <CardFooter className="pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-t border-border bg-muted/30">
-                    <div>
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-3xl font-semibold text-foreground">
-                          ৳{course.price.toLocaleString()}
-                        </span>
-                        {course.originalPrice && (
-                          <span className="text-lg text-muted-foreground line-through">
-                            ৳{course.originalPrice.toLocaleString()}
-                          </span>
-                        )}
-                      </div>
-                      {course.originalPrice && (
-                        <p className="text-xs font-medium text-accent mt-1">
-                          Save ৳{(course.originalPrice - course.price).toLocaleString()}
-                        </p>
-                      )}
-                    </div>
-                    <Link to={`/courses/${course.id}`} className="w-full sm:w-auto">
-                      <Button className="w-full group/btn">
-                        View Details
-                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                      </Button>
-                    </Link>
-                  </CardFooter>
-                </Card>
-              ))
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-16 md:py-20 bg-muted/50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-2">
-              Why Choose Us
-            </p>
-            <h2 className="font-sans text-3xl md:text-4xl font-semibold text-foreground">
-              Learning experience designed for results
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
-            <Card className="text-center p-8 hover:shadow-md transition-shadow">
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-foreground text-background mb-6">
-                <Globe className="h-6 w-6" />
-              </div>
-              <h3 className="font-sans text-xl font-semibold text-foreground mb-3">
-                Global Community
-              </h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Join students from 50+ countries preparing for top universities worldwide.
-              </p>
-            </Card>
-
-            <Card className="text-center p-8 hover:shadow-md transition-shadow">
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-foreground text-background mb-6">
-                <Video className="h-6 w-6" />
-              </div>
-              <h3 className="font-sans text-xl font-semibold text-foreground mb-3">
-                HD Live Sessions
-              </h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Crystal clear video and audio for an immersive classroom experience.
-              </p>
-            </Card>
-
-            <Card className="text-center p-8 hover:shadow-md transition-shadow">
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-foreground text-background mb-6">
-                <Star className="h-6 w-6" />
-              </div>
-              <h3 className="font-sans text-xl font-semibold text-foreground mb-3">
-                Proven Results
-              </h3>
-              <p className="text-muted-foreground leading-relaxed">
-                10,000+ students achieved Band 7+ with our structured methodology.
-              </p>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto px-4">
-          <Card className="bg-foreground text-background p-8 md:p-12 lg:p-16 text-center overflow-hidden relative">
-            {/* Subtle decorative element */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-background/5 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-background/5 rounded-full blur-3xl" />
-            
-            <div className="relative">
-              <BookOpen className="h-12 w-12 mx-auto mb-6 opacity-80" />
-              
-              <h2 className="font-sans text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 text-balance">
-                Ready to achieve your target band score?
-              </h2>
-              
-              <p className="text-background/70 text-lg max-w-2xl mx-auto mb-8">
-                Get personalized guidance from our expert instructors and join a supportive community of learners.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link to="/contact">
-                  <Button 
-                    size="lg" 
-                    variant="secondary"
-                    className="h-12 px-8 bg-background text-foreground hover:bg-background/90 w-full sm:w-auto"
-                  >
-                    <MessageCircle className="mr-2 h-4 w-4" />
-                    Message on WhatsApp
-                  </Button>
-                </Link>
-                <Link to="/contact">
-                  <Button 
-                    size="lg" 
-                    variant="outline"
-                    className="h-12 px-8 bg-transparent border-background/20 text-background hover:bg-background/10 hover:text-background w-full sm:w-auto"
-                  >
-                    <Phone className="mr-2 h-4 w-4" />
-                    Schedule a Call
-                  </Button>
+                  Explore courses <ArrowRight className="h-4 w-4" />
+                </button>
+                <Link
+                  to="/pricing"
+                  className="inline-flex h-12 items-center justify-center rounded-xl border border-white/25 bg-white/5 px-6 text-sm font-semibold text-white transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                >
+                  View Premium plans
                 </Link>
               </div>
             </div>
-          </Card>
+
+            <div className="rounded-3xl border border-violet-400/50 bg-[#11102f]/90 p-6 shadow-2xl backdrop-blur sm:p-7">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-violet-300">Your study plan</p>
+              <h2 className="mt-3 text-2xl font-bold">4 skills. One clear path.</h2>
+              <div className="mt-6 space-y-4">
+                {['Reading & Listening', 'Writing Task 1 & 2', 'Speaking confidence'].map((item) => (
+                  <div key={item} className="flex items-center gap-3 text-sm text-indigo-50">
+                    <span className="grid h-7 w-7 place-items-center rounded-lg bg-violet-600"><Check className="h-4 w-4" /></span>
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
-    </div>
+
+      <section id="course-list" className="mx-auto max-w-[1376px] scroll-mt-28 px-4 pb-8 pt-14 sm:px-6 sm:pt-16 lg:px-8">
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-violet-700">Explore programs</p>
+        <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Courses designed for focused progress</h2>
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
+          Choose a complete program or strengthen one IELTS skill at a time.
+        </p>
+
+        <div className="mt-7 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {filters.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => setFilter(item.id)}
+              aria-pressed={filter === item.id}
+              className={`shrink-0 rounded-xl border px-4 py-2.5 text-xs font-semibold transition sm:text-sm ${
+                filter === item.id
+                  ? 'border-violet-600 bg-violet-600 text-white shadow-sm'
+                  : 'border-slate-200 bg-white text-slate-600 hover:border-violet-200 hover:text-violet-700'
+              } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+
+        {loading ? (
+          <div className="mt-8 grid min-h-72 place-items-center rounded-3xl border border-slate-200 bg-white">
+            <div className="text-center text-slate-500"><Loader2 className="mx-auto mb-3 h-7 w-7 animate-spin text-violet-600" />Loading courses…</div>
+          </div>
+        ) : visibleCourses.length === 0 ? (
+          <div className="mt-8 rounded-3xl border border-slate-200 bg-white p-12 text-center text-slate-600">No courses found in this category.</div>
+        ) : (
+          <div className="mt-7 grid gap-5 lg:grid-cols-2 lg:gap-6">
+            {visibleCourses.map((course) => {
+              const style = courseStyle(course);
+              const palette = colors[style.color];
+              const Icon = style.icon;
+              const lessonCount = course.curriculum?.reduce((sum, module) => sum + module.lessons.length, 0);
+              return (
+                <article key={course.id} className="group relative flex min-h-[286px] flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_12px_35px_rgba(15,23,42,0.05)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_45px_rgba(76,29,149,0.10)] sm:p-7">
+                  <span className={`absolute inset-y-0 left-0 w-1.5 ${palette.bar}`} />
+                  <div className="flex items-start gap-4">
+                    <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-white ${palette.icon}`}><Icon className="h-5 w-5" /></span>
+                    <div className="min-w-0">
+                      <p className={`text-[11px] font-bold uppercase tracking-[0.12em] ${palette.text}`}>{style.label}</p>
+                      <h3 className="mt-1 text-xl font-bold leading-tight sm:text-2xl">{course.title}</h3>
+                    </div>
+                  </div>
+                  <p className="mt-5 line-clamp-2 min-h-12 text-sm leading-6 text-slate-600">{course.description}</p>
+                  <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-xs font-medium text-slate-500 sm:text-sm">
+                    <span>{lessonCount ? `${lessonCount} lessons` : course.duration}</span>
+                    <span>•</span>
+                    <span>{course.type === 'recorded' ? 'Self-paced' : course.type === 'hybrid' ? 'Hybrid learning' : 'Live program'}</span>
+                  </div>
+                  <div className="mt-auto flex items-end justify-between gap-4 pt-7">
+                    <div>
+                      <p className="text-2xl font-bold">৳{course.price.toLocaleString()}</p>
+                      {course.originalPrice && <p className="mt-0.5 text-xs text-slate-400 line-through">৳{course.originalPrice.toLocaleString()}</p>}
+                    </div>
+                    <Link to={`/courses/${course.id}`} className="inline-flex h-11 items-center gap-2 rounded-xl border border-violet-200 bg-violet-50 px-4 text-sm font-semibold text-violet-700 transition hover:border-violet-600 hover:bg-violet-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2">
+                      View course <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        )}
+      </section>
+
+      <section className="mx-auto max-w-[1376px] space-y-5 px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-5 rounded-3xl border border-slate-200 bg-white p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+          <div className="flex gap-4">
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-violet-100 text-violet-700"><MessageCircle className="h-5 w-5" /></span>
+            <div><h2 className="text-xl font-bold">Not sure which course fits your goal?</h2><p className="mt-1 text-sm leading-6 text-slate-600">Tell us your target band and strongest challenge—we’ll help you choose a focused study path.</p></div>
+          </div>
+          <Link to="/contact" className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-violet-600 px-6 text-sm font-semibold text-white transition hover:bg-violet-500">Get course guidance <ArrowRight className="h-4 w-4" /></Link>
+        </div>
+
+        <div className="flex flex-col gap-6 rounded-3xl bg-[linear-gradient(115deg,#080b25,#261168_75%,#43219b)] p-7 text-white sm:flex-row sm:items-center sm:justify-between sm:p-9">
+          <div className="flex gap-4"><BookOpen className="mt-1 h-7 w-7 shrink-0 text-violet-300" /><div><h2 className="text-2xl font-bold">Want access to the complete IELTS Tree library?</h2><p className="mt-2 text-sm text-indigo-100/80">Compare Monthly and Yearly Premium plans.</p></div></div>
+          <Link to="/pricing" className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-white px-6 text-sm font-semibold text-violet-700 transition hover:bg-violet-50">View Premium plans <ArrowRight className="h-4 w-4" /></Link>
+        </div>
+      </section>
+    </main>
   );
 }

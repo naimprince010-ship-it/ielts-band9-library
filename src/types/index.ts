@@ -53,6 +53,8 @@ export interface LessonContent {
   deepVocabulary?: import('@/data/deepVocabularyLessons').DeepVocabularyLessonData;
   /** Marks a complete AI-generated grammar draft that requires staff review. */
   deepGrammar?: boolean;
+  /** Versioned, validated study-material blueprint rendered without lesson-specific JSX. */
+  studyBlueprint?: import('@/lib/lessonBlueprint').StudyLessonBlueprint;
 }
 
 export interface Lesson {
@@ -73,6 +75,10 @@ export interface Lesson {
   recommended_order?: number; // for band upgrade packs
   courseId?: string; // Optional: Link to a specific Course
   moduleName?: string; // Optional: Name of the module within that course
+  videoUrl?: string; // Optional YouTube, Vimeo, or direct video URL
+  blueprint_version?: number;
+  content_status?: 'legacy' | 'draft' | 'in_review' | 'approved' | 'published' | 'archived';
+  quality_report?: Record<string, unknown>;
 }
 
 export type LessonProgress = 'not_started' | 'completed';

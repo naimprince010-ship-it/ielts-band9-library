@@ -174,7 +174,7 @@ export function TableOfContents({ items, className, completedSections = [] }: Ta
           <span className="min-w-8 text-right tabular-nums">{viewedSections.size}/{items.length}</span>
         </div>
         <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100">
-          <div 
+          <div
             className="h-full rounded-full bg-indigo-600 transition-all duration-500"
             style={{ width: `${progress}%` }}
           />
@@ -261,13 +261,13 @@ export function MobileTableOfContents({ items, className }: MobileTableOfContent
           )} />
         </div>
       </Button>
-      
+
       {isOpen && (
         <div className="absolute left-0 right-0 top-full z-50 mt-2 max-h-80 overflow-y-auto rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
           {items.map((item) => {
             const isActive = activeId === item.id;
             const isViewed = viewedSections.has(item.id) && !isActive;
-            
+
             return (
               <button
                 key={item.id}

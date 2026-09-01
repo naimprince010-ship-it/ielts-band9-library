@@ -9,6 +9,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { MobileTableOfContents } from '@/components/ui/TableOfContents';
 import { ReadingProgressBar } from '@/components/ui/ReadingProgressBar';
 import { LessonWorkspaceHeader } from '@/components/lesson/LessonWorkspaceHeader';
+import { LessonVideoPlayer } from '@/components/lesson/LessonVideoPlayer';
+import { CourseLessonNavigation } from '@/components/lesson/CourseLessonNavigation';
 import { LessonHeaderActions } from '@/components/lesson/LessonHeaderActions';
 import { useNavConfig } from '@/contexts/NavContext';
 import type { Lesson, LessonContent } from '@/types';
@@ -123,6 +125,12 @@ export function GrammarLessonTemplate({
         learningOutcomes={content.whatYouWillLearn}
         sentencePreview={content.sentenceUpgrade?.[0]}
       />
+
+      {lesson.videoUrl && (
+        <div className="mx-auto max-w-[96rem] px-4 pt-6 sm:px-6 lg:px-8">
+          <LessonVideoPlayer url={lesson.videoUrl} title={content.title} canAccess={canAccessContent} />
+        </div>
+      )}
 
       <div className="mx-auto grid max-w-[96rem] gap-6 px-4 sm:px-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:px-8 xl:grid-cols-[260px_minmax(0,1fr)_320px] xl:gap-7">
         <div className="hidden w-56 flex-shrink-0 lg:block xl:w-60">
@@ -276,6 +284,8 @@ export function GrammarLessonTemplate({
               </CardContent>
             </Card>
           )}
+
+          {canAccessContent && <CourseLessonNavigation courseId={lesson.courseId} lessonId={lesson.id} />}
 
           <div className="mt-8 flex items-center justify-between">
             <Link to="/grammar">

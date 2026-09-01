@@ -1,3 +1,3 @@
 export function cleanEnv(value: string | undefined): string {
-  return (value ?? '').replace(/^\uFEFF/, '').trim();
+  return (value ?? '').trim().replace(/^(?:\uFEFF|\\uFEFF)/, '').trim();
 }
