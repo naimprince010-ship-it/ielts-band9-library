@@ -65,7 +65,7 @@ async function withGemini(prompt: string) {
         contents: [{ role: "user", parts: [{ text: prompt }] }],
         generationConfig: {
           temperature: 0.25,
-          maxOutputTokens: 14000,
+          maxOutputTokens: 6000,
           responseMimeType: "application/json",
         },
       }),
