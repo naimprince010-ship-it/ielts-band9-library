@@ -17,6 +17,8 @@ import { CopyableBadge } from '@/components/ui/CopyButton';
 import { SpeakButton } from '@/components/ui/SpeakButton';
 import { PieChartCoreExplanation } from '@/components/ui/PieChartVisuals';
 import { DeepVocabularyLesson } from '@/components/lesson/DeepVocabularyLesson';
+import { StudyMaterialRenderer } from '@/components/lesson/StudyMaterialRenderer';
+import { ListeningLessonExperience } from '@/components/lesson/listening/ListeningLessonExperience';
 import { useLessons } from '@/contexts/LessonContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
@@ -211,8 +213,8 @@ function parseVocabularySection(text: string): React.ReactNode {
 export function LessonPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { getLessonBySlug, addBookmark, removeBookmark, isBookmarked, incrementViewCount, lessons, getLessonProgress, setLessonProgress } = useLessons();
-  const { user, isPremium } = useAuth();
+  const { getLessonBySlug, addBookmark, removeBookmark, isBookmarked, incrementViewCount, lessons, loading: lessonsLoading, getLessonProgress, setLessonProgress } = useLessons();
+  const { user, isPremium, isAdmin, isInstructor } = useAuth();
   const [lesson, setLesson] = useState(getLessonBySlug(slug || ''));
 
   // Dynamic page title
@@ -256,6 +258,19 @@ export function LessonPage() {
     }
   }, [slug, lessons, user]);
 
+  // Show a loading state while the initial Supabase fetch is in progress
+  // to avoid briefly rendering stale hardcoded local content.
+  if (lessonsLoading && !lesson?.content?.studyBlueprint) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-3">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-violet-200 border-t-violet-600 mx-auto" />
+          <p className="text-muted-foreground text-sm font-medium">Loading lesson…</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!lesson) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -270,7 +285,7 @@ export function LessonPage() {
   }
 
   // They can access if it's NOT premium, OR they are a global premium user, OR they bought the specific course
-  const canAccessContent = !lesson.is_premium || isPremium || isCourseEnrolled;
+  const canAccessContent = !lesson.is_premium || isPremium || isCourseEnrolled || isAdmin || isInstructor;
   const content = lesson.content;
   const isDeepVocabularyLesson = lesson.slug === 'influence-impact-vocabulary';
 
@@ -297,6 +312,144 @@ export function LessonPage() {
 
     setLessonProgress(lesson.id, isCompleted ? 'not_started' : 'completed');
   };
+
+  const studyBlueprint = content.studyBlueprint;
+
+  // Complete study blueprints use a dedicated learning-material experience.
+  // Legacy lessons keep the established renderer below until they are migrated.
+  if (studyBlueprint) {
+    const backTo = lesson.courseId ? `/courses/${lesson.courseId}` : '/courses';
+    const backLabel = lesson.courseId ? 'Back to course' : 'Back to courses';
+    const blueprintTocItems = [
+      ...(lesson.type === 'listening' && content.listeningData ? [{ id: 'listening-lab', title: '01 Listening lab', icon: <BookOpen className="h-3.5 w-3.5" />, group: 'learning' as const }]
+        : []),
+      ...studyBlueprint.sections.map((section, index) => ({
+      id: section.id,
+      title: `${String(index + 1 + (lesson.type === 'listening' && content.listeningData ? 1 : 0)).padStart(2, '0')} ${section.title}`,
+      icon: <BookOpen className="h-3.5 w-3.5" />,
+      group: section.type === 'concept' || section.type === 'phrase-bank'
+        ? 'learning' as const
+        : section.type === 'self-check' || section.type === 'assignment'
+          ? 'review' as const
+          : 'practice' as const,
+      })),
+    ];
+    const firstStepId = studyBlueprint.sections[0]?.id;
+    const startFirstStep = () => document.getElementById(firstStepId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    return (
+      <main className="min-h-screen bg-[#f6f7fb] pb-20 text-slate-950">
+        <ReadingProgressBar estimatedMinutes={Math.max(5, studyBlueprint.sections.length * 2)} />
+
+        <section className="overflow-hidden bg-[linear-gradient(105deg,#090b28_0%,#0c0d31_54%,#48239c_54%,#392083_100%)] text-white">
+          <div className="mx-auto max-w-7xl px-4 pb-10 pt-7 sm:px-6 sm:pb-14 lg:px-8">
+            <Link to={backTo} className="inline-flex items-center gap-2 text-sm font-semibold text-indigo-100/80 transition hover:text-white">
+              <ArrowLeft className="h-4 w-4" /> {backLabel}
+            </Link>
+
+            <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-end">
+              <div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge className="border-0 bg-white/15 px-3 py-1 text-white hover:bg-white/15">{lesson.type}</Badge>
+                  <Badge className="border border-white/20 bg-transparent px-3 py-1 text-indigo-100">{lesson.level}</Badge>
+                  {lesson.is_premium && <Badge className="bg-amber-400 px-3 py-1 text-amber-950 hover:bg-amber-400"><Star className="mr-1 h-3.5 w-3.5" />Premium</Badge>}
+                </div>
+                <h1 className="mt-5 max-w-4xl text-3xl font-black leading-tight tracking-tight sm:text-5xl">{content.title}</h1>
+                <p className="mt-5 max-w-3xl text-base leading-7 text-indigo-100/90 sm:text-lg">{lesson.description}</p>
+              </div>
+
+              <div className="rounded-2xl bg-white p-6 text-slate-900 shadow-2xl shadow-indigo-950/20">
+                <p className="text-xs font-black uppercase tracking-[0.17em] text-violet-600">Your study plan</p>
+                <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                  <div><p className="text-3xl font-black">{studyBlueprint.sections.length}</p><p className="mt-1 text-slate-500">Study steps</p></div>
+                  <div><p className="text-3xl font-black">~{Math.max(5, studyBlueprint.sections.length * 2)}m</p><p className="mt-1 text-slate-500">Estimated time</p></div>
+                </div>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={handleBookmarkToggle}
+                  className="mt-5 w-full justify-center border border-violet-100 bg-violet-50 text-violet-800 hover:bg-violet-100"
+                >
+                  {isBookmarked(lesson.id) ? <BookmarkCheck className="mr-2 h-4 w-4" /> : <Bookmark className="mr-2 h-4 w-4" />}
+                  {isBookmarked(lesson.id) ? 'Saved to bookmarks' : 'Save lesson'}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-7xl px-4 py-9 sm:px-6 lg:px-8 lg:py-12">
+          <div className="mb-7 max-w-3xl">
+            <h2 className="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">A focused lesson, not a wall of text.</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-500 sm:text-base">Work through each step in order, then check your understanding before moving on.</p>
+          </div>
+
+          <div className="mb-6 lg:hidden">
+            <MobileTableOfContents items={blueprintTocItems} />
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)_240px] lg:items-start">
+            <aside className="hidden lg:block lg:sticky lg:top-24">
+              <TableOfContents items={blueprintTocItems} />
+            </aside>
+
+            <div className={!canAccessContent ? 'pointer-events-none select-none blur-sm' : ''}>
+              {lesson.type === 'listening' && content.listeningData && <div className="mb-6"><ListeningLessonExperience lessonId={lesson.id} data={content.listeningData} /></div>}
+              <StudyMaterialRenderer blueprint={studyBlueprint} />
+            </div>
+
+          <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
+            {!canAccessContent ? (
+              <Card className="border-amber-200 bg-amber-50">
+                <CardContent className="p-5">
+                  <Lock className="h-6 w-6 text-amber-600" />
+                  <h2 className="mt-3 font-bold text-amber-950">Premium lesson</h2>
+                  <p className="mt-2 text-sm leading-6 text-amber-800">Enroll in this course to unlock the complete study material.</p>
+                  <Link to={lesson.courseId ? `/courses/${lesson.courseId}` : '/pricing'} className="mt-4 inline-flex">
+                    <Button className="bg-amber-600 hover:bg-amber-700">View access options</Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            ) : (
+              <>
+                <Card className="border-violet-100 bg-white shadow-sm">
+                  <CardContent className="p-5">
+                    <p className="text-xs font-black uppercase tracking-[0.17em] text-violet-600">By the end</p>
+                    <p className="mt-3 text-sm font-semibold leading-6 text-slate-800">{studyBlueprint.outcome}</p>
+                    <Button onClick={startFirstStep} className="mt-5 w-full bg-violet-600 font-bold hover:bg-violet-700">
+                      Start step 1 <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </CardContent>
+                </Card>
+                <Card className="border-violet-100 bg-white shadow-sm">
+                <CardContent className="p-5">
+                  <p className="text-xs font-black uppercase tracking-widest text-violet-600">Lesson progress</p>
+                  <p className="mt-3 text-lg font-black text-slate-900">{isCompleted ? 'Completed' : 'Not started'}</p>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">Complete the lesson after you finish the self-check.</p>
+                  <Button onClick={handleProgressToggle} className="mt-5 w-full bg-violet-600 font-bold hover:bg-violet-700">
+                    {isCompleted ? <><CheckCircle2 className="mr-2 h-4 w-4" />Completed</> : <><Circle className="mr-2 h-4 w-4" />Mark complete</>}
+                  </Button>
+                </CardContent>
+                </Card>
+              </>
+            )}
+          </aside>
+          </div>
+        </section>
+
+        {canAccessContent && (
+          <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col gap-5 rounded-3xl bg-[linear-gradient(100deg,#161545,#2d1e76)] px-6 py-7 text-white shadow-xl sm:flex-row sm:items-center sm:justify-between sm:px-8">
+              <div><h2 className="text-xl font-black">Ready to finish?</h2><p className="mt-1 text-sm text-indigo-100">Mark the lesson complete after you have checked every step.</p></div>
+              <Button onClick={handleProgressToggle} className="bg-violet-600 px-6 font-bold hover:bg-violet-500">
+                {isCompleted ? 'Completed' : 'Mark complete'} <CheckCircle2 className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+          </section>
+        )}
+      </main>
+    );
+  }
 
   const deepLessonTocItems = [
     { id: 'what-you-will-learn', title: 'Overview', icon: <Lightbulb className="h-4 w-4" /> },

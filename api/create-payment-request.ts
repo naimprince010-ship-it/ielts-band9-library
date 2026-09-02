@@ -48,6 +48,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { data: { user }, error: authError } = await adminClient.auth.getUser(token);
   if (authError || !user?.email) return res.status(401).json({ error: 'Invalid or expired session' });
 
+  // A payment request must always have a matching application profile.  This
+  // deliberately uses only the verified Auth id/email, never user metadata.
+  const { error: profileError } = await adminClient
+    .from('users')
+    .upsert({ id: user.id, email: user.email, role: 'user' }, { onConflict: 'id', ignoreDuplicates: true });
+  if (profileError) {
+    console.error('Payment profile recovery failed:', profileError.code, profileError.message);
+    return res.status(500).json({ error: 'Could not prepare your account for payment verification' });
+  }
+
   const body = (req.body || {}) as RequestBody;
   const packageType = body.packageType;
   const transactionId = safeText(body.transactionId, 12)?.toUpperCase() || '';

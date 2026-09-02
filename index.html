@@ -35,6 +35,19 @@
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
+          const isLocalDevelopment = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+
+          if (isLocalDevelopment) {
+            // A cache-first service worker can otherwise keep serving an old Vite
+            // module after an edit, making local UI verification misleading.
+            navigator.serviceWorker.getRegistrations()
+              .then((registrations) => Promise.all(registrations.map((registration) => registration.unregister())))
+              .then(() => caches.keys())
+              .then((keys) => Promise.all(keys.map((key) => caches.delete(key))))
+              .catch(() => {});
+            return;
+          }
+
           navigator.serviceWorker.register('/sw.js').catch(() => {});
         });
       }

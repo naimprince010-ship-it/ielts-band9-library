@@ -63,6 +63,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(409).json({ error: `Payment already ${payment.status}` });
   }
 
+  // Older payment requests can predate profile creation. Recover only from the
+  // verified Auth account; do not derive authorization data from user metadata.
+  const { data: paymentUserResult, error: paymentUserError } = await adminClient.auth.admin.getUserById(payment.user_id);
+  const paymentUser = paymentUserResult?.user;
+  if (paymentUserError || !paymentUser?.email) {
+    return res.status(409).json({ error: 'The payment user account is unavailable' });
+  }
+  const { error: profileRecoveryError } = await adminClient
+    .from('users')
+    .upsert({ id: payment.user_id, email: paymentUser.email, role: 'user' }, { onConflict: 'id', ignoreDuplicates: true });
+  if (profileRecoveryError) {
+    console.error('Payment approval profile recovery failed:', profileRecoveryError.code, profileRecoveryError.message);
+    return res.status(500).json({ error: 'Could not recover the payment user profile' });
+  }
+
   // The database trigger grants subscription/course access atomically with this
   // status transition. Returning the row also proves this request won the race.
   const { data: approvedPayment, error: approveErr } = await adminClient

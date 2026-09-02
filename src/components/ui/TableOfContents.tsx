@@ -23,6 +23,12 @@ function groupItems(items: TOCItem[]): { learning: TOCItem[]; practice: TOCItem[
   const review: TOCItem[] = [];
 
   items.forEach((item) => {
+    if (item.group) {
+      if (item.group === 'learning') learning.push(item);
+      if (item.group === 'practice') practice.push(item);
+      if (item.group === 'review') review.push(item);
+      return;
+    }
     const id = item.id.toLowerCase();
     if (id.includes('overview') || id.includes('what-you-will-learn') || id.includes('compare') || id.includes('learn') || id.includes('explanation') || id.includes('grammar') || id.includes('use')) {
       learning.push({ ...item, group: 'learning' });

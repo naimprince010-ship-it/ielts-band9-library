@@ -55,6 +55,8 @@ export interface LessonContent {
   deepGrammar?: boolean;
   /** Versioned, validated study-material blueprint rendered without lesson-specific JSX. */
   studyBlueprint?: import('@/lib/lessonBlueprint').StudyLessonBlueprint;
+  /** Isolated Listening Studio data. It is mirrored to listening_lesson_data for publish readiness. */
+  listeningData?: import('@/modules/listening/listeningLesson').ListeningLessonData;
 }
 
 export interface Lesson {

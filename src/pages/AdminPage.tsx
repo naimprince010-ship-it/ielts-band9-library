@@ -68,6 +68,8 @@ import { generateLessonWithAI } from '@/services/aiLessonGenerator';
 import { cn } from '@/lib/utils';
 import { authenticatedJsonHeaders } from '@/lib/authenticatedApi';
 import { validateStudyLessonBlueprint } from '@/lib/lessonBlueprint';
+import { listeningLessonDataSchema, type ListeningLessonData } from '@/modules/listening/listeningLesson';
+import { StudyMaterialRenderer } from '@/components/lesson/StudyMaterialRenderer';
 
 interface QualityChecklist {
   naturalCollocations: boolean;
@@ -173,6 +175,7 @@ export function AdminPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<string[]>(menuGroups.map(g => g.title));
   const [isEditorOpen, setIsEditorOpen] = useState(false);
+  const [isDraftPreviewOpen, setIsDraftPreviewOpen] = useState(false);
   const [editingLesson, setEditingLesson] = useState<Lesson | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -374,6 +377,28 @@ export function AdminPage() {
   if (!user || (!isAdmin && !isInstructor)) return null;
 
   const topics = formData.type === 'vocabulary' ? VOCABULARY_TOPICS : GRAMMAR_TOPICS;
+  const listeningData = formData.content?.listeningData;
+  const listeningPublishReady = Boolean(
+    listeningData
+    && listeningData.audio.status !== 'pending'
+    && listeningData.transcript.status === 'reviewed'
+    && listeningData.quality.contentReviewed
+    && listeningData.quality.transcriptChecked
+    && listeningData.quality.answersChecked,
+  );
+
+  const updateListeningData = (update: (current: ListeningLessonData) => ListeningLessonData) => {
+    setFormData((previous) => {
+      if (!previous.content?.listeningData) return previous;
+      return {
+        ...previous,
+        content: {
+          ...previous.content,
+          listeningData: update(previous.content.listeningData),
+        },
+      };
+    });
+  };
 
   const handleNewLesson = () => {
     setEditingLesson(null);
@@ -498,7 +523,7 @@ export function AdminPage() {
     setError('');
     setSuccess('');
     try {
-      const response = await fetch('/api/generate-study-lesson', {
+      const response = await fetch(formData.type === 'listening' ? '/api/generate-listening-lesson' : '/api/generate-study-lesson', {
         method: 'POST',
         headers: await authenticatedJsonHeaders(),
         body: JSON.stringify({ type: formData.type, topic: formData.topic, level: formData.level }),
@@ -507,6 +532,10 @@ export function AdminPage() {
       if (!response.ok) throw new Error(generated.error || 'Failed to generate study lesson');
       const validation = validateStudyLessonBlueprint(generated.studyBlueprint);
       if (!validation.success) throw new Error('Generated blueprint did not pass the lesson schema');
+      const listeningData = formData.type === 'listening'
+        ? listeningLessonDataSchema.safeParse(generated.listeningData)
+        : null;
+      if (listeningData && !listeningData.success) throw new Error('Generated Listening data did not pass the studio schema');
       const content: LessonContent = {
         title: generated.title,
         targetLevel: generated.targetLevel,
@@ -518,10 +547,13 @@ export function AdminPage() {
         answerKey: [],
         quickRecap: validation.data.outcome,
         studyBlueprint: validation.data,
+        ...(listeningData?.success ? { listeningData: listeningData.data } : {}),
       };
       setFormData(prev => ({ ...prev, title: generated.title, description: generated.description, content, is_published: false }));
       setQualityChecklist({ naturalCollocations: false, ieltsSafeUsage: false, noRareWords: false, examplesReviewed: false, mistakesAccurate: false });
-      setSuccess('Validated study-material draft generated. Preview and complete the review guard before publishing.');
+      setSuccess(formData.type === 'listening'
+        ? 'Listening Studio draft generated. Choose Browser voice or recorded audio, then complete the transcript and answer review before publishing.'
+        : 'Validated study-material draft generated. Preview and complete the review guard before publishing.');
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Failed to generate study lesson');
     } finally {
@@ -633,6 +665,17 @@ export function AdminPage() {
       const blueprintValidation = validateStudyLessonBlueprint(formData.content.studyBlueprint);
       if (!blueprintValidation.success) {
         setError(`Lesson blueprint is incomplete: ${blueprintValidation.error.issues[0]?.message || 'schema validation failed'}`);
+        return;
+      }
+    }
+    if (formData.type === 'listening') {
+      const listeningValidation = listeningLessonDataSchema.safeParse(formData.content.listeningData);
+      if (!listeningValidation.success) {
+        setError(`Listening Studio data is incomplete: ${listeningValidation.error.issues[0]?.message || 'schema validation failed'}`);
+        return;
+      }
+      if (formData.is_published && !listeningPublishReady) {
+        setError('Listening lessons need Browser voice or approved recorded audio, a reviewed transcript, checked answers, and content review before publishing.');
         return;
       }
     }
@@ -1515,6 +1558,120 @@ export function AdminPage() {
                 <p className="text-xs leading-5 text-slate-500">Supports YouTube, Vimeo, and direct HTTPS video links. Premium access rules also protect the player.</p>
               </div>
 
+              {formData.type === 'listening' && listeningData && (
+                <Card className="overflow-hidden rounded-[1.5rem] border-sky-200 bg-sky-50/40 shadow-sm">
+                  <CardHeader className="border-b border-sky-100 bg-white/70">
+                    <CardTitle className="flex items-center gap-2 text-lg font-black text-sky-950">
+                      <Mic className="h-5 w-5 text-sky-600" /> Listening Studio
+                    </CardTitle>
+                    <CardDescription className="font-medium text-sky-800">Audio, transcript and answer data live only in the Listening module.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6 p-5 sm:p-6">
+                    <div className="grid gap-4 md:grid-cols-3">
+                      <div className="space-y-2">
+                        <Label className="text-xs font-black uppercase tracking-widest text-slate-500">Question type</Label>
+                        <Select value={listeningData.sectionType} onValueChange={(value) => updateListeningData((current) => ({ ...current, sectionType: value as ListeningLessonData['sectionType'] }))}>
+                          <SelectTrigger className="bg-white"><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="form_completion">Form completion</SelectItem>
+                            <SelectItem value="note_completion">Note completion</SelectItem>
+                            <SelectItem value="multiple_choice">Multiple choice</SelectItem>
+                            <SelectItem value="matching">Matching</SelectItem>
+                            <SelectItem value="map_labelling">Map labelling</SelectItem>
+                            <SelectItem value="sentence_completion">Sentence completion</SelectItem>
+                            <SelectItem value="short_answer">Short answer</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-xs font-black uppercase tracking-widest text-slate-500">Practice section</Label>
+                        <Select value={listeningData.sectionNumber?.toString() ?? 'skill'} onValueChange={(value) => updateListeningData((current) => ({ ...current, sectionNumber: value === 'skill' ? null : Number(value) }))}>
+                          <SelectTrigger className="bg-white"><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="skill">Skill lesson</SelectItem>
+                            <SelectItem value="1">Section 1</SelectItem>
+                            <SelectItem value="2">Section 2</SelectItem>
+                            <SelectItem value="3">Section 3</SelectItem>
+                            <SelectItem value="4">Section 4</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-xs font-black uppercase tracking-widest text-slate-500">Audio delivery</Label>
+                        <Select value={listeningData.audio.status} onValueChange={(value) => updateListeningData((current) => ({
+                          ...current,
+                          audio: value === 'ready'
+                            ? { status: 'ready', ...(current.audio.url ? { url: current.audio.url } : {}) }
+                            : { status: value as 'pending' | 'browser_tts' },
+                        }))}>
+                          <SelectTrigger className="bg-white"><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="browser_tts">Browser voice (no audio URL)</SelectItem>
+                            <SelectItem value="ready">Recorded audio URL</SelectItem>
+                            <SelectItem value="pending">Audio pending</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-xs font-black uppercase tracking-widest text-slate-500">Approved HTTPS audio URL</Label>
+                      <Input
+                        type="url"
+                        value={listeningData.audio.url ?? ''}
+                        disabled={listeningData.audio.status === 'browser_tts'}
+                        onChange={(event) => updateListeningData((current) => ({
+                          ...current,
+                          audio: event.target.value.trim() ? { status: 'ready', url: event.target.value.trim() } : { status: 'pending' },
+                        }))}
+                        placeholder="https://.../listening-audio.mp3"
+                        className="h-11 bg-white"
+                      />
+                      <p className="text-xs leading-5 text-slate-600">Choose “Browser voice” to publish without a URL; students will hear the reviewed transcript through their browser. Choose recorded audio for the final instructor-audio experience.</p>
+                    </div>
+
+                    <div className="rounded-2xl border border-sky-100 bg-white p-4 sm:p-5">
+                      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                        <div><p className="font-black text-slate-900">Transcript cues</p><p className="mt-1 text-xs text-slate-600">Each cue is time-coded so the student player can sync text with audio.</p></div>
+                        <div className="flex items-center gap-2">
+                          <Switch checked={listeningData.transcript.status === 'reviewed'} onCheckedChange={(checked) => updateListeningData((current) => ({ ...current, transcript: { ...current.transcript, status: checked ? 'reviewed' : 'draft' } }))} />
+                          <span className="text-xs font-bold text-slate-700">Transcript reviewed</span>
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        {listeningData.transcript.cues.map((cue, index) => (
+                          <div key={`${cue.startSeconds}-${index}`} className="grid gap-2 rounded-xl border border-slate-100 bg-slate-50 p-3 md:grid-cols-[74px_74px_120px_minmax(0,1fr)_36px]">
+                            <Input type="number" min="0" value={cue.startSeconds} aria-label={`Cue ${index + 1} start`} onChange={(event) => updateListeningData((current) => ({ ...current, transcript: { ...current.transcript, cues: current.transcript.cues.map((item, itemIndex) => itemIndex === index ? { ...item, startSeconds: Number(event.target.value) } : item) } }))} />
+                            <Input type="number" min="0" value={cue.endSeconds} aria-label={`Cue ${index + 1} end`} onChange={(event) => updateListeningData((current) => ({ ...current, transcript: { ...current.transcript, cues: current.transcript.cues.map((item, itemIndex) => itemIndex === index ? { ...item, endSeconds: Number(event.target.value) } : item) } }))} />
+                            <Input value={cue.speaker ?? ''} placeholder="Speaker" aria-label={`Cue ${index + 1} speaker`} onChange={(event) => updateListeningData((current) => ({ ...current, transcript: { ...current.transcript, cues: current.transcript.cues.map((item, itemIndex) => itemIndex === index ? { ...item, speaker: event.target.value || undefined } : item) } }))} />
+                            <Input value={cue.text} placeholder="Transcript text" aria-label={`Cue ${index + 1} text`} onChange={(event) => updateListeningData((current) => ({ ...current, transcript: { ...current.transcript, cues: current.transcript.cues.map((item, itemIndex) => itemIndex === index ? { ...item, text: event.target.value } : item) } }))} />
+                            <Button type="button" variant="ghost" size="icon" disabled={listeningData.transcript.cues.length === 1} onClick={() => updateListeningData((current) => ({ ...current, transcript: { ...current.transcript, cues: current.transcript.cues.filter((_, itemIndex) => itemIndex !== index) } }))} aria-label={`Remove cue ${index + 1}`}><Trash2 className="h-4 w-4 text-rose-500" /></Button>
+                          </div>
+                        ))}
+                      </div>
+                      <Button type="button" variant="outline" size="sm" className="mt-4" onClick={() => updateListeningData((current) => ({ ...current, transcript: { ...current.transcript, cues: [...current.transcript.cues, { startSeconds: 0, endSeconds: 5, text: 'New transcript cue' }] } }))}><Plus className="mr-2 h-4 w-4" /> Add cue</Button>
+                    </div>
+
+                    <div className="rounded-2xl border border-sky-100 bg-white p-4 sm:p-5">
+                      <div className="mb-4 flex items-center justify-between gap-3"><div><p className="font-black text-slate-900">Practice questions</p><p className="mt-1 text-xs text-slate-600">Answers remain reviewable; student submissions will be captured separately.</p></div><Badge className="bg-sky-600">{listeningData.questions.length} questions</Badge></div>
+                      <div className="space-y-4">
+                        {listeningData.questions.map((question, index) => (
+                          <div key={question.id} className="rounded-xl border border-slate-100 bg-slate-50 p-4">
+                            <div className="mb-3 flex items-center justify-between"><p className="text-sm font-black text-slate-800">Question {index + 1}</p><Button type="button" variant="ghost" size="sm" disabled={listeningData.questions.length === 1} onClick={() => updateListeningData((current) => ({ ...current, questions: current.questions.filter((_, itemIndex) => itemIndex !== index) }))} className="text-rose-600 hover:bg-rose-50 hover:text-rose-700"><Trash2 className="mr-1 h-4 w-4" /> Remove</Button></div>
+                            <div className="grid gap-3"><Input value={question.prompt} onChange={(event) => updateListeningData((current) => ({ ...current, questions: current.questions.map((item, itemIndex) => itemIndex === index ? { ...item, prompt: event.target.value } : item) }))} placeholder="Question prompt" /><Input value={question.acceptedAnswers.join(', ')} onChange={(event) => updateListeningData((current) => ({ ...current, questions: current.questions.map((item, itemIndex) => itemIndex === index ? { ...item, acceptedAnswers: event.target.value.split(',').map((answer) => answer.trim()).filter(Boolean) } : item) }))} placeholder="Accepted answers, separated by commas" /><Textarea value={question.explanation} onChange={(event) => updateListeningData((current) => ({ ...current, questions: current.questions.map((item, itemIndex) => itemIndex === index ? { ...item, explanation: event.target.value } : item) }))} placeholder="Why this answer is correct" rows={2} /></div>
+                          </div>
+                        ))}
+                      </div>
+                      <Button type="button" variant="outline" size="sm" className="mt-4" onClick={() => updateListeningData((current) => ({ ...current, questions: [...current.questions, { id: `question-${Date.now()}`, type: current.sectionType, prompt: 'New listening question', acceptedAnswers: ['Answer'], explanation: 'Add a reviewable explanation.' }] }))}><Plus className="mr-2 h-4 w-4" /> Add question</Button>
+                    </div>
+
+                    <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4"><p className="text-sm font-black text-emerald-950">Listening publication review</p><div className="mt-3 grid gap-3 sm:grid-cols-3">{([
+                      ['contentReviewed', 'Content reviewed'], ['transcriptChecked', 'Transcript checked'], ['answersChecked', 'Answers checked'],
+                    ] as const).map(([key, label]) => <label key={key} className="flex cursor-pointer items-center gap-2 rounded-xl bg-white px-3 py-2 text-sm font-bold text-slate-700"><Switch checked={listeningData.quality[key]} onCheckedChange={(checked) => updateListeningData((current) => ({ ...current, quality: { ...current.quality, [key]: checked } }))} />{label}</label>)}</div></div>
+                  </CardContent>
+                </Card>
+              )}
+
               {formData.content && (
                 <Card className="rounded-[1.5rem] border-slate-100 shadow-sm">
                   <CardHeader>
@@ -1542,6 +1699,14 @@ export function AdminPage() {
                           <Badge className="bg-emerald-600">{formData.content.studyBlueprint.sections.length} study steps</Badge>
                         </div>
                         <p className="mt-2 text-xs leading-5 text-emerald-700">{formData.content.studyBlueprint.outcome}</p>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => setIsDraftPreviewOpen(true)}
+                          className="mt-4 w-full border-emerald-300 bg-white font-bold text-emerald-800 hover:bg-emerald-100"
+                        >
+                          <Eye className="mr-2 h-4 w-4" /> Open full draft preview
+                        </Button>
                       </div>
                     )}
                     {formData.content.deepVocabulary && (
@@ -1606,7 +1771,7 @@ export function AdminPage() {
                     <Switch
                       id="is_published"
                       checked={formData.is_published}
-                      disabled={Boolean(formData.content?.deepVocabulary || formData.content?.deepGrammar || formData.content?.studyBlueprint) && !Object.values(qualityChecklist).every(Boolean)}
+                      disabled={(Boolean(formData.content?.deepVocabulary || formData.content?.deepGrammar || formData.content?.studyBlueprint) && !Object.values(qualityChecklist).every(Boolean)) || (formData.type === 'listening' && !listeningPublishReady)}
                       onCheckedChange={(checked) => setFormData(prev => ({ ...prev, is_published: checked }))}
                     />
                     <Label htmlFor="is_published" className="font-bold text-slate-700">Published</Label>
@@ -1621,6 +1786,57 @@ export function AdminPage() {
                 {isSaving ? <><Loader2 className="h-5 w-5 mr-2 animate-spin" /> Saving...</> : <><Save className="h-5 w-5 mr-2" /> Save Lesson</>}
               </Button>
             </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isDraftPreviewOpen} onOpenChange={setIsDraftPreviewOpen}>
+        <DialogContent className="max-h-[92vh] max-w-5xl overflow-y-auto rounded-[2rem] p-0">
+          <DialogHeader className="sticky top-0 z-10 border-b border-slate-100 bg-white/95 p-6 backdrop-blur">
+            <div className="flex items-start justify-between gap-4 pr-8">
+              <div>
+                <DialogTitle className="flex items-center gap-2 text-2xl font-black text-slate-900">
+                  <Eye className="h-6 w-6 text-violet-600" /> Full draft preview
+                </DialogTitle>
+                <DialogDescription className="mt-2 font-medium text-slate-600">
+                  Private admin review only. Opening this preview does not save, approve, or publish the lesson.
+                </DialogDescription>
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsDraftPreviewOpen(false)}
+                className="shrink-0 font-bold"
+              >
+                Back to editor
+              </Button>
+            </div>
+          </DialogHeader>
+          <div className="bg-slate-50 p-5 sm:p-8">
+            {formData.content?.studyBlueprint ? (
+              <div className="mx-auto max-w-3xl">
+                <div className="mb-6 rounded-2xl bg-gradient-to-br from-slate-950 to-violet-900 p-6 text-white">
+                  <p className="text-xs font-black uppercase tracking-widest text-violet-200">
+                    {formData.is_published ? 'Published lesson' : 'Draft lesson'}
+                  </p>
+                  <h2 className="mt-2 text-2xl font-black sm:text-3xl">{formData.title || 'Untitled lesson'}</h2>
+                  <p className="mt-3 max-w-2xl leading-7 text-violet-100">{formData.description}</p>
+                  {formData.is_published && editingLesson?.slug && (
+                    <RouterLink
+                      to={`/lesson/${editingLesson.slug}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-5 inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-violet-800 transition hover:bg-violet-50"
+                    >
+                      <ExternalLink className="h-4 w-4" /> Open published student page
+                    </RouterLink>
+                  )}
+                </div>
+                <StudyMaterialRenderer blueprint={formData.content.studyBlueprint} />
+              </div>
+            ) : (
+              <p className="py-12 text-center font-medium text-slate-500">A complete study blueprint is required for preview.</p>
+            )}
           </div>
         </DialogContent>
       </Dialog>

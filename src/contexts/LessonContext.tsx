@@ -3,6 +3,7 @@ import { Lesson, LessonType, LessonLevel, Bookmark, UserLessonProgress, LessonPr
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { useAuth } from './AuthContext';
 import { SAMPLE_LESSONS } from '@/data/sampleLessons';
+import { fromListeningLessonRow, listeningLessonDataSchema, toListeningLessonRow } from '@/modules/listening/listeningLesson';
 
 interface LessonContextType {
   lessons: Lesson[];
@@ -31,7 +32,8 @@ export function LessonProvider({ children }: { children: ReactNode }) {
   const [lessons, setLessons] = useState<Lesson[]>(SAMPLE_LESSONS);
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [progress, setProgress] = useState<UserLessonProgress[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [initialFetchDone, setInitialFetchDone] = useState(false);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -43,6 +45,14 @@ export function LessonProvider({ children }: { children: ReactNode }) {
     if (storedProgress) {
       setProgress(JSON.parse(storedProgress));
     }
+  }, []);
+
+  // Fetch published lessons from Supabase on mount so every page
+  // (including /lesson/:slug) shows the latest content rather than
+  // stale hardcoded SAMPLE_LESSONS.
+  useEffect(() => {
+    fetchLessons().finally(() => setInitialFetchDone(true));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -120,6 +130,20 @@ export function LessonProvider({ children }: { children: ReactNode }) {
     const { data, error } = await query;
 
     if (!error && data) {
+      const listeningLessonIds = (data as Lesson[])
+        .filter((lesson) => lesson.type === 'listening')
+        .map((lesson) => lesson.id);
+      const listeningDataByLessonId = new Map<string, NonNullable<Lesson['content']['listeningData']>>();
+      if (listeningLessonIds.length > 0) {
+        const { data: listeningRows } = await supabase
+          .from('listening_lesson_data')
+          .select('*')
+          .in('lesson_id', listeningLessonIds);
+        for (const row of listeningRows || []) {
+          const listeningData = fromListeningLessonRow(row as Record<string, unknown>);
+          if (listeningData && typeof row.lesson_id === 'string') listeningDataByLessonId.set(row.lesson_id, listeningData);
+        }
+      }
       const lessonsWithLocalFallbacks = (data as Lesson[]).map((lesson) => {
         const localLesson = SAMPLE_LESSONS.find((candidate) => candidate.id === lesson.id);
         const videoUrl = lesson.videoUrl || localLesson?.videoUrl;
@@ -127,7 +151,11 @@ export function LessonProvider({ children }: { children: ReactNode }) {
         return {
           ...lesson,
           ...(videoUrl ? { videoUrl } : {}),
-          content: studyBlueprint ? { ...lesson.content, studyBlueprint } : lesson.content,
+          content: {
+            ...lesson.content,
+            ...(studyBlueprint ? { studyBlueprint } : {}),
+            ...(listeningDataByLessonId.get(lesson.id) ? { listeningData: listeningDataByLessonId.get(lesson.id) } : {}),
+          },
         };
       });
       setLessons(lessonsWithLocalFallbacks);
@@ -195,6 +223,16 @@ export function LessonProvider({ children }: { children: ReactNode }) {
     return bookmarks.some(b => b.lesson_id === lessonId);
   };
 
+  const syncListeningStudioData = async (lessonId: string, content: Lesson['content']) => {
+    if (!isSupabaseConfigured() || !supabase || !content.listeningData) return true;
+    const parsed = listeningLessonDataSchema.safeParse(content.listeningData);
+    if (!parsed.success) return false;
+    const { error } = await supabase
+      .from('listening_lesson_data')
+      .upsert({ lesson_id: lessonId, ...toListeningLessonRow(parsed.data) }, { onConflict: 'lesson_id' });
+    return !error;
+  };
+
   const createLesson = async (lessonData: Omit<Lesson, 'id' | 'created_at' | 'updated_at' | 'view_count'>) => {
     if (!isSupabaseConfigured() || !supabase) {
       const newLesson: Lesson = {
@@ -216,6 +254,10 @@ export function LessonProvider({ children }: { children: ReactNode }) {
 
     if (!error && data) {
       const newLesson = data as Lesson;
+      if (newLesson.type === 'listening' && !(await syncListeningStudioData(newLesson.id, newLesson.content))) {
+        await supabase.from('lessons').delete().eq('id', newLesson.id);
+        return null;
+      }
       setLessons([newLesson, ...lessons]);
       return newLesson;
     }
@@ -228,6 +270,13 @@ export function LessonProvider({ children }: { children: ReactNode }) {
         l.id === id ? { ...l, ...lessonData, updated_at: new Date().toISOString() } : l
       ));
       return true;
+    }
+
+    const currentLesson = lessons.find((lesson) => lesson.id === id);
+    const nextContent = lessonData.content ?? currentLesson?.content;
+    const nextType = lessonData.type ?? currentLesson?.type;
+    if (nextType === 'listening' && nextContent && !(await syncListeningStudioData(id, nextContent))) {
+      return false;
     }
 
     const { error } = await supabase
