@@ -569,8 +569,11 @@ export function AdminPage() {
       }
       if (!response.ok) {
         const message = typeof generated.error === 'string' ? generated.error : 'Failed to generate study lesson';
+        const qualityIssues = Array.isArray(generated.issues)
+          ? generated.issues.filter((issue): issue is string => typeof issue === 'string').slice(0, 3)
+          : [];
         const localDetail = import.meta.env.DEV && typeof generated.detail === 'string' ? ` (${generated.detail})` : '';
-        throw new Error(`${message}${localDetail}`);
+        throw new Error(`${message}${qualityIssues.length ? ` ${qualityIssues.join(' ')}` : ''}${localDetail}`);
       }
       const validation = validateStudyLessonBlueprint(generated.studyBlueprint);
       if (!validation.success) throw new Error('Generated blueprint did not pass the lesson schema');

@@ -3,7 +3,8 @@ import { checkRateLimit, LIMITS } from './_rateLimit.js';
 import { cleanEnv } from './_env.js';
 import { requireStaff } from './_staffAuth.js';
 import { studyLessonBlueprintSchema } from '../src/lib/lessonBlueprint.js';
-import { readingLessonDataSchema, type ReadingLessonData } from '../src/modules/reading/readingLesson.js';
+import { readingLessonDataSchema } from '../src/modules/reading/readingLesson.js';
+import { assessReadingGenerationQuality } from '../src/modules/reading/readingGenerationQuality.js';
 
 const GEMINI_API_KEY = cleanEnv(process.env.GEMINI_API_KEY);
 const OPENAI_API_KEY = cleanEnv(process.env.OPENAI_API_KEY);
@@ -29,18 +30,6 @@ Return ONLY valid JSON exactly shaped as:
 For readingData: write an original 600-750 word passage split into 5-7 labelled paragraphs A-G. passageContent must be the paragraphs joined in order. Create exactly 2-3 distinct question groups and 8-12 questions total. Every group must include a strategy object with learner-facing focus, two actionable steps, and a realistic suggestedSeconds time limit. Every question needs an answer, paragraphRefs, and an explanation that names the evidence paragraph.
 
 Topic alignment is mandatory. If the topic contains “skimming”, create a timed main-idea / heading task that teaches reading headings, first sentences and topic sentences without reading every detail. If the topic contains “scanning”, create a separate timed detail-location task that teaches keyword prediction, synonym matching and locating a specific detail. For a topic containing both, include BOTH skills in separate groups. Do not make the heading options repeat the paragraph wording or make answers obvious. Use plausible distractors. Do not copy IELTS/Cambridge passages, claim official content, promise scores, or use unverified citations. Keep all quality flags false for human review. Return JSON only.`;
-
-function validateSkillLesson(topic: string, reading: ReadingLessonData): string | null {
-  const questionCount = reading.questionGroups.reduce((total, group) => total + group.questions.length, 0);
-  const wordCount = reading.paragraphs.flatMap((paragraph) => paragraph.content.split(/\s+/)).filter(Boolean).length;
-  if (reading.questionGroups.length < 2 || questionCount < 8 || wordCount < 550) return 'The generated lesson does not yet meet the minimum Reading practice standard.';
-  if (reading.questionGroups.some((group) => !group.strategy || group.strategy.steps.length < 2 || group.questions.some((question) => !question.paragraphRefs?.length))) return 'The generated lesson is missing strategy instructions or paragraph evidence references.';
-  const loweredTopic = topic.toLowerCase();
-  const focuses = new Set(reading.questionGroups.flatMap((group) => group.strategy?.focus || []));
-  if (loweredTopic.includes('skimm') && !focuses.has('skimming')) return 'The generated lesson does not include a skimming practice task.';
-  if (loweredTopic.includes('scann') && !focuses.has('scanning')) return 'The generated lesson does not include a scanning practice task.';
-  return null;
-}
 
 function createReadingBlueprint(topic: string, level: string, reading: ReadingLessonData) {
   const firstQuestion = reading.questionGroups[0]?.questions[0];
@@ -112,8 +101,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const generated = await generate(promptFor(topic, level));
     const readingData = readingLessonDataSchema.safeParse(generated.readingData);
     if (!readingData.success || typeof generated.title !== 'string' || typeof generated.description !== 'string') return res.status(502).json({ error: 'AI returned an incomplete Reading lesson draft', issues: { readingData: readingData.success ? [] : readingData.error.issues } });
-    const qualityIssue = validateSkillLesson(topic, readingData.data);
-    if (qualityIssue) return res.status(502).json({ error: qualityIssue });
+    const qualityReport = assessReadingGenerationQuality(topic, readingData.data);
+    if (!qualityReport.passed) return res.status(502).json({ error: 'Generated Reading draft did not pass the quality gate.', issues: qualityReport.blockingReasons });
     const blueprint = studyLessonBlueprintSchema.parse(createReadingBlueprint(topic, level, readingData.data));
     return res.status(200).json({ ...generated, studyBlueprint: blueprint, readingData: readingData.data });
   } catch (error) {
