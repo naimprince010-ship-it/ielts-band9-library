@@ -3,7 +3,7 @@ import { checkRateLimit, LIMITS } from './_rateLimit.js';
 import { cleanEnv } from './_env.js';
 import { requireStaff } from './_staffAuth.js';
 import { studyLessonBlueprintSchema } from '../src/lib/lessonBlueprint.js';
-import { readingLessonDataSchema } from '../src/modules/reading/readingLesson.js';
+import { readingLessonDataSchema, type ReadingLessonData } from '../src/modules/reading/readingLesson.js';
 
 const GEMINI_API_KEY = cleanEnv(process.env.GEMINI_API_KEY);
 const OPENAI_API_KEY = cleanEnv(process.env.OPENAI_API_KEY);
@@ -15,7 +15,6 @@ Return ONLY valid JSON exactly shaped as:
   "title": "Professional Reading lesson title",
   "description": "One precise sentence",
   "targetLevel": "Band range",
-  "studyBlueprint": { "schemaVersion": 1, "objective": "Measurable objective", "outcome": "Demonstrable outcome", "estimatedMinutes": 30, "sourceNotes": ["Original practice material"], "sections": [] },
   "readingData": {
     "schemaVersion": 1,
     "passageFormat": "academic",
@@ -27,8 +26,41 @@ Return ONLY valid JSON exactly shaped as:
   }
 }
 
-For studyBlueprint use this exact order: concept, worked-example, phrase-bank, guided-practice, self-check, assignment. Do not use speaking-drill.
 For readingData: write an original 550-750 word passage split into 5-7 labelled paragraphs A-G. passageContent must be the paragraphs joined in order. Use 2-3 questionGroups and at least 5 questions total. Permitted question types: multiple_choice, true_false_not_given, yes_no_not_given, matching_headings, matching_information, matching_features, summary_completion, sentence_completion, short_answer. Every question needs an answer and explanation. Do not copy IELTS/Cambridge passages, claim official content, promise scores, or use unverified citations. Keep all quality flags false for human review. Return JSON only.`;
+
+function createReadingBlueprint(topic: string, level: string, reading: ReadingLessonData) {
+  const firstQuestion = reading.questionGroups[0]?.questions[0];
+  const firstParagraph = reading.paragraphs[0];
+  const lastParagraph = reading.paragraphs.at(-1);
+  const labels = reading.paragraphs.map((paragraph) => paragraph.label).join(', ');
+  const guidedItems = reading.questionGroups
+    .flatMap((group) => group.questions)
+    .slice(0, 2)
+    .map((question) => ({ prompt: question.prompt, modelAnswer: question.acceptedAnswers[0], explanation: question.explanation }));
+  while (guidedItems.length < 2) {
+    guidedItems.push({
+      prompt: `Find the key idea in paragraph ${firstParagraph?.label || 'A'}.`,
+      modelAnswer: firstParagraph?.content || 'Refer to the passage.',
+      explanation: 'Use the paragraph’s main idea as evidence before choosing an answer.',
+    });
+  }
+
+  return {
+    schemaVersion: 1 as const,
+    objective: `Use ${topic} reading strategies to locate evidence and answer questions accurately.`,
+    outcome: `Complete the ${reading.passageFormat === 'academic' ? 'Academic' : 'General Training'} passage questions with evidence-based answers.`,
+    estimatedMinutes: 30,
+    sourceNotes: ['Original AI-assisted practice material. Human review required before publishing.'],
+    sections: [
+      { id: 'concept', type: 'concept' as const, title: 'Reading strategy', summary: `Learn how to approach ${topic} at ${level} level.`, points: ['Read the instructions before scanning the passage.', `Use paragraph labels (${labels}) to organise your evidence.`] },
+      { id: 'worked-example', type: 'worked-example' as const, title: 'Worked example', prompt: firstQuestion?.prompt || 'Identify the key information in the passage.', weakAnswer: 'Choose an answer without locating evidence.', strongAnswer: `Locate the relevant detail in paragraph ${firstParagraph?.label || 'A'} and check it against the question wording.`, breakdown: ['Underline the key words in the question.', 'Confirm the answer with the exact passage evidence.'] },
+      { id: 'phrase-bank', type: 'phrase-bank' as const, title: 'Useful reading language', groups: [{ label: 'Instructions', items: ['according to the passage', 'the writer states that'] }, { label: 'Evidence', items: ['the relevant paragraph', 'the supporting detail'] }] },
+      { id: 'guided-practice', type: 'guided-practice' as const, title: 'Guided practice', instructions: 'Answer each question, then use the explanation to check your reasoning.', items: guidedItems },
+      { id: 'self-check', type: 'self-check' as const, title: 'Self-check', criteria: ['I read every instruction carefully.', 'I found evidence before choosing an answer.', 'I checked that my answer matches the required format.'] },
+      { id: 'assignment', type: 'assignment' as const, title: 'Independent task', task: `Complete the remaining questions for “${reading.passageTitle}”.`, deliverable: `Submit answers with a paragraph reference from ${lastParagraph?.label || 'the passage'} or another relevant paragraph.`, successCriteria: ['Every answer is completed.', 'Each answer is supported by passage evidence.', 'I review explanations for any incorrect answer.'] },
+    ],
+  };
+}
 
 async function generate(prompt: string) {
   if (GEMINI_API_KEY) {
@@ -63,10 +95,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!topic) return res.status(400).json({ error: 'Lesson topic is required' });
   try {
     const generated = await generate(promptFor(topic, level));
-    const blueprint = studyLessonBlueprintSchema.safeParse(generated.studyBlueprint);
     const readingData = readingLessonDataSchema.safeParse(generated.readingData);
-    if (!blueprint.success || !readingData.success || typeof generated.title !== 'string' || typeof generated.description !== 'string') return res.status(502).json({ error: 'AI returned an incomplete Reading lesson draft', issues: { studyBlueprint: blueprint.success ? [] : blueprint.error.issues, readingData: readingData.success ? [] : readingData.error.issues } });
-    return res.status(200).json({ ...generated, studyBlueprint: blueprint.data, readingData: readingData.data });
+    if (!readingData.success || typeof generated.title !== 'string' || typeof generated.description !== 'string') return res.status(502).json({ error: 'AI returned an incomplete Reading lesson draft', issues: { readingData: readingData.success ? [] : readingData.error.issues } });
+    const blueprint = studyLessonBlueprintSchema.parse(createReadingBlueprint(topic, level, readingData.data));
+    return res.status(200).json({ ...generated, studyBlueprint: blueprint, readingData: readingData.data });
   } catch (error) {
     console.error('Reading lesson generation error:', error);
     const detail = error instanceof Error ? error.message : 'Unknown generation error';
