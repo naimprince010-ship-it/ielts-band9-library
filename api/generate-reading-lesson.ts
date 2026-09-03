@@ -102,8 +102,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   } catch (error) {
     console.error('Reading lesson generation error:', error);
     const detail = error instanceof Error ? error.message : 'Unknown generation error';
+    const configurationMessage = detail.includes('OpenAI request failed with status 429')
+      ? 'AI generation is unavailable because the configured OpenAI account has no available credits. Add API credits or configure a valid Gemini API key.'
+      : detail.includes('Gemini request failed with status 400')
+        ? 'AI generation is unavailable because the configured Gemini API key is invalid. Replace it with a valid server-side key.'
+        : 'Failed to generate the Reading lesson';
     return res.status(500).json({
-      error: 'Failed to generate the Reading lesson',
+      error: configurationMessage,
       ...(process.env.VERCEL_ENV === 'production' ? {} : { detail }),
     });
   }

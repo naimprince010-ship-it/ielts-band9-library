@@ -565,7 +565,11 @@ export function AdminPage() {
       } catch {
         throw new Error('The AI generator returned an invalid response. Please try again.');
       }
-      if (!response.ok) throw new Error(typeof generated.error === 'string' ? generated.error : 'Failed to generate study lesson');
+      if (!response.ok) {
+        const message = typeof generated.error === 'string' ? generated.error : 'Failed to generate study lesson';
+        const localDetail = import.meta.env.DEV && typeof generated.detail === 'string' ? ` (${generated.detail})` : '';
+        throw new Error(`${message}${localDetail}`);
+      }
       const validation = validateStudyLessonBlueprint(generated.studyBlueprint);
       if (!validation.success) throw new Error('Generated blueprint did not pass the lesson schema');
       const listeningData = formData.type === 'listening'
