@@ -1,5 +1,6 @@
 import {
   BookOpenCheck,
+  Check,
   CheckCircle2,
   ClipboardCheck,
   Lightbulb,
@@ -7,6 +8,7 @@ import {
   Mic2,
   Sparkles,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import type { StudyLessonBlueprint } from "@/lib/lessonBlueprint";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -23,9 +25,39 @@ const sectionIcons = {
 
 export function StudyMaterialRenderer({
   blueprint,
+  storageKey,
 }: {
   blueprint: StudyLessonBlueprint;
+  /** A learner-specific key lets self-check progress survive a page refresh. */
+  storageKey?: string;
 }) {
+  const [checkedCriteria, setCheckedCriteria] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (!storageKey) {
+      setCheckedCriteria([]);
+      return;
+    }
+
+    try {
+      const saved = window.localStorage.getItem(`lesson-self-check:${storageKey}`);
+      const parsed: unknown = saved ? JSON.parse(saved) : [];
+      setCheckedCriteria(Array.isArray(parsed) && parsed.every((item) => typeof item === "string") ? parsed : []);
+    } catch {
+      setCheckedCriteria([]);
+    }
+  }, [storageKey]);
+
+  const toggleCriterion = (criterion: string) => {
+    setCheckedCriteria((previous) => {
+      const next = previous.includes(criterion)
+        ? previous.filter((item) => item !== criterion)
+        : [...previous, criterion];
+      if (storageKey) window.localStorage.setItem(`lesson-self-check:${storageKey}`, JSON.stringify(next));
+      return next;
+    });
+  };
+
   return (
     <div className="space-y-6">
       <Card className="overflow-hidden border-violet-200 bg-gradient-to-br from-white to-violet-50/60">
@@ -188,13 +220,22 @@ export function StudyMaterialRenderer({
               {section.type === "self-check" && (
                 <ul className="space-y-3">
                   {section.criteria.map((item) => (
-                    <li
+                    <button
+                      type="button"
                       key={item}
-                      className="flex gap-3 rounded-xl border border-slate-200 p-3"
+                      aria-pressed={checkedCriteria.includes(item)}
+                      onClick={() => toggleCriterion(item)}
+                      className={`flex w-full items-start gap-3 rounded-xl border p-3 text-left transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 ${
+                        checkedCriteria.includes(item)
+                          ? "border-emerald-300 bg-emerald-50 text-emerald-950"
+                          : "border-slate-200 hover:border-violet-300 hover:bg-violet-50/50"
+                      }`}
                     >
-                      <span className="mt-0.5 h-5 w-5 shrink-0 rounded border-2 border-slate-300" />
+                      <span className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded border-2 ${checkedCriteria.includes(item) ? "border-emerald-600 bg-emerald-600 text-white" : "border-slate-300 bg-white"}`}>
+                        {checkedCriteria.includes(item) && <Check className="h-3.5 w-3.5" aria-hidden="true" />}
+                      </span>
                       <span>{item}</span>
-                    </li>
+                    </button>
                   ))}
                 </ul>
               )}

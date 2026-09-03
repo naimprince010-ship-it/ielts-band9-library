@@ -398,7 +398,7 @@ export function LessonPage() {
             <div className={!canAccessContent ? 'pointer-events-none select-none blur-sm' : ''}>
               {lesson.type === 'listening' && content.listeningData && <div className="mb-6"><ListeningLessonExperience lessonId={lesson.id} data={content.listeningData} /></div>}
               {lesson.type === 'reading' && content.readingData && <div className="mb-6"><ReadingLessonExperience lessonId={lesson.id} data={content.readingData} /></div>}
-              <StudyMaterialRenderer blueprint={studyBlueprint} />
+              <StudyMaterialRenderer blueprint={studyBlueprint} storageKey={lesson.id} />
             </div>
 
           <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
