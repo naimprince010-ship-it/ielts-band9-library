@@ -14,6 +14,15 @@ export const readingQuestionTypeSchema = z.enum([
   'short_answer',
 ]);
 
+export const readingSkillFocusSchema = z.enum([
+  'skimming',
+  'scanning',
+  'main_idea',
+  'detail',
+  'inference',
+  'vocabulary_in_context',
+]);
+
 export const readingLessonDataSchema = z.object({
   schemaVersion: z.literal(1),
   passageFormat: z.enum(['academic', 'general_training']),
@@ -24,6 +33,11 @@ export const readingLessonDataSchema = z.object({
     id: nonEmpty,
     type: readingQuestionTypeSchema,
     instructions: nonEmpty,
+    strategy: z.object({
+      focus: z.array(readingSkillFocusSchema).min(1),
+      steps: z.array(nonEmpty).min(2),
+      suggestedSeconds: z.number().int().min(30).max(900),
+    }).optional(),
     questions: z.array(z.object({
       id: nonEmpty,
       prompt: nonEmpty,
@@ -34,10 +48,12 @@ export const readingLessonDataSchema = z.object({
     })).min(1),
   })).min(1),
   quality: z.object({
-    passageReviewed: z.boolean(),
-    questionsReviewed: z.boolean(),
-    answersChecked: z.boolean(),
-    copyrightConfirmed: z.boolean(),
+    passageReviewed: z.boolean().default(false),
+    questionsReviewed: z.boolean().default(false),
+    answersChecked: z.boolean().default(false),
+    copyrightConfirmed: z.boolean().default(false),
+    skillAlignmentReviewed: z.boolean().default(false),
+    difficultyReviewed: z.boolean().default(false),
   }),
 });
 

@@ -393,7 +393,9 @@ export function AdminPage() {
     && readingData.quality.passageReviewed
     && readingData.quality.questionsReviewed
     && readingData.quality.answersChecked
-    && readingData.quality.copyrightConfirmed,
+    && readingData.quality.copyrightConfirmed
+    && readingData.quality.skillAlignmentReviewed
+    && readingData.quality.difficultyReviewed,
   );
 
   const updateListeningData = (update: (current: ListeningLessonData) => ListeningLessonData) => {
@@ -1800,8 +1802,8 @@ export function AdminPage() {
                       </div>
                     </div>
 
-                    <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4"><p className="text-sm font-black text-emerald-950">Reading publication review</p><p className="mt-1 text-xs text-emerald-800">Confirm these only after a human has reviewed the complete material.</p><div className="mt-3 grid gap-3 sm:grid-cols-2">{([
-                      ['passageReviewed', 'Passage reviewed'], ['questionsReviewed', 'Questions reviewed'], ['answersChecked', 'Answers checked'], ['copyrightConfirmed', 'Original / copyright-safe'],
+                    <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4"><p className="text-sm font-black text-emerald-950">Reading publication review</p><p className="mt-1 text-xs text-emerald-800">Confirm these only after a human has reviewed the complete material, its skill focus, and its level.</p><div className="mt-3 grid gap-3 sm:grid-cols-2">{([
+                      ['passageReviewed', 'Passage reviewed'], ['questionsReviewed', 'Questions reviewed'], ['answersChecked', 'Answers checked'], ['copyrightConfirmed', 'Original / copyright-safe'], ['skillAlignmentReviewed', 'Skill-topic alignment reviewed'], ['difficultyReviewed', 'Level and difficulty reviewed'],
                     ] as const).map(([key, label]) => <label key={key} className="flex cursor-pointer items-center gap-2 rounded-xl bg-white px-3 py-2 text-sm font-bold text-slate-700"><Switch checked={readingData.quality[key]} onCheckedChange={(checked) => updateReadingData((current) => ({ ...current, quality: { ...current.quality, [key]: checked } }))} />{label}</label>)}</div></div>
                   </CardContent>
                 </Card>
