@@ -340,40 +340,45 @@ export function LessonPage() {
     const startFirstStep = () => document.getElementById(firstStepId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     return (
-      <main className="min-h-screen bg-[#f6f7fb] pb-20 text-slate-950">
-        <ReadingProgressBar estimatedMinutes={Math.max(5, studyBlueprint.sections.length * 2)} />
+      <main className="min-h-screen bg-[#f6f7fb] pb-28 text-slate-950 lg:pb-20">
+        <ReadingProgressBar showEstimate={false} estimatedMinutes={Math.max(5, studyBlueprint.sections.length * 2)} />
 
-        <section className="overflow-hidden bg-[linear-gradient(105deg,#090b28_0%,#0c0d31_54%,#48239c_54%,#392083_100%)] text-white">
-          <div className="mx-auto max-w-7xl px-4 pb-10 pt-7 sm:px-6 sm:pb-14 lg:px-8">
-            <Link to={backTo} className="inline-flex items-center gap-2 text-sm font-semibold text-indigo-100/80 transition hover:text-white">
+        <header className="border-b border-slate-200/80 bg-white/95 pt-1 backdrop-blur">
+          <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+            <Link to="/" className="text-lg font-black tracking-tight text-slate-950">IELTS Tree</Link>
+            <p className="hidden text-sm font-medium text-slate-500 sm:block">Reading lesson · {studyBlueprint.sections.length} study steps</p>
+            <Button variant="ghost" size="sm" onClick={handleBookmarkToggle} className="text-violet-700 hover:bg-violet-50 hover:text-violet-800">
+              {isBookmarked(lesson.id) ? <BookmarkCheck className="mr-2 h-4 w-4" /> : <Bookmark className="mr-2 h-4 w-4" />}
+              <span className="hidden sm:inline">{isBookmarked(lesson.id) ? 'Saved' : 'Save'}</span>
+            </Button>
+          </div>
+        </header>
+
+        <section className="border-b border-slate-200/80 bg-white">
+          <div className="mx-auto max-w-7xl px-4 py-7 sm:px-6 sm:py-10 lg:px-8">
+            <Link to={backTo} className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-violet-700">
               <ArrowLeft className="h-4 w-4" /> {backLabel}
             </Link>
 
-            <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-end">
+            <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-end">
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <Badge className="border-0 bg-white/15 px-3 py-1 text-white hover:bg-white/15">{lesson.type}</Badge>
-                  <Badge className="border border-white/20 bg-transparent px-3 py-1 text-indigo-100">{lesson.level}</Badge>
-                  {lesson.is_premium && <Badge className="bg-amber-400 px-3 py-1 text-amber-950 hover:bg-amber-400"><Star className="mr-1 h-3.5 w-3.5" />Premium</Badge>}
+                  <Badge className="border-0 bg-violet-100 px-3 py-1 text-violet-700 hover:bg-violet-100">{lesson.type}</Badge>
+                  <Badge variant="outline" className="border-slate-200 px-3 py-1 text-slate-600">{lesson.level}</Badge>
+                  {lesson.is_premium && <Badge className="bg-amber-100 px-3 py-1 text-amber-800 hover:bg-amber-100"><Star className="mr-1 h-3.5 w-3.5" />Premium</Badge>}
                 </div>
-                <h1 className="mt-5 max-w-4xl text-3xl font-black leading-tight tracking-tight sm:text-5xl">{content.title}</h1>
-                <p className="mt-5 max-w-3xl text-base leading-7 text-indigo-100/90 sm:text-lg">{lesson.description}</p>
+                <h1 className="mt-4 max-w-4xl text-3xl font-black leading-tight tracking-tight text-slate-950 sm:text-5xl">{content.title}</h1>
+                <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600 sm:text-lg">{lesson.description}</p>
               </div>
 
-              <div className="rounded-2xl bg-white p-6 text-slate-900 shadow-2xl shadow-indigo-950/20">
+              <div className="rounded-2xl border border-violet-100 bg-violet-50/70 p-5 text-slate-900">
                 <p className="text-xs font-black uppercase tracking-[0.17em] text-violet-600">Your study plan</p>
                 <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
                   <div><p className="text-3xl font-black">{studyBlueprint.sections.length}</p><p className="mt-1 text-slate-500">Study steps</p></div>
                   <div><p className="text-3xl font-black">~{Math.max(5, studyBlueprint.sections.length * 2)}m</p><p className="mt-1 text-slate-500">Estimated time</p></div>
                 </div>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={handleBookmarkToggle}
-                  className="mt-5 w-full justify-center border border-violet-100 bg-violet-50 text-violet-800 hover:bg-violet-100"
-                >
-                  {isBookmarked(lesson.id) ? <BookmarkCheck className="mr-2 h-4 w-4" /> : <Bookmark className="mr-2 h-4 w-4" />}
-                  {isBookmarked(lesson.id) ? 'Saved to bookmarks' : 'Save lesson'}
+                <Button onClick={startFirstStep} className="mt-5 w-full bg-violet-600 font-bold hover:bg-violet-700">
+                  Continue practice <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
             </div>
@@ -381,18 +386,26 @@ export function LessonPage() {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-9 sm:px-6 lg:px-8 lg:py-12">
-          <div className="mb-7 max-w-3xl">
-            <h2 className="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">A focused lesson, not a wall of text.</h2>
-            <p className="mt-2 text-sm leading-6 text-slate-500 sm:text-base">Work through each step in order, then check your understanding before moving on.</p>
+          <div className="mb-7 max-w-3xl rounded-2xl border border-amber-100 bg-amber-50 px-5 py-4">
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-amber-600">Today’s focus</p>
+            <h2 className="mt-1 text-xl font-black tracking-tight text-slate-900">Work through each step, then check your understanding.</h2>
+            <p className="mt-1 text-sm leading-6 text-slate-600">Your reading position and self-check choices are saved automatically.</p>
           </div>
 
           <div className="mb-6 lg:hidden">
             <MobileTableOfContents items={blueprintTocItems} />
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)_240px] lg:items-start">
+          <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)_260px] lg:items-start">
             <aside className="hidden lg:block lg:sticky lg:top-24">
-              <TableOfContents items={blueprintTocItems} />
+              <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+                <div className="px-2 pb-3">
+                  <p className="text-xs font-black uppercase tracking-[0.16em] text-slate-500">Lesson outline</p>
+                  <p className="mt-1 text-base font-black text-slate-950">Study steps</p>
+                </div>
+                <TableOfContents items={blueprintTocItems} className="border-0 p-0 shadow-none" />
+                <div className="mt-3 rounded-xl bg-emerald-50 px-3 py-2.5 text-xs font-semibold text-emerald-700">✓ Your progress is saved</div>
+              </div>
             </aside>
 
             <div className={!canAccessContent ? 'pointer-events-none select-none blur-sm' : ''}>
@@ -417,20 +430,18 @@ export function LessonPage() {
               <>
                 <Card className="border-violet-100 bg-white shadow-sm">
                   <CardContent className="p-5">
-                    <p className="text-xs font-black uppercase tracking-[0.17em] text-violet-600">By the end</p>
-                    <p className="mt-3 text-sm font-semibold leading-6 text-slate-800">{studyBlueprint.outcome}</p>
-                    <Button onClick={startFirstStep} className="mt-5 w-full bg-violet-600 font-bold hover:bg-violet-700">
-                      Start step 1 <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
+                    <p className="text-xs font-black uppercase tracking-[0.17em] text-violet-600">Your session</p>
+                    <h2 className="mt-2 text-lg font-black text-slate-900">Keep your momentum</h2>
+                    <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-100"><div className="h-full w-1/2 rounded-full bg-violet-600" /></div>
+                    <p className="mt-2 text-xs font-medium text-slate-500">Keep moving through the study steps.</p>
                   </CardContent>
                 </Card>
                 <Card className="border-violet-100 bg-white shadow-sm">
                 <CardContent className="p-5">
-                  <p className="text-xs font-black uppercase tracking-widest text-violet-600">Lesson progress</p>
-                  <p className="mt-3 text-lg font-black text-slate-900">{isCompleted ? 'Completed' : 'Not started'}</p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">Complete the lesson after you finish the self-check.</p>
+                  <p className="text-xs font-black uppercase tracking-widest text-violet-600">Before you finish</p>
+                  <p className="mt-3 text-sm leading-6 text-slate-600">Finish the self-check, then mark this lesson complete.</p>
                   <Button onClick={handleProgressToggle} className="mt-5 w-full bg-violet-600 font-bold hover:bg-violet-700">
-                    {isCompleted ? <><CheckCircle2 className="mr-2 h-4 w-4" />Completed</> : <><Circle className="mr-2 h-4 w-4" />Mark complete</>}
+                    {isCompleted ? <><CheckCircle2 className="mr-2 h-4 w-4" />Completed</> : <><Circle className="mr-2 h-4 w-4" />Mark step complete</>}
                   </Button>
                 </CardContent>
                 </Card>
@@ -449,6 +460,13 @@ export function LessonPage() {
               </Button>
             </div>
           </section>
+        )}
+        {canAccessContent && (
+          <div className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 px-4 py-3 shadow-[0_-8px_24px_rgba(15,23,42,0.08)] backdrop-blur lg:hidden">
+            <Button onClick={handleProgressToggle} className="h-11 w-full bg-violet-600 font-bold hover:bg-violet-700">
+              {isCompleted ? 'Completed' : 'Mark lesson complete'} <CheckCircle2 className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
         )}
       </main>
     );
