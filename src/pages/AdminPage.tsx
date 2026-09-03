@@ -738,9 +738,11 @@ export function AdminPage() {
       const readyForPublication = quality.passageReviewed
         && quality.questionsReviewed
         && quality.answersChecked
-        && quality.copyrightConfirmed;
+        && quality.copyrightConfirmed
+        && quality.skillAlignmentReviewed
+        && quality.difficultyReviewed;
       if (formData.is_published && !readyForPublication) {
-        setError('Reading lessons need a reviewed passage, checked questions and answers, and copyright confirmation before publishing.');
+        setError('Reading lessons need all six Reading publication review checks before publishing: passage, questions, answers, copyright, skill-topic alignment, and level/difficulty.');
         return;
       }
     }
