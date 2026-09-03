@@ -343,35 +343,24 @@ export function LessonPage() {
       <main className="min-h-screen bg-[#f6f7fb] pb-28 text-slate-950 lg:pb-20">
         <ReadingProgressBar showEstimate={false} estimatedMinutes={Math.max(5, studyBlueprint.sections.length * 2)} />
 
-        <header className="border-b border-slate-200/80 bg-white/95 pt-1 backdrop-blur">
-          <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-            <Link to="/" className="text-lg font-black tracking-tight text-slate-950">IELTS Tree</Link>
-            <p className="hidden text-sm font-medium text-slate-500 sm:block">Reading lesson · {studyBlueprint.sections.length} study steps</p>
-            <Button variant="ghost" size="sm" onClick={handleBookmarkToggle} className="text-violet-700 hover:bg-violet-50 hover:text-violet-800">
-              {isBookmarked(lesson.id) ? <BookmarkCheck className="mr-2 h-4 w-4" /> : <Bookmark className="mr-2 h-4 w-4" />}
-              <span className="hidden sm:inline">{isBookmarked(lesson.id) ? 'Saved' : 'Save'}</span>
-            </Button>
-          </div>
-        </header>
-
-        <section className="border-b border-slate-200/80 bg-white">
-          <div className="mx-auto max-w-7xl px-4 py-7 sm:px-6 sm:py-10 lg:px-8">
-            <Link to={backTo} className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-violet-700">
+        <section className="overflow-hidden bg-[linear-gradient(105deg,#090b28_0%,#0c0d31_54%,#48239c_54%,#392083_100%)] text-white">
+          <div className="mx-auto max-w-7xl px-4 pb-10 pt-7 sm:px-6 sm:pb-14 lg:px-8">
+            <Link to={backTo} className="inline-flex items-center gap-2 text-sm font-semibold text-indigo-100/80 transition hover:text-white">
               <ArrowLeft className="h-4 w-4" /> {backLabel}
             </Link>
 
-            <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-end">
+            <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-end">
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <Badge className="border-0 bg-violet-100 px-3 py-1 text-violet-700 hover:bg-violet-100">{lesson.type}</Badge>
-                  <Badge variant="outline" className="border-slate-200 px-3 py-1 text-slate-600">{lesson.level}</Badge>
-                  {lesson.is_premium && <Badge className="bg-amber-100 px-3 py-1 text-amber-800 hover:bg-amber-100"><Star className="mr-1 h-3.5 w-3.5" />Premium</Badge>}
+                  <Badge className="border-0 bg-white/15 px-3 py-1 text-white hover:bg-white/15">{lesson.type}</Badge>
+                  <Badge className="border border-white/20 bg-transparent px-3 py-1 text-indigo-100">{lesson.level}</Badge>
+                  {lesson.is_premium && <Badge className="bg-amber-400 px-3 py-1 text-amber-950 hover:bg-amber-400"><Star className="mr-1 h-3.5 w-3.5" />Premium</Badge>}
                 </div>
-                <h1 className="mt-4 max-w-4xl text-3xl font-black leading-tight tracking-tight text-slate-950 sm:text-5xl">{content.title}</h1>
-                <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600 sm:text-lg">{lesson.description}</p>
+                <h1 className="mt-5 max-w-4xl text-3xl font-black leading-tight tracking-tight sm:text-5xl">{content.title}</h1>
+                <p className="mt-5 max-w-3xl text-base leading-7 text-indigo-100/90 sm:text-lg">{lesson.description}</p>
               </div>
 
-              <div className="rounded-2xl border border-violet-100 bg-violet-50/70 p-5 text-slate-900">
+              <div className="rounded-2xl bg-white p-6 text-slate-900 shadow-2xl shadow-indigo-950/20">
                 <p className="text-xs font-black uppercase tracking-[0.17em] text-violet-600">Your study plan</p>
                 <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
                   <div><p className="text-3xl font-black">{studyBlueprint.sections.length}</p><p className="mt-1 text-slate-500">Study steps</p></div>
