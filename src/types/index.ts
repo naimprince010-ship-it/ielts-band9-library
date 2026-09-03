@@ -57,6 +57,8 @@ export interface LessonContent {
   studyBlueprint?: import('@/lib/lessonBlueprint').StudyLessonBlueprint;
   /** Isolated Listening Studio data. It is mirrored to listening_lesson_data for publish readiness. */
   listeningData?: import('@/modules/listening/listeningLesson').ListeningLessonData;
+  /** Isolated Reading Studio data. It is mirrored to reading_lesson_data for publish readiness. */
+  readingData?: import('@/modules/reading/readingLesson').ReadingLessonData;
 }
 
 export interface Lesson {

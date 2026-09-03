@@ -21,28 +21,38 @@ export async function getStaffCaller(req: VercelRequest, res: VercelResponse): P
     return null;
   }
 
-  const token = authHeader.slice('Bearer '.length).trim();
-  const adminClient = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
-    auth: { autoRefreshToken: false, persistSession: false },
-  });
-  const { data: { user }, error: authError } = await adminClient.auth.getUser(token);
-  if (authError || !user) {
-    res.status(401).json({ error: 'Invalid or expired session' });
+  try {
+    const token = authHeader.slice('Bearer '.length).trim();
+    const adminClient = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    });
+    const { data: { user }, error: authError } = await adminClient.auth.getUser(token);
+    if (authError || !user) {
+      res.status(401).json({ error: 'Invalid or expired session' });
+      return null;
+    }
+
+    const { data: caller, error: callerError } = await adminClient
+      .from('users')
+      .select('role')
+      .eq('id', user.id)
+      .single();
+
+    if (callerError || !caller || !['admin', 'instructor'].includes(caller.role)) {
+      res.status(403).json({ error: 'Staff access required' });
+      return null;
+    }
+
+    return { id: user.id };
+  } catch (error) {
+    console.error('Staff authentication setup failed:', error);
+    const detail = error instanceof Error ? error.message : 'Unknown authentication setup error';
+    res.status(500).json({
+      error: 'Server authentication is unavailable',
+      ...(process.env.VERCEL_ENV === 'production' ? {} : { detail }),
+    });
     return null;
   }
-
-  const { data: caller, error: callerError } = await adminClient
-    .from('users')
-    .select('role')
-    .eq('id', user.id)
-    .single();
-
-  if (callerError || !caller || !['admin', 'instructor'].includes(caller.role)) {
-    res.status(403).json({ error: 'Staff access required' });
-    return null;
-  }
-
-  return { id: user.id };
 }
 
 export async function requireStaff(req: VercelRequest, res: VercelResponse): Promise<boolean> {

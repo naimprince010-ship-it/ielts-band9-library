@@ -1,3 +1,6 @@
 export function cleanEnv(value: string | undefined): string {
-  return (value ?? '').trim().replace(/^(?:\uFEFF|\\uFEFF)/, '').trim();
+  let cleaned = (value ?? '').trim();
+  cleaned = cleaned.replace(/^['"]+|['"]+$/g, '');
+  cleaned = cleaned.replace(/^(?:\uFEFF|\u00EF\u00BB\u00BF|\\uFEFF)+/, '');
+  return cleaned.replace(/(?:\\r\\n|\\n|\\r)+$/g, '').trim();
 }

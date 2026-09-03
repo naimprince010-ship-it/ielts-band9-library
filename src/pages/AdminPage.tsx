@@ -69,6 +69,7 @@ import { cn } from '@/lib/utils';
 import { authenticatedJsonHeaders } from '@/lib/authenticatedApi';
 import { validateStudyLessonBlueprint } from '@/lib/lessonBlueprint';
 import { listeningLessonDataSchema, type ListeningLessonData } from '@/modules/listening/listeningLesson';
+import { readingLessonDataSchema, type ReadingLessonData } from '@/modules/reading/readingLesson';
 import { StudyMaterialRenderer } from '@/components/lesson/StudyMaterialRenderer';
 
 interface QualityChecklist {
@@ -386,6 +387,14 @@ export function AdminPage() {
     && listeningData.quality.transcriptChecked
     && listeningData.quality.answersChecked,
   );
+  const readingData = formData.content?.readingData;
+  const readingPublishReady = Boolean(
+    readingData
+    && readingData.quality.passageReviewed
+    && readingData.quality.questionsReviewed
+    && readingData.quality.answersChecked
+    && readingData.quality.copyrightConfirmed,
+  );
 
   const updateListeningData = (update: (current: ListeningLessonData) => ListeningLessonData) => {
     setFormData((previous) => {
@@ -395,6 +404,19 @@ export function AdminPage() {
         content: {
           ...previous.content,
           listeningData: update(previous.content.listeningData),
+        },
+      };
+    });
+  };
+
+  const updateReadingData = (update: (current: ReadingLessonData) => ReadingLessonData) => {
+    setFormData((previous) => {
+      if (!previous.content?.readingData) return previous;
+      return {
+        ...previous,
+        content: {
+          ...previous.content,
+          readingData: update(previous.content.readingData),
         },
       };
     });
@@ -523,19 +545,37 @@ export function AdminPage() {
     setError('');
     setSuccess('');
     try {
-      const response = await fetch(formData.type === 'listening' ? '/api/generate-listening-lesson' : '/api/generate-study-lesson', {
+      const generatorPath = formData.type === 'listening'
+        ? '/api/generate-listening-lesson'
+        : formData.type === 'reading'
+          ? '/api/generate-reading-lesson'
+          : '/api/generate-study-lesson';
+      const response = await fetch(generatorPath, {
         method: 'POST',
         headers: await authenticatedJsonHeaders(),
         body: JSON.stringify({ type: formData.type, topic: formData.topic, level: formData.level }),
       });
-      const generated = await response.json();
-      if (!response.ok) throw new Error(generated.error || 'Failed to generate study lesson');
+      const responseText = await response.text();
+      if (!responseText.trim()) {
+        throw new Error('The AI generator did not return a response. Please try again in a moment.');
+      }
+      let generated: Record<string, unknown>;
+      try {
+        generated = JSON.parse(responseText) as Record<string, unknown>;
+      } catch {
+        throw new Error('The AI generator returned an invalid response. Please try again.');
+      }
+      if (!response.ok) throw new Error(typeof generated.error === 'string' ? generated.error : 'Failed to generate study lesson');
       const validation = validateStudyLessonBlueprint(generated.studyBlueprint);
       if (!validation.success) throw new Error('Generated blueprint did not pass the lesson schema');
       const listeningData = formData.type === 'listening'
         ? listeningLessonDataSchema.safeParse(generated.listeningData)
         : null;
       if (listeningData && !listeningData.success) throw new Error('Generated Listening data did not pass the studio schema');
+      const readingData = formData.type === 'reading'
+        ? readingLessonDataSchema.safeParse(generated.readingData)
+        : null;
+      if (readingData && !readingData.success) throw new Error('Generated Reading data did not pass the studio schema');
       const content: LessonContent = {
         title: generated.title,
         targetLevel: generated.targetLevel,
@@ -548,12 +588,15 @@ export function AdminPage() {
         quickRecap: validation.data.outcome,
         studyBlueprint: validation.data,
         ...(listeningData?.success ? { listeningData: listeningData.data } : {}),
+        ...(readingData?.success ? { readingData: readingData.data } : {}),
       };
       setFormData(prev => ({ ...prev, title: generated.title, description: generated.description, content, is_published: false }));
       setQualityChecklist({ naturalCollocations: false, ieltsSafeUsage: false, noRareWords: false, examplesReviewed: false, mistakesAccurate: false });
       setSuccess(formData.type === 'listening'
         ? 'Listening Studio draft generated. Choose Browser voice or recorded audio, then complete the transcript and answer review before publishing.'
-        : 'Validated study-material draft generated. Preview and complete the review guard before publishing.');
+        : formData.type === 'reading'
+          ? 'Reading Studio draft generated. Review the passage, question groups, answers, and copyright confirmation before publishing.'
+          : 'Validated study-material draft generated. Preview and complete the review guard before publishing.');
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Failed to generate study lesson');
     } finally {
@@ -676,6 +719,22 @@ export function AdminPage() {
       }
       if (formData.is_published && !listeningPublishReady) {
         setError('Listening lessons need Browser voice or approved recorded audio, a reviewed transcript, checked answers, and content review before publishing.');
+        return;
+      }
+    }
+    if (formData.type === 'reading') {
+      const readingValidation = readingLessonDataSchema.safeParse(formData.content.readingData);
+      if (!readingValidation.success) {
+        setError(`Reading Studio data is incomplete: ${readingValidation.error.issues[0]?.message || 'schema validation failed'}`);
+        return;
+      }
+      const quality = readingValidation.data.quality;
+      const readyForPublication = quality.passageReviewed
+        && quality.questionsReviewed
+        && quality.answersChecked
+        && quality.copyrightConfirmed;
+      if (formData.is_published && !readyForPublication) {
+        setError('Reading lessons need a reviewed passage, checked questions and answers, and copyright confirmation before publishing.');
         return;
       }
     }
@@ -1672,6 +1731,78 @@ export function AdminPage() {
                 </Card>
               )}
 
+              {formData.type === 'reading' && readingData && (
+                <Card className="overflow-hidden rounded-[1.5rem] border-violet-200 bg-violet-50/40 shadow-sm">
+                  <CardHeader className="border-b border-violet-100 bg-white/70">
+                    <CardTitle className="flex items-center gap-2 text-lg font-black text-violet-950">
+                      <FileText className="h-5 w-5 text-violet-600" /> Reading Studio
+                    </CardTitle>
+                    <CardDescription className="font-medium text-violet-800">Review original passage material and answer keys before this Reading lesson can be published.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6 p-5 sm:p-6">
+                    <div className="grid gap-4 md:grid-cols-[200px_minmax(0,1fr)]">
+                      <div className="space-y-2">
+                        <Label className="text-xs font-black uppercase tracking-widest text-slate-500">Passage format</Label>
+                        <Select value={readingData.passageFormat} onValueChange={(value) => updateReadingData((current) => ({ ...current, passageFormat: value as ReadingLessonData['passageFormat'] }))}>
+                          <SelectTrigger className="bg-white"><SelectValue /></SelectTrigger>
+                          <SelectContent><SelectItem value="academic">Academic</SelectItem><SelectItem value="general_training">General Training</SelectItem></SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-xs font-black uppercase tracking-widest text-slate-500">Passage title</Label>
+                        <Input value={readingData.passageTitle} onChange={(event) => updateReadingData((current) => ({ ...current, passageTitle: event.target.value }))} className="bg-white" />
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-violet-100 bg-white p-4 sm:p-5">
+                      <div className="mb-4 flex flex-wrap items-center justify-between gap-3"><div><p className="font-black text-slate-900">Passage paragraphs</p><p className="mt-1 text-xs text-slate-600">Edit the labelled student-facing passage. The full reading text stays synced automatically.</p></div><Badge className="bg-violet-600">{readingData.paragraphs.length} paragraphs</Badge></div>
+                      <div className="space-y-3">
+                        {readingData.paragraphs.map((paragraph, index) => (
+                          <div key={`${paragraph.label}-${index}`} className="grid gap-3 rounded-xl border border-slate-100 bg-slate-50 p-3 md:grid-cols-[70px_minmax(0,1fr)_36px]">
+                            <Input value={paragraph.label} maxLength={1} aria-label={`Paragraph ${index + 1} label`} onChange={(event) => updateReadingData((current) => {
+                              const paragraphs = current.paragraphs.map((item, itemIndex) => itemIndex === index ? { ...item, label: event.target.value.toUpperCase().slice(0, 1) } : item);
+                              return { ...current, paragraphs, passageContent: paragraphs.map((item) => `${item.label}. ${item.content}`).join('\n\n') };
+                            })} />
+                            <Textarea value={paragraph.content} rows={4} aria-label={`Paragraph ${paragraph.label}`} onChange={(event) => updateReadingData((current) => {
+                              const paragraphs = current.paragraphs.map((item, itemIndex) => itemIndex === index ? { ...item, content: event.target.value } : item);
+                              return { ...current, paragraphs, passageContent: paragraphs.map((item) => `${item.label}. ${item.content}`).join('\n\n') };
+                            })} className="bg-white" />
+                            <Button type="button" variant="ghost" size="icon" disabled={readingData.paragraphs.length === 1} onClick={() => updateReadingData((current) => {
+                              const paragraphs = current.paragraphs.filter((_, itemIndex) => itemIndex !== index);
+                              return { ...current, paragraphs, passageContent: paragraphs.map((item) => `${item.label}. ${item.content}`).join('\n\n') };
+                            })} aria-label={`Remove paragraph ${index + 1}`}><Trash2 className="h-4 w-4 text-rose-500" /></Button>
+                          </div>
+                        ))}
+                      </div>
+                      <Button type="button" variant="outline" size="sm" className="mt-4" onClick={() => updateReadingData((current) => {
+                        const label = String.fromCharCode(65 + current.paragraphs.length);
+                        const paragraphs = [...current.paragraphs, { label, content: 'Add the next original passage paragraph.' }];
+                        return { ...current, paragraphs, passageContent: paragraphs.map((item) => `${item.label}. ${item.content}`).join('\n\n') };
+                      })}><Plus className="mr-2 h-4 w-4" /> Add paragraph</Button>
+                    </div>
+
+                    <div className="rounded-2xl border border-violet-100 bg-white p-4 sm:p-5">
+                      <div className="mb-4 flex flex-wrap items-center justify-between gap-3"><div><p className="font-black text-slate-900">Question groups and answer keys</p><p className="mt-1 text-xs text-slate-600">Every answer must be explicit and explained for student feedback.</p></div><Badge className="bg-violet-600">{readingData.questionGroups.reduce((total, group) => total + group.questions.length, 0)} questions</Badge></div>
+                      <div className="space-y-5">
+                        {readingData.questionGroups.map((group, groupIndex) => (
+                          <div key={group.id} className="rounded-xl border border-slate-100 bg-slate-50 p-4">
+                            <div className="mb-3 flex flex-wrap items-center justify-between gap-2"><p className="font-black text-slate-800">Group {groupIndex + 1}</p><Badge variant="outline" className="bg-white">{group.type.replaceAll('_', ' ')}</Badge></div>
+                            <Textarea value={group.instructions} rows={2} className="mb-3 bg-white" aria-label={`Group ${groupIndex + 1} instructions`} onChange={(event) => updateReadingData((current) => ({ ...current, questionGroups: current.questionGroups.map((item, itemIndex) => itemIndex === groupIndex ? { ...item, instructions: event.target.value } : item) }))} />
+                            <div className="space-y-3">
+                              {group.questions.map((question, questionIndex) => <div key={question.id} className="rounded-lg border border-slate-100 bg-white p-3"><p className="mb-2 text-xs font-black uppercase tracking-wider text-slate-400">Question {questionIndex + 1}</p><div className="grid gap-2"><Textarea value={question.prompt} rows={2} aria-label={`Question ${questionIndex + 1} prompt`} onChange={(event) => updateReadingData((current) => ({ ...current, questionGroups: current.questionGroups.map((item, itemIndex) => itemIndex === groupIndex ? { ...item, questions: item.questions.map((entry, entryIndex) => entryIndex === questionIndex ? { ...entry, prompt: event.target.value } : entry) } : item) }))} /><Input value={question.acceptedAnswers.join(', ')} aria-label={`Question ${questionIndex + 1} answers`} placeholder="Accepted answers, separated by commas" onChange={(event) => updateReadingData((current) => ({ ...current, questionGroups: current.questionGroups.map((item, itemIndex) => itemIndex === groupIndex ? { ...item, questions: item.questions.map((entry, entryIndex) => entryIndex === questionIndex ? { ...entry, acceptedAnswers: event.target.value.split(',').map((answer) => answer.trim()).filter(Boolean) } : entry) } : item) }))} /><Textarea value={question.explanation} rows={2} aria-label={`Question ${questionIndex + 1} explanation`} placeholder="Why this answer is correct" onChange={(event) => updateReadingData((current) => ({ ...current, questionGroups: current.questionGroups.map((item, itemIndex) => itemIndex === groupIndex ? { ...item, questions: item.questions.map((entry, entryIndex) => entryIndex === questionIndex ? { ...entry, explanation: event.target.value } : entry) } : item) }))} /></div></div>)}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4"><p className="text-sm font-black text-emerald-950">Reading publication review</p><p className="mt-1 text-xs text-emerald-800">Confirm these only after a human has reviewed the complete material.</p><div className="mt-3 grid gap-3 sm:grid-cols-2">{([
+                      ['passageReviewed', 'Passage reviewed'], ['questionsReviewed', 'Questions reviewed'], ['answersChecked', 'Answers checked'], ['copyrightConfirmed', 'Original / copyright-safe'],
+                    ] as const).map(([key, label]) => <label key={key} className="flex cursor-pointer items-center gap-2 rounded-xl bg-white px-3 py-2 text-sm font-bold text-slate-700"><Switch checked={readingData.quality[key]} onCheckedChange={(checked) => updateReadingData((current) => ({ ...current, quality: { ...current.quality, [key]: checked } }))} />{label}</label>)}</div></div>
+                  </CardContent>
+                </Card>
+              )}
+
               {formData.content && (
                 <Card className="rounded-[1.5rem] border-slate-100 shadow-sm">
                   <CardHeader>
@@ -1771,7 +1902,7 @@ export function AdminPage() {
                     <Switch
                       id="is_published"
                       checked={formData.is_published}
-                      disabled={(Boolean(formData.content?.deepVocabulary || formData.content?.deepGrammar || formData.content?.studyBlueprint) && !Object.values(qualityChecklist).every(Boolean)) || (formData.type === 'listening' && !listeningPublishReady)}
+                      disabled={(Boolean(formData.content?.deepVocabulary || formData.content?.deepGrammar || formData.content?.studyBlueprint) && !Object.values(qualityChecklist).every(Boolean)) || (formData.type === 'listening' && !listeningPublishReady) || (formData.type === 'reading' && !readingPublishReady)}
                       onCheckedChange={(checked) => setFormData(prev => ({ ...prev, is_published: checked }))}
                     />
                     <Label htmlFor="is_published" className="font-bold text-slate-700">Published</Label>

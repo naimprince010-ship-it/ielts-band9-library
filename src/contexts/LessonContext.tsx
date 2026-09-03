@@ -4,6 +4,7 @@ import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { useAuth } from './AuthContext';
 import { SAMPLE_LESSONS } from '@/data/sampleLessons';
 import { fromListeningLessonRow, listeningLessonDataSchema, toListeningLessonRow } from '@/modules/listening/listeningLesson';
+import { fromReadingLessonRow, readingLessonDataSchema, toReadingLessonRow } from '@/modules/reading/readingLesson';
 
 interface LessonContextType {
   lessons: Lesson[];
@@ -134,6 +135,8 @@ export function LessonProvider({ children }: { children: ReactNode }) {
         .filter((lesson) => lesson.type === 'listening')
         .map((lesson) => lesson.id);
       const listeningDataByLessonId = new Map<string, NonNullable<Lesson['content']['listeningData']>>();
+      const readingLessonIds = (data as Lesson[]).filter((lesson) => lesson.type === 'reading').map((lesson) => lesson.id);
+      const readingDataByLessonId = new Map<string, NonNullable<Lesson['content']['readingData']>>();
       if (listeningLessonIds.length > 0) {
         const { data: listeningRows } = await supabase
           .from('listening_lesson_data')
@@ -142,6 +145,13 @@ export function LessonProvider({ children }: { children: ReactNode }) {
         for (const row of listeningRows || []) {
           const listeningData = fromListeningLessonRow(row as Record<string, unknown>);
           if (listeningData && typeof row.lesson_id === 'string') listeningDataByLessonId.set(row.lesson_id, listeningData);
+        }
+      }
+      if (readingLessonIds.length > 0) {
+        const { data: readingRows } = await supabase.from('reading_lesson_data').select('*').in('lesson_id', readingLessonIds);
+        for (const row of readingRows || []) {
+          const readingData = fromReadingLessonRow(row as Record<string, unknown>);
+          if (readingData && typeof row.lesson_id === 'string') readingDataByLessonId.set(row.lesson_id, readingData);
         }
       }
       const lessonsWithLocalFallbacks = (data as Lesson[]).map((lesson) => {
@@ -155,6 +165,7 @@ export function LessonProvider({ children }: { children: ReactNode }) {
             ...lesson.content,
             ...(studyBlueprint ? { studyBlueprint } : {}),
             ...(listeningDataByLessonId.get(lesson.id) ? { listeningData: listeningDataByLessonId.get(lesson.id) } : {}),
+            ...(readingDataByLessonId.get(lesson.id) ? { readingData: readingDataByLessonId.get(lesson.id) } : {}),
           },
         };
       });
@@ -233,6 +244,14 @@ export function LessonProvider({ children }: { children: ReactNode }) {
     return !error;
   };
 
+  const syncReadingStudioData = async (lessonId: string, content: Lesson['content']) => {
+    if (!isSupabaseConfigured() || !supabase || !content.readingData) return true;
+    const parsed = readingLessonDataSchema.safeParse(content.readingData);
+    if (!parsed.success) return false;
+    const { error } = await supabase.from('reading_lesson_data').upsert({ lesson_id: lessonId, ...toReadingLessonRow(parsed.data) }, { onConflict: 'lesson_id' });
+    return !error;
+  };
+
   const createLesson = async (lessonData: Omit<Lesson, 'id' | 'created_at' | 'updated_at' | 'view_count'>) => {
     if (!isSupabaseConfigured() || !supabase) {
       const newLesson: Lesson = {
@@ -258,6 +277,10 @@ export function LessonProvider({ children }: { children: ReactNode }) {
         await supabase.from('lessons').delete().eq('id', newLesson.id);
         return null;
       }
+      if (newLesson.type === 'reading' && !(await syncReadingStudioData(newLesson.id, newLesson.content))) {
+        await supabase.from('lessons').delete().eq('id', newLesson.id);
+        return null;
+      }
       setLessons([newLesson, ...lessons]);
       return newLesson;
     }
@@ -278,6 +301,7 @@ export function LessonProvider({ children }: { children: ReactNode }) {
     if (nextType === 'listening' && nextContent && !(await syncListeningStudioData(id, nextContent))) {
       return false;
     }
+    if (nextType === 'reading' && nextContent && !(await syncReadingStudioData(id, nextContent))) return false;
 
     const { error } = await supabase
       .from('lessons')

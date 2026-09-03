@@ -19,6 +19,7 @@ import { PieChartCoreExplanation } from '@/components/ui/PieChartVisuals';
 import { DeepVocabularyLesson } from '@/components/lesson/DeepVocabularyLesson';
 import { StudyMaterialRenderer } from '@/components/lesson/StudyMaterialRenderer';
 import { ListeningLessonExperience } from '@/components/lesson/listening/ListeningLessonExperience';
+import { ReadingLessonExperience } from '@/components/lesson/reading/ReadingLessonExperience';
 import { useLessons } from '@/contexts/LessonContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
@@ -323,9 +324,10 @@ export function LessonPage() {
     const blueprintTocItems = [
       ...(lesson.type === 'listening' && content.listeningData ? [{ id: 'listening-lab', title: '01 Listening lab', icon: <BookOpen className="h-3.5 w-3.5" />, group: 'learning' as const }]
         : []),
+      ...(lesson.type === 'reading' && content.readingData ? [{ id: 'reading-lab', title: '01 Reading lab', icon: <BookOpen className="h-3.5 w-3.5" />, group: 'learning' as const }] : []),
       ...studyBlueprint.sections.map((section, index) => ({
       id: section.id,
-      title: `${String(index + 1 + (lesson.type === 'listening' && content.listeningData ? 1 : 0)).padStart(2, '0')} ${section.title}`,
+      title: `${String(index + 1 + ((lesson.type === 'listening' && content.listeningData) || (lesson.type === 'reading' && content.readingData) ? 1 : 0)).padStart(2, '0')} ${section.title}`,
       icon: <BookOpen className="h-3.5 w-3.5" />,
       group: section.type === 'concept' || section.type === 'phrase-bank'
         ? 'learning' as const
@@ -395,6 +397,7 @@ export function LessonPage() {
 
             <div className={!canAccessContent ? 'pointer-events-none select-none blur-sm' : ''}>
               {lesson.type === 'listening' && content.listeningData && <div className="mb-6"><ListeningLessonExperience lessonId={lesson.id} data={content.listeningData} /></div>}
+              {lesson.type === 'reading' && content.readingData && <div className="mb-6"><ReadingLessonExperience lessonId={lesson.id} data={content.readingData} /></div>}
               <StudyMaterialRenderer blueprint={studyBlueprint} />
             </div>
 
