@@ -66,24 +66,34 @@ function createReadingBlueprint(topic: string, level: string, reading: ReadingLe
   };
 }
 
+function parseGeneratedJson(value: string): Record<string, unknown> {
+  const trimmed = value.trim().replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/\s*```$/, '');
+  const parsed = JSON.parse(trimmed);
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('AI returned an invalid JSON object');
+  return parsed as Record<string, unknown>;
+}
+
 async function generate(prompt: string) {
   if (GEMINI_API_KEY) {
-    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent', {
-      method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': GEMINI_API_KEY },
-      body: JSON.stringify({ systemInstruction: { parts: [{ text: 'Return accurate original IELTS Reading lesson JSON only.' }] }, contents: [{ role: 'user', parts: [{ text: prompt }] }], generationConfig: { temperature: 0.2, maxOutputTokens: 6500, responseMimeType: 'application/json' } }),
-      signal: AbortSignal.timeout(50_000),
-    });
-    if (response.ok) {
+    try {
+      const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': GEMINI_API_KEY },
+        body: JSON.stringify({ systemInstruction: { parts: [{ text: 'Return accurate original IELTS Reading lesson JSON only.' }] }, contents: [{ role: 'user', parts: [{ text: prompt }] }], generationConfig: { temperature: 0.2, maxOutputTokens: 8192, responseMimeType: 'application/json' } }),
+        signal: AbortSignal.timeout(50_000),
+      });
+      if (!response.ok) throw new Error(`Gemini request failed with status ${response.status}`);
       const payload = await response.json();
-      return JSON.parse(payload.candidates?.[0]?.content?.parts?.map((part: { text?: string }) => part.text || '').join('') || '{}');
+      const text = payload.candidates?.[0]?.content?.parts?.map((part: { text?: string }) => part.text || '').join('') || '';
+      return parseGeneratedJson(text);
+    } catch (error) {
+      if (!OPENAI_API_KEY) throw error;
     }
-    if (!OPENAI_API_KEY) throw new Error(`Gemini request failed with status ${response.status}`);
   }
   if (!OPENAI_API_KEY) throw new Error('No AI provider is configured');
   const response = await fetch('https://api.openai.com/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${OPENAI_API_KEY}` }, body: JSON.stringify({ model: 'gpt-4o-mini', messages: [{ role: 'system', content: 'Return accurate original IELTS Reading lesson JSON only.' }, { role: 'user', content: prompt }], response_format: { type: 'json_object' }, temperature: 0.2, max_tokens: 6500 }), signal: AbortSignal.timeout(50_000) });
   if (!response.ok) throw new Error(`OpenAI request failed with status ${response.status}`);
   const payload = await response.json();
-  return JSON.parse(payload.choices?.[0]?.message?.content || '{}');
+  return parseGeneratedJson(payload.choices?.[0]?.message?.content || '');
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -112,6 +122,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ? 'AI generation is unavailable because the configured OpenAI account has no available credits. Add API credits or configure a valid Gemini API key.'
       : detail.includes('Gemini request failed with status 400')
         ? 'AI generation is unavailable because the configured Gemini API key is invalid. Replace it with a valid server-side key.'
+        : detail.includes('invalid JSON') || detail.includes('Unexpected end of JSON')
+          ? 'The AI returned an incomplete lesson draft. Please generate again.'
         : 'Failed to generate the Reading lesson';
     return res.status(500).json({
       error: configurationMessage,
