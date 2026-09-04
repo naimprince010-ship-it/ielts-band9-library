@@ -5,7 +5,7 @@ import {
   Sparkles, Save, X, AlertCircle, CheckCircle, ShieldCheck, Square, CheckSquare,
   CreditCard, Clock, CheckCircle2, XCircle, Loader2, BarChart3, Tag, ExternalLink,
   LayoutDashboard, FileText, Users, Palette, Menu, ChevronDown, ChevronRight, Star,
-  Search, Bell, User as UserIcon, LogOut, Home, Mic, PenTool, Link as LinkIcon, Filter
+  Search, Bell, User as UserIcon, LogOut, Home, Mic, PenTool, Link as LinkIcon, Filter, ChevronLeft
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -205,6 +205,8 @@ export function AdminPage() {
   });
   const [filterCourse, setFilterCourse] = useState<string>('all');
   const [lessonSearch, setLessonSearch] = useState('');
+  const [lessonPage, setLessonPage] = useState(1);
+  const lessonsPerPage = 8;
 
   const [payments, setPayments] = useState<PaymentRequest[]>([]);
   const [loadingPayments, setLoadingPayments] = useState(false);
@@ -828,6 +830,27 @@ export function AdminPage() {
     );
   });
 
+  const sortedFilteredLessons = [...filteredLessons].sort(
+    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+  );
+  const lessonPageCount = Math.max(1, Math.ceil(sortedFilteredLessons.length / lessonsPerPage));
+  const visibleLessonPage = Math.min(lessonPage, lessonPageCount);
+  const paginatedLessons = sortedFilteredLessons.slice(
+    (visibleLessonPage - 1) * lessonsPerPage,
+    visibleLessonPage * lessonsPerPage,
+  );
+  const formatLessonCreatedAt = (createdAt: string) => {
+    const date = new Date(createdAt);
+    if (Number.isNaN(date.getTime())) return 'Creation time unavailable';
+    return new Intl.DateTimeFormat('en-GB', {
+      day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true,
+    }).format(date);
+  };
+
+  useEffect(() => {
+    setLessonPage(1);
+  }, [lessonSearch, filterCourse]);
+
   const toggleGroup = (title: string) => {
     setExpandedGroups(prev => prev.includes(title) ? prev.filter(g => g !== title) : [...prev, title]);
   };
@@ -1148,15 +1171,24 @@ export function AdminPage() {
               </div>
             </div>
 
+            {sortedFilteredLessons.length > 0 && (
+              <div className="flex flex-col gap-2 px-1 text-sm sm:flex-row sm:items-center sm:justify-between">
+                <p className="font-semibold text-slate-500">
+                  Newest first &middot; Showing {((visibleLessonPage - 1) * lessonsPerPage) + 1}&ndash;{Math.min(visibleLessonPage * lessonsPerPage, sortedFilteredLessons.length)} of {sortedFilteredLessons.length} lessons
+                </p>
+                <p className="text-xs font-medium text-slate-400">Created time uses your browser&apos;s local time.</p>
+              </div>
+            )}
+
             <div className="grid gap-4">
-              {filteredLessons.length === 0 ? (
+              {sortedFilteredLessons.length === 0 ? (
                 <Card className="rounded-[2rem] border-dashed border-2">
                   <CardContent className="py-16 text-center text-slate-400 font-bold uppercase tracking-widest">
                     No lessons found matching your filters.
                   </CardContent>
                 </Card>
               ) : (
-                filteredLessons.map((lesson) => (
+                paginatedLessons.map((lesson) => (
                   <Card key={lesson.id} className="hover:shadow-xl hover:shadow-slate-100 transition-all duration-300 border-slate-100 rounded-2xl overflow-hidden group">
                     <CardContent className="p-5">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -1189,6 +1221,9 @@ export function AdminPage() {
                                 </Badge>
                               )}
                             </div>
+                            <p className="mt-2 flex items-center gap-1.5 text-xs font-medium text-slate-400">
+                              <Clock className="h-3.5 w-3.5" /> Created {formatLessonCreatedAt(lesson.created_at)}
+                            </p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -1221,6 +1256,32 @@ export function AdminPage() {
                 ))
               )}
             </div>
+
+            {lessonPageCount > 1 && (
+              <div className="flex flex-col gap-3 rounded-2xl border border-slate-100 bg-white p-3 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm font-bold text-slate-600">Page {visibleLessonPage} of {lessonPageCount}</p>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-xl font-bold"
+                    disabled={visibleLessonPage === 1}
+                    onClick={() => setLessonPage(page => Math.max(1, page - 1))}
+                  >
+                    <ChevronLeft className="mr-1 h-4 w-4" /> Previous
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-xl font-bold"
+                    disabled={visibleLessonPage === lessonPageCount}
+                    onClick={() => setLessonPage(page => Math.min(lessonPageCount, page + 1))}
+                  >
+                    Next <ChevronRight className="ml-1 h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         );
 
